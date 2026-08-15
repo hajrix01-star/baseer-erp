@@ -1,0 +1,17 @@
+{$BASEER_PUBLIC_DOMAIN} {
+  encode zstd gzip
+
+  header {
+    -Server
+    X-Content-Type-Options "nosniff"
+    Referrer-Policy "no-referrer"
+    Permissions-Policy "camera=(), geolocation=(), microphone=()"
+  }
+
+  reverse_proxy api:5200
+
+  log {
+    output stdout
+    format json
+  }
+}

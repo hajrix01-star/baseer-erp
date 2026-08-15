@@ -1,0 +1,87 @@
+# BASEER ERP — Committee Build Sequence
+
+**Status:** Owner-approved execution sequence, updated 2026-08-15 after independent source, product, and governance review.
+
+## Current truth
+
+- Platform and Finance Phase 1 backend are verified on the isolated BASEER Docker test database.
+- Finance Phase 2 native UI remains deferred; it is not cancelled.
+- Marketing Performance & Google Hub is designed but has no backend models, commands, Google connection, facts, UI, or external calls yet.
+- AI Platform is configuration foundation only. It has no provider call, conversation, memory, read tool, or chat UI.
+- The active delivery path is **Daily Sales Closing as the official sales source**, then Marketing Performance. No UI or AI chat starts before their source and read-model gates pass.
+
+## Phase 0 — Build-control baseline
+
+1. Keep the delivery register and scope decisions aligned with the source.
+2. Correct confirmed text-encoding defects before user-facing UI work.
+3. Establish a reviewed source-control baseline before the next large implementation increment; never commit secrets or test data.
+4. Preserve one active business scope at a time and record any owner priority exception.
+
+**Closure:** documents, source status, encoding checks, and baseline evidence agree.
+
+## Phase 1 — Daily Sales Closing backend
+
+1. Operational calendar with `OPEN`, `CLOSED_HOLIDAY`, `PARTIAL`, and `PENDING` data states.
+2. Daily Sales Closing only — not POS — with gross/VAT, channels tied to vaults, and management-only cash-on-hand observation.
+3. Open-period correction and closed/locked-period reversal policy through the journal.
+4. Company-scoped contracts, RLS, authorization, idempotency, audit, serials, tests, and server read receipts.
+
+**Closure:** daily sales is an authoritative, versioned source that distinguishes a non-working day from a zero-sales day.
+
+## Phase 2 — Marketing Performance Gate A
+
+1. Company-scoped manual campaign register: channel, dates, status, objective, location/reference and immutable revisions where required.
+2. Immutable normalized daily facts, source/freshness/quality fields, metric catalog enforcement and explicit campaign-to-fact links.
+3. Read contracts for campaign analysis; no browser calculations, revenue attribution, Google call, OAuth, provider credential, or external action.
+4. Database/RLS, authorization, idempotency, audit, cross-company and data-quality integration tests.
+
+**Closure:** BASEER can safely store and explain manual campaign context and factual measurements, but does not claim causation.
+
+## Phase 3 — Google read-only connection gates
+
+1. Separate provider decision records for Google Ads and Google Business Profile: supported fields, scopes, terms, retention, rate/quota, kill switch and no-write proof.
+2. Connection/capability/mapping/sync-receipt and snapshot foundations, then a verified read-only adapter for one provider at a time.
+3. Imported daily facts are immutable, deduplicated, freshness-labelled and quarantined on validation failure.
+
+**Closure:** each provider has proven company isolation, token protection, manual sync, no external write, retry/deduplication and data-quality behavior.
+
+## Phase 4 — Server-calculated analysis and reports
+
+1. Central filter contract: all/day/month/range/year/quarter, company/location, timezone and Apply/Reset semantics.
+2. Marketing Performance read models; sales correlation only after Daily Sales Closing exists.
+3. Financial ledger/read models, vault balances, supplier aging and management cash projections as their source operations become complete.
+4. No ROAS or causal claim unless sales source, metric definition, window and attribution methodology are all complete.
+
+**Closure:** every displayed metric has source, period, timezone, freshness and quality state.
+
+## Phase 5 — Native UI, one vertical journey at a time
+
+1. Marketing Performance UI: Overview, Campaigns, Google Ads, Google Business and Connections.
+2. Command Center summary cards use the same server read models; they do not duplicate a full dashboard or contain external action controls.
+3. Finance setup and remaining Finance operation UI resume as a separate approved scope.
+
+**Closure:** each screen uses authorized API contracts, bilingual RTL/LTR behavior, mobile/accessibility states, retry/error handling and no direct database access.
+
+## Phase 6 — Assistant and AI adoption
+
+1. Implement AI Gateway adapter, read-only tools, citations, evaluations and encrypted bounded conversation memory.
+2. Run internal read-only evaluation using verified Marketing, Sales, Finance and report read models.
+3. Add the floating Baseer Assistant UI only after isolation, prompt-injection, source/freshness and no-side-effect tests pass.
+
+**Closure:** the assistant explains verified facts and uncertainty; it cannot perform financial, advertising, publishing or configuration side effects.
+
+## Phase 7 — Noorix rehearsal and private operation
+
+1. Design source maps and stage an import rehearsal only after the corresponding BASEER source models exist.
+2. Reconcile company/month counts, status, gross/net/tax, debit/credit, serials, cancellations, attachments and operating dates.
+3. Complete private deployment, encrypted backup and isolated restore drill before cutover.
+
+## Explicitly deferred
+
+- live Noorix cutover;
+- public signup/SaaS behavior;
+- POS/inventory;
+- bank reconciliation;
+- Google Ads/GBP write actions, automated review replies, social publishing, or external spend;
+- AI chat UI before verified source read models;
+- browser-calculated business values.

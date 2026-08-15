@@ -1,0 +1,93 @@
+﻿name: baseer-erp-private-online
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${BASEER_DB_NAME:?BASEER_DB_NAME is required}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${BASEER_DB_BOOTSTRAP_PASSWORD:?BASEER_DB_BOOTSTRAP_PASSWORD is required}
+      BASEER_APP_USER: ${BASEER_DB_APP_USER:?BASEER_DB_APP_USER is required}
+      BASEER_APP_PASSWORD: ${BASEER_DB_APP_PASSWORD:?BASEER_DB_APP_PASSWORD is required}
+    volumes:
+      - baseer_private_postgres_data:/var/lib/postgresql/data
+      - ./docker/baseer-private-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - database
+
+  migrate:
+    image: baseer-erp-api:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
+    profiles:
+      - bootstrap
+    environment:
+      DATABASE_URL: postgresql://postgres:${BASEER_DB_BOOTSTRAP_PASSWORD:?BASEER_DB_BOOTSTRAP_PASSWORD is required}@postgres:5432/${BASEER_DB_NAME:?BASEER_DB_NAME is required}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["npx", "prisma", "migrate", "deploy", "--schema", "apps/api/prisma/schema.prisma"]
+    networks:
+      - database
+  api:
+    image: baseer-erp-api:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      BASEER_DEPLOYMENT_MODE: private-online
+      BASEER_BIND_HOST: 0.0.0.0
+      BASEER_API_PORT: "5200"
+      BASEER_ALLOW_PUBLIC_SIGNUP: "false"
+      DATABASE_URL: postgresql://${BASEER_DB_APP_USER}:${BASEER_DB_APP_PASSWORD}@postgres:5432/${BASEER_DB_NAME}
+      IDENTITY_JWT_SECRET: ${IDENTITY_JWT_SECRET:?IDENTITY_JWT_SECRET is required}
+      BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
+      BASEER_BACKUP_TARGET_LABEL: ${BASEER_BACKUP_TARGET_LABEL:?BASEER_BACKUP_TARGET_LABEL is required}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "5200"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web
+      - database
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile.private-online:/etc/caddy/Caddyfile:ro
+      - baseer_private_caddy_data:/data
+      - baseer_private_caddy_config:/config
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web
+
+networks:
+  web:
+  database:
+    internal: true
+
+volumes:
+  baseer_private_postgres_data:
+  baseer_private_caddy_data:
+  baseer_private_caddy_config:

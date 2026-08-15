@@ -1,0 +1,28 @@
+﻿import 'reflect-metadata';
+
+import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+
+import { AppModule } from './app.module.js';
+import { ApiExceptionFilter } from './common/api-exception.filter.js';
+import { ObservabilityService } from './observability/observability.service.js';
+import { RequestObservabilityInterceptor } from './observability/request-observability.interceptor.js';
+import { validatePrivateDeploymentConfiguration } from './operations/private-deployment-config.js';
+
+async function bootstrap(): Promise<void> {
+  validatePrivateDeploymentConfiguration();
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({ logger: false }),
+  );
+  app.setGlobalPrefix('v1');
+  app.useGlobalFilters(new ApiExceptionFilter());
+  app.useGlobalInterceptors(app.get(RequestObservabilityInterceptor));
+  app.enableShutdownHooks();
+  const port = Number.parseInt(process.env.BASEER_API_PORT ?? '5200', 10);
+  const host = process.env.BASEER_BIND_HOST ?? '127.0.0.1';
+  await app.listen({ host, port });
+  app.get(ObservabilityService).logLifecycle('service.started');
+}
+
+void bootstrap();

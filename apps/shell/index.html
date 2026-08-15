@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b2119" />
+    <title>Baseer ERP</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar" aria-label="شريط التطبيق">
+        <button class="icon-button" id="open-modules" type="button" aria-label="فتح الموديولات" title="الموديولات"><span class="grid-icon" aria-hidden="true">⠿</span></button>
+        <a class="brand" href="#modules" aria-label="Baseer ERP الرئيسية"><span class="brand-mark" aria-hidden="true">ب</span><span>Baseer ERP</span></a>
+        <div class="topbar-spacer"></div>
+        <button class="company-selector" type="button" aria-label="الشركة الحالية"><span class="status-dot" aria-hidden="true"></span><span data-ar="شركة نوركس الافتراضية" data-en="Noorix Default Company">شركة نوركس الافتراضية</span><span aria-hidden="true">⌄</span></button>
+        <button class="icon-button" id="quick-entry" type="button" aria-label="إدخال سريع" title="إدخال سريع">＋</button>
+        <button class="text-button" id="language-toggle" type="button" aria-label="Change language">EN</button>
+        <button class="theme-button" id="theme-toggle" type="button" aria-pressed="false"><span class="theme-dot" aria-hidden="true"></span><span data-ar="الثيم الأخضر" data-en="Green theme">الثيم الأخضر</span></button>
+        <button class="avatar" type="button" aria-label="حساب المستخدم">م</button>
+      </header>
+
+      <main class="workspace">
+        <aside class="module-sidebar" id="module-sidebar" aria-label="قائمة الموديول">
+          <div class="sidebar-head"><p class="overline" data-ar="الموديول الحالي" data-en="Current module">الموديول الحالي</p><h2 id="sidebar-title">مركز القيادة</h2></div>
+          <nav id="module-navigation" class="module-navigation" aria-label="أقسام الموديول"></nav>
+          <button class="back-to-modules" id="back-to-modules" type="button"><span aria-hidden="true">▦</span><span data-ar="كل الموديولات" data-en="All modules">كل الموديولات</span></button>
+        </aside>
+
+        <section class="module-page" aria-labelledby="page-title">
+          <div class="page-breadcrumb" id="page-breadcrumb">Baseer ERP / مركز القيادة</div>
+          <div class="page-heading"><div><h1 id="page-title">النظرة التنفيذية</h1><p id="page-description">ملخص موحّد يساعدك على اتخاذ قرار اليوم.</p></div><button class="period-button" type="button"><span aria-hidden="true">◫</span> <span data-ar="هذا الشهر" data-en="This month">هذا الشهر</span></button></div>
+          <section class="hero-panel" aria-label="ملخص الموديول"><div><span class="eyebrow">Baseer ERP</span><h2 id="hero-title">كل أعمالك في مكان واحد</h2><p id="hero-copy">ابدأ من الموديول المناسب، وستبقى الشركة والثيم والصلاحيات موحّدة.</p></div><button id="hero-open-modules" class="hero-action" type="button"><span data-ar="فتح الموديولات" data-en="Open modules">فتح الموديولات</span> ←</button></section>
+          <section class="summary-grid" aria-label="بطاقات توضيحية">
+            <article class="summary-card"><span class="card-icon green">⌘</span><p data-ar="سياق موحّد" data-en="One context">سياق موحّد</p><strong data-ar="شركة واحدة" data-en="One company">شركة واحدة</strong><small data-ar="تتغير الشركة في كل الموديولات معًا." data-en="A company changes across every module.">تتغير الشركة في كل الموديولات معًا.</small></article>
+            <article class="summary-card"><span class="card-icon blue">◫</span><p data-ar="مركزية" data-en="Centralized">مركزية</p><strong data-ar="ثيم موحّد" data-en="One theme">ثيم موحّد</strong><small data-ar="التغيير بصري فقط ولا يغير العمل." data-en="Visual only; it never changes the work.">التغيير بصري فقط ولا يغير العمل.</small></article>
+            <article class="summary-card"><span class="card-icon gold">✓</span><p data-ar="صلاحيات" data-en="Permissions">صلاحيات</p><strong data-ar="وصول واضح" data-en="Clear access">وصول واضح</strong><small data-ar="تظهر لك الموديولات المسموح بها فقط." data-en="Only permitted modules are shown.">تظهر لك الموديولات المسموح بها فقط.</small></article>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="overlay" id="modules-overlay" aria-hidden="false">
+      <section class="module-launcher" role="dialog" aria-modal="true" aria-labelledby="modules-title">
+        <header class="launcher-head"><button class="close-button" id="close-modules" type="button" aria-label="إغلاق">×</button><div><span class="launcher-kicker">Baseer ERP</span><h1 id="modules-title" data-ar="اختر الموديول الذي تريد العمل فيه" data-en="Choose the module you want to work in">اختر الموديول الذي تريد العمل فيه</h1><p data-ar="كل الموديولات تشترك في نفس الشركة والبيانات والصلاحيات." data-en="All modules share the same company, data, and permissions.">كل الموديولات تشترك في نفس الشركة والبيانات والصلاحيات.</p></div><span class="module-count" id="module-count">6 / 6</span></header>
+        <label class="module-search"><span aria-hidden="true">⌕</span><input id="module-search-input" type="search" autocomplete="off" placeholder="ابحث عن موديول…" /></label>
+        <div class="modules-grid" id="modules-grid"></div>
+        <footer class="launcher-foot"><span data-ar="تظهر الموديولات وفق الصلاحيات." data-en="Modules are shown according to permissions.">تظهر الموديولات وفق الصلاحيات.</span><button id="launcher-theme-toggle" class="plain-action" type="button"><span data-ar="تبديل الثيم" data-en="Switch theme">تبديل الثيم</span></button></footer>
+      </section>
+    </div>
+
+    <dialog class="quick-entry-dialog" id="quick-entry-dialog" aria-labelledby="quick-entry-title"><form method="dialog"><button class="close-button dialog-close" value="cancel" aria-label="إغلاق">×</button><span class="launcher-kicker" data-ar="إدخال سريع" data-en="Quick entry">إدخال سريع</span><h2 id="quick-entry-title" data-ar="اختر العملية" data-en="Choose an action">اختر العملية</h2><p data-ar="هذه واجهة مبدئية فقط؛ التنفيذ لاحقًا سيكون من أوامر HR الخادمية المصرح بها." data-en="This is a visual foundation only; execution will later use authorized HR server commands.">هذه واجهة مبدئية فقط؛ التنفيذ لاحقًا سيكون من أوامر HR الخادمية المصرح بها.</p><div class="quick-actions"><button value="advance" type="submit"><span>＋</span><strong data-ar="سلفة موظف" data-en="Employee advance">سلفة موظف</strong></button><button value="deduction" type="submit"><span>−</span><strong data-ar="خصم موظف" data-en="Employee deduction">خصم موظف</strong></button></div></form></dialog>
+    <script src="./app.js"></script>
+  </body>
+</html>

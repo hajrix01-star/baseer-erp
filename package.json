@@ -1,0 +1,13 @@
+{
+  "name": "baseer-erp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Baseer ERP modular monolith",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check:architecture": "node scripts/check-architecture.mjs"
+  }
+}

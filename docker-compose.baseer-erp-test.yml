@@ -1,0 +1,26 @@
+name: baseer-erp
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: baseer-erp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${BASEER_TEST_DB_NAME:-baseer_erp_test}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${BASEER_TEST_BOOTSTRAP_PASSWORD:?Set BASEER_TEST_BOOTSTRAP_PASSWORD in the local environment file}
+      BASEER_TEST_DB_USER: ${BASEER_TEST_DB_USER:-baseer_app}
+      BASEER_TEST_DB_PASSWORD: ${BASEER_TEST_DB_PASSWORD:?Set BASEER_TEST_DB_PASSWORD in the local environment file}
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - baseer-erp-postgres-data:/var/lib/postgresql/data
+      - ./docker/baseer-erp-test-init:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  baseer-erp-postgres-data:

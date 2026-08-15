@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baseer ERP — موديولات وأقسام</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .launcher-actions {display:flex;align-items:center;justify-content:flex-end;gap:10px}.launcher-back{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:10px;color:var(--brand);background:#fff;font-size:13px;font-weight:800}.launcher-back[hidden]{display:none}.section-card{--module:var(--brand);display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:13px;min-height:92px;padding:16px;border:1px solid var(--line);border-radius:16px;color:var(--ink);background:#fff;text-align:right;transition:.18s ease}.section-card:hover{border-color:var(--module);box-shadow:0 10px 24px rgba(16,44,31,.09);transform:translateY(-1px)}.section-order{display:grid;width:40px;height:40px;place-items:center;border-radius:12px;color:var(--module);background:color-mix(in srgb,var(--module) 12%,#fff);font-weight:800;direction:ltr}.section-card strong{font-size:16px}.section-card small{display:block;margin-top:4px;color:var(--muted)}.section-arrow{color:var(--module);font-size:21px}.module-page__placeholder{margin-top:20px;padding:26px;border:1px dashed #cbd9d0;border-radius:18px;color:var(--muted);background:rgba(255,255,255,.54);line-height:1.8}.module-page__placeholder strong{color:var(--ink)}@media(max-width:800px){.section-card{grid-template-columns:40px 1fr}.section-arrow{display:none}}
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <button class="icon-button" id="open-launcher" type="button" aria-label="فتح الموديولات">⠿</button>
+        <a class="brand" href="./launcher-v2.html"><span class="brand-mark">ب</span><span>Baseer ERP</span></a><div class="topbar-spacer"></div>
+        <button class="company-selector" type="button"><span class="status-dot"></span><span>شركة نوركس الافتراضية</span><span>⌄</span></button>
+        <button class="icon-button" type="button" aria-label="إدخال سريع">＋</button><button class="text-button" type="button">EN</button><button class="avatar" type="button">م</button>
+      </header>
+      <main class="workspace">
+        <aside class="module-sidebar"><div class="sidebar-head"><p class="overline">الموديول الحالي</p><h2 id="sidebar-title">مركز القيادة</h2></div><nav id="side-nav" class="module-navigation"></nav><button id="side-launcher" class="back-to-modules" type="button">▦ كل الموديولات</button></aside>
+        <section class="module-page"><div class="page-breadcrumb" id="crumb">Baseer ERP / مركز القيادة</div><div class="page-heading"><div><h1 id="page-title">النظرة التنفيذية</h1><p id="page-description">ملخص موحّد يساعدك على اتخاذ قرار اليوم.</p></div><button class="period-button" type="button">◫ هذا الشهر</button></div><section class="hero-panel"><div><span class="eyebrow">Baseer ERP</span><h2 id="hero-title">مرحبًا بك في مركز القيادة</h2><p id="hero-copy">تنتقل من نافذة الموديولات إلى القسم المطلوب مباشرة، وتبقى الأقسام في القائمة الجانبية.</p></div><button id="hero-launcher" class="hero-action" type="button">فتح الموديولات ←</button></section><section class="module-page__placeholder"><strong>تجربة التنقل الجديدة:</strong> اختر موديولًا، ثم اختر قسمًا من النافذة نفسها. بعد ذلك تستطيع الانتقال بين أقسام الموديول من القائمة الجانبية فقط.</section></section>
+      </main>
+    </div>
+
+    <div class="overlay" id="launcher-overlay">
+      <section class="module-launcher" role="dialog" aria-modal="true" aria-labelledby="launcher-title">
+        <header class="launcher-head"><button class="close-button" id="close-launcher" type="button" aria-label="إغلاق">×</button><div><span class="launcher-kicker" id="launcher-kicker">Baseer ERP</span><h1 id="launcher-title">اختر الموديول الذي تريد العمل فيه</h1><p id="launcher-intro">كل الموديولات تشترك في نفس الشركة والبيانات والصلاحيات.</p></div><div class="launcher-actions"><button class="launcher-back" id="launcher-back" type="button" hidden>→ كل الموديولات</button><span class="module-count" id="launcher-count">6 / 6</span></div></header>
+        <label class="module-search"><span>⌕</span><input id="launcher-search" type="search" autocomplete="off" placeholder="ابحث عن موديول أو قسم…" /></label>
+        <div class="modules-grid" id="launcher-grid"></div>
+        <footer class="launcher-foot"><span id="launcher-note">تظهر الموديولات وفق الصلاحيات.</span><span class="plain-action">نفس النظام · نفس الشركة · نفس البيانات</span></footer>
+      </section>
+    </div>
+    <script src="./launcher-v2.js"></script>
+  </body>
+</html>
