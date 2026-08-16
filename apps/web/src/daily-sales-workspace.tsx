@@ -8,6 +8,10 @@ import { DailySalesHistory } from "./daily-sales-history";
 import { DailySalesInsights } from "./daily-sales-insights";
 import { useDailySalesPreview } from "./use-daily-sales-preview";
 import {
+  buildDailySalesWhatsAppText,
+  openDailySalesWhatsApp,
+} from "./daily-sales-whatsapp";
+import {
   activeSession,
   api,
   initialForm,
@@ -178,6 +182,25 @@ export function DailySalesWorkspace({
             scope: form.scope,
           }),
         });
+      }
+      if (!editing) {
+        try {
+          const dayQuery = `fromBusinessDate=${form.businessDate}&toBusinessDate=${form.businessDate}`;
+          const day = await api<{ closings: Closing[] }>(
+            session,
+            `/finance/daily-sales/closings?${dayQuery}`,
+          );
+          openDailySalesWhatsApp(
+            buildDailySalesWhatsAppText({
+              language,
+              businessDate: form.businessDate,
+              closings: day.closings,
+              vaults,
+            }),
+          );
+        } catch {
+          // Sharing is optional and must never make a successfully posted summary look failed.
+        }
       }
       setEntryOpen(false);
       resetDialog();

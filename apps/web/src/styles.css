@@ -2186,3 +2186,96 @@ html[dir="ltr"] .mobile-drawer__panel {
     flex-wrap: wrap;
   }
 }
+
+/* Compact daily sales entry dialog: desktop-first, while retaining safe scroll on small viewports. */
+.daily-sales-dialog {
+  width: min(980px, 100%);
+  padding: 16px;
+  border-radius: 16px;
+}
+.daily-sales-dialog__header {
+  gap: 12px;
+  padding-bottom: 10px;
+}
+.daily-sales-dialog__header h3 {
+  margin: 3px 0;
+  font-size: 20px;
+}
+.daily-sales-dialog__header p:last-child {
+  line-height: 1.45;
+}
+.daily-sales-dialog__form {
+  gap: 10px;
+  padding-top: 12px;
+}
+.daily-sales-dialog__form label {
+  gap: 4px;
+}
+.daily-sales-dialog__form input,
+.daily-sales-dialog__form select,
+.daily-sales-dialog__form textarea {
+  min-height: 38px;
+  padding: 7px 9px;
+}
+.daily-sales-dialog__form textarea {
+  min-height: 48px;
+}
+.daily-sales-dialog__form small {
+  line-height: 1.35;
+}
+.daily-sales-dialog__mode {
+  grid-column: span 2;
+  min-height: 38px;
+  padding: 3px;
+}
+.daily-sales-dialog__mode button {
+  min-height: 32px;
+}
+.daily-sales-dialog__form fieldset {
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr);
+  gap: 8px 12px;
+  padding: 10px;
+}
+.daily-sales-dialog__form fieldset legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+.daily-sales-dialog__scope-picker {
+  grid-template-columns: none !important;
+}
+.daily-sales-dialog__scope-picker button {
+  min-width: 0;
+  padding: 7px;
+}
+.daily-sales-dialog__scope-picker small {
+  margin-top: 0;
+}
+.daily-sales-dialog__vault-grid {
+  gap: 7px;
+}
+.daily-sales-dialog__vault {
+  gap: 5px;
+  padding: 9px;
+}
+.daily-sales-dialog__total {
+  align-content: center;
+  padding: 10px;
+}
+.daily-sales-dialog__total strong {
+  font-size: 19px;
+}
+.daily-sales-dialog__handover {
+  gap: 8px;
+}
+.daily-sales-dialog__actions {
+  gap: 8px;
+  padding-top: 0;
+}
+@media (max-width: 800px) {
+  .daily-sales-dialog__mode {
+    grid-column: 1 / -1;
+  }
+  .daily-sales-dialog__form fieldset {
+    grid-template-columns: 1fr;
+  }
+}

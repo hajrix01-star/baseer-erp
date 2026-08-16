@@ -239,7 +239,9 @@ export function DailySalesClosingDialog({
                           onChange={(event) =>
                             updateAmount(vault.id, event.target.value)
                           }
-                          placeholder="0.00"
+                          placeholder={
+                            language === "ar" ? "أدخل المبلغ" : "Enter amount"
+                          }
                         />
                       </label>
                     );
@@ -272,7 +274,7 @@ export function DailySalesClosingDialog({
                         cashHandoverAmount: event.target.value,
                       })
                     }
-                    placeholder="0.0000"
+                    placeholder={language === "ar" ? "اختياري" : "Optional"}
                   />
                 </label>
                 <label>

@@ -69,7 +69,8 @@ export type DailySalesWorkspaceReceipt = {
   closings: Closing[];
   cashHandovers: CashHandoverReport;
   shifts: ShiftSummary[];
-};export type CalendarDay = {
+};
+export type CalendarDay = {
   businessDate: string;
   operationalStatus: "OPEN" | "CLOSED" | "PARTIAL";
   dataStatus: "RECORDED" | "PENDING" | "CLOSED";
@@ -103,14 +104,19 @@ let sessionExpiryReloadScheduled = false;
 export const baseerApiBaseUrl = (
   import.meta.env.VITE_BASEER_API_URL ?? "/v1"
 ).replace(/\/$/, "");
-function riyadhDateParts(value: Date): { year: number; month: number; day: number } {
+function riyadhDateParts(value: Date): {
+  year: number;
+  month: number;
+  day: number;
+} {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Riyadh",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   }).formatToParts(value);
-  const read = (type: Intl.DateTimeFormatPartTypes) => Number(parts.find((part) => part.type === type)?.value);
+  const read = (type: Intl.DateTimeFormatPartTypes) =>
+    Number(parts.find((part) => part.type === type)?.value);
   return { year: read("year"), month: read("month"), day: read("day") };
 }
 
@@ -130,7 +136,7 @@ export function initialForm(vaultId = ""): FormState {
   return {
     businessDate: "",
     scope: "ALL",
-    customerCount: "0",
+    customerCount: "",
     allocations: [{ vaultId, grossAmount: "" }],
     cashHandoverAmount: "",
     cashHandoverVaultId: vaultId,
@@ -200,7 +206,8 @@ export async function api<T>(
   try {
     return await parseBaseerApiResponse<T>(response);
   } catch (error) {
-    if (error instanceof BaseerApiError && error.status === 401) clearExpiredSession();
+    if (error instanceof BaseerApiError && error.status === 401)
+      clearExpiredSession();
     throw error;
   }
 }
