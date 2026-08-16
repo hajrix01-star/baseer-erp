@@ -2658,3 +2658,20 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-column: auto;
   }
 }
+
+/* Approved Baseer wordmark: shared source asset, tinted only where the surface needs contrast. */
+.baseer-brand__image {
+  display: block;
+  width: auto;
+  height: 2.1rem;
+  max-width: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+.topbar .baseer-brand__image,
+.launcher-topbar .baseer-brand__image {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(15%) saturate(1762%) hue-rotate(104deg) brightness(90%) contrast(91%);
+}
+.sidebar-brand .baseer-brand__image {
+  height: 2.25rem;
+}
