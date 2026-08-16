@@ -2613,3 +2613,9 @@ html[dir="ltr"] .mobile-drawer__panel {
   width: 100%;
   box-sizing: border-box;
 }
+/* Keep the day-off reason panel aligned to the entry dialog width. */
+.daily-sales-dialog--noorix .daily-sales-dialog__day-off {
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
