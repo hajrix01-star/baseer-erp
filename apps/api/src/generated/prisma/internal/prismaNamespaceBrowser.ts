@@ -343,6 +343,7 @@ export const FinanceCategoryScalarFieldEnum = {
   nameEn: 'nameEn',
   kind: 'kind',
   status: 'status',
+  isPosting: 'isPosting',
   sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

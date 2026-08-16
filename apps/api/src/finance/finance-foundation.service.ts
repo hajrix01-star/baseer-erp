@@ -13,9 +13,10 @@ import { RequestContext } from '../observability/request-context.js';
 import {
   FINANCE_BASE_ACCOUNT_SEEDS,
   FINANCE_BASE_CATEGORY_SEEDS,
+  FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS,
 } from './finance-foundation-seeds.js';
 
-const BASE_SEED_VERSION = 2;
+const BASE_SEED_VERSION = 3;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;
@@ -64,18 +65,51 @@ export class FinanceFoundationService {
       accountsByCode.set(seed.code, account.id);
     }
 
-    const existingCategoryCodes = new Set((await transaction.financeCategory.findMany({
-      where: { tenantId: context.tenantId, companyId: context.companyId }, select: { code: true },
-    })).map((category) => category.code));
+    const existingCategories = await transaction.financeCategory.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId },
+      select: { id: true, code: true, accountId: true, parentId: true },
+    });
+    const categoriesByCode = new Map(existingCategories.map((category) => [category.code, category]));
     for (const seed of FINANCE_BASE_CATEGORY_SEEDS) {
-      if (existingCategoryCodes.has(seed.code)) continue;
+      if (categoriesByCode.has(seed.code)) continue;
       const accountId = accountsByCode.get(seed.accountCode);
-      if (!accountId) throw new ConflictException(`Missing required seeded account ${seed.accountCode}.`);
-      await transaction.financeCategory.create({
+      if (!accountId) throw new ConflictException('Missing required seeded account ' + seed.accountCode + '.');
+      const category = await transaction.financeCategory.create({
         data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, accountId, code: seed.code, nameAr: seed.nameAr, nameEn: seed.nameEn, kind: seed.kind, status: FinanceCategoryStatus.ACTIVE, sortOrder: seed.sortOrder },
+        select: { id: true, code: true, accountId: true, parentId: true },
       });
+      categoriesByCode.set(category.code, category);
     }
 
+    const parentCodes = [...new Set(FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS.map((seed) => seed.parentCode))];
+    for (const seed of FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS) {
+      if (categoriesByCode.has(seed.code)) continue;
+      const parent = categoriesByCode.get(seed.parentCode);
+      if (!parent?.accountId) throw new ConflictException('Missing required seeded category ' + seed.parentCode + '.');
+      const category = await transaction.financeCategory.create({
+        data: {
+          id: randomUUID(),
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          parentId: parent.id,
+          accountId: parent.accountId,
+          code: seed.code,
+          nameAr: seed.nameAr,
+          nameEn: seed.nameEn,
+          kind: seed.kind,
+          status: FinanceCategoryStatus.ACTIVE,
+          isPosting: true,
+          sortOrder: seed.sortOrder,
+        },
+        select: { id: true, code: true, accountId: true, parentId: true },
+      });
+      categoriesByCode.set(category.code, category);
+    }
+    // A parent provides navigation only. Financial documents must select a posting leaf.
+    await transaction.financeCategory.updateMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, code: { in: parentCodes }, parentId: null },
+      data: { isPosting: false },
+    });
     if (!existingProfile) {
       await transaction.companyFinanceProfile.create({
         data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: false },

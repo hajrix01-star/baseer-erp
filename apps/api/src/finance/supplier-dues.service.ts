@@ -239,6 +239,7 @@ export class SupplierDuesService {
           tenantId: context.tenantId,
           companyId: context.companyId,
           status: FinanceCategoryStatus.ACTIVE,
+          isPosting: true,
           kind: { in: [FinanceCategoryKind.PURCHASE, FinanceCategoryKind.EXPENSE] },
         },
         select: { id: true, accountId: true, account: { select: { id: true, status: true, type: true } } },

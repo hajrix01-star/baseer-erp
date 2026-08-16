@@ -506,6 +506,7 @@ model FinanceCategory {
   nameEn    String                @db.VarChar(160)
   kind      FinanceCategoryKind
   status    FinanceCategoryStatus @default(ACTIVE)
+  isPosting Boolean               @default(true)
   sortOrder Int                   @default(0)
   createdAt DateTime              @default(now()) @db.Timestamptz(6)
   updatedAt DateTime              @updatedAt @db.Timestamptz(6)

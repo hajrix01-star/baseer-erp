@@ -444,6 +444,8 @@ const financeConfigurationCategorySchema = z
     kind: z.string().min(1).max(40),
     status: z.string().min(1).max(40),
     accountId: z.string().uuid().nullable(),
+    parentId: z.string().uuid().nullable(),
+    isPosting: z.boolean(),
   })
   .strict();
 const financeConfigurationSupplierSchema = z

@@ -48,6 +48,7 @@ export class RecurringExpenseService {
           tenantId: context.tenantId,
           companyId: context.companyId,
           status: FinanceCategoryStatus.ACTIVE,
+          isPosting: true,
           kind: { in: [FinanceCategoryKind.PURCHASE, FinanceCategoryKind.EXPENSE] },
         },
         select: { id: true },

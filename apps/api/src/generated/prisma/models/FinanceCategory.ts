@@ -45,6 +45,7 @@ export type FinanceCategoryMinAggregateOutputType = {
   nameEn: string | null
   kind: $Enums.FinanceCategoryKind | null
   status: $Enums.FinanceCategoryStatus | null
+  isPosting: boolean | null
   sortOrder: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,6 +62,7 @@ export type FinanceCategoryMaxAggregateOutputType = {
   nameEn: string | null
   kind: $Enums.FinanceCategoryKind | null
   status: $Enums.FinanceCategoryStatus | null
+  isPosting: boolean | null
   sortOrder: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -77,6 +79,7 @@ export type FinanceCategoryCountAggregateOutputType = {
   nameEn: number
   kind: number
   status: number
+  isPosting: number
   sortOrder: number
   createdAt: number
   updatedAt: number
@@ -103,6 +106,7 @@ export type FinanceCategoryMinAggregateInputType = {
   nameEn?: true
   kind?: true
   status?: true
+  isPosting?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -119,6 +123,7 @@ export type FinanceCategoryMaxAggregateInputType = {
   nameEn?: true
   kind?: true
   status?: true
+  isPosting?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -135,6 +140,7 @@ export type FinanceCategoryCountAggregateInputType = {
   nameEn?: true
   kind?: true
   status?: true
+  isPosting?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -238,6 +244,7 @@ export type FinanceCategoryGroupByOutputType = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status: $Enums.FinanceCategoryStatus
+  isPosting: boolean
   sortOrder: number
   createdAt: Date
   updatedAt: Date
@@ -277,6 +284,7 @@ export type FinanceCategoryWhereInput = {
   nameEn?: Prisma.StringFilter<"FinanceCategory"> | string
   kind?: Prisma.EnumFinanceCategoryKindFilter<"FinanceCategory"> | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFilter<"FinanceCategory"> | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFilter<"FinanceCategory"> | boolean
   sortOrder?: Prisma.IntFilter<"FinanceCategory"> | number
   createdAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
@@ -302,6 +310,7 @@ export type FinanceCategoryOrderByWithRelationInput = {
   nameEn?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  isPosting?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -332,6 +341,7 @@ export type FinanceCategoryWhereUniqueInput = Prisma.AtLeast<{
   nameEn?: Prisma.StringFilter<"FinanceCategory"> | string
   kind?: Prisma.EnumFinanceCategoryKindFilter<"FinanceCategory"> | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFilter<"FinanceCategory"> | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFilter<"FinanceCategory"> | boolean
   sortOrder?: Prisma.IntFilter<"FinanceCategory"> | number
   createdAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
@@ -357,6 +367,7 @@ export type FinanceCategoryOrderByWithAggregationInput = {
   nameEn?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  isPosting?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -381,6 +392,7 @@ export type FinanceCategoryScalarWhereWithAggregatesInput = {
   nameEn?: Prisma.StringWithAggregatesFilter<"FinanceCategory"> | string
   kind?: Prisma.EnumFinanceCategoryKindWithAggregatesFilter<"FinanceCategory"> | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusWithAggregatesFilter<"FinanceCategory"> | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolWithAggregatesFilter<"FinanceCategory"> | boolean
   sortOrder?: Prisma.IntWithAggregatesFilter<"FinanceCategory"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceCategory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceCategory"> | Date | string
@@ -393,6 +405,7 @@ export type FinanceCategoryCreateInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -418,6 +431,7 @@ export type FinanceCategoryUncheckedCreateInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -436,6 +450,7 @@ export type FinanceCategoryUpdateInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -461,6 +476,7 @@ export type FinanceCategoryUncheckedUpdateInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -483,6 +499,7 @@ export type FinanceCategoryCreateManyInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -495,6 +512,7 @@ export type FinanceCategoryUpdateManyMutationInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -511,6 +529,7 @@ export type FinanceCategoryUncheckedUpdateManyInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -553,6 +572,7 @@ export type FinanceCategoryCountOrderByAggregateInput = {
   nameEn?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  isPosting?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -573,6 +593,7 @@ export type FinanceCategoryMaxOrderByAggregateInput = {
   nameEn?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  isPosting?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -589,6 +610,7 @@ export type FinanceCategoryMinOrderByAggregateInput = {
   nameEn?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  isPosting?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -836,6 +858,7 @@ export type FinanceCategoryCreateWithoutCompanyInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -858,6 +881,7 @@ export type FinanceCategoryUncheckedCreateWithoutCompanyInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -909,6 +933,7 @@ export type FinanceCategoryScalarWhereInput = {
   nameEn?: Prisma.StringFilter<"FinanceCategory"> | string
   kind?: Prisma.EnumFinanceCategoryKindFilter<"FinanceCategory"> | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFilter<"FinanceCategory"> | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFilter<"FinanceCategory"> | boolean
   sortOrder?: Prisma.IntFilter<"FinanceCategory"> | number
   createdAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceCategory"> | Date | string
@@ -921,6 +946,7 @@ export type FinanceCategoryCreateWithoutAccountInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -942,6 +968,7 @@ export type FinanceCategoryUncheckedCreateWithoutAccountInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -986,6 +1013,7 @@ export type FinanceCategoryCreateWithoutChildrenInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1010,6 +1038,7 @@ export type FinanceCategoryUncheckedCreateWithoutChildrenInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1032,6 +1061,7 @@ export type FinanceCategoryCreateWithoutParentInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1053,6 +1083,7 @@ export type FinanceCategoryUncheckedCreateWithoutParentInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1092,6 +1123,7 @@ export type FinanceCategoryUpdateWithoutChildrenInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1116,6 +1148,7 @@ export type FinanceCategoryUncheckedUpdateWithoutChildrenInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1149,6 +1182,7 @@ export type FinanceCategoryCreateWithoutSuppliersInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1173,6 +1207,7 @@ export type FinanceCategoryUncheckedCreateWithoutSuppliersInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1206,6 +1241,7 @@ export type FinanceCategoryUpdateWithoutSuppliersInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1230,6 +1266,7 @@ export type FinanceCategoryUncheckedUpdateWithoutSuppliersInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1247,6 +1284,7 @@ export type FinanceCategoryCreateWithoutDuesInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1271,6 +1309,7 @@ export type FinanceCategoryUncheckedCreateWithoutDuesInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1304,6 +1343,7 @@ export type FinanceCategoryUpdateWithoutDuesInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1328,6 +1368,7 @@ export type FinanceCategoryUncheckedUpdateWithoutDuesInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1345,6 +1386,7 @@ export type FinanceCategoryCreateWithoutOutflowDocumentsInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1369,6 +1411,7 @@ export type FinanceCategoryUncheckedCreateWithoutOutflowDocumentsInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1402,6 +1445,7 @@ export type FinanceCategoryUpdateWithoutOutflowDocumentsInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1426,6 +1470,7 @@ export type FinanceCategoryUncheckedUpdateWithoutOutflowDocumentsInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1443,6 +1488,7 @@ export type FinanceCategoryCreateWithoutDailySalesClosingsInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1467,6 +1513,7 @@ export type FinanceCategoryUncheckedCreateWithoutDailySalesClosingsInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1500,6 +1547,7 @@ export type FinanceCategoryUpdateWithoutDailySalesClosingsInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1524,6 +1572,7 @@ export type FinanceCategoryUncheckedUpdateWithoutDailySalesClosingsInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1541,6 +1590,7 @@ export type FinanceCategoryCreateWithoutRecurringExpenseProfilesInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1565,6 +1615,7 @@ export type FinanceCategoryUncheckedCreateWithoutRecurringExpenseProfilesInput =
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1598,6 +1649,7 @@ export type FinanceCategoryUpdateWithoutRecurringExpenseProfilesInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1622,6 +1674,7 @@ export type FinanceCategoryUncheckedUpdateWithoutRecurringExpenseProfilesInput =
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1641,6 +1694,7 @@ export type FinanceCategoryCreateManyCompanyInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1653,6 +1707,7 @@ export type FinanceCategoryUpdateWithoutCompanyInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1675,6 +1730,7 @@ export type FinanceCategoryUncheckedUpdateWithoutCompanyInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1695,6 +1751,7 @@ export type FinanceCategoryUncheckedUpdateManyWithoutCompanyInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1708,6 +1765,7 @@ export type FinanceCategoryCreateManyAccountInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1720,6 +1778,7 @@ export type FinanceCategoryUpdateWithoutAccountInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1741,6 +1800,7 @@ export type FinanceCategoryUncheckedUpdateWithoutAccountInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1760,6 +1820,7 @@ export type FinanceCategoryUncheckedUpdateManyWithoutAccountInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1773,6 +1834,7 @@ export type FinanceCategoryCreateManyParentInput = {
   nameEn: string
   kind: $Enums.FinanceCategoryKind
   status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1785,6 +1847,7 @@ export type FinanceCategoryUpdateWithoutParentInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1806,6 +1869,7 @@ export type FinanceCategoryUncheckedUpdateWithoutParentInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1825,6 +1889,7 @@ export type FinanceCategoryUncheckedUpdateManyWithoutParentInput = {
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
   status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1917,6 +1982,7 @@ export type FinanceCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   nameEn?: boolean
   kind?: boolean
   status?: boolean
+  isPosting?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1943,6 +2009,7 @@ export type FinanceCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   nameEn?: boolean
   kind?: boolean
   status?: boolean
+  isPosting?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1962,6 +2029,7 @@ export type FinanceCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   nameEn?: boolean
   kind?: boolean
   status?: boolean
+  isPosting?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1981,12 +2049,13 @@ export type FinanceCategorySelectScalar = {
   nameEn?: boolean
   kind?: boolean
   status?: boolean
+  isPosting?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FinanceCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "parentId" | "accountId" | "code" | "nameAr" | "nameEn" | "kind" | "status" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["financeCategory"]>
+export type FinanceCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "parentId" | "accountId" | "code" | "nameAr" | "nameEn" | "kind" | "status" | "isPosting" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["financeCategory"]>
 export type FinanceCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   account?: boolean | Prisma.FinanceCategory$accountArgs<ExtArgs>
@@ -2034,6 +2103,7 @@ export type $FinanceCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
     nameEn: string
     kind: $Enums.FinanceCategoryKind
     status: $Enums.FinanceCategoryStatus
+    isPosting: boolean
     sortOrder: number
     createdAt: Date
     updatedAt: Date
@@ -2479,6 +2549,7 @@ export interface FinanceCategoryFieldRefs {
   readonly nameEn: Prisma.FieldRef<"FinanceCategory", 'String'>
   readonly kind: Prisma.FieldRef<"FinanceCategory", 'FinanceCategoryKind'>
   readonly status: Prisma.FieldRef<"FinanceCategory", 'FinanceCategoryStatus'>
+  readonly isPosting: Prisma.FieldRef<"FinanceCategory", 'Boolean'>
   readonly sortOrder: Prisma.FieldRef<"FinanceCategory", 'Int'>
   readonly createdAt: Prisma.FieldRef<"FinanceCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FinanceCategory", 'DateTime'>

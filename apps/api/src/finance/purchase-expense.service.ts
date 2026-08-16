@@ -22,7 +22,7 @@ export class PurchaseExpenseService {
       if(begun.kind==='replay') return begun.response.body as unknown as PurchaseExpenseReceipt;
       if(begun.kind==='in-progress') throw new ConflictException('This purchase request is already being processed.');
       await this.dates.assertNotFutureInTransaction(tx,input.context,r.businessDate);
-      const category=await tx.financeCategory.findFirst({where:{id:r.categoryId,tenantId:input.context.tenantId,companyId:input.context.companyId,status:FinanceCategoryStatus.ACTIVE,kind:r.kind},include:{account:{select:{id:true,type:true,status:true}}}});
+      const category=await tx.financeCategory.findFirst({where:{id:r.categoryId,tenantId:input.context.tenantId,companyId:input.context.companyId,status:FinanceCategoryStatus.ACTIVE,isPosting:true,kind:r.kind},include:{account:{select:{id:true,type:true,status:true}}}});
       if(!category?.account||category.account.status!==FinanceAccountStatus.ACTIVE||category.account.type!==FinanceAccountType.ASSET&&category.account.type!==FinanceAccountType.EXPENSE)throw new BadRequestException('The selected category is not ready for financial posting.');
       if(r.supplierId&&!await tx.financeSupplier.findFirst({where:{id:r.supplierId,tenantId:input.context.tenantId,companyId:input.context.companyId,status:FinanceSupplierStatus.ACTIVE},select:{id:true}}))throw new BadRequestException('The selected supplier is not active.');
       if(r.settlementKind==='PAYABLE'&&!r.supplierId)throw new BadRequestException('A supplier is required for a payable document.');

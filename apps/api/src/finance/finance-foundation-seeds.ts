@@ -78,26 +78,89 @@ export const FINANCE_BASE_CATEGORY_SEEDS: readonly FinanceCategorySeed[] = [
   { code: 'EXP-012', accountCode: 'EXP-012', nameAr: 'خدمات بلدية وتراخيص', nameEn: 'Municipal services and licenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 160 },
 ] as const;
 
+export type FinanceCategoryHierarchySeed = Readonly<{
+  code: string;
+  parentCode: string;
+  nameAr: string;
+  nameEn: string;
+  kind: FinanceCategoryKind;
+  sortOrder: number;
+}>;
+
+// The hierarchy follows Noorix's proven restaurant master-data taxonomy while
+// keeping BASEER's distinct accounts for electricity, water, telecom and municipality.
+export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHierarchySeed[] = [
+  { code: 'P1-1', parentCode: 'PUR-001', nameAr: 'لحوم', nameEn: 'Meat', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
+  { code: 'P1-2', parentCode: 'PUR-001', nameAr: 'دجاج', nameEn: 'Poultry', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
+  { code: 'P1-3', parentCode: 'PUR-001', nameAr: 'خضار وفواكه', nameEn: 'Vegetables and fruits', kind: FinanceCategoryKind.PURCHASE, sortOrder: 30 },
+  { code: 'P1-4', parentCode: 'PUR-001', nameAr: 'بضاعة تموينية', nameEn: 'Grocery goods', kind: FinanceCategoryKind.PURCHASE, sortOrder: 40 },
+  { code: 'P1-5', parentCode: 'PUR-001', nameAr: 'خامات', nameEn: 'Raw materials', kind: FinanceCategoryKind.PURCHASE, sortOrder: 50 },
+  { code: 'P1-6', parentCode: 'PUR-001', nameAr: 'مواد غذائية أخرى', nameEn: 'Other food items', kind: FinanceCategoryKind.PURCHASE, sortOrder: 60 },
+  { code: 'P2-1', parentCode: 'PUR-002', nameAr: 'غازيات', nameEn: 'Soft drinks', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
+  { code: 'P2-2', parentCode: 'PUR-002', nameAr: 'مياه', nameEn: 'Water', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
+  { code: 'P2-3', parentCode: 'PUR-002', nameAr: 'عصائر', nameEn: 'Juices', kind: FinanceCategoryKind.PURCHASE, sortOrder: 30 },
+  { code: 'P3-1', parentCode: 'PUR-003', nameAr: 'بلاستيكات', nameEn: 'Plastics', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
+  { code: 'P3-2', parentCode: 'PUR-003', nameAr: 'علب وأكواب', nameEn: 'Cups and containers', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
+  { code: 'P3-3', parentCode: 'PUR-003', nameAr: 'أكياس', nameEn: 'Bags', kind: FinanceCategoryKind.PURCHASE, sortOrder: 30 },
+  { code: 'P4-1', parentCode: 'PUR-004', nameAr: 'فحم', nameEn: 'Charcoal', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
+  { code: 'P4-2', parentCode: 'PUR-004', nameAr: 'غاز طبخ', nameEn: 'Cooking gas', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
+  { code: 'P4-3', parentCode: 'PUR-004', nameAr: 'مواد تشغيلية', nameEn: 'Operational supplies', kind: FinanceCategoryKind.PURCHASE, sortOrder: 30 },
+  { code: 'P4-4', parentCode: 'PUR-004', nameAr: 'مواد تنظيف مطبخ', nameEn: 'Kitchen cleaning supplies', kind: FinanceCategoryKind.PURCHASE, sortOrder: 40 },
+  { code: 'E2-1', parentCode: 'EXP-002', nameAr: 'رخصة تجارية', nameEn: 'Commercial license', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E2-2', parentCode: 'EXP-002', nameAr: 'رخصة بلدية', nameEn: 'Municipal license', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E2-3', parentCode: 'EXP-002', nameAr: 'دفاع مدني', nameEn: 'Civil defense', kind: FinanceCategoryKind.EXPENSE, sortOrder: 30 },
+  { code: 'E2-4', parentCode: 'EXP-002', nameAr: 'إقامات وجوازات', nameEn: 'Iqama and passports', kind: FinanceCategoryKind.EXPENSE, sortOrder: 40 },
+  { code: 'E2-5', parentCode: 'EXP-002', nameAr: 'زيارات', nameEn: 'Visit visas', kind: FinanceCategoryKind.EXPENSE, sortOrder: 50 },
+  { code: 'E2-6', parentCode: 'EXP-002', nameAr: 'غرامات', nameEn: 'Fines and penalties', kind: FinanceCategoryKind.EXPENSE, sortOrder: 60 },
+  { code: 'E2-7', parentCode: 'EXP-002', nameAr: 'ضرائب ورسوم أخرى', nameEn: 'Other taxes and fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 70 },
+  { code: 'E2-10', parentCode: 'EXP-002', nameAr: 'رسوم منصات حكومية', nameEn: 'Government platform fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 80 },
+  { code: 'E2-11', parentCode: 'EXP-002', nameAr: 'شهادات صحية وتصاريح موظفين', nameEn: 'Health certificates and employee permits', kind: FinanceCategoryKind.EXPENSE, sortOrder: 90 },
+  { code: 'E3-1', parentCode: 'EXP-003', nameAr: 'إيجارات', nameEn: 'Rent', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E3-5', parentCode: 'EXP-003', nameAr: 'غاز', nameEn: 'Gas', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E4-1', parentCode: 'EXP-004', nameAr: 'رواتب وأجور', nameEn: 'Salaries and wages', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E4-2', parentCode: 'EXP-004', nameAr: 'التأمينات الاجتماعية', nameEn: 'GOSI employer contributions', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E5-1', parentCode: 'EXP-005', nameAr: 'صيانة آلات', nameEn: 'Equipment maintenance', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E5-2', parentCode: 'EXP-005', nameAr: 'قطع غيار', nameEn: 'Spare parts', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E5-3', parentCode: 'EXP-005', nameAr: 'وقود ومواصلات', nameEn: 'Fuel and transportation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 30 },
+  { code: 'E6-1', parentCode: 'EXP-006', nameAr: 'حملات تسويقية', nameEn: 'Marketing campaigns', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E6-2', parentCode: 'EXP-006', nameAr: 'هدايا وضيافة', nameEn: 'Gifts and hospitality', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E7-1', parentCode: 'EXP-007', nameAr: 'رسوم تحويل', nameEn: 'Transfer fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E7-2', parentCode: 'EXP-007', nameAr: 'رسوم سحب', nameEn: 'Withdrawal fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E7-3', parentCode: 'EXP-007', nameAr: 'رسوم إدارة حساب', nameEn: 'Account management fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 30 },
+  { code: 'E7-4', parentCode: 'EXP-007', nameAr: 'فوائد ورسوم قروض', nameEn: 'Loan interest and fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 40 },
+  { code: 'E7-5', parentCode: 'EXP-007', nameAr: 'رسوم أخرى', nameEn: 'Other fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 50 },
+  { code: 'E8-1', parentCode: 'EXP-008', nameAr: 'أثاث', nameEn: 'Furniture', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E8-2', parentCode: 'EXP-008', nameAr: 'معدات مكتبية', nameEn: 'Office equipment', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E8-3', parentCode: 'EXP-008', nameAr: 'أجهزة وإلكترونيات', nameEn: 'Devices and electronics', kind: FinanceCategoryKind.EXPENSE, sortOrder: 30 },
+  { code: 'E8-4', parentCode: 'EXP-008', nameAr: 'مركبات', nameEn: 'Vehicles', kind: FinanceCategoryKind.EXPENSE, sortOrder: 40 },
+  { code: 'E8-5', parentCode: 'EXP-008', nameAr: 'آلات ومعدات', nameEn: 'Machinery and equipment', kind: FinanceCategoryKind.EXPENSE, sortOrder: 50 },
+  { code: 'E8-6', parentCode: 'EXP-008', nameAr: 'أصول أخرى', nameEn: 'Other assets', kind: FinanceCategoryKind.EXPENSE, sortOrder: 60 },
+  { code: 'E9-1', parentCode: 'EXP-009', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E10-1', parentCode: 'EXP-010', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E11-1', parentCode: 'EXP-011', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E12-1', parentCode: 'EXP-012', nameAr: 'خدمات بلدية', nameEn: 'Municipal services', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E12-2', parentCode: 'EXP-012', nameAr: 'تصاريح سلامة ودفاع مدني', nameEn: 'Safety and civil-defense permits', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+] as const;
 export const STANDARD_SUPPLIER_KEYS = [
   "SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY",
 ] as const;
 export type StandardSupplierKey = (typeof STANDARD_SUPPLIER_KEYS)[number];
 export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string }>;
 export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
-  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "EXP-009" },
-  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "EXP-011" },
-  { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "EXP-004" },
-  { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "EXP-002" },
-  { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "EXP-002" },
-  { key: "SAUDI_BUSINESS_CENTER", nameAr: "المركز السعودي للأعمال", nameEn: "Saudi Business Center", categoryCode: "EXP-002" },
-  { key: "MUNICIPALITIES_HOUSING", nameAr: "وزارة البلديات والإسكان", nameEn: "Ministry of Municipalities and Housing", categoryCode: "EXP-012" },
-  { key: "HRSD", nameAr: "وزارة الموارد البشرية والتنمية الاجتماعية", nameEn: "Ministry of Human Resources and Social Development", categoryCode: "EXP-002" },
-  { key: "PASSPORTS", nameAr: "المديرية العامة للجوازات", nameEn: "General Directorate of Passports", categoryCode: "EXP-002" },
-  { key: "CIVIL_DEFENSE", nameAr: "الدفاع المدني", nameEn: "Civil Defense", categoryCode: "EXP-012" },
-  { key: "SAUDI_CHAMBERS", nameAr: "اتحاد الغرف السعودية", nameEn: "Federation of Saudi Chambers", categoryCode: "EXP-002" },
-  { key: "QIWA", nameAr: "قوى", nameEn: "Qiwa", categoryCode: "EXP-002" },
-  { key: "ABSHER_BUSINESS", nameAr: "أبشر أعمال", nameEn: "Absher Business", categoryCode: "EXP-002" },
-  { key: "MUDAD", nameAr: "مدد", nameEn: "Mudad", categoryCode: "EXP-004" },
-  { key: "MUQEEM", nameAr: "مقيم", nameEn: "Muqeem", categoryCode: "EXP-002" },
-  { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "EXP-012" },
+  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "E9-1" },
+  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "E11-1" },
+  { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "E4-2" },
+  { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "E2-7" },
+  { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "E2-1" },
+  { key: "SAUDI_BUSINESS_CENTER", nameAr: "المركز السعودي للأعمال", nameEn: "Saudi Business Center", categoryCode: "E2-1" },
+  { key: "MUNICIPALITIES_HOUSING", nameAr: "وزارة البلديات والإسكان", nameEn: "Ministry of Municipalities and Housing", categoryCode: "E12-1" },
+  { key: "HRSD", nameAr: "وزارة الموارد البشرية والتنمية الاجتماعية", nameEn: "Ministry of Human Resources and Social Development", categoryCode: "E2-10" },
+  { key: "PASSPORTS", nameAr: "المديرية العامة للجوازات", nameEn: "General Directorate of Passports", categoryCode: "E2-4" },
+  { key: "CIVIL_DEFENSE", nameAr: "الدفاع المدني", nameEn: "Civil Defense", categoryCode: "E12-2" },
+  { key: "SAUDI_CHAMBERS", nameAr: "اتحاد الغرف السعودية", nameEn: "Federation of Saudi Chambers", categoryCode: "E2-7" },
+  { key: "QIWA", nameAr: "قوى", nameEn: "Qiwa", categoryCode: "E2-10" },
+  { key: "ABSHER_BUSINESS", nameAr: "أبشر أعمال", nameEn: "Absher Business", categoryCode: "E2-10" },
+  { key: "MUDAD", nameAr: "مدد", nameEn: "Mudad", categoryCode: "E4-1" },
+  { key: "MUQEEM", nameAr: "مقيم", nameEn: "Muqeem", categoryCode: "E2-4" },
+  { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "E12-1" },
 ] as const;

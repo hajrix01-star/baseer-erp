@@ -1,0 +1,1 @@
+ALTER TABLE "FinanceCategory" ADD COLUMN "isPosting" BOOLEAN NOT NULL DEFAULT true;

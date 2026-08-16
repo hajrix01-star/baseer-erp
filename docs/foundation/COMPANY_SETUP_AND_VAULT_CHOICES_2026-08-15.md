@@ -1,6 +1,6 @@
 # Company Setup and Vault Choices — Decision and Source Delivery
 
-**Status:** Server foundation implemented; guided browser screen remains a later increment.  
+**Status:** Implemented in source in the Finance Setup workspace on 2026-08-17; activation awaits the controlled category-hierarchy database migration.
 **Scope:** BASEER ERP private companies only.
 
 ## Approved company-start choices

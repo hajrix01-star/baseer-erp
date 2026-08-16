@@ -104,7 +104,7 @@ export class FinanceMasterDataService {
 
   private async assertCategory(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, categoryId: string | null | undefined): Promise<void> {
     if (!categoryId) return;
-    const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE }, select: { id: true } });
+    const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true }, select: { id: true } });
     if (!category) throw new BadRequestException("The selected supplier category is not active.");
   }
 

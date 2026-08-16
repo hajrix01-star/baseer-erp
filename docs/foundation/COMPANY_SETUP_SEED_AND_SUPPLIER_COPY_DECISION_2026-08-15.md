@@ -1,6 +1,6 @@
 # Company Setup Seed and Supplier Copy — Owner Decision
 
-**Status:** Implemented for the Finance Setup flow on 2026-08-17; supplier copying from another company remains a separate later slice.
+**Status:** Implemented in source for the Finance Setup flow on 2026-08-17. Activation requires the controlled database migration 20260817210000_finance_category_posting_hierarchy; supplier copying from another company remains a separate later slice.
 **Date:** 2026-08-15  
 **Product:** BASEER ERP — private use by the owner and the owner's companies.  
 **Source reference:** read-only Noorix source inspection at `origin/main` commit `94536fd3bf7e82135b065aaa20c9dd1e1d496464`. No Noorix data was accessed or changed.
@@ -28,8 +28,8 @@ Noorix currently creates a company and then initializes accounting. Its starter 
 
 | Seed item | Noorix observed content | BASEER setup treatment |
 |---|---|---|
-| Chart of accounts | 23 starter accounts: assets, liabilities, equity, revenue, purchases and expenses | required protected base, visible for review before confirmation |
-| Core categories | 13 parent categories and 47 subcategories | required base; created company-local and extendable later |
+| Chart of accounts | 20 starter accounts: assets, liabilities, equity, revenue, purchases and expenses | required protected base, visible for review before confirmation |
+| Core categories | 13 parent categories and 47 subcategories (current Noorix source); BASEER applies a compatible 16-parent, 50-leaf taxonomy tailored to its expanded service accounts | required base; created company-local and extendable later |
 | Vaults | cash and bank asset-backed vaults | cash vault required; bank/electronic vault is optional and is **not** a bank-reconciliation feature |
 | Fiscal period | one open calendar-year period | required; BASEER uses the approved strict rule that every Finance posting must be in exactly one open period |
 | Standard suppliers | 16 general Saudi service/government/platform suppliers | selectable, not silently forced |
