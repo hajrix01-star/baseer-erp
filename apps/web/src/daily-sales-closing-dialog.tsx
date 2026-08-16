@@ -263,14 +263,6 @@ export function DailySalesClosingDialog({
             </h3>
             <p>{isDayOff ? copy.dayOffIntro : copy.entryIntro}</p>
           </div>
-          <button
-            className="daily-sales-secondary"
-            type="button"
-            onClick={close}
-            disabled={saving}
-          >
-            {copy.closeDialog}
-          </button>
         </header>
         <form className="daily-sales-dialog__form" onSubmit={onSubmit}>
           {!editing && (
