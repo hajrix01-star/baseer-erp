@@ -8,7 +8,17 @@
   --brand: #08744d;
   --brand-deep: #083a29;
   --shadow: 0 18px 60px rgba(11, 36, 26, 0.12);
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-caption: 0.75rem;
+  --font-label: 0.875rem;
+  --font-body: 1rem;
+  --font-title-sm: 1.25rem;
+  --font-title-md: 1.5rem;
+  --font-title-lg: 2rem;
+  --font-page: clamp(2rem, 4vw, 3rem);
+  --font-display: clamp(2.25rem, 5vw, 3.5rem);
+  --font-display-mobile: 2.1875rem;
+  --icon-size-lg: 1.75rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
 }
 * {
   box-sizing: border-box;
@@ -18,6 +28,9 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--canvas);
+  font-size: var(--font-body);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
 }
 button,
 input {
@@ -64,7 +77,7 @@ button {
 }
 .baseer-brand__word {
   color: var(--ink);
-  font-size: 17px;
+  font-size: var(--font-body);
   font-weight: 800;
   letter-spacing: -0.02em;
 }
@@ -84,7 +97,7 @@ button {
   border-radius: 12px;
   color: #fff;
   background: linear-gradient(145deg, #0b8d5d, #075035);
-  font-size: 20px;
+  font-size: var(--font-title-sm);
 }
 .topbar-spacer {
   flex: 1;
@@ -105,7 +118,7 @@ button {
   display: grid;
   width: 44px;
   place-items: center;
-  font-size: 21px;
+  font-size: var(--font-title-sm);
 }
 .company-selector,
 .theme-button {
@@ -113,7 +126,7 @@ button {
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 700;
 }
 .status-dot,
@@ -158,20 +171,20 @@ button {
 .overline {
   margin: 0;
   color: var(--brand);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
   letter-spacing: 0.03em;
 }
 .launcher-page__heading h1 {
   margin: 8px 0;
-  font-size: clamp(34px, 5vw, 58px);
+  font-size: var(--font-display);
   letter-spacing: -0.05em;
 }
 .launcher-page__heading > p:last-child {
   max-width: 670px;
   margin: 0;
   color: var(--muted);
-  font-size: 17px;
+  font-size: var(--font-body);
   line-height: 1.8;
 }
 .launcher-page__tools {
@@ -204,7 +217,7 @@ button {
   border-radius: 999px;
   color: var(--brand);
   background: #e8f5ed;
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
   direction: ltr;
 }
@@ -213,7 +226,7 @@ button {
 }
 .recent h2 {
   margin: 0 0 10px;
-  font-size: 15px;
+  font-size: var(--font-body);
 }
 .recent__list {
   display: flex;
@@ -227,7 +240,7 @@ button {
   border-radius: 999px;
   color: var(--brand);
   background: #fff;
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
 }
 .modules-grid {
@@ -271,23 +284,23 @@ button {
   border-radius: 15px;
   color: var(--module);
   background: color-mix(in srgb, var(--module) 12%, #fff);
-  font-size: 25px;
+  font-size: var(--font-title-md);
 }
 .module-copy {
   display: grid;
   gap: 4px;
 }
 .module-copy strong {
-  font-size: 18px;
+  font-size: var(--font-title-sm);
 }
 .module-copy span {
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
   line-height: 1.5;
 }
 .module-arrow {
   color: var(--module);
-  font-size: 21px;
+  font-size: var(--font-title-sm);
 }
 .empty-results {
   margin: 20px 0;
@@ -302,7 +315,7 @@ button {
   padding-top: 18px;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .workspace {
   display: grid;
@@ -326,7 +339,7 @@ button {
 }
 .sidebar-head h2 {
   margin: 5px 0 0;
-  font-size: 21px;
+  font-size: var(--font-title-sm);
 }
 .module-navigation {
   display: grid;
@@ -379,7 +392,7 @@ button {
 }
 .page-breadcrumb {
   color: var(--brand);
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 700;
 }
 .page-heading {
@@ -391,7 +404,7 @@ button {
 }
 .page-heading h1 {
   margin: 0;
-  font-size: clamp(30px, 4vw, 46px);
+  font-size: var(--font-page);
   letter-spacing: -0.035em;
 }
 .page-heading p {
@@ -447,7 +460,7 @@ button {
   max-width: 650px;
   margin: 10px 0;
   color: #fff;
-  font-size: clamp(28px, 3.4vw, 43px);
+  font-size: var(--font-page);
   letter-spacing: -0.035em;
 }
 .hero-panel p {
@@ -530,7 +543,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .mobile-drawer__panel h2 {
   margin: 5px 0 0;
-  font-size: 20px;
+  font-size: var(--font-title-sm);
 }
 .mobile-drawer__panel .close-button {
   display: grid;
@@ -541,7 +554,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 12px;
   color: #fff;
   background: rgba(255, 255, 255, 0.06);
-  font-size: 28px;
+  font-size: var(--icon-size-lg);
 }
 .mobile-drawer__panel .overline {
   color: #89ba9c;
@@ -626,7 +639,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 @media (max-width: 500px) {
   .launcher-page__heading h1 {
-    font-size: 35px;
+    font-size: var(--font-display-mobile);
   }
   .modules-grid {
     grid-template-columns: 1fr;
@@ -673,7 +686,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-heading h2 {
   margin: 6px 0;
-  font-size: clamp(26px, 3vw, 36px);
+  font-size: var(--font-page);
 }
 .daily-sales-heading p {
   max-width: 780px;
@@ -688,14 +701,14 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 12px;
   color: #086b49;
   background: #effaf3;
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 700;
 }
 .daily-sales-message {
   margin: 0;
   padding: 12px 14px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: var(--font-label);
   font-weight: 700;
 }
 .daily-sales-message.success {
@@ -731,14 +744,14 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-calendar h3,
 .daily-sales-history h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-title-sm);
 }
 .daily-sales-form label,
 .daily-sales-calendar__actions label {
   display: grid;
   gap: 7px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-form input,
@@ -761,7 +774,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-form small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.5;
 }
 .daily-sales-form fieldset {
@@ -776,7 +789,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-form legend {
   padding: 0 6px;
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
 }
 .daily-sales-allocation {
@@ -790,7 +803,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 10px;
   color: #9d321b;
   background: #fff0eb;
-  font-size: 23px;
+  font-size: var(--font-title-md);
 }
 .daily-sales-wide {
   grid-column: span 2;
@@ -831,7 +844,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-history > div > p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .daily-sales-calendar__actions {
   display: grid;
@@ -855,15 +868,15 @@ html[dir="ltr"] .mobile-drawer__panel {
   background: #fff;
 }
 .daily-sales-day strong {
-  font-size: 17px;
+  font-size: var(--font-body);
 }
 .daily-sales-day span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
 }
 .daily-sales-day em {
   font-style: normal;
-  font-size: 11px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-day--recorded {
@@ -903,12 +916,12 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-closing > p {
   margin: 9px 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .daily-sales-badge {
   padding: 5px 8px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-badge.posted {
@@ -932,12 +945,12 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-closing dt {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
 }
 .daily-sales-closing dd {
   margin: 4px 0 0;
   color: var(--ink);
-  font-size: 14px;
+  font-size: var(--font-label);
   font-weight: 800;
   direction: ltr;
   text-align: start;
@@ -1001,7 +1014,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: grid;
   gap: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-sign-in input {
@@ -1065,7 +1078,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__header h3 {
   margin: 6px 0;
-  font-size: 22px;
+  font-size: var(--font-title-md);
 }
 .daily-sales-dialog__header p:last-child {
   max-width: 620px;
@@ -1083,7 +1096,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: grid;
   gap: 7px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-dialog__form input,
@@ -1104,7 +1117,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__form small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.5;
 }
 .daily-sales-dialog__form fieldset {
@@ -1119,7 +1132,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog__form legend {
   padding: 0 6px;
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
 }
 .daily-sales-dialog__wide {
@@ -1186,12 +1199,12 @@ html[dir="ltr"] .mobile-drawer__panel {
   justify-content: space-between;
   gap: 8px;
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
 }
 .daily-sales-dialog__vault small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
   font-weight: 700;
 }
 .daily-sales-dialog__total {
@@ -1206,16 +1219,16 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: #086b49;
 }
 .daily-sales-dialog__total span {
-  font-size: 13px;
+  font-size: var(--font-label);
   font-weight: 800;
 }
 .daily-sales-dialog__total strong {
-  font-size: 22px;
+  font-size: var(--font-title-md);
 }
 .daily-sales-dialog__total small {
   grid-column: 1/-1;
   color: #44725a;
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.55;
 }
 @media (max-width: 520px) {
@@ -1226,7 +1239,7 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
   .daily-sales-dialog__total strong {
-    font-size: 20px;
+    font-size: var(--font-title-sm);
   }
 }
 .daily-sales-dialog__mode {
@@ -1263,7 +1276,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__day-off > strong {
   color: #7c531a;
-  font-size: 16px;
+  font-size: var(--font-body);
 }
 .daily-sales-dialog__day-off > small {
   color: #805f33;
@@ -1295,7 +1308,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-register th {
   color: #5d6a63;
-  font-size: 0.82rem;
+  font-size: var(--font-label);
   font-weight: 700;
   background: #f8fbf8;
 }
@@ -1327,7 +1340,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-insights > article > strong {
   display: block;
-  font-size: 1.5rem;
+  font-size: var(--font-title-md);
   color: #08744d;
 }
 .daily-sales-insights > article > small {
@@ -1425,7 +1438,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   gap: 6px;
 }
 .command-sales-calendar__day strong {
-  font-size: 1.25rem;
+  font-size: var(--font-title-sm);
 }
 .command-sales-calendar__day span {
   font-weight: 700;
@@ -1495,13 +1508,13 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-grid > article span {
   display: block;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .administration-grid > article strong {
   display: block;
   margin-top: 8px;
   color: var(--brand);
-  font-size: 30px;
+  font-size: var(--font-title-lg);
 }
 .administration-wide {
   grid-column: 1/-1;
@@ -1537,7 +1550,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-list span,
 .administration-list small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   line-height: 1.5;
 }
 .administration-form {
@@ -1556,7 +1569,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: grid;
   gap: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 700;
 }
 .administration-form input,
@@ -1592,7 +1605,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-bottom: 0;
 }
 .administration-membership span {
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .administration-form fieldset label {
   display: flex;
@@ -1685,7 +1698,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-reversal-dialog__summary span {
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .daily-sales-reversal-dialog__summary strong {
   color: var(--ink);
@@ -1695,7 +1708,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   gap: 7px;
   margin-top: 16px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .daily-sales-reversal-dialog__reason textarea {
@@ -1709,7 +1722,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-reversal-dialog__reason small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.5;
 }
 /* Shared desktop content standard. */
@@ -1731,7 +1744,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-permission-module > header span {
   color: var(--muted);
   font-weight: 600;
-  font-size: 12px;
+  font-size: var(--font-caption);
 }
 .administration-permission-module {
   display: grid;
@@ -1752,7 +1765,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   margin: 0;
 }
 .administration-permission-module h5 {
-  font-size: 15px;
+  font-size: var(--font-body);
 }
 .administration-permission-sections {
   display: grid;
@@ -1769,7 +1782,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .administration-permission-section h6 {
   color: var(--brand-deep);
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .administration-permission-section > div {
   display: grid;
@@ -1788,7 +1801,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 999px;
   color: #8c4a13;
   background: #fff0d9;
-  font-size: 10px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 @media (max-width: 520px) {
@@ -1849,13 +1862,13 @@ html[dir="ltr"] .mobile-drawer__panel {
   min-width: 0;
 }
 .administration-user-card__body strong {
-  font-size: 16px;
+  font-size: var(--font-body);
 }
 .administration-user-card__body small,
 .administration-user-card__body > span {
   overflow: hidden;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1865,7 +1878,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   margin-top: 3px;
   padding: 3px 7px;
   border-radius: 99px;
-  font-size: 11px;
+  font-size: var(--font-caption);
   font-style: normal;
   font-weight: 800;
 }
@@ -1882,7 +1895,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   padding-top: 10px;
   border-top: 1px solid #edf2ef;
   color: #54645c;
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 700;
 }
 .administration-user-avatar {
@@ -1895,7 +1908,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 50%;
   color: #075e40;
   background: #e3f4ea;
-  font-size: 19px;
+  font-size: var(--font-title-sm);
   font-weight: 850;
   line-height: 1;
 }
@@ -1910,7 +1923,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-user-avatar.is-large {
   width: 62px;
   height: 62px;
-  font-size: 28px;
+  font-size: var(--icon-size-lg);
 }
 .administration-user-dialog {
   width: min(700px, 100%);
@@ -1925,7 +1938,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: grid;
   gap: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .administration-dialog-form input,
@@ -1991,7 +2004,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: block;
   margin-top: 10px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.55;
 }
 .administration-user-profile {
@@ -2009,7 +2022,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-user-profile span,
 .administration-access-list small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
 }
 .administration-access-list {
   display: grid;
@@ -2040,7 +2053,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: grid;
   gap: 6px;
   color: #76511c;
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .administration-sensitive-actions input {
@@ -2058,20 +2071,20 @@ html[dir="ltr"] .mobile-drawer__panel {
   background: #fff;
 }
 .administration-role-cards strong {
-  font-size: 16px;
+  font-size: var(--font-body);
 }
 .administration-role-cards small,
 .administration-role-cards p {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-caption);
 }
 .administration-role-card__system,
 .administration-role-card__custom {
   width: max-content;
   padding: 3px 7px;
   border-radius: 99px;
-  font-size: 10px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 .administration-role-card__system {
@@ -2133,7 +2146,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-user-avatar.is-large {
   width: 52px;
   height: 52px;
-  font-size: 24px;
+  font-size: var(--font-title-md);
 }
 .administration-user-dialog {
   width: min(620px, 100%);
@@ -2143,7 +2156,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-user-dialog .daily-sales-primary {
   min-height: 38px;
   padding: 7px 12px;
-  font-size: 13px;
+  font-size: var(--font-label);
 }
 .administration-user-dialog .administration-sensitive-actions {
   grid-template-columns: max-content minmax(190px, 1fr) max-content;
@@ -2178,7 +2191,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-register__actions .daily-sales-danger {
   min-height: 34px;
   padding: 6px 9px;
-  font-size: 0.8rem;
+  font-size: var(--font-label);
   white-space: nowrap;
 }
 @media (max-width: 760px) {
@@ -2199,7 +2212,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__header h3 {
   margin: 3px 0;
-  font-size: 20px;
+  font-size: var(--font-title-sm);
 }
 .daily-sales-dialog__header p:last-child {
   line-height: 1.45;
@@ -2262,7 +2275,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   padding: 10px;
 }
 .daily-sales-dialog__total strong {
-  font-size: 19px;
+  font-size: var(--font-title-sm);
 }
 .daily-sales-dialog__handover {
   gap: 8px;
@@ -2322,7 +2335,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__shift-card h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-body);
 }
 .daily-sales-dialog__entry-grid {
   display: grid;
@@ -2393,7 +2406,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   display: none;
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__header h3 {
-  font-size: 18px;
+  font-size: var(--font-title-sm);
   margin: 0;
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__form {
@@ -2426,7 +2439,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__date small {
   grid-column: auto;
-  font-size: 11px;
+  font-size: var(--font-caption);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__shift-stack {
   grid-template-columns: 1fr;
@@ -2438,7 +2451,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: 14px;
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__shift-card h4 {
-  font-size: 16px;
+  font-size: var(--font-body);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__customer-field {
   width: 100%;
@@ -2457,7 +2470,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   background: transparent;
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__vault > span {
-  font-size: 12px;
+  font-size: var(--font-caption);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__vault input {
   min-height: 38px;
@@ -2481,11 +2494,11 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__summary small {
   color: var(--muted, #65776d);
-  font-size: 11px;
+  font-size: var(--font-caption);
 }
 .daily-sales-dialog__summary strong {
   color: var(--brand, #087a4a);
-  font-size: 15px;
+  font-size: var(--font-body);
 }
 .daily-sales-dialog__cash-details {
   border-top: 1px solid var(--line, #d6e4da);
@@ -2493,7 +2506,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-dialog__cash-details summary {
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 700;
   color: var(--muted, #65776d);
 }
@@ -2579,12 +2592,12 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 /* Readable desktop and touch-target scale for the daily-sales dialog. */
 .daily-sales-dialog--noorix .daily-sales-dialog__header h3 {
-  font-size: 20px;
+  font-size: var(--font-title-sm);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__form label > span,
 .daily-sales-dialog--noorix .daily-sales-dialog__channels legend,
 .daily-sales-dialog--noorix .daily-sales-dialog__vault > span {
-  font-size: 14px;
+  font-size: var(--font-label);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__form input,
 .daily-sales-dialog--noorix .daily-sales-dialog__form select,
@@ -2592,11 +2605,11 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog--noorix .daily-sales-dialog__mode button,
 .daily-sales-dialog--noorix .daily-sales-dialog__scope-picker button,
 .daily-sales-dialog--noorix .daily-sales-dialog__actions button {
-  font-size: 16px;
+  font-size: var(--font-body);
 }
 .daily-sales-dialog--noorix .daily-sales-dialog__vault small,
 .daily-sales-dialog--noorix .daily-sales-dialog__summary small {
-  font-size: 12px;
+  font-size: var(--font-caption);
 }
 .daily-sales-dialog--noorix.daily-sales-dialog--batch {
   width: min(480px, calc(100vw - 28px));
@@ -2639,7 +2652,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   padding: 12px 14px;
 }
 .daily-sales-register th {
-  font-size: 0.875rem;
+  font-size: var(--font-label);
 }
 .daily-sales-register .is-number {
   text-align: end;
@@ -2725,7 +2738,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-record-dialog__facts dt {
   color: #68776e;
-  font-size: 0.8125rem;
+  font-size: var(--font-label);
 }
 .daily-sales-record-dialog__facts dd {
   margin: 5px 0 0;
@@ -2752,7 +2765,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-record-dialog__channels h4,
 .daily-sales-record-dialog__notes h4 {
-  font-size: 0.875rem;
+  font-size: var(--font-label);
 }
 .daily-sales-record-dialog__notes {
   margin-top: 12px;
@@ -2803,7 +2816,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .baseer-data-table th {
   color: #5d6a63;
   background: #f8fbf8;
-  font-size: 0.8125rem;
+  font-size: var(--font-label);
   font-weight: 700;
   letter-spacing: 0.01em;
   white-space: nowrap;
