@@ -2940,3 +2940,43 @@ html[dir="ltr"] .mobile-drawer__panel {
     padding: var(--card-padding-compact);
   }
 }
+/* Record details: independent values and collection channels are scanned from the center. */
+.daily-sales-record-dialog__facts > div {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.daily-sales-record-dialog__facts dt,
+.daily-sales-record-dialog__facts dd {
+  text-align: center;
+}
+.daily-sales-record-dialog__channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 8px;
+}
+.daily-sales-record-dialog__channels h4 {
+  grid-column: 1 / -1;
+}
+.daily-sales-record-dialog__channels > div {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border: 1px solid var(--line, #e4ece6);
+  border-radius: 10px;
+  background: #f8fbf8;
+  text-align: center;
+}
+.daily-sales-record-dialog__channels > div:last-child {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line, #e4ece6);
+}
+.daily-sales-record-dialog__channels > div > span {
+  color: #68776e;
+  font-size: var(--font-label);
+}
+.daily-sales-record-dialog__channels > div > strong {
+  font-variant-numeric: tabular-nums;
+}
