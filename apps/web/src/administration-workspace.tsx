@@ -27,7 +27,7 @@ export function AdministrationWorkspace({ language, section }: { language: "ar" 
   }, [language, load]);
 
   if (!session) return <DailySalesSignIn language={language} />;
-  if (!overview) return <section className="administration-shell"><p className="daily-sales-message error">{message || (language === "ar" ? "جارٍ تحميل الإدارة…" : "Loading administration…")}</p></section>;
+  if (!overview) return <section className="administration-shell"><p className={message ? "daily-sales-message error" : "administration-loading"}>{message || (language === "ar" ? "جارٍ تحميل الإدارة…" : "Loading administration…")}</p></section>;
 
   const shared = { session, owner: overview.owner, onDone: load, onError: reportError };
   return <section className="administration-shell">

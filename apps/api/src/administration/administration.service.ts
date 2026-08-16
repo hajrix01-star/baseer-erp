@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -57,6 +57,33 @@ export class AdministrationService {
       await tx.role.create({ data: { id, tenantId: context.tenantId, code: request.code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false, grants: { createMany: { data: [...new Set(request.permissionCodes)].map((permissionCode) => ({ tenantId: context.tenantId, permissionCode })) } } } });
       await this.audit(tx, context, "administration.role.created", "Role", id, null, { code: request.code, permissionCodes: [...new Set(request.permissionCodes)] });
       return { id };
+    });
+  }
+
+  async updateRole(context: TrustedTenantAdministratorContext, roleId: string, request: UpdateAdministrationRoleRequest) {
+    this.ownerOnly(context);
+    if (!permissionCodesAreKnown(request.permissionCodes)) throw new ForbiddenException("Unknown permission selection.");
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, include: { grants: true } });
+      if (!role) throw new NotFoundException("Role was not found.");
+      const permissionCodes: string[] = [...new Set(request.permissionCodes)];
+      await tx.role.update({ where: { id: role.id }, data: { nameAr: request.nameAr, nameEn: request.nameEn } });
+      await tx.rolePermission.deleteMany({ where: { roleId: role.id } });
+      await tx.rolePermission.createMany({ data: permissionCodes.map((permissionCode) => ({ tenantId: context.tenantId, roleId: role.id, permissionCode })) });
+      await this.audit(tx, context, "administration.role.updated", "Role", role.id, { nameAr: role.nameAr, nameEn: role.nameEn, permissionCodes: role.grants.map((grant) => grant.permissionCode) }, { nameAr: request.nameAr, nameEn: request.nameEn, permissionCodes });
+      return { updated: true };
+    });
+  }
+
+  async deleteRole(context: TrustedTenantAdministratorContext, roleId: string) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, select: { id: true, code: true, nameAr: true } });
+      if (!role) throw new NotFoundException("Role was not found.");
+      if (await tx.companyMembership.count({ where: { tenantId: context.tenantId, roleId: role.id } })) throw new ConflictException("Reassign members before deleting this role.");
+      await tx.role.delete({ where: { id: role.id } });
+      await this.audit(tx, context, "administration.role.deleted", "Role", role.id, { code: role.code, nameAr: role.nameAr }, { deleted: true });
+      return { deleted: true };
     });
   }
 
@@ -226,32 +253,10 @@ export class AdministrationService {
     await tx.appSession.updateMany({ where: { tenantId, userId, status: SessionStatus.ACTIVE }, data: { status: SessionStatus.REVOKED, revokedAt: new Date() } });
   }
   private async ensureSystemRoles(tx: Prisma.TransactionClient, tenantId: string): Promise<void> {
+    if (await tx.role.count({ where: { tenantId } })) return;
     for (const template of SYSTEM_ROLE_TEMPLATES) {
-      const role = await tx.role.upsert({
-        where: { tenantId_code: { tenantId, code: template.code } },
-        create: {
-          id: randomUUID(),
-          tenantId,
-          code: template.code,
-          nameAr: template.nameAr,
-          nameEn: template.nameEn,
-          isSystem: true,
-        },
-        update: { nameAr: template.nameAr, nameEn: template.nameEn, isSystem: true },
-      });
-      // System templates are maintained centrally. Removing a broad legacy
-      // grant is deliberate: it prevents a cashier from retaining correction
-      // and reversal privileges after the permission split.
-      await tx.rolePermission.deleteMany({
-        where: { roleId: role.id, permissionCode: { notIn: [...template.permissions] } },
-      });
-      for (const permissionCode of template.permissions) {
-        await tx.rolePermission.upsert({
-          where: { roleId_permissionCode: { roleId: role.id, permissionCode } },
-          create: { tenantId, roleId: role.id, permissionCode },
-          update: {},
-        });
-      }
+      const role = await tx.role.create({ data: { id: randomUUID(), tenantId, code: template.code, nameAr: template.nameAr, nameEn: template.nameEn, isSystem: true } });
+      await tx.rolePermission.createMany({ data: [...template.permissions].map((permissionCode) => ({ tenantId, roleId: role.id, permissionCode })) });
     }
   }
   private ownerOnly(context: TrustedTenantAdministratorContext): void { if (!context.isOwner) throw new ForbiddenException("Tenant-owner access is required."); }

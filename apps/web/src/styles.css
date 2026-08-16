@@ -1876,15 +1876,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   }
 }
 /* Compact administration desktop density */
-.administration-user-cards {
-  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-  gap: 11px;
-}
-.administration-user-card {
-  min-height: 104px;
-  padding: 13px;
-  border-radius: 15px;
-}
 .administration-user-avatar.is-large {
   width: 52px;
   height: 52px;
@@ -1910,9 +1901,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .administration-user-dialog .administration-user-profile {
   padding: 10px 0;
-}
-.administration-user-card__access {
-  padding-top: 7px;
 }
 @media (max-width: 760px) {
   .administration-user-dialog .administration-sensitive-actions {
@@ -2385,8 +2373,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-radius: var(--card-radius);
   box-shadow: var(--shadow);
 }
-.daily-sales-badge,
-.administration-user-card__body em {
+.daily-sales-badge {
   display: inline-flex;
   min-height: 1.5rem;
   align-items: center;
@@ -2427,43 +2414,6 @@ html[dir="ltr"] .mobile-drawer__panel {
     padding-inline: clamp(1.75rem, 2.5vw, 3rem);
   }
 }
-.administration-user-cards {
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: var(--section-gap);
-}
-.administration-user-card {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  min-height: 96px;
-  padding: var(--card-padding);
-  border-radius: var(--card-radius);
-  box-shadow: 0 8px 24px rgb(11 36 26 / 5%);
-  text-align: start;
-}
-.administration-user-card__body {
-  align-self: center;
-  gap: 0.2rem;
-}
-.administration-user-card__body strong {
-  font-size: var(--font-body);
-}
-.administration-user-card__body small {
-  display: none;
-}
-.administration-user-card__body > span {
-  font-size: var(--font-caption);
-}
-.administration-user-card__body em {
-  margin-top: 0.2rem;
-}
-.administration-user-card__access {
-  grid-column: auto;
-  align-self: center;
-  padding: 0;
-  border: 0;
-  color: var(--brand);
-  font-size: var(--font-label);
-  white-space: nowrap;
-}
 .administration-user-dialog {
   width: min(38.75rem, calc(100vw - 2rem));
   overflow-x: hidden;
@@ -2476,10 +2426,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   grid-column: 1 / -1;
 }
 @media (max-width: 640px) {
-  .administration-user-card {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    min-height: 88px;
-  }
   .administration-user-dialog .administration-sensitive-actions {
     grid-template-columns: 1fr;
   }
@@ -2549,3 +2495,17 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
 .administration-company-status-action label { display: grid; gap: 0.35rem; }
 @media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }
+/* Application-shell scrolling: navigation is an independent rail; only the work area scrolls. */
+.administration-loading { margin: 28px auto; max-width: 480px; padding: 14px 18px; border: 1px solid #dbe8e0; border-radius: 12px; background: #f7fbf8; color: var(--muted); text-align: center; }
+.administration-table-user { display: inline-flex; align-items: center; gap: 10px; border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; text-align: right; }
+.administration-table-user:hover strong { color: var(--green-700); text-decoration: underline; }
+.administration-table-user > span:last-child, .administration-table-access { display: grid; gap: 2px; }
+.administration-table-user small, .administration-table-access small { color: var(--muted); }
+.administration-table-access > span { display: grid; }
+.administration-status-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; font-weight: 700; }
+.administration-status-pill.is-active { background: #e8f7ee; color: #087f5b; }
+.administration-status-pill.is-disabled { background: #f8e9e7; color: #b42318; }
+.administration-membership-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; }
+.administration-membership-actions select { min-width: 150px; }
+@media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-sidebar { height: 100vh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
+@media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
