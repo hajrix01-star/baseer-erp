@@ -32,7 +32,7 @@ export function AdministrationWorkspace({ language, section }: { language: "ar" 
   const shared = { session, owner: overview.owner, onDone: load, onError: reportError };
   return <section className="administration-shell">
     <header className="administration-heading">
-      <div><p className="eyebrow">Baseer ERP / Administration</p><h2>{language === "ar" ? "إدارة الشركات والوصول" : "Companies and access"}</h2><p>{language === "ar" ? "الصلاحيات تُفحص من الخادم لكل شركة؛ الواجهة لا تمنح وصولاً من تلقاء نفسها." : "The server evaluates access per company; this interface never grants access by itself."}</p></div>
+      <div><p className="eyebrow">Baseer ERP / Administration</p><h2>{language === "ar" ? "إدارة الشركات والوصول" : "Companies and access"}</h2></div>
       <button className="daily-sales-secondary" type="button" onClick={() => void load()}>تحديث</button>
     </header>
     {message && <p className="daily-sales-message error">{message}</p>}

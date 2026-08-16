@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
+import { BaseerPeriodFilter, defaultBaseerPeriodRange } from "./baseer-period-filter";
 import { DailySalesClosingDialog } from "./daily-sales-closing-dialog";
 import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
 import { DailySalesRecordDialog } from "./daily-sales-record-dialog";
@@ -17,7 +18,6 @@ import {
   initialForm,
   initialFormForVaults,
   initialShiftFormsForVaults,
-  monthRange,
   requestId,
   type ActiveSession,
   type CashHandoverReport,
@@ -39,7 +39,7 @@ export function DailySalesWorkspace({
 }) {
   const copy = dailySalesText[language];
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
-  const range = useMemo(monthRange, []);
+  const [range, setRange] = useState(defaultBaseerPeriodRange);
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [permissionCodes, setPermissionCodes] = useState<string[]>([]);
   const [closings, setClosings] = useState<Closing[]>([]);
@@ -345,7 +345,6 @@ export function DailySalesWorkspace({
         <div>
           <p className="eyebrow">{copy.eyebrow}</p>
           <h2>{copy.title}</h2>
-          <p>{copy.subtitle}</p>
         </div>
         <div className="daily-sales-heading__actions">
           {canCreate && (
@@ -366,7 +365,7 @@ export function DailySalesWorkspace({
           </button>
         </div>
       </header>
-      <p className="daily-sales-source">{copy.serverOnly}</p>
+      <BaseerPeriodFilter language={language} value={range} onChange={setRange} />
       {status.kind !== "idle" && (
         <p className={`daily-sales-message ${status.kind}`}>{status.message}</p>
       )}

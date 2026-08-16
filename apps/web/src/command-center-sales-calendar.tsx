@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { DailySalesSignIn } from "./daily-sales-sign-in";
+import { BaseerPeriodFilter, defaultBaseerPeriodRange } from "./baseer-period-filter";
 import {
   activeSession,
   api,
-  monthRange,
   type ActiveSession,
   type CalendarDay,
 } from "./daily-sales-client";
@@ -46,7 +46,7 @@ export function CommandCenterSalesCalendar({
   language: DailySalesLanguage;
 }) {
   const copy = statusCopy[language];
-  const range = useMemo(monthRange, []);
+  const [range, setRange] = useState(defaultBaseerPeriodRange);
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [days, setDays] = useState<CalendarDay[]>([]);
   const [error, setError] = useState("");
@@ -79,7 +79,6 @@ export function CommandCenterSalesCalendar({
         <div>
           <p className="eyebrow">Baseer ERP</p>
           <h2>{copy.title}</h2>
-          <p>{copy.subtitle}</p>
         </div>
         <button
           className="daily-sales-secondary"
@@ -89,6 +88,7 @@ export function CommandCenterSalesCalendar({
           {copy.refresh}
         </button>
       </header>
+      <BaseerPeriodFilter language={language} value={range} onChange={setRange} />
       {error && <p className="daily-sales-message error">{error}</p>}
       <div className="command-sales-calendar__grid">
         {days.map((day) => {
