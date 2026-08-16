@@ -37,4 +37,4 @@ The platforms are separate application collection/sales channels. They are not m
 
 ## Utility default and Noorix migration safety
 
-For small private companies, Baseer version 4 provides one active posting category: UTIL-001 (مرافق وخدمات). Noorix electricity, telecom, and water leaves map to it only through the approved semantic resolver; identical-looking codes are never assumed equivalent. Existing company history is preserved and is not rewritten by seed refresh.
+For small private companies, Baseer version 5 provides one active posting category: UTIL-001 (مرافق وخدمات). Noorix electricity, telecom, and water leaves map to it only through the approved semantic resolver; identical-looking codes are never assumed equivalent. Existing company history is preserved and is not rewritten by seed refresh.

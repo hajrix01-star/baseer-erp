@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceVaultStatus, FinanceVaultType, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceVaultStatus, FinanceVaultType, Prisma } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
 import { FinanceFoundationService } from './finance-foundation.service.js';
 import { STANDARD_SUPPLIER_KEYS, STANDARD_SUPPLIER_SEEDS, type StandardSupplierKey } from './finance-foundation-seeds.js';
@@ -60,7 +60,7 @@ export class CompanyFinanceSetupService {
         vaultIds.push(id);
       }
       const selectedSuppliers = STANDARD_SUPPLIER_SEEDS.filter((supplier) => standardSupplierKeys.includes(supplier.key));
-      const categories = await transaction.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, code: { in: selectedSuppliers.map((supplier) => supplier.categoryCode) } }, select: { id: true, code: true } });
+      const categories = await transaction.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, code: { in: selectedSuppliers.map((supplier) => supplier.categoryCode) } }, select: { id: true, code: true } });
       const categoriesByCode = new Map(categories.map((category) => [category.code, category.id]));
       const supplierIds: string[] = [];
       for (const supplier of selectedSuppliers) {

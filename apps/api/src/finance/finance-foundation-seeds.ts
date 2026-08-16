@@ -44,7 +44,7 @@ export const FINANCE_BASE_ACCOUNT_SEEDS: readonly FinanceAccountSeed[] = [
   { code: 'PUR-003', systemKey: 'PACKAGING', nameAr: 'تعبئة وتغليف', nameEn: 'Packaging', type: FinanceAccountType.EXPENSE },
   { code: 'PUR-004', systemKey: 'KITCHEN_OPERATIONS', nameAr: 'مستلزمات تشغيل مطبخ', nameEn: 'Kitchen operations', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-002', systemKey: 'GOVERNMENT_FEES', nameAr: 'رسوم حكومية وإقامات', nameEn: 'Government fees and residency', type: FinanceAccountType.EXPENSE },
-  { code: 'EXP-003', systemKey: 'RENT_UTILITIES', nameAr: 'إيجار ومرافق', nameEn: 'Rent and utilities', type: FinanceAccountType.EXPENSE },
+  { code: 'EXP-003', systemKey: 'RENT', nameAr: 'إيجارات', nameEn: 'Rent', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-004', systemKey: 'PAYROLL_EXPENSE', nameAr: 'رواتب وأجور', nameEn: 'Salaries and wages', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-005', systemKey: 'OPERATIONS_MAINTENANCE', nameAr: 'صيانة وتشغيل', nameEn: 'Maintenance and operations', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-006', systemKey: 'MARKETING', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', type: FinanceAccountType.EXPENSE },
@@ -63,7 +63,7 @@ export const FINANCE_BASE_CATEGORY_SEEDS: readonly FinanceCategorySeed[] = [
   { code: 'PUR-004', accountCode: 'PUR-004', nameAr: 'مستلزمات تشغيل مطبخ', nameEn: 'Kitchen operations', kind: FinanceCategoryKind.PURCHASE, sortOrder: 40 },
   { code: 'REV-001', accountCode: 'REV-001', nameAr: 'المبيعات', nameEn: 'Sales', kind: FinanceCategoryKind.SALE, sortOrder: 50 },
   { code: 'EXP-002', accountCode: 'EXP-002', nameAr: 'رسوم حكومية وإقامات', nameEn: 'Government fees and residency', kind: FinanceCategoryKind.EXPENSE, sortOrder: 60 },
-  { code: 'EXP-003', accountCode: 'EXP-003', nameAr: 'إيجار ومرافق', nameEn: 'Rent and utilities', kind: FinanceCategoryKind.EXPENSE, sortOrder: 70 },
+  { code: 'EXP-003', accountCode: 'EXP-003', nameAr: 'إيجارات', nameEn: 'Rent', kind: FinanceCategoryKind.EXPENSE, sortOrder: 70 },
   { code: 'EXP-004', accountCode: 'EXP-004', nameAr: 'رواتب وأجور', nameEn: 'Salaries and wages', kind: FinanceCategoryKind.EXPENSE, sortOrder: 80 },
   { code: 'EXP-005', accountCode: 'EXP-005', nameAr: 'صيانة وتشغيل', nameEn: 'Maintenance and operations', kind: FinanceCategoryKind.EXPENSE, sortOrder: 90 },
   { code: 'EXP-006', accountCode: 'EXP-006', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', kind: FinanceCategoryKind.EXPENSE, sortOrder: 100 },
@@ -84,8 +84,8 @@ export type FinanceCategoryHierarchySeed = Readonly<{
   sortOrder: number;
 }>;
 
-// The hierarchy follows Noorix's proven restaurant master-data taxonomy while
-// keeping BASEER's distinct accounts for electricity, water, telecom and municipality.
+// The hierarchy follows Noorix's proven restaurant master-data taxonomy. Utilities
+// are consolidated into UTIL-001 for BASEER's small-company default.
 export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHierarchySeed[] = [
   { code: 'P1-1', parentCode: 'PUR-001', nameAr: 'لحوم', nameEn: 'Meat', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
   { code: 'P1-2', parentCode: 'PUR-001', nameAr: 'دجاج', nameEn: 'Poultry', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
@@ -113,7 +113,6 @@ export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHier
   { code: 'E2-10', parentCode: 'EXP-002', nameAr: 'رسوم منصات حكومية', nameEn: 'Government platform fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 80 },
   { code: 'E2-11', parentCode: 'EXP-002', nameAr: 'شهادات صحية وتصاريح موظفين', nameEn: 'Health certificates and employee permits', kind: FinanceCategoryKind.EXPENSE, sortOrder: 90 },
   { code: 'E3-1', parentCode: 'EXP-003', nameAr: 'إيجارات', nameEn: 'Rent', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
-  { code: 'E3-5', parentCode: 'EXP-003', nameAr: 'غاز', nameEn: 'Gas', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
   { code: 'E4-1', parentCode: 'EXP-004', nameAr: 'رواتب وأجور', nameEn: 'Salaries and wages', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
   { code: 'E4-2', parentCode: 'EXP-004', nameAr: 'التأمينات الاجتماعية', nameEn: 'GOSI employer contributions', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
   { code: 'E5-1', parentCode: 'EXP-005', nameAr: 'صيانة آلات', nameEn: 'Equipment maintenance', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },

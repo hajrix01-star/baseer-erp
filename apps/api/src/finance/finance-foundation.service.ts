@@ -16,7 +16,7 @@ import {
   FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS,
 } from './finance-foundation-seeds.js';
 
-const BASE_SEED_VERSION = 4;
+const BASE_SEED_VERSION = 5;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;

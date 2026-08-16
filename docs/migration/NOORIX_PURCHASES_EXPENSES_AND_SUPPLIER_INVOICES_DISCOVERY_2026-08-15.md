@@ -102,11 +102,11 @@ An ambiguous supplier match, duplicate normalized supplier number, unmatched cat
 
 `apps/api/src/finance/noorix-category-mapping.ts` is the canonical resolver for the Noorix baseline **leaf** category codes. The importer must retain the source category ID and code on its receipt, then resolve the target category again inside the target company. It may post only to an active `isPosting=true` category owned by that company.
 
-For the small-company Baseer default, the category **`UTIL-001` — مرافق وخدمات** is one posting category. Noorix leaves `E3-2` (electricity), `E3-3` (telecommunications), and `E3-4` (water) map semantically to it. This is deliberately a semantic map, not a code match. Noorix `EXP-009` is an employee-benefits group, not Baseer's former electricity code; an import must never infer a match merely because two systems reuse a code.
+For the small-company Baseer default, the category **`UTIL-001` — مرافق وخدمات** is one posting category. Noorix leaves `E3-2` (electricity), `E3-3` (telecommunications), and `E3-4` (water), and `E3-5` (gas) map semantically to it. This is deliberately a semantic map, not a code match. Noorix `EXP-009` is an employee-benefits group, not Baseer's former electricity code; an import must never infer a match merely because two systems reuse a code.
 
 `E9-3` (GOSI) maps to `E4-2`. Noorix `E9-1` (travel tickets), `E9-2` (medical insurance), any parent category, custom source category, or inactive target category becomes a review exception. The owner must select an approved posting category before that document can be imported. No exception falls back to a generic expense.
 
-Existing Baseer companies are not rewritten: old separate utility records remain historical data. After the owner runs the audited finance-seed refresh to version 4, `UTIL-001` is available for new work. Old categories may be archived only through their normal lifecycle after their history is reconciled.
+Existing Baseer companies are not rewritten: old separate utility records remain historical data. After the owner runs the audited finance-seed refresh to version 5, `UTIL-001` is available for new work. Old categories may be archived only through their normal lifecycle after their history is reconciled.
 ## Gate B test requirements
 
 - company and user isolation for suppliers, invoices, attachments, accounts, and vault allocations;

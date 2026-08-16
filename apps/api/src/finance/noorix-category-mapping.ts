@@ -16,7 +16,7 @@ const DIRECT_CODES = new Set([
   'P3-1', 'P3-2', 'P3-3',
   'P4-1', 'P4-2', 'P4-3', 'P4-4',
   'E2-1', 'E2-2', 'E2-3', 'E2-4', 'E2-5', 'E2-6', 'E2-7', 'E2-10', 'E2-11',
-  'E3-1', 'E3-5',
+  'E3-1',
   'E4-1', 'E4-2',
   'E5-1', 'E5-2', 'E5-3',
   'E6-1', 'E6-2',
@@ -30,6 +30,7 @@ const SEMANTIC_MAPPINGS: Readonly<Record<string, Omit<NoorixCategoryResolution, 
   'E3-2': { decision: 'SEMANTIC', targetCode: 'UTIL-001', reasonAr: 'كهرباء نوركس تُرحّل إلى مرافق وخدمات في بصير.' },
   'E3-3': { decision: 'SEMANTIC', targetCode: 'UTIL-001', reasonAr: 'اتصالات نوركس تُرحّل إلى مرافق وخدمات في بصير.' },
   'E3-4': { decision: 'SEMANTIC', targetCode: 'UTIL-001', reasonAr: 'مياه نوركس تُرحّل إلى مرافق وخدمات في بصير.' },
+  'E3-5': { decision: 'SEMANTIC', targetCode: 'UTIL-001', reasonAr: 'غاز نوركس يُرحّل إلى مرافق وخدمات في بصير.' },
   'E9-3': { decision: 'SEMANTIC', targetCode: 'E4-2', reasonAr: 'التأمينات الاجتماعية تُطابق بند التأمينات في بصير.' },
   // There is no safe default for travel or medical insurance. They must be
   // selected by the owner or mapped to an approved company-specific category.
