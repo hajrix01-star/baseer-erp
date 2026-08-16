@@ -1002,6 +1002,7 @@ model AiExecutionReceipt {
   companyId               String             @db.Uuid
   providerConfigurationId String?            @db.Uuid
   identityId              String?            @db.Uuid
+  systemIdentityId        String?            @db.Uuid
   moduleKey               String             @db.VarChar(80)
   capability              String             @db.VarChar(120)
   skillKey                String?            @db.VarChar(120)
@@ -1012,6 +1013,7 @@ model AiExecutionReceipt {
   modelSnapshot           String?            @db.VarChar(160)
   configurationVersion    Int?
   identityVersion         Int?
+  systemIdentityVersion   Int?
   inputCharacters         Int                @default(0)
   outputCharacters        Int                @default(0)
   safeErrorCode           String?            @db.VarChar(120)
@@ -1021,11 +1023,13 @@ model AiExecutionReceipt {
   company               Company                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   providerConfiguration AiProviderConfiguration? @relation(fields: [providerConfigurationId, tenantId], references: [id, tenantId], onDelete: Restrict)
   identity              AiCompanyIdentity?       @relation(fields: [identityId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  systemIdentity        AiSystemIdentity?        @relation(fields: [systemIdentityId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
   @@index([tenantId, companyId, moduleKey, capability, createdAt])
   @@index([tenantId, companyId, skillKey, createdAt])
+  @@index([tenantId, systemIdentityId, createdAt])
 }
 
 model AiSystemIdentity {
@@ -1040,6 +1044,8 @@ model AiSystemIdentity {
   safetyInstructions String                  @db.VarChar(4000)
   createdAt          DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt          DateTime                @updatedAt @db.Timestamptz(6)
+
+  executionReceipts  AiExecutionReceipt[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, version])

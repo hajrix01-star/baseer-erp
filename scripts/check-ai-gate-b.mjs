@@ -9,7 +9,8 @@ const adapter = source("apps/api/src/ai-platform/ai-provider-adapter-registry.ts
 const controller = source("apps/api/src/ai-platform/ai-runtime.controller.ts");
 const catalog = source("apps/api/src/ai-platform/ai-skills.ts");
 const contracts = source("packages/contracts/src/ai-platform.ts");
-const migration = source("apps/api/prisma/migrations/20260816200000_ai_gate_b_runtime_receipts/migration.sql");
+const receiptMigration = source("apps/api/prisma/migrations/20260816200000_ai_gate_b_runtime_receipts/migration.sql");
+const integrityMigration = source("apps/api/prisma/migrations/20260816201000_ai_gate_b_receipt_integrity/migration.sql");
 const appModule = source("apps/api/src/app.module.ts");
 const permissions = source("apps/api/src/administration/administration-permissions.ts");
 
@@ -20,6 +21,8 @@ for (const required of [
   "completeInTransaction",
   "AiExecutionOutcome.BLOCKED",
   "AI_SKILL_NOT_ACTIVATED",
+  "AiRuntimeRateLimitService",
+  "systemIdentityVersion",
 ]) {
   if (!runtime.includes(required)) throw new Error(`AI runtime boundary is missing: ${required}`);
 }
@@ -37,10 +40,11 @@ for (const required of [
   "policyVersion",
   "platform.ai.use",
 ]) {
-  const all = `${contracts}\n${controller}\n${appModule}\n${migration}\n${permissions}`;
+  const all = `${contracts}\n${controller}\n${appModule}\n${receiptMigration}\n${integrityMigration}\n${permissions}`;
   if (!all.includes(required)) throw new Error(`AI Gate B integration is missing: ${required}`);
 }
-for (const required of ["S1", "S2", "S3", "S4", "PLANNED", "VALIDATED"]) {
+for (const required of ["S1", "S2", "S3", "S4", "PLANNED", "VALIDATED", "requiredCapabilities", "policyVersion"]) {
   if (!catalog.includes(required)) throw new Error(`AI skill catalogue is missing lifecycle coverage: ${required}`);
 }
-console.log("AI Gate B boundary verified: scoped, receipted, and provider-offline.");
+if (!integrityMigration.includes("AiExecutionReceipt_versions_positive")) throw new Error("AI receipt integrity migration is missing.");
+console.log("AI Gate B boundary verified: scoped, receipted, rate-limited and provider-offline.");

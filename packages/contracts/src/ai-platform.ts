@@ -127,6 +127,8 @@ export const aiSkillCatalogItemSchema = z
     allowedModules: z.array(z.string().min(1).max(80)).min(1),
     riskTier: aiSkillRiskTierSchema,
     status: aiSkillStatusSchema,
+    policyVersion: z.number().int().positive(),
+    requiredCapabilities: z.array(z.string().min(1).max(120)).min(1),
     purpose: z.string().min(1).max(1_000),
     activationCondition: z.string().min(1).max(1_000),
   })
@@ -147,6 +149,8 @@ export const aiRuntimePreflightReceiptSchema = z
     skillVersion: z.number().int().positive(),
     riskTier: aiSkillRiskTierSchema,
     status: aiSkillStatusSchema,
+    policyVersion: z.number().int().positive(),
+    requiredCapabilities: z.array(z.string().min(1).max(120)).min(1),
     outcome: z.literal("BLOCKED"),
     safeReasonCode: z.string().min(1).max(120),
     companyId: companyIdSchema,

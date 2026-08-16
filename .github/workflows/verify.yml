@@ -19,6 +19,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npx prisma generate --schema apps/api/prisma/schema.prisma
+      - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm run check:architecture
       - run: npm run check:permissions
@@ -33,5 +35,7 @@ jobs:
       - run: node scripts/run-auth-rate-limit-verification.mjs
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run verify:web-budget
+      - run: npx prisma generate --schema apps/api/prisma/schema.prisma
+      - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm audit --omit=dev

@@ -8,6 +8,7 @@ import { AiPlatformController } from './ai-platform/ai-platform.controller.js';
 import { AiRuntimeController } from './ai-platform/ai-runtime.controller.js';
 import { AiProviderAdapterRegistry } from './ai-platform/ai-provider-adapter-registry.js';
 import { AiRuntimeService } from './ai-platform/ai-runtime.service.js';
+import { AiRuntimeRateLimitService } from './ai-platform/ai-runtime-rate-limit.service.js';
 import { AiPlatformService } from './ai-platform/ai-platform.service.js';
 
 import { BusinessDateController } from './business-date/business-date.controller.js';
@@ -71,6 +72,7 @@ import { OutputService } from './output/output.service.js';
     AiPlatformService,
     AiProviderAdapterRegistry,
     AiRuntimeService,
+    AiRuntimeRateLimitService,
     { provide: BUSINESS_DATE_CLOCK, useValue: { now: () => new Date() } },
     BusinessDateService,
     AuthService,

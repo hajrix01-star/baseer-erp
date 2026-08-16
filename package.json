@@ -1,19 +1,20 @@
 {
-  "name": "baseer-erp",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Baseer ERP modular monolith",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "check:architecture": "node scripts/check-architecture.mjs",
-    "check:permissions": "node scripts/check-permission-catalog.mjs",
-    "check:ai-gate-b": "node scripts/check-ai-gate-b.mjs",
-    "verify:ai-gate-b-db": "node scripts/run-ai-gate-b-db-verification.mjs",
-    "verify:web-budget": "node scripts/check-web-release-budget.mjs",
-    "check:web-financial-boundaries": "node scripts/check-web-financial-boundaries.mjs",
-    "verify:administration-lifecycle": "npm run build --workspace @baseer-erp/api && node scripts/run-administration-lifecycle-verification.mjs"
-  }
+    "name":  "baseer-erp",
+    "version":  "0.1.0",
+    "private":  true,
+    "description":  "Baseer ERP modular monolith",
+    "workspaces":  [
+                       "apps/*",
+                       "packages/*"
+                   ],
+    "scripts":  {
+                    "check:architecture":  "node scripts/check-architecture.mjs",
+                    "check:permissions":  "node scripts/check-permission-catalog.mjs",
+                    "check:ai-gate-b":  "node scripts/check-ai-gate-b.mjs",
+                    "verify:ai-gate-b-db":  "node scripts/run-ai-gate-b-db-verification.mjs",
+                    "verify:web-budget":  "node scripts/check-web-release-budget.mjs",
+                    "check:web-financial-boundaries":  "node scripts/check-web-financial-boundaries.mjs",
+                    "verify:administration-lifecycle":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-administration-lifecycle-verification.mjs",
+                    "verify:ai-gate-b-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-ai-gate-b-http-verification.mjs"
+                }
 }

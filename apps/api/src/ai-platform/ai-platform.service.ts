@@ -11,6 +11,7 @@ import type {
   CreateAiSystemIdentityRequest,
 } from "@baseer-erp/contracts";
 
+import { TenantAdministrationContextService } from "../administration/tenant-administration-context.service.js";
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { IdempotencyService } from "../core-controls/idempotency.service.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
@@ -18,6 +19,7 @@ import { DatabaseService } from "../database/database.service.js";
 import {
   AiCompanyIdentityStatus,
   AiProviderConfigurationStatus,
+  CompanyStatus,
   Prisma,
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
@@ -40,6 +42,7 @@ export class AiPlatformService {
     private readonly companyContext: CompanyContextService,
     private readonly idempotency: IdempotencyService,
     private readonly vault: AiCredentialVault,
+    private readonly tenantAdministration: TenantAdministrationContextService,
   ) {}
 
   async read(input: { accessToken: string; companyId: string }) {
@@ -295,17 +298,28 @@ export class AiPlatformService {
   }
 
   async authorizeProviderWrite(accessToken: string, companyId: string) {
-    return this.authorize(accessToken, companyId, PROVIDER_WRITE);
+    return this.authorizeTenantOwner(accessToken, companyId);
   }
 
   async authorizeSystemIdentityWrite(accessToken: string, companyId: string) {
-    return this.authorize(accessToken, companyId, SYSTEM_IDENTITY_WRITE);
+    return this.authorizeTenantOwner(accessToken, companyId);
   }
 
   async authorizeIdentityWrite(accessToken: string, companyId: string) {
     return this.authorize(accessToken, companyId, IDENTITY_WRITE);
   }
 
+  private async authorizeTenantOwner(accessToken: string, companyId: string): Promise<TrustedCompanyActorContext> {
+    const owner = await this.tenantAdministration.authorizeOwner(accessToken);
+    return this.database.inTenantTransaction(owner.tenantId, async (transaction) => {
+      const company = await transaction.company.findFirst({
+        where: { id: companyId, tenantId: owner.tenantId, status: CompanyStatus.ACTIVE },
+        select: { id: true },
+      });
+      if (!company) throw new NotFoundException("The tenant audit company was not found.");
+      return { tenantId: owner.tenantId, companyId: company.id, actorUserId: owner.actorUserId };
+    });
+  }
   private async authorize(accessToken: string, companyId: string, capability: string) {
     const authorized = await this.companyContext.authorize({
       accessToken,

@@ -2,6 +2,8 @@ import type { AiSkillCatalogItem } from "@baseer-erp/contracts";
 
 export type AiSkillDefinition = Readonly<
   AiSkillCatalogItem & {
+    policyVersion: number;
+    requiredCapabilities: readonly string[];
     nonNegotiableRules: readonly string[];
   }
 >;
@@ -14,11 +16,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "administration.guide",
     version: 1,
+    policyVersion: 1,
     nameAr: "دليل الإدارة",
     nameEn: "Administration guide",
     allowedModules: ["administration"],
     riskTier: "S1",
     status: "VALIDATED",
+    requiredCapabilities: ["administration.companies.read"],
     purpose: "Explain approved company, user and role settings without changing them.",
     activationCondition: "The administration help read model and user-facing AI surface are approved.",
     nonNegotiableRules: [
@@ -29,11 +33,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "operations.daily_sales_explainer",
     version: 1,
+    policyVersion: 1,
     nameAr: "مفسر التقفيل اليومي",
     nameEn: "Daily sales closing explainer",
     allowedModules: ["operations", "command-center"],
     riskTier: "S2",
     status: "PLANNED",
+    requiredCapabilities: ["finance.daily_sales.read"],
     purpose: "Explain official daily-closing, shift and operating-day facts.",
     activationCondition: "Journal-reconciled sales read models and central report filters are approved.",
     nonNegotiableRules: [
@@ -45,11 +51,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "finance.accounting_advisor",
     version: 1,
+    policyVersion: 1,
     nameAr: "المستشار المحاسبي",
     nameEn: "Accounting advisor",
     allowedModules: ["finance", "reports", "command-center"],
     riskTier: "S2",
     status: "PLANNED",
+    requiredCapabilities: ["finance.configuration.read"],
     purpose: "Explain reconciled accounting information and exceptions using Baseer facts.",
     activationCondition: "Ledger-first financial reports and read tools are approved.",
     nonNegotiableRules: [
@@ -61,11 +69,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "finance.document_classification_draft",
     version: 1,
+    policyVersion: 1,
     nameAr: "مسودة تصنيف المستند المالي",
     nameEn: "Financial document classification draft",
     allowedModules: ["finance", "inbound-evidence"],
     riskTier: "S3",
     status: "PLANNED",
+    requiredCapabilities: ["finance.supplier_dues.read"],
     purpose: "Suggest a classification or link for a human reviewer from governed evidence.",
     activationCondition: "Financial documents, evidence lifecycle and reviewed OCR contracts are approved.",
     nonNegotiableRules: [
@@ -76,11 +86,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "marketing.performance_analyst",
     version: 1,
+    policyVersion: 1,
     nameAr: "محلل الأداء التسويقي",
     nameEn: "Marketing performance analyst",
     allowedModules: ["marketing", "command-center", "reports"],
     riskTier: "S2",
     status: "PLANNED",
+    requiredCapabilities: ["platform.ai.use"],
     purpose: "Explain provider facts, campaign timing and data-quality gaps without claiming causation.",
     activationCondition: "Marketing facts, official sales projection and measurement links are approved.",
     nonNegotiableRules: [
@@ -92,11 +104,13 @@ export const AI_SKILL_CATALOG: readonly AiSkillDefinition[] = [
   {
     key: "marketing.google_review_reply_automation",
     version: 1,
+    policyVersion: 1,
     nameAr: "ردود Google الآلية المحكومة",
     nameEn: "Governed Google review reply automation",
     allowedModules: ["marketing"],
     riskTier: "S4",
     status: "PLANNED",
+    requiredCapabilities: ["platform.ai.use"],
     purpose: "Generate and publish only the narrow Google review replies permitted by the approved policy.",
     activationCondition: "The Google Business Profile provider gate, outbox worker and review automation policy checks are approved.",
     nonNegotiableRules: [

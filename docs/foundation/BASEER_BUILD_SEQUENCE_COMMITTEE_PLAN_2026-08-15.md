@@ -9,8 +9,8 @@ The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOUR
 - Platform and Finance Phase 1 backend are verified on the isolated BASEER Docker test database.
 - Finance Phase 2 native UI remains deferred; it is not cancelled.
 - Marketing Performance & Google Hub is designed but has no backend models, commands, Google connection, facts, UI, or external calls yet.
-- AI Platform is configuration foundation only. It has no provider call, conversation, memory, read tool, or chat UI.
-- The active delivery path is **Daily Sales Closing as the official sales source**, then Marketing Performance. The Daily Sales vertical slice records one end-of-day aggregate copied from an external POS system, as fixed in `DAILY_SALES_CLOSING_OPERATIONAL_PURPOSE_DECISION_2026-08-16.md`; it is not POS. No Marketing UI or AI chat starts before their source and read-model gates pass.
+- AI Platform Gate B technical core is verified: versioned skills, company-authorized offline preflight, rate limit, idempotency, audit receipts and receipt-integrity constraints. It still has no provider call, conversation, memory, read tool or chat UI.
+- Daily Sales Closing is frozen pending owner acceptance as the official sales source. The active next business scope is **Purchase & Expense financial documents** under the owner priority amendment. Marketing/Google, Inbound Evidence and a user-facing AI assistant remain deferred until the required financial documents and server read models close.
 
 ## Phase 0 — Build-control baseline
 
@@ -33,11 +33,7 @@ The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOUR
 
 ## Effective priority amendment (2026-08-16)
 
-The owner-approved order after the Daily Sales scope is governed by `../governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`: AI Gate B technical core first, then core Finance documents/treasury/reports, with Marketing/Google and Inbound Email/Telegram/OCR deferred. The phase headings below remain the scoped designs; this amendment controls their activation order.
-
-## Effective priority amendment (2026-08-16)
-
-The owner-approved order after the Daily Sales scope is governed by `../governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`: AI Gate B technical core first, then core Finance documents/treasury/reports, with Marketing/Google and Inbound Email/Telegram/OCR deferred. The phase headings below remain the scoped designs; this amendment controls their activation order.
+The owner-approved order after Daily Sales is governed by `../governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`: AI Gate B technical core is closed; core Finance documents, treasury and reconciled reports come next. Marketing/Google and Inbound Email/Telegram/OCR remain deferred. The phase headings below describe scope only; this amendment controls activation order.
 
 ## Phase 2 — Marketing Performance Gate A
 
@@ -99,6 +95,6 @@ The owner-approved order after the Daily Sales scope is governed by `../governan
 
 ## Queued finance-operational scope — Inbound Evidence & Payment Hub
 
-The owner-approved scope in `INBOUND_EVIDENCE_AND_PAYMENT_HUB_SCOPE_DECISION_2026-08-15.md` is queued and does not replace the active Daily Sales Closing scope or the following Marketing Performance Gate A. It covers work-only central email classification, evidence received through Telegram and later SMS, trusted company bank-account/service-identifier matching, manual company-first recurring-expense selection, payment orders and payment vouchers.
+The owner-approved scope in `INBOUND_EVIDENCE_AND_PAYMENT_HUB_SCOPE_DECISION_2026-08-15.md` is queued and does not replace the active Purchase & Expense financial-document scope. It covers work-only central email classification, evidence received through Telegram and later SMS, trusted company bank-account/service-identifier matching, manual company-first recurring-expense selection, payment orders and payment vouchers.
 
-It starts only after Daily Sales Closing is accepted and Marketing Gate A has closed, unless the owner records a specific priority exception. It begins as a backend vertical slice: trusted evidence records and company isolation (E1), then authorized payment order/voucher plus journal integration (E2), then separately approved email/Telegram/SMS and AI analysis adapters (E3), and finally native UI (E4). Bank-statement reconciliation, automatic payment, automatic posting and unrestricted mailbox ingestion remain excluded.
+It starts only after core financial documents and reconciled reports close, and after a separate owner priority decision. It begins as a backend vertical slice: trusted evidence records and company isolation (E1), then authorized payment order/voucher plus journal integration (E2), then separately approved email/Telegram/SMS and AI analysis adapters (E3), and finally native UI (E4). Bank-statement reconciliation, automatic payment, automatic posting and unrestricted mailbox ingestion remain excluded.

@@ -21,6 +21,7 @@ import {
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 import { AiProviderAdapterRegistry } from "./ai-provider-adapter-registry.js";
+import { AiRuntimeRateLimitService } from "./ai-runtime-rate-limit.service.js";
 import { listAiSkills, selectAiSkill } from "./ai-skills.js";
 
 const AI_USE_CAPABILITY = "platform.ai.use";
@@ -37,6 +38,7 @@ export class AiRuntimeService {
     private readonly companyContext: CompanyContextService,
     private readonly idempotency: IdempotencyService,
     private readonly adapters: AiProviderAdapterRegistry,
+    private readonly rateLimit: AiRuntimeRateLimitService,
   ) {}
 
   async list(input: { accessToken: string; companyId: string; moduleKey?: string }) {
@@ -53,20 +55,22 @@ export class AiRuntimeService {
     companyId: string;
     request: AiRuntimePreflightRequest;
   }): Promise<AiRuntimePreflightReceipt> {
+    const skill = selectAiSkill(input.request.moduleKey, input.request.skillKey);
+    if (!skill) {
+      throw new ForbiddenException("The selected AI skill is not available for this module.");
+    }
     const authorized = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
-      requiredCapabilities: [AI_USE_CAPABILITY],
+      requiredCapabilities: Array.from(
+        new Set([AI_USE_CAPABILITY, ...skill.requiredCapabilities]),
+      ),
     });
     const context: TrustedCompanyActorContext = {
       tenantId: authorized.principal.tenantId,
       companyId: authorized.company.id,
       actorUserId: authorized.principal.userId,
     };
-    const skill = selectAiSkill(input.request.moduleKey, input.request.skillKey);
-    if (!skill) {
-      throw new ForbiddenException("The selected AI skill is not available for this module.");
-    }
 
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       let begun;
@@ -78,6 +82,7 @@ export class AiRuntimeService {
             moduleKey: input.request.moduleKey,
             skillKey: input.request.skillKey,
             skillVersion: skill.version,
+            policyVersion: skill.policyVersion,
           },
           expiresAt: new Date(Date.now() + 86_400_000),
         });
@@ -99,33 +104,26 @@ export class AiRuntimeService {
         return replay.data;
       }
 
-      const [provider, identity] = await Promise.all([
+      this.rateLimit.recordNewExecution(context);
+      const [provider, identity, systemIdentity] = await Promise.all([
         transaction.aiProviderConfiguration.findFirst({
-          where: {
-            tenantId: context.tenantId,
-            status: AiProviderConfigurationStatus.ACTIVE,
-            isDefault: true,
-          },
-          select: {
-            id: true,
-            provider: true,
-            model: true,
-            configurationVersion: true,
-          },
+          where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE, isDefault: true },
+          select: { id: true, provider: true, model: true, configurationVersion: true },
         }),
         transaction.aiCompanyIdentity.findFirst({
-          where: {
-            tenantId: context.tenantId,
-            companyId: context.companyId,
-            status: AiCompanyIdentityStatus.ACTIVE,
-          },
+          where: { tenantId: context.tenantId, companyId: context.companyId, status: AiCompanyIdentityStatus.ACTIVE },
+          select: { id: true, version: true },
+        }),
+        transaction.aiSystemIdentity.findFirst({
+          where: { tenantId: context.tenantId, status: AiCompanyIdentityStatus.ACTIVE },
           select: { id: true, version: true },
         }),
       ]);
       const offline = this.adapters.offlineResult(provider?.provider ?? null);
-      const safeReasonCode =
-        skill.status === "PLANNED"
-          ? "AI_SKILL_NOT_ACTIVATED"
+      const safeReasonCode = skill.status === "PLANNED"
+        ? "AI_SKILL_NOT_ACTIVATED"
+        : skill.status === "SUSPENDED"
+          ? "AI_SKILL_SUSPENDED"
           : offline.safeReasonCode;
       const createdAt = new Date();
       const receiptId = randomUUID();
@@ -137,16 +135,18 @@ export class AiRuntimeService {
           companyId: context.companyId,
           providerConfigurationId: provider?.id ?? null,
           identityId: identity?.id ?? null,
+          systemIdentityId: systemIdentity?.id ?? null,
           moduleKey: input.request.moduleKey,
           capability: AI_USE_CAPABILITY,
           skillKey: skill.key,
           skillVersion: skill.version,
-          policyVersion: 1,
+          policyVersion: skill.policyVersion,
           outcome: AiExecutionOutcome.BLOCKED,
           providerSnapshot: provider?.provider ?? null,
           modelSnapshot: provider?.model ?? null,
           configurationVersion: provider?.configurationVersion ?? null,
           identityVersion: identity?.version ?? null,
+          systemIdentityVersion: systemIdentity?.version ?? null,
           safeErrorCode: safeReasonCode,
           requestId,
           createdAt,
@@ -158,6 +158,8 @@ export class AiRuntimeService {
         skillVersion: skill.version,
         riskTier: skill.riskTier,
         status: skill.status,
+        policyVersion: skill.policyVersion,
+        requiredCapabilities: [...skill.requiredCapabilities],
         outcome: offline.outcome,
         safeReasonCode,
         companyId: context.companyId,
@@ -167,21 +169,14 @@ export class AiRuntimeService {
       });
       await transaction.auditEvent.create({
         data: {
-          id: randomUUID(),
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          actorUserId: context.actorUserId,
-          action: "platform.ai.runtime_preflight_blocked",
-          entityType: "AiExecutionReceipt",
-          entityId: receiptId,
-          requestId: receipt.requestId,
+          id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId,
+          actorUserId: context.actorUserId, action: "platform.ai.runtime_preflight_blocked",
+          entityType: "AiExecutionReceipt", entityId: receiptId, requestId: receipt.requestId,
           afterJson: {
-            moduleKey: input.request.moduleKey,
-            skillKey: skill.key,
-            skillVersion: skill.version,
-            riskTier: skill.riskTier,
-            status: skill.status,
-            safeReasonCode,
+            moduleKey: input.request.moduleKey, skillKey: skill.key,
+            skillVersion: skill.version, policyVersion: skill.policyVersion,
+            systemIdentityVersion: systemIdentity?.version ?? null,
+            riskTier: skill.riskTier, status: skill.status, safeReasonCode,
           },
         },
       });

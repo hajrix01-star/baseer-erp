@@ -1,4 +1,4 @@
-﻿import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service.js";
 import { SessionStatus, UserStatus } from "../generated/prisma/client.js";
@@ -25,6 +25,11 @@ export class TenantAdministrationContextService {
     });
   }
 
+  async authorizeOwner(accessToken: string): Promise<TrustedTenantAdministratorContext> {
+    const context = await this.authorize(accessToken);
+    if (!context.isOwner) throw new ForbiddenException("Tenant owner access is not permitted.");
+    return context;
+  }
   private verify(accessToken: string) {
     try { return this.tokens.verify(accessToken, "access"); }
     catch (error) { if (error instanceof IdentityTokenError) throw new UnauthorizedException("Invalid authentication credentials."); throw error; }
