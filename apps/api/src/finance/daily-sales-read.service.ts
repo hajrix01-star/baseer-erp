@@ -8,7 +8,7 @@ const MAX_RANGE_DAYS = 400;
 export const CASHIER_CLOSING_HISTORY_LIMIT = 7;
 export const FULL_CLOSING_HISTORY_LIMIT = MAX_RANGE_DAYS;
 
-type DateRange = Readonly<{ fromBusinessDate: Date; toBusinessDate: Date }>;
+type DateRange = Readonly<{ fromBusinessDate: Date; toBusinessDate: Date; businessMonths?: readonly string[] }>;
 
 @Injectable()
 export class DailySalesReadService {
@@ -31,10 +31,7 @@ export class DailySalesReadService {
           where: {
             tenantId: context.tenantId,
             companyId: context.companyId,
-            businessDate: {
-              gte: range.fromBusinessDate,
-              lte: range.toBusinessDate,
-            },
+            ...this.businessDateWhere(range),
           },
           orderBy: [
             { businessDate: "desc" },
@@ -96,7 +93,7 @@ export class DailySalesReadService {
         companyId: context.companyId,
         status: "POSTED" as const,
         cashHandoverAmount: { not: null },
-        businessDate: { gte: range.fromBusinessDate, lte: range.toBusinessDate },
+        ...this.businessDateWhere(range),
       };
       const [summary, handovers] = await Promise.all([
         transaction.financeDailySalesClosing.aggregate({
@@ -187,6 +184,26 @@ export class DailySalesReadService {
     );
   }
 
+  private businessDateWhere(range: DateRange): Prisma.FinanceDailySalesClosingWhereInput {
+    const periods = this.periods(range);
+    const onlyPeriod = periods[0];
+    if (!onlyPeriod) throw new BadRequestException("A daily-sales period is required.");
+    return periods.length === 1
+      ? { businessDate: { gte: onlyPeriod.from, lte: onlyPeriod.to } }
+      : { OR: periods.map((period) => ({ businessDate: { gte: period.from, lte: period.to } })) };
+  }
+
+  private periods(range: DateRange): ReadonlyArray<{ from: Date; to: Date }> {
+    if (!range.businessMonths?.length) return [{ from: range.fromBusinessDate, to: range.toBusinessDate }];
+    return range.businessMonths.map((month) => {
+      if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) throw new BadRequestException("Invalid selected business month.");
+      const year = Number(month.slice(0, 4));
+      const monthNumber = Number(month.slice(5, 7));
+      const from = new Date(Date.UTC(year, monthNumber - 1, 1));
+      const to = new Date(Date.UTC(year, monthNumber, 0));
+      return { from, to };
+    });
+  }
   private assertRange(range: DateRange) {
     if (
       !(range.fromBusinessDate instanceof Date) ||
@@ -201,11 +218,10 @@ export class DailySalesReadService {
         "The start date must not be after the end date.",
       );
     }
-    const days =
-      Math.floor(
-        (range.toBusinessDate.getTime() - range.fromBusinessDate.getTime()) /
-          86_400_000,
-      ) + 1;
+    const days = this.periods(range).reduce(
+      (total, period) => total + Math.floor((period.to.getTime() - period.from.getTime()) / 86_400_000) + 1,
+      0,
+    );
     if (days > MAX_RANGE_DAYS)
       throw new BadRequestException(
         "The daily-sales range may not exceed 400 days.",

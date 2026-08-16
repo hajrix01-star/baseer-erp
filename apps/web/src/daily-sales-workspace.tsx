@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
-import { BaseerPeriodFilter, defaultBaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange } from "./baseer-period-filter";
 import { DailySalesClosingDialog } from "./daily-sales-closing-dialog";
 import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
 import { DailySalesRecordDialog } from "./daily-sales-record-dialog";
@@ -77,7 +77,7 @@ export function DailySalesWorkspace({
     const current = activeSession();
     setSession(current);
     if (!current) return;
-    const query = `fromBusinessDate=${range.from}&toBusinessDate=${range.to}`;
+    const query = baseerPeriodQuery(range);
     const workspace = await api<DailySalesWorkspaceReceipt>(
       current,
       `/finance/daily-sales/workspace?${query}`,

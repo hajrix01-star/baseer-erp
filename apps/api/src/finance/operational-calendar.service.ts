@@ -150,23 +150,25 @@ export class OperationalCalendarService {
 
   async listCalendar(
     context: TrustedCompanyActorContext,
-    input: { fromBusinessDate: Date; toBusinessDate: Date },
+    input: { fromBusinessDate: Date; toBusinessDate: Date; businessMonths?: readonly string[] },
   ): Promise<readonly DailySalesCalendarItem[]> {
     const from = this.requiredDate(input.fromBusinessDate);
     const to = this.requiredDate(input.toBusinessDate);
     if (from > to) throw new BadRequestException('The calendar start date cannot be after the end date.');
-    const dates = datesInclusive(from, to);
+    const dates = input.businessMonths?.length
+      ? input.businessMonths.flatMap((month) => datesForMonth(month))
+      : datesInclusive(from, to);
     if (dates.length > MAX_CALENDAR_RANGE_DAYS) {
       throw new BadRequestException(`The calendar range cannot exceed ${MAX_CALENDAR_RANGE_DAYS} days.`);
     }
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       const [days, summaries] = await Promise.all([
         transaction.financeOperationalDay.findMany({
-          where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: from, lte: to } },
+          where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { in: dates } },
           select: { businessDate: true, status: true, source: true },
         }),
         transaction.financeDailyFinancialSummary.findMany({
-          where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: from, lte: to } },
+          where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { in: dates } },
           select: { businessDate: true, dataStatus: true, salesGrossAmount: true, customerCount: true, salesClosingCount: true },
         }),
       ]);
@@ -260,4 +262,10 @@ function datesInclusive(from: Date, to: Date): Date[] {
     result.push(new Date(cursor));
   }
   return result;
+}
+function datesForMonth(month: string): Date[] {
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) throw new BadRequestException('A selected business month is invalid.');
+  const year = Number(month.slice(0, 4));
+  const monthNumber = Number(month.slice(5, 7));
+  return datesInclusive(new Date(Date.UTC(year, monthNumber - 1, 1)), new Date(Date.UTC(year, monthNumber, 0)));
 }

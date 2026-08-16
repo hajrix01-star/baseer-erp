@@ -509,6 +509,14 @@ export const setOperationalDayRequestSchema = z
   })
   .strict();
 
+const businessMonthsQuerySchema = z
+  .string()
+  .trim()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])(,\d{4}-(0[1-9]|1[0-2]))*$/)
+  .max(95)
+  .optional()
+  .transform((value) => (value ? [...new Set(value.split(","))].sort() : []));
+
 export const dailySalesCalendarQuerySchema = z
   .object({
     fromBusinessDate: businessDateSchema.transform(
@@ -517,6 +525,7 @@ export const dailySalesCalendarQuerySchema = z
     toBusinessDate: businessDateSchema.transform(
       (value) => new Date(`${value}T00:00:00.000Z`),
     ),
+    businessMonths: businessMonthsQuerySchema,
   })
   .strict();
 export const dailySalesClosingsQuerySchema = dailySalesCalendarQuerySchema;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { DailySalesSignIn } from "./daily-sales-sign-in";
-import { BaseerPeriodFilter, defaultBaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange } from "./baseer-period-filter";
 import {
   activeSession,
   api,
@@ -56,7 +56,7 @@ export function CommandCenterSalesCalendar({
     setSession(current);
     if (!current) return;
     try {
-      const query = `fromBusinessDate=${range.from}&toBusinessDate=${range.to}`;
+      const query = baseerPeriodQuery(range);
       const result = await api<{ days: CalendarDay[] }>(
         current,
         `/finance/operational-calendar?${query}`,
