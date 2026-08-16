@@ -2379,7 +2379,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 
 /* Noorix reference alignment: a calm, medium-width entry sheet; no wide desktop form. */
 .daily-sales-dialog--noorix {
-  width: min(500px, calc(100vw - 28px));
+  width: min(480px, calc(100vw - 28px));
   max-height: calc(100vh - 40px);
   padding: 20px;
   border-radius: 18px;
