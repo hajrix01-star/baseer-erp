@@ -358,6 +358,14 @@ button {
   html[dir="ltr"] .topbar { margin-left: 248px; margin-right: 0; }
   html[dir="ltr"] .workspace { padding-left: 248px; padding-right: 0; }
   html[dir="ltr"] .module-sidebar { right: auto; left: 0; }
+  .launcher-topbar { padding-inline: 0; }
+  .launcher-brand-anchor {
+    display: flex;
+    align-items: center;
+    flex: 0 0 248px;
+    min-height: 72px;
+    padding-inline: 18px;
+  }
 }
 .sidebar-product {
   display: flex;
@@ -2423,9 +2431,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .launcher-topbar .baseer-brand__image {
   filter: brightness(0) saturate(100%) invert(17%) sepia(15%) saturate(1762%) hue-rotate(104deg) brightness(90%) contrast(91%);
 }
-.sidebar-brand .baseer-brand__image {
-  height: 2.25rem;
-}
 /* ERP is a secondary descriptor; Baseer remains the dominant wordmark. */
 .baseer-brand__erp {
   color: var(--brand);
@@ -2435,13 +2440,9 @@ html[dir="ltr"] .mobile-drawer__panel {
   letter-spacing: 0.08em;
   line-height: 1;
 }
-.sidebar-brand .baseer-brand__image {
-  height: 2.7rem;
-}
-.sidebar-brand .baseer-brand__erp {
-  color: #8ad4ad;
-  font-size: 0.72rem;
-}
+.sidebar-brand .baseer-brand__image, .launcher-brand-anchor .baseer-brand__image { height: 2.7rem; }
+.sidebar-brand .baseer-brand__erp { color: #8ad4ad; font-size: 0.72rem; }
+.launcher-brand-anchor .baseer-brand__erp { color: var(--brand); font-size: 0.72rem; }
 /* Company cards mirror the administrative flow: inspect first, edit in a focused dialog. */
 .administration-companies-heading { align-items: center; }
 .administration-companies-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 0.65rem; }
