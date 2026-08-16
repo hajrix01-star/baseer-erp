@@ -46,7 +46,6 @@ function ShiftCard({
   open,
   form,
   vaults,
-  saving,
   onChange,
 }: {
   language: DailySalesLanguage;
@@ -54,7 +53,6 @@ function ShiftCard({
   open: boolean;
   form: FormState;
   vaults: Vault[];
-  saving: boolean;
   onChange: (form: FormState) => void;
 }) {
   const copy = dailySalesText[language];
@@ -79,55 +77,31 @@ function ShiftCard({
       : form.scope === "EVENING"
         ? copy.evening
         : copy.all;
+  const customerCount = Number(form.customerCount) || 0;
+  const grossAmount = preview?.grossAmount ?? "0";
+  const average =
+    customerCount > 0 && preview
+      ? Number(preview.grossAmount) / customerCount
+      : null;
 
   return (
     <section className="daily-sales-dialog__shift-card">
       <h4>{title}</h4>
-      <div className="daily-sales-dialog__entry-grid">
-        <label>
-          <span>{copy.customers}</span>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            value={form.customerCount}
-            onChange={(event) =>
-              onChange({ ...form, customerCount: event.target.value })
-            }
-            placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
-            required
-          />
-        </label>
-        <label>
-          <span>{copy.cashHandover}</span>
-          <input
-            inputMode="decimal"
-            value={form.cashHandoverAmount}
-            onChange={(event) =>
-              onChange({ ...form, cashHandoverAmount: event.target.value })
-            }
-            placeholder={language === "ar" ? "اختياري" : "Optional"}
-          />
-        </label>
-        <label>
-          <span>{copy.cashVault}</span>
-          <select
-            value={form.cashHandoverVaultId}
-            onChange={(event) =>
-              onChange({ ...form, cashHandoverVaultId: event.target.value })
-            }
-          >
-            {vaults
-              .filter((vault) => vault.type === "CASH")
-              .map((vault) => (
-                <option key={vault.id} value={vault.id}>
-                  {language === "ar" ? vault.nameAr : vault.nameEn}
-                </option>
-              ))}
-          </select>
-        </label>
-      </div>
-      <fieldset>
+      <label className="daily-sales-dialog__customer-field">
+        <span>{copy.customers}</span>
+        <input
+          type="number"
+          min="0"
+          step="1"
+          value={form.customerCount}
+          onChange={(event) =>
+            onChange({ ...form, customerCount: event.target.value })
+          }
+          placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
+          required
+        />
+      </label>
+      <fieldset className="daily-sales-dialog__channels">
         <legend>{copy.channels}</legend>
         <div className="daily-sales-dialog__vault-grid">
           {vaults.map((vault) => {
@@ -157,35 +131,80 @@ function ShiftCard({
           })}
         </div>
       </fieldset>
-      <div className="daily-sales-dialog__shift-footer">
-        <label className="daily-sales-dialog__wide">
-          <span>{copy.notes}</span>
-          <textarea
-            value={form.notes}
-            onChange={(event) =>
-              onChange({ ...form, notes: event.target.value })
-            }
-            maxLength={2_000}
-          />
-        </label>
-        <output className="daily-sales-dialog__total" aria-live="polite">
-          <span>{copy.entryTotal}</span>
+      <label className="daily-sales-dialog__wide">
+        <span>{copy.notes}</span>
+        <textarea
+          value={form.notes}
+          onChange={(event) => onChange({ ...form, notes: event.target.value })}
+          maxLength={2_000}
+          placeholder={
+            language === "ar"
+              ? "أي ملاحظات على مبيعات اليوم…"
+              : "Optional notes…"
+          }
+        />
+      </label>
+      <output className="daily-sales-dialog__summary" aria-live="polite">
+        <span>
+          <small>{copy.entryTotal}</small>
           <strong dir="ltr">
             {previewLoading
               ? copy.previewLoading
               : preview
-                ? formatMoney(preview.grossAmount)
+                ? formatMoney(grossAmount)
                 : copy.previewUnavailable}
           </strong>
-        </output>
-      </div>
-      <small className="daily-sales-dialog__recorded-hint">
-        {copy.recordedHint}
-      </small>
+        </span>
+        <span>
+          <small>{copy.customers}</small>
+          <strong>{customerCount || "—"}</strong>
+        </span>
+        <span>
+          <small>
+            {language === "ar" ? "معدل العميل" : "Average customer"}
+          </small>
+          <strong dir="ltr">
+            {average === null ? "—" : formatMoney(String(average))}
+          </strong>
+        </span>
+      </output>
+      <details className="daily-sales-dialog__cash-details">
+        <summary>{copy.cashHandover}</summary>
+        <div>
+          <label>
+            <span>{copy.cashHandover}</span>
+            <input
+              inputMode="decimal"
+              value={form.cashHandoverAmount}
+              onChange={(event) =>
+                onChange({ ...form, cashHandoverAmount: event.target.value })
+              }
+              placeholder={language === "ar" ? "اختياري" : "Optional"}
+            />
+          </label>
+          <label>
+            <span>{copy.cashVault}</span>
+            <select
+              value={form.cashHandoverVaultId}
+              onChange={(event) =>
+                onChange({ ...form, cashHandoverVaultId: event.target.value })
+              }
+            >
+              {vaults
+                .filter((vault) => vault.type === "CASH")
+                .map((vault) => (
+                  <option key={vault.id} value={vault.id}>
+                    {language === "ar" ? vault.nameAr : vault.nameEn}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </div>
+        <small>{copy.recordedHint}</small>
+      </details>
     </section>
   );
 }
-
 export function DailySalesClosingDialog({
   language,
   open,
@@ -242,7 +261,7 @@ export function DailySalesClosingDialog({
     >
       <section
         ref={dialogRef}
-        className="daily-sales-dialog daily-sales-dialog--noorix"
+        className={`daily-sales-dialog daily-sales-dialog--noorix ${activeScopes.length === 2 ? "daily-sales-dialog--batch" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="daily-sales-dialog-title"
@@ -371,7 +390,6 @@ export function DailySalesClosingDialog({
                   open={open}
                   form={forms[scope]}
                   vaults={vaults}
-                  saving={saving}
                   onChange={(form) =>
                     onFormsChange({ ...forms, [scope]: form })
                   }

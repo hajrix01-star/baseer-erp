@@ -2376,3 +2376,152 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
 }
+
+/* Noorix reference alignment: a calm, medium-width entry sheet; no wide desktop form. */
+.daily-sales-dialog--noorix {
+  width: min(600px, calc(100vw - 28px));
+  max-height: calc(100vh - 40px);
+  padding: 20px;
+  border-radius: 18px;
+}
+.daily-sales-dialog--noorix.daily-sales-dialog--batch {
+  width: min(720px, calc(100vw - 28px));
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__header {
+  padding-bottom: 12px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__header .eyebrow,
+.daily-sales-dialog--noorix .daily-sales-dialog__header p:last-child {
+  display: none;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 6px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker legend,
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker small {
+  grid-column: 1 / -1;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker button {
+  min-height: 38px;
+  border-radius: 9px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__date {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__date small {
+  grid-column: auto;
+  font-size: 11px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-stack {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-card {
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-card h4 {
+  font-size: 16px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__customer-field {
+  width: 100%;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__channels {
+  display: block;
+  padding: 10px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault > span {
+  font-size: 12px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault input {
+  min-height: 38px;
+}
+.daily-sales-dialog__summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--line, #d6e4da);
+  border-radius: 12px;
+}
+.daily-sales-dialog__summary > span {
+  display: grid;
+  gap: 4px;
+  min-height: 62px;
+  padding: 9px 10px;
+  border-inline-start: 1px solid var(--line, #d6e4da);
+}
+.daily-sales-dialog__summary > span:first-child {
+  border-inline-start: 0;
+}
+.daily-sales-dialog__summary small {
+  color: var(--muted, #65776d);
+  font-size: 11px;
+}
+.daily-sales-dialog__summary strong {
+  color: var(--brand, #087a4a);
+  font-size: 15px;
+}
+.daily-sales-dialog__cash-details {
+  border-top: 1px solid var(--line, #d6e4da);
+  padding-top: 8px;
+}
+.daily-sales-dialog__cash-details summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted, #65776d);
+}
+.daily-sales-dialog__cash-details > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__actions {
+  position: static;
+  margin: 0;
+  padding: 4px 0 0;
+  border-top: 0;
+  background: transparent;
+}
+@media (max-width: 520px) {
+  .daily-sales-dialog--noorix {
+    width: calc(100vw - 12px);
+    padding: 14px;
+  }
+  .daily-sales-dialog--noorix .daily-sales-dialog__scope-picker {
+    grid-template-columns: 1fr !important;
+  }
+  .daily-sales-dialog--noorix .daily-sales-dialog__vault-grid,
+  .daily-sales-dialog__cash-details > div {
+    grid-template-columns: 1fr;
+  }
+}
