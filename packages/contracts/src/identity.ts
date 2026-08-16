@@ -26,7 +26,7 @@ export const loginIdentifierSchema = z.union([
 export const signInRequestSchema = z
   .object({
     login: loginIdentifierSchema,
-    password: z.string().min(12).max(256),
+    password: z.string().min(6).max(256),
   })
   .strict();
 
@@ -56,7 +56,7 @@ export const activateOwnerRequestSchema = z
   .object({
     email: z.string().trim().toLowerCase().email().max(254),
     activationCode: z.string().min(16).max(256),
-    password: z.string().min(12).max(256),
+    password: z.string().min(6).max(256),
   })
   .strict();
 export const refreshSessionRequestSchema = z

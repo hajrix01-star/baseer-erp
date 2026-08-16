@@ -12,6 +12,10 @@ The production database is persistent. Deployment uses the same database and `pr
 
 The deployment environment sets `BASEER_SYSTEM_TENANT_CODE` once. This private code is server-only configuration used to resolve logins; it is never shown or entered in the browser.
 
+## Password policy
+
+A new or reset password must contain at least six non-empty characters. It may contain numbers and letters; it is not restricted to a numeric PIN.
+
 ## Rules
 
 - The owner email is normalized case-insensitively: `mohammad.alhajri@gmail.com`.

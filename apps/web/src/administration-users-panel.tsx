@@ -71,8 +71,8 @@ export function AdministrationUsersPanel({ session, overview, owner, onDone, onE
         <button className="daily-sales-secondary" disabled={busy || reason.trim().length < 3} type="button" onClick={() => void runSensitiveAction(() => updateAdministrationUserStatus(session, selectedUser.id, selectedUser.status === "ACTIVE" ? "DISABLED" : "ACTIVE", reason))}>{selectedUser.status === "ACTIVE" ? "تعطيل المستخدم" : "تفعيل المستخدم"}</button>
       </div>
       {selectedUser.status === "ACTIVE" && <>
-        <label>كلمة مرور جديدة<input type="password" minLength={12} value={replacementPassword} onChange={(event) => setReplacementPassword(event.target.value)} placeholder="12 حرفًا على الأقل" /></label>
-        <button className="daily-sales-secondary" disabled={busy || reason.trim().length < 3 || replacementPassword.length < 12} type="button" onClick={() => void runSensitiveAction(() => resetAdministrationUserPassword(session, selectedUser.id, replacementPassword, reason))}>إعادة ضبط كلمة المرور وإنهاء الجلسات</button>
+        <label>كلمة مرور جديدة<input type="password" minLength={6} value={replacementPassword} onChange={(event) => setReplacementPassword(event.target.value)} placeholder="6 خانات على الأقل" /></label>
+        <button className="daily-sales-secondary" disabled={busy || reason.trim().length < 3 || replacementPassword.length < 6} type="button" onClick={() => void runSensitiveAction(() => resetAdministrationUserPassword(session, selectedUser.id, replacementPassword, reason))}>إعادة ضبط كلمة المرور وإنهاء الجلسات</button>
       </>}
       {selectedUser.memberships.length > 0 && <fieldset>
         <legend>وصول الشركات</legend>
@@ -85,7 +85,7 @@ export function AdministrationUsersPanel({ session, overview, owner, onDone, onE
       <label>اسم المستخدم أو البريد<input type="text" required value={login} onChange={(event) => setLogin(event.target.value)} placeholder="ahmed أو ahmed@example.com" autoComplete="username" /></label>
       <label>الاسم بالعربية<input required value={nameAr} onChange={(event) => setNameAr(event.target.value)} /></label>
       <label>الاسم بالإنجليزية<input required value={nameEn} onChange={(event) => setNameEn(event.target.value)} /></label>
-      <label>كلمة مرور أولية<input type="password" minLength={12} required value={password} onChange={(event) => setPassword(event.target.value)} /></label>
+      <label>كلمة مرور أولية<input type="password" minLength={6} required value={password} onChange={(event) => setPassword(event.target.value)} /></label>
       <label>الشركة<select value={companyId} onChange={(event) => setCompanyId(event.target.value)}>{overview.companies.map((company) => <option key={company.id} value={company.id}>{company.nameAr}</option>)}</select></label>
       <label>الدور<select value={roleId} onChange={(event) => setRoleId(event.target.value)}>{overview.roles.map((role) => <option key={role.id} value={role.id}>{role.nameAr}</option>)}</select></label>
       <button className="daily-sales-primary" disabled={busy}>إضافة المستخدم</button>

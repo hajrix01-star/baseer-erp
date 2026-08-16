@@ -5,7 +5,7 @@ import { companyIdSchema, languageSchema, loginIdentifierSchema, userIdSchema } 
 const text160 = z.string().trim().min(1).max(160);
 const roleCode = z.string().trim().min(3).max(80).regex(/^[A-Z][A-Z0-9_]*$/);
 const permissionCode = z.string().trim().min(3).max(120).regex(/^[a-z][a-z0-9._-]*$/);
-const password = z.string().min(12).max(256).refine((value) => value.trim().length > 0);
+const password = z.string().min(6).max(256).refine((value) => value.trim().length > 0);
 
 export const administrationPermissionSchema = z.object({
   code: permissionCode, module: z.string().min(1).max(80), nameAr: text160, nameEn: text160, risk: z.enum(["standard", "sensitive"]),

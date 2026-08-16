@@ -64,6 +64,14 @@ export function DailySalesSignIn({
   };
   const activate = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (password.trim().length < 6) {
+      setError(
+        language === "ar"
+          ? "يجب أن تكون كلمة المرور 6 خانات على الأقل."
+          : "Password must be at least 6 characters.",
+      );
+      return;
+    }
     if (password !== confirmPassword) {
       setError(
         language === "ar"
@@ -145,6 +153,7 @@ export function DailySalesSignIn({
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="new-password"
+              minLength={6}
               required
             />
           </label>
@@ -157,6 +166,7 @@ export function DailySalesSignIn({
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
               autoComplete="new-password"
+              minLength={6}
               required
             />
           </label>
