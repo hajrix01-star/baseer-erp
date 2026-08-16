@@ -1,3 +1,4 @@
+import { BaseerButton } from "./baseer-button";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing, Vault } from "./daily-sales-client";
 import { formatMoney, formatNumber } from "./number-format";
@@ -106,14 +107,10 @@ export function DailySalesRecordDialog({
         )}
         <footer>
           {closing.status === "POSTED" && canCorrect && (
-            <button className="daily-sales-secondary" type="button" onClick={() => onCorrect(closing)}>
-              {copy.edit}
-            </button>
+            <BaseerButton type="button" onClick={() => onCorrect(closing)}>{copy.edit}</BaseerButton>
           )}
           {closing.status === "POSTED" && canReverse && (
-            <button className="daily-sales-danger" type="button" onClick={() => onReverse(closing)}>
-              {cancelLabel}
-            </button>
+            <BaseerButton variant="danger" type="button" onClick={() => onReverse(closing)}>{cancelLabel}</BaseerButton>
           )}
         </footer>
       </section>

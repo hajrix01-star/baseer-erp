@@ -45,6 +45,11 @@
   --card-radius: 1rem;
   --card-padding: 1.125rem;
   --card-padding-compact: 0.875rem;
+  --control-height: 2.75rem;
+  --control-radius: 0.625rem;
+  --field-border: #cbdad0;
+  --page-gutter: clamp(1rem, 3vw, 3.25rem);
+  --section-gap: clamp(1rem, 2vw, 1.5rem);
   font-family: "Noto Sans Arabic Variable", "IBM Plex Sans Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
 }
 * {
@@ -2979,4 +2984,131 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 .daily-sales-record-dialog__channels > div > strong {
   font-variant-numeric: tabular-nums;
+}
+/* Baseer UI system: the single visual contract for controls, fields, dialogs, status, and page rhythm. */
+.baseer-button,
+.daily-sales-primary,
+.daily-sales-secondary,
+.daily-sales-danger {
+  display: inline-flex;
+  min-height: var(--control-height);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid transparent;
+  border-radius: var(--control-radius);
+  font: inherit;
+  font-weight: 750;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.baseer-button:not(:disabled):active,
+.daily-sales-primary:not(:disabled):active,
+.daily-sales-secondary:not(:disabled):active,
+.daily-sales-danger:not(:disabled):active {
+  transform: translateY(1px);
+}
+.baseer-button:focus-visible,
+.daily-sales-primary:focus-visible,
+.daily-sales-secondary:focus-visible,
+.daily-sales-danger:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.baseer-button--primary,
+.daily-sales-primary {
+  color: #fff;
+  background: var(--brand);
+  border-color: var(--brand);
+}
+.baseer-button--secondary,
+.daily-sales-secondary {
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--field-border);
+}
+.baseer-button--danger,
+.daily-sales-danger {
+  color: #fff;
+  background: #bf2c2c;
+  border-color: #bf2c2c;
+}
+.baseer-button--icon {
+  width: var(--control-height);
+  padding: 0;
+}
+.baseer-button:disabled,
+.daily-sales-primary:disabled,
+.daily-sales-secondary:disabled,
+.daily-sales-danger:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form) :is(input, select, textarea) {
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--field-border);
+  border-radius: var(--control-radius);
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+  line-height: 1.4;
+}
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form) textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form) :is(input, select, textarea):focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand) 55%, transparent);
+  outline-offset: 1px;
+  border-color: var(--brand);
+}
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form) label {
+  color: var(--ink);
+  font-size: var(--font-label);
+  font-weight: 700;
+}
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form) label small {
+  color: var(--muted);
+  font-size: var(--font-caption);
+  font-weight: 500;
+}
+.daily-sales-dialog,
+.daily-sales-record-dialog {
+  border-color: var(--line);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+}
+.daily-sales-badge,
+.administration-user-card__body em {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: var(--font-caption);
+  font-style: normal;
+  font-weight: 750;
+  line-height: 1.2;
+}
+.workspace {
+  padding-inline: var(--page-gutter);
+}
+.module-page,
+.administration-section,
+.daily-sales-workspace {
+  gap: var(--section-gap);
+}
+@media (max-width: 640px) {
+  .baseer-button,
+  .daily-sales-primary,
+  .daily-sales-secondary,
+  .daily-sales-danger {
+    min-height: 2.625rem;
+  }
 }
