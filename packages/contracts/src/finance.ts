@@ -659,7 +659,7 @@ export const dailySalesWorkspaceReceiptSchema = z
       fromBusinessDate: true,
       toBusinessDate: true,
     }),
-    shifts: z.array(dailySalesShiftSummaryItemSchema).length(3),
+    shifts: z.array(dailySalesShiftSummaryItemSchema).max(3),
   })
   .strict();
 export type CreateDailySalesClosingRequest = z.infer<

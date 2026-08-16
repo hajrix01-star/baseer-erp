@@ -44,12 +44,14 @@ import { DailySalesService } from "./daily-sales.service.js";
 import { OperationalCalendarService } from "./operational-calendar.service.js";
 
 const DAILY_SALES_READ_CAPABILITY = "finance.daily_sales.read";
-const DAILY_SALES_FULL_HISTORY_CAPABILITY = "finance.daily_sales.history.read_all";
+const DAILY_SALES_FULL_HISTORY_CAPABILITY =
+  "finance.daily_sales.history.read_all";
 const DAILY_SALES_LEGACY_WRITE_CAPABILITY = "finance.daily_sales.write";
 const DAILY_SALES_CREATE_CAPABILITY = "finance.daily_sales.create";
 const DAILY_SALES_CORRECT_CAPABILITY = "finance.daily_sales.correct";
 const DAILY_SALES_REVERSE_CAPABILITY = "finance.daily_sales.reverse";
-const OPERATIONAL_CALENDAR_MANAGE_CAPABILITY = "finance.operational_calendar.manage";
+const OPERATIONAL_CALENDAR_MANAGE_CAPABILITY =
+  "finance.operational_calendar.manage";
 
 /**
  * Narrow operational commands only. This controller deliberately exposes no
@@ -81,20 +83,29 @@ export class DailySalesController {
       DAILY_SALES_READ_CAPABILITY,
     );
     const accessToken = this.accessToken(authorization);
-    const fullHistory = await this.canReadFullClosingHistory(authorization, companyId);
+    const fullHistory = await this.canReadFullClosingHistory(
+      authorization,
+      companyId,
+    );
     const historyLimit = fullHistory
       ? FULL_CLOSING_HISTORY_LIMIT
       : CASHIER_CLOSING_HISTORY_LIMIT;
-    const [vaults, closings, cashHandovers, shifts, entryDate, companies] =
+    const [vaults, closings, entryDate, companies, managementReports] =
       await Promise.all([
         this.reads.listChannelVaults(context),
         this.reads.listClosings(context, parsed.data, { limit: historyLimit }),
-        this.reads.listCashHandovers(context, parsed.data),
-        this.reads.listShiftSummary(context, parsed.data),
         this.businessDates.currentForTrustedContext(context),
         this.companyAccess.listAvailableCompanies(accessToken),
+        fullHistory
+          ? Promise.all([
+              this.reads.listCashHandovers(context, parsed.data),
+              this.reads.listShiftSummary(context, parsed.data),
+            ])
+          : Promise.resolve(null),
       ]);
-    const activeCompany = companies.find((company) => company.id === context.companyId);
+    const activeCompany = companies.find(
+      (company) => company.id === context.companyId,
+    );
     if (!activeCompany)
       throw new ForbiddenException("Company finance scope is not permitted.");
     return dailySalesWorkspaceReceiptSchema.parse({
@@ -109,8 +120,12 @@ export class DailySalesController {
       vaults,
       historyLimit,
       closings,
-      cashHandovers,
-      shifts,
+      cashHandovers: managementReports?.[0] ?? {
+        totalCashHandoverAmount: "0.0000",
+        recordCount: 0,
+        handovers: [],
+      },
+      shifts: managementReports?.[1] ?? [],
     });
   }
   @Get("daily-sales/closings")
@@ -127,7 +142,10 @@ export class DailySalesController {
       companyId,
       DAILY_SALES_READ_CAPABILITY,
     );
-    const fullHistory = await this.canReadFullClosingHistory(authorization, companyId);
+    const fullHistory = await this.canReadFullClosingHistory(
+      authorization,
+      companyId,
+    );
     const historyLimit = fullHistory
       ? FULL_CLOSING_HISTORY_LIMIT
       : CASHIER_CLOSING_HISTORY_LIMIT;
@@ -136,7 +154,9 @@ export class DailySalesController {
       fromBusinessDate: parsed.data.fromBusinessDate,
       toBusinessDate: parsed.data.toBusinessDate,
       historyLimit,
-      closings: await this.reads.listClosings(context, parsed.data, { limit: historyLimit }),
+      closings: await this.reads.listClosings(context, parsed.data, {
+        limit: historyLimit,
+      }),
     });
   }
 
@@ -147,8 +167,13 @@ export class DailySalesController {
     @Headers("x-baseer-company-id") companyId?: string,
   ) {
     const parsed = dailySalesClosingsQuerySchema.safeParse(query);
-    if (!parsed.success) throw new BadRequestException("Invalid cash-handover query.");
-    const context = await this.authorize(authorization, companyId, DAILY_SALES_READ_CAPABILITY);
+    if (!parsed.success)
+      throw new BadRequestException("Invalid cash-handover query.");
+    const context = await this.authorize(
+      authorization,
+      companyId,
+      DAILY_SALES_FULL_HISTORY_CAPABILITY,
+    );
     const handovers = await this.reads.listCashHandovers(context, parsed.data);
     return dailySalesCashHandoversReceiptSchema.parse({
       companyId: context.companyId,
@@ -165,8 +190,13 @@ export class DailySalesController {
     @Headers("x-baseer-company-id") companyId?: string,
   ) {
     const parsed = dailySalesClosingsQuerySchema.safeParse(query);
-    if (!parsed.success) throw new BadRequestException("Invalid daily-sales shift-summary query.");
-    const context = await this.authorize(authorization, companyId, DAILY_SALES_READ_CAPABILITY);
+    if (!parsed.success)
+      throw new BadRequestException("Invalid daily-sales shift-summary query.");
+    const context = await this.authorize(
+      authorization,
+      companyId,
+      DAILY_SALES_FULL_HISTORY_CAPABILITY,
+    );
     return dailySalesShiftSummaryReceiptSchema.parse({
       companyId: context.companyId,
       fromBusinessDate: parsed.data.fromBusinessDate,
@@ -195,11 +225,10 @@ export class DailySalesController {
     @Headers("authorization") authorization?: string,
     @Headers("x-baseer-company-id") companyId?: string,
   ) {
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [DAILY_SALES_CREATE_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_CREATE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     const current = await this.businessDates.currentForTrustedContext(context);
     return dailySalesEntryDateReceiptSchema.parse({
       companyId: context.companyId,
@@ -220,11 +249,10 @@ export class DailySalesController {
       throw new BadRequestException(
         "Invalid daily-sales closing preview request.",
       );
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [DAILY_SALES_CREATE_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_CREATE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     return dailySalesClosingPreviewReceiptSchema.parse(
       await this.dailySales.preview({
         context,
@@ -256,11 +284,10 @@ export class DailySalesController {
     const request = createDailySalesClosingRequestSchema.safeParse(body);
     if (!request.success)
       throw new BadRequestException("Invalid daily-sales closing request.");
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [DAILY_SALES_CREATE_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_CREATE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     return dailySalesClosingReceiptSchema.parse(
       await this.dailySales.create({
         context,
@@ -294,11 +321,10 @@ export class DailySalesController {
     const request = correctDailySalesClosingRequestSchema.safeParse(body);
     if (!request.success)
       throw new BadRequestException("Invalid daily-sales correction request.");
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [DAILY_SALES_CORRECT_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_CORRECT_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     return dailySalesClosingReceiptSchema.parse(
       await this.dailySales.correct({
         context,
@@ -331,11 +357,10 @@ export class DailySalesController {
     const request = reverseDailySalesClosingRequestSchema.safeParse(body);
     if (!request.success)
       throw new BadRequestException("Invalid daily-sales reversal request.");
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [DAILY_SALES_REVERSE_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_REVERSE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     return dailySalesClosingReversalReceiptSchema.parse(
       await this.dailySales.reverse({
         context,
@@ -359,11 +384,10 @@ export class DailySalesController {
     const request = setOperationalDayRequestSchema.safeParse(body);
     if (!request.success)
       throw new BadRequestException("Invalid operational-calendar request.");
-    const context = await this.authorize(
-      authorization,
-      companyId,
-      [OPERATIONAL_CALENDAR_MANAGE_CAPABILITY, DAILY_SALES_LEGACY_WRITE_CAPABILITY],
-    );
+    const context = await this.authorize(authorization, companyId, [
+      OPERATIONAL_CALENDAR_MANAGE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
     return operationalDayReceiptSchema.parse(
       await this.calendar.setDay({
         context,
@@ -443,7 +467,9 @@ export class DailySalesController {
     const acceptedCapabilities = Array.isArray(capabilities)
       ? capabilities
       : [capabilities];
-    let authorized: Awaited<ReturnType<CompanyContextService["authorize"]>> | null = null;
+    let authorized: Awaited<
+      ReturnType<CompanyContextService["authorize"]>
+    > | null = null;
     for (const capability of acceptedCapabilities) {
       try {
         authorized = await this.companyContext.authorize({

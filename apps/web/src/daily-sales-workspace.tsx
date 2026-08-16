@@ -38,7 +38,9 @@ export function DailySalesWorkspace({
   const [closings, setClosings] = useState<Closing[]>([]);
   const [historyLimit, setHistoryLimit] = useState<number | null>(null);
   const [entryDate, setEntryDate] = useState<string | null>(null);
-  const [cashHandover, setCashHandover] = useState<CashHandoverReport | null>(null);
+  const [cashHandover, setCashHandover] = useState<CashHandoverReport | null>(
+    null,
+  );
   const [shiftSummary, setShiftSummary] = useState<ShiftSummary[]>([]);
   const [form, setForm] = useState<FormState>(initialForm());
   const [editing, setEditing] = useState<Closing | null>(null);
@@ -86,9 +88,13 @@ export function DailySalesWorkspace({
   }, [copy.loaded, range.from, range.to]);
 
   useEffect(() => {
-    void load().catch((error) => setStatus({ kind: "error", message: presentBaseerApiError(error, language, copy.error) }));
+    void load().catch((error) =>
+      setStatus({
+        kind: "error",
+        message: presentBaseerApiError(error, language, copy.error),
+      }),
+    );
   }, [copy.error, load]);
-
 
   const resetDialog = () => {
     setEditing(null);
@@ -123,7 +129,7 @@ export function DailySalesWorkspace({
     setStatus({ kind: "idle", message: "" });
     try {
       if (entryMode === "DAY_OFF") {
-        const note = `DAY_OFF: ${dayOffReason}${dayOffNote.trim() ? ` — ${dayOffNote.trim()}` : ""}`;
+        const note = `DAY_OFF: ${dayOffReason}${dayOffNote.trim() ? ` â€” ${dayOffNote.trim()}` : ""}`;
         await api(session, "/finance/operational-calendar/days", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -186,10 +192,21 @@ export function DailySalesWorkspace({
 
   const permissions = new Set(permissionCodes);
   const hasPermission = (code: string) => permissions.has(code);
-  const canCreate = hasPermission("finance.daily_sales.create") || hasPermission("finance.daily_sales.write");
-  const canCorrect = hasPermission("finance.daily_sales.correct") || hasPermission("finance.daily_sales.write");
-  const canReverse = hasPermission("finance.daily_sales.reverse") || hasPermission("finance.daily_sales.write");
-  const canManageOperationalDay = hasPermission("finance.operational_calendar.manage") || hasPermission("finance.daily_sales.write");
+  const canCreate =
+    hasPermission("finance.daily_sales.create") ||
+    hasPermission("finance.daily_sales.write");
+  const canCorrect =
+    hasPermission("finance.daily_sales.correct") ||
+    hasPermission("finance.daily_sales.write");
+  const canReverse =
+    hasPermission("finance.daily_sales.reverse") ||
+    hasPermission("finance.daily_sales.write");
+  const canManageOperationalDay =
+    hasPermission("finance.operational_calendar.manage") ||
+    hasPermission("finance.daily_sales.write");
+  const canReadManagementReports = hasPermission(
+    "finance.daily_sales.history.read_all",
+  );
   const selectForCorrection = (closing: Closing) => {
     setEditing(closing);
     setEntryMode("CLOSING");
@@ -232,7 +249,13 @@ export function DailySalesWorkspace({
   };
 
   const reverse = async () => {
-    if (!session || saving || !reversalTarget || reversalReason.trim().length < 3) return;
+    if (
+      !session ||
+      saving ||
+      !reversalTarget ||
+      reversalReason.trim().length < 3
+    )
+      return;
     setSaving(true);
     try {
       await api(session, "/finance/daily-sales/closings/reverse", {
@@ -249,7 +272,10 @@ export function DailySalesWorkspace({
       await load();
       setStatus({ kind: "success", message: copy.success });
     } catch (error) {
-      setStatus({ kind: "error", message: presentBaseerApiError(error, language, copy.error) });
+      setStatus({
+        kind: "error",
+        message: presentBaseerApiError(error, language, copy.error),
+      });
     } finally {
       setSaving(false);
     }
@@ -280,13 +306,15 @@ export function DailySalesWorkspace({
           <p>{copy.subtitle}</p>
         </div>
         <div className="daily-sales-heading__actions">
-          {canCreate && <button
-            className="daily-sales-primary"
-            type="button"
-            onClick={() => openEntryForDate()}
-          >
-            {copy.create}
-          </button>}
+          {canCreate && (
+            <button
+              className="daily-sales-primary"
+              type="button"
+              onClick={() => openEntryForDate()}
+            >
+              {copy.create}
+            </button>
+          )}
           <button
             className="daily-sales-secondary"
             type="button"
@@ -330,11 +358,13 @@ export function DailySalesWorkspace({
         onDayOffReasonChange={setDayOffReason}
         onDayOffNoteChange={setDayOffNote}
       />
-      <DailySalesInsights
-        language={language}
-        shifts={shiftSummary}
-        cashHandover={cashHandover}
-      />
+      {canReadManagementReports && (
+        <DailySalesInsights
+          language={language}
+          shifts={shiftSummary}
+          cashHandover={cashHandover}
+        />
+      )}{" "}
       <DailySalesReversalDialog
         language={language}
         closing={reversalTarget}
@@ -343,7 +373,8 @@ export function DailySalesWorkspace({
         onReasonChange={setReversalReason}
         onClose={closeReversal}
         onConfirm={() => void reverse()}
-      />      <DailySalesHistory
+      />{" "}
+      <DailySalesHistory
         language={language}
         closings={closings}
         historyLimit={historyLimit}

@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ADMINISTRATION_PERMISSION_CATALOG } from "../administration/administration-permissions.js";
 import { DatabaseService } from "../database/database.service.js";
 import {
   CompanyStatus,
@@ -67,7 +68,12 @@ export class CompanyAccessService {
               select: { id: true, nameAr: true, nameEn: true },
             })
             .then((companies) =>
-              companies.map((company) => ({ ...company, permissionCodes: [] })),
+              companies.map((company) => ({
+                ...company,
+                permissionCodes: ADMINISTRATION_PERMISSION_CATALOG.map(
+                  (permission) => permission.code,
+                ),
+              })),
             );
         }
         return transaction.companyMembership

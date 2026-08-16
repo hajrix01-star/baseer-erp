@@ -372,9 +372,9 @@ button {
   font-weight: 700;
 }
 .module-page {
-  width: min(1180px, 100%);
+  width: min(1440px, 100%);
   margin: 0 auto;
-  padding: 42px clamp(20px, 4vw, 56px) 64px;
+  padding: 42px clamp(24px, 3.5vw, 64px) 64px;
 }
 .page-breadcrumb {
   color: var(--brand);
@@ -1384,3 +1384,5 @@ html[dir="ltr"] .mobile-drawer__panel {
   resize: vertical;
 }
 .daily-sales-reversal-dialog__reason small { color: var(--muted); font-size: 11px; line-height: 1.5; }
+/* Shared desktop content standard. */
+.administration-copy{margin:-6px 0 2px;color:var(--muted);line-height:1.7}.administration-permission-picker{display:grid!important;gap:14px!important}.administration-permission-picker legend{display:flex;align-items:center;gap:8px}.administration-permission-picker legend small,.administration-permission-module>header span{color:var(--muted);font-weight:600;font-size:12px}.administration-permission-module{display:grid;gap:10px;padding:14px;border:1px solid #dce7e0;border-radius:12px;background:#fbfdfb}.administration-permission-module>header{display:flex;align-items:center;justify-content:space-between;gap:12px}.administration-permission-module h5,.administration-permission-section h6{margin:0}.administration-permission-module h5{font-size:15px}.administration-permission-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:10px}.administration-permission-section{display:grid;gap:8px;padding:11px;border:1px solid #e6ede8;border-radius:10px;background:#fff}.administration-permission-section h6{color:var(--brand-deep);font-size:13px}.administration-permission-section>div{display:grid;gap:6px}.administration-permission-section label{justify-content:flex-start;min-height:34px;padding:7px 8px!important}.administration-permission-section label span{flex:1}.administration-permission-section label small{padding:2px 6px;border-radius:999px;color:#8c4a13;background:#fff0d9;font-size:10px;font-weight:800}@media(max-width:520px){.administration-permission-sections{grid-template-columns:1fr}}

@@ -19,6 +19,8 @@ export function DailySalesHistory({
   onReverse: (closing: Closing) => void;
 }) {
   const copy = dailySalesText[language];
+  const cancellationLabel = language === "ar" ? "\u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0642\u0641\u064a\u0644" : "Cancel closing";
+  const cancelledLabel = language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
   return (
     <section className="daily-sales-history">
       <div>
@@ -46,13 +48,13 @@ export function DailySalesHistory({
                   <td><strong>{closing.documentNumber}</strong><small>{closing.businessDate.slice(0, 10)}</small></td>
                   <td>{copy[closing.scope.toLowerCase() as "morning" | "evening" | "all"]}</td>
                   <td>{closing.grossAmount}</td><td>{closing.customerCount}</td>
-                  <td>{closing.cashHandoverAmount ?? "—"}</td>
-                  <td><span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>{copy[closing.status]}</span></td>
+                  <td>{closing.cashHandoverAmount ?? "â€”"}</td>
+                  <td><span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>{closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}</span></td>
                   <td>
                     {closing.status === "POSTED" && (canCorrect || canReverse) && (
                       <div className="daily-sales-register__actions">
                         {canCorrect && <button className="daily-sales-secondary" type="button" onClick={() => onCorrect(closing)}>{copy.edit}</button>}
-                        {canReverse && <button className="daily-sales-danger" type="button" onClick={() => onReverse(closing)}>{copy.reverse}</button>}
+                        {canReverse && <button className="daily-sales-danger" type="button" onClick={() => onReverse(closing)}>{cancellationLabel}</button>}
                       </div>
                     )}
                   </td>
