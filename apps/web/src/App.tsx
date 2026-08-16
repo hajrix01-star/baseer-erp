@@ -98,7 +98,8 @@ function persistRecent(route: ResolvedRoute): void {
 function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onModules: () => void }) {
   const text = copy[language];
   return <header className="topbar">
-    <button className="icon-button app-modules-button" onClick={onModules} type="button" aria-label={text.allModules}>{"\u283f"}</button>`n    <div className="topbar-spacer" />
+    <button className="icon-button app-modules-button" onClick={onModules} type="button" aria-label={text.allModules}>{"\u283f"}</button>
+    <div className="topbar-spacer" />
     <CompanySessionControl language={language} />
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button>
     <button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button>
