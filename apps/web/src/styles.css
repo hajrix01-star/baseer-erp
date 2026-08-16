@@ -102,16 +102,11 @@ button {
   color: var(--brand-deep);
   line-height: 1;
 }
-.baseer-brand__mark {
-  width: 32px;
-  height: 39px;
-  overflow: visible;
-}
 .baseer-brand__word {
   color: var(--ink);
-  font-size: var(--font-title-sm);
+  font-size: 1.75rem;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
 }
 .baseer-brand__word b {
   color: var(--brand);
@@ -148,9 +143,9 @@ button {
 }
 .icon-button {
   display: grid;
-  width: 44px;
+  width: 52px;
   place-items: center;
-  font-size: var(--font-title-sm);
+  font-size: 1.5rem;
 }
 .company-selector,
 .theme-button {
@@ -403,19 +398,6 @@ button {
   border-radius: 50%;
   background: currentColor;
   opacity: 0.8;
-}
-.back-to-modules {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 44px;
-  margin-top: auto;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 11px;
-  color: #fff;
-  background: transparent;
-  font-weight: 700;
 }
 .module-page {
   width: min(1440px, 100%);
