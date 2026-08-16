@@ -130,10 +130,7 @@ function ShiftCard({
             const name = language === "ar" ? vault.nameAr : vault.nameEn;
             return (
               <label className="daily-sales-dialog__vault" key={vault.id}>
-                <span>
-                  {name}
-                  <small>{copy[vault.type]}</small>
-                </span>
+                <span>{name}</span>
                 <input
                   aria-label={`${name} ${copy.amount}`}
                   inputMode="decimal"
