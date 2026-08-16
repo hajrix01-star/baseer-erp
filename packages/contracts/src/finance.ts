@@ -330,7 +330,8 @@ export const supplierDueHistoryReceiptSchema = z
 
 const financeConfigurationProfileSchema = z
   .object({
-    baseSeedVersion: z.string().min(1).max(80),
+    // Mirrors CompanyFinanceProfile.baseSeedVersion (Prisma Int), not a label.
+    baseSeedVersion: z.number().int().positive(),
     accountingMode: z.string().min(1).max(80),
     vatAccountingEnabled: z.boolean(),
     initializedAt: z.date(),
