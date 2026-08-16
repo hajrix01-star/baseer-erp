@@ -2568,3 +2568,14 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
 }
+/* Entry fields always follow the selected shift and use the full card width. */
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-card {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__entry-fields,
+.daily-sales-dialog--noorix .daily-sales-dialog__channels,
+.daily-sales-dialog--noorix .daily-sales-dialog__wide,
+.daily-sales-dialog--noorix .daily-sales-dialog__summary {
+  grid-column: 1 / -1;
+  width: 100%;
+}

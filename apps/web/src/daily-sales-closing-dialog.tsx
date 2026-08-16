@@ -308,7 +308,6 @@ export function DailySalesClosingDialog({
                   onChange={(event) => setDate(event.target.value)}
                   required
                 />
-                <small>{copy.dateHint}</small>
               </label>
               {!isDayOff && (
                 <fieldset className="daily-sales-dialog__scope-picker">
@@ -330,7 +329,6 @@ export function DailySalesClosingDialog({
                           : copy.all}
                     </button>
                   ))}
-                  <small>{copy.scopeHint}</small>
                 </fieldset>
               )}
             </>
