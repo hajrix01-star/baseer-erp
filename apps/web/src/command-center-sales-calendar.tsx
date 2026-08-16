@@ -66,7 +66,7 @@ export function CommandCenterSalesCalendar({
     } catch {
       setError(copy.error);
     }
-  }, [copy.error, range.from, range.to]);
+  }, [copy.error, range.from, range.to, range.months.join(",")]);
 
   useEffect(() => {
     void load();

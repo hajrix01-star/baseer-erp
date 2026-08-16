@@ -864,34 +864,8 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-wide {
   grid-column: span 2;
 }
-.daily-sales-primary,
-.daily-sales-secondary,
-.daily-sales-danger {
-  min-height: 42px;
-  padding: 0 14px;
-  border-radius: 10px;
-  font-weight: 800;
-}
-.daily-sales-primary {
-  align-self: end;
-  border: 0;
-  color: #fff;
-  background: var(--brand);
-}
-.daily-sales-primary:disabled {
-  opacity: 0.6;
-  cursor: progress;
-}
-.daily-sales-secondary {
-  border: 1px solid #bcd0c3;
-  color: var(--brand-deep);
-  background: #fff;
-}
-.daily-sales-danger {
-  border: 1px solid #f1c4b6;
-  color: #9d321b;
-  background: #fff7f4;
-}
+.daily-sales-primary { align-self: end; }
+.daily-sales-primary:disabled { cursor: progress; }
 .daily-sales-calendar {
   display: grid;
   gap: 16px;
@@ -1198,7 +1172,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-insights > article > strong {
   display: block;
   font-size: var(--font-title-md);
-  color: #08744d;
+  color: var(--brand);
 }
 .daily-sales-insights > article > small {
   color: #65736a;
@@ -1209,7 +1183,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   gap: 10px;
 }
 .daily-sales-insights__shifts > div {
-  border-inline-start: 3px solid #08744d;
+  border-inline-start: 3px solid var(--brand);
   padding-inline-start: 10px;
 }
 .daily-sales-insights__shifts strong,
@@ -1733,9 +1707,9 @@ html[dir="ltr"] .mobile-drawer__panel {
   font-weight: 750;
 }
 .administration-avatar-picker button.is-selected {
-  border-color: #08744d;
+  border-color: var(--brand);
   background: #e9f7ef;
-  box-shadow: inset 0 0 0 1px #08744d;
+  box-shadow: inset 0 0 0 1px var(--brand);
 }
 
 .administration-user-profile {
@@ -2488,7 +2462,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 @media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
 @media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
 .administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
-.administration-company-checkboxes input[type="checkbox"] { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; width: auto; min-height: 0; accent-color: #087f5b; }
+.administration-company-checkboxes input[type="checkbox"] { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; width: auto; min-height: 0; accent-color: var(--brand); }
 
 .administration-login-domain { display: flex; align-items: center; gap: .35rem; direction: ltr; }.administration-login-domain b { color: var(--muted); }.administration-login-domain input { min-inline-size: 0; flex: 1; }
 .baseer-password-field { display: flex; gap: .5rem; }
@@ -2512,10 +2486,10 @@ html[dir="ltr"] .mobile-drawer__panel {
 .baseer-period-filter__weekdays, .baseer-period-filter__days { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
 .baseer-period-filter__weekdays { margin-block: 4px; color: var(--muted); font-size: .72rem; font-weight: 700; }
 .baseer-period-filter__days button { aspect-ratio: 1; margin: 1px; border: 0; border-radius: 7px; color: var(--ink); background: transparent; font: inherit; font-size: var(--font-label); cursor: pointer; }
-.baseer-period-filter__days button:hover, .baseer-period-filter__months button:hover, .baseer-period-filter__quarters button:hover, .baseer-period-filter__years button:hover { background: #eaf6ee; }
+.baseer-period-filter__days button:hover, .baseer-period-filter__months button:hover, .baseer-period-filter__quarters button:hover, .baseer-period-filter__years button:hover { background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
 .baseer-period-filter button.is-outside { color: #aab8ae; }
 .baseer-period-filter button.is-today { outline: 1px solid var(--brand); outline-offset: -2px; }
-.baseer-period-filter button.is-between { border-radius: 0; background: #e5f5ea; }
+.baseer-period-filter button.is-between { border-radius: 0; background: color-mix(in srgb, var(--brand) 14%, var(--surface)); }
 .baseer-period-filter button.is-selected { color: #fff; background: var(--brand); }
 .baseer-period-filter__months, .baseer-period-filter__quarters, .baseer-period-filter__years { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .baseer-period-filter__quarters { grid-template-columns: repeat(2, 1fr); }

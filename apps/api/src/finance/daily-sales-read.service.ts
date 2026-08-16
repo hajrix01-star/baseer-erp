@@ -139,22 +139,32 @@ export class DailySalesReadService {
     });
   }
   async listShiftSummary(context: TrustedCompanyActorContext, range: DateRange) {
-    const closings = await this.listClosings(context, range);
-    const scopes = ["MORNING", "EVENING", "ALL"] as const;
-    return scopes.map((scope) => {
-      const items = closings.filter((item) => item.scope === scope && item.status === "POSTED");
-      const gross = items.reduce(
-        (sum, item) => sum.plus(item.grossAmount),
-        new Prisma.Decimal(0),
-      );
-      const customers = items.reduce((sum, item) => sum + item.customerCount, 0);
-      return {
-        scope,
-        closingCount: items.length,
-        grossAmount: gross.toFixed(4),
-        customerCount: customers,
-        averageOrderAmount: customers === 0 ? null : gross.div(customers).toDecimalPlaces(4).toFixed(4),
-      };
+    this.assertRange(range);
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const rows = await transaction.financeDailySalesClosing.groupBy({
+        by: ["scope"],
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          status: "POSTED",
+          ...this.businessDateWhere(range),
+        },
+        _sum: { grossAmount: true, customerCount: true },
+        _count: { _all: true },
+      });
+      const byScope = new Map(rows.map((row) => [row.scope, row]));
+      return (["MORNING", "EVENING", "ALL"] as const).map((scope) => {
+        const item = byScope.get(scope);
+        const gross = item?._sum.grossAmount ?? new Prisma.Decimal(0);
+        const customers = item?._sum.customerCount ?? 0;
+        return {
+          scope,
+          closingCount: item?._count._all ?? 0,
+          grossAmount: gross.toFixed(4),
+          customerCount: customers,
+          averageOrderAmount: customers === 0 ? null : gross.div(customers).toDecimalPlaces(4).toFixed(4),
+        };
+      });
     });
   }
 

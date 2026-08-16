@@ -27,7 +27,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/baseer_erp_test?schema=public
+      CI_DATABASE_ADMIN_URL: postgresql://postgres:postgres@localhost:5432/baseer_erp_test?schema=public
       BASEER_SYSTEM_TENANT_CODE: baseer-ci-system
       BASEER_ACCESS_TOKEN_SECRET: baseer-ci-access-token-secret-at-least-32-chars
       BASEER_REFRESH_TOKEN_SECRET: baseer-ci-refresh-token-secret-at-least-32-chars
@@ -41,6 +41,15 @@ jobs:
       - run: npm ci
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma
       - run: npx prisma migrate deploy --config apps/api/prisma.config.ts
+        env:
+          DATABASE_URL: ${{ env.CI_DATABASE_ADMIN_URL }}
+      - name: Prepare restricted test application role
+        run: |
+          CI_DATABASE_APP_PASSWORD=$(openssl rand -hex 32)
+          echo "CI_DATABASE_APP_PASSWORD=$CI_DATABASE_APP_PASSWORD" >> "$GITHUB_ENV"
+          CI_DATABASE_APP_PASSWORD="$CI_DATABASE_APP_PASSWORD" node scripts/prepare-ci-restricted-role.mjs
+      - name: Use restricted test application role
+        run: echo "DATABASE_URL=postgresql://baseer_ci_app:${CI_DATABASE_APP_PASSWORD}@localhost:5432/baseer_erp_test?schema=public" >> "$GITHUB_ENV"
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm run check:architecture
@@ -55,6 +64,11 @@ jobs:
       - run: npm run build --workspace @baseer-erp/output-platform
       - run: npm run build --workspace @baseer-erp/api
       - run: node scripts/run-auth-rate-limit-verification.mjs
+      - run: npm run verify:administration-lifecycle
+      - run: npm run verify:finance-gate-b-db
+      - run: npm run verify:finance-period-race
+      - run: npm run verify:ai-gate-b-db
+      - run: npm run verify:ai-gate-b-http
       - run: npm run verify:daily-sales-db
       - run: npm run verify:daily-sales-http
       - run: npm run build --workspace @baseer-erp/web

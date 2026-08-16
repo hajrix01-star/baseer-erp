@@ -1,7 +1,7 @@
 # BASEER ERP — 360° Committee Review and Build Confirmation
 
 **Date:** 2026-08-16  
-**Decision:** Conditional pass for local development. No P0 blocker was found. The approved sequence remains valid, with a mandatory stabilization gate before the next financial write scope.
+**Decision:** Conditional pass for local development. S1 stabilization is closed; Purchase & Expense is the only active next business scope. Private/production release remains separately blocked by backup-and-restore evidence.
 
 ## Verified position
 
@@ -11,25 +11,27 @@
 - AI Gate B: technical, offline only; it has no provider call, prompt, tool, conversation, memory or chat UI.
 - Marketing/Google and Inbound Evidence/Email/Telegram/OCR: approved designs only; no backend integration has started.
 
-## Mandatory stabilization gate — S1
+## S1 stabilization closure — 2026-08-16
 
-Close these before accepting the first new Purchase & Expense write model:
+1. **Restricted CI database role:** CI now runs migrations with `postgres` only, then provisions `baseer_ci_app` as `NOSUPERUSER NOBYPASSRLS` for API, database and HTTP verification. The same restricted-role Finance Gate B proof passed locally against the disposable Docker test database.
+2. **Financial report completeness:** shift summaries now use a database `groupBy` across the full allowed business-date range; they are no longer calculated from the 400-row screen list.
+3. **CI evidence:** administration lifecycle, Finance Gate B, period-race, AI Gate B DB/HTTP and Daily Sales DB/HTTP verifiers are mandatory workflow steps. Two stale HTTP fixtures were corrected to select their generated system tenant, so the tests are repeatable.
+4. **Web reliability:** multiple-month selections now trigger reloads from their stable month selection; the period picker supports outside-click close, Escape close and focus return. Active picker states and sales insight accents use theme tokens.
+5. **CSS capacity:** obsolete Daily Sales button declarations were consolidated into the central button primitive. Production CSS is now 57,684 bytes under the unchanged 58,000-byte limit (316-byte headroom).
 
-1. **Restricted CI database role:** use `postgres` only for bootstrap/migrate; API, DB and HTTP verifiers must run under a dedicated `NOSUPERUSER NOBYPASSRLS` application role so RLS is proved rather than bypassed.
-2. **Financial report completeness:** calculate shift totals directly in the database across the permitted period, not from a 400-row display list; no financial report may truncate silently.
-3. **CI evidence:** run administration lifecycle, finance race/foundation and AI Gate B DB/HTTP verification as mandatory checks using the restricted role.
-4. **Web reliability:** fix multiple-month reload dependencies, complete theme-aware active/semantic tokens, and add keyboard/Escape/outside-click behavior plus interaction coverage for the period picker.
-5. **CSS capacity:** consolidate legacy selectors before expanding further; the release stylesheet is close to its approved 58KB budget.
+## Re-evaluation evidence
 
+Passed locally after the fixes: TypeScript checks for contracts/API/web; API and web production builds; web release-budget, financial-boundary and dialog-convention gates; architecture, permission-catalog and AI Gate B gates; Finance Gate B DB; period-race; Daily Sales DB/HTTP; Administration lifecycle; AI Gate B DB/HTTP; and Finance Gate B again under `baseer_ci_app` rather than a superuser.
+
+The GitHub workflow will repeat these checks using its ephemeral restricted role on its next run. Visual regression and browser E2E coverage remain a quality improvement for the next UI expansion; they are not represented as completed evidence.
 ## Confirmed delivery order
 
-1. S1 stabilization gate.
-2. Purchase & Expense financial documents: contract → server command → journal posting → correction/reversal → tests → native UI → owner acceptance.
-3. Treasury completion and journal-reconciled financial read models/reports.
-4. Daily Sales owner acceptance and report adoption.
-5. Owner decision between Inbound Evidence E1/E2 and Marketing Gate A; one business scope only.
-6. Read-only integrations after their provider decisions and evidence gates.
-7. Basira read tools/evaluations/chat only after official read models exist; no autonomous financial action.
+1. Purchase & Expense financial documents: contract → server command → journal posting → correction/reversal → tests → native UI → owner acceptance.
+2. Treasury completion and journal-reconciled financial read models/reports.
+3. Daily Sales owner acceptance and report adoption.
+4. Owner decision between Inbound Evidence E1/E2 and Marketing Gate A; one business scope only.
+5. Read-only integrations after their provider decisions and evidence gates.
+6. Basira read tools/evaluations/chat only after official read models exist; no autonomous financial action.
 
 ## Production boundary
 

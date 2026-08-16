@@ -2,15 +2,16 @@
 
 Last updated: 2026-08-16
 Control protocol: `DELIVERY_CONTROL_PROTOCOL.md`
+Current authority: `CURRENT_DELIVERY_AUTHORITY.md`
 
 ## Current focus
 
 | Field              | Value                                                                                                                                                                                                                                                     |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Active scope       | S1 stabilization gate, then Purchase & Expense financial documents
-| Stage              | Daily Sales Closing is frozen pending owner acceptance. AI Gate B is verified on the Docker test database; it enables no provider, chat or tool. S1 closes restricted-role CI/RLS proof, complete shift aggregation, mandatory verifier coverage and period-picker reliability.
+| Active scope       | Purchase & Expense financial documents
+| Stage              | S1 stabilization is closed locally: CI now provisions a restricted verification role, shift totals are aggregate queries, required verifier coverage is enforced, and the period picker is corrected. Daily Sales remains frozen pending owner acceptance; AI Gate B remains offline.
 | Deferred scope     | Marketing/Google and Inbound Evidence/Email/Telegram/OCR remain deferred until core financial documents and reports close, under `OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`.
-| Next decision gate | Close S1 recorded in `COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md`, then start the Purchase & Expense financial-document vertical slice; no marketing, email or AI provider integration beforehand.
+| Next decision gate | Complete the Purchase & Expense financial-document vertical slice; no marketing, email or AI provider integration beforehand.
 
 ## Portfolio state
 

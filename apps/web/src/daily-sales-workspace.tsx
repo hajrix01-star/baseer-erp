@@ -95,7 +95,7 @@ export function DailySalesWorkspace({
         : initialShiftFormsForVaults(workspace.vaults),
     );
     setStatus({ kind: "success", message: copy.loaded });
-  }, [copy.loaded, range.from, range.to]);
+  }, [copy.loaded, range.from, range.to, range.months.join(",")]);
 
   useEffect(() => {
     void load().catch((error) =>

@@ -12,6 +12,8 @@
                     "check:permissions":  "node scripts/check-permission-catalog.mjs",
                     "check:ai-gate-b":  "node scripts/check-ai-gate-b.mjs",
                     "verify:ai-gate-b-db":  "node scripts/run-ai-gate-b-db-verification.mjs",
+                    "verify:finance-gate-b-db":  "node scripts/run-finance-gate-b-db-verification.mjs",
+                    "verify:finance-period-race":  "node scripts/run-finance-period-race-verification.mjs",
                     "verify:web-budget":  "node scripts/check-web-release-budget.mjs",
                     "check:web-financial-boundaries":  "node scripts/check-web-financial-boundaries.mjs",
                     "check:web-dialog-conventions":  "node scripts/check-web-dialog-conventions.mjs",

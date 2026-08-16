@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 export type BaseerPeriodPreset = "DAY" | "MONTH" | "MULTI_MONTH" | "QUARTER" | "YEAR" | "RANGE";
 export type BaseerPeriodRange = { preset: BaseerPeriodPreset; from: string; to: string; months: readonly string[] };
@@ -29,12 +29,14 @@ export function baseerPeriodQuery(range: BaseerPeriodRange) { const query = new 
 
 export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY", "MONTH", "MULTI_MONTH", "QUARTER", "YEAR", "RANGE"], className }: Props) {
   const rootRef = useRef<HTMLElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverId = useId();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(value);
   const [cursor, setCursor] = useState(cursorFor(value.from));
   const [rangeStart, setRangeStart] = useState<string | null>(null);
   const years = useMemo(() => { const current = riyadhToday().year; return Array.from({ length: 9 }, (_, index) => current - 5 + index); }, []);
-  useEffect(() => { if (!open) return; const closeWhenOutside = (event: MouseEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false); }; document.addEventListener("mousedown", closeWhenOutside); return () => document.removeEventListener("mousedown", closeWhenOutside); }, [open]);
+  useEffect(() => { if (!open) return; const closeWhenOutside = (event: MouseEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false); }; const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { event.preventDefault(); setOpen(false); triggerRef.current?.focus(); } }; document.addEventListener("mousedown", closeWhenOutside); document.addEventListener("keydown", closeOnEscape); return () => { document.removeEventListener("mousedown", closeWhenOutside); document.removeEventListener("keydown", closeOnEscape); }; }, [open]);
   const openPicker = () => { setDraft(value); setCursor(cursorFor(value.from)); setRangeStart(null); setOpen(true); };
   const setPreset = (preset: BaseerPeriodPreset) => { const next = preset === "RANGE" ? { ...draft, preset, months: [] } : baseerPeriodRange(preset); setDraft(next); setCursor(cursorFor(next.from)); setRangeStart(null); };
   const selectMonth = (month: number) => { const token = `${cursor.slice(0, 4)}-${String(month).padStart(2, "0")}`; if (draft.preset === "MULTI_MONTH") { const next = draft.months.includes(token) ? envelope(draft.months.filter((item) => item !== token)) : envelope([...draft.months, token]); setDraft(next ? { preset: "MULTI_MONTH", ...next } : { ...baseerPeriodRange("MULTI_MONTH"), months: [] }); return; } setDraft({ preset: "MONTH", ...rangeFromMonth(token), months: [token] }); };
@@ -49,10 +51,10 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
   const hasCustomPeriod = value.preset !== defaultRange.preset || value.from !== defaultRange.from || value.to !== defaultRange.to || value.months.join(",") !== defaultRange.months.join(",");
   return <section ref={rootRef} className={["baseer-period-filter", className].filter(Boolean).join(" ")} aria-label={language === "ar" ? "فلترة الفترة" : "Period filter"}>
     <div className="baseer-period-filter__bar">
-      <button className="baseer-period-filter__trigger" type="button" aria-expanded={open} onClick={() => open ? setOpen(false) : openPicker()}><span className="baseer-period-filter__calendar" aria-hidden="true">▦</span><span className="baseer-period-filter__label">{language === "ar" ? "الفترة" : "Period"}</span><strong>{display(value, language)}</strong></button>
+      <button ref={triggerRef} className="baseer-period-filter__trigger" type="button" aria-controls={open ? popoverId : undefined} aria-expanded={open} onClick={() => open ? setOpen(false) : openPicker()}><span className="baseer-period-filter__calendar" aria-hidden="true">▦</span><span className="baseer-period-filter__label">{language === "ar" ? "الفترة" : "Period"}</span><strong>{display(value, language)}</strong></button>
       {hasCustomPeriod && <button className="baseer-period-filter__clear" type="button" onClick={clearPeriod} aria-label={language === "ar" ? "إلغاء الفلترة" : "Clear filter"} title={language === "ar" ? "إلغاء الفلترة" : "Clear filter"}>×</button>}
     </div>
-    {open && <section className="baseer-period-filter__popover" role="dialog" aria-label={language === "ar" ? "اختيار الفترة" : "Choose period"}>
+    {open && <section id={popoverId} className="baseer-period-filter__popover" role="dialog" aria-label={language === "ar" ? "اختيار الفترة" : "Choose period"}>
       <header><select value={draft.preset} onChange={(event) => setPreset(event.target.value as BaseerPeriodPreset)}>{presets.map((preset) => <option key={preset} value={preset}>{labels[language][preset]}</option>)}</select><div className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "السابق" : "Previous"}>‹</button><strong>{monthName(language, cursor)}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "التالي" : "Next"}>›</button></div></header>
       {(draft.preset === "DAY" || draft.preset === "RANGE") && <><div className="baseer-period-filter__weekdays">{weekdays[language].map((day) => <span key={day}>{day}</span>)}</div><div className="baseer-period-filter__days">{days.map((day) => <button key={day.iso} className={[!day.inMonth ? "is-outside" : "", day.iso === draft.from || day.iso === draft.to ? "is-selected" : "", day.iso > draft.from && day.iso < draft.to ? "is-between" : "", day.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} type="button" onClick={() => selectDay(day.iso)}>{day.day}</button>)}</div></>}
       {(draft.preset === "MONTH" || draft.preset === "MULTI_MONTH") && <div className="baseer-period-filter__months">{Array.from({ length: 12 }, (_, index) => { const token = `${cursor.slice(0, 4)}-${String(index + 1).padStart(2, "0")}`; const selected = draft.preset === "MULTI_MONTH" ? draft.months.includes(token) : draft.from.slice(0, 7) === token; return <button className={selected ? "is-selected" : ""} key={token} type="button" onClick={() => selectMonth(index + 1)}>{monthName(language, token, "short")}</button>; })}</div>}

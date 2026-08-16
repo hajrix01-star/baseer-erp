@@ -23,6 +23,7 @@ let app;
 
 try {
   await seedFixture();
+  process.env.BASEER_SYSTEM_TENANT_CODE = `ai-http-${suffix}`;
   const [{ AppModule }, { AuthService }, { DatabaseService }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/identity/auth.service.js"),
