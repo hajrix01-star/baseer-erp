@@ -14,6 +14,7 @@
                     "verify:ai-gate-b-db":  "node scripts/run-ai-gate-b-db-verification.mjs",
                     "verify:web-budget":  "node scripts/check-web-release-budget.mjs",
                     "check:web-financial-boundaries":  "node scripts/check-web-financial-boundaries.mjs",
+                    "check:web-dialog-conventions":  "node scripts/check-web-dialog-conventions.mjs",
                     "verify:administration-lifecycle":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-administration-lifecycle-verification.mjs",
                     "verify:ai-gate-b-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-ai-gate-b-http-verification.mjs",
                     "verify:daily-sales-db":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-daily-sales-gate-b-verification.mjs",
