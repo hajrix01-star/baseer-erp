@@ -1,6 +1,6 @@
 # Company Setup Seed and Supplier Copy — Owner Decision
 
-**Status:** Owner-requested design, mandatory when the Company Setup and Finance foundations are delivered.  
+**Status:** Implemented for the Finance Setup flow on 2026-08-17; supplier copying from another company remains a separate later slice.
 **Date:** 2026-08-15  
 **Product:** BASEER ERP — private use by the owner and the owner's companies.  
 **Source reference:** read-only Noorix source inspection at `origin/main` commit `94536fd3bf7e82135b065aaa20c9dd1e1d496464`. No Noorix data was accessed or changed.
@@ -38,6 +38,9 @@ The 16 observed standard suppliers are Saudi Energy, STC, GOSI, ZATCA, Ministry 
 
 Noorix keeps activity-specific entities, such as NWC, Mobily, Zain, Salam, SFDA, SASO, SAIP, and MISA, outside the automatic default list. BASEER likewise presents them only when selected or copied from an authorized company.
 
+## تنفيذ البذرة في بصير
+
+أصبحت البذرة المالية تضيف أيضًا فئات خدمات مستقلة: **كهرباء وطاقة**، **مياه وصرف صحي**، **اتصالات وإنترنت**، و**خدمات بلدية وتراخيص**. عند تهيئة شركة جديدة تظهر قائمة الموردين العامة الـ16 كخيارات صريحة، وتُنشأ فقط للمحدد منها كسجلات مستقلة داخل الشركة مع فئتها المقترحة. لا تُنشأ موردات مشتركة ولا تُضاف أي جهة دون اختيار.
 ## Required Company Setup flow
 
 ### Step 1 — company identity

@@ -50,6 +50,10 @@ export const FINANCE_BASE_ACCOUNT_SEEDS: readonly FinanceAccountSeed[] = [
   { code: 'EXP-006', systemKey: 'MARKETING', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-007', systemKey: 'FINANCIAL_EXPENSES', nameAr: 'مصروفات مالية أخرى', nameEn: 'Other financial expenses', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-008', systemKey: 'ASSET_EXPENSE_LEGACY', nameAr: 'أصول ومعدات تاريخية', nameEn: 'Legacy assets and equipment expense', type: FinanceAccountType.EXPENSE },
+  { code: 'EXP-009', systemKey: 'ELECTRICITY', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', type: FinanceAccountType.EXPENSE },
+  { code: 'EXP-010', systemKey: 'WATER', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', type: FinanceAccountType.EXPENSE },
+  { code: 'EXP-011', systemKey: 'TELECOM_INTERNET', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', type: FinanceAccountType.EXPENSE },
+  { code: 'EXP-012', systemKey: 'MUNICIPAL_SERVICES', nameAr: 'خدمات بلدية وتراخيص', nameEn: 'Municipal services and licenses', type: FinanceAccountType.EXPENSE },
   { code: 'FA-001', systemKey: 'FIXED_ASSETS', nameAr: 'أصول ثابتة', nameEn: 'Fixed assets', type: FinanceAccountType.ASSET },
   { code: 'FA-ACCDEP-001', systemKey: 'ACCUMULATED_DEPRECIATION', nameAr: 'مجمع الإهلاك', nameEn: 'Accumulated depreciation', type: FinanceAccountType.ASSET },
   { code: 'DEPR-EXP-001', systemKey: 'DEPRECIATION_EXPENSE', nameAr: 'مصروف إهلاك', nameEn: 'Depreciation expense', type: FinanceAccountType.EXPENSE },
@@ -68,4 +72,32 @@ export const FINANCE_BASE_CATEGORY_SEEDS: readonly FinanceCategorySeed[] = [
   { code: 'EXP-006', accountCode: 'EXP-006', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', kind: FinanceCategoryKind.EXPENSE, sortOrder: 100 },
   { code: 'EXP-007', accountCode: 'EXP-007', nameAr: 'مصروفات مالية أخرى', nameEn: 'Other financial expenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 110 },
   { code: 'EXP-008', accountCode: 'EXP-008', nameAr: 'أصول ومعدات تاريخية', nameEn: 'Legacy assets and equipment expense', kind: FinanceCategoryKind.EXPENSE, sortOrder: 120 },
+  { code: 'EXP-009', accountCode: 'EXP-009', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', kind: FinanceCategoryKind.EXPENSE, sortOrder: 130 },
+  { code: 'EXP-010', accountCode: 'EXP-010', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 140 },
+  { code: 'EXP-011', accountCode: 'EXP-011', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', kind: FinanceCategoryKind.EXPENSE, sortOrder: 150 },
+  { code: 'EXP-012', accountCode: 'EXP-012', nameAr: 'خدمات بلدية وتراخيص', nameEn: 'Municipal services and licenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 160 },
+] as const;
+
+export const STANDARD_SUPPLIER_KEYS = [
+  "SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY",
+] as const;
+export type StandardSupplierKey = (typeof STANDARD_SUPPLIER_KEYS)[number];
+export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string }>;
+export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
+  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "EXP-009" },
+  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "EXP-011" },
+  { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "EXP-004" },
+  { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "EXP-002" },
+  { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "EXP-002" },
+  { key: "SAUDI_BUSINESS_CENTER", nameAr: "المركز السعودي للأعمال", nameEn: "Saudi Business Center", categoryCode: "EXP-002" },
+  { key: "MUNICIPALITIES_HOUSING", nameAr: "وزارة البلديات والإسكان", nameEn: "Ministry of Municipalities and Housing", categoryCode: "EXP-012" },
+  { key: "HRSD", nameAr: "وزارة الموارد البشرية والتنمية الاجتماعية", nameEn: "Ministry of Human Resources and Social Development", categoryCode: "EXP-002" },
+  { key: "PASSPORTS", nameAr: "المديرية العامة للجوازات", nameEn: "General Directorate of Passports", categoryCode: "EXP-002" },
+  { key: "CIVIL_DEFENSE", nameAr: "الدفاع المدني", nameEn: "Civil Defense", categoryCode: "EXP-012" },
+  { key: "SAUDI_CHAMBERS", nameAr: "اتحاد الغرف السعودية", nameEn: "Federation of Saudi Chambers", categoryCode: "EXP-002" },
+  { key: "QIWA", nameAr: "قوى", nameEn: "Qiwa", categoryCode: "EXP-002" },
+  { key: "ABSHER_BUSINESS", nameAr: "أبشر أعمال", nameEn: "Absher Business", categoryCode: "EXP-002" },
+  { key: "MUDAD", nameAr: "مدد", nameEn: "Mudad", categoryCode: "EXP-004" },
+  { key: "MUQEEM", nameAr: "مقيم", nameEn: "Muqeem", categoryCode: "EXP-002" },
+  { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "EXP-012" },
 ] as const;

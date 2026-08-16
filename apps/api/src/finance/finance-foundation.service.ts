@@ -15,7 +15,7 @@ import {
   FINANCE_BASE_CATEGORY_SEEDS,
 } from './finance-foundation-seeds.js';
 
-const BASE_SEED_VERSION = 1;
+const BASE_SEED_VERSION = 2;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;
@@ -47,79 +47,50 @@ export class FinanceFoundationService {
     const existingProfile = await transaction.companyFinanceProfile.findFirst({
       where: { tenantId: context.tenantId, companyId: context.companyId },
     });
-    if (existingProfile) {
-      if (existingProfile.baseSeedVersion !== BASE_SEED_VERSION) {
-        throw new ConflictException('The company finance foundation uses an unsupported seed version.');
-      }
-      const [accountCount, categoryCount] = await Promise.all([
-        transaction.financeAccount.count({
-          where: { tenantId: context.tenantId, companyId: context.companyId },
-        }),
-        transaction.financeCategory.count({
-          where: { tenantId: context.tenantId, companyId: context.companyId },
-        }),
-      ]);
-      return {
-        initialized: false,
-        accountCount,
-        categoryCount,
-        baseSeedVersion: existingProfile.baseSeedVersion,
-      };
+    if (existingProfile && existingProfile.baseSeedVersion > BASE_SEED_VERSION) {
+      throw new ConflictException('The company finance foundation uses an unsupported future seed version.');
     }
 
-    const accountsByCode = new Map<string, string>();
+    const existingAccounts = await transaction.financeAccount.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId },
+      select: { id: true, code: true },
+    });
+    const accountsByCode = new Map(existingAccounts.map((account) => [account.code, account.id]));
     for (const seed of FINANCE_BASE_ACCOUNT_SEEDS) {
+      if (accountsByCode.has(seed.code)) continue;
       const account = await transaction.financeAccount.create({
-        data: {
-          id: randomUUID(),
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          code: seed.code,
-          nameAr: seed.nameAr,
-          nameEn: seed.nameEn,
-          type: seed.type,
-          systemKey: seed.systemKey,
-          isSystem: true,
-          status: FinanceAccountStatus.ACTIVE,
-        },
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, code: seed.code, nameAr: seed.nameAr, nameEn: seed.nameEn, type: seed.type, systemKey: seed.systemKey, isSystem: true, status: FinanceAccountStatus.ACTIVE },
       });
       accountsByCode.set(seed.code, account.id);
     }
 
+    const existingCategoryCodes = new Set((await transaction.financeCategory.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId }, select: { code: true },
+    })).map((category) => category.code));
     for (const seed of FINANCE_BASE_CATEGORY_SEEDS) {
+      if (existingCategoryCodes.has(seed.code)) continue;
       const accountId = accountsByCode.get(seed.accountCode);
       if (!accountId) throw new ConflictException(`Missing required seeded account ${seed.accountCode}.`);
       await transaction.financeCategory.create({
-        data: {
-          id: randomUUID(),
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          accountId,
-          code: seed.code,
-          nameAr: seed.nameAr,
-          nameEn: seed.nameEn,
-          kind: seed.kind,
-          status: FinanceCategoryStatus.ACTIVE,
-          sortOrder: seed.sortOrder,
-        },
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, accountId, code: seed.code, nameAr: seed.nameAr, nameEn: seed.nameEn, kind: seed.kind, status: FinanceCategoryStatus.ACTIVE, sortOrder: seed.sortOrder },
       });
     }
 
-    await transaction.companyFinanceProfile.create({
-      data: {
-        id: randomUUID(),
-        tenantId: context.tenantId,
-        companyId: context.companyId,
-        baseSeedVersion: BASE_SEED_VERSION,
-        accountingMode: 'management_cash',
-        vatAccountingEnabled: false,
-      },
-    });
-
+    if (!existingProfile) {
+      await transaction.companyFinanceProfile.create({
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: false },
+      });
+    } else if (existingProfile.baseSeedVersion < BASE_SEED_VERSION) {
+      await transaction.companyFinanceProfile.update({ where: { id: existingProfile.id }, data: { baseSeedVersion: BASE_SEED_VERSION } });
+    }
+    const [accountCount, categoryCount] = await Promise.all([
+      transaction.financeAccount.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }),
+      transaction.financeCategory.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }),
+    ]);
     const receipt: FinanceFoundationReceipt = {
-      initialized: true,
-      accountCount: FINANCE_BASE_ACCOUNT_SEEDS.length,
-      categoryCount: FINANCE_BASE_CATEGORY_SEEDS.length,
+      initialized: !existingProfile,
+      accountCount,
+      categoryCount,
       baseSeedVersion: BASE_SEED_VERSION,
     };
     await transaction.auditEvent.create({

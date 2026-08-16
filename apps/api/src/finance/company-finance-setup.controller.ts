@@ -1,5 +1,6 @@
 import {
   companyFinanceSetupReceiptSchema,
+  financeFoundationRefreshReceiptSchema,
   companyFinanceSetupRequestSchema,
   companyIdSchema,
 } from '@baseer-erp/contracts';
@@ -12,6 +13,15 @@ import { CompanyFinanceSetupService } from './company-finance-setup.service.js';
 export class CompanyFinanceSetupController {
   constructor(private readonly companyContext: CompanyContextService, private readonly setup: CompanyFinanceSetupService) {}
 
+  @Post("refresh-foundation")
+  async refreshFoundation(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1];
+    if (!accessToken) throw new UnauthorizedException("Invalid authentication credentials.");
+    const parsedCompanyId = companyIdSchema.safeParse(companyId);
+    if (!parsedCompanyId.success) throw new ForbiddenException("Company finance scope is not permitted.");
+    const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: ["finance.setup.write"] });
+    return financeFoundationRefreshReceiptSchema.parse(await this.setup.refreshFoundation({ tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId }));
+  }
   @Post()
   @HttpCode(201)
   async initialize(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
@@ -28,6 +38,7 @@ export class CompanyFinanceSetupController {
       fiscalPeriodStartDate: request.data.fiscalPeriodStartDate,
       fiscalPeriodEndDate: request.data.fiscalPeriodEndDate,
       selectedVaults: request.data.selectedVaults,
+      selectedStandardSupplierKeys: request.data.selectedStandardSupplierKeys,
     }, request.data.idempotencyKey);
     return companyFinanceSetupReceiptSchema.parse(receipt);
   }

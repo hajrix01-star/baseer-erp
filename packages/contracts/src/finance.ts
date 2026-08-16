@@ -109,6 +109,7 @@ export type RecordSupplierDuePaymentRequest = z.infer<
 export type ReverseSupplierDuePaymentRequest = z.infer<
   typeof reverseSupplierDuePaymentRequestSchema
 >;
+export const standardSupplierKeySchema = z.enum(["SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY"]);
 export const companyFinanceSetupRequestSchema = z
   .object({
     fiscalPeriodNameAr: z.string().trim().min(1).max(160),
@@ -119,6 +120,7 @@ export const companyFinanceSetupRequestSchema = z
       .array(z.enum(["CASH", "BANK", "HUNGERSTATION", "JAHEZ", "KEETA"]))
       .min(1)
       .max(5),
+    selectedStandardSupplierKeys: z.array(standardSupplierKeySchema).max(16).default([]),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
@@ -126,7 +128,11 @@ export const companyFinanceSetupReceiptSchema = z
   .object({
     periodId: z.string().uuid(),
     vaultIds: z.array(z.string().uuid()).min(1).max(5),
+    supplierIds: z.array(z.string().uuid()).max(16),
   })
+  .strict();
+export const financeFoundationRefreshReceiptSchema = z
+  .object({ initialized: z.boolean(), accountCount: z.number().int().nonnegative(), categoryCount: z.number().int().nonnegative(), baseSeedVersion: z.number().int().positive() })
   .strict();
 export type CompanyFinanceSetupRequest = z.infer<
   typeof companyFinanceSetupRequestSchema
