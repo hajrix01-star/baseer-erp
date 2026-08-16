@@ -95,10 +95,10 @@ function persistRecent(route: ResolvedRoute): void {
   localStorage.setItem(recentStorageKey, JSON.stringify([key, ...values].slice(0, 4)));
 }
 
-function AppHeader({ language, theme, onLanguage, onTheme }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void }) {
+function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onModules: () => void }) {
   const text = copy[language];
   return <header className="topbar">
-    <div className="topbar-spacer" />
+    <button className="icon-button app-modules-button" onClick={onModules} type="button" aria-label={text.allModules}>{"\u283f"}</button>`n    <div className="topbar-spacer" />
     <CompanySessionControl language={language} />
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button>
     <button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button>
@@ -136,10 +136,10 @@ function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModule
   const sectionTitle = module.sections[language][route.section];
   const select = (section: number) => { onSection(section); setDrawerOpen(false); };
   return <>
-    <AppHeader language={language} theme={theme} onLanguage={onLanguage} onTheme={onTheme} />
+    <AppHeader language={language} theme={theme} onLanguage={onLanguage} onTheme={onTheme} onModules={onModules} />
     <main className="workspace">
       <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} /></aside>
-      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1><p>{module.description[language]}</p></div><div className="page-actions"><button className="period-button" type="button" onClick={onModules}>⠿ {text.allModules}</button><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button><button className="period-button" type="button">◫ {text.thisMonth}</button></div></div>{route.moduleId === 'operations' && route.section === 1 ? <DailySalesWorkspace language={language} /> : route.moduleId === 'administration' ? <AdministrationWorkspace language={language} section={route.section} /> : route.moduleId === 'command' && route.section === 0 ? <CommandCenterSalesCalendar language={language} /> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2><p>{text.heroText}</p></div><button className="hero-action" type="button" onClick={onModules}>{text.openModules} ←</button></section><section className="module-page__placeholder"><strong>{text.foundation}</strong> {text.foundationText}</section></>}</section>
+      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1><p>{module.description[language]}</p></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button><button className="period-button" type="button">◫ {text.thisMonth}</button></div></div>{route.moduleId === 'operations' && route.section === 1 ? <DailySalesWorkspace language={language} /> : route.moduleId === 'administration' ? <AdministrationWorkspace language={language} section={route.section} /> : route.moduleId === 'command' && route.section === 0 ? <CommandCenterSalesCalendar language={language} /> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2><p>{text.heroText}</p></div><button className="hero-action" type="button" onClick={onModules}>{text.openModules} ←</button></section><section className="module-page__placeholder"><strong>{text.foundation}</strong> {text.foundationText}</section></>}</section>
     </main>
     {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label="Close">×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} /></aside></div>}
   </>;
