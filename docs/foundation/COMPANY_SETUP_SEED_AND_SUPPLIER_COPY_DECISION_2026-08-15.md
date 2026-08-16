@@ -32,9 +32,9 @@ Noorix currently creates a company and then initializes accounting. Its starter 
 | Core categories | 13 parent categories and 47 subcategories (current Noorix source); BASEER applies a compatible 16-parent, 50-leaf taxonomy tailored to its expanded service accounts | required base; created company-local and extendable later |
 | Vaults | cash and bank asset-backed vaults | cash vault required; bank/electronic vault is optional and is **not** a bank-reconciliation feature |
 | Fiscal period | one open calendar-year period | required; BASEER uses the approved strict rule that every Finance posting must be in exactly one open period |
-| Standard suppliers | 16 general Saudi service/government/platform suppliers | selectable, not silently forced |
+| Standard suppliers | 26 optional Saudi utility/government/platform suppliers | selectable, not silently forced |
 
-The 16 observed standard suppliers are Saudi Energy, STC, GOSI, ZATCA, Ministry of Commerce, Saudi Business Center, Ministry of Municipalities and Housing, HRSD, Passports, Civil Defense, Saudi Chambers, Qiwa, Absher Business, Mudad, Muqeem, and Balady.
+The optional standard-supplier catalog covers Saudi Energy; STC; Mobily; Zain Saudi; Salam; GO Telecom; National Water Company; GOSI; ZATCA; Ministry of Commerce; Saudi Business Center; Ministry of Municipalities and Housing; HRSD; Passports; Civil Defense; Saudi Chambers; Qiwa; Absher Business; Mudad; Muqeem; Balady; Ajeer; Musaned; Wafid; Ministry of Foreign Affairs; and Saudi Post SPL. It is a selectable convenience catalog, not a mandatory vendor list.
 
 Noorix keeps activity-specific entities, such as NWC, Mobily, Zain, Salam, SFDA, SASO, SAIP, and MISA, outside the automatic default list. BASEER likewise presents them only when selected or copied from an authorized company.
 
@@ -98,3 +98,9 @@ This setup wizard is for a new company. It is not a replacement for the formal N
 ## Utility default and Noorix migration safety
 
 For small private companies, Baseer version 5 provides one active posting category: UTIL-001 (مرافق وخدمات). Noorix electricity, telecom, and water leaves map to it only through the approved semantic resolver; identical-looking codes are never assumed equivalent. Existing company history is preserved and is not rewritten by seed refresh.
+
+### Provider tax identifiers and existing companies
+
+A seed may carry a supplier tax number only when it has been confirmed from an official provider source. Current catalog evidence includes Mobily VAT ID `300000699600003` ([Mobily commercial information](https://www.mobily.com.sa/wps/portal/web/commercial-information/)); other providers remain blank until their official tax certificate or official commercial information confirms a value. When a company chooses **Add selected standard suppliers**, BASEER creates missing suppliers and fills a tax number only when the existing supplier’s tax-number field is empty. It never overwrites a company-entered tax number. The sync is company-scoped, idempotent, and audited.
+
+Employment and residency-related services are kept optional and mapped to the correct existing posting categories: GOSI → employer contributions; Qiwa, Absher Business, Mudad, Ajeer and Musaned → government-platform fees; Muqeem, Passports and SPL → iqama/passport-related costs; Wafid → health certificates and employee permits; Ministry of Foreign Affairs → visit-visa costs. Insurance providers are intentionally not seeded generically: the actual insurer named on the company invoice must be selected or created by the company.

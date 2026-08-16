@@ -109,7 +109,7 @@ export type RecordSupplierDuePaymentRequest = z.infer<
 export type ReverseSupplierDuePaymentRequest = z.infer<
   typeof reverseSupplierDuePaymentRequestSchema
 >;
-export const standardSupplierKeySchema = z.enum(["SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY"]);
+export const standardSupplierKeySchema = z.enum(["SAUDI_ENERGY", "STC", "MOBILY", "ZAIN_SAUDI", "SALAM", "GO_TELECOM", "NATIONAL_WATER_COMPANY", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY", "AJEER", "MUSANED", "WAFID", "MINISTRY_OF_FOREIGN_AFFAIRS", "SAUDI_POST_SPL"]);
 export const companyFinanceSetupRequestSchema = z
   .object({
     fiscalPeriodNameAr: z.string().trim().min(1).max(160),
@@ -120,7 +120,7 @@ export const companyFinanceSetupRequestSchema = z
       .array(z.enum(["CASH", "BANK", "HUNGERSTATION", "JAHEZ", "KEETA"]))
       .min(1)
       .max(5),
-    selectedStandardSupplierKeys: z.array(standardSupplierKeySchema).max(16).default([]),
+    selectedStandardSupplierKeys: z.array(standardSupplierKeySchema).max(32).default([]),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
@@ -128,9 +128,11 @@ export const companyFinanceSetupReceiptSchema = z
   .object({
     periodId: z.string().uuid(),
     vaultIds: z.array(z.string().uuid()).min(1).max(5),
-    supplierIds: z.array(z.string().uuid()).max(16),
+    supplierIds: z.array(z.string().uuid()).max(32),
   })
   .strict();
+export const standardSupplierSyncRequestSchema = z.object({ selectedStandardSupplierKeys: z.array(standardSupplierKeySchema).min(1).max(32), idempotencyKey: idempotencyKeySchema }).strict();
+export const standardSupplierSyncReceiptSchema = z.object({ supplierIds: z.array(z.string().uuid()).min(1).max(32), taxNumbersUpdated: z.number().int().nonnegative() }).strict();
 export const financeFoundationRefreshReceiptSchema = z
   .object({ initialized: z.boolean(), accountCount: z.number().int().nonnegative(), categoryCount: z.number().int().nonnegative(), baseSeedVersion: z.number().int().positive() })
   .strict();

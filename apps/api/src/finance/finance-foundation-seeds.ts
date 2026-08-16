@@ -133,13 +133,20 @@ export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHier
   { code: 'E8-6', parentCode: 'EXP-008', nameAr: 'أصول أخرى', nameEn: 'Other assets', kind: FinanceCategoryKind.EXPENSE, sortOrder: 60 },
 ] as const;
 export const STANDARD_SUPPLIER_KEYS = [
-  "SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY",
+  "SAUDI_ENERGY", "STC", "MOBILY", "ZAIN_SAUDI", "SALAM", "GO_TELECOM", "NATIONAL_WATER_COMPANY",
+  "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS",
+  "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY", "AJEER", "MUSANED", "WAFID", "MINISTRY_OF_FOREIGN_AFFAIRS", "SAUDI_POST_SPL",
 ] as const;
 export type StandardSupplierKey = (typeof STANDARD_SUPPLIER_KEYS)[number];
-export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string }>;
+export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string; taxNumber?: string }>;
 export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
   { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "UTIL-001" },
   { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "UTIL-001" },
+  { key: "MOBILY", nameAr: "شركة اتحاد اتصالات (موبايلي)", nameEn: "Etihad Etisalat Company (Mobily)", categoryCode: "UTIL-001", taxNumber: "300000699600003" },
+  { key: "ZAIN_SAUDI", nameAr: "الشركة السعودية للاتصالات المتنقلة (زين)", nameEn: "Mobile Telecommunications Company Saudi Arabia (Zain)", categoryCode: "UTIL-001" },
+  { key: "SALAM", nameAr: "شركة الاتصالات المتكاملة (سلام)", nameEn: "Integrated Telecom Company (Salam)", categoryCode: "UTIL-001" },
+  { key: "GO_TELECOM", nameAr: "شركة اتحاد عذيب للاتصالات (جو)", nameEn: "Etihad Atheeb Telecommunication Company (GO)", categoryCode: "UTIL-001" },
+  { key: "NATIONAL_WATER_COMPANY", nameAr: "شركة المياه الوطنية", nameEn: "National Water Company", categoryCode: "UTIL-001" },
   { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "E4-2" },
   { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "E2-7" },
   { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "E2-1" },
@@ -154,4 +161,9 @@ export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
   { key: "MUDAD", nameAr: "مدد", nameEn: "Mudad", categoryCode: "E4-1" },
   { key: "MUQEEM", nameAr: "مقيم", nameEn: "Muqeem", categoryCode: "E2-4" },
   { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "E2-2" },
+  { key: "AJEER", nameAr: "أجير", nameEn: "Ajeer", categoryCode: "E2-10" },
+  { key: "MUSANED", nameAr: "مساند", nameEn: "Musaned", categoryCode: "E2-10" },
+  { key: "WAFID", nameAr: "وافد", nameEn: "Wafid", categoryCode: "E2-11" },
+  { key: "MINISTRY_OF_FOREIGN_AFFAIRS", nameAr: "وزارة الخارجية", nameEn: "Ministry of Foreign Affairs", categoryCode: "E2-5" },
+  { key: "SAUDI_POST_SPL", nameAr: "سبل", nameEn: "Saudi Post SPL", categoryCode: "E2-4" },
 ] as const;
