@@ -335,22 +335,29 @@ button {
   font-size: var(--font-label);
 }
 .workspace {
-  display: grid;
-  grid-template-columns: 248px minmax(0, 1fr);
   min-height: calc(100vh - 72px);
 }
 @media (min-width: 801px) {
-  .topbar > .brand {
-    display: none;
-  }
+  .topbar > .brand { display: none; }
   .topbar {
-    /* In RTL, the session controls live on the inline-end (physical left). */
+    margin-inline-end: 248px;
     padding-inline-end: clamp(1.75rem, 2.5vw, 3rem);
   }
+  .workspace {
+    display: block;
+    padding-inline-end: 248px;
+  }
   .module-sidebar {
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+    z-index: 20;
+    width: 248px;
+    height: 100vh;
     min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
 }
 .sidebar-product {
@@ -2367,9 +2374,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   font-weight: 750;
   line-height: 1.2;
 }
-.workspace {
-  padding-inline: 0;
-}
 .module-page,
 .administration-section,
 .daily-sales-workspace {
@@ -2486,7 +2490,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-status-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; font-weight: 700; }
 .administration-status-pill.is-active { background: #e8f7ee; color: #087f5b; }
 .administration-status-pill.is-disabled { background: #f8e9e7; color: #b42318; }
-@media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-sidebar { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
+@media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
 @media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
 .administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .administration-company-checkboxes input[type="checkbox"] { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; width: auto; min-height: 0; accent-color: #087f5b; }
