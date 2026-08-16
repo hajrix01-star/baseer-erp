@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export type BaseerPeriodPreset = "DAY" | "MONTH" | "MULTI_MONTH" | "QUARTER" | "YEAR" | "RANGE";
 export type BaseerPeriodRange = { preset: BaseerPeriodPreset; from: string; to: string; months: readonly string[] };
@@ -28,11 +28,13 @@ export function defaultBaseerPeriodRange() { return baseerPeriodRange("MONTH"); 
 export function baseerPeriodQuery(range: BaseerPeriodRange) { const query = new URLSearchParams({ fromBusinessDate: range.from, toBusinessDate: range.to }); if (range.preset === "MULTI_MONTH" && range.months.length) query.set("businessMonths", range.months.join(",")); return query.toString(); }
 
 export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY", "MONTH", "MULTI_MONTH", "QUARTER", "YEAR", "RANGE"], className }: Props) {
+  const rootRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(value);
   const [cursor, setCursor] = useState(cursorFor(value.from));
   const [rangeStart, setRangeStart] = useState<string | null>(null);
   const years = useMemo(() => { const current = riyadhToday().year; return Array.from({ length: 9 }, (_, index) => current - 5 + index); }, []);
+  useEffect(() => { if (!open) return; const closeWhenOutside = (event: MouseEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false); }; document.addEventListener("mousedown", closeWhenOutside); return () => document.removeEventListener("mousedown", closeWhenOutside); }, [open]);
   const openPicker = () => { setDraft(value); setCursor(cursorFor(value.from)); setRangeStart(null); setOpen(true); };
   const setPreset = (preset: BaseerPeriodPreset) => { const next = preset === "RANGE" ? { ...draft, preset, months: [] } : baseerPeriodRange(preset); setDraft(next); setCursor(cursorFor(next.from)); setRangeStart(null); };
   const selectMonth = (month: number) => { const token = `${cursor.slice(0, 4)}-${String(month).padStart(2, "0")}`; if (draft.preset === "MULTI_MONTH") { const next = draft.months.includes(token) ? envelope(draft.months.filter((item) => item !== token)) : envelope([...draft.months, token]); setDraft(next ? { preset: "MULTI_MONTH", ...next } : { ...baseerPeriodRange("MULTI_MONTH"), months: [] }); return; } setDraft({ preset: "MONTH", ...rangeFromMonth(token), months: [token] }); };
@@ -45,7 +47,7 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
   const today = iso(riyadhToday().year, riyadhToday().month, riyadhToday().day);
   const defaultRange = defaultBaseerPeriodRange();
   const hasCustomPeriod = value.preset !== defaultRange.preset || value.from !== defaultRange.from || value.to !== defaultRange.to || value.months.join(",") !== defaultRange.months.join(",");
-  return <section className={["baseer-period-filter", className].filter(Boolean).join(" ")} aria-label={language === "ar" ? "فلترة الفترة" : "Period filter"}>
+  return <section ref={rootRef} className={["baseer-period-filter", className].filter(Boolean).join(" ")} aria-label={language === "ar" ? "فلترة الفترة" : "Period filter"}>
     <div className="baseer-period-filter__bar">
       <button className="baseer-period-filter__trigger" type="button" aria-expanded={open} onClick={() => open ? setOpen(false) : openPicker()}><span className="baseer-period-filter__calendar" aria-hidden="true">▦</span><span className="baseer-period-filter__label">{language === "ar" ? "الفترة" : "Period"}</span><strong>{display(value, language)}</strong></button>
       {hasCustomPeriod && <button className="baseer-period-filter__clear" type="button" onClick={clearPeriod} aria-label={language === "ar" ? "إلغاء الفلترة" : "Clear filter"} title={language === "ar" ? "إلغاء الفلترة" : "Clear filter"}>×</button>}
