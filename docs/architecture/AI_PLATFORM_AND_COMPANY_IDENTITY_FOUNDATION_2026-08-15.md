@@ -16,7 +16,7 @@ An administrator configures one tenant-scoped (system-wide) AI provider/API cred
 
 ## Identity terminology
 
-`AiSystemIdentity` is the tenant/system-wide assistant identity: Arabic and English assistant name, default language, tone and non-negotiable safety instructions. It is versioned centrally in Administration, so changing the name does not create different assistants for different companies.
+`AiSystemIdentity` is the tenant/system-wide assistant identity: Arabic and English assistant name, default language, tone and non-negotiable safety instructions. The approved initial identity is **بصيرة — المساعدة الذكية** (`Basira Assistant`). It is versioned centrally in Administration, so changing the name does not create different assistants for different companies.
 
 `AiCompanyIdentity` is a separate company-scoped context profile: concise approved company context and module policy reference. It has no assistant-name authority and never changes the central assistant identity.
 

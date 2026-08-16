@@ -9,10 +9,11 @@
 - `NOORIX_DOCUMENT_NUMBER_COMPATIBILITY.md`
 - `../foundation/ANALYTICS_READ_MODELS_GATE_A_DECISION.md`
 - `../foundation/CENTRAL_FILTERS_GATE_A_DECISION.md`
+- `../foundation/DAILY_SALES_CLOSING_OPERATIONAL_PURPOSE_DECISION_2026-08-16.md`
 
 ## Business conclusion
 
-The Noorix **Sales** module is not a point-of-sale screen and must not be copied into Baseer as one. It records a final sales closing for a business date and shift. A cashier or accountant enters the aggregated result of the already-completed POS activity:
+The Noorix **Sales** module is not a point-of-sale screen and must not be copied into Baseer as one. Per the owner purpose decision, BASEER ERP records the end-of-day aggregate extracted by an employee from the external POS system. It records one daily sales-closing summary for a business date and shift:
 
 - business date;
 - one closing scope: `morning`, `evening`, or `all` day;
@@ -26,7 +27,7 @@ The total sales amount is the sum of payment channels. Each entered channel amou
 
 ## Owner decision: optional closing
 
-**Approved 2026-08-15; editing policy in `../foundation/OPEN_PERIOD_FINANCIAL_EDITING_GATE_A_DECISION.md`:** a Sales Closing remains optional. The company Operational Calendar, not the mere absence of a record, determines whether the business date was closed or expected to operate. A scheduled closed day needs no manual zero closing; an expected operating day without a saved active closing is visibly pending data. An authorized user may directly create or edit an active closing while its date belongs to an open fiscal period.
+**Owner decision updated 2026-08-16; editing policy in `../foundation/OPEN_PERIOD_FINANCIAL_EDITING_GATE_A_DECISION.md`:** a Sales Closing remains optional. The absence of a saved daily-closing summary means the shop did not operate that day; it is never substituted with a zero-sales closing or a pending sales amount. The Operational Calendar may retain a reason such as holiday or partial operation, but it never creates a sales value. An authorized user may directly create or edit an active closing while its date belongs to an open fiscal period.
 
 ## What Noorix does after a closing is saved
 
@@ -47,15 +48,15 @@ Cancellation is not deletion. Noorix marks the closing, the linked sales invoice
 
 ## Important meaning of the fields
 
-| Field | Meaning in the reviewed Noorix implementation | Baseer implication |
-| --- | --- | --- |
-| `transactionDate` | The business date of the closing, not merely the time the user pressed Save. | Baseer must use its central business-date policy and enforce open/closed periods. |
-| `shift` | Exactly `morning`, `evening`, or `all`. The same company/date/shift may have only one active closing. | Treat it as a closing scope, not as a POS session unless a future POS module explicitly maps to it. |
-| `channels[]` | Positive gross amounts, each connected to a vault. Their sum is the sales total. | Keep a dedicated allocation row per vault; do not store a comma-separated payment method. |
-| `cashOnHand` | A separately stored physical-cash figure. In the reviewed flow it does **not** contribute to the total or create ledger entries. | **Owner decision (2026-08-15):** it is the actual cash counted and available in the cash box, retained for end-of-month availability and reconciliation; it is not revenue, a payment channel, or an accounting posting. |
-| `customerCount` | A non-negative count used for average basket/customer metrics. | Preserve its business definition during migration; it is not a customer master record list. |
-| VAT | Company configuration determines whether gross channel amounts are split into net revenue and VAT collected. | VAT must be calculated on the server and rounded/balanced safely, never by the screen. |
-| `dayContext` | A snapshot of relevant special day, school holiday, or manual calendar event for that date. | Retain only if it has business value; store a snapshot for historical analytics, not a live mutable label. |
+| Field             | Meaning in the reviewed Noorix implementation                                                                                    | Baseer implication                                                                                                                                                                                                       |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transactionDate` | The business date of the closing, not merely the time the user pressed Save.                                                     | Baseer must use its central business-date policy and enforce open/closed periods.                                                                                                                                        |
+| `shift`           | Exactly `morning`, `evening`, or `all`. The same company/date/shift may have only one active closing.                            | Treat it as a closing scope, not as a POS session unless a future POS module explicitly maps to it.                                                                                                                      |
+| `channels[]`      | Positive gross amounts, each connected to a vault. Their sum is the sales total.                                                 | Keep a dedicated allocation row per vault; do not store a comma-separated payment method.                                                                                                                                |
+| `cashOnHand`      | A separately stored physical-cash figure. In the reviewed flow it does **not** contribute to the total or create ledger entries. | **Superseded owner decision (2026-08-16):** Noorix `cashOnHand` remains source evidence of a physical count only. BASEER does not treat it as a cash handover. A new, explicit `cashHandoverAmount` records cash actually handed to the accountant and is the only value included in the cumulative handover report; neither value is revenue, a payment channel, or an accounting posting. |
+| `customerCount`   | A non-negative count used for average basket/customer metrics.                                                                   | Preserve its business definition during migration; it is not a customer master record list.                                                                                                                              |
+| VAT               | Company configuration determines whether gross channel amounts are split into net revenue and VAT collected.                     | VAT must be calculated on the server and rounded/balanced safely, never by the screen.                                                                                                                                   |
+| `dayContext`      | A snapshot of relevant special day, school holiday, or manual calendar event for that date.                                      | Retain only if it has business value; store a snapshot for historical analytics, not a live mutable label.                                                                                                               |
 
 ## Numbering observed in Noorix
 
@@ -88,7 +89,7 @@ The first Finance delivery shall introduce a server-owned **Sales Closing** sour
 7. company/user authorization and row-level isolation; and
 8. server-generated, read-only analytics models and reconciliation receipts.
 
-The owner has decided that the legacy `cashOnHand` value is the actual cash available in the cash box. Baseer shall retain it as a dated cash-count observation associated with the relevant closing and cash vault. It must remain outside revenue and journal posting. It is retained for management visibility only; Baseer will not build a bank-statement or external reconciliation module.
+Noorix `cashOnHand` is preserved only as dated source evidence if imported; it must not be silently converted into a BASEER cash handover. BASEER records a handover only when the worker explicitly confirms the amount delivered to the accountant. Both remain outside revenue and journal posting. BASEER will not build a bank-statement or external reconciliation module.
 
 For migration, the raw legacy summary number, original business date, original shift, channel-to-vault mapping, status, user reference, source record ID, and checksum must be retained. Any legacy vault that cannot be matched must go to an exception queue; it must never silently become cash or a new generic payment method.
 

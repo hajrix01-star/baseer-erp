@@ -3,7 +3,7 @@ import {
   type BusinessDateIntent,
   type BusinessDateResolution,
 } from '@baseer-erp/contracts';
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
@@ -43,6 +43,27 @@ export class BusinessDateService {
     return this.database.inTenantTransaction(trusted.tenantId, (transaction) =>
       this.resolveInTransaction(transaction, trusted, input.intent),
     );
+  }
+
+  async currentForTrustedContext(
+    context: TrustedCompanyActorContext,
+  ): Promise<BusinessDateResolution> {
+    return this.database.inTenantTransaction(context.tenantId, (transaction) =>
+      this.resolveInTransaction(transaction, context, { kind: 'current' }),
+    );
+  }
+
+  async assertNotFutureInTransaction(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    businessDate: Date,
+    message = 'A financial record cannot use a future business date.',
+  ): Promise<BusinessDateResolution> {
+    const current = await this.resolveInTransaction(transaction, context, { kind: 'current' });
+    if (businessDate.toISOString().slice(0, 10) > current.businessDate) {
+      throw new BadRequestException(message);
+    }
+    return current;
   }
 
   async resolveInTransaction(

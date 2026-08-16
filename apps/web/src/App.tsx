@@ -1,4 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { CommandCenterSalesCalendar } from './command-center-sales-calendar';
+import { BaseerBrand } from './baseer-brand';
+import { CompanySessionControl } from './company-session-control';
+import { DailySalesWorkspace } from './daily-sales-workspace';
+import { AdministrationWorkspace } from './administration-workspace';
 import { getModule, modules, type ModuleId } from './modules';
 
 type Language = 'ar' | 'en';
@@ -94,9 +99,9 @@ function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { langua
   const text = copy[language];
   return <header className="topbar">
     <button className="icon-button" onClick={onModules} type="button" aria-label={text.allModules}>⠿</button>
-    <button className="brand brand-button" onClick={onModules} type="button"><span className="brand-mark">ب</span><span>Baseer ERP</span></button>
+    <button className="brand brand-button" onClick={onModules} type="button"><BaseerBrand /></button>
     <div className="topbar-spacer" />
-    <button className="company-selector" type="button"><span className="status-dot" /><span>{text.company}</span><span>⌄</span></button>
+    <CompanySessionControl language={language} />
     <button className="icon-button" type="button" aria-label={text.quickEntry}>＋</button>
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button>
     <button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button>
@@ -111,7 +116,7 @@ function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen }: { lang
   const visible = useMemo(() => modules.filter((module) => `${module.title.ar} ${module.title.en} ${module.description.ar} ${module.description.en}`.toLocaleLowerCase().includes(query.toLocaleLowerCase().trim())), [query]);
   const open = (route: ResolvedRoute) => { onOpen(route); setRecent(readRecent()); };
   return <div className="launcher-page">
-    <header className="launcher-topbar"><button className="brand brand-button" type="button"><span className="brand-mark">ب</span><span>Baseer ERP</span></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button><button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button><button className="avatar" type="button" aria-label="Profile">م</button></header>
+    <header className="launcher-topbar"><button className="brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button><button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button><button className="avatar" type="button" aria-label="Profile">م</button></header>
     <main className="launcher-page__content">
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1><p>{text.chooseDescription}</p></div>
       <div className="launcher-page__tools"><label className="module-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text.search} /></label><span className="module-count">{visible.length} / {modules.length}</span></div>
@@ -125,9 +130,8 @@ function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen }: { lang
 
 function Navigation({ moduleId, active, language, onSelect }: { moduleId: ModuleId; active: number; language: Language; onSelect: (section: number) => void }) {
   const module = getModule(moduleId);
-  return <nav className="module-navigation">{module.sections[language].map((label, index) => <button key={label} type="button" onClick={() => onSelect(index)} className={`nav-item${index === active ? ' active' : ''}`}><span className="nav-dot" /><span>{label}</span></button>)}</nav>;
+  return <nav className="module-navigation">{module.sections[language].map((label, index) => <button key={label} type="button" onClick={() => onSelect(index)} className={`nav-item${index === active ? " active" : ""}`}><span className="nav-dot" /><span>{label}</span></button>)}</nav>;
 }
-
 function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModules, onSection }: { route: ResolvedRoute; language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onModules: () => void; onSection: (section: number) => void }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const module = getModule(route.moduleId);
@@ -138,7 +142,7 @@ function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModule
     <AppHeader language={language} theme={theme} onLanguage={onLanguage} onTheme={onTheme} onModules={onModules} />
     <main className="workspace">
       <aside className="module-sidebar"><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} /><button className="back-to-modules" type="button" onClick={onModules}>▦ {text.allModules}</button></aside>
-      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1><p>{module.description[language]}</p></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button><button className="period-button" type="button">◫ {text.thisMonth}</button></div></div><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2><p>{text.heroText}</p></div><button className="hero-action" type="button" onClick={onModules}>{text.openModules} ←</button></section><section className="module-page__placeholder"><strong>{text.foundation}</strong> {text.foundationText}</section></section>
+      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1><p>{module.description[language]}</p></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button><button className="period-button" type="button">◫ {text.thisMonth}</button></div></div>{route.moduleId === 'operations' && route.section === 1 ? <DailySalesWorkspace language={language} /> : route.moduleId === 'administration' ? <AdministrationWorkspace language={language} section={route.section} /> : route.moduleId === 'command' && route.section === 0 ? <CommandCenterSalesCalendar language={language} /> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2><p>{text.heroText}</p></div><button className="hero-action" type="button" onClick={onModules}>{text.openModules} ←</button></section><section className="module-page__placeholder"><strong>{text.foundation}</strong> {text.foundationText}</section></>}</section>
     </main>
     <div className={`mobile-drawer${drawerOpen ? ' is-open' : ''}`} aria-hidden={!drawerOpen}><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel"><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label="Close">×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} /></aside></div>
   </>;

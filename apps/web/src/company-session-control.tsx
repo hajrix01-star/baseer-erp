@@ -1,0 +1,92 @@
+import { useEffect, useState } from "react";
+
+import {
+  activeSession,
+  listAvailableCompanies,
+  selectActiveCompany,
+  type AvailableCompany,
+} from "./daily-sales-client";
+
+type Language = "ar" | "en";
+
+export function CompanySessionControl({ language }: { language: Language }) {
+  const [companies, setCompanies] = useState<AvailableCompany[]>([]);
+  const [open, setOpen] = useState(false);
+  const session = activeSession();
+  const activeCompany = companies.find((company) => company.id === session?.companyId);
+
+  useEffect(() => {
+    if (!session) return;
+    let cancelled = false;
+    void listAvailableCompanies(session)
+      .then((items) => {
+        if (!cancelled) setCompanies(items);
+      })
+      .catch(() => {
+        if (!cancelled) setCompanies([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.accessToken, session?.companyId]);
+
+  const label = activeCompany
+    ? language === "ar"
+      ? activeCompany.nameAr
+      : activeCompany.nameEn
+    : language === "ar"
+      ? "تسجيل الدخول واختيار الشركة"
+      : "Sign in and choose company";
+
+  if (!session) {
+    return (
+      <button
+        className="company-selector"
+        type="button"
+        onClick={() => {
+          window.location.hash = "module=operations&section=1";
+        }}
+      >
+        <span className="status-dot" />
+        <span>{label}</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="company-session-control">
+      <button
+        className="company-selector"
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="status-dot" />
+        <span>{label}</span>
+        <span aria-hidden="true">⌄</span>
+      </button>
+      {open && (
+        <div className="company-session-control__menu" role="menu">
+          {companies.map((company) => (
+            <button
+              key={company.id}
+              type="button"
+              role="menuitem"
+              className={company.id === session.companyId ? "is-active" : ""}
+              onClick={() => {
+                if (company.id === session.companyId) {
+                  setOpen(false);
+                  return;
+                }
+                selectActiveCompany(company.id);
+                window.location.reload();
+              }}
+            >
+              {language === "ar" ? company.nameAr : company.nameEn}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

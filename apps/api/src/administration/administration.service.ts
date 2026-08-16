@@ -1,0 +1,185 @@
+import { randomUUID } from "node:crypto";
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
+import { DatabaseService } from "../database/database.service.js";
+import { hashPassword } from "../identity/password.util.js";
+import { displayLoginIdentifier, normalizeLoginIdentifier } from "../identity/login-identifier.js";
+import { RequestContext } from "../observability/request-context.js";
+import { ADMINISTRATION_PERMISSION_CATALOG, permissionCodesAreKnown, SYSTEM_ROLE_TEMPLATES } from "./administration-permissions.js";
+import type { TrustedTenantAdministratorContext } from "./tenant-administration-context.service.js";
+
+@Injectable()
+export class AdministrationService {
+  constructor(private readonly database: DatabaseService) {}
+
+  async overview(context: TrustedTenantAdministratorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.ensureSystemRoles(tx, context.tenantId);
+      const [tenant, companies, users, roles] = await Promise.all([
+        tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } }),
+        tx.company.findMany({ orderBy: { nameAr: "asc" }, take: 250, include: { branding: { select: { logoFileMetadataId: true } } } }),
+        tx.user.findMany({ orderBy: { nameAr: "asc" }, take: 500, include: { memberships: { include: { company: true, role: true }, orderBy: { company: { nameAr: "asc" } } } } }),
+        tx.role.findMany({ orderBy: [{ isSystem: "desc" }, { nameAr: "asc" }], take: 250, include: { grants: { orderBy: { permissionCode: "asc" } } } }),
+      ]);
+      return {
+        owner: context.isOwner,
+        permissions: ADMINISTRATION_PERMISSION_CATALOG,
+        companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null })),
+        users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, status: user.status, memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
+        roles: roles.map((role) => ({ id: role.id, code: role.code, nameAr: role.nameAr, nameEn: role.nameEn, isSystem: role.isSystem, permissionCodes: role.grants.map((grant) => grant.permissionCode) })),
+      };
+    });
+  }
+
+  async createCompany(context: TrustedTenantAdministratorContext, request: CreateAdministrationCompanyRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.ensureSystemRoles(tx, context.tenantId);
+      const manager = await tx.role.findFirst({ where: { tenantId: context.tenantId, code: "BASEER_COMPANY_MANAGER" } });
+      if (!manager) throw new ConflictException("Company-manager role was not initialized.");
+      const id = randomUUID();
+      await tx.company.create({ data: { id, tenantId: context.tenantId, nameAr: request.nameAr, nameEn: request.nameEn, businessTimezone: request.businessTimezone } });
+      await tx.companyBranding.create({ data: { tenantId: context.tenantId, companyId: id } });
+      await tx.companyMembership.upsert({ where: { userId_companyId: { userId: context.actorUserId, companyId: id } }, create: { tenantId: context.tenantId, userId: context.actorUserId, companyId: id, roleId: manager.id }, update: { roleId: manager.id } });
+      await this.audit(tx, context, "administration.company.created", "Company", id, null, { nameAr: request.nameAr, nameEn: request.nameEn, businessTimezone: request.businessTimezone });
+      return { id };
+    });
+  }
+  async createRole(context: TrustedTenantAdministratorContext, request: CreateAdministrationRoleRequest) {
+    this.ownerOnly(context); if (!permissionCodesAreKnown(request.permissionCodes)) throw new ForbiddenException("Unknown permission selection.");
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.ensureSystemRoles(tx, context.tenantId);
+      const existing = await tx.role.findFirst({ where: { tenantId: context.tenantId, code: request.code } }); if (existing) throw new ConflictException("Role code already exists.");
+      const id = randomUUID();
+      await tx.role.create({ data: { id, tenantId: context.tenantId, code: request.code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false, grants: { createMany: { data: [...new Set(request.permissionCodes)].map((permissionCode) => ({ tenantId: context.tenantId, permissionCode })) } } } });
+      await this.audit(tx, context, "administration.role.created", "Role", id, null, { code: request.code, permissionCodes: [...new Set(request.permissionCodes)] });
+      return { id };
+    });
+  }
+
+  async createUser(context: TrustedTenantAdministratorContext, request: CreateAdministrationUserRequest) {
+    this.ownerOnly(context); const passwordHash = await hashPassword(request.password);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.ensureSystemRoles(tx, context.tenantId);
+      const tenant = await tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } });
+      const loginNormalized = normalizeLoginIdentifier(request.login, tenant.code);
+      const [company, role, existing] = await Promise.all([
+        tx.company.findFirst({ where: { id: request.companyId, tenantId: context.tenantId, status: CompanyStatus.ACTIVE } }),
+        tx.role.findFirst({ where: { id: request.roleId, tenantId: context.tenantId } }),
+        tx.user.findFirst({ where: { tenantId: context.tenantId, loginNormalized } }),
+      ]);
+      if (!company || !role) throw new NotFoundException("Company or role was not found."); if (existing) throw new ConflictException("User login already exists.");
+      const id = randomUUID();
+      await tx.user.create({ data: { id, tenantId: context.tenantId, loginNormalized, nameAr: request.nameAr, nameEn: request.nameEn, preferredLanguage: request.preferredLanguage, passwordHash } });
+      await tx.companyMembership.create({ data: { tenantId: context.tenantId, userId: id, companyId: company.id, roleId: role.id } });
+      await this.audit(tx, context, "administration.user.created", "User", id, null, { companyId: company.id, roleId: role.id }); return { id };
+    });
+  }
+
+  async assignMembership(context: TrustedTenantAdministratorContext, request: AssignAdministrationMembershipRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const [user, company, role] = await Promise.all([tx.user.findFirst({ where: { id: request.userId, tenantId: context.tenantId } }), tx.company.findFirst({ where: { id: request.companyId, tenantId: context.tenantId, status: CompanyStatus.ACTIVE } }), tx.role.findFirst({ where: { id: request.roleId, tenantId: context.tenantId } })]);
+      if (!user || !company || !role) throw new NotFoundException("User, company, or role was not found.");
+      const prior = await tx.companyMembership.findFirst({ where: { tenantId: context.tenantId, userId: user.id, companyId: company.id }, select: { roleId: true } });
+      await tx.companyMembership.upsert({ where: { userId_companyId: { userId: user.id, companyId: company.id } }, create: { tenantId: context.tenantId, userId: user.id, companyId: company.id, roleId: role.id }, update: { roleId: role.id } });
+      await tx.user.update({ where: { id: user.id }, data: { sessionVersion: { increment: 1 } } });
+      await this.revokeUserSessions(tx, context.tenantId, user.id);
+      await this.audit(tx, context, "administration.membership.assigned", "CompanyMembership", `${user.id}:${company.id}`, prior, { roleId: role.id }); return { assigned: true };
+    });
+  }
+
+  async updateUserStatus(context: TrustedTenantAdministratorContext, userId: string, request: UpdateAdministrationUserStatusRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const user = await tx.user.findFirst({ where: { id: userId, tenantId: context.tenantId }, select: { id: true, status: true } });
+      if (!user) throw new NotFoundException("User was not found.");
+      if (user.status === request.status) return { updated: true, status: user.status };
+      if (request.status === UserStatus.DISABLED) await this.assertAnotherActiveOwner(tx, context.tenantId, user.id);
+      await tx.user.update({ where: { id: user.id }, data: { status: request.status, sessionVersion: { increment: 1 } } });
+      await this.revokeUserSessions(tx, context.tenantId, user.id);
+      await this.audit(tx, context, "administration.user.status_changed", "User", user.id, { status: user.status }, { status: request.status, reason: request.reason });
+      return { updated: true, status: request.status };
+    });
+  }
+
+  async resetUserPassword(context: TrustedTenantAdministratorContext, userId: string, request: ResetAdministrationUserPasswordRequest) {
+    this.ownerOnly(context);
+    const passwordHash = await hashPassword(request.password);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const user = await tx.user.findFirst({ where: { id: userId, tenantId: context.tenantId }, select: { id: true, status: true } });
+      if (!user) throw new NotFoundException("User was not found.");
+      if (user.status !== UserStatus.ACTIVE) throw new ConflictException("A disabled user cannot receive a password reset.");
+      await tx.user.update({ where: { id: user.id }, data: { passwordHash, sessionVersion: { increment: 1 } } });
+      await this.revokeUserSessions(tx, context.tenantId, user.id);
+      await this.audit(tx, context, "administration.user.password_reset", "User", user.id, null, { reset: true, reason: request.reason });
+      return { reset: true };
+    });
+  }
+
+  async withdrawMembership(context: TrustedTenantAdministratorContext, userId: string, companyId: string, request: WithdrawAdministrationMembershipRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const membership = await tx.companyMembership.findFirst({ where: { tenantId: context.tenantId, userId, companyId }, select: { userId: true, companyId: true, roleId: true } });
+      if (!membership) throw new NotFoundException("Company membership was not found.");
+      await tx.companyMembership.delete({ where: { userId_companyId: { userId, companyId } } });
+      await this.revokeUserSessions(tx, context.tenantId, userId);
+      await this.audit(tx, context, "administration.membership.withdrawn", "CompanyMembership", `${userId}:${companyId}`, { roleId: membership.roleId }, { withdrawn: true, reason: request.reason });
+      return { withdrawn: true };
+    });
+  }
+  async updateCompany(context: TrustedTenantAdministratorContext, companyId: string, request: UpdateAdministrationCompanyRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId } }); if (!company) throw new NotFoundException("Company was not found.");
+      if (request.logoFileMetadataId) { const logo = await tx.fileMetadata.findFirst({ where: { id: request.logoFileMetadataId, tenantId: context.tenantId, companyId, status: FileMetadataStatus.RESERVED, sourceType: "company.branding", sourceId: companyId, purpose: "logo" } }); if (!logo || !logo.declaredMimeType.startsWith("image/")) throw new ForbiddenException("Company logo file is not permitted."); }
+      await tx.company.update({ where: { id: companyId }, data: { nameAr: request.nameAr, nameEn: request.nameEn, businessTimezone: request.businessTimezone } });
+      await tx.companyBranding.upsert({ where: { tenantId_companyId: { tenantId: context.tenantId, companyId } }, create: { tenantId: context.tenantId, companyId, logoFileMetadataId: request.logoFileMetadataId }, update: { logoFileMetadataId: request.logoFileMetadataId } });
+      await this.audit(tx, context, "administration.company.settings_updated", "Company", companyId, { nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone }, request); return { updated: true };
+    });
+  }
+
+  private async assertAnotherActiveOwner(tx: Prisma.TransactionClient, tenantId: string, userId: string): Promise<void> {
+    const owners = await tx.tenantAdministrationAssignment.findMany({ where: { tenantId, isOwner: true }, include: { user: { select: { id: true, status: true } } } });
+    const targetIsOwner = owners.some((owner) => owner.userId === userId);
+    if (targetIsOwner && !owners.some((owner) => owner.userId !== userId && owner.user.status === UserStatus.ACTIVE)) {
+      throw new ConflictException("The last active tenant owner cannot be disabled.");
+    }
+  }
+
+  private async revokeUserSessions(tx: Prisma.TransactionClient, tenantId: string, userId: string): Promise<void> {
+    await tx.appSession.updateMany({ where: { tenantId, userId, status: SessionStatus.ACTIVE }, data: { status: SessionStatus.REVOKED, revokedAt: new Date() } });
+  }
+  private async ensureSystemRoles(tx: Prisma.TransactionClient, tenantId: string): Promise<void> {
+    for (const template of SYSTEM_ROLE_TEMPLATES) {
+      const role = await tx.role.upsert({
+        where: { tenantId_code: { tenantId, code: template.code } },
+        create: {
+          id: randomUUID(),
+          tenantId,
+          code: template.code,
+          nameAr: template.nameAr,
+          nameEn: template.nameEn,
+          isSystem: true,
+        },
+        update: { nameAr: template.nameAr, nameEn: template.nameEn, isSystem: true },
+      });
+      // System templates are maintained centrally. Removing a broad legacy
+      // grant is deliberate: it prevents a cashier from retaining correction
+      // and reversal privileges after the permission split.
+      await tx.rolePermission.deleteMany({
+        where: { roleId: role.id, permissionCode: { notIn: [...template.permissions] } },
+      });
+      for (const permissionCode of template.permissions) {
+        await tx.rolePermission.upsert({
+          where: { roleId_permissionCode: { roleId: role.id, permissionCode } },
+          create: { tenantId, roleId: role.id, permissionCode },
+          update: {},
+        });
+      }
+    }
+  }
+  private ownerOnly(context: TrustedTenantAdministratorContext): void { if (!context.isOwner) throw new ForbiddenException("Tenant-owner access is required."); }
+  private async audit(tx: Prisma.TransactionClient, context: TrustedTenantAdministratorContext, action: string, entityType: string, entityId: string, beforeJson: unknown, afterJson: unknown): Promise<void> { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: RequestContext.correlationId() ?? randomUUID(), beforeJson: beforeJson === null ? Prisma.JsonNull : beforeJson as Prisma.InputJsonValue, afterJson: afterJson as Prisma.InputJsonValue } }); }
+}

@@ -8,6 +8,10 @@
     "packages/*"
   ],
   "scripts": {
-    "check:architecture": "node scripts/check-architecture.mjs"
+    "check:architecture": "node scripts/check-architecture.mjs",
+    "check:permissions": "node scripts/check-permission-catalog.mjs",
+    "verify:web-budget": "node scripts/check-web-release-budget.mjs",
+    "check:web-financial-boundaries": "node scripts/check-web-financial-boundaries.mjs",
+    "verify:administration-lifecycle": "npm run build --workspace @baseer-erp/api && node scripts/run-administration-lifecycle-verification.mjs"
   }
 }

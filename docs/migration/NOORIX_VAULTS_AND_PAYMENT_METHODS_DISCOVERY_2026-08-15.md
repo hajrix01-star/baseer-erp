@@ -36,7 +36,7 @@ Cancelled entries are excluded. The balance is not manually stored or edited.
 
 The owner decision for Baseer is separate and mandatory:
 
-- `cashOnHand` is **actual cash physically counted in the cash box** at the time of a daily closing;
+- `cashOnHand` is **a Noorix physical cash-count field** at the time of a daily closing; it is legacy evidence and not a BASEER cash handover.
 - it does not create revenue, VAT, or a journal entry;
 - it is not a payment channel; and
 - it is retained for end-of-month available-cash visibility and reconciliation.
@@ -95,7 +95,7 @@ This distinction is essential for a bank deposit: moving physical cash from a ca
 
 Before import, each Noorix vault requires a mapping record containing the company, source ID, source name, type, linked source account, active/archive status, sales-channel flag, payment-method flag, and checksum.
 
-Legacy Sales Closing channel rows must map to the matching imported vault by source identity, not by display name. Where a legacy `cashOnHand` value lacks a vault reference, Baseer must preserve it as source evidence and place the vault assignment in a controlled exception queue. It must not guess which cash box was counted.
+Legacy Sales Closing channel rows must map to the matching imported vault by source identity, not by display name. Where a legacy `cashOnHand` value lacks a vault reference, Baseer must preserve it as source evidence and place the vault assignment in a controlled exception queue. It must not guess which cash box was counted, and it must never add it to the BASEER cumulative cash-handover report.
 
 ## Gate B test requirements
 

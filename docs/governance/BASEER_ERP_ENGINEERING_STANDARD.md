@@ -30,6 +30,10 @@ A module cannot be called complete while its main workflow silently opens a lega
 
 ## 3. Backend is the business authority
 
+### 3.1 Financial and factual truth boundary
+
+`FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md` is mandatory. Every money amount is served only from a journal-reconciled server read model. Operational/provider/AI facts keep their own provenance and may enrich a report, but never become accounting truth. Every new module must name both sources and its reconciliation receipt before implementation.
+
 - React/mobile clients display server receipts and collect input; they do not calculate totals, VAT, balances, ratios, period boundaries, serials, or ledger effects.
 - Every financial command is server-side, validated, permission-scoped, company-scoped, idempotent, auditable, and atomic.
 - Reads are server projections with explicit source, period, basis, currency, and generated-at metadata.
@@ -123,6 +127,7 @@ A capability is complete only when all conditions are true:
 6. Its server report/timeline/filter data is reconciled with approved legacy fixtures where parity is required.
 7. Observability, recovery, and operational documentation are present.
 8. The owner has accepted the workflow.
+9. Its acceptance record states and verifies the request budget: initial-load HTTP requests, post-write refresh requests, server preview behavior, and absence of duplicate company/session/context reads.
 
 ## 11. External engineering references
 

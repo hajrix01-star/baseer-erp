@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
 
 import { AiCredentialVault } from './ai-platform/ai-credential-vault.js';
+import { AdministrationController } from './administration/administration.controller.js';
+import { AdministrationService } from './administration/administration.service.js';
+import { TenantAdministrationContextService } from './administration/tenant-administration-context.service.js';
 import { AiPlatformController } from './ai-platform/ai-platform.controller.js';
 import { AiPlatformService } from './ai-platform/ai-platform.service.js';
 
 import { BusinessDateController } from './business-date/business-date.controller.js';
 import { BUSINESS_DATE_CLOCK, BusinessDateService } from './business-date/business-date.service.js';
+import { CompanyAccessController } from './company-context/company-access.controller.js';
+import { CompanyAccessService } from './company-context/company-access.service.js';
 import { CompanyContextService } from './company-context/company-context.service.js';
 import { DocumentSerialService, IdempotencyService } from './core-controls/index.js';
 import { DatabaseService } from './database/database.service.js';
@@ -34,6 +39,14 @@ import { VaultManagementService } from './finance/vault-management.service.js';
 import { VaultManagementController } from './finance/vault-management.controller.js';
 import { FinanceConfigurationService } from './finance/finance-configuration.service.js';
 import { FinanceConfigurationController } from './finance/finance-configuration.controller.js';
+import { DailySalesController } from './finance/daily-sales.controller.js';
+import { DailySalesService } from './finance/daily-sales.service.js';
+import { DailySalesCommandSupportService } from './finance/daily-sales-command-support.service.js';
+import { DailySalesWriteService } from './finance/daily-sales-write.service.js';
+import { DailySalesProjectionService } from './finance/daily-sales-projection.service.js';
+import { DailySalesReadService } from './finance/daily-sales-read.service.js';
+import { DailySalesPostingService } from './finance/daily-sales-posting.service.js';
+import { OperationalCalendarService } from './finance/operational-calendar.service.js';
 import { HealthController } from './health/health.controller.js';
 import { ObservabilityController } from './observability/observability.controller.js';
 import { ObservabilityService } from './observability/observability.service.js';
@@ -41,20 +54,25 @@ import { RequestObservabilityInterceptor } from './observability/request-observa
 import { AuthController } from './identity/auth.controller.js';
 import { AuthService } from './identity/auth.service.js';
 import { IdentityTokenService } from './identity/identity-token.service.js';
+import { SignInRateLimitService } from './identity/sign-in-rate-limit.service.js';
 import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 
 @Module({
-  controllers: [HealthController, AiPlatformController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
   providers: [
     DatabaseService,
+    TenantAdministrationContextService,
+    AdministrationService,
     AiCredentialVault,
     AiPlatformService,
     { provide: BUSINESS_DATE_CLOCK, useValue: { now: () => new Date() } },
     BusinessDateService,
     AuthService,
     IdentityTokenService,
+    SignInRateLimitService,
     CompanyContextService,
+    CompanyAccessService,
     IdempotencyService,
     DocumentSerialService,
     FileMetadataService,
@@ -73,6 +91,13 @@ import { OutputService } from './output/output.service.js';
     CompanyFinanceSetupService,
     VaultManagementService,
     FinanceConfigurationService,
+    DailySalesProjectionService,
+    DailySalesReadService,
+    DailySalesPostingService,
+    OperationalCalendarService,
+    DailySalesCommandSupportService,
+    DailySalesWriteService,
+    DailySalesService,
     ObservabilityService,
     RequestObservabilityInterceptor,
     OutputService,

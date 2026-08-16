@@ -16,7 +16,7 @@ No live Noorix migration, production use, writable Finance UI, or dashboard figu
 
 - The source contains a strong internal financial kernel: tenant/company isolation, journal balance and sealing, reversals, fiscal-period locking, supplier due partial payments/reversals, paid-only cash projection, recurring reminders, inclusive opening loans and repayments, and selectable vault setup.
 - The owner decisions are respected in the implemented source: unpaid supplier dues stay outside cash-management totals; recurring profiles do not post automatically; inclusive loans do not split interest; platform vaults are selectable; no bank reconciliation is planned.
-- Noorix compatibility direction is correct: daily sales are a daily closing rather than POS; `cashOnHand` is a management observation; Baseer supplier dues intentionally improve on Noorix by supporting partial payment and reversal.
+- Noorix compatibility direction is correct: daily sales are a daily closing rather than POS; legacy `cashOnHand` is source evidence only, while the newer explicit cash handover is a separate management record; Baseer supplier dues intentionally improve on Noorix by supporting partial payment and reversal.
 
 ## Corrections to the previous report
 
@@ -39,7 +39,7 @@ The only financial HTTP controller currently registered is supplier copying. Com
 2. **Phase 1 — safe command boundary:** authorised, idempotent, audited Finance contracts/controllers for company finance setup, accounts/categories/suppliers, periods, vaults, dues, loans, and reminders. No public manual-journal endpoint.
 3. **Phase 2 — unified financial document:** serial, VAT and source snapshots, supplier/category, attachment metadata, paid-vault or due choice, edit/reversal rules, and Noorix source map. Then provide paid purchase/expense and due journeys.
 4. **Phase 3 — bilingual guided setup UI:** company, fiscal period, selected vaults, supplier copies, optional opening loans and reminder profiles, with one final review/confirm action.
-5. **Phase 4 — daily operations:** operational calendar first, then daily sales closing (not POS), collection channels, vault linkage, and management-only cash-on-hand.
+5. **Phase 4 — daily operations:** operational calendar first, then daily sales closing (not POS), collection channels, vault linkage, and an explicit management-only cash handover to the accountant; it is separate from revenue, collection channels, vault balances and journals.
 6. **Phase 5 — treasury and reports:** internal transfers/cash count, then server-calculated read models, central filters, ledger and management reports. Bank reconciliation remains excluded.
 7. **Phase 6 — Noorix rehearsal and private production:** staging importer/mappings/reconciliation per company and month, owner-approved cutover only after a dry run; then private HTTPS/backups/restore/rollback proof.
 

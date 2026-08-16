@@ -24,6 +24,7 @@ import {
   Prisma,
 } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
+import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 import { FinanceVaultService } from './finance-vault.service.js';
 
@@ -118,6 +119,7 @@ export class SupplierDuesService {
     private readonly idempotency: IdempotencyService,
     private readonly journals: JournalPostingService,
     private readonly vaults: FinanceVaultService,
+    private readonly businessDates: BusinessDateService,
   ) {}
 
   async createDue(command: SupplierDueCommand<CreateSupplierDueRequest>): Promise<SupplierDueReceipt> {
@@ -215,6 +217,12 @@ export class SupplierDuesService {
     const businessDate = this.requiredDate(request.businessDate, 'A due business date is required.');
     const dueDate = request.dueDate ? this.requiredDate(request.dueDate, 'A due date is invalid.') : null;
     if (dueDate && dueDate < businessDate) throw new BadRequestException('A due date cannot be before the due business date.');
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      businessDate,
+      'A supplier due cannot use a future business date.',
+    );
     const notes = this.optionalText(request.notes, 2_000);
 
     await transaction.$executeRaw`
@@ -314,6 +322,12 @@ export class SupplierDuesService {
   ): Promise<SupplierDuePaymentReceipt> {
     const amount = this.positiveAmount(request.amount);
     const businessDate = this.requiredDate(request.businessDate, 'A payment business date is required.');
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      businessDate,
+      'A supplier-due payment cannot use a future business date.',
+    );
     const dueId = this.requiredText(request.dueId, 'A supplier due is required.', 36);
     await this.lockDue(transaction, context, dueId);
     const vault = await this.vaults.assertActivePaymentDestination(transaction, {
@@ -393,6 +407,12 @@ export class SupplierDuesService {
   ): Promise<SupplierDuePaymentReversalReceipt> {
     const paymentId = this.requiredText(request.paymentId, 'A supplier-due payment is required.', 36);
     const businessDate = this.requiredDate(request.businessDate, 'A reversal business date is required.');
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      businessDate,
+      'A supplier-due payment reversal cannot use a future business date.',
+    );
     const reason = this.requiredText(request.reason, 'A payment reversal reason is required.', 1_000);
     await transaction.$executeRaw`
       SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:supplier-due-payment-reversal:${paymentId}`}, 0))

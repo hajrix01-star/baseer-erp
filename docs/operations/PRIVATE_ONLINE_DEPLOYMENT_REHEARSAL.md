@@ -1,4 +1,4 @@
-﻿# BASEER ERP private online deployment and recovery rehearsal
+# BASEER ERP private online deployment and recovery rehearsal
 
 ## Boundaries
 
@@ -16,7 +16,7 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 
 ## Before the first private deployment
 
-1. Choose the owner-controlled server and an encrypted, physically separate backup device. Do not use the database volume itself as the backup.
+1. Choose the owner-controlled Hostinger server and subscribe to Hostinger daily server backups. Do not treat the live database volume itself as a backup. The adopted policy is recorded in `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
 2. Choose any available domain and point its DNS records to the private server. The domain may change later; **BASEER ERP** remains the product name.
 3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository.
 4. Build the API image locally; this does not start the services:
@@ -46,8 +46,8 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 1. HTTPS works on the chosen domain; only ports 80/443 are externally reachable.
 2. API and database administration ports are not publicly reachable.
 3. A user from one company is refused access to another company's data.
-4. The backup is encrypted and copied to the separate owner-controlled device.
-5. Restore that backup into a disposable isolated database and prove row counts, key reports, and log-in behaviour without touching production.
+4. Hostinger daily server backup coverage and retention are confirmed for the database volume and enabled application files.
+5. Restore a Hostinger backup into a disposable isolated environment and prove row counts, key reports, and log-in behaviour without touching production.
 6. Record the date, operator, backup identifier, restore result, and any corrective action in the governance evidence.
 
 ## Explicitly deferred

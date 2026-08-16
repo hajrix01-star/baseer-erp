@@ -55,6 +55,14 @@ try {
     request: { supplierId: master.supplierId, categoryId: master.categoryId, sourceDocumentNumber: `DUE-${suffix}`, businessDate: date('2026-08-15'), amount: '100.0000' },
   });
   assert.equal(due.remainingAmount, '100.0000');
+  await assert.rejects(
+    () => services.dues.createDue({
+      context,
+      idempotencyKey: randomUUID(),
+      request: { supplierId: master.supplierId, categoryId: master.categoryId, sourceDocumentNumber: `FUTURE-${suffix}`, businessDate: date('2099-01-01'), amount: '1.0000' },
+    }),
+    'A future purchase business date must be rejected.',
+  );
 
   const payment = await services.dues.recordPayment({
     context,
@@ -114,7 +122,7 @@ try {
 }
 
 async function loadServices() {
-  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }] = await Promise.all([
+  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { BusinessDateService }] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
     import('../apps/api/dist/finance/finance-period.service.js'),
@@ -125,17 +133,23 @@ async function loadServices() {
     import('../apps/api/dist/finance/supplier-dues.service.js'),
     import('../apps/api/dist/finance/inclusive-loan.service.js'),
     import('../apps/api/dist/finance/inclusive-loan-repayment.service.js'),
+    import('../apps/api/dist/business-date/business-date.service.js'),
   ]);
   database = new DatabaseService();
   const periods = new FinancePeriodService(database);
   const journals = new JournalPostingService(periods);
   const idempotency = new IdempotencyService(database);
   const foundation = new FinanceFoundationService(database);
+  const businessDates = new BusinessDateService(
+    database,
+    {},
+    { now: () => new Date('2026-08-20T12:00:00.000Z') },
+  );
   return {
     setup: new CompanyFinanceSetupService(database, foundation, periods),
-    dues: new SupplierDuesService(database, idempotency, journals, new FinanceVaultService()),
-    loans: new InclusiveLoanService(database, idempotency, journals),
-    repayments: new InclusiveLoanRepaymentService(database, idempotency, journals),
+    dues: new SupplierDuesService(database, idempotency, journals, new FinanceVaultService(), businessDates),
+    loans: new InclusiveLoanService(database, idempotency, journals, businessDates),
+    repayments: new InclusiveLoanRepaymentService(database, idempotency, journals, businessDates),
   };
 }
 

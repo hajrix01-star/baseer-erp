@@ -8,3 +8,5 @@ export * from './observability.js';
 export * from './finance.js';
 
 export * from './ai-platform.js';
+
+export * from './administration.js';

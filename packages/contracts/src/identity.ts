@@ -10,15 +10,22 @@ export const sessionTokenTypeSchema = z.enum(['access', 'refresh']);
 export const sessionTokenSchema = z.string().min(40).max(8_192);
 export const jwtExpirationSchema = z.number().int().positive();
 
+// A short username is resolved by the server to the current tenant's
+// deterministic Baseer login domain. Email remains the stored identifier.
+export const loginIdentifierSchema = z.union([
+  z.string().trim().toLowerCase().email().max(254),
+  z.string().trim().toLowerCase().min(3).max(64).regex(/^[a-z0-9](?:[a-z0-9._-]{1,62}[a-z0-9])?$/),
+]);
+
 export const signInRequestSchema = z.object({
-  login: z.string().trim().toLowerCase().email().max(254),
+  login: loginIdentifierSchema,
   password: z.string().min(12).max(256),
 }).strict();
 
 // This schema exists only at the sign-in boundary for migrated Noorix bcrypt credentials.
 // New-password creation and reset flows retain the stronger signInRequestSchema policy.
 export const legacyCompatibleSignInRequestSchema = z.object({
-  login: z.string().trim().toLowerCase().email().max(254),
+  login: loginIdentifierSchema,
   password: z.string().min(1).max(256).refine((value) => value.trim().length > 0),
 }).strict();
 
@@ -107,6 +114,7 @@ export const apiErrorCodeSchema = z.enum([
   'IDEMPOTENCY_MISMATCH',
   'DEPENDENCY_UNAVAILABLE',
   'INTERNAL_ERROR',
+  'RATE_LIMITED',
 ]);
 
 export const apiErrorReceiptSchema = z.object({
@@ -122,7 +130,13 @@ export const activeCompanyReceiptSchema = z.object({
   id: companyIdSchema,
   nameAr: z.string().min(1).max(160),
   nameEn: z.string().min(1).max(160),
+  // Capability metadata is a UI hint only. Every command is still authorized
+  // again by the server against live company membership and role grants.
+  permissionCodes: z.array(z.string().min(3).max(120)).max(250),
 }).strict();
+export const availableCompaniesReceiptSchema = z
+  .object({ companies: z.array(activeCompanyReceiptSchema).min(1).max(250) })
+  .strict();
 
 export type SignInRequest = z.infer<typeof signInRequestSchema>;
 export type LegacyCompatibleSignInRequest = z.infer<typeof legacyCompatibleSignInRequestSchema>;

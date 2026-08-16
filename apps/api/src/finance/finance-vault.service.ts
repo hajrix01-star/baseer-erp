@@ -9,6 +9,43 @@ import {
 
 @Injectable()
 export class FinanceVaultService {
+  async assertActiveSalesChannel(
+    transaction: Prisma.TransactionClient,
+    input: { tenantId: string; companyId: string; vaultId: string },
+  ): Promise<{ id: string; accountId: string }> {
+    const vault = await transaction.financeVault.findFirst({
+      where: {
+        id: input.vaultId,
+        tenantId: input.tenantId,
+        companyId: input.companyId,
+        status: FinanceVaultStatus.ACTIVE,
+        isSalesChannel: true,
+        account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE },
+      },
+      select: { id: true, accountId: true },
+    });
+    if (!vault) throw new BadRequestException('The selected sales channel is not active for this company.');
+    return vault;
+  }
+
+  async assertActiveCashObservationVault(
+    transaction: Prisma.TransactionClient,
+    input: { tenantId: string; companyId: string; vaultId: string },
+  ): Promise<{ id: string }> {
+    const vault = await transaction.financeVault.findFirst({
+      where: {
+        id: input.vaultId,
+        tenantId: input.tenantId,
+        companyId: input.companyId,
+        status: FinanceVaultStatus.ACTIVE,
+        type: 'CASH',
+        account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE },
+      },
+      select: { id: true },
+    });
+    if (!vault) throw new BadRequestException('The selected cash-observation vault is not active for this company.');
+    return vault;
+  }
   async assertActivePaymentDestination(
     transaction: Prisma.TransactionClient,
     input: { tenantId: string; companyId: string; vaultId: string },

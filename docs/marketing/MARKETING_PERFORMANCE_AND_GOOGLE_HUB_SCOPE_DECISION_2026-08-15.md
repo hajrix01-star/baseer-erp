@@ -28,6 +28,8 @@ Campaign planning/version/approval/budget proposals, content calendar/publicatio
 
 ## Measurement rules
 
+The cross-module source rule in `docs/governance/FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md` is mandatory: Marketing reads confirmed monetary values only from a journal-reconciled Finance/Sales server projection; provider and campaign facts remain separate factual evidence.
+
 - Google Ads conversions are provider-reported conversions, not ERP sales.
 - GBP calls, directions, website actions, searches and views are platform interaction facts, not confirmed customers or sales.
 - Finance and future Daily Sales Closing are the source of confirmed sales, refunds and actual accounting spend.

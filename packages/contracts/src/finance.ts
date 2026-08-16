@@ -413,3 +413,264 @@ export const financeConfigurationReceiptSchema = z
     suppliers: z.array(financeConfigurationSupplierSchema).max(1_000),
   })
   .strict();
+
+const dailySalesScopeSchema = z.enum(["MORNING", "EVENING", "ALL"]);
+const operationalDayStatusSchema = z.enum(["OPEN", "CLOSED", "PARTIAL"]);
+const operationalDaySourceSchema = z.enum(["MANUAL", "HOLIDAY", "MIGRATION"]);
+const dailySalesClosingStatusSchema = z.enum(["POSTED", "REVERSED"]);
+const dailySalesDataStatusSchema = z.enum(["RECORDED", "PENDING", "CLOSED"]);
+
+const dailySalesAllocationRequestSchema = z
+  .object({
+    vaultId: z.string().uuid(),
+    grossAmount: financeAmountSchema,
+  })
+  .strict();
+
+const dailySalesClosingFieldsSchema = z
+  .object({
+    businessDate: financeDateSchema,
+    scope: dailySalesScopeSchema,
+    customerCount: z.number().int().min(0).max(10_000_000).default(0),
+    allocations: z.array(dailySalesAllocationRequestSchema).min(1).max(25),
+    cashHandoverAmount: financeAmountSchema.optional(),
+    cashHandoverVaultId: z.string().uuid().optional(),
+    notes: z.string().trim().max(2_000).optional(),
+  })
+  .strict();
+
+export const previewDailySalesClosingRequestSchema =
+  dailySalesClosingFieldsSchema.strict();
+
+export const createDailySalesClosingRequestSchema =
+  dailySalesClosingFieldsSchema
+    .extend({ idempotencyKey: idempotencyKeySchema })
+    .strict();
+
+export const correctDailySalesClosingRequestSchema =
+  dailySalesClosingFieldsSchema
+    .omit({ businessDate: true, scope: true })
+    .extend({
+      closingId: z.string().uuid(),
+      idempotencyKey: idempotencyKeySchema,
+    })
+    .strict();
+
+export const reverseDailySalesClosingRequestSchema = z
+  .object({
+    closingId: z.string().uuid(),
+    businessDate: financeDateSchema,
+    reason: z.string().trim().min(1).max(1_000),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const setOperationalDayRequestSchema = z
+  .object({
+    businessDate: financeDateSchema,
+    status: operationalDayStatusSchema,
+    source: operationalDaySourceSchema.optional(),
+    note: z.string().trim().max(1_000).optional(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const dailySalesCalendarQuerySchema = z
+  .object({
+    fromBusinessDate: businessDateSchema.transform(
+      (value) => new Date(`${value}T00:00:00.000Z`),
+    ),
+    toBusinessDate: businessDateSchema.transform(
+      (value) => new Date(`${value}T00:00:00.000Z`),
+    ),
+  })
+  .strict();
+export const dailySalesClosingsQuerySchema = dailySalesCalendarQuerySchema;
+
+const dailySalesAllocationReceiptSchema = z
+  .object({ vaultId: z.string().uuid(), grossAmount: financeAmountSchema })
+  .strict();
+
+export const dailySalesClosingReceiptSchema = z
+  .object({
+    closingId: z.string().uuid(),
+    documentNumber: z.string().min(1).max(160),
+    businessDate: z.date(),
+    scope: dailySalesScopeSchema,
+    postingVersion: z.number().int().min(1),
+    journalEntryId: z.string().uuid(),
+    grossAmount: financeAmountSchema,
+    netAmount: financeAmountSchema,
+    vatAmount: financeAmountSchema,
+    vatRateBasisPoints: z.number().int().min(0).max(10_000),
+    customerCount: z.number().int().min(0),
+    cashHandoverAmount: financeAmountSchema.nullable(),
+    cashHandoverVaultId: z.string().uuid().nullable(),
+    status: dailySalesClosingStatusSchema,
+    allocations: z.array(dailySalesAllocationReceiptSchema).min(1).max(25),
+  })
+  .strict();
+
+export const dailySalesClosingPreviewReceiptSchema = z
+  .object({
+    grossAmount: financeAmountSchema,
+    netAmount: financeAmountSchema,
+    vatAmount: financeAmountSchema,
+    vatRateBasisPoints: z.number().int().min(0).max(10_000),
+  })
+  .strict();
+export const dailySalesClosingReversalReceiptSchema = z
+  .object({
+    closingId: z.string().uuid(),
+    documentNumber: z.string().min(1).max(160),
+    originalJournalEntryId: z.string().uuid(),
+    reversalJournalEntryId: z.string().uuid(),
+    status: z.literal("REVERSED"),
+  })
+  .strict();
+
+export const operationalDayReceiptSchema = z
+  .object({
+    businessDate: z.date(),
+    status: operationalDayStatusSchema,
+    source: operationalDaySourceSchema,
+    dataStatus: dailySalesDataStatusSchema,
+  })
+  .strict();
+
+export const dailySalesCalendarItemSchema = z
+  .object({
+    businessDate: z.date(),
+    operationalStatus: operationalDayStatusSchema,
+    dataStatus: dailySalesDataStatusSchema,
+    source: operationalDaySourceSchema.nullable(),
+    hasActiveClosing: z.boolean(),
+    salesGrossAmount: financeAmountSchema,
+    customerCount: z.number().int().min(0),
+  })
+  .strict();
+
+export const dailySalesCalendarReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    fromBusinessDate: z.date(),
+    toBusinessDate: z.date(),
+    days: z.array(dailySalesCalendarItemSchema).max(400),
+  })
+  .strict();
+
+export const dailySalesChannelVaultSchema = z
+  .object({
+    id: z.string().uuid(),
+    nameAr: z.string().min(1).max(160),
+    nameEn: z.string().min(1).max(160),
+    type: z.enum(["CASH", "BANK", "ELECTRONIC"]),
+    isSalesChannel: z.boolean(),
+  })
+  .strict();
+
+export const dailySalesChannelVaultsReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    vaults: z.array(dailySalesChannelVaultSchema).max(100),
+  })
+  .strict();
+
+export const dailySalesEntryDateReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    businessDate: businessDateSchema,
+    timezone: z.literal("Asia/Riyadh"),
+  })
+  .strict();
+
+export const dailySalesClosingHistoryItemSchema = dailySalesClosingReceiptSchema
+  .extend({ notes: z.string().nullable() })
+  .strict();
+
+export const dailySalesClosingsReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    fromBusinessDate: z.date(),
+    toBusinessDate: z.date(),
+    historyLimit: z.number().int().min(1).max(400),
+    closings: z.array(dailySalesClosingHistoryItemSchema).max(400),
+  })
+  .strict();
+
+export const dailySalesCashHandoverItemSchema = z
+  .object({
+    closingId: z.string().uuid(),
+    documentNumber: z.string().min(1).max(160),
+    businessDate: z.date(),
+    scope: dailySalesScopeSchema,
+    cashHandoverAmount: financeAmountSchema,
+    cashHandoverVaultId: z.string().uuid(),
+    notes: z.string().nullable(),
+  })
+  .strict();
+
+export const dailySalesCashHandoversReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    fromBusinessDate: z.date(),
+    toBusinessDate: z.date(),
+    totalCashHandoverAmount: financeAmountSchema,
+    recordCount: z.number().int().min(0),
+    handovers: z.array(dailySalesCashHandoverItemSchema).max(400),
+  })
+  .strict();
+
+export const dailySalesShiftSummaryItemSchema = z
+  .object({
+    scope: dailySalesScopeSchema,
+    closingCount: z.number().int().min(0),
+    grossAmount: financeAmountSchema,
+    customerCount: z.number().int().min(0),
+    averageOrderAmount: financeAmountSchema.nullable(),
+  })
+  .strict();
+
+export const dailySalesShiftSummaryReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    fromBusinessDate: z.date(),
+    toBusinessDate: z.date(),
+    shifts: z.array(dailySalesShiftSummaryItemSchema).length(3),
+  })
+  .strict();
+/**
+ * One bounded read-model for the native Daily Sales workspace. It prevents
+ * the screen from fanning out into several independently-authorized HTTP
+ * reads, while preserving the smaller endpoints for focused consumers.
+ */
+export const dailySalesWorkspaceReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    fromBusinessDate: z.date(),
+    toBusinessDate: z.date(),
+    permissionCodes: z.array(z.string().min(3).max(120)).max(250),
+    entryDate: dailySalesEntryDateReceiptSchema.omit({ companyId: true }),
+    vaults: z.array(dailySalesChannelVaultSchema).max(100),
+    historyLimit: z.number().int().min(1).max(400),
+    closings: z.array(dailySalesClosingHistoryItemSchema).max(400),
+    cashHandovers: dailySalesCashHandoversReceiptSchema.omit({
+      companyId: true,
+      fromBusinessDate: true,
+      toBusinessDate: true,
+    }),
+    shifts: z.array(dailySalesShiftSummaryItemSchema).length(3),
+  })
+  .strict();
+export type CreateDailySalesClosingRequest = z.infer<
+  typeof createDailySalesClosingRequestSchema
+>;
+export type CorrectDailySalesClosingRequest = z.infer<
+  typeof correctDailySalesClosingRequestSchema
+>;
+export type ReverseDailySalesClosingRequest = z.infer<
+  typeof reverseDailySalesClosingRequestSchema
+>;
+export type SetOperationalDayRequest = z.infer<
+  typeof setOperationalDayRequestSchema
+>;

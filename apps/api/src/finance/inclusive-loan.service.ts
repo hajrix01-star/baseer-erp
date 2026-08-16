@@ -6,6 +6,7 @@ import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-con
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceAccountStatus, FinanceAccountType, Prisma } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
+import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 
 const CREATE_OPENING_LOAN_OPERATION = 'finance.inclusive_loan.opening.create';
@@ -51,6 +52,7 @@ export class InclusiveLoanService {
     private readonly database: DatabaseService,
     private readonly idempotency: IdempotencyService,
     private readonly journals: JournalPostingService,
+    private readonly businessDates: BusinessDateService,
   ) {}
 
   async createOpeningLoan(command: OpeningInclusiveLoanCommand): Promise<OpeningInclusiveLoanReceipt> {
@@ -101,6 +103,12 @@ export class InclusiveLoanService {
     for (const date of [request.firstInstallmentDueDate, request.openingBusinessDate]) {
       if (!(date instanceof Date) || Number.isNaN(date.valueOf())) throw new BadRequestException('Loan dates must be valid dates.');
     }
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      request.openingBusinessDate,
+      'An inclusive-loan opening cannot use a future business date.',
+    );
     await transaction.$executeRaw`
       SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:inclusive-loan:${sourceDocumentNumber}`}, 0))
     `;

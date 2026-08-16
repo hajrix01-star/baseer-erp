@@ -14,6 +14,9 @@ Every write route derives tenant, user, and company from the live access token a
 | `finance.supplier_dues.write` | `POST /v1/finance/supplier-dues/payments`, `/reverse` | Record or reverse a partial/full payment | Implemented |
 | `finance.supplier_dues.read` | `GET /v1/finance/supplier-dues/cash-payments` | Read the paid-only cash projection | Implemented |
 | `finance.loans.write` | `POST /v1/finance/inclusive-loans` and repayment routes | Opening inclusive loan, repayment, reversal | Implemented |
+| `finance.daily_sales.read` | `GET /v1/finance/daily-sales/closings`, `/channel-vaults`, `/operational-calendar` | Read company-scoped sales data. Without the full-history permission, the closing register is server-limited to the latest seven records. | Implemented and Gate-B verified |
+| `finance.daily_sales.history.read_all` | `GET /v1/finance/daily-sales/closings` | View the complete requested closing history (up to the server’s 400-day range); assign to owner/supervisor roles, not cashiers. | Implemented |
+| `finance.daily_sales.write` | `GET /v1/finance/daily-sales/entry-date`; `POST /v1/finance/daily-sales/closings`, `/correct`, `/reverse`, `/operational-calendar/days` | Obtain the server-owned Riyadh entry-date maximum; post/correct/reverse a daily closing and maintain an operating-day state. Future sales dates are denied by the server. | Implemented and Gate-B verified |
 
 ## Seed-vault lifecycle policy
 
@@ -24,4 +27,4 @@ System seed vaults are never deleted. A removal request archives the vault, disa
 - Contracts and controllers do not expose direct journal posting.
 - Read-only reporting remains server-side; the browser does not calculate financial values.
 - This is a private, multi-company system: no SaaS signup or public tenancy behavior.
-- Phase 1 is not closed until the remaining operational history/read endpoints and their route-level tests are recorded.
+- Daily Sales Closing remains awaiting owner acceptance of the narrow native operational journey; it does not authorize Marketing, external integrations, or AI chat UI.

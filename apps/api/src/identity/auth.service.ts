@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { DatabaseService } from '../database/database.service.js';
 import { Prisma, SessionStatus, UserStatus } from '../generated/prisma/client.js';
 import { IdentityTokenError, IdentityTokenService } from './identity-token.service.js';
+import { normalizeLoginIdentifier } from './login-identifier.js';
 import {
   hashRefreshToken,
   verifyPassword,
@@ -48,7 +49,7 @@ export class AuthService {
 
   async signIn(input: SignInInput): Promise<AuthTokenPair> {
     const tenantCode = this.requiredString(input.tenantCode).trim();
-    const loginNormalized = this.normalizeLogin(input.login);
+    const loginNormalized = normalizeLoginIdentifier(input.login, input.tenantCode);
     const password = this.requiredString(input.password);
     const requestId = this.requestId(input.requestId);
 
@@ -297,10 +298,6 @@ export class AuthService {
       },
       sessionExpiresAt: new Date(refresh.claims.exp * 1_000).toISOString(),
     };
-  }
-
-  private normalizeLogin(login: string): string {
-    return this.requiredString(login).normalize('NFKC').trim().toLocaleLowerCase('en-US');
   }
 
   private requestId(value: string): string {

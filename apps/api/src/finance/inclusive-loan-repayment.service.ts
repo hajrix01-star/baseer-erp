@@ -21,6 +21,7 @@ import {
   Prisma,
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
+import { BusinessDateService } from "../business-date/business-date.service.js";
 import { JournalPostingService } from "./journal/journal-posting.service.js";
 
 const RECORD_REPAYMENT_OPERATION = "finance.inclusive_loan.repayment.record";
@@ -58,6 +59,7 @@ export class InclusiveLoanRepaymentService {
     private readonly database: DatabaseService,
     private readonly idempotency: IdempotencyService,
     private readonly journals: JournalPostingService,
+    private readonly businessDates: BusinessDateService,
   ) {}
 
   async recordRepayment(
@@ -152,6 +154,12 @@ export class InclusiveLoanRepaymentService {
   ): Promise<InclusiveLoanRepaymentReceipt> {
     const amount = positiveAmount(request.amount);
     const businessDate = validDate(request.businessDate);
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      businessDate,
+      'An inclusive-loan repayment cannot use a future business date.',
+    );
     await this.lock(transaction, context, `loan:${request.loanId}`);
     const loan = await transaction.financeInclusiveLoan.findFirst({
       where: {
@@ -271,6 +279,12 @@ export class InclusiveLoanRepaymentService {
     request: ReverseInclusiveLoanRepaymentRequest,
   ): Promise<InclusiveLoanRepaymentReceipt> {
     const businessDate = validDate(request.businessDate);
+    await this.businessDates.assertNotFutureInTransaction(
+      transaction,
+      context,
+      businessDate,
+      'An inclusive-loan repayment reversal cannot use a future business date.',
+    );
     const reason = requiredText(
       request.reason,
       1_000,

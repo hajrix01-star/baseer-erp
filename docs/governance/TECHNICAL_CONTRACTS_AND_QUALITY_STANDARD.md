@@ -56,6 +56,12 @@ Every API capability has a versioned, typed contract before UI work begins.
 - Each write command declares validation, confirmation phrase where needed, idempotency-key requirement, canonical request-hash behavior, and replay/conflict receipt.
 - Dates use business-date intent, not browser-generated date boundaries.
 
+### Authentication identifiers
+
+- A user may sign in with either a full email address or a short username. Only the server resolves a short username, using the authenticated tenant code, to a deterministic tenant-local email-shaped identity.
+- The browser never constructs, stores, or treats the resolved address as authority. Rate-limit keys use the resolved identifier so email and short-form attempts cannot bypass the same limit.
+- A short username is lowercase ASCII (`a-z`, `0-9`, `.`, `_`, `-`), 3–64 characters, unique per tenant, and is only a convenience presentation. The stored identity remains the normalized email-shaped value.
+
 ### Output contract
 
 - Responses are narrow, intentional projections. Never return raw ORM/database objects.
@@ -64,6 +70,8 @@ Every API capability has a versioned, typed contract before UI work begins.
 - Contracts are backward compatible within a released version. Breaking changes require a new version or approved migration path.
 
 ## 5. Web adapters and the no-business-logic rule
+
+The adapter may read only the module’s published server projection. Any financial display must be a journal-reconciled read model; operational/provider facts must carry provenance, freshness and quality in accordance with `FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md`.
 
 Each module has a typed web adapter that is the only client code allowed to call its HTTP endpoints.
 
@@ -132,6 +140,10 @@ No test may hide type errors using `any`, `as any`, or `as never`.
 
 ## 11. Performance and observability
 
+- Each native workspace declares its **request budget** in its discovery/acceptance record. A normal initial load must use one bounded workspace read-model request, plus only truly global session/context reads shared by the shell. A screen must not fan out into repeated HTTP reads for its own cards, filters, permissions, and summary.
+- A write receipt either contains the refreshed projection needed by the current screen or names the one bounded refresh request that follows. Reloading a page through many unrelated reads after every save is prohibited.
+- Server-owned preview is allowed only for authoritative validation/calculation. It must be debounced, cancel stale in-flight work where practical, and never be used to calculate money in the browser.
+- Every module completion review records: initial-load request count, post-write request count, preview behavior, largest response size, and evidence that no duplicate company/session/context request is made by sibling components.
 - Performance budgets are established per critical route before release: server latency, query count, payload size, client load, and error rate.
 - List endpoints paginate and filter server-side; they do not return unbounded tables for browser filtering.
 - Large imports/exports run as observable jobs with status, cancellation/recovery policy, audit, and user-safe receipts.

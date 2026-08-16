@@ -4,11 +4,13 @@
 
 ## Current truth
 
+The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md`: every money value in a later report, Marketing view, Command Center card or AI answer must come from a journal-reconciled server read model; operational and provider facts add provenance-aware context only.
+
 - Platform and Finance Phase 1 backend are verified on the isolated BASEER Docker test database.
 - Finance Phase 2 native UI remains deferred; it is not cancelled.
 - Marketing Performance & Google Hub is designed but has no backend models, commands, Google connection, facts, UI, or external calls yet.
 - AI Platform is configuration foundation only. It has no provider call, conversation, memory, read tool, or chat UI.
-- The active delivery path is **Daily Sales Closing as the official sales source**, then Marketing Performance. No UI or AI chat starts before their source and read-model gates pass.
+- The active delivery path is **Daily Sales Closing as the official sales source**, then Marketing Performance. The Daily Sales vertical slice records one end-of-day aggregate copied from an external POS system, as fixed in `DAILY_SALES_CLOSING_OPERATIONAL_PURPOSE_DECISION_2026-08-16.md`; it is not POS. No Marketing UI or AI chat starts before their source and read-model gates pass.
 
 ## Phase 0 — Build-control baseline
 
@@ -19,14 +21,15 @@
 
 **Closure:** documents, source status, encoding checks, and baseline evidence agree.
 
-## Phase 1 — Daily Sales Closing backend
+## Phase 1 — Daily Sales Closing vertical slice
 
-1. Operational calendar with `OPEN`, `CLOSED_HOLIDAY`, `PARTIAL`, and `PENDING` data states.
-2. Daily Sales Closing only — not POS — with gross/VAT, channels tied to vaults, and management-only cash-on-hand observation.
+1. Operational calendar with `OPEN`, `CLOSED`, and `PARTIAL` operational states, with `PENDING` as a derived data state and `HOLIDAY` recorded as a closed-day source.
+2. Daily Sales Closing only — not POS — where an employee records the external POS end-of-day aggregate, with gross/VAT, channels tied to vaults, and an explicit management-only cash handover to the accountant. The handover is separate from revenue, collection channels, vault balances and journals.
 3. Open-period correction and closed/locked-period reversal policy through the journal.
 4. Company-scoped contracts, RLS, authorization, idempotency, audit, serials, tests, and server read receipts.
+5. A narrow native operational UI for the calendar and daily close only, with bilingual/RTL behavior, authorized API use and error/retry states. It is not a dashboard or POS.
 
-**Closure:** daily sales is an authoritative, versioned source that distinguishes a non-working day from a zero-sales day.
+**Closure:** the backend, database/HTTP/concurrency tests and the narrow operating journey are accepted together. Daily sales is an authoritative, versioned source that distinguishes a non-working day from a zero-sales day.
 
 ## Phase 2 — Marketing Performance Gate A
 
@@ -66,7 +69,7 @@
 
 1. Implement AI Gateway adapter, read-only tools, citations, evaluations and encrypted bounded conversation memory.
 2. Run internal read-only evaluation using verified Marketing, Sales, Finance and report read models.
-3. Add the floating Baseer Assistant UI only after isolation, prompt-injection, source/freshness and no-side-effect tests pass.
+3. Add the floating Basira Assistant UI only after isolation, prompt-injection, source/freshness and no-side-effect tests pass.
 
 **Closure:** the assistant explains verified facts and uncertainty; it cannot perform financial, advertising, publishing or configuration side effects.
 
@@ -85,3 +88,9 @@
 - Google Ads/GBP write actions, automated review replies, social publishing, or external spend;
 - AI chat UI before verified source read models;
 - browser-calculated business values.
+
+## Queued finance-operational scope — Inbound Evidence & Payment Hub
+
+The owner-approved scope in `INBOUND_EVIDENCE_AND_PAYMENT_HUB_SCOPE_DECISION_2026-08-15.md` is queued and does not replace the active Daily Sales Closing scope or the following Marketing Performance Gate A. It covers work-only central email classification, evidence received through Telegram and later SMS, trusted company bank-account/service-identifier matching, manual company-first recurring-expense selection, payment orders and payment vouchers.
+
+It starts only after Daily Sales Closing is accepted and Marketing Gate A has closed, unless the owner records a specific priority exception. It begins as a backend vertical slice: trusted evidence records and company isolation (E1), then authorized payment order/voucher plus journal integration (E2), then separately approved email/Telegram/SMS and AI analysis adapters (E3), and finally native UI (E4). Bank-statement reconciliation, automatic payment, automatic posting and unrestricted mailbox ingestion remain excluded.

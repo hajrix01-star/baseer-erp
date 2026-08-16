@@ -54,6 +54,8 @@ An unanswered question is a blocker, not an implicit approval.
 | What are the input steps, defaults, and validations? | Workflow map from entry to success/failure/retry/cancel |
 | Which behaviors are deliberate exceptions? | Explicit list, e.g. negative vault balances, historical owner amendment, gross VAT display |
 | What is the source of truth? | The canonical domain/ledger/document source; never a browser total or duplicate table |
+
+The answer must apply `FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md`: money uses a journal-reconciled server projection; operational, provider and AI facts retain separate provenance and cannot become financial truth.
 | What changes after the command? | Document/status, serial, ledger, VAT, vault, inventory/HR effect, audit, notifications, attachments |
 | Which permissions and scopes apply? | Exact permission plus tenant/company/owner boundaries |
 | Which data must migrate? | Mapping, legacy IDs, ambiguity policy, reconciliation fields |

@@ -19,8 +19,9 @@ date-picker implementation.
 | Date meanings | `businessDate` is a SQL/calendar `DATE`; `issuedAt` is an immutable event `TIMESTAMPTZ`; creation/update/cancellation/audit times are technical instants. No conversion may merge these meanings. |
 | Month semantics | `month=YYYY-MM` is the full Gregorian civil month in the company Saudi timezone, from day 1 through its last day. Period movement starts at zero; a cumulative value is a separate explicit `asOf` request. |
 | Historical work | A valid prior `businessDate` is allowed by the kernel. Authorization for amendment/cancellation belongs to the command policy; the kernel must not introduce a fiscal close or automatic historical block. |
+| Future financial entry | Any financial posting—sales, purchase, payment, reversal, loan opening or loan repayment—may never use a `businessDate` later than the current server-owned Riyadh business date. Future due dates and installment schedules remain valid planning data and are not postings. |
 | Company scope | `CompanyContextService` verifies the live company before resolving its date. Proposed read capability: `platform.business-date.read`. No company identifier is accepted in a request body. |
-| Migration impact | No Noorix data or fiscal-period status migrates in this slice. Future migrated document dates map as literal `DATE` values; legacy timestamp ambiguity requires a dedicated migration/reconciliation record. |
+| Migration impact | No Noorix data or fiscal-period status migrates in this slice. A legacy date later than the cutover business date is an exception for owner review; it must not become a user-created future financial posting. Legacy timestamp ambiguity requires a dedicated migration/reconciliation record. |
 | Completion definition | A verified company receives a Riyadh current-date receipt; strict dates/months/ranges resolve on the server; invalid/leap/date-order cases fail safely; Riyadh midnight boundaries are deterministic under a test clock; no closure behavior exists. |
 
 ## Preserve / Harden / Correct / Defer

@@ -18,9 +18,9 @@ The schedule may be created from the normal company working-week pattern and kno
 
 For every selected authorized company and period, Baseer shall provide both server-calculated metrics:
 
-| Metric | Formula | Meaning |
-| --- | --- | --- |
-| **Period daily average** | Total sales ÷ all calendar days in the selected period | Overall financial performance across the passage of time. A closed day contributes zero sales. |
+| Metric                    | Formula                                                                       | Meaning                                                                                                                       |
+| ------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **Period daily average**  | Total sales ÷ all calendar days in the selected period                        | Overall financial performance across the passage of time. A closed day contributes zero sales.                                |
 | **Operating-day average** | Total sales ÷ scheduled open or partial operating days in the selected period | Sales strength when the company was expected to operate. Fully closed days, including Eid and planned holidays, are excluded. |
 
 The interface, report, printout, and export must show the metric name and its denominator: calendar days or operating days. They must not silently substitute one for the other.
@@ -55,3 +55,7 @@ Over seven calendar days, six operating days each have sales of SAR 1,000 and on
 - Operating-day average = SAR 6,000 ÷ 6 = **SAR 1,000.00**.
 
 If the seventh day was scheduled open but its closing was omitted, Baseer must flag it as incomplete rather than report either average as final.
+
+## 2026-08-16 implementation amendment — Day Off
+
+The approved native Daily Sales Closing window includes **No work today / Day Off** as a documented operational-calendar command, not as a zero-value sales closing. It requires a reason (weekly closure, holiday, maintenance, emergency, or other with a note), creates no journal, tax, vault movement, or sales summary, and is visible in calendar/report metadata. `closed` remains excluded from the operating-day average and included as zero only in the period daily average. An open or partial day without a saved active closing remains pending/incomplete data; it is never inferred to be a Day Off.

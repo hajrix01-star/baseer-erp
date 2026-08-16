@@ -1,0 +1,36 @@
+name: Verify BASEER ERP
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: git diff --check
+      - run: npm run check:architecture
+      - run: npm run check:permissions
+      - run: npm run check:web-financial-boundaries
+      - run: npm run check --workspace @baseer-erp/contracts
+      - run: npm run check --workspace @baseer-erp/api
+      - run: npm run check --workspace @baseer-erp/web
+      - run: npm run build --workspace @baseer-erp/contracts
+      - run: npm run build --workspace @baseer-erp/output-platform
+      - run: npm run build --workspace @baseer-erp/api
+      - run: node scripts/run-auth-rate-limit-verification.mjs
+      - run: npm run build --workspace @baseer-erp/web
+      - run: npm run verify:web-budget
+      - run: git diff --check
+      - run: npm audit --omit=dev

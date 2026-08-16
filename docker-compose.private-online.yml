@@ -1,4 +1,4 @@
-﻿name: baseer-erp-private-online
+name: baseer-erp-private-online
 
 services:
   postgres:
@@ -63,11 +63,29 @@ services:
       - web
       - database
 
+  web:
+    image: baseer-erp-web:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    expose:
+      - "8080"
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web
+
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
       - api
+      - web
     environment:
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
     ports:

@@ -2,6 +2,7 @@
 
 Date: 2026-08-15
 Status: Mandatory design contract before Marketing database models, syncs or UI.
+`docs/governance/FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md` applies: financial metrics consume only journal-reconciled server projections, while provider metrics remain separately sourced factual observations.
 Timezone: Company business timezone; `Asia/Riyadh` by default.
 
 ## Rule of truth

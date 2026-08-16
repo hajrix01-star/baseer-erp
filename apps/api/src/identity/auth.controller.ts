@@ -17,10 +17,15 @@ import {
 import { RequestContext } from '../observability/request-context.js';
 
 import { AuthService } from './auth.service.js';
+import { normalizeLoginIdentifier } from './login-identifier.js';
+import { SignInRateLimitService } from './sign-in-rate-limit.service.js';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly auth: AuthService) {}
+  constructor(
+    private readonly auth: AuthService,
+    private readonly signInRateLimit: SignInRateLimitService,
+  ) {}
 
   @Post('sign-in')
   @HttpCode(200)
@@ -34,12 +39,23 @@ export class AuthController {
       throw this.unauthorized();
     }
 
-    return this.sessionReceipt(await this.auth.signIn({
-      tenantCode: this.tenantCode(tenantCode),
-      login: request.data.login,
-      password: request.data.password,
-      requestId: this.requestId(requestId),
-    }));
+    const normalizedTenantCode = this.tenantCode(tenantCode);
+    const normalizedLogin = normalizeLoginIdentifier(request.data.login, normalizedTenantCode);
+    const key = this.signInRateLimit.key(normalizedTenantCode, normalizedLogin);
+    this.signInRateLimit.assertAllowed(key);
+    try {
+      const session = await this.auth.signIn({
+        tenantCode: normalizedTenantCode,
+        login: request.data.login,
+        password: request.data.password,
+        requestId: this.requestId(requestId),
+      });
+      this.signInRateLimit.recordSuccess(key);
+      return this.sessionReceipt(session);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) this.signInRateLimit.recordFailure(key);
+      throw error;
+    }
   }
 
   @Post('refresh')

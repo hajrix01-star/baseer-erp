@@ -1,0 +1,96 @@
+export type AdministrationPermissionDefinition = Readonly<{
+  code: string;
+  module: string;
+  nameAr: string;
+  nameEn: string;
+  risk: "standard" | "sensitive";
+}>;
+
+/**
+ * The server owns this catalogue. Administrators can compose roles from these
+ * stable capabilities, but they cannot invent permission keys in the UI.
+ */
+export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissionDefinition[] = [
+  { code: "administration.companies.read", module: "administration", nameAr: "عرض الشركات", nameEn: "View companies", risk: "standard" },
+  { code: "administration.companies.manage", module: "administration", nameAr: "إدارة الشركات وإعداداتها", nameEn: "Manage companies and settings", risk: "sensitive" },
+  { code: "administration.users.read", module: "administration", nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard" },
+  { code: "administration.users.manage", module: "administration", nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive" },
+  { code: "administration.roles.read", module: "administration", nameAr: "عرض الأدوار والصلاحيات", nameEn: "View roles and permissions", risk: "standard" },
+  { code: "administration.roles.manage", module: "administration", nameAr: "إدارة الأدوار والصلاحيات", nameEn: "Manage roles and permissions", risk: "sensitive" },
+
+  { code: "finance.setup.write", module: "finance", nameAr: "تهيئة المالية للشركة", nameEn: "Initialize company finance", risk: "sensitive" },
+  { code: "finance.configuration.read", module: "finance", nameAr: "عرض إعدادات المالية", nameEn: "View finance configuration", risk: "standard" },
+  { code: "finance.periods.write", module: "finance", nameAr: "إدارة الفترات المالية", nameEn: "Manage fiscal periods", risk: "sensitive" },
+  { code: "finance.vaults.write", module: "finance", nameAr: "إدارة الخزائن", nameEn: "Manage vaults", risk: "sensitive" },
+  { code: "finance.foundation.write", module: "finance", nameAr: "نسخ وإعداد البيانات المالية الأساسية", nameEn: "Copy and initialize finance master data", risk: "sensitive" },
+  { code: "finance.suppliers.read", module: "finance", nameAr: "عرض الموردين", nameEn: "View suppliers", risk: "standard" },
+  { code: "finance.supplier_dues.read", module: "finance", nameAr: "عرض ذمم الموردين", nameEn: "View supplier dues", risk: "standard" },
+  { code: "finance.supplier_dues.write", module: "finance", nameAr: "إنشاء وسداد وعكس ذمم الموردين", nameEn: "Create, pay, and reverse supplier dues", risk: "sensitive" },
+  { code: "finance.loans.write", module: "finance", nameAr: "إدارة القروض وسدادها", nameEn: "Manage inclusive loans and repayments", risk: "sensitive" },
+
+  { code: "finance.daily_sales.read", module: "operations", nameAr: "عرض سجل المبيعات", nameEn: "View sales register", risk: "standard" },
+  { code: "finance.daily_sales.history.read_all", module: "operations", nameAr: "عرض كامل سجل المبيعات", nameEn: "View full sales history", risk: "standard" },
+  { code: "finance.daily_sales.create", module: "operations", nameAr: "إدخال تقفيل المبيعات", nameEn: "Enter sales closings", risk: "sensitive" },
+  { code: "finance.daily_sales.correct", module: "operations", nameAr: "تصحيح تقفيل المبيعات", nameEn: "Correct sales closings", risk: "sensitive" },
+  { code: "finance.daily_sales.reverse", module: "operations", nameAr: "عكس تقفيل المبيعات", nameEn: "Reverse sales closings", risk: "sensitive" },
+  { code: "finance.operational_calendar.manage", module: "operations", nameAr: "توثيق أيام بدون عمل", nameEn: "Manage non-operating days", risk: "sensitive" },
+  // Compatibility only for roles created before the narrower daily-sales split.
+  { code: "finance.daily_sales.write", module: "operations", nameAr: "إدخال وتقفيل مبيعات قديم", nameEn: "Legacy sales-closing write", risk: "sensitive" },
+
+  { code: "platform.files.read", module: "platform", nameAr: "عرض الملفات", nameEn: "View files", risk: "standard" },
+  { code: "platform.files.write", module: "platform", nameAr: "إضافة ملفات", nameEn: "Add files", risk: "sensitive" },
+  { code: "platform.business-date.read", module: "platform", nameAr: "عرض تاريخ العمل", nameEn: "View business date", risk: "standard" },
+  { code: "platform.observability.read", module: "platform", nameAr: "عرض حالة التشغيل", nameEn: "View operational health", risk: "standard" },
+  { code: "platform.output.preview", module: "platform", nameAr: "معاينة الطباعة", nameEn: "Preview output", risk: "standard" },
+  { code: "platform.output.export", module: "platform", nameAr: "تصدير التقارير", nameEn: "Export output", risk: "sensitive" },
+
+  { code: "platform.ai.configuration.read", module: "ai", nameAr: "عرض إعداد مزود الذكاء", nameEn: "View AI provider configuration", risk: "sensitive" },
+  { code: "platform.ai.configuration.write", module: "ai", nameAr: "تعديل إعداد مزود الذكاء", nameEn: "Change AI provider configuration", risk: "sensitive" },
+  { code: "platform.ai.provider.configure", module: "ai", nameAr: "تهيئة مزود الذكاء", nameEn: "Configure AI provider", risk: "sensitive" },
+  { code: "platform.ai.identity.read", module: "ai", nameAr: "عرض هوية الذكاء للشركة", nameEn: "View company AI identity", risk: "standard" },
+  { code: "platform.ai.identity.write", module: "ai", nameAr: "تعديل هوية الذكاء للشركة", nameEn: "Change company AI identity", risk: "sensitive" },
+  { code: "platform.ai.identity.create_version", module: "ai", nameAr: "إنشاء إصدار هوية الذكاء للشركة", nameEn: "Create company AI identity version", risk: "sensitive" },
+  { code: "platform.ai.system_identity.read", module: "ai", nameAr: "عرض هوية بصيرة المركزية", nameEn: "View central Baseerah identity", risk: "standard" },
+  { code: "platform.ai.system_identity.write", module: "ai", nameAr: "تعديل هوية بصيرة المركزية", nameEn: "Change central Baseerah identity", risk: "sensitive" },
+  { code: "platform.ai.system_identity.create_version", module: "ai", nameAr: "إنشاء إصدار هوية بصيرة المركزية", nameEn: "Create central Baseerah identity version", risk: "sensitive" },
+] as const;
+
+const DAILY_SALES_MANAGE = [
+  "finance.daily_sales.create",
+  "finance.daily_sales.correct",
+  "finance.daily_sales.reverse",
+  "finance.operational_calendar.manage",
+] as const;
+
+const COMPANY_MANAGER_PERMISSIONS = [
+  "finance.setup.write",
+  "finance.configuration.read",
+  "finance.periods.write",
+  "finance.vaults.write",
+  "finance.foundation.write",
+  "finance.suppliers.read",
+  "finance.supplier_dues.read",
+  "finance.supplier_dues.write",
+  "finance.loans.write",
+  "finance.daily_sales.read",
+  "finance.daily_sales.history.read_all",
+  ...DAILY_SALES_MANAGE,
+  "platform.files.read",
+  "platform.files.write",
+  "platform.business-date.read",
+  "platform.output.preview",
+  "platform.output.export",
+] as const;
+
+export const SYSTEM_ROLE_TEMPLATES = [
+  { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
+  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["finance.configuration.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.write", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
+  { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
+  { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },
+  { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["finance.daily_sales.read", "finance.configuration.read", "finance.supplier_dues.read", "platform.business-date.read"] },
+] as const;
+
+export function permissionCodesAreKnown(codes: readonly string[]): boolean {
+  const known = new Set(ADMINISTRATION_PERMISSION_CATALOG.map((item) => item.code));
+  return codes.length > 0 && codes.every((code) => known.has(code));
+}

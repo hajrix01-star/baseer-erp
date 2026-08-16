@@ -3,12 +3,18 @@
 
   header {
     -Server
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
     X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
     Referrer-Policy "no-referrer"
     Permissions-Policy "camera=(), geolocation=(), microphone=()"
+    Cross-Origin-Opener-Policy "same-origin"
+    Content-Security-Policy "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'"
   }
 
-  reverse_proxy api:5200
+  @api path /v1/*
+  reverse_proxy @api api:5200
+  reverse_proxy web:8080
 
   log {
     output stdout
