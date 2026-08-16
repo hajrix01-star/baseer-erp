@@ -19,11 +19,13 @@ const fixture = {
   userId: randomUUID(),
   cashierUserId: randomUUID(),
   companyId: randomUUID(),
+  tenantCode: `daily-http-${suffix}`,
 };
 let app;
 
 try {
   await seedFixture();
+  process.env.BASEER_SYSTEM_TENANT_CODE = fixture.tenantCode;
   const [
     { AppModule },
     { AuthService },
@@ -49,7 +51,7 @@ try {
     actorUserId: fixture.userId,
   };
   await setup.initialize(context, {
-    fiscalPeriodNameAr: "فترة HTTP",
+    fiscalPeriodNameAr: "ÙØªØ±Ø© HTTP",
     fiscalPeriodNameEn: "HTTP test period",
     fiscalPeriodStartDate: date("2026-01-01"),
     fiscalPeriodEndDate: date("2026-12-31"),
@@ -75,13 +77,11 @@ try {
   );
   const auth = app.get(AuthService);
   const session = await auth.signIn({
-    tenantCode: `daily-http-${suffix}`,
     login: `daily-http-${suffix}@baseer.test`,
     password: `Gate-${suffix}`,
     requestId: randomUUID(),
   });
   const cashierSession = await auth.signIn({
-    tenantCode: `daily-http-${suffix}`,
     login: `daily-cashier-${suffix}@baseer.test`,
     password: `Cashier-${suffix}`,
     requestId: randomUUID(),
@@ -93,7 +93,6 @@ try {
     customerCount: 2,
     allocations: [{ vaultId: cashVault.id, grossAmount: "115.0000" }],
     cashHandoverAmount: "75.0000",
-    cashHandoverVaultId: cashVault.id,
     idempotencyKey: randomUUID(),
   };
   const unauthenticated = await server.inject({
@@ -280,7 +279,6 @@ try {
       ...body,
       businessDate: "2026-08-14",
       cashHandoverAmount: undefined,
-      cashHandoverVaultId: undefined,
       idempotencyKey: randomUUID(),
     },
   });
@@ -341,7 +339,7 @@ try {
 }
 
 async function seedFixture() {
-  const tenantCode = `daily-http-${suffix}`;
+  const tenantCode = fixture.tenantCode;
   await pool.query(
     'INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)',
     [fixture.tenantId, tenantCode, `Daily HTTP ${suffix}`],
@@ -354,7 +352,7 @@ async function seedFixture() {
     ]);
     const roleId = randomUUID();
     await client.query(
-      `INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, 'مستخدم HTTP', 'HTTP user', $4)`,
+      `INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, 'Ù…Ø³ØªØ®Ø¯Ù… HTTP', 'HTTP user', $4)`,
       [
         fixture.userId,
         fixture.tenantId,
@@ -364,7 +362,7 @@ async function seedFixture() {
     );
     const cashierRoleId = randomUUID();
     await client.query(
-      `INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, 'كاشير HTTP', 'HTTP cashier', $4)`,
+      `INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, 'ÙƒØ§Ø´ÙŠØ± HTTP', 'HTTP cashier', $4)`,
       [
         fixture.cashierUserId,
         fixture.tenantId,
@@ -374,7 +372,7 @@ async function seedFixture() {
     );
     await client.query(
       'INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4)',
-      [fixture.companyId, fixture.tenantId, "شركة HTTP", "HTTP company"],
+      [fixture.companyId, fixture.tenantId, "Ø´Ø±ÙƒØ© HTTP", "HTTP company"],
     );
     await client.query(
       'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5)',
@@ -382,7 +380,7 @@ async function seedFixture() {
         roleId,
         fixture.tenantId,
         `DAILY_HTTP_${suffix}`,
-        "دور HTTP",
+        "Ø¯ÙˆØ± HTTP",
         "HTTP role",
       ],
     );
@@ -398,7 +396,7 @@ async function seedFixture() {
     );
     await client.query(
       'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5)',
-      [cashierRoleId, fixture.tenantId, `CASHIER_${suffix}`, "كاشير", "Cashier"],
+      [cashierRoleId, fixture.tenantId, `CASHIER_${suffix}`, "ÙƒØ§Ø´ÙŠØ±", "Cashier"],
     );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4)',

@@ -37,3 +37,6 @@
 ## بوابة التسليم
 
 قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق.
+## Release-budget rule (2026-08-16)
+
+The production web budget is **300 KB JavaScript** and **52 KB CSS** (raw generated assets). The CSS ceiling covers the one shared bilingual RTL/LTR application stylesheet and leaves only 4 KB of headroom above the audited baseline. Any increase requires removal of duplicate rules or an explicit UI-system decision; the compressed CSS target remains below 10 KB.

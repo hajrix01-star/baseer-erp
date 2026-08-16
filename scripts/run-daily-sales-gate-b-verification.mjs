@@ -42,7 +42,7 @@ try {
       orderBy: { type: 'asc' },
     });
     const cash = vaults.find((vault) => vault.type === 'CASH');
-    const electronic = vaults.find((vault) => vault.type === 'ELECTRONIC');
+    const electronic = vaults.find((vault) => vault.type === 'APP');
     assert.ok(cash && electronic, 'Expected selected Cash and HungerStation sales channels.');
     return { cashVaultId: cash.id, electronicVaultId: electronic.id };
   });
@@ -216,6 +216,8 @@ async function loadServices() {
     { DailySalesPostingService },
     { OperationalCalendarService },
     { DailySalesService },
+    { DailySalesCommandSupportService },
+    { DailySalesWriteService },
   ] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
@@ -230,6 +232,8 @@ async function loadServices() {
     import('../apps/api/dist/finance/daily-sales-posting.service.js'),
     import('../apps/api/dist/finance/operational-calendar.service.js'),
     import('../apps/api/dist/finance/daily-sales.service.js'),
+    import('../apps/api/dist/finance/daily-sales-command-support.service.js'),
+    import('../apps/api/dist/finance/daily-sales-write.service.js'),
   ]);
   database = new DatabaseService();
   const periods = new FinancePeriodService();
@@ -240,10 +244,12 @@ async function loadServices() {
   const businessDates = new BusinessDateService(database, {}, { now: () => new Date('2026-08-25T12:00:00.000Z') });
   const projections = new DailySalesProjectionService();
   const posting = new DailySalesPostingService(journals, periods, vaults, businessDates);
+  const support = new DailySalesCommandSupportService(idempotency);
+  const writes = new DailySalesWriteService(new DocumentSerialService(database), journals, projections, posting, support);
   return {
     setup: new CompanyFinanceSetupService(database, foundation, periods),
     calendar: new OperationalCalendarService(database, idempotency, projections),
-    dailySales: new DailySalesService(database, idempotency, journals, new DocumentSerialService(database), projections, posting),
+    dailySales: new DailySalesService(database, posting, support, writes),
   };
 }
 

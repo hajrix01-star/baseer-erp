@@ -41,6 +41,7 @@ export type ClosingsReceipt = {
 export type CashHandoverReport = {
   totalCashHandoverAmount: string;
   recordCount: number;
+  hasMore: boolean;
   handovers: Array<{
     closingId: string;
     documentNumber: string;

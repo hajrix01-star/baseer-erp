@@ -11,7 +11,27 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: baseer_erp_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d baseer_erp_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/baseer_erp_test?schema=public
+      BASEER_SYSTEM_TENANT_CODE: baseer-ci-system
+      BASEER_ACCESS_TOKEN_SECRET: baseer-ci-access-token-secret-at-least-32-chars
+      BASEER_REFRESH_TOKEN_SECRET: baseer-ci-refresh-token-secret-at-least-32-chars
+      BASEER_AI_CREDENTIAL_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,6 +40,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma
+      - run: npx prisma migrate deploy --config apps/api/prisma.config.ts
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm run check:architecture
@@ -33,6 +54,8 @@ jobs:
       - run: npm run build --workspace @baseer-erp/output-platform
       - run: npm run build --workspace @baseer-erp/api
       - run: node scripts/run-auth-rate-limit-verification.mjs
+      - run: npm run verify:daily-sales-db
+      - run: npm run verify:daily-sales-http
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run verify:web-budget
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma

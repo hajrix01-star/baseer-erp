@@ -91,33 +91,40 @@ export class DailySalesReadService {
   async listCashHandovers(context: TrustedCompanyActorContext, range: DateRange) {
     this.assertRange(range);
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
-      const handovers = await transaction.financeDailySalesClosing.findMany({
-        where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          status: "POSTED",
-          cashHandoverAmount: { not: null },
-          businessDate: { gte: range.fromBusinessDate, lte: range.toBusinessDate },
-        },
-        orderBy: [{ businessDate: "desc" }, { scope: "asc" }],
-        take: MAX_RANGE_DAYS,
-        select: {
-          id: true,
-          documentNumber: true,
-          businessDate: true,
-          scope: true,
-          cashHandoverAmount: true,
-          cashHandoverVaultId: true,
-          notes: true,
-        },
-      });
-      const total = handovers.reduce(
-        (sum, item) => sum.plus(item.cashHandoverAmount ?? 0),
-        new Prisma.Decimal(0),
-      );
+      const where = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        status: "POSTED" as const,
+        cashHandoverAmount: { not: null },
+        businessDate: { gte: range.fromBusinessDate, lte: range.toBusinessDate },
+      };
+      const [summary, handovers] = await Promise.all([
+        transaction.financeDailySalesClosing.aggregate({
+          where,
+          _sum: { cashHandoverAmount: true },
+          _count: { _all: true },
+        }),
+        transaction.financeDailySalesClosing.findMany({
+          where,
+          orderBy: [{ businessDate: "desc" }, { scope: "asc" }],
+          // The list is intentionally capped for the screen. Totals are always
+          // computed by the aggregate above and hasMore makes truncation explicit.
+          take: MAX_RANGE_DAYS,
+          select: {
+            id: true,
+            documentNumber: true,
+            businessDate: true,
+            scope: true,
+            cashHandoverAmount: true,
+            cashHandoverVaultId: true,
+            notes: true,
+          },
+        }),
+      ]);
       return {
-        totalCashHandoverAmount: total.toFixed(4),
-        recordCount: handovers.length,
+        totalCashHandoverAmount: (summary._sum.cashHandoverAmount ?? new Prisma.Decimal(0)).toFixed(4),
+        recordCount: summary._count._all,
+        hasMore: summary._count._all > handovers.length,
         handovers: handovers.flatMap((item) =>
           item.cashHandoverAmount
             ? [{
@@ -134,7 +141,6 @@ export class DailySalesReadService {
       };
     });
   }
-
   async listShiftSummary(context: TrustedCompanyActorContext, range: DateRange) {
     const closings = await this.listClosings(context, range);
     const scopes = ["MORNING", "EVENING", "ALL"] as const;

@@ -945,12 +945,13 @@ model FinanceInclusiveLoanInstallmentPlan {
 
   company        Company              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   loan           FinanceInclusiveLoan @relation(fields: [loanId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  financeVault   FinanceVault?        @relation(fields: [financeVaultId], references: [id])
   financeVaultId String?              @db.Uuid
+  financeVault   FinanceVault?        @relation(fields: [financeVaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([loanId, installmentNo])
   @@index([tenantId, companyId, loanId, dueDate])
+  @@index([tenantId, companyId, financeVaultId])
 }
 
 model AiProviderConfiguration {

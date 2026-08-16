@@ -654,6 +654,7 @@ export const dailySalesCashHandoversReceiptSchema = z
     toBusinessDate: z.date(),
     totalCashHandoverAmount: financeAmountSchema,
     recordCount: z.number().int().min(0),
+    hasMore: z.boolean(),
     handovers: z.array(dailySalesCashHandoverItemSchema).max(400),
   })
   .strict();

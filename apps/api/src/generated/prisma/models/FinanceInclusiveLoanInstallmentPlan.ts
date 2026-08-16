@@ -668,8 +668,6 @@ export type FinanceInclusiveLoanInstallmentPlanCreateWithoutFinanceVaultInput = 
 
 export type FinanceInclusiveLoanInstallmentPlanUncheckedCreateWithoutFinanceVaultInput = {
   id?: string
-  tenantId: string
-  companyId: string
   loanId: string
   installmentNo: number
   dueDate: Date | string
@@ -790,8 +788,6 @@ export type FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompany
 
 export type FinanceInclusiveLoanInstallmentPlanCreateManyFinanceVaultInput = {
   id?: string
-  tenantId: string
-  companyId: string
   loanId: string
   installmentNo: number
   dueDate: Date | string
@@ -811,8 +807,6 @@ export type FinanceInclusiveLoanInstallmentPlanUpdateWithoutFinanceVaultInput = 
 
 export type FinanceInclusiveLoanInstallmentPlanUncheckedUpdateWithoutFinanceVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   loanId?: Prisma.StringFieldUpdateOperationsInput | string
   installmentNo?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -822,8 +816,6 @@ export type FinanceInclusiveLoanInstallmentPlanUncheckedUpdateWithoutFinanceVaul
 
 export type FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   loanId?: Prisma.StringFieldUpdateOperationsInput | string
   installmentNo?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string

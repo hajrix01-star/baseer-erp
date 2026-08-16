@@ -142,7 +142,7 @@ export function DailySalesWorkspace({
     setStatus({ kind: "idle", message: "" });
     try {
       if (entryMode === "DAY_OFF") {
-        const note = `DAY_OFF: ${dayOffReason}${dayOffNote.trim() ? ` â€” ${dayOffNote.trim()}` : ""}`;
+        const note = `DAY_OFF: ${dayOffReason}${dayOffNote.trim() ? ` \u2014 ${dayOffNote.trim()}` : ""}`;
         await api(session, "/finance/operational-calendar/days", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
