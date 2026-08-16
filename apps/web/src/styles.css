@@ -2505,7 +2505,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-status-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; font-weight: 700; }
 .administration-status-pill.is-active { background: #e8f7ee; color: #087f5b; }
 .administration-status-pill.is-disabled { background: #f8e9e7; color: #b42318; }
-.administration-membership-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; }
-.administration-membership-actions select { min-width: 150px; }
 @media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-sidebar { height: 100vh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
 @media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
+.administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }

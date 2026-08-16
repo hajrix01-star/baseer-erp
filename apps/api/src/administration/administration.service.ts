@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -93,19 +93,18 @@ export class AdministrationService {
       await this.ensureSystemRoles(tx, context.tenantId);
       const tenant = await tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } });
       const loginNormalized = normalizeLoginIdentifier(request.login, tenant.code);
-      const [company, role, existing] = await Promise.all([
-        tx.company.findFirst({ where: { id: request.companyId, tenantId: context.tenantId, status: CompanyStatus.ACTIVE } }),
+      const [companies, role, existing] = await Promise.all([
+        tx.company.findMany({ where: { id: { in: request.companyIds }, tenantId: context.tenantId, status: CompanyStatus.ACTIVE }, select: { id: true } }),
         tx.role.findFirst({ where: { id: request.roleId, tenantId: context.tenantId } }),
         tx.user.findFirst({ where: { tenantId: context.tenantId, loginNormalized } }),
       ]);
-      if (!company || !role) throw new NotFoundException("Company or role was not found."); if (existing) throw new ConflictException("User login already exists.");
+      if (companies.length !== request.companyIds.length || !role) throw new NotFoundException("Company or role was not found."); if (existing) throw new ConflictException("User login already exists.");
       const id = randomUUID();
       await tx.user.create({ data: { id, tenantId: context.tenantId, loginNormalized, nameAr: request.nameAr, nameEn: request.nameEn, preferredLanguage: request.preferredLanguage, avatarKind: request.avatarKind, passwordHash } });
-      await tx.companyMembership.create({ data: { tenantId: context.tenantId, userId: id, companyId: company.id, roleId: role.id } });
-      await this.audit(tx, context, "administration.user.created", "User", id, null, { companyId: company.id, roleId: role.id }); return { id };
+      await tx.companyMembership.createMany({ data: companies.map((company) => ({ tenantId: context.tenantId, userId: id, companyId: company.id, roleId: role.id })) });
+      await this.audit(tx, context, "administration.user.created", "User", id, null, { companyIds: companies.map((company) => company.id), roleId: role.id }); return { id };
     });
   }
-
   async assignMembership(context: TrustedTenantAdministratorContext, request: AssignAdministrationMembershipRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
@@ -119,6 +118,24 @@ export class AdministrationService {
     });
   }
 
+  async replaceUserAccess(context: TrustedTenantAdministratorContext, userId: string, request: ReplaceAdministrationUserAccessRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const [user, role, companies, prior] = await Promise.all([
+        tx.user.findFirst({ where: { id: userId, tenantId: context.tenantId }, select: { id: true } }),
+        tx.role.findFirst({ where: { id: request.roleId, tenantId: context.tenantId }, select: { id: true } }),
+        tx.company.findMany({ where: { id: { in: request.companyIds }, tenantId: context.tenantId, status: CompanyStatus.ACTIVE }, select: { id: true } }),
+        tx.companyMembership.findMany({ where: { tenantId: context.tenantId, userId }, select: { companyId: true, roleId: true } }),
+      ]);
+      if (!user || !role || companies.length !== request.companyIds.length) throw new NotFoundException("User, company, or role was not found.");
+      await tx.companyMembership.deleteMany({ where: { tenantId: context.tenantId, userId } });
+      await tx.companyMembership.createMany({ data: companies.map((company) => ({ tenantId: context.tenantId, userId, companyId: company.id, roleId: role.id })) });
+      await tx.user.update({ where: { id: userId }, data: { sessionVersion: { increment: 1 } } });
+      await this.revokeUserSessions(tx, context.tenantId, userId);
+      await this.audit(tx, context, "administration.user.access_replaced", "User", userId, { memberships: prior }, { companyIds: companies.map((company) => company.id), roleId: role.id, reason: request.reason });
+      return { updated: true };
+    });
+  }
   async updateUserStatus(context: TrustedTenantAdministratorContext, userId: string, request: UpdateAdministrationUserStatusRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {

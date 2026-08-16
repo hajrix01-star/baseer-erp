@@ -25,8 +25,9 @@ export const administrationUserSchema = z.object({
 export const administrationOverviewReceiptSchema = z.object({ companies: z.array(administrationCompanySchema).max(250), users: z.array(administrationUserSchema).max(500), roles: z.array(administrationRoleSchema).max(250), permissions: z.array(administrationPermissionSchema), owner: z.boolean() }).strict();
 export const createAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64).default("Asia/Riyadh") }).strict();
 export const createAdministrationRoleRequestSchema = z.object({ code: roleCode, nameAr: text160, nameEn: text160, permissionCodes: z.array(permissionCode).min(1).max(120) }).strict();
-export const createAdministrationUserRequestSchema = z.object({ login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema.default("ar"), avatarKind: userAvatarKind.default("INITIALS"), password, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
+export const createAdministrationUserRequestSchema = z.object({ login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema.default("ar"), avatarKind: userAvatarKind.default("INITIALS"), password, companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), roleId: z.string().uuid() }).strict();
 export const assignAdministrationMembershipRequestSchema = z.object({ userId: userIdSchema, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
+export const replaceAdministrationUserAccessRequestSchema = z.object({ roleId: z.string().uuid(), companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), reason: z.string().trim().min(3).max(500) }).strict();
 export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable() }).strict();
 export const uploadAdministrationCompanyLogoRequestSchema = z.object({ fileName: safeFileNameSchema, contentBase64: companyLogoContentBase64 }).strict();
 export const updateAdministrationCompanyStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "ARCHIVED"]), reason: z.string().trim().min(3).max(500).optional() }).strict();
@@ -40,6 +41,7 @@ export type CreateAdministrationCompanyRequest = z.infer<typeof createAdministra
 export type CreateAdministrationRoleRequest = z.infer<typeof createAdministrationRoleRequestSchema>;
 export type CreateAdministrationUserRequest = z.infer<typeof createAdministrationUserRequestSchema>;
 export type AssignAdministrationMembershipRequest = z.infer<typeof assignAdministrationMembershipRequestSchema>;
+export type ReplaceAdministrationUserAccessRequest = z.infer<typeof replaceAdministrationUserAccessRequestSchema>;
 export type UpdateAdministrationCompanyRequest = z.infer<typeof updateAdministrationCompanyRequestSchema>;
 export type UploadAdministrationCompanyLogoRequest = z.infer<typeof uploadAdministrationCompanyLogoRequestSchema>;
 export type UpdateAdministrationRoleRequest = z.infer<typeof updateAdministrationRoleRequestSchema>;
