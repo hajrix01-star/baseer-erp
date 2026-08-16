@@ -1642,7 +1642,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: var(--muted);
   line-height: 1.7;
 }
-.is-active { color: #0a704a; background: #e7f7ed; }
+.is-active { color: var(--brand); background: #e7f7ed; }
 .is-disabled { color: #9b342a; background: #fff0ed; }.administration-user-avatar {
   display: inline-grid;
   width: 42px;
