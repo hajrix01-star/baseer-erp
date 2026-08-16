@@ -74,6 +74,8 @@ export const ModelName = {
   FinanceSupplierDue: 'FinanceSupplierDue',
   FinanceSupplierDuePayment: 'FinanceSupplierDuePayment',
   FinanceJournalEntry: 'FinanceJournalEntry',
+  FinanceOutflowDocument: 'FinanceOutflowDocument',
+  FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceOperationalDay: 'FinanceOperationalDay',
   FinanceDailySalesClosing: 'FinanceDailySalesClosing',
@@ -483,6 +485,48 @@ export const FinanceJournalEntryScalarFieldEnum = {
 } as const
 
 export type FinanceJournalEntryScalarFieldEnum = (typeof FinanceJournalEntryScalarFieldEnum)[keyof typeof FinanceJournalEntryScalarFieldEnum]
+
+
+export const FinanceOutflowDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  kind: 'kind',
+  status: 'status',
+  settlementKind: 'settlementKind',
+  documentNumber: 'documentNumber',
+  supplierId: 'supplierId',
+  categoryId: 'categoryId',
+  supplierInvoiceNumber: 'supplierInvoiceNumber',
+  supplierInvoiceNumberNormalized: 'supplierInvoiceNumberNormalized',
+  supplierInvoiceMissingReason: 'supplierInvoiceMissingReason',
+  businessDate: 'businessDate',
+  supplierInvoiceDate: 'supplierInvoiceDate',
+  grossAmount: 'grossAmount',
+  netAmount: 'netAmount',
+  vatAmount: 'vatAmount',
+  vatRateBasisPoints: 'vatRateBasisPoints',
+  notes: 'notes',
+  journalEntryId: 'journalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceOutflowDocumentScalarFieldEnum = (typeof FinanceOutflowDocumentScalarFieldEnum)[keyof typeof FinanceOutflowDocumentScalarFieldEnum]
+
+
+export const FinanceOutflowAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  documentId: 'documentId',
+  vaultId: 'vaultId',
+  grossAmount: 'grossAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceOutflowAllocationScalarFieldEnum = (typeof FinanceOutflowAllocationScalarFieldEnum)[keyof typeof FinanceOutflowAllocationScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {

@@ -289,6 +289,7 @@ export type FinanceVaultWhereInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
+  outflowAllocations?: Prisma.FinanceOutflowAllocationListRelationFilter
 }
 
 export type FinanceVaultOrderByWithRelationInput = {
@@ -314,6 +315,7 @@ export type FinanceVaultOrderByWithRelationInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingOrderByRelationAggregateInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingOrderByRelationAggregateInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryOrderByRelationAggregateInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationOrderByRelationAggregateInput
 }
 
 export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
@@ -345,6 +347,7 @@ export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
   dailyCashObservations?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
+  outflowAllocations?: Prisma.FinanceOutflowAllocationListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_nameAr" | "companyId_accountId">
 
 export type FinanceVaultOrderByWithAggregationInput = {
@@ -407,6 +410,7 @@ export type FinanceVaultCreateInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateInput = {
@@ -430,6 +434,7 @@ export type FinanceVaultUncheckedCreateInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUpdateInput = {
@@ -452,6 +457,7 @@ export type FinanceVaultUpdateInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateInput = {
@@ -475,6 +481,7 @@ export type FinanceVaultUncheckedUpdateInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateManyInput = {
@@ -720,6 +727,20 @@ export type FinanceVaultUpdateOneRequiredWithoutSupplierDuePaymentsNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutSupplierDuePaymentsInput, Prisma.FinanceVaultUpdateWithoutSupplierDuePaymentsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput>
 }
 
+export type FinanceVaultCreateNestedOneWithoutOutflowAllocationsInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutOutflowAllocationsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+}
+
+export type FinanceVaultUpdateOneRequiredWithoutOutflowAllocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutOutflowAllocationsInput
+  upsert?: Prisma.FinanceVaultUpsertWithoutOutflowAllocationsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutOutflowAllocationsInput, Prisma.FinanceVaultUpdateWithoutOutflowAllocationsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput>
+}
+
 export type FinanceVaultCreateNestedOneWithoutDailyCashObservationsInput = {
   create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutDailyCashObservationsInput, Prisma.FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput>
   connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutDailyCashObservationsInput
@@ -829,6 +850,7 @@ export type FinanceVaultCreateWithoutCompanyInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
@@ -850,6 +872,7 @@ export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutCompanyInput = {
@@ -916,6 +939,7 @@ export type FinanceVaultCreateWithoutAccountInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutAccountInput = {
@@ -936,6 +960,7 @@ export type FinanceVaultUncheckedCreateWithoutAccountInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutAccountInput = {
@@ -983,6 +1008,7 @@ export type FinanceVaultCreateWithoutSupplierDuePaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
@@ -1005,6 +1031,7 @@ export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutSupplierDuePaymentsInput = {
@@ -1042,6 +1069,7 @@ export type FinanceVaultUpdateWithoutSupplierDuePaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
@@ -1058,6 +1086,113 @@ export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
+  account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  accountId: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultCreateOrConnectWithoutOutflowAllocationsInput = {
+  where: Prisma.FinanceVaultWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput>
+}
+
+export type FinanceVaultUpsertWithoutOutflowAllocationsInput = {
+  update: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput>
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput>
+  where?: Prisma.FinanceVaultWhereInput
+}
+
+export type FinanceVaultUpdateToOneWithWhereWithoutOutflowAllocationsInput = {
+  where?: Prisma.FinanceVaultWhereInput
+  data: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutOutflowAllocationsInput, Prisma.FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput>
+}
+
+export type FinanceVaultUpdateWithoutOutflowAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
+  account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1085,6 +1220,7 @@ export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
@@ -1107,6 +1243,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashObservationsInput = {
@@ -1133,6 +1270,7 @@ export type FinanceVaultCreateWithoutDailyCashHandoversInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
@@ -1155,6 +1293,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashHandoversInput = {
@@ -1192,6 +1331,7 @@ export type FinanceVaultUpdateWithoutDailyCashObservationsInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
@@ -1214,6 +1354,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUpsertWithoutDailyCashHandoversInput = {
@@ -1246,6 +1387,7 @@ export type FinanceVaultUpdateWithoutDailyCashHandoversInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
@@ -1268,6 +1410,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
@@ -1289,6 +1432,7 @@ export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
@@ -1311,6 +1455,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesAllocationsInput = {
@@ -1348,6 +1493,7 @@ export type FinanceVaultUpdateWithoutDailySalesAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
@@ -1370,6 +1516,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
@@ -1391,6 +1538,7 @@ export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = {
@@ -1413,6 +1561,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = 
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesChannelSummariesInput = {
@@ -1450,6 +1599,7 @@ export type FinanceVaultUpdateWithoutDailySalesChannelSummariesInput = {
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
@@ -1472,6 +1622,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = 
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
@@ -1493,6 +1644,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
@@ -1515,6 +1667,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanPaymentsInput = {
@@ -1552,6 +1705,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanPaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
@@ -1574,6 +1728,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -1595,6 +1750,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -1617,6 +1773,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanInstallmentsInput = {
@@ -1654,6 +1811,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
@@ -1676,6 +1834,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateManyCompanyInput = {
@@ -1711,6 +1870,7 @@ export type FinanceVaultUpdateWithoutCompanyInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
@@ -1732,6 +1892,7 @@ export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutCompanyInput = {
@@ -1780,6 +1941,7 @@ export type FinanceVaultUpdateWithoutAccountInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
@@ -1800,6 +1962,7 @@ export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutAccountInput = {
@@ -1828,6 +1991,7 @@ export type FinanceVaultCountOutputType = {
   dailyCashObservations: number
   dailyCashHandovers: number
   dailySalesChannelSummaries: number
+  outflowAllocations: number
 }
 
 export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1838,6 +2002,7 @@ export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   dailyCashObservations?: boolean | FinanceVaultCountOutputTypeCountDailyCashObservationsArgs
   dailyCashHandovers?: boolean | FinanceVaultCountOutputTypeCountDailyCashHandoversArgs
   dailySalesChannelSummaries?: boolean | FinanceVaultCountOutputTypeCountDailySalesChannelSummariesArgs
+  outflowAllocations?: boolean | FinanceVaultCountOutputTypeCountOutflowAllocationsArgs
 }
 
 /**
@@ -1899,6 +2064,13 @@ export type FinanceVaultCountOutputTypeCountDailySalesChannelSummariesArgs<ExtAr
   where?: Prisma.FinanceDailySalesChannelSummaryWhereInput
 }
 
+/**
+ * FinanceVaultCountOutputType without action
+ */
+export type FinanceVaultCountOutputTypeCountOutflowAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceOutflowAllocationWhereInput
+}
+
 
 export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1923,6 +2095,7 @@ export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.Internal
   dailyCashObservations?: boolean | Prisma.FinanceVault$dailyCashObservationsArgs<ExtArgs>
   dailyCashHandovers?: boolean | Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>
   dailySalesChannelSummaries?: boolean | Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>
+  outflowAllocations?: boolean | Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeVault"]>
 
@@ -1989,6 +2162,7 @@ export type FinanceVaultInclude<ExtArgs extends runtime.Types.Extensions.Interna
   dailyCashObservations?: boolean | Prisma.FinanceVault$dailyCashObservationsArgs<ExtArgs>
   dailyCashHandovers?: boolean | Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>
   dailySalesChannelSummaries?: boolean | Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>
+  outflowAllocations?: boolean | Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceVaultIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2012,6 +2186,7 @@ export type $FinanceVaultPayload<ExtArgs extends runtime.Types.Extensions.Intern
     dailyCashObservations: Prisma.$FinanceDailySalesClosingPayload<ExtArgs>[]
     dailyCashHandovers: Prisma.$FinanceDailySalesClosingPayload<ExtArgs>[]
     dailySalesChannelSummaries: Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>[]
+    outflowAllocations: Prisma.$FinanceOutflowAllocationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2430,6 +2605,7 @@ export interface Prisma__FinanceVaultClient<T, Null = never, ExtArgs extends run
   dailyCashObservations<T extends Prisma.FinanceVault$dailyCashObservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailyCashObservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesClosingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dailyCashHandovers<T extends Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesClosingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dailySalesChannelSummaries<T extends Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  outflowAllocations<T extends Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3038,6 +3214,30 @@ export type FinanceVault$dailySalesChannelSummariesArgs<ExtArgs extends runtime.
   take?: number
   skip?: number
   distinct?: Prisma.FinanceDailySalesChannelSummaryScalarFieldEnum | Prisma.FinanceDailySalesChannelSummaryScalarFieldEnum[]
+}
+
+/**
+ * FinanceVault.outflowAllocations
+ */
+export type FinanceVault$outflowAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceOutflowAllocation
+   */
+  select?: Prisma.FinanceOutflowAllocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceOutflowAllocation
+   */
+  omit?: Prisma.FinanceOutflowAllocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceOutflowAllocationInclude<ExtArgs> | null
+  where?: Prisma.FinanceOutflowAllocationWhereInput
+  orderBy?: Prisma.FinanceOutflowAllocationOrderByWithRelationInput | Prisma.FinanceOutflowAllocationOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceOutflowAllocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceOutflowAllocationScalarFieldEnum | Prisma.FinanceOutflowAllocationScalarFieldEnum[]
 }
 
 /**

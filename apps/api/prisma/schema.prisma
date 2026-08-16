@@ -130,6 +130,21 @@ enum FinanceRecurringExpenseStatus {
   ARCHIVED
 }
 
+enum FinanceOutflowDocumentKind {
+  PURCHASE
+  EXPENSE
+}
+
+enum FinanceOutflowDocumentStatus {
+  POSTED
+  CANCELLED
+}
+
+enum FinanceOutflowSettlementKind {
+  PAID
+  PAYABLE
+}
+
 enum FinanceInclusiveLoanStatus {
   ACTIVE
   SETTLED
@@ -244,6 +259,7 @@ model Company {
   dailySalesAllocations      FinanceDailySalesAllocation[]
   dailyFinancialSummaries    FinanceDailyFinancialSummary[]
   dailySalesChannelSummaries FinanceDailySalesChannelSummary[]
+  outflowDocuments          FinanceOutflowDocument[]
   aiCompanyIdentities        AiCompanyIdentity[]
   aiExecutionReceipts        AiExecutionReceipt[]
   branding                    CompanyBranding?
@@ -502,6 +518,7 @@ model FinanceCategory {
   dues                     FinanceSupplierDue[]
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
   dailySalesClosings       FinanceDailySalesClosing[]
+  outflowDocuments         FinanceOutflowDocument[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, code])
@@ -529,6 +546,7 @@ model FinanceSupplier {
   dues                     FinanceSupplierDue[]
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
   dailySalesClosings       FinanceDailySalesClosing[]
+  outflowDocuments         FinanceOutflowDocument[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status])
@@ -601,6 +619,7 @@ model FinanceVault {
   dailyCashObservations      FinanceDailySalesClosing[]            @relation("FinanceDailySalesCashObservationVault")
   dailyCashHandovers         FinanceDailySalesClosing[]            @relation("FinanceDailySalesCashHandoverVault")
   dailySalesChannelSummaries FinanceDailySalesChannelSummary[]
+  outflowAllocations         FinanceOutflowAllocation[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, nameAr])
@@ -696,6 +715,7 @@ model FinanceJournalEntry {
   inclusiveLoan        FinanceInclusiveLoan?        @relation("FinanceInclusiveLoanOpeningJournal")
   inclusiveLoanPayment FinanceInclusiveLoanPayment? @relation("FinanceInclusiveLoanPaymentJournal")
   dailySalesClosing    FinanceDailySalesClosing?    @relation("FinanceDailySalesClosingJournal")
+  outflowDocument      FinanceOutflowDocument?      @relation("FinanceOutflowDocumentJournal")
 
   @@unique([id, tenantId, companyId])
   @@unique([reversalOfEntryId, tenantId, companyId])
@@ -704,6 +724,60 @@ model FinanceJournalEntry {
   @@index([tenantId, companyId, fiscalPeriodId, businessDate])
 }
 
+model FinanceOutflowDocument {
+  id                              String                       @id @default(uuid()) @db.Uuid
+  tenantId                        String                       @db.Uuid
+  companyId                       String                       @db.Uuid
+  kind                            FinanceOutflowDocumentKind
+  status                          FinanceOutflowDocumentStatus @default(POSTED)
+  settlementKind                  FinanceOutflowSettlementKind
+  documentNumber                  String                       @db.VarChar(80)
+  supplierId                      String?                      @db.Uuid
+  categoryId                      String                       @db.Uuid
+  supplierInvoiceNumber           String?                      @db.VarChar(160)
+  supplierInvoiceNumberNormalized String?                      @db.VarChar(160)
+  supplierInvoiceMissingReason    String?                      @db.VarChar(500)
+  businessDate                    DateTime                     @db.Date
+  supplierInvoiceDate             DateTime?                    @db.Date
+  grossAmount                     Decimal                      @db.Decimal(18, 4)
+  netAmount                       Decimal                      @db.Decimal(18, 4)
+  vatAmount                       Decimal                      @db.Decimal(18, 4)
+  vatRateBasisPoints              Int                          @default(0)
+  notes                           String?                      @db.VarChar(2000)
+  journalEntryId                  String                       @db.Uuid
+  createdByUserId                 String                       @db.Uuid
+  createdAt                       DateTime                     @default(now()) @db.Timestamptz(6)
+  updatedAt                       DateTime                     @updatedAt @db.Timestamptz(6)
+
+  company      Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  supplier     FinanceSupplier?           @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category     FinanceCategory            @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry FinanceJournalEntry        @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  allocations  FinanceOutflowAllocation[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([journalEntryId, tenantId, companyId])
+  @@unique([companyId, documentNumber])
+  @@index([tenantId, companyId, businessDate, status])
+  @@index([tenantId, companyId, supplierId, businessDate])
+}
+
+model FinanceOutflowAllocation {
+  id          String                @id @default(uuid()) @db.Uuid
+  tenantId    String                @db.Uuid
+  companyId   String                @db.Uuid
+  documentId  String                @db.Uuid
+  vaultId     String                @db.Uuid
+  grossAmount Decimal               @db.Decimal(18, 4)
+  createdAt   DateTime              @default(now()) @db.Timestamptz(6)
+
+  document FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  vault    FinanceVault           @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([documentId, vaultId])
+  @@index([tenantId, companyId, vaultId, createdAt])
+}
 model FinanceJournalLine {
   id             String   @id @default(uuid()) @db.Uuid
   tenantId       String   @db.Uuid

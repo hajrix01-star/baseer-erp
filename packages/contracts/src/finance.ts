@@ -721,3 +721,44 @@ export type ReverseDailySalesClosingRequest = z.infer<
 export type SetOperationalDayRequest = z.infer<
   typeof setOperationalDayRequestSchema
 >;
+
+const financeOutflowKindSchema = z.enum(["PURCHASE", "EXPENSE"]);
+const financeOutflowSettlementSchema = z.enum(["PAID", "PAYABLE"]);
+const financeOutflowStatusSchema = z.enum(["POSTED", "CANCELLED"]);
+
+export const financeOutflowAllocationSchema = z.object({
+  vaultId: z.string().uuid(),
+  grossAmount: financeAmountSchema,
+}).strict();
+
+export const createFinanceOutflowDocumentRequestSchema = z.object({
+  kind: financeOutflowKindSchema,
+  settlementKind: financeOutflowSettlementSchema,
+  categoryId: z.string().uuid(),
+  supplierId: financeSupplierIdSchema.optional(),
+  supplierInvoiceNumber: z.string().trim().min(1).max(160).optional(),
+  supplierInvoiceMissingReason: z.string().trim().min(1).max(500).optional(),
+  businessDate: financeDateSchema,
+  supplierInvoiceDate: financeDateSchema.optional(),
+  grossAmount: financeAmountSchema,
+  isTaxable: z.boolean().default(false),
+  allocations: z.array(financeOutflowAllocationSchema).max(20).default([]),
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const financeOutflowDocumentReceiptSchema = z.object({
+  documentId: z.string().uuid(),
+  documentNumber: z.string().min(1).max(80),
+  journalEntryId: z.string().uuid(),
+  kind: financeOutflowKindSchema,
+  settlementKind: financeOutflowSettlementSchema,
+  status: financeOutflowStatusSchema,
+  grossAmount: financeAmountSchema,
+  netAmount: financeAmountSchema,
+  vatAmount: financeAmountSchema,
+  supplierDueId: z.string().uuid().nullable(),
+}).strict();
+
+export type CreateFinanceOutflowDocumentRequest = z.infer<typeof createFinanceOutflowDocumentRequestSchema>;
+export type FinanceOutflowDocumentReceipt = z.infer<typeof financeOutflowDocumentReceiptSchema>;

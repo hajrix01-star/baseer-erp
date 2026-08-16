@@ -27,6 +27,10 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "finance.supplier_dues.read", module: "finance", nameAr: "عرض ذمم الموردين", nameEn: "View supplier dues", risk: "standard" },
   { code: "finance.supplier_dues.write", module: "finance", nameAr: "إنشاء وسداد وعكس ذمم الموردين", nameEn: "Create, pay, and reverse supplier dues", risk: "sensitive" },
   { code: "finance.loans.write", module: "finance", nameAr: "إدارة القروض وسدادها", nameEn: "Manage inclusive loans and repayments", risk: "sensitive" },
+  { code: "finance.purchase_expense.read", module: "finance", nameAr: "عرض مستندات المشتريات والمصروفات", nameEn: "View purchase and expense documents", risk: "standard" },
+  { code: "finance.purchase_expense.create", module: "finance", nameAr: "إدخال مستندات المشتريات والمصروفات", nameEn: "Create purchase and expense documents", risk: "sensitive" },
+  { code: "finance.purchase_expense.correct", module: "finance", nameAr: "تعديل مستندات المشتريات والمصروفات", nameEn: "Correct purchase and expense documents", risk: "sensitive" },
+  { code: "finance.purchase_expense.cancel", module: "finance", nameAr: "إلغاء مستندات المشتريات والمصروفات", nameEn: "Cancel purchase and expense documents", risk: "sensitive" },
 
   { code: "finance.daily_sales.read", module: "operations", nameAr: "عرض سجل المبيعات", nameEn: "View sales register", risk: "standard" },
   { code: "finance.daily_sales.history.read_all", module: "operations", nameAr: "عرض كامل سجل المبيعات", nameEn: "View full sales history", risk: "standard" },
@@ -86,7 +90,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
 
 export const SYSTEM_ROLE_TEMPLATES = [
   { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
-  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.write", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
+  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
   { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
   { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },
   { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "finance.supplier_dues.read", "platform.business-date.read"] },

@@ -32,6 +32,8 @@ import { SupplierCopyService } from './finance/supplier-copy.service.js';
 import { SupplierDuesService } from './finance/supplier-dues.service.js';
 import { SupplierDueQueriesService } from './finance/supplier-due-queries.service.js';
 import { SupplierDuesController } from './finance/supplier-dues.controller.js';
+import { PurchaseExpenseController } from './finance/purchase-expense.controller.js';
+import { PurchaseExpenseService } from './finance/purchase-expense.service.js';
 import { SupplierDueReportsController } from './finance/supplier-due-reports.controller.js';
 import { RecurringExpenseService } from './finance/recurring-expense.service.js';
 import { InclusiveLoanService } from './finance/inclusive-loan.service.js';
@@ -63,7 +65,7 @@ import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -91,6 +93,7 @@ import { OutputService } from './output/output.service.js';
     FinanceVaultService,
     SupplierCopyService,
     SupplierDuesService,
+    PurchaseExpenseService,
     SupplierDueQueriesService,
     RecurringExpenseService,
     InclusiveLoanService,

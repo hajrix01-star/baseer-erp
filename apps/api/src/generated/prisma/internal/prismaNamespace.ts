@@ -420,6 +420,8 @@ export const ModelName = {
   FinanceSupplierDue: 'FinanceSupplierDue',
   FinanceSupplierDuePayment: 'FinanceSupplierDuePayment',
   FinanceJournalEntry: 'FinanceJournalEntry',
+  FinanceOutflowDocument: 'FinanceOutflowDocument',
+  FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceOperationalDay: 'FinanceOperationalDay',
   FinanceDailySalesClosing: 'FinanceDailySalesClosing',
@@ -449,7 +451,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeJournalLine" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowAllocation" | "financeJournalLine" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2155,6 +2157,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FinanceOutflowDocument: {
+      payload: Prisma.$FinanceOutflowDocumentPayload<ExtArgs>
+      fields: Prisma.FinanceOutflowDocumentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceOutflowDocumentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceOutflowDocumentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceOutflowDocumentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceOutflowDocumentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        findMany: {
+          args: Prisma.FinanceOutflowDocumentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>[]
+        }
+        create: {
+          args: Prisma.FinanceOutflowDocumentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        createMany: {
+          args: Prisma.FinanceOutflowDocumentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceOutflowDocumentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceOutflowDocumentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        update: {
+          args: Prisma.FinanceOutflowDocumentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceOutflowDocumentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceOutflowDocumentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceOutflowDocumentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceOutflowDocumentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowDocumentPayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceOutflowDocumentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceOutflowDocument>
+        }
+        groupBy: {
+          args: Prisma.FinanceOutflowDocumentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceOutflowDocumentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceOutflowDocumentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceOutflowDocumentCountAggregateOutputType> | number
+        }
+      }
+    }
+    FinanceOutflowAllocation: {
+      payload: Prisma.$FinanceOutflowAllocationPayload<ExtArgs>
+      fields: Prisma.FinanceOutflowAllocationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceOutflowAllocationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceOutflowAllocationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceOutflowAllocationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceOutflowAllocationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        findMany: {
+          args: Prisma.FinanceOutflowAllocationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>[]
+        }
+        create: {
+          args: Prisma.FinanceOutflowAllocationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        createMany: {
+          args: Prisma.FinanceOutflowAllocationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceOutflowAllocationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceOutflowAllocationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        update: {
+          args: Prisma.FinanceOutflowAllocationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceOutflowAllocationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceOutflowAllocationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceOutflowAllocationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceOutflowAllocationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceOutflowAllocationPayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceOutflowAllocationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceOutflowAllocation>
+        }
+        groupBy: {
+          args: Prisma.FinanceOutflowAllocationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceOutflowAllocationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceOutflowAllocationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceOutflowAllocationCountAggregateOutputType> | number
+        }
+      }
+    }
     FinanceJournalLine: {
       payload: Prisma.$FinanceJournalLinePayload<ExtArgs>
       fields: Prisma.FinanceJournalLineFieldRefs
@@ -3609,6 +3759,48 @@ export const FinanceJournalEntryScalarFieldEnum = {
 export type FinanceJournalEntryScalarFieldEnum = (typeof FinanceJournalEntryScalarFieldEnum)[keyof typeof FinanceJournalEntryScalarFieldEnum]
 
 
+export const FinanceOutflowDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  kind: 'kind',
+  status: 'status',
+  settlementKind: 'settlementKind',
+  documentNumber: 'documentNumber',
+  supplierId: 'supplierId',
+  categoryId: 'categoryId',
+  supplierInvoiceNumber: 'supplierInvoiceNumber',
+  supplierInvoiceNumberNormalized: 'supplierInvoiceNumberNormalized',
+  supplierInvoiceMissingReason: 'supplierInvoiceMissingReason',
+  businessDate: 'businessDate',
+  supplierInvoiceDate: 'supplierInvoiceDate',
+  grossAmount: 'grossAmount',
+  netAmount: 'netAmount',
+  vatAmount: 'vatAmount',
+  vatRateBasisPoints: 'vatRateBasisPoints',
+  notes: 'notes',
+  journalEntryId: 'journalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceOutflowDocumentScalarFieldEnum = (typeof FinanceOutflowDocumentScalarFieldEnum)[keyof typeof FinanceOutflowDocumentScalarFieldEnum]
+
+
+export const FinanceOutflowAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  documentId: 'documentId',
+  vaultId: 'vaultId',
+  grossAmount: 'grossAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceOutflowAllocationScalarFieldEnum = (typeof FinanceOutflowAllocationScalarFieldEnum)[keyof typeof FinanceOutflowAllocationScalarFieldEnum]
+
+
 export const FinanceJournalLineScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -4246,6 +4438,48 @@ export type ListEnumFinanceJournalEntryStatusFieldRefInput<$PrismaModel> = Field
 
 
 /**
+ * Reference to a field of type 'FinanceOutflowDocumentKind'
+ */
+export type EnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowDocumentKind'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceOutflowDocumentKind[]'
+ */
+export type ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowDocumentKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceOutflowDocumentStatus'
+ */
+export type EnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowDocumentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceOutflowDocumentStatus[]'
+ */
+export type ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowDocumentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceOutflowSettlementKind'
+ */
+export type EnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowSettlementKind'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceOutflowSettlementKind[]'
+ */
+export type ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOutflowSettlementKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'FinanceOperationalDayStatus'
  */
 export type EnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOperationalDayStatus'>
@@ -4600,6 +4834,8 @@ export type GlobalOmitConfig = {
   financeSupplierDue?: Prisma.FinanceSupplierDueOmit
   financeSupplierDuePayment?: Prisma.FinanceSupplierDuePaymentOmit
   financeJournalEntry?: Prisma.FinanceJournalEntryOmit
+  financeOutflowDocument?: Prisma.FinanceOutflowDocumentOmit
+  financeOutflowAllocation?: Prisma.FinanceOutflowAllocationOmit
   financeJournalLine?: Prisma.FinanceJournalLineOmit
   financeOperationalDay?: Prisma.FinanceOperationalDayOmit
   financeDailySalesClosing?: Prisma.FinanceDailySalesClosingOmit

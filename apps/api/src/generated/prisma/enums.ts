@@ -198,6 +198,30 @@ export const FinanceRecurringExpenseStatus = {
 export type FinanceRecurringExpenseStatus = (typeof FinanceRecurringExpenseStatus)[keyof typeof FinanceRecurringExpenseStatus]
 
 
+export const FinanceOutflowDocumentKind = {
+  PURCHASE: 'PURCHASE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type FinanceOutflowDocumentKind = (typeof FinanceOutflowDocumentKind)[keyof typeof FinanceOutflowDocumentKind]
+
+
+export const FinanceOutflowDocumentStatus = {
+  POSTED: 'POSTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type FinanceOutflowDocumentStatus = (typeof FinanceOutflowDocumentStatus)[keyof typeof FinanceOutflowDocumentStatus]
+
+
+export const FinanceOutflowSettlementKind = {
+  PAID: 'PAID',
+  PAYABLE: 'PAYABLE'
+} as const
+
+export type FinanceOutflowSettlementKind = (typeof FinanceOutflowSettlementKind)[keyof typeof FinanceOutflowSettlementKind]
+
+
 export const FinanceInclusiveLoanStatus = {
   ACTIVE: 'ACTIVE',
   SETTLED: 'SETTLED',

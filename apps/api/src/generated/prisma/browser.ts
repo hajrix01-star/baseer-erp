@@ -133,6 +133,16 @@ export type FinanceSupplierDuePayment = Prisma.FinanceSupplierDuePaymentModel
  */
 export type FinanceJournalEntry = Prisma.FinanceJournalEntryModel
 /**
+ * Model FinanceOutflowDocument
+ * 
+ */
+export type FinanceOutflowDocument = Prisma.FinanceOutflowDocumentModel
+/**
+ * Model FinanceOutflowAllocation
+ * 
+ */
+export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
+/**
  * Model FinanceJournalLine
  * 
  */

@@ -650,6 +650,57 @@ export type EnumFinanceJournalEntryStatusWithAggregatesFilter<$PrismaModel = nev
   _max?: Prisma.NestedEnumFinanceJournalEntryStatusFilter<$PrismaModel>
 }
 
+export type EnumFinanceOutflowDocumentKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentKind | Prisma.EnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentKind
+}
+
+export type EnumFinanceOutflowDocumentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentStatus | Prisma.EnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentStatus
+}
+
+export type EnumFinanceOutflowSettlementKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowSettlementKind | Prisma.EnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel> | $Enums.FinanceOutflowSettlementKind
+}
+
+export type EnumFinanceOutflowDocumentKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentKind | Prisma.EnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel>
+}
+
+export type EnumFinanceOutflowDocumentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentStatus | Prisma.EnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel>
+}
+
+export type EnumFinanceOutflowSettlementKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowSettlementKind | Prisma.EnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowSettlementKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowSettlementKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel>
+}
+
 export type EnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceOperationalDayStatus | Prisma.EnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceOperationalDayStatus[] | Prisma.ListEnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
@@ -1514,6 +1565,57 @@ export type NestedEnumFinanceJournalEntryStatusWithAggregatesFilter<$PrismaModel
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFinanceJournalEntryStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFinanceJournalEntryStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentKind | Prisma.EnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentKind
+}
+
+export type NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentStatus | Prisma.EnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentStatus
+}
+
+export type NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowSettlementKind | Prisma.EnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel> | $Enums.FinanceOutflowSettlementKind
+}
+
+export type NestedEnumFinanceOutflowDocumentKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentKind | Prisma.EnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentKind[] | Prisma.ListEnumFinanceOutflowDocumentKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowDocumentKindFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceOutflowDocumentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowDocumentStatus | Prisma.EnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowDocumentStatus[] | Prisma.ListEnumFinanceOutflowDocumentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowDocumentStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowDocumentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowDocumentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceOutflowSettlementKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceOutflowSettlementKind | Prisma.EnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceOutflowSettlementKind[] | Prisma.ListEnumFinanceOutflowSettlementKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceOutflowSettlementKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceOutflowSettlementKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceOutflowSettlementKindFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {
