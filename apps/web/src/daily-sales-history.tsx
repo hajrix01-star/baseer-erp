@@ -1,3 +1,4 @@
+import { DataTable, type DataTableColumn } from "./data-table";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing } from "./daily-sales-client";
 import { formatMoney, formatNumber } from "./number-format";
@@ -16,6 +17,63 @@ export function DailySalesHistory({
   const copy = dailySalesText[language];
   const cancelledLabel = language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
   const recordLabel = language === "ar" ? "\u0627\u0644\u0633\u062c\u0644" : "Record";
+  const columns: readonly DataTableColumn<Closing>[] = [
+    {
+      id: "record",
+      header: recordLabel,
+      cell: (closing) => (
+        <button
+          className="daily-sales-record-link"
+          type="button"
+          onClick={() => onView(closing)}
+        >
+          <strong dir="ltr">{closing.documentNumber}</strong>
+          <small>{closing.businessDate.slice(0, 10)}</small>
+        </button>
+      ),
+    },
+    {
+      id: "scope",
+      header: copy.scope,
+      cell: (closing) => copy[closing.scope.toLowerCase() as "morning" | "evening" | "all"],
+    },
+    {
+      id: "gross",
+      header: copy.gross,
+      cell: (closing) => <span dir="ltr">{formatMoney(closing.grossAmount)}</span>,
+      align: "end",
+      numeric: true,
+    },
+    {
+      id: "customers",
+      header: copy.customers,
+      cell: (closing) => <span dir="ltr">{formatNumber(closing.customerCount)}</span>,
+      align: "end",
+      numeric: true,
+    },
+    {
+      id: "cash-handover",
+      header: copy.cashHandoverShort,
+      cell: (closing) => (
+        <span dir="ltr">
+          {closing.cashHandoverAmount ? formatMoney(closing.cashHandoverAmount) : "\u2014"}
+        </span>
+      ),
+      align: "end",
+      numeric: true,
+    },
+    {
+      id: "status",
+      header: copy.status,
+      cell: (closing) => (
+        <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>
+          {closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}
+        </span>
+      ),
+      align: "center",
+      className: "daily-sales-register__status",
+    },
+  ];
 
   return (
     <section className="daily-sales-history">
@@ -29,48 +87,14 @@ export function DailySalesHistory({
       {closings.length === 0 ? (
         <p className="daily-sales-empty-copy">{copy.noClosings}</p>
       ) : (
-        <div className="daily-sales-register" role="region" aria-label={copy.closings}>
-          <table>
-            <caption className="visually-hidden">{copy.closings}</caption>
-            <thead>
-              <tr>
-                <th scope="col">{recordLabel}</th>
-                <th scope="col">{copy.scope}</th>
-                <th scope="col" className="is-number">{copy.gross}</th>
-                <th scope="col" className="is-number">{copy.customers}</th>
-                <th scope="col" className="is-number">{copy.cashHandoverShort}</th>
-                <th scope="col" className="is-status">{copy.status}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {closings.map((closing) => (
-                <tr key={closing.closingId}>
-                  <td>
-                    <button
-                      className="daily-sales-record-link"
-                      type="button"
-                      onClick={() => onView(closing)}
-                    >
-                      <strong dir="ltr">{closing.documentNumber}</strong>
-                      <small>{closing.businessDate.slice(0, 10)}</small>
-                    </button>
-                  </td>
-                  <td>{copy[closing.scope.toLowerCase() as "morning" | "evening" | "all"]}</td>
-                  <td className="is-number" dir="ltr">{formatMoney(closing.grossAmount)}</td>
-                  <td className="is-number" dir="ltr">{formatNumber(closing.customerCount)}</td>
-                  <td className="is-number" dir="ltr">
-                    {closing.cashHandoverAmount ? formatMoney(closing.cashHandoverAmount) : "\u2014"}
-                  </td>
-                  <td className="is-status">
-                    <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>
-                      {closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          ariaLabel={copy.closings}
+          caption={copy.closings}
+          className="daily-sales-register"
+          columns={columns}
+          rows={closings}
+          rowKey={(closing) => closing.closingId}
+        />
       )}
     </section>
   );

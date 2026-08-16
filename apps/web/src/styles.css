@@ -2776,3 +2776,60 @@ html[dir="ltr"] .mobile-drawer__panel {
     padding: 9px;
   }
 }
+/* Central data-table primitive: semantic, responsive, and ready for every module. */
+.baseer-data-table {
+  overflow-x: auto;
+  border: 1px solid var(--line, #dce6df);
+  border-radius: 16px;
+  background: #fff;
+  scrollbar-color: #b5c9bb transparent;
+}
+.baseer-data-table:focus-visible {
+  outline: 2px solid var(--brand, #087a4a);
+  outline-offset: 3px;
+}
+.baseer-data-table table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+.baseer-data-table th,
+.baseer-data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line, #e4ece6);
+  vertical-align: middle;
+  text-align: start;
+}
+.baseer-data-table th {
+  color: #5d6a63;
+  background: #f8fbf8;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.baseer-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.baseer-data-table tbody tr:hover {
+  background: #f8fbf8;
+}
+.baseer-data-table__end {
+  text-align: end !important;
+}
+.baseer-data-table__center {
+  text-align: center !important;
+}
+.baseer-data-table__numeric {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 640px) {
+  .baseer-data-table {
+    border-radius: 13px;
+  }
+  .baseer-data-table th,
+  .baseer-data-table td {
+    padding: 11px 12px;
+  }
+}
