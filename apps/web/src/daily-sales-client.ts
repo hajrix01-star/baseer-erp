@@ -12,7 +12,7 @@ export type Closing = {
   closingId: string;
   documentNumber: string;
   businessDate: string;
-  scope: "MORNING" | "EVENING" | "ALL";
+  scope: DailySalesScope;
   postingVersion: number;
   grossAmount: string;
   netAmount: string;
@@ -45,14 +45,14 @@ export type CashHandoverReport = {
     closingId: string;
     documentNumber: string;
     businessDate: string;
-    scope: "MORNING" | "EVENING" | "ALL";
+    scope: DailySalesScope;
     cashHandoverAmount: string;
     cashHandoverVaultId: string;
     notes: string | null;
   }>;
 };
 export type ShiftSummary = {
-  scope: "MORNING" | "EVENING" | "ALL";
+  scope: DailySalesScope;
   closingCount: number;
   grossAmount: string;
   customerCount: number;
@@ -85,9 +85,10 @@ export type AvailableCompany = {
   nameEn: string;
   permissionCodes: string[];
 };
+export type DailySalesScope = "MORNING" | "EVENING" | "ALL";
 export type FormState = {
   businessDate: string;
-  scope: "MORNING" | "EVENING" | "ALL";
+  scope: DailySalesScope;
   customerCount: string;
   allocations: Allocation[];
   cashHandoverAmount: string;
@@ -141,6 +142,22 @@ export function initialForm(vaultId = ""): FormState {
     cashHandoverAmount: "",
     cashHandoverVaultId: vaultId,
     notes: "",
+  };
+}
+export type DailySalesShiftForms = Record<DailySalesScope, FormState>;
+export function initialShiftFormsForVaults(
+  vaults: readonly Vault[],
+  businessDate = "",
+): DailySalesShiftForms {
+  const make = (scope: DailySalesScope): FormState => ({
+    ...initialFormForVaults(vaults),
+    businessDate,
+    scope,
+  });
+  return {
+    MORNING: make("MORNING"),
+    EVENING: make("EVENING"),
+    ALL: make("ALL"),
   };
 }
 export function initialFormForVaults(vaults: readonly Vault[]): FormState {

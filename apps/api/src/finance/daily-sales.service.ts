@@ -7,9 +7,11 @@ import { DailySalesCommandSupportService } from "./daily-sales-command-support.s
 import { DailySalesWriteService } from "./daily-sales-write.service.js";
 import type {
   CreateDailySalesClosingRequest,
+  CreateDailySalesClosingBatchRequest,
   CorrectDailySalesClosingRequest,
   DailySalesClosingPreview,
   DailySalesClosingReceipt,
+  DailySalesClosingBatchReceipt,
   DailySalesClosingReversalReceipt,
   DailySalesCommand,
   ReverseDailySalesClosingRequest,
@@ -19,11 +21,13 @@ export type {
   DailySalesAllocationInput,
   DailySalesFields,
   CreateDailySalesClosingRequest,
+  CreateDailySalesClosingBatchRequest,
   CorrectDailySalesClosingRequest,
   ReverseDailySalesClosingRequest,
   DailySalesCommand,
   DailySalesClosingPreview,
   DailySalesClosingReceipt,
+  DailySalesClosingBatchReceipt,
   DailySalesClosingReversalReceipt,
 } from "./daily-sales.types.js";
 
@@ -98,23 +102,62 @@ export class DailySalesService {
           command.request,
           this.support.requestId(),
         );
-        await this.support.complete(
-          transaction,
-          command.context,
-          {
-            receiptId: begun.receiptId,
-            response: {
-              status: 201,
-              headers: null,
-              body: this.support.serialiseReceipt(receipt),
-            },
+        await this.support.complete(transaction, command.context, {
+          receiptId: begun.receiptId,
+          response: {
+            status: 201,
+            headers: null,
+            body: this.support.serialiseReceipt(receipt),
           },
-        );
+        });
         return receipt;
       },
     );
   }
 
+  async createBatch(
+    command: DailySalesCommand<CreateDailySalesClosingBatchRequest>,
+  ): Promise<DailySalesClosingBatchReceipt> {
+    return this.database.inTenantTransaction(
+      command.context.tenantId,
+      async (transaction) => {
+        const begun = await this.support.begin(
+          transaction,
+          command.context,
+          "finance.daily_sales.create_batch",
+          command.idempotencyKey,
+          this.support.requestForBatch(command.request),
+        );
+        if (begun.kind === "replay")
+          return this.support.hydrateBatchReceipt(begun.response.body);
+        if (begun.kind === "in-progress")
+          throw new ConflictException(
+            "The daily-sales batch request is still in progress.",
+          );
+        const closings: DailySalesClosingReceipt[] = [];
+        for (const entry of command.request.entries) {
+          closings.push(
+            await this.writes.createInTransaction(
+              transaction,
+              command.context,
+              { ...entry, businessDate: command.request.businessDate },
+              this.support.requestId(),
+            ),
+          );
+        }
+        const receipt = { closings };
+        await this.support.complete(transaction, command.context, {
+          receiptId: begun.receiptId,
+          response: {
+            status: 201,
+            headers: null,
+            body: this.support.serialiseBatchReceipt(receipt),
+          },
+        });
+        return receipt;
+      },
+    );
+  }
   async correct(
     command: DailySalesCommand<CorrectDailySalesClosingRequest>,
   ): Promise<DailySalesClosingReceipt> {
@@ -140,18 +183,14 @@ export class DailySalesService {
           command.request,
           this.support.requestId(),
         );
-        await this.support.complete(
-          transaction,
-          command.context,
-          {
-            receiptId: begun.receiptId,
-            response: {
-              status: 200,
-              headers: null,
-              body: this.support.serialiseReceipt(receipt),
-            },
+        await this.support.complete(transaction, command.context, {
+          receiptId: begun.receiptId,
+          response: {
+            status: 200,
+            headers: null,
+            body: this.support.serialiseReceipt(receipt),
           },
-        );
+        });
         return receipt;
       },
     );
@@ -187,18 +226,12 @@ export class DailySalesService {
           command.request,
           this.support.requestId(),
         );
-        await this.support.complete(
-          transaction,
-          command.context,
-          {
-            receiptId: begun.receiptId,
-            response: { status: 200, headers: null, body: { ...receipt } },
-          },
-        );
+        await this.support.complete(transaction, command.context, {
+          receiptId: begun.receiptId,
+          response: { status: 200, headers: null, body: { ...receipt } },
+        });
         return receipt;
       },
     );
   }
-
-
 }

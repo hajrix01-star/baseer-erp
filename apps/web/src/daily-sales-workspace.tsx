@@ -6,7 +6,6 @@ import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { DailySalesHistory } from "./daily-sales-history";
 import { DailySalesInsights } from "./daily-sales-insights";
-import { useDailySalesPreview } from "./use-daily-sales-preview";
 import {
   buildDailySalesWhatsAppText,
   openDailySalesWhatsApp,
@@ -16,6 +15,7 @@ import {
   api,
   initialForm,
   initialFormForVaults,
+  initialShiftFormsForVaults,
   monthRange,
   requestId,
   type ActiveSession,
@@ -25,6 +25,8 @@ import {
   type DailySalesEntryMode,
   type DayOffReason,
   type FormState,
+  type DailySalesScope,
+  type DailySalesShiftForms,
   type ShiftSummary,
   type Vault,
 } from "./daily-sales-client";
@@ -46,7 +48,15 @@ export function DailySalesWorkspace({
     null,
   );
   const [shiftSummary, setShiftSummary] = useState<ShiftSummary[]>([]);
-  const [form, setForm] = useState<FormState>(initialForm());
+  const [shiftForms, setShiftForms] = useState<DailySalesShiftForms>(() =>
+    initialShiftFormsForVaults([]),
+  );
+  const [selectedScopes, setSelectedScopes] = useState<DailySalesScope[]>([
+    "ALL",
+  ]);
+  const form = shiftForms[selectedScopes[0] ?? "ALL"];
+  const setForm = (next: FormState) =>
+    setShiftForms((current) => ({ ...current, [next.scope]: next }));
   const [editing, setEditing] = useState<Closing | null>(null);
   const [entryMode, setEntryMode] = useState<DailySalesEntryMode>("CLOSING");
   const [dayOffReason, setDayOffReason] =
@@ -60,12 +70,6 @@ export function DailySalesWorkspace({
   const [entryOpen, setEntryOpen] = useState(false);
   const [reversalTarget, setReversalTarget] = useState<Closing | null>(null);
   const [reversalReason, setReversalReason] = useState("");
-  const { preview, previewLoading, clearPreview } = useDailySalesPreview({
-    open: entryOpen,
-    session,
-    mode: entryMode,
-    form,
-  });
 
   const load = useCallback(async () => {
     const current = activeSession();
@@ -83,10 +87,10 @@ export function DailySalesWorkspace({
     setHistoryLimit(workspace.historyLimit);
     setCashHandover(workspace.cashHandovers);
     setShiftSummary(workspace.shifts);
-    setForm((currentForm) =>
-      currentForm.allocations[0]?.vaultId
-        ? currentForm
-        : initialFormForVaults(workspace.vaults),
+    setShiftForms((currentForms) =>
+      currentForms.ALL.allocations[0]?.vaultId
+        ? currentForms
+        : initialShiftFormsForVaults(workspace.vaults),
     );
     setStatus({ kind: "success", message: copy.loaded });
   }, [copy.loaded, range.from, range.to]);
@@ -105,8 +109,8 @@ export function DailySalesWorkspace({
     setEntryMode("CLOSING");
     setDayOffReason("WEEKLY_CLOSURE");
     setDayOffNote("");
-    setForm(initialFormForVaults(vaults));
-    clearPreview();
+    setShiftForms(initialShiftFormsForVaults(vaults));
+    setSelectedScopes(["ALL"]);
   };
 
   const submit = async (event: React.FormEvent) => {
@@ -122,8 +126,11 @@ export function DailySalesWorkspace({
     }
     if (
       entryMode === "CLOSING" &&
-      !form.allocations.some(
-        (allocation) => allocation.grossAmount.trim().length > 0,
+      selectedScopes.some(
+        (scope) =>
+          !shiftForms[scope].allocations.some(
+            (allocation) => allocation.grossAmount.trim().length > 0,
+          ),
       )
     ) {
       setStatus({ kind: "error", message: copy.enterAmount });
@@ -152,34 +159,49 @@ export function DailySalesWorkspace({
         return;
       }
 
-      const body = {
-        customerCount: Number(form.customerCount),
-        allocations: form.allocations.filter(
+      const toEntry = (draft: FormState) => ({
+        scope: draft.scope,
+        customerCount: Number(draft.customerCount),
+        allocations: draft.allocations.filter(
           (allocation) => allocation.grossAmount.trim().length > 0,
         ),
-        ...(form.cashHandoverAmount
+        ...(draft.cashHandoverAmount
           ? {
-              cashHandoverAmount: form.cashHandoverAmount,
-              cashHandoverVaultId: form.cashHandoverVaultId,
+              cashHandoverAmount: draft.cashHandoverAmount,
+              cashHandoverVaultId: draft.cashHandoverVaultId,
             }
           : {}),
-        ...(form.notes.trim() ? { notes: form.notes.trim() } : {}),
-        idempotencyKey: requestId(),
-      };
+        ...(draft.notes.trim() ? { notes: draft.notes.trim() } : {}),
+      });
+      const entries = selectedScopes.map((scope) => toEntry(shiftForms[scope]));
       if (editing) {
         await api(session, "/finance/daily-sales/closings/correct", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...body, closingId: editing.closingId }),
+          body: JSON.stringify({
+            ...entries[0],
+            closingId: editing.closingId,
+            idempotencyKey: requestId(),
+          }),
+        });
+      } else if (entries.length === 2) {
+        await api(session, "/finance/daily-sales/closings/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            businessDate: form.businessDate,
+            entries,
+            idempotencyKey: requestId(),
+          }),
         });
       } else {
         await api(session, "/finance/daily-sales/closings", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            ...body,
+            ...entries[0],
             businessDate: form.businessDate,
-            scope: form.scope,
+            idempotencyKey: requestId(),
           }),
         });
       }
@@ -312,10 +334,8 @@ export function DailySalesWorkspace({
     setEntryMode(mode);
     setDayOffReason("WEEKLY_CLOSURE");
     setDayOffNote("");
-    setForm({
-      ...initialFormForVaults(vaults),
-      ...(businessDate ? { businessDate } : {}),
-    });
+    setShiftForms(initialShiftFormsForVaults(vaults, businessDate ?? ""));
+    setSelectedScopes(["ALL"]);
     setEntryOpen(true);
   };
 
@@ -359,13 +379,13 @@ export function DailySalesWorkspace({
         open={entryOpen}
         editing={editing}
         vaults={vaults}
-        form={form}
+        forms={shiftForms}
+        selectedScopes={selectedScopes}
+        session={session}
         mode={entryMode}
         dayOffReason={dayOffReason}
         dayOffNote={dayOffNote}
         saving={saving}
-        preview={preview}
-        previewLoading={previewLoading}
         maxBusinessDate={entryDate ?? undefined}
         allowDayOff={canManageOperationalDay}
         onClose={() => {
@@ -373,11 +393,9 @@ export function DailySalesWorkspace({
           resetDialog();
         }}
         onSubmit={submit}
-        onChange={setForm}
-        onModeChange={(mode) => {
-          setEntryMode(mode);
-          clearPreview();
-        }}
+        onFormsChange={setShiftForms}
+        onSelectedScopesChange={setSelectedScopes}
+        onModeChange={setEntryMode}
         onDayOffReasonChange={setDayOffReason}
         onDayOffNoteChange={setDayOffNote}
       />

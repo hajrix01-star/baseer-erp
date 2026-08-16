@@ -2279,3 +2279,100 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
 }
+
+/* Noorix-style shift entry: date and selector once, compact cards per selected shift. */
+.daily-sales-dialog--noorix {
+  width: min(1080px, calc(100vw - 32px));
+  max-height: min(880px, calc(100vh - 28px));
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__form {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  align-items: start;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__mode,
+.daily-sales-dialog--noorix .daily-sales-dialog__date,
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker,
+.daily-sales-dialog--noorix .daily-sales-dialog__day-off,
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-stack,
+.daily-sales-dialog--noorix .daily-sales-dialog__actions {
+  grid-column: 1 / -1;
+}
+.daily-sales-dialog__date {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 12px;
+}
+.daily-sales-dialog__date small {
+  grid-column: 2;
+}
+.daily-sales-dialog__shift-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 12px;
+}
+.daily-sales-dialog__shift-card {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid var(--line, #d6e4da);
+  border-radius: 14px;
+  background: #fcfefd;
+}
+.daily-sales-dialog__shift-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+.daily-sales-dialog__entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.daily-sales-dialog__shift-card fieldset {
+  display: block;
+  padding: 8px;
+}
+.daily-sales-dialog__shift-card fieldset legend {
+  margin-inline: 6px;
+}
+.daily-sales-dialog__shift-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 144px;
+  gap: 9px;
+  align-items: stretch;
+}
+.daily-sales-dialog__shift-footer textarea {
+  min-height: 38px;
+}
+.daily-sales-dialog__recorded-hint {
+  color: var(--muted, #65776d);
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__actions {
+  position: sticky;
+  bottom: -16px;
+  margin: 0 -16px -16px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid var(--line, #d6e4da);
+}
+@media (max-width: 800px) {
+  .daily-sales-dialog--noorix {
+    width: min(100%, calc(100vw - 12px));
+  }
+  .daily-sales-dialog__entry-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .daily-sales-dialog__entry-grid label:last-child {
+    grid-column: 1 / -1;
+  }
+  .daily-sales-dialog__date {
+    grid-template-columns: 1fr;
+  }
+  .daily-sales-dialog__date small {
+    grid-column: auto;
+  }
+  .daily-sales-dialog__shift-footer {
+    grid-template-columns: 1fr;
+  }
+}

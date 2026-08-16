@@ -1,63 +1,69 @@
 import { type FormEvent } from "react";
+
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
-import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 import { formatMoney } from "./number-format";
+import { useDialogFocusTrap } from "./use-dialog-focus-trap";
+import { useDailySalesPreview } from "./use-daily-sales-preview";
 import type {
+  ActiveSession,
   Closing,
   DailySalesEntryMode,
-  DailySalesPreview,
+  DailySalesScope,
+  DailySalesShiftForms,
   DayOffReason,
   FormState,
   Vault,
 } from "./daily-sales-client";
 
-type DailySalesClosingDialogProps = {
+type Props = {
   language: DailySalesLanguage;
   open: boolean;
   editing: Closing | null;
   vaults: Vault[];
-  form: FormState;
+  forms: DailySalesShiftForms;
+  selectedScopes: readonly DailySalesScope[];
+  session: ActiveSession | null;
   mode: DailySalesEntryMode;
   dayOffReason: DayOffReason;
   dayOffNote: string;
   saving: boolean;
-  preview: DailySalesPreview | null;
-  previewLoading: boolean;
   maxBusinessDate?: string;
   allowDayOff: boolean;
   onClose: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  onChange: (form: FormState) => void;
+  onFormsChange: (forms: DailySalesShiftForms) => void;
+  onSelectedScopesChange: (scopes: DailySalesScope[]) => void;
   onModeChange: (mode: DailySalesEntryMode) => void;
   onDayOffReasonChange: (reason: DayOffReason) => void;
   onDayOffNoteChange: (note: string) => void;
 };
 
-export function DailySalesClosingDialog({
-  language,
-  open,
-  editing,
-  vaults,
-  form,
-  mode,
-  dayOffReason,
-  dayOffNote,
-  saving,
-  preview,
-  previewLoading,
-  maxBusinessDate,
-  allowDayOff,
-  onClose,
-  onSubmit,
-  onChange,
-  onModeChange,
-  onDayOffReasonChange,
-  onDayOffNoteChange,
-}: DailySalesClosingDialogProps) {
-  const copy = dailySalesText[language];
-  const dialogRef = useDialogFocusTrap({ open, saving, onClose });
+const scopeOrder: DailySalesScope[] = ["MORNING", "EVENING", "ALL"];
 
-  if (!open) return null;
+function ShiftCard({
+  language,
+  session,
+  open,
+  form,
+  vaults,
+  saving,
+  onChange,
+}: {
+  language: DailySalesLanguage;
+  session: ActiveSession | null;
+  open: boolean;
+  form: FormState;
+  vaults: Vault[];
+  saving: boolean;
+  onChange: (form: FormState) => void;
+}) {
+  const copy = dailySalesText[language];
+  const { preview, previewLoading } = useDailySalesPreview({
+    open,
+    session,
+    mode: "CLOSING",
+    form,
+  });
   const updateAmount = (vaultId: string, grossAmount: string) =>
     onChange({
       ...form,
@@ -67,10 +73,166 @@ export function DailySalesClosingDialog({
           : allocation,
       ),
     });
+  const title =
+    form.scope === "MORNING"
+      ? copy.morning
+      : form.scope === "EVENING"
+        ? copy.evening
+        : copy.all;
+
+  return (
+    <section className="daily-sales-dialog__shift-card">
+      <h4>{title}</h4>
+      <div className="daily-sales-dialog__entry-grid">
+        <label>
+          <span>{copy.customers}</span>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={form.customerCount}
+            onChange={(event) =>
+              onChange({ ...form, customerCount: event.target.value })
+            }
+            placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
+            required
+          />
+        </label>
+        <label>
+          <span>{copy.cashHandover}</span>
+          <input
+            inputMode="decimal"
+            value={form.cashHandoverAmount}
+            onChange={(event) =>
+              onChange({ ...form, cashHandoverAmount: event.target.value })
+            }
+            placeholder={language === "ar" ? "اختياري" : "Optional"}
+          />
+        </label>
+        <label>
+          <span>{copy.cashVault}</span>
+          <select
+            value={form.cashHandoverVaultId}
+            onChange={(event) =>
+              onChange({ ...form, cashHandoverVaultId: event.target.value })
+            }
+          >
+            {vaults
+              .filter((vault) => vault.type === "CASH")
+              .map((vault) => (
+                <option key={vault.id} value={vault.id}>
+                  {language === "ar" ? vault.nameAr : vault.nameEn}
+                </option>
+              ))}
+          </select>
+        </label>
+      </div>
+      <fieldset>
+        <legend>{copy.channels}</legend>
+        <div className="daily-sales-dialog__vault-grid">
+          {vaults.map((vault) => {
+            const allocation = form.allocations.find(
+              (item) => item.vaultId === vault.id,
+            );
+            const name = language === "ar" ? vault.nameAr : vault.nameEn;
+            return (
+              <label className="daily-sales-dialog__vault" key={vault.id}>
+                <span>
+                  {name}
+                  <small>{copy[vault.type]}</small>
+                </span>
+                <input
+                  aria-label={`${name} ${copy.amount}`}
+                  inputMode="decimal"
+                  value={allocation?.grossAmount ?? ""}
+                  onChange={(event) =>
+                    updateAmount(vault.id, event.target.value)
+                  }
+                  placeholder={
+                    language === "ar" ? "أدخل المبلغ" : "Enter amount"
+                  }
+                />
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+      <div className="daily-sales-dialog__shift-footer">
+        <label className="daily-sales-dialog__wide">
+          <span>{copy.notes}</span>
+          <textarea
+            value={form.notes}
+            onChange={(event) =>
+              onChange({ ...form, notes: event.target.value })
+            }
+            maxLength={2_000}
+          />
+        </label>
+        <output className="daily-sales-dialog__total" aria-live="polite">
+          <span>{copy.entryTotal}</span>
+          <strong dir="ltr">
+            {previewLoading
+              ? copy.previewLoading
+              : preview
+                ? formatMoney(preview.grossAmount)
+                : copy.previewUnavailable}
+          </strong>
+        </output>
+      </div>
+      <small className="daily-sales-dialog__recorded-hint">
+        {copy.recordedHint}
+      </small>
+    </section>
+  );
+}
+
+export function DailySalesClosingDialog({
+  language,
+  open,
+  editing,
+  vaults,
+  forms,
+  selectedScopes,
+  session,
+  mode,
+  dayOffReason,
+  dayOffNote,
+  saving,
+  maxBusinessDate,
+  allowDayOff,
+  onClose,
+  onSubmit,
+  onFormsChange,
+  onSelectedScopesChange,
+  onModeChange,
+  onDayOffReasonChange,
+  onDayOffNoteChange,
+}: Props) {
+  const copy = dailySalesText[language];
+  const dialogRef = useDialogFocusTrap({ open, saving, onClose });
+  if (!open) return null;
+  const isDayOff = !editing && mode === "DAY_OFF";
+  const activeScopes = editing ? [editing.scope] : selectedScopes;
+  const businessDate = forms[activeScopes[0] ?? "ALL"].businessDate;
+  const setDate = (value: string) =>
+    onFormsChange({
+      ...forms,
+      MORNING: { ...forms.MORNING, businessDate: value },
+      EVENING: { ...forms.EVENING, businessDate: value },
+      ALL: { ...forms.ALL, businessDate: value },
+    });
+  const setScope = (scope: DailySalesScope) => {
+    if (scope === "ALL") return onSelectedScopesChange(["ALL"]);
+    const next = selectedScopes.includes(scope)
+      ? selectedScopes.filter((item) => item !== scope)
+      : [...selectedScopes.filter((item) => item !== "ALL"), scope];
+    onSelectedScopesChange(
+      next.length ? scopeOrder.filter((item) => next.includes(item)) : [scope],
+    );
+  };
   const close = () => {
     if (!saving) onClose();
   };
-  const isDayOff = !editing && mode === "DAY_OFF";
 
   return (
     <div
@@ -80,7 +242,7 @@ export function DailySalesClosingDialog({
     >
       <section
         ref={dialogRef}
-        className="daily-sales-dialog"
+        className="daily-sales-dialog daily-sales-dialog--noorix"
         role="dialog"
         aria-modal="true"
         aria-labelledby="daily-sales-dialog-title"
@@ -91,7 +253,7 @@ export function DailySalesClosingDialog({
             <p className="eyebrow">{copy.eyebrow}</p>
             <h3 id="daily-sales-dialog-title">
               {editing
-                ? `${copy.correct}: ${editing.documentNumber}`
+                ? `${copy.edit}: ${editing.documentNumber}`
                 : isDayOff
                   ? copy.dayOffTitle
                   : copy.create}
@@ -134,15 +296,13 @@ export function DailySalesClosingDialog({
                   </button>
                 )}
               </div>
-              <label>
+              <label className="daily-sales-dialog__date">
                 <span>{copy.date}</span>
                 <input
                   type="date"
-                  value={form.businessDate}
+                  value={businessDate}
                   max={maxBusinessDate}
-                  onChange={(event) =>
-                    onChange({ ...form, businessDate: event.target.value })
-                  }
+                  onChange={(event) => setDate(event.target.value)}
                   required
                 />
                 <small>{copy.dateHint}</small>
@@ -150,21 +310,21 @@ export function DailySalesClosingDialog({
               {!isDayOff && (
                 <fieldset className="daily-sales-dialog__scope-picker">
                   <legend>{copy.scope}</legend>
-                  {(
-                    [
-                      ["MORNING", copy.morning],
-                      ["EVENING", copy.evening],
-                      ["ALL", copy.all],
-                    ] as const
-                  ).map(([scope, label]) => (
+                  {scopeOrder.map((scope) => (
                     <button
                       key={scope}
                       type="button"
-                      className={form.scope === scope ? "is-selected" : ""}
-                      onClick={() => onChange({ ...form, scope })}
+                      className={
+                        selectedScopes.includes(scope) ? "is-selected" : ""
+                      }
+                      onClick={() => setScope(scope)}
                       disabled={saving}
                     >
-                      {label}
+                      {scope === "MORNING"
+                        ? copy.morning
+                        : scope === "EVENING"
+                          ? copy.evening
+                          : copy.all}
                     </button>
                   ))}
                   <small>{copy.scopeHint}</small>
@@ -202,114 +362,22 @@ export function DailySalesClosingDialog({
               </label>
             </section>
           ) : (
-            <>
-              <label>
-                <span>{copy.customers}</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={form.customerCount}
-                  onChange={(event) =>
-                    onChange({ ...form, customerCount: event.target.value })
+            <div className="daily-sales-dialog__shift-stack">
+              {activeScopes.map((scope) => (
+                <ShiftCard
+                  key={scope}
+                  language={language}
+                  session={session}
+                  open={open}
+                  form={forms[scope]}
+                  vaults={vaults}
+                  saving={saving}
+                  onChange={(form) =>
+                    onFormsChange({ ...forms, [scope]: form })
                   }
-                  required
                 />
-              </label>
-              <fieldset>
-                <legend>{copy.channels}</legend>
-                <div className="daily-sales-dialog__vault-grid">
-                  {vaults.map((vault) => {
-                    const allocation = form.allocations.find(
-                      (item) => item.vaultId === vault.id,
-                    );
-                    return (
-                      <label
-                        className="daily-sales-dialog__vault"
-                        key={vault.id}
-                      >
-                        <span>
-                          {language === "ar" ? vault.nameAr : vault.nameEn}
-                          <small>{copy[vault.type]}</small>
-                        </span>
-                        <input
-                          aria-label={`${language === "ar" ? vault.nameAr : vault.nameEn} ${copy.amount}`}
-                          inputMode="decimal"
-                          value={allocation?.grossAmount ?? ""}
-                          onChange={(event) =>
-                            updateAmount(vault.id, event.target.value)
-                          }
-                          placeholder={
-                            language === "ar" ? "أدخل المبلغ" : "Enter amount"
-                          }
-                        />
-                      </label>
-                    );
-                  })}
-                </div>
-                <output
-                  className="daily-sales-dialog__total"
-                  aria-live="polite"
-                >
-                  <span>{copy.entryTotal}</span>
-                  <strong dir="ltr">
-                    {previewLoading
-                      ? copy.previewLoading
-                      : preview
-                        ? formatMoney(preview.grossAmount)
-                        : copy.previewUnavailable}
-                  </strong>
-                  <small>{copy.entryTotalHint}</small>
-                </output>
-              </fieldset>
-              <section className="daily-sales-dialog__handover">
-                <label>
-                  <span>{copy.cashHandover}</span>
-                  <input
-                    inputMode="decimal"
-                    value={form.cashHandoverAmount}
-                    onChange={(event) =>
-                      onChange({
-                        ...form,
-                        cashHandoverAmount: event.target.value,
-                      })
-                    }
-                    placeholder={language === "ar" ? "اختياري" : "Optional"}
-                  />
-                </label>
-                <label>
-                  <span>{copy.cashVault}</span>
-                  <select
-                    value={form.cashHandoverVaultId}
-                    onChange={(event) =>
-                      onChange({
-                        ...form,
-                        cashHandoverVaultId: event.target.value,
-                      })
-                    }
-                  >
-                    {vaults
-                      .filter((vault) => vault.type === "CASH")
-                      .map((vault) => (
-                        <option key={vault.id} value={vault.id}>
-                          {language === "ar" ? vault.nameAr : vault.nameEn}
-                        </option>
-                      ))}
-                  </select>
-                </label>
-                <small>{copy.recordedHint}</small>
-              </section>
-              <label className="daily-sales-dialog__wide">
-                <span>{copy.notes}</span>
-                <textarea
-                  value={form.notes}
-                  onChange={(event) =>
-                    onChange({ ...form, notes: event.target.value })
-                  }
-                  maxLength={2_000}
-                />
-              </label>
-            </>
+              ))}
+            </div>
           )}
           <footer className="daily-sales-dialog__actions">
             <button

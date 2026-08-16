@@ -2,6 +2,7 @@ import {
   companyIdSchema,
   correctDailySalesClosingRequestSchema,
   createDailySalesClosingRequestSchema,
+  createDailySalesClosingBatchRequestSchema,
   dailySalesCalendarQuerySchema,
   dailySalesCashHandoversReceiptSchema,
   dailySalesEntryDateReceiptSchema,
@@ -12,6 +13,7 @@ import {
   dailySalesClosingsReceiptSchema,
   dailySalesCalendarReceiptSchema,
   dailySalesClosingReceiptSchema,
+  dailySalesClosingBatchReceiptSchema,
   dailySalesClosingReversalReceiptSchema,
   dailySalesClosingPreviewReceiptSchema,
   operationalDayReceiptSchema,
@@ -270,6 +272,42 @@ export class DailySalesController {
           ...(request.data.notes === undefined
             ? {}
             : { notes: request.data.notes }),
+        },
+      }),
+    );
+  }
+  @Post("daily-sales/closings/batch")
+  @HttpCode(201)
+  async createClosingBatch(
+    @Body() body: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const request = createDailySalesClosingBatchRequestSchema.safeParse(body);
+    if (!request.success)
+      throw new BadRequestException("Invalid daily-sales batch request.");
+    const context = await this.authorize(authorization, companyId, [
+      DAILY_SALES_CREATE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
+    return dailySalesClosingBatchReceiptSchema.parse(
+      await this.dailySales.createBatch({
+        context,
+        idempotencyKey: request.data.idempotencyKey,
+        request: {
+          businessDate: request.data.businessDate,
+          entries: request.data.entries.map((entry) => ({
+            scope: entry.scope,
+            customerCount: entry.customerCount,
+            allocations: entry.allocations,
+            ...(entry.cashHandoverAmount === undefined
+              ? {}
+              : { cashHandoverAmount: entry.cashHandoverAmount }),
+            ...(entry.cashHandoverVaultId === undefined
+              ? {}
+              : { cashHandoverVaultId: entry.cashHandoverVaultId }),
+            ...(entry.notes === undefined ? {} : { notes: entry.notes }),
+          })),
         },
       }),
     );

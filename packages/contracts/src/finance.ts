@@ -447,6 +447,41 @@ export const createDailySalesClosingRequestSchema =
     .extend({ idempotencyKey: idempotencyKeySchema })
     .strict();
 
+const dailySalesBatchEntrySchema = dailySalesClosingFieldsSchema
+  .omit({ businessDate: true })
+  .strict();
+
+export const createDailySalesClosingBatchRequestSchema = z
+  .object({
+    businessDate: financeDateSchema,
+    entries: z.array(dailySalesBatchEntrySchema).min(1).max(2),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict()
+  .superRefine((value, context) => {
+    const scopes = value.entries.map((entry) => entry.scope);
+    if (new Set(scopes).size !== scopes.length) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Duplicate daily-sales scope.",
+      });
+    }
+    if (scopes.includes("ALL") && scopes.length !== 1) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "A full-day summary cannot be combined with shifts.",
+      });
+    }
+    if (
+      scopes.length === 2 &&
+      !(scopes.includes("MORNING") && scopes.includes("EVENING"))
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Only morning and evening may be saved together.",
+      });
+    }
+  });
 export const correctDailySalesClosingRequestSchema =
   dailySalesClosingFieldsSchema
     .omit({ businessDate: true, scope: true })
@@ -511,6 +546,9 @@ export const dailySalesClosingReceiptSchema = z
   })
   .strict();
 
+export const dailySalesClosingBatchReceiptSchema = z
+  .object({ closings: z.array(dailySalesClosingReceiptSchema).min(1).max(2) })
+  .strict();
 export const dailySalesClosingPreviewReceiptSchema = z
   .object({
     grossAmount: financeAmountSchema,

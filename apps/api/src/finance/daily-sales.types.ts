@@ -19,6 +19,10 @@ export type DailySalesFields = Readonly<{
   notes?: string;
 }>;
 export type CreateDailySalesClosingRequest = DailySalesFields;
+export type CreateDailySalesClosingBatchRequest = Readonly<{
+  businessDate: Date;
+  entries: readonly Omit<CreateDailySalesClosingRequest, "businessDate">[];
+}>;
 export type CorrectDailySalesClosingRequest = Omit<
   DailySalesFields,
   "businessDate" | "scope"
@@ -56,6 +60,9 @@ export type DailySalesClosingReceipt = Readonly<{
   cashHandoverVaultId: string | null;
   status: FinanceDailySalesClosingStatus;
   allocations: readonly DailySalesAllocationInput[];
+}>;
+export type DailySalesClosingBatchReceipt = Readonly<{
+  closings: readonly DailySalesClosingReceipt[];
 }>;
 export type DailySalesClosingReversalReceipt = Readonly<{
   closingId: string;

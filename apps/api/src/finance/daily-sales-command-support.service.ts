@@ -13,14 +13,23 @@ import {
   type CanonicalJsonValue,
 } from "../core-controls/idempotency.service.js";
 import type { SqlDate } from "../core-controls/document-serial.service.js";
-import { Prisma, FinanceDailySalesClosingScope, FinanceDailySalesClosingStatus } from "../generated/prisma/client.js";
+import {
+  Prisma,
+  FinanceDailySalesClosingScope,
+  FinanceDailySalesClosingStatus,
+} from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
-import type { DailySalesAccounting, ValidatedDailySalesFields } from "./daily-sales-posting.service.js";
+import type {
+  DailySalesAccounting,
+  ValidatedDailySalesFields,
+} from "./daily-sales-posting.service.js";
 import type {
   CreateDailySalesClosingRequest,
+  CreateDailySalesClosingBatchRequest,
   CorrectDailySalesClosingRequest,
   DailySalesAllocationInput,
   DailySalesClosingReceipt,
+  DailySalesClosingBatchReceipt,
 } from "./daily-sales.types.js";
 
 @Injectable()
@@ -60,9 +69,15 @@ export class DailySalesCommandSupportService {
     businessDate: Date,
     scope: FinanceDailySalesClosingScope,
   ): Promise<void> {
-    const conflictingScope = scope === FinanceDailySalesClosingScope.ALL
-      ? { in: [FinanceDailySalesClosingScope.MORNING, FinanceDailySalesClosingScope.EVENING] }
-      : { equals: FinanceDailySalesClosingScope.ALL };
+    const conflictingScope =
+      scope === FinanceDailySalesClosingScope.ALL
+        ? {
+            in: [
+              FinanceDailySalesClosingScope.MORNING,
+              FinanceDailySalesClosingScope.EVENING,
+            ],
+          }
+        : { equals: FinanceDailySalesClosingScope.ALL };
     const conflict = await transaction.financeDailySalesClosing.findFirst({
       where: {
         tenantId: context.tenantId,
@@ -232,9 +247,7 @@ export class DailySalesCommandSupportService {
     });
   }
 
-  serialiseReceipt(
-    receipt: DailySalesClosingReceipt,
-  ): CanonicalJsonValue {
+  serialiseReceipt(receipt: DailySalesClosingReceipt): CanonicalJsonValue {
     return {
       ...receipt,
       businessDate: this.dateValue(receipt.businessDate),
@@ -242,9 +255,7 @@ export class DailySalesCommandSupportService {
     };
   }
 
-  hydrateReceipt(
-    value: CanonicalJsonValue | null,
-  ): DailySalesClosingReceipt {
+  hydrateReceipt(value: CanonicalJsonValue | null): DailySalesClosingReceipt {
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new ConflictException(
         "The saved daily-sales idempotency receipt is invalid.",
@@ -270,6 +281,49 @@ export class DailySalesCommandSupportService {
     };
   }
 
+  serialiseBatchReceipt(
+    receipt: DailySalesClosingBatchReceipt,
+  ): CanonicalJsonValue {
+    return {
+      closings: receipt.closings.map((closing) =>
+        this.serialiseReceipt(closing),
+      ),
+    };
+  }
+
+  hydrateBatchReceipt(
+    value: CanonicalJsonValue | null,
+  ): DailySalesClosingBatchReceipt {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new ConflictException(
+        "The saved daily-sales batch receipt is invalid.",
+      );
+    }
+    const closings = (value as Record<string, CanonicalJsonValue>).closings;
+    if (
+      !Array.isArray(closings) ||
+      closings.length < 1 ||
+      closings.length > 2
+    ) {
+      throw new ConflictException(
+        "The saved daily-sales batch receipt is invalid.",
+      );
+    }
+    return {
+      closings: closings.map((closing) => this.hydrateReceipt(closing)),
+    };
+  }
+
+  requestForBatch(
+    request: CreateDailySalesClosingBatchRequest,
+  ): CanonicalJsonValue {
+    return {
+      businessDate: this.dateValue(request.businessDate),
+      entries: request.entries.map((entry) =>
+        this.requestForCreate({ ...entry, businessDate: request.businessDate }),
+      ),
+    };
+  }
   sqlDateValue(value: Date): SqlDate {
     return this.dateValue(value) as SqlDate;
   }
@@ -310,11 +364,7 @@ export class DailySalesCommandSupportService {
       .slice(0, 10);
   }
 
-  requiredText(
-    value: string,
-    message: string,
-    maximumLength: number,
-  ): string {
+  requiredText(value: string, message: string, maximumLength: number): string {
     const text = value.trim();
     if (!text || text.length > maximumLength)
       throw new BadRequestException(message);
