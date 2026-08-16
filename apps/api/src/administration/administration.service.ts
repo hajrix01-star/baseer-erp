@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UpdateAdministrationUserLoginRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -118,6 +118,23 @@ export class AdministrationService {
     });
   }
 
+  async updateUserLogin(context: TrustedTenantAdministratorContext, userId: string, request: UpdateAdministrationUserLoginRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const tenant = await tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } });
+      const loginNormalized = normalizeLoginIdentifier(request.login, tenant.code);
+      const [user, existing] = await Promise.all([
+        tx.user.findFirst({ where: { id: userId, tenantId: context.tenantId }, select: { id: true, loginNormalized: true } }),
+        tx.user.findFirst({ where: { tenantId: context.tenantId, loginNormalized }, select: { id: true } }),
+      ]);
+      if (!user) throw new NotFoundException("User was not found.");
+      if (existing && existing.id !== user.id) throw new ConflictException("User login already exists.");
+      if (user.loginNormalized === loginNormalized) return { updated: true };
+      await tx.user.update({ where: { id: user.id }, data: { loginNormalized } });
+      await this.audit(tx, context, "administration.user.login_updated", "User", user.id, { login: displayLoginIdentifier(user.loginNormalized, tenant.code) }, { login: displayLoginIdentifier(loginNormalized, tenant.code), reason: request.reason });
+      return { updated: true };
+    });
+  }
   async replaceUserAccess(context: TrustedTenantAdministratorContext, userId: string, request: ReplaceAdministrationUserAccessRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
