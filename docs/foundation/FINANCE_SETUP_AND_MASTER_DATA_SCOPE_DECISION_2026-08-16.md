@@ -32,3 +32,9 @@ Build the financial prerequisites before exposing Purchase & Expense as an opera
 ## Closure evidence
 
 Each slice closes only with contracts, API/DB authorization proof, idempotency/audit evidence, native UI, and owner acceptance. The next scope is Purchase & Expense documents, not Marketing or AI chat.
+## التنفيذ الحالي
+
+- `S1` مكتمل: شاشة إعدادات المالية، تهيئة الشركة والخزائن، وإضافة خزينة مرتبطة بحساب خادمي.
+- `S2` بدأ: API محمي للفئات والموردين. إنشاء الفئة ينشئ حسابها المالي تلقائيًا، والمورد يمكن ربطه بفئة نشطة فقط. جميع الأوامر تحمل مفتاح منع تكرار وسجل تدقيق، ولا يوجد حذف نهائي للبيانات الأساسية.
+- إدارة `S2` مقيدة حاليًا بالمالك العام حتى يصدر قرار تفويض صريح لأدوار الشركة؛ هذا يمنع منح صلاحيات مالية حساسة تلقائيًا.
+- ما زال تعديل الفئة، أرشفة الفئات/الموردين من واجهة المستخدم، وتعديل المورد في واجهة التفاصيل ضمن شريحة الإكمال التالية قبل فتح رحلة فواتير مكتملة.

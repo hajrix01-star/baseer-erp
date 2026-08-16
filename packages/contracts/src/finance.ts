@@ -174,6 +174,55 @@ export const createVaultRequestSchema = z
 export const removeVaultRequestSchema = z
   .object({ vaultId: z.string().uuid(), idempotencyKey: idempotencyKeySchema })
   .strict();
+const financeCategoryKindSchema = z.enum(["PURCHASE", "EXPENSE", "SALE"]);
+
+export const createFinanceCategoryRequestSchema = z
+  .object({
+    code: z.string().trim().min(2).max(80).regex(/^[A-Za-z0-9_-]+$/),
+    nameAr: z.string().trim().min(1).max(160),
+    nameEn: z.string().trim().min(1).max(160),
+    kind: financeCategoryKindSchema,
+    parentId: z.string().uuid().optional(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const archiveFinanceCategoryRequestSchema = z
+  .object({ categoryId: z.string().uuid(), idempotencyKey: idempotencyKeySchema })
+  .strict();
+
+export const createFinanceSupplierRequestSchema = z
+  .object({
+    nameAr: z.string().trim().min(1).max(160),
+    nameEn: z.string().trim().max(160).optional(),
+    phone: z.string().trim().max(30).optional(),
+    taxNumber: z.string().trim().max(32).optional(),
+    isTaxRegistered: z.boolean().default(false),
+    categoryId: z.string().uuid().optional(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const updateFinanceSupplierRequestSchema = z
+  .object({
+    supplierId: financeSupplierIdSchema,
+    nameAr: z.string().trim().min(1).max(160),
+    nameEn: z.string().trim().max(160).optional(),
+    phone: z.string().trim().max(30).optional(),
+    taxNumber: z.string().trim().max(32).optional(),
+    isTaxRegistered: z.boolean(),
+    categoryId: z.string().uuid().nullable().optional(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const archiveFinanceSupplierRequestSchema = z
+  .object({ supplierId: financeSupplierIdSchema, idempotencyKey: idempotencyKeySchema })
+  .strict();
+
+export const financeMasterDataEntityReceiptSchema = z
+  .object({ id: z.string().uuid(), status: z.enum(["ACTIVE", "ARCHIVED"]), replayed: z.boolean() })
+  .strict();
 export const financePeriodActionRequestSchema = z
   .object({
     periodId: z.string().uuid(),

@@ -45,6 +45,8 @@ import { VaultManagementService } from './finance/vault-management.service.js';
 import { VaultManagementController } from './finance/vault-management.controller.js';
 import { FinanceConfigurationService } from './finance/finance-configuration.service.js';
 import { FinanceConfigurationController } from './finance/finance-configuration.controller.js';
+import { FinanceMasterDataController } from './finance/finance-master-data.controller.js';
+import { FinanceMasterDataService } from './finance/finance-master-data.service.js';
 import { DailySalesController } from './finance/daily-sales.controller.js';
 import { DailySalesService } from './finance/daily-sales.service.js';
 import { DailySalesCommandSupportService } from './finance/daily-sales-command-support.service.js';
@@ -65,7 +67,7 @@ import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, FinanceMasterDataController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -101,6 +103,7 @@ import { OutputService } from './output/output.service.js';
     CompanyFinanceSetupService,
     VaultManagementService,
     FinanceConfigurationService,
+    FinanceMasterDataService,
     DailySalesProjectionService,
     DailySalesReadService,
     DailySalesPostingService,
