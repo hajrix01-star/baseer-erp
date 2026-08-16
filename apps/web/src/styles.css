@@ -359,7 +359,8 @@ button {
     display: none;
   }
   .topbar {
-    padding-inline-end: calc(248px + 18px);
+    /* In RTL, the session controls live on the inline-end (physical left). */
+    padding-inline-end: clamp(1.75rem, 2.5vw, 3rem);
   }
   .module-sidebar {
     position: relative;
