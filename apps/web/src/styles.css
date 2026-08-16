@@ -2607,3 +2607,9 @@ html[dir="ltr"] .mobile-drawer__panel {
   width: 100%;
   box-sizing: border-box;
 }
+/* The entry-mode selector matches the full dialog width. */
+.daily-sales-dialog--noorix .daily-sales-dialog__mode {
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
