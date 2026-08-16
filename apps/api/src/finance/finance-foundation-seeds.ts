@@ -50,10 +50,7 @@ export const FINANCE_BASE_ACCOUNT_SEEDS: readonly FinanceAccountSeed[] = [
   { code: 'EXP-006', systemKey: 'MARKETING', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-007', systemKey: 'FINANCIAL_EXPENSES', nameAr: 'مصروفات مالية أخرى', nameEn: 'Other financial expenses', type: FinanceAccountType.EXPENSE },
   { code: 'EXP-008', systemKey: 'ASSET_EXPENSE_LEGACY', nameAr: 'أصول ومعدات تاريخية', nameEn: 'Legacy assets and equipment expense', type: FinanceAccountType.EXPENSE },
-  { code: 'EXP-009', systemKey: 'ELECTRICITY', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', type: FinanceAccountType.EXPENSE },
-  { code: 'EXP-010', systemKey: 'WATER', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', type: FinanceAccountType.EXPENSE },
-  { code: 'EXP-011', systemKey: 'TELECOM_INTERNET', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', type: FinanceAccountType.EXPENSE },
-  { code: 'EXP-012', systemKey: 'MUNICIPAL_SERVICES', nameAr: 'خدمات بلدية وتراخيص', nameEn: 'Municipal services and licenses', type: FinanceAccountType.EXPENSE },
+  { code: 'UTIL-001', systemKey: 'UTILITIES_SERVICES', nameAr: 'مرافق وخدمات', nameEn: 'Utilities and services', type: FinanceAccountType.EXPENSE },
   { code: 'FA-001', systemKey: 'FIXED_ASSETS', nameAr: 'أصول ثابتة', nameEn: 'Fixed assets', type: FinanceAccountType.ASSET },
   { code: 'FA-ACCDEP-001', systemKey: 'ACCUMULATED_DEPRECIATION', nameAr: 'مجمع الإهلاك', nameEn: 'Accumulated depreciation', type: FinanceAccountType.ASSET },
   { code: 'DEPR-EXP-001', systemKey: 'DEPRECIATION_EXPENSE', nameAr: 'مصروف إهلاك', nameEn: 'Depreciation expense', type: FinanceAccountType.EXPENSE },
@@ -72,10 +69,10 @@ export const FINANCE_BASE_CATEGORY_SEEDS: readonly FinanceCategorySeed[] = [
   { code: 'EXP-006', accountCode: 'EXP-006', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', kind: FinanceCategoryKind.EXPENSE, sortOrder: 100 },
   { code: 'EXP-007', accountCode: 'EXP-007', nameAr: 'مصروفات مالية أخرى', nameEn: 'Other financial expenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 110 },
   { code: 'EXP-008', accountCode: 'EXP-008', nameAr: 'أصول ومعدات تاريخية', nameEn: 'Legacy assets and equipment expense', kind: FinanceCategoryKind.EXPENSE, sortOrder: 120 },
-  { code: 'EXP-009', accountCode: 'EXP-009', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', kind: FinanceCategoryKind.EXPENSE, sortOrder: 130 },
-  { code: 'EXP-010', accountCode: 'EXP-010', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 140 },
-  { code: 'EXP-011', accountCode: 'EXP-011', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', kind: FinanceCategoryKind.EXPENSE, sortOrder: 150 },
-  { code: 'EXP-012', accountCode: 'EXP-012', nameAr: 'خدمات بلدية وتراخيص', nameEn: 'Municipal services and licenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 160 },
+  // A single posting category is the default for small private companies.
+  // Detailed Noorix utility categories are mapped here on import; companies can
+  // add a deliberate local split later if materiality warrants it.
+  { code: 'UTIL-001', accountCode: 'UTIL-001', nameAr: 'مرافق وخدمات', nameEn: 'Utilities and services', kind: FinanceCategoryKind.EXPENSE, sortOrder: 130 },
 ] as const;
 
 export type FinanceCategoryHierarchySeed = Readonly<{
@@ -135,11 +132,6 @@ export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHier
   { code: 'E8-4', parentCode: 'EXP-008', nameAr: 'مركبات', nameEn: 'Vehicles', kind: FinanceCategoryKind.EXPENSE, sortOrder: 40 },
   { code: 'E8-5', parentCode: 'EXP-008', nameAr: 'آلات ومعدات', nameEn: 'Machinery and equipment', kind: FinanceCategoryKind.EXPENSE, sortOrder: 50 },
   { code: 'E8-6', parentCode: 'EXP-008', nameAr: 'أصول أخرى', nameEn: 'Other assets', kind: FinanceCategoryKind.EXPENSE, sortOrder: 60 },
-  { code: 'E9-1', parentCode: 'EXP-009', nameAr: 'كهرباء وطاقة', nameEn: 'Electricity and energy', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
-  { code: 'E10-1', parentCode: 'EXP-010', nameAr: 'مياه وصرف صحي', nameEn: 'Water and sanitation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
-  { code: 'E11-1', parentCode: 'EXP-011', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
-  { code: 'E12-1', parentCode: 'EXP-012', nameAr: 'خدمات بلدية', nameEn: 'Municipal services', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
-  { code: 'E12-2', parentCode: 'EXP-012', nameAr: 'تصاريح سلامة ودفاع مدني', nameEn: 'Safety and civil-defense permits', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
 ] as const;
 export const STANDARD_SUPPLIER_KEYS = [
   "SAUDI_ENERGY", "STC", "GOSI", "ZATCA", "MINISTRY_OF_COMMERCE", "SAUDI_BUSINESS_CENTER", "MUNICIPALITIES_HOUSING", "HRSD", "PASSPORTS", "CIVIL_DEFENSE", "SAUDI_CHAMBERS", "QIWA", "ABSHER_BUSINESS", "MUDAD", "MUQEEM", "BALADY",
@@ -147,20 +139,20 @@ export const STANDARD_SUPPLIER_KEYS = [
 export type StandardSupplierKey = (typeof STANDARD_SUPPLIER_KEYS)[number];
 export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string }>;
 export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
-  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "E9-1" },
-  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "E11-1" },
+  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "UTIL-001" },
+  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "UTIL-001" },
   { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "E4-2" },
   { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "E2-7" },
   { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "E2-1" },
   { key: "SAUDI_BUSINESS_CENTER", nameAr: "المركز السعودي للأعمال", nameEn: "Saudi Business Center", categoryCode: "E2-1" },
-  { key: "MUNICIPALITIES_HOUSING", nameAr: "وزارة البلديات والإسكان", nameEn: "Ministry of Municipalities and Housing", categoryCode: "E12-1" },
+  { key: "MUNICIPALITIES_HOUSING", nameAr: "وزارة البلديات والإسكان", nameEn: "Ministry of Municipalities and Housing", categoryCode: "E2-2" },
   { key: "HRSD", nameAr: "وزارة الموارد البشرية والتنمية الاجتماعية", nameEn: "Ministry of Human Resources and Social Development", categoryCode: "E2-10" },
   { key: "PASSPORTS", nameAr: "المديرية العامة للجوازات", nameEn: "General Directorate of Passports", categoryCode: "E2-4" },
-  { key: "CIVIL_DEFENSE", nameAr: "الدفاع المدني", nameEn: "Civil Defense", categoryCode: "E12-2" },
+  { key: "CIVIL_DEFENSE", nameAr: "الدفاع المدني", nameEn: "Civil Defense", categoryCode: "E2-3" },
   { key: "SAUDI_CHAMBERS", nameAr: "اتحاد الغرف السعودية", nameEn: "Federation of Saudi Chambers", categoryCode: "E2-7" },
   { key: "QIWA", nameAr: "قوى", nameEn: "Qiwa", categoryCode: "E2-10" },
   { key: "ABSHER_BUSINESS", nameAr: "أبشر أعمال", nameEn: "Absher Business", categoryCode: "E2-10" },
   { key: "MUDAD", nameAr: "مدد", nameEn: "Mudad", categoryCode: "E4-1" },
   { key: "MUQEEM", nameAr: "مقيم", nameEn: "Muqeem", categoryCode: "E2-4" },
-  { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "E12-1" },
+  { key: "BALADY", nameAr: "بلدي", nameEn: "Balady", categoryCode: "E2-2" },
 ] as const;

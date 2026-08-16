@@ -23,3 +23,4 @@ export * from './daily-sales-read.service.js';
 export * from './daily-sales.types.js';
 export * from './daily-sales-command-support.service.js';
 export * from './daily-sales-write.service.js';
+export * from './noorix-category-mapping.js';
