@@ -38,7 +38,7 @@ function CompanyCheckboxes({ overview, value, onChange, disabled }: { overview: 
 }
 
 function LoginFields({ local, domain, onLocal, onDomain, disabled = false }: { local: string; domain: string; onLocal: (value: string) => void; onDomain: (value: string) => void; disabled?: boolean }) {
-  return <><label>اسم الدخول<input required disabled={disabled} value={local} onChange={(event) => onLocal(event.target.value)} placeholder="ahmed" autoComplete="username" /></label><label>النطاق<span className="administration-login-domain"><b>@</b><input required disabled={disabled} value={domain} onChange={(event) => onDomain(event.target.value.replace(/^@/, ""))} placeholder="hajrix.com" inputMode="email" /></span></label></>;
+  return <><label>النطاق<span className="administration-login-domain"><b>@</b><input required disabled={disabled} value={domain} onChange={(event) => onDomain(event.target.value.replace(/^@/, ""))} placeholder="hajrix.com" inputMode="email" /></span></label><label>اسم الدخول<input required disabled={disabled} value={local} onChange={(event) => onLocal(event.target.value)} placeholder="ahmed" autoComplete="username" /></label></>;
 }
 
 function PasswordField({ label, value, onChange, autoComplete, required = false }: { label: string; value: string; onChange: (value: string) => void; autoComplete: string; required?: boolean }) {
