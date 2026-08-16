@@ -2525,3 +2525,46 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
 }
+
+/* Daily sales entry: compact Noorix-inspired visual rhythm. */
+.daily-sales-dialog--noorix .daily-sales-dialog__shift-card {
+  gap: 8px;
+  padding: 12px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__entry-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__entry-fields label {
+  gap: 4px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__entry-fields input {
+  min-height: 36px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__channels {
+  margin: 0;
+  padding: 8px 10px 10px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__channels legend {
+  margin-inline: 0;
+  padding-inline: 4px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault-grid {
+  gap: 7px 8px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault > span {
+  min-height: 16px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__wide textarea {
+  min-height: 48px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__summary > span {
+  min-height: 56px;
+  padding: 8px 9px;
+}
+@media (max-width: 520px) {
+  .daily-sales-dialog--noorix .daily-sales-dialog__entry-fields {
+    grid-template-columns: 1fr;
+  }
+}

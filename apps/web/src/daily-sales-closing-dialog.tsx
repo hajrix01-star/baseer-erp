@@ -93,20 +93,33 @@ function ShiftCard({
   return (
     <section className="daily-sales-dialog__shift-card">
       <h4>{title}</h4>
-      <label className="daily-sales-dialog__customer-field">
-        <span>{copy.customers}</span>
-        <input
-          type="number"
-          min="0"
-          step="1"
-          value={form.customerCount}
-          onChange={(event) =>
-            onChange({ ...form, customerCount: event.target.value })
-          }
-          placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
-          required
-        />
-      </label>
+      <div className="daily-sales-dialog__entry-fields">
+        <label className="daily-sales-dialog__customer-field">
+          <span>{copy.customers}</span>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={form.customerCount}
+            onChange={(event) =>
+              onChange({ ...form, customerCount: event.target.value })
+            }
+            placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
+            required
+          />
+        </label>
+        <label className="daily-sales-dialog__handover-field">
+          <span>{copy.cashHandover}</span>
+          <input
+            inputMode="decimal"
+            value={form.cashHandoverAmount}
+            onChange={(event) =>
+              onChange({ ...form, cashHandoverAmount: event.target.value })
+            }
+            placeholder={language === "ar" ? "اختياري" : "Optional"}
+          />
+        </label>
+      </div>
       <fieldset className="daily-sales-dialog__channels">
         <legend>{copy.channels}</legend>
         <div className="daily-sales-dialog__vault-grid">
@@ -172,24 +185,7 @@ function ShiftCard({
           </strong>
         </span>
       </output>
-      <details className="daily-sales-dialog__cash-details">
-        <summary>{copy.cashHandover}</summary>
-        <div>
-          <label>
-            <span>{copy.cashHandover}</span>
-            <input
-              inputMode="decimal"
-              value={form.cashHandoverAmount}
-              onChange={(event) =>
-                onChange({ ...form, cashHandoverAmount: event.target.value })
-              }
-              placeholder={language === "ar" ? "اختياري" : "Optional"}
-            />
-          </label>
 
-        </div>
-        <small>{copy.recordedHint}</small>
-      </details>
     </section>
   );
 }
