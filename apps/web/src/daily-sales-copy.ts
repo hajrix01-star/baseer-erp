@@ -101,7 +101,7 @@ export const dailySalesText = {
     saveDay: "حفظ حالة اليوم",
     reason: "سبب الإغلاق/الملاحظة",
     recordedHint:
-      "يُجمع في تقرير تسليم الكاش للشهر فقط، ولا ينشئ قيدًا ولا يغيّر الإيراد أو الرصيد.",
+      "يُجمع للمتابعة الشهرية فقط؛ لا يدخل خزينة ولا ينشئ قيدًا أو يغيّر الإيراد أو الرصيد.",
     serverOnly: "كل الأرقام أدناه نتائج خادمية موثقة.",
     reversalHint: "العكس لا يحذف السجل؛ ينشئ قيدًا عكسيًا موثقًا.",
     historyLimited: "بحسب صلاحيتك: تظهر آخر {count} ملخصات فقط.",
@@ -221,7 +221,7 @@ export const dailySalesText = {
     saveDay: "Save day status",
     reason: "Closure reason / note",
     recordedHint:
-      "It is included only in the monthly cash-handover report; it never creates a journal or changes revenue or balance.",
+      "It is tracked only in the monthly handover report; it never enters a vault, creates a journal, or changes revenue or balance.",
     serverOnly: "All figures below are server-owned, traceable results.",
     reversalHint:
       "Reversal preserves history and creates a documented reversing journal.",

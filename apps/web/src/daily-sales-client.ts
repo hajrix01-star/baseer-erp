@@ -47,7 +47,7 @@ export type CashHandoverReport = {
     businessDate: string;
     scope: DailySalesScope;
     cashHandoverAmount: string;
-    cashHandoverVaultId: string;
+    cashHandoverVaultId: string | null;
     notes: string | null;
   }>;
 };
@@ -92,7 +92,6 @@ export type FormState = {
   customerCount: string;
   allocations: Allocation[];
   cashHandoverAmount: string;
-  cashHandoverVaultId: string;
   notes: string;
 };
 export type DailySalesEntryMode = "CLOSING" | "DAY_OFF";
@@ -140,7 +139,6 @@ export function initialForm(vaultId = ""): FormState {
     customerCount: "",
     allocations: [{ vaultId, grossAmount: "" }],
     cashHandoverAmount: "",
-    cashHandoverVaultId: vaultId,
     notes: "",
   };
 }
@@ -161,14 +159,12 @@ export function initialShiftFormsForVaults(
   };
 }
 export function initialFormForVaults(vaults: readonly Vault[]): FormState {
-  const cashVaultId = vaults.find((vault) => vault.type === "CASH")?.id ?? "";
   return {
-    ...initialForm(cashVaultId),
+    ...initialForm(),
     allocations: vaults.map((vault) => ({
       vaultId: vault.id,
       grossAmount: "",
     })),
-    cashHandoverVaultId: cashVaultId,
   };
 }
 export function activeSession(): ActiveSession | null {

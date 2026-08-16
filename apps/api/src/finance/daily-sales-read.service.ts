@@ -119,7 +119,7 @@ export class DailySalesReadService {
         totalCashHandoverAmount: total.toFixed(4),
         recordCount: handovers.length,
         handovers: handovers.flatMap((item) =>
-          item.cashHandoverAmount && item.cashHandoverVaultId
+          item.cashHandoverAmount
             ? [{
                 closingId: item.id,
                 documentNumber: item.documentNumber,

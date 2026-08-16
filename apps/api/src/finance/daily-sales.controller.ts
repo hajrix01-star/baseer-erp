@@ -266,9 +266,6 @@ export class DailySalesController {
           ...(request.data.cashHandoverAmount === undefined
             ? {}
             : { cashHandoverAmount: request.data.cashHandoverAmount }),
-          ...(request.data.cashHandoverVaultId === undefined
-            ? {}
-            : { cashHandoverVaultId: request.data.cashHandoverVaultId }),
           ...(request.data.notes === undefined
             ? {}
             : { notes: request.data.notes }),
@@ -303,9 +300,6 @@ export class DailySalesController {
             ...(entry.cashHandoverAmount === undefined
               ? {}
               : { cashHandoverAmount: entry.cashHandoverAmount }),
-            ...(entry.cashHandoverVaultId === undefined
-              ? {}
-              : { cashHandoverVaultId: entry.cashHandoverVaultId }),
             ...(entry.notes === undefined ? {} : { notes: entry.notes }),
           })),
         },
@@ -338,9 +332,6 @@ export class DailySalesController {
           ...(request.data.cashHandoverAmount === undefined
             ? {}
             : { cashHandoverAmount: request.data.cashHandoverAmount }),
-          ...(request.data.cashHandoverVaultId === undefined
-            ? {}
-            : { cashHandoverVaultId: request.data.cashHandoverVaultId }),
           ...(request.data.notes === undefined
             ? {}
             : { notes: request.data.notes }),
@@ -374,9 +365,6 @@ export class DailySalesController {
           ...(request.data.cashHandoverAmount === undefined
             ? {}
             : { cashHandoverAmount: request.data.cashHandoverAmount }),
-          ...(request.data.cashHandoverVaultId === undefined
-            ? {}
-            : { cashHandoverVaultId: request.data.cashHandoverVaultId }),
           ...(request.data.notes === undefined
             ? {}
             : { notes: request.data.notes }),

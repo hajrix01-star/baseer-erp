@@ -168,7 +168,6 @@ export function DailySalesWorkspace({
         ...(draft.cashHandoverAmount
           ? {
               cashHandoverAmount: draft.cashHandoverAmount,
-              cashHandoverVaultId: draft.cashHandoverVaultId,
             }
           : {}),
         ...(draft.notes.trim() ? { notes: draft.notes.trim() } : {}),
@@ -272,8 +271,6 @@ export function DailySalesWorkspace({
         grossAmount: savedAmounts.get(allocation.vaultId) ?? "",
       })),
       cashHandoverAmount: closing.cashHandoverAmount ?? "",
-      cashHandoverVaultId:
-        closing.cashHandoverVaultId ?? seeded.cashHandoverVaultId,
       notes: closing.notes ?? "",
     });
     setEntryOpen(true);

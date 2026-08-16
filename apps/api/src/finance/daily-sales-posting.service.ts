@@ -81,19 +81,9 @@ export class DailySalesPostingService {
     const cashHandoverAmount = request.cashHandoverAmount === undefined
       ? null
       : this.nonNegativeAmount(request.cashHandoverAmount, 'Cash handover must be a non-negative amount.');
-    const cashHandoverVaultId = request.cashHandoverVaultId === undefined
-      ? null
-      : this.requiredText(request.cashHandoverVaultId, 'A cash-handover vault is invalid.', 36);
-    if ((cashHandoverAmount === null) !== (cashHandoverVaultId === null)) {
-      throw new BadRequestException('Cash handover and its cash vault must be provided together.');
-    }
-    if (cashHandoverVaultId) {
-      await this.vaults.assertActiveCashObservationVault(transaction, {
-        tenantId: context.tenantId,
-        companyId: context.companyId,
-        vaultId: cashHandoverVaultId,
-      });
-    }
+    // Cash handover is a management observation only. It never moves a vault balance
+    // and is deliberately not tied to a vault or included in the posting journal.
+    const cashHandoverVaultId = null;
     return {
       businessDate,
       scope: request.scope,

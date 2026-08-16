@@ -15,7 +15,6 @@ export type DailySalesFields = Readonly<{
   customerCount: number;
   allocations: readonly DailySalesAllocationInput[];
   cashHandoverAmount?: string;
-  cashHandoverVaultId?: string;
   notes?: string;
 }>;
 export type CreateDailySalesClosingRequest = DailySalesFields;

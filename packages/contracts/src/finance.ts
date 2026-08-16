@@ -434,7 +434,6 @@ const dailySalesClosingFieldsSchema = z
     customerCount: z.number().int().min(0).max(10_000_000).default(0),
     allocations: z.array(dailySalesAllocationRequestSchema).min(1).max(25),
     cashHandoverAmount: financeAmountSchema.optional(),
-    cashHandoverVaultId: z.string().uuid().optional(),
     notes: z.string().trim().max(2_000).optional(),
   })
   .strict();
@@ -643,7 +642,7 @@ export const dailySalesCashHandoverItemSchema = z
     businessDate: z.date(),
     scope: dailySalesScopeSchema,
     cashHandoverAmount: financeAmountSchema,
-    cashHandoverVaultId: z.string().uuid(),
+    cashHandoverVaultId: z.string().uuid().nullable(),
     notes: z.string().nullable(),
   })
   .strict();

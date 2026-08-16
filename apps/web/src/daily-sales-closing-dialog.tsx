@@ -56,7 +56,7 @@ function ShiftCard({
   onChange: (form: FormState) => void;
 }) {
   const copy = dailySalesText[language];
-  const { preview, previewLoading } = useDailySalesPreview({
+  const { preview } = useDailySalesPreview({
     open,
     session,
     mode: "CLOSING",
@@ -78,10 +78,16 @@ function ShiftCard({
         ? copy.evening
         : copy.all;
   const customerCount = Number(form.customerCount) || 0;
-  const grossAmount = preview?.grossAmount ?? "0";
+  const localGrossAmount = form.allocations.reduce(
+    (total, allocation) => total + (Number(allocation.grossAmount) || 0),
+    0,
+  );
+  const displayGrossAmount = preview
+    ? Number(preview.grossAmount)
+    : localGrossAmount;
   const average =
-    customerCount > 0 && preview
-      ? Number(preview.grossAmount) / customerCount
+    customerCount > 0 && displayGrossAmount > 0
+      ? displayGrossAmount / customerCount
       : null;
 
   return (
@@ -148,11 +154,9 @@ function ShiftCard({
         <span>
           <small>{copy.entryTotal}</small>
           <strong dir="ltr">
-            {previewLoading
-              ? copy.previewLoading
-              : preview
-                ? formatMoney(grossAmount)
-                : copy.previewUnavailable}
+            {displayGrossAmount > 0
+              ? formatMoney(String(displayGrossAmount))
+              : copy.previewUnavailable}
           </strong>
         </span>
         <span>
@@ -182,23 +186,7 @@ function ShiftCard({
               placeholder={language === "ar" ? "اختياري" : "Optional"}
             />
           </label>
-          <label>
-            <span>{copy.cashVault}</span>
-            <select
-              value={form.cashHandoverVaultId}
-              onChange={(event) =>
-                onChange({ ...form, cashHandoverVaultId: event.target.value })
-              }
-            >
-              {vaults
-                .filter((vault) => vault.type === "CASH")
-                .map((vault) => (
-                  <option key={vault.id} value={vault.id}>
-                    {language === "ar" ? vault.nameAr : vault.nameEn}
-                  </option>
-                ))}
-            </select>
-          </label>
+
         </div>
         <small>{copy.recordedHint}</small>
       </details>

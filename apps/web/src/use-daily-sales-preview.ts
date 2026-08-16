@@ -28,7 +28,7 @@ export function useDailySalesPreview({
       return;
     }
     const allocations = form.allocations.filter((allocation) => allocation.grossAmount.trim().length > 0);
-    if (!allocations.length) {
+    if (!form.businessDate || !allocations.length) {
       setPreview(null);
       setPreviewLoading(false);
       return;
@@ -45,7 +45,7 @@ export function useDailySalesPreview({
           scope: form.scope,
           customerCount: Number(form.customerCount) || 0,
           allocations,
-          ...(form.cashHandoverAmount ? { cashHandoverAmount: form.cashHandoverAmount, cashHandoverVaultId: form.cashHandoverVaultId } : {}),
+          ...(form.cashHandoverAmount ? { cashHandoverAmount: form.cashHandoverAmount } : {}),
           ...(form.notes.trim() ? { notes: form.notes.trim() } : {}),
         }),
       }).then((result) => {

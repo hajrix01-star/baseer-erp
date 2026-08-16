@@ -171,7 +171,6 @@ export class DailySalesCommandSupportService {
       customerCount: request.customerCount,
       allocations: request.allocations,
       cashHandoverAmount: request.cashHandoverAmount ?? null,
-      cashHandoverVaultId: request.cashHandoverVaultId ?? null,
       notes: request.notes ?? null,
     };
   }
@@ -184,7 +183,6 @@ export class DailySalesCommandSupportService {
       customerCount: request.customerCount,
       allocations: request.allocations,
       cashHandoverAmount: request.cashHandoverAmount ?? null,
-      cashHandoverVaultId: request.cashHandoverVaultId ?? null,
       notes: request.notes ?? null,
     };
   }
