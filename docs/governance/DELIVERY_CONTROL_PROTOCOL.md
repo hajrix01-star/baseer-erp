@@ -26,6 +26,7 @@ The repository maintains these records for every capability:
 | Module Discovery Record | Noorix understanding, workflow and parity evidence |
 | Decision Register | Preserve / harden / correct / defer decisions |
 | Evidence Checklist | Links to contracts, tests, security review, UX review, reconciliation, and acceptance |
+| AI Skill Decision | Records whether and when Basira is useful for the module; it is not a requirement to build a chat |
 | Exception Log | Explicit owner-approved interruptions or policy deviations |
 
 No status may be inferred from conversation alone; it must be recorded in the delivery register.
@@ -51,6 +52,7 @@ At the end of every implementation task, the delivery lead records:
 3. Which gate question became satisfied.
 4. Remaining known risks or blockers.
 5. Whether the next task remains in the same active scope.
+6. The module AI Skill Decision: S0 not needed, S1 guidance, S2 analysis, S3 reviewed draft, or S4 governed automation; see `AI_SKILL_READINESS_GATE_DECISION_2026-08-16.md`.
 
 “Build passed” is never enough evidence by itself.
 

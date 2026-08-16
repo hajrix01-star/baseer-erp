@@ -18,13 +18,13 @@ English: `Marketing Performance`
 2. Campaigns: a simple campaign register, not a planning system. A manual campaign stores name, platform, company/location, start/end, status and optional external reference. It supports TikTok, Meta, Snapchat or other campaigns as time context even without a provider integration.
 3. Google Ads: a first-class, read-only provider connector for the Google Ads account, campaigns and daily performance facts. The initial reader covers the available account/campaign reporting facts such as spend, impressions, clicks, conversions and conversion value. No ad creation, edits, budgets, bids, pause/resume or spend.
 4. Google Business Profile: a first-class provider connector for company/location mapping, profile data, reviews and available daily performance facts such as search/maps impressions, website clicks, calls, directions, bookings or food/menu actions when Google exposes them for the selected location and account. The UI must identify the exact source metric, date coverage and freshness; unavailable Google fields stay unavailable rather than being invented.
-5. Google Reviews: review reading and AI-assisted reply drafts. A user with operating permission may generate and edit a draft; an independent approver may publish it to Google only after explicit confirmation. Automatic publication is not part of the first release.
+5. Google Reviews: review reading, AI-assisted reply drafts and governed automatic publication under the separate policy decision `GOOGLE_REVIEW_REPLY_AUTOMATION_POLICY_DECISION_2026-08-16.md`. The policy is a controlled exception to the normal no-external-action rule: only eligible 3-, 4- and 5-star reviews may be published automatically after content-risk screening; 1- and 2-star reviews never publish automatically. A user may always regenerate, edit and publish a reply manually when authorized.
 6. Connections and data quality: provider/account/location mapping, exact capability, health, last successful sync, coverage, freshness, failure-safe reason, disconnect/revoke and immutable sync receipts.
 7. General analysis: server-generated comparisons of pre-window, campaign window and post-window. It is labelled `temporal association - not causation`.
 
 ## Excluded from the current module
 
-Campaign planning/version/approval/budget proposals, content calendar/publication, creators, competitors, local SEO/maps/keyword labs beyond data received from Google Business Profile, profile writes, social publishing, social/ads execution, automatic review publication, AI-driven actions without human approval, and external messaging.
+Campaign planning/version/approval/budget proposals, content calendar/publication, creators, competitors, local SEO/maps/keyword labs beyond data received from Google Business Profile, profile writes, social publishing, social/ads execution, AI-driven actions outside the governed Google-review policy, and external messaging.
 
 ## Measurement rules
 
@@ -87,11 +87,12 @@ Reserved and disabled until their separate provider gate:
 - `marketing.google-business.reviews.read`
 - `marketing.google-business.reviews.reply.draft`
 - `marketing.google-business.reviews.reply.publish`
+- `marketing.google-business.reviews.reply.automation.manage`
 - `marketing.google-ads.reporting.read`
 - `platform.ai.use`
 - `platform.ai.manage`
 
-`marketing.google-business.reviews.reply.publish` is disabled by default and requires a separate approval capability from draft generation. There is no Google Ads execution capability in this scope, and there is no automatic review-reply capability in the first release.
+`marketing.google-business.reviews.reply.publish` is distinct from draft generation. `marketing.google-business.reviews.reply.automation.manage` enables, disables or changes the governed automation policy for an approved company/location and requires an audit reason. Google Ads execution remains prohibited.
 
 ## Security and operational decisions
 
@@ -99,7 +100,7 @@ Reserved and disabled until their separate provider gate:
 - OAuth requires authorization code plus PKCE/state/nonce, server callback and exact company/account/location ownership validation. The scope set is the smallest Google-approved set needed for the enabled capability; no browser receives a token.
 - Sync is manual-triggered first, runs outside the request transaction, deduplicates by source/window/checksum, has timeout/rate limit/backoff and stores immutable receipt/freshness.
 - Disconnect/revoke stops future jobs immediately and disables credential use.
-- Google Ads write routes and write scopes are prohibited. Google Business Profile review publication is the one controlled exception: it requires a separately enabled capability, explicit per-reply confirmation, an approver distinct from the draft workflow, a final content hash and an immutable audit receipt. Profile edits, posts, messages and automatic reply publishing remain prohibited.
+- Google Ads write routes and write scopes are prohibited. Google Business Profile review publication is the one controlled exception. Manual publication requires a separately enabled capability, explicit per-reply confirmation, a final content hash and an immutable audit receipt. Governed automatic publication is permitted only under the separately approved review-reply automation policy, with a per-company/location enablement, immutable policy version, content-risk gate, idempotent worker, audit receipt and instant kill switch. Profile edits, posts and messages remain prohibited.
 - No cross-company rollup is shown by default.
 
 ## UI boundary
