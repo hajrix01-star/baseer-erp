@@ -2870,3 +2870,31 @@ html[dir="ltr"] .mobile-drawer__panel {
     padding: 11px 12px;
   }
 }
+.daily-sales-record-dialog__header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.daily-sales-record-dialog__close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line, #dce6df);
+  border-radius: 9px;
+  background: #fff;
+  color: #536158;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+.daily-sales-record-dialog__close:hover {
+  border-color: #9eb6a5;
+  color: var(--ink, #10251c);
+  background: #f8fbf8;
+}
+.daily-sales-record-dialog__close:focus-visible {
+  outline: 2px solid var(--brand, #087a4a);
+  outline-offset: 2px;
+}

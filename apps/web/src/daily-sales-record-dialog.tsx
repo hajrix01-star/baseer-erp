@@ -36,6 +36,7 @@ export function DailySalesRecordDialog({
   const recordTitle = language === "ar" ? "\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0644\u062e\u0635" : "Summary details";
   const cancelledLabel = language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
   const cancelLabel = language === "ar" ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel";
+  const closeLabel = language === "ar" ? "\u0625\u063a\u0644\u0627\u0642 \u0627\u0644\u062a\u0641\u0627\u0635\u064a\u0644" : "Close details";
   const vaultName = (vaultId: string) => {
     const vault = vaults.find((item) => item.id === vaultId);
     return vault ? (language === "ar" ? vault.nameAr : vault.nameEn) : "\u2014";
@@ -57,9 +58,20 @@ export function DailySalesRecordDialog({
             <strong dir="ltr">{closing.documentNumber}</strong>
             <small>{closing.businessDate.slice(0, 10)} · {scope}</small>
           </div>
-          <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>
-            {closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}
-          </span>
+          <div className="daily-sales-record-dialog__header-actions">
+            <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>
+              {closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}
+            </span>
+            <button
+              className="daily-sales-record-dialog__close"
+              type="button"
+              aria-label={closeLabel}
+              title={closeLabel}
+              onClick={onClose}
+            >
+              ×
+            </button>
+          </div>
         </header>
         <dl className="daily-sales-record-dialog__facts">
           <div>
@@ -93,9 +105,6 @@ export function DailySalesRecordDialog({
           </section>
         )}
         <footer>
-          <button className="daily-sales-secondary" type="button" onClick={onClose}>
-            {copy.cancelEdit}
-          </button>
           {closing.status === "POSTED" && canCorrect && (
             <button className="daily-sales-secondary" type="button" onClick={() => onCorrect(closing)}>
               {copy.edit}
