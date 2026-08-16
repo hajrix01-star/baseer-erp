@@ -2601,3 +2601,9 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog--noorix.daily-sales-dialog--batch {
   width: min(480px, calc(100vw - 28px));
 }
+/* The shift selector is a full-width, equal three-choice control. */
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker {
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
