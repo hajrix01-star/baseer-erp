@@ -2675,3 +2675,19 @@ html[dir="ltr"] .mobile-drawer__panel {
 .sidebar-brand .baseer-brand__image {
   height: 2.25rem;
 }
+/* ERP is a secondary descriptor; Baseer remains the dominant wordmark. */
+.baseer-brand__erp {
+  color: var(--brand);
+  font-family: "IBM Plex Sans Variable", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+.sidebar-brand .baseer-brand__image {
+  height: 2.7rem;
+}
+.sidebar-brand .baseer-brand__erp {
+  color: #8ad4ad;
+  font-size: 0.72rem;
+}

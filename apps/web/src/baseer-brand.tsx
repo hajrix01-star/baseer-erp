@@ -15,6 +15,7 @@ export function BaseerBrand({ className = "" }: BaseerBrandProps) {
         src="/brand/baseer-wordmark.png"
         width={547}
       />
+      <span className="baseer-brand__erp">ERP</span>
     </span>
   );
 }
