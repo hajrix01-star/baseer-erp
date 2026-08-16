@@ -2520,4 +2520,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .baseer-period-filter__months button, .baseer-period-filter__quarters button, .baseer-period-filter__years button { min-height: 40px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font: inherit; font-size: var(--font-label); font-weight: 700; cursor: pointer; }
 .baseer-period-filter__popover footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-block-start: 10px; padding-block-start: 10px; border-block-start: 1px solid var(--line); color: var(--muted); font-size: var(--font-label); }
 .baseer-period-filter__popover footer button { min-height: 32px; padding-inline: 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--brand-deep); background: var(--surface); font: inherit; font-size: var(--font-label); font-weight: 700; cursor: pointer; }
+.baseer-period-filter__popover footer div { display: inline-flex; gap: 6px; }
+.baseer-period-filter__popover footer .baseer-period-filter__apply { border-color: var(--brand); color: #fff; background: var(--brand); }
 @media (max-width: 640px) { .baseer-period-filter { display: block; min-width: 0; width: 100%; } .baseer-period-filter__popover { width: min(340px, calc(100vw - 24px)); } }
