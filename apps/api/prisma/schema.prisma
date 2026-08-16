@@ -260,6 +260,7 @@ model Company {
   dailyFinancialSummaries    FinanceDailyFinancialSummary[]
   dailySalesChannelSummaries FinanceDailySalesChannelSummary[]
   outflowDocuments          FinanceOutflowDocument[]
+  outflowBatches            FinanceOutflowBatch[]
   aiCompanyIdentities        AiCompanyIdentity[]
   aiExecutionReceipts        AiExecutionReceipt[]
   branding                    CompanyBranding?
@@ -733,6 +734,7 @@ model FinanceOutflowDocument {
   status                          FinanceOutflowDocumentStatus @default(POSTED)
   settlementKind                  FinanceOutflowSettlementKind
   documentNumber                  String                       @db.VarChar(80)
+  batchId                         String?                      @db.Uuid
   supplierId                      String?                      @db.Uuid
   categoryId                      String                       @db.Uuid
   supplierInvoiceNumber           String?                      @db.VarChar(160)
@@ -751,6 +753,7 @@ model FinanceOutflowDocument {
   updatedAt                       DateTime                     @updatedAt @db.Timestamptz(6)
 
   company      Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  batch        FinanceOutflowBatch?       @relation(fields: [batchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   supplier     FinanceSupplier?           @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   category     FinanceCategory            @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   journalEntry FinanceJournalEntry        @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -761,6 +764,29 @@ model FinanceOutflowDocument {
   @@unique([companyId, documentNumber])
   @@index([tenantId, companyId, businessDate, status])
   @@index([tenantId, companyId, supplierId, businessDate])
+  @@index([tenantId, companyId, batchId])
+}
+
+model FinanceOutflowBatch {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  batchNumber     String   @db.VarChar(80)
+  businessDate    DateTime @db.Date
+  documentCount   Int
+  grossAmount     Decimal  @db.Decimal(18, 4)
+  netAmount       Decimal  @db.Decimal(18, 4)
+  vatAmount       Decimal  @db.Decimal(18, 4)
+  notes           String?  @db.VarChar(2000)
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  company   Company                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  documents FinanceOutflowDocument[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, batchNumber])
+  @@index([tenantId, companyId, businessDate])
 }
 
 model FinanceOutflowAllocation {

@@ -162,6 +162,11 @@ export type FinanceJournalEntry = Prisma.FinanceJournalEntryModel
  */
 export type FinanceOutflowDocument = Prisma.FinanceOutflowDocumentModel
 /**
+ * Model FinanceOutflowBatch
+ * 
+ */
+export type FinanceOutflowBatch = Prisma.FinanceOutflowBatchModel
+/**
  * Model FinanceOutflowAllocation
  * 
  */

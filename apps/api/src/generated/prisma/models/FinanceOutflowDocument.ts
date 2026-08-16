@@ -48,6 +48,7 @@ export type FinanceOutflowDocumentMinAggregateOutputType = {
   status: $Enums.FinanceOutflowDocumentStatus | null
   settlementKind: $Enums.FinanceOutflowSettlementKind | null
   documentNumber: string | null
+  batchId: string | null
   supplierId: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
@@ -74,6 +75,7 @@ export type FinanceOutflowDocumentMaxAggregateOutputType = {
   status: $Enums.FinanceOutflowDocumentStatus | null
   settlementKind: $Enums.FinanceOutflowSettlementKind | null
   documentNumber: string | null
+  batchId: string | null
   supplierId: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
@@ -100,6 +102,7 @@ export type FinanceOutflowDocumentCountAggregateOutputType = {
   status: number
   settlementKind: number
   documentNumber: number
+  batchId: number
   supplierId: number
   categoryId: number
   supplierInvoiceNumber: number
@@ -142,6 +145,7 @@ export type FinanceOutflowDocumentMinAggregateInputType = {
   status?: true
   settlementKind?: true
   documentNumber?: true
+  batchId?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -168,6 +172,7 @@ export type FinanceOutflowDocumentMaxAggregateInputType = {
   status?: true
   settlementKind?: true
   documentNumber?: true
+  batchId?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -194,6 +199,7 @@ export type FinanceOutflowDocumentCountAggregateInputType = {
   status?: true
   settlementKind?: true
   documentNumber?: true
+  batchId?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -307,6 +313,7 @@ export type FinanceOutflowDocumentGroupByOutputType = {
   status: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId: string | null
   supplierId: string | null
   categoryId: string
   supplierInvoiceNumber: string | null
@@ -356,6 +363,7 @@ export type FinanceOutflowDocumentWhereInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
+  batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -373,6 +381,7 @@ export type FinanceOutflowDocumentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  batch?: Prisma.XOR<Prisma.FinanceOutflowBatchNullableScalarRelationFilter, Prisma.FinanceOutflowBatchWhereInput> | null
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
@@ -387,6 +396,7 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
+  batchId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -404,6 +414,7 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
+  batch?: Prisma.FinanceOutflowBatchOrderByWithRelationInput
   supplier?: Prisma.FinanceSupplierOrderByWithRelationInput
   category?: Prisma.FinanceCategoryOrderByWithRelationInput
   journalEntry?: Prisma.FinanceJournalEntryOrderByWithRelationInput
@@ -424,6 +435,7 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumFinanceOutflowDocumentStatusFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
+  batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -441,6 +453,7 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  batch?: Prisma.XOR<Prisma.FinanceOutflowBatchNullableScalarRelationFilter, Prisma.FinanceOutflowBatchWhereInput> | null
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
@@ -455,6 +468,7 @@ export type FinanceOutflowDocumentOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
+  batchId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -489,6 +503,7 @@ export type FinanceOutflowDocumentScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusWithAggregatesFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindWithAggregatesFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringWithAggregatesFilter<"FinanceOutflowDocument"> | string
+  batchId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
   supplierId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidWithAggregatesFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
@@ -527,6 +542,7 @@ export type FinanceOutflowDocumentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
@@ -541,6 +557,7 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -580,6 +597,7 @@ export type FinanceOutflowDocumentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
@@ -594,6 +612,7 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -621,6 +640,7 @@ export type FinanceOutflowDocumentCreateManyInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -668,6 +688,7 @@ export type FinanceOutflowDocumentUncheckedUpdateManyInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -726,6 +747,7 @@ export type FinanceOutflowDocumentCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -759,6 +781,7 @@ export type FinanceOutflowDocumentMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -785,6 +808,7 @@ export type FinanceOutflowDocumentMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -985,6 +1009,48 @@ export type EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput = {
   set?: $Enums.FinanceOutflowSettlementKind
 }
 
+export type FinanceOutflowDocumentCreateNestedManyWithoutBatchInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput> | Prisma.FinanceOutflowDocumentCreateWithoutBatchInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyBatchInputEnvelope
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+}
+
+export type FinanceOutflowDocumentUncheckedCreateNestedManyWithoutBatchInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput> | Prisma.FinanceOutflowDocumentCreateWithoutBatchInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyBatchInputEnvelope
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+}
+
+export type FinanceOutflowDocumentUpdateManyWithoutBatchNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput> | Prisma.FinanceOutflowDocumentCreateWithoutBatchInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput[]
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutBatchInput | Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutBatchInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyBatchInputEnvelope
+  set?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  disconnect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  delete?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  update?: Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutBatchInput | Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutBatchInput[]
+  updateMany?: Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutBatchInput | Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutBatchInput[]
+  deleteMany?: Prisma.FinanceOutflowDocumentScalarWhereInput | Prisma.FinanceOutflowDocumentScalarWhereInput[]
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput> | Prisma.FinanceOutflowDocumentCreateWithoutBatchInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutBatchInput[]
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutBatchInput | Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutBatchInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyBatchInputEnvelope
+  set?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  disconnect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  delete?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  update?: Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutBatchInput | Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutBatchInput[]
+  updateMany?: Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutBatchInput | Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutBatchInput[]
+  deleteMany?: Prisma.FinanceOutflowDocumentScalarWhereInput | Prisma.FinanceOutflowDocumentScalarWhereInput[]
+}
+
 export type FinanceOutflowDocumentCreateNestedOneWithoutAllocationsInput = {
   create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutAllocationsInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput>
   connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutAllocationsInput
@@ -1018,6 +1084,7 @@ export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
@@ -1030,6 +1097,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1086,6 +1154,7 @@ export type FinanceOutflowDocumentScalarWhereInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
+  batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -1124,6 +1193,7 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
@@ -1135,6 +1205,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1199,6 +1270,7 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
@@ -1210,6 +1282,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1274,6 +1347,7 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
@@ -1285,6 +1359,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1339,6 +1414,7 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
@@ -1350,6 +1426,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1368,7 +1445,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
-export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
+export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   id?: string
   kind: $Enums.FinanceOutflowDocumentKind
   status?: $Enums.FinanceOutflowDocumentStatus
@@ -1391,6 +1468,84 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentCreateOrConnectWithoutBatchInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput>
+}
+
+export type FinanceOutflowDocumentCreateManyBatchInputEnvelope = {
+  data: Prisma.FinanceOutflowDocumentCreateManyBatchInput | Prisma.FinanceOutflowDocumentCreateManyBatchInput[]
+  skipDuplicates?: boolean
+}
+
+export type FinanceOutflowDocumentUpsertWithWhereUniqueWithoutBatchInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  update: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput>
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutBatchInput>
+}
+
+export type FinanceOutflowDocumentUpdateWithWhereUniqueWithoutBatchInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutBatchInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput>
+}
+
+export type FinanceOutflowDocumentUpdateManyWithWhereWithoutBatchInput = {
+  where: Prisma.FinanceOutflowDocumentScalarWhereInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateManyMutationInput, Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput>
+}
+
+export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
+  journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
@@ -1401,6 +1556,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1455,6 +1611,7 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
@@ -1468,6 +1625,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1492,6 +1650,7 @@ export type FinanceOutflowDocumentCreateManyCompanyInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1529,6 +1688,7 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
@@ -1541,6 +1701,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1566,6 +1727,7 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1590,6 +1752,7 @@ export type FinanceOutflowDocumentCreateManyCategoryInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   supplierId?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1627,6 +1790,7 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
@@ -1638,6 +1802,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1662,6 +1827,7 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1685,6 +1851,7 @@ export type FinanceOutflowDocumentCreateManySupplierInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  batchId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1722,6 +1889,7 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
@@ -1733,6 +1901,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1757,6 +1926,106 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FinanceOutflowDocumentCreateManyBatchInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1813,6 +2082,7 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   status?: boolean
   settlementKind?: boolean
   documentNumber?: boolean
+  batchId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -1830,6 +2100,7 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -1845,6 +2116,7 @@ export type FinanceOutflowDocumentSelectCreateManyAndReturn<ExtArgs extends runt
   status?: boolean
   settlementKind?: boolean
   documentNumber?: boolean
+  batchId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -1862,6 +2134,7 @@ export type FinanceOutflowDocumentSelectCreateManyAndReturn<ExtArgs extends runt
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -1875,6 +2148,7 @@ export type FinanceOutflowDocumentSelectUpdateManyAndReturn<ExtArgs extends runt
   status?: boolean
   settlementKind?: boolean
   documentNumber?: boolean
+  batchId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -1892,6 +2166,7 @@ export type FinanceOutflowDocumentSelectUpdateManyAndReturn<ExtArgs extends runt
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -1905,6 +2180,7 @@ export type FinanceOutflowDocumentSelectScalar = {
   status?: boolean
   settlementKind?: boolean
   documentNumber?: boolean
+  batchId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -1923,9 +2199,10 @@ export type FinanceOutflowDocumentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "supplierId" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "notes" | "journalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
+export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "batchId" | "supplierId" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "notes" | "journalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
 export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -1934,12 +2211,14 @@ export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensio
 }
 export type FinanceOutflowDocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
 }
 export type FinanceOutflowDocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -1949,6 +2228,7 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
   name: "FinanceOutflowDocument"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
+    batch: Prisma.$FinanceOutflowBatchPayload<ExtArgs> | null
     supplier: Prisma.$FinanceSupplierPayload<ExtArgs> | null
     category: Prisma.$FinanceCategoryPayload<ExtArgs>
     journalEntry: Prisma.$FinanceJournalEntryPayload<ExtArgs>
@@ -1962,6 +2242,7 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
     status: $Enums.FinanceOutflowDocumentStatus
     settlementKind: $Enums.FinanceOutflowSettlementKind
     documentNumber: string
+    batchId: string | null
     supplierId: string | null
     categoryId: string
     supplierInvoiceNumber: string | null
@@ -2373,6 +2654,7 @@ readonly fields: FinanceOutflowDocumentFieldRefs;
 export interface Prisma__FinanceOutflowDocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  batch<T extends Prisma.FinanceOutflowDocument$batchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>>): Prisma.Prisma__FinanceOutflowBatchClient<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   supplier<T extends Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>>): Prisma.Prisma__FinanceSupplierClient<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.FinanceCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceCategoryClient<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   journalEntry<T extends Prisma.FinanceJournalEntryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceJournalEntryClient<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2413,6 +2695,7 @@ export interface FinanceOutflowDocumentFieldRefs {
   readonly status: Prisma.FieldRef<"FinanceOutflowDocument", 'FinanceOutflowDocumentStatus'>
   readonly settlementKind: Prisma.FieldRef<"FinanceOutflowDocument", 'FinanceOutflowSettlementKind'>
   readonly documentNumber: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
+  readonly batchId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly supplierId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly categoryId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly supplierInvoiceNumber: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
@@ -2827,6 +3110,25 @@ export type FinanceOutflowDocumentDeleteManyArgs<ExtArgs extends runtime.Types.E
    * Limit how many FinanceOutflowDocuments to delete.
    */
   limit?: number
+}
+
+/**
+ * FinanceOutflowDocument.batch
+ */
+export type FinanceOutflowDocument$batchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceOutflowBatch
+   */
+  select?: Prisma.FinanceOutflowBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceOutflowBatch
+   */
+  omit?: Prisma.FinanceOutflowBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceOutflowBatchInclude<ExtArgs> | null
+  where?: Prisma.FinanceOutflowBatchWhereInput
 }
 
 /**

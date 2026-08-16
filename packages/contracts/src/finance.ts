@@ -807,6 +807,26 @@ export const createFinanceOutflowDocumentRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+export const financeOutflowBatchItemSchema = z.object({
+  kind: financeOutflowKindSchema,
+  settlementKind: financeOutflowSettlementSchema,
+  categoryId: z.string().uuid(),
+  supplierId: financeSupplierIdSchema.optional(),
+  supplierInvoiceNumber: z.string().trim().min(1).max(160).optional(),
+  supplierInvoiceMissingReason: z.string().trim().min(1).max(500).optional(),
+  supplierInvoiceDate: financeDateSchema.optional(),
+  grossAmount: financeAmountSchema,
+  isTaxable: z.boolean().default(false),
+  allocations: z.array(financeOutflowAllocationSchema).max(20).default([]),
+  notes: z.string().trim().max(2_000).optional(),
+}).strict();
+
+export const createFinanceOutflowBatchRequestSchema = z.object({
+  businessDate: financeDateSchema,
+  notes: z.string().trim().max(2_000).optional(),
+  items: z.array(financeOutflowBatchItemSchema).min(1).max(25),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
 export const financeOutflowDocumentReceiptSchema = z.object({
   documentId: z.string().uuid(),
   documentNumber: z.string().min(1).max(80),
@@ -821,6 +841,17 @@ export const financeOutflowDocumentReceiptSchema = z.object({
 }).strict();
 
 export type CreateFinanceOutflowDocumentRequest = z.infer<typeof createFinanceOutflowDocumentRequestSchema>;
+export const financeOutflowBatchReceiptSchema = z.object({
+  batchId: z.string().uuid(),
+  batchNumber: z.string().min(1).max(80),
+  businessDate: z.date(),
+  documentCount: z.number().int().positive(),
+  grossAmount: financeAmountSchema,
+  netAmount: financeAmountSchema,
+  vatAmount: financeAmountSchema,
+  documents: z.array(financeOutflowDocumentReceiptSchema).min(1).max(25),
+}).strict();
+export type CreateFinanceOutflowBatchRequest = z.infer<typeof createFinanceOutflowBatchRequestSchema>;
 
 export const financeOutflowDocumentHistoryItemSchema = z.object({
   id: z.string().uuid(),
@@ -830,6 +861,7 @@ export const financeOutflowDocumentHistoryItemSchema = z.object({
   status: financeOutflowStatusSchema,
   businessDate: z.date(),
   grossAmount: financeAmountSchema,
+  batchNumber: z.string().min(1).max(80).nullable(),
   supplierNameAr: z.string().nullable(),
   categoryNameAr: z.string().min(1).max(160),
 }).strict();

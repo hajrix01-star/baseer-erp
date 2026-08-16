@@ -75,6 +75,7 @@ export const ModelName = {
   FinanceSupplierDuePayment: 'FinanceSupplierDuePayment',
   FinanceJournalEntry: 'FinanceJournalEntry',
   FinanceOutflowDocument: 'FinanceOutflowDocument',
+  FinanceOutflowBatch: 'FinanceOutflowBatch',
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -496,6 +497,7 @@ export const FinanceOutflowDocumentScalarFieldEnum = {
   status: 'status',
   settlementKind: 'settlementKind',
   documentNumber: 'documentNumber',
+  batchId: 'batchId',
   supplierId: 'supplierId',
   categoryId: 'categoryId',
   supplierInvoiceNumber: 'supplierInvoiceNumber',
@@ -515,6 +517,24 @@ export const FinanceOutflowDocumentScalarFieldEnum = {
 } as const
 
 export type FinanceOutflowDocumentScalarFieldEnum = (typeof FinanceOutflowDocumentScalarFieldEnum)[keyof typeof FinanceOutflowDocumentScalarFieldEnum]
+
+
+export const FinanceOutflowBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  batchNumber: 'batchNumber',
+  businessDate: 'businessDate',
+  documentCount: 'documentCount',
+  grossAmount: 'grossAmount',
+  netAmount: 'netAmount',
+  vatAmount: 'vatAmount',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceOutflowBatchScalarFieldEnum = (typeof FinanceOutflowBatchScalarFieldEnum)[keyof typeof FinanceOutflowBatchScalarFieldEnum]
 
 
 export const FinanceOutflowAllocationScalarFieldEnum = {

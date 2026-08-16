@@ -1,4 +1,4 @@
-import { createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema } from '@baseer-erp/contracts';
+import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema } from '@baseer-erp/contracts';
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -31,6 +31,25 @@ export class PurchaseExpenseController {
     }));
   }
 
+  @Post('batch')
+  @HttpCode(201)
+  async createBatch(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const request = createFinanceOutflowBatchRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException('Invalid purchase batch request.');
+    const context = await this.authorize(authorization, companyId);
+    return financeOutflowBatchReceiptSchema.parse(await this.documents.createBatch({
+      context, idempotencyKey: request.data.idempotencyKey,
+      request: { businessDate: request.data.businessDate, ...(request.data.notes ? { notes: request.data.notes } : {}), items: request.data.items.map((item) => ({
+        kind: item.kind, settlementKind: item.settlementKind, categoryId: item.categoryId,
+        ...(item.supplierId ? { supplierId: item.supplierId } : {}),
+        ...(item.supplierInvoiceNumber ? { supplierInvoiceNumber: item.supplierInvoiceNumber } : {}),
+        ...(item.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: item.supplierInvoiceMissingReason } : {}),
+        ...(item.supplierInvoiceDate ? { supplierInvoiceDate: item.supplierInvoiceDate } : {}),
+        grossAmount: item.grossAmount, isTaxable: item.isTaxable, allocations: item.allocations,
+        ...(item.notes ? { notes: item.notes } : {}),
+      })) },
+    }));
+  }
   @Get()
   async list(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
