@@ -43,3 +43,6 @@
 ## بوابة القبول
 
 قبل اعتماد الإدارة كواجهة تشغيلية: اختبارات HTTP لعزل Tenant/Company، مستخدم معطل، جلسة ملغاة بعد تغيير الدور، منع تعيين دور أو شركة عابرة للـTenant، ومنع تعديل قالب نظام أو خفض آخر مالك.
+## Company-logo storage exception — 2026-08-16
+
+The earlier generic file-storage deferral remains in force for documents, receipts, employee images, and all general attachments. A deliberately narrow exception is approved for an owner-managed company logo only. The server accepts PNG, JPEG, or WebP bytes up to 512 KiB, verifies the signature and SHA-256 hash, generates an opaque storage reference, writes to private server storage, creates immutable FileMetadata version lineage, and records an audit event. The prior logo is marked `SUPERSEDED` and its private blob remains retained until a future approved retention command. Logo preview/download is an authenticated owner-only endpoint with no public URL, browser-supplied storage path, or reusable file URL. `BASEER_COMPANY_LOGO_STORAGE_ROOT` identifies the private server volume root; it is excluded from Git and must be included in the approved Hostinger server backup when deployment begins.

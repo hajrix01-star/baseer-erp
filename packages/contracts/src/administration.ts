@@ -6,7 +6,9 @@ const text160 = z.string().trim().min(1).max(160);
 const roleCode = z.string().trim().min(3).max(80).regex(/^[A-Z][A-Z0-9_]*$/);
 const permissionCode = z.string().trim().min(3).max(120).regex(/^[a-z][a-z0-9._-]*$/);
 const password = z.string().min(6).max(256).refine((value) => value.trim().length > 0);
+const safeFileNameSchema = z.string().trim().min(1).max(160).refine((value) => !/[\\/\x00-\x1F]/.test(value));
 const userAvatarKind = z.enum(["INITIALS", "MALE", "FEMALE"]);
+const companyLogoContentBase64 = z.string().trim().min(4).max(700_000).regex(/^[A-Za-z0-9+/]+={0,2}$/);
 
 export const administrationPermissionSchema = z.object({
   code: permissionCode, module: z.string().min(1).max(80), nameAr: text160, nameEn: text160, risk: z.enum(["standard", "sensitive"]),
@@ -26,6 +28,7 @@ export const createAdministrationRoleRequestSchema = z.object({ code: roleCode, 
 export const createAdministrationUserRequestSchema = z.object({ login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema.default("ar"), avatarKind: userAvatarKind.default("INITIALS"), password, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
 export const assignAdministrationMembershipRequestSchema = z.object({ userId: userIdSchema, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
 export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable() }).strict();
+export const uploadAdministrationCompanyLogoRequestSchema = z.object({ fileName: safeFileNameSchema, contentBase64: companyLogoContentBase64 }).strict();
 export const updateAdministrationCompanyStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "ARCHIVED"]), reason: z.string().trim().min(3).max(500) }).strict();
 export const updateAdministrationUserStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "DISABLED"]), reason: z.string().trim().min(3).max(500) }).strict();
 export const resetAdministrationUserPasswordRequestSchema = z.object({ password, reason: z.string().trim().min(3).max(500) }).strict();
@@ -36,6 +39,7 @@ export type CreateAdministrationRoleRequest = z.infer<typeof createAdministratio
 export type CreateAdministrationUserRequest = z.infer<typeof createAdministrationUserRequestSchema>;
 export type AssignAdministrationMembershipRequest = z.infer<typeof assignAdministrationMembershipRequestSchema>;
 export type UpdateAdministrationCompanyRequest = z.infer<typeof updateAdministrationCompanyRequestSchema>;
+export type UploadAdministrationCompanyLogoRequest = z.infer<typeof uploadAdministrationCompanyLogoRequestSchema>;
 export type UpdateAdministrationCompanyStatusRequest = z.infer<typeof updateAdministrationCompanyStatusRequestSchema>;
 export type UpdateAdministrationUserStatusRequest = z.infer<typeof updateAdministrationUserStatusRequestSchema>;
 export type ResetAdministrationUserPasswordRequest = z.infer<typeof resetAdministrationUserPasswordRequestSchema>;

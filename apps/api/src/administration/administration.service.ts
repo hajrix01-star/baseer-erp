@@ -1,6 +1,8 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -140,6 +142,53 @@ export class AdministrationService {
     });
   }
 
+  async uploadCompanyLogo(context: TrustedTenantAdministratorContext, companyId: string, request: UploadAdministrationCompanyLogoRequest) {
+    this.ownerOnly(context);
+    const content = Buffer.from(request.contentBase64, "base64");
+    if (!content.length || content.length > 512 * 1024) throw new ForbiddenException("Company logo size is not permitted.");
+    const image = this.companyLogoImageType(content);
+    if (!image) throw new ForbiddenException("Company logo must be a PNG, JPEG, or WebP image.");
+    const fileId = randomUUID();
+    const storageReference = `company-branding/${context.tenantId}/${companyId}/${fileId}.${image.extension}`;
+    const target = this.companyLogoStoragePath(storageReference);
+    const temporary = `${target}.${randomUUID()}.uploading`;
+    try {
+      await mkdir(dirname(target), { recursive: true });
+      await writeFile(temporary, content, { flag: "wx" });
+      await rename(temporary, target);
+    } catch (error) {
+      await rm(temporary, { force: true }).catch(() => undefined);
+      throw error;
+    }
+    try {
+      const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
+        const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, select: { id: true } });
+        if (!company) throw new NotFoundException("Company was not found.");
+        const existing = await tx.companyBranding.findFirst({ where: { tenantId: context.tenantId, companyId }, select: { logoFileMetadataId: true } });
+        const [prior, history] = await Promise.all([
+          existing?.logoFileMetadataId ? tx.fileMetadata.findFirst({ where: { id: existing.logoFileMetadataId, tenantId: context.tenantId, companyId }, select: { id: true, storageReference: true } }) : null,
+          tx.fileMetadata.aggregate({ where: { tenantId: context.tenantId, companyId, sourceType: "company.branding", sourceId: companyId, purpose: "logo" }, _max: { version: true } }),
+        ]);
+        const created = await tx.fileMetadata.create({ data: { id: fileId, tenantId: context.tenantId, companyId, sourceType: "company.branding", sourceId: companyId, purpose: "logo", version: (history._max.version ?? 0) + 1, status: FileMetadataStatus.RESERVED, displayName: request.fileName, declaredMimeType: image.mime, declaredByteSize: BigInt(content.length), declaredSha256: createHash("sha256").update(content).digest("hex"), storageReference, replacesFileMetadataId: prior?.id ?? null, createdByUserId: context.actorUserId } });
+        await tx.companyBranding.upsert({ where: { tenantId_companyId: { tenantId: context.tenantId, companyId } }, create: { tenantId: context.tenantId, companyId, logoFileMetadataId: created.id }, update: { logoFileMetadataId: created.id } });
+        if (prior) await tx.fileMetadata.update({ where: { id: prior.id }, data: { status: FileMetadataStatus.SUPERSEDED, supersededAt: new Date() } });
+        await this.audit(tx, context, "administration.company.logo_uploaded", "Company", companyId, prior ? { logoFileMetadataId: prior.id } : null, { logoFileMetadataId: created.id, mimeType: image.mime, byteSize: content.length, sha256: created.declaredSha256 });
+        return { id: created.id, mimeType: image.mime, byteSize: content.length };
+      });
+      return { id: result.id, mimeType: result.mimeType, byteSize: result.byteSize };
+    } catch (error) {
+      await rm(target, { force: true }).catch(() => undefined);
+      throw error;
+    }
+  }
+
+  async readCompanyLogo(context: TrustedTenantAdministratorContext, companyId: string) {
+    this.ownerOnly(context);
+    const file = await this.database.inTenantTransaction(context.tenantId, async (tx) => tx.fileMetadata.findFirst({ where: { tenantId: context.tenantId, companyId, sourceType: "company.branding", sourceId: companyId, purpose: "logo", status: FileMetadataStatus.RESERVED }, select: { declaredMimeType: true, storageReference: true } }));
+    if (!file) throw new NotFoundException("Company logo was not found.");
+    try { return { mimeType: file.declaredMimeType, bytes: await readFile(this.companyLogoStoragePath(file.storageReference)) }; }
+    catch { throw new NotFoundException("Company logo was not found."); }
+  }
   async updateCompanyStatus(context: TrustedTenantAdministratorContext, companyId: string, request: UpdateAdministrationCompanyStatusRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
@@ -150,6 +199,20 @@ export class AdministrationService {
       await this.audit(tx, context, "administration.company.status_changed", "Company", company.id, { status: company.status }, { status: request.status, reason: request.reason });
       return { updated: true, status: request.status };
     });
+  }
+  private companyLogoStoragePath(storageReference: string): string {
+    if (!/^company-branding\/[0-9a-f-]+\/[0-9a-f-]+\/[0-9a-f-]+\.(png|jpg|webp)$/.test(storageReference)) throw new ForbiddenException("Company logo storage reference is not permitted.");
+    const root = resolve(process.env.BASEER_COMPANY_LOGO_STORAGE_ROOT ?? join(process.cwd(), "storage"));
+    const target = resolve(root, storageReference);
+    if (!target.startsWith(`${root}${sep}`)) throw new ForbiddenException("Company logo storage path is not permitted.");
+    return target;
+  }
+
+  private companyLogoImageType(content: Buffer): { mime: string; extension: string } | null {
+    if (content.length >= 8 && content.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return { mime: "image/png", extension: "png" };
+    if (content.length >= 3 && content[0] === 0xff && content[1] === 0xd8 && content[2] === 0xff) return { mime: "image/jpeg", extension: "jpg" };
+    if (content.length >= 12 && content.subarray(0, 4).toString("ascii") === "RIFF" && content.subarray(8, 12).toString("ascii") === "WEBP") return { mime: "image/webp", extension: "webp" };
+    return null;
   }
   private async assertAnotherActiveOwner(tx: Prisma.TransactionClient, tenantId: string, userId: string): Promise<void> {
     const owners = await tx.tenantAdministrationAssignment.findMany({ where: { tenantId, isOwner: true }, include: { user: { select: { id: true, status: true } } } });

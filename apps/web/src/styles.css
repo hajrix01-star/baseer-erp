@@ -2529,7 +2529,8 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-company-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--section-gap); }
 .administration-company-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; min-height: 8.75rem; color: var(--ink); text-align: start; cursor: pointer; font: inherit; }
 .administration-company-card__mark,
-.administration-company-editor-profile > span { display: grid; inline-size: 2.8rem; block-size: 2.8rem; place-items: center; flex: 0 0 auto; border: 1px solid #bedfcf; border-radius: 50%; color: #075e40; background: #e3f4ea; font-size: var(--font-title-sm); font-weight: 850; }
+.administration-company-editor-profile > span,
+.administration-company-editor-profile > img { display: grid; inline-size: 2.8rem; block-size: 2.8rem; place-items: center; flex: 0 0 auto; border: 1px solid #bedfcf; border-radius: 50%; color: #075e40; background: #e3f4ea; font-size: var(--font-title-sm); font-weight: 850; object-fit: cover; }
 .administration-company-card__body { display: grid; align-content: center; gap: 0.22rem; min-width: 0; }
 .administration-company-card__body strong { font-size: var(--font-body); }
 .administration-company-card__body small,
@@ -2543,9 +2544,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .dialog-icon-button:hover { color: var(--ink); border-color: #b5cdbd; }
 .administration-company-editor-profile { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
 .administration-company-editor-profile > div { display: grid; gap: 0.15rem; }
-.administration-company-editor-profile small,
-.administration-company-logo-note span { color: var(--muted); font-size: var(--font-caption); font-weight: 500; }
-.administration-company-logo-note { display: grid; align-content: start; gap: 0.35rem; }
+.administration-company-editor-profile small { color: var(--muted); font-size: var(--font-caption); font-weight: 500; }
 .administration-company-status-action { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 0.75rem; margin: 0; padding: 0.85rem; border: 1px solid #efd3cc; border-radius: 0.8rem; }
 .administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
 .administration-company-status-action label { display: grid; gap: 0.35rem; }

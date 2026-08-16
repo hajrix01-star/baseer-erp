@@ -64,3 +64,6 @@
 - `GET /v1/file-metadata/:id` requires `platform.files.read` and returns only the narrow metadata receipt in the verified live company context.
 - Replacing a `RESERVED` reference creates the next version, records the prior version as `SUPERSEDED`, and preserves both audit evidence and idempotent replay semantics.
 - `scripts/run-gate-b-db-verification.mjs` passed RLS, allowed/denied/cross-company/revoked-session access, idempotent replay/mismatch, no silent overwrite, immutable supersession, audit events, path/storage-reference non-disclosure, and all prior foundation regressions against the disposable Baseer database.
+## Narrow approved exception: company branding logo
+
+The general binary-storage deferral still applies. The Administration decision dated 2026-08-16 approves a single isolated implementation: an owner-only company logo (PNG/JPEG/WebP, maximum 512 KiB) in private server storage. It verifies magic bytes and SHA-256 server-side, stores an opaque generated reference, creates immutable version lineage/audit, and streams previews only after authenticated owner authorization. It does not introduce public URLs, generic upload/download endpoints, attachment scanning claims, or a general document-storage capability.

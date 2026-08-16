@@ -9,3 +9,4 @@ coverage/
 .DS_Store
 .rehearsal/
 .codex-remote-attachments/
+apps/api/storage/

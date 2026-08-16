@@ -5,6 +5,24 @@ const jsonHeaders = () => ({ "Content-Type": "application/json", "X-Request-Id":
 
 export const loadAdministrationOverview = (session: ActiveSession) => api<AdministrationOverview>(session, "/administration/overview");
 export const createAdministrationCompany = (session: ActiveSession, body: { nameAr: string; nameEn: string }) => api(session, "/administration/companies", { method: "POST", headers: jsonHeaders(), body: JSON.stringify({ ...body, businessTimezone: "Asia/Riyadh" }) });
+export async function uploadAdministrationCompanyLogo(session: ActiveSession, companyId: string, file: File): Promise<{ id: string; mimeType: string; byteSize: number }> {
+  const contentBase64 = await fileToBase64(file);
+  return api(session, `/administration/companies/${companyId}/logo`, { method: "POST", headers: jsonHeaders(), body: JSON.stringify({ fileName: file.name, contentBase64 }) });
+}
+export async function loadAdministrationCompanyLogo(session: ActiveSession, companyId: string): Promise<string | null> {
+  const response = await fetch(`/v1/administration/companies/${companyId}/logo`, { headers: { Authorization: `Bearer ${session.accessToken}` } });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error("Could not load company logo.");
+  return URL.createObjectURL(await response.blob());
+}
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read the selected logo."));
+    reader.onload = () => resolve(String(reader.result).split(",", 2)[1] ?? "");
+    reader.readAsDataURL(file);
+  });
+}
 export const updateAdministrationCompany = (session: ActiveSession, companyId: string, body: { nameAr: string; nameEn: string; businessTimezone: string; logoFileMetadataId: string | null }) => api(session, `/administration/companies/${companyId}/settings`, { method: "PUT", headers: jsonHeaders(), body: JSON.stringify(body) });
 export const updateAdministrationCompanyStatus = (session: ActiveSession, companyId: string, status: "ACTIVE" | "ARCHIVED", reason: string) => api(session, `/administration/companies/${companyId}/status`, { method: "PUT", headers: jsonHeaders(), body: JSON.stringify({ status, reason }) });
 export const createAdministrationUser = (session: ActiveSession, body: { login: string; nameAr: string; nameEn: string; password: string; preferredLanguage: "ar" | "en"; avatarKind: "INITIALS" | "MALE" | "FEMALE"; companyId: string; roleId: string }) => api(session, "/administration/users", { method: "POST", headers: jsonHeaders(), body: JSON.stringify(body) });
