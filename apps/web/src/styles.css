@@ -102,21 +102,6 @@ button {
   color: var(--brand-deep);
   line-height: 1;
 }
-.baseer-brand__mark {
-  width: 32px;
-  height: 39px;
-  overflow: visible;
-}
-.baseer-brand__word {
-  color: var(--ink);
-  font-size: var(--font-title-sm);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-}
-.baseer-brand__word b {
-  color: var(--brand);
-  font-weight: 900;
-}
 .brand-button {
   border: 0;
   background: transparent;
@@ -1232,46 +1217,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: #65736a;
   margin-top: 4px;
 }
-.daily-sales-dialog__scope-picker {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
-.daily-sales-dialog__scope-picker legend {
-  width: 100%;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.daily-sales-dialog__scope-picker button {
-  flex: 1;
-  min-width: 120px;
-  border: 1px solid #d6e3da;
-  border-radius: 10px;
-  background: #fff;
-  padding: 10px;
-  font-weight: 700;
-}
-.daily-sales-dialog__scope-picker button.is-selected {
-  background: #08744d;
-  color: #fff;
-  border-color: #08744d;
-}
-.daily-sales-dialog__scope-picker small {
-  width: 100%;
-  color: #68766e;
-}
-.daily-sales-dialog__handover {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.daily-sales-dialog__handover > small {
-  grid-column: 1 / -1;
-  color: #68766e;
-}
 .command-sales-calendar > header {
   display: flex;
   justify-content: space-between;
@@ -1689,80 +1634,13 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: var(--muted);
   line-height: 1.7;
 }
-.administration-user-cards,
 .administration-role-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
 }
-.administration-user-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 13px;
-  align-items: center;
-  min-height: 128px;
-  padding: 16px;
-  border: 1px solid #dce7e0;
-  border-radius: 18px;
-  color: var(--ink);
-  background: #fff;
-  text-align: inherit;
-  cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-}
-.administration-user-card:hover,
-.administration-user-card:focus-visible {
-  border-color: #16805b;
-  box-shadow: 0 14px 28px -22px rgba(9, 74, 53, 0.55);
-  transform: translateY(-2px);
-  outline: none;
-}
-.administration-user-card__body {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-}
-.administration-user-card__body strong {
-  font-size: var(--font-body);
-}
-.administration-user-card__body small,
-.administration-user-card__body > span {
-  overflow: hidden;
-  color: var(--muted);
-  font-size: var(--font-caption);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.administration-user-card__body em,
-.administration-user-profile em {
-  width: max-content;
-  margin-top: 3px;
-  padding: 3px 7px;
-  border-radius: 99px;
-  font-size: var(--font-caption);
-  font-style: normal;
-  font-weight: 800;
-}
-.is-active {
-  color: #0a704a;
-  background: #e7f7ed;
-}
-.is-disabled {
-  color: #9b342a;
-  background: #fff0ed;
-}
-.administration-user-card__access {
-  grid-column: 1 / -1;
-  padding-top: 10px;
-  border-top: 1px solid #edf2ef;
-  color: #54645c;
-  font-size: var(--font-caption);
-  font-weight: 700;
-}
-.administration-user-avatar {
+.is-active { color: #0a704a; background: #e7f7ed; }
+.is-disabled { color: #9b342a; background: #fff0ed; }.administration-user-avatar {
   display: inline-grid;
   width: 42px;
   height: 42px;
@@ -2042,27 +1920,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   }
 }
 /* Keep sales register actions compact and legible on desktop. */
-.daily-sales-register th:last-child,
-.daily-sales-register td:last-child {
-  width: 154px;
-  min-width: 154px;
-}
-.daily-sales-register__actions {
-  gap: 6px;
-  flex-wrap: nowrap;
-}
-.daily-sales-register__actions .daily-sales-secondary,
-.daily-sales-register__actions .daily-sales-danger {
-  min-height: 34px;
-  padding: 6px 9px;
-  font-size: var(--font-label);
-  white-space: nowrap;
-}
-@media (max-width: 760px) {
-  .daily-sales-register__actions {
-    flex-wrap: wrap;
-  }
-}
 
 /* Daily sales entry dialog: a single compact, Noorix-inspired layout. */
 .daily-sales-dialog {
@@ -2562,35 +2419,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .baseer-brand {
   gap: 0;
 }
-.baseer-brand__mark {
-  width: 2rem;
-  height: 2.45rem;
-  flex: 0 0 auto;
-  margin-inline-end: -0.125rem;
-}
-.baseer-brand__word {
-  font-size: 1.875rem;
-  font-weight: 850;
-  letter-spacing: -0.045em;
-}
-.baseer-brand__word b {
-  display: inline-block;
-  margin-inline-start: 0.1em;
-  font-size: 0.56em;
-  font-weight: 800;
-  letter-spacing: 0.025em;
-  vertical-align: 0.1em;
-}
-.sidebar-brand .baseer-brand__mark {
-  color: #edf8f1;
-}
-.sidebar-brand .baseer-brand__word {
-  color: #edf8f1;
-  font-size: 2rem;
-}
-.sidebar-brand .baseer-brand__word b {
-  color: #8ad4ad;
-}
 @media (min-width: 801px) {
   .module-page {
     width: 100%;
@@ -2692,3 +2520,33 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: #8ad4ad;
   font-size: 0.72rem;
 }
+/* Company cards mirror the administrative flow: inspect first, edit in a focused dialog. */
+.administration-companies-heading { align-items: center; }
+.administration-companies-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 0.65rem; }
+.administration-archive-toggle { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: var(--font-caption); font-weight: 700; }
+.administration-archive-toggle input { inline-size: 1rem; block-size: 1rem; accent-color: var(--brand); }
+.administration-archive-toggle span { min-inline-size: 1.25rem; padding: 0.1rem 0.36rem; border-radius: 999px; color: var(--brand-deep); background: #e7f4ec; text-align: center; }
+.administration-company-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--section-gap); }
+.administration-company-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; min-height: 8.75rem; color: var(--ink); text-align: start; cursor: pointer; font: inherit; }
+.administration-company-card__mark,
+.administration-company-editor-profile > span { display: grid; inline-size: 2.8rem; block-size: 2.8rem; place-items: center; flex: 0 0 auto; border: 1px solid #bedfcf; border-radius: 50%; color: #075e40; background: #e3f4ea; font-size: var(--font-title-sm); font-weight: 850; }
+.administration-company-card__body { display: grid; align-content: center; gap: 0.22rem; min-width: 0; }
+.administration-company-card__body strong { font-size: var(--font-body); }
+.administration-company-card__body small,
+.administration-company-card__body > span { overflow: hidden; color: var(--muted); font-size: var(--font-caption); text-overflow: ellipsis; white-space: nowrap; }
+.administration-company-card__status { align-self: start; display: inline-flex; padding: 0.15rem 0.48rem; border-radius: 999px; font-size: var(--font-caption); font-style: normal; font-weight: 800; }
+.administration-company-card__footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 0.65rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--font-caption); }
+.administration-company-card__footer b { color: var(--brand); font-weight: 750; }
+.administration-company-empty { padding: var(--card-padding); border: 1px dashed var(--line); border-radius: var(--card-radius); color: var(--muted); text-align: center; }
+.administration-company-dialog { width: min(42rem, calc(100vw - 2rem)); overflow-x: hidden; }
+.dialog-icon-button { display: grid; inline-size: 2.25rem; block-size: 2.25rem; place-items: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 0.65rem; color: var(--muted); background: var(--surface); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.dialog-icon-button:hover { color: var(--ink); border-color: #b5cdbd; }
+.administration-company-editor-profile { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
+.administration-company-editor-profile > div { display: grid; gap: 0.15rem; }
+.administration-company-editor-profile small,
+.administration-company-logo-note span { color: var(--muted); font-size: var(--font-caption); font-weight: 500; }
+.administration-company-logo-note { display: grid; align-content: start; gap: 0.35rem; }
+.administration-company-status-action { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 0.75rem; margin: 0; padding: 0.85rem; border: 1px solid #efd3cc; border-radius: 0.8rem; }
+.administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
+.administration-company-status-action label { display: grid; gap: 0.35rem; }
+@media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }

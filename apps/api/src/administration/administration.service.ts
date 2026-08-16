@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -140,6 +140,17 @@ export class AdministrationService {
     });
   }
 
+  async updateCompanyStatus(context: TrustedTenantAdministratorContext, companyId: string, request: UpdateAdministrationCompanyStatusRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, select: { id: true, status: true } });
+      if (!company) throw new NotFoundException("Company was not found.");
+      if (company.status === request.status) return { updated: true, status: company.status };
+      await tx.company.update({ where: { id: company.id }, data: { status: request.status } });
+      await this.audit(tx, context, "administration.company.status_changed", "Company", company.id, { status: company.status }, { status: request.status, reason: request.reason });
+      return { updated: true, status: request.status };
+    });
+  }
   private async assertAnotherActiveOwner(tx: Prisma.TransactionClient, tenantId: string, userId: string): Promise<void> {
     const owners = await tx.tenantAdministrationAssignment.findMany({ where: { tenantId, isOwner: true }, include: { user: { select: { id: true, status: true } } } });
     const targetIsOwner = owners.some((owner) => owner.userId === userId);
