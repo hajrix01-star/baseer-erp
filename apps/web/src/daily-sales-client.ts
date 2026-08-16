@@ -1,4 +1,4 @@
-import { parseBaseerApiResponse } from "./baseer-api-error";
+import { BaseerApiError, parseBaseerApiResponse } from "./baseer-api-error";
 
 export type Vault = {
   id: string;
@@ -99,6 +99,7 @@ export type DayOffReason =
 
 const tokenStorageKey = "baseer.erp.access-token";
 const companyStorageKey = "baseer.erp.company-id";
+let sessionExpiryReloadScheduled = false;
 export const baseerApiBaseUrl = (
   import.meta.env.VITE_BASEER_API_URL ?? "/v1"
 ).replace(/\/$/, "");
@@ -153,6 +154,18 @@ export function activeSession(): ActiveSession | null {
   return accessToken && companyId ? { accessToken, companyId } : null;
 }
 
+export function clearActiveSession(): void {
+  sessionStorage.removeItem(tokenStorageKey);
+  sessionStorage.removeItem(companyStorageKey);
+}
+
+function clearExpiredSession(): void {
+  clearActiveSession();
+  if (sessionExpiryReloadScheduled) return;
+  sessionExpiryReloadScheduled = true;
+  window.setTimeout(() => window.location.reload(), 0);
+}
+
 export function selectActiveCompany(companyId: string): void {
   sessionStorage.setItem(companyStorageKey, companyId);
 }
@@ -184,5 +197,10 @@ export async function api<T>(
       ...(options?.headers ?? {}),
     },
   });
-  return parseBaseerApiResponse<T>(response);
+  try {
+    return await parseBaseerApiResponse<T>(response);
+  } catch (error) {
+    if (error instanceof BaseerApiError && error.status === 401) clearExpiredSession();
+    throw error;
+  }
 }
