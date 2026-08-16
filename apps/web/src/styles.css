@@ -371,6 +371,7 @@ button {
   display: flex;
   align-items: center;
   min-height: 72px;
+  margin-inline: -18px;
   padding: 0 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -378,7 +379,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 22px;
-  padding: 26px 18px;
+  padding: 0 18px 26px;
   color: #e8f5ed;
   background: #10241b;
 }
