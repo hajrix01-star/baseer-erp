@@ -18,7 +18,7 @@ A new or reset password must contain at least six non-empty characters. It may c
 
 ## Rules
 
-- The owner email is normalized case-insensitively: `mohammad.alhajri@gmail.com`.
+- The owner email is normalized case-insensitively: `mohammad.alhajri@hajrix.com`.
 - A username must be globally unique in a private BASEER deployment; an email is recommended. The server rejects an ambiguous legacy login rather than guessing a tenant.
 - A user with one permitted company enters it directly. A user with more than one chooses from the company control in the top bar.
 - Tenant codes remain internal migration/administration data, not a login credential.

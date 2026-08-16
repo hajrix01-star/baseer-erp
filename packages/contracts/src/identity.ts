@@ -11,7 +11,7 @@ export const sessionTokenSchema = z.string().min(40).max(8_192);
 export const jwtExpirationSchema = z.number().int().positive();
 
 // A short username is resolved by the server inside the private system tenant
-// to its deterministic Baseer login domain. Email remains the stored identifier.
+// to the system-wide hajrix.com login domain. Email remains the stored identifier.
 export const loginIdentifierSchema = z.union([
   z.string().trim().toLowerCase().email().max(254),
   z

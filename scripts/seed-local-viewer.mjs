@@ -18,7 +18,7 @@ const pool = new Pool({
   connectionString: requiredEnvironment("DATABASE_URL"),
 });
 const tenantCode = "baseer-viewer";
-const login = "owner@baseer.local";
+const login = "owner@hajrix.com";
 let app;
 
 try {

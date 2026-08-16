@@ -58,3 +58,11 @@ The earlier generic file-storage deferral remains in force for documents, receip
 ### قبول هذه الزيادة
 
 يجب أن تثبت الفحوص: تعديل الدور ينهي جلسات المستخدم، تعديل/حذف دور يعملان للمالك فقط، حذف دور مستخدم يرفض بأمان، سبب حالة الشركة اختياري، وبناء الواجهة والباكند والعقود يمر.
+## User identity and display-name rule — 2026-08-16
+
+- Every user has an immutable internal `User.id`. Changing a name or a login never changes memberships, historical audit records, reports, or the user ID.
+- `nameAr` and `nameEn` are the editable **display names**. Arabic reports and tables show `nameAr` first, then `nameEn` where needed; the login is not used as a person label except as a fallback.
+- Users may sign in with a short username such as `ahmed`; the server resolves it to `ahmed@hajrix.com`. A full email remains accepted when deliberately entered.
+- The default domain for new and converted internal users is `hajrix.com`. The migration converts every existing user login to the same local name under `hajrix.com`; it aborts safely if that would create a duplicate.
+- Password entry and reset fields include an explicit, local-only show/hide control. Passwords remain hashed server-side; neither audit events nor API responses expose them.
+- Display-name and login changes require the owner role and an audited reason. They do not grant extra access and do not alter the user identifier.

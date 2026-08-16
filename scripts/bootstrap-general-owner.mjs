@@ -8,7 +8,7 @@ dotenv.config({
 });
 
 const ownerEmail = (
-  process.env.BASEER_GENERAL_OWNER_EMAIL ?? "MOHAMMAD.ALHAJRI@GMAIL.COM"
+  process.env.BASEER_GENERAL_OWNER_EMAIL ?? "MOHAMMAD.ALHAJRI@HAJRIX.COM"
 )
   .trim()
   .toLowerCase();

@@ -330,10 +330,10 @@ export class AuthService {
             ? { tenantId, loginNormalized: normalized }
             : {
                 tenantId,
-                loginNormalized: {
-                  startsWith: `${normalized}@`,
-                  endsWith: ".baseer.local",
-                },
+                OR: [
+                  { loginNormalized: `${normalized}@hajrix.com` },
+                  { loginNormalized: { startsWith: `${normalized}@`, endsWith: ".baseer.local" } },
+                ],
               },
           select: {
             id: true,

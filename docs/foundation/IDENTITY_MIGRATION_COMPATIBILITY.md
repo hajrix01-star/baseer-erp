@@ -8,7 +8,7 @@ dual write, session transfer, or token transfer between the systems.
 
 ## Preserve
 
-- Normalize identifiers as Noorix does: trimmed and lowercase. BASEER also accepts a short username at the sign-in and user-creation boundary; the server deterministically resolves it to `<username>@<tenant-code>.baseer.local`. The stored identity remains email-shaped and unique per tenant, while the administration screen displays the short form.
+- Normalize identifiers as Noorix does: trimmed and lowercase. BASEER also accepts a short username at the sign-in and user-creation boundary; the server deterministically resolves it to `<username>@hajrix.com`. The stored identity remains email-shaped and unique per tenant, while the administration screen displays the short form.
 - Accept and verify migrated bcrypt password hashes. New Baseer password hashes
   use bcrypt cost 12.
 - Verify the selected company and permissions from Baseer's live database

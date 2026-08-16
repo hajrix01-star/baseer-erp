@@ -21,6 +21,7 @@ export function DailySalesSignIn({
   const [password, setPassword] = useState("");
   const [activationCode, setActivationCode] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPasswords, setShowPasswords] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [companies, setCompanies] = useState<AuthenticatedCompany[]>([]);
   const [activationMode, setActivationMode] = useState(false);
@@ -149,7 +150,7 @@ export function DailySalesSignIn({
               {language === "ar" ? "كلمة المرور الجديدة" : "New password"}
             </span>
             <input
-              type="password"
+              type={showPasswords ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="new-password"
@@ -162,7 +163,7 @@ export function DailySalesSignIn({
               {language === "ar" ? "تأكيد كلمة المرور" : "Confirm password"}
             </span>
             <input
-              type="password"
+              type={showPasswords ? "text" : "password"}
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
               autoComplete="new-password"
@@ -170,6 +171,7 @@ export function DailySalesSignIn({
               required
             />
           </label>
+          <button className="daily-sales-secondary" type="button" onClick={() => setShowPasswords((current) => !current)}>{showPasswords ? (language === "ar" ? "إخفاء كلمة المرور" : "Hide password") : (language === "ar" ? "إظهار كلمة المرور" : "Show password")}</button>
           {error && <p className="daily-sales-message error">{error}</p>}
           <button
             className="daily-sales-primary"
@@ -213,13 +215,14 @@ export function DailySalesSignIn({
           <label>
             <span>{copy.password}</span>
             <input
-              type="password"
+              type={showPasswords ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
               required
             />
           </label>
+          <button className="daily-sales-secondary" type="button" onClick={() => setShowPasswords((current) => !current)}>{showPasswords ? (language === "ar" ? "إخفاء كلمة المرور" : "Hide password") : (language === "ar" ? "إظهار كلمة المرور" : "Show password")}</button>
           {error && <p className="daily-sales-message error">{error}</p>}
           <button
             className="daily-sales-primary"

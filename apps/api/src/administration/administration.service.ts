@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UpdateAdministrationUserLoginRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UpdateAdministrationUserLoginRequest, UpdateAdministrationUserDisplayNameRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -135,7 +135,17 @@ export class AdministrationService {
       return { updated: true };
     });
   }
-  async replaceUserAccess(context: TrustedTenantAdministratorContext, userId: string, request: ReplaceAdministrationUserAccessRequest) {
+  async updateUserDisplayName(context: TrustedTenantAdministratorContext, userId: string, request: UpdateAdministrationUserDisplayNameRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const user = await tx.user.findFirst({ where: { id: userId, tenantId: context.tenantId }, select: { id: true, nameAr: true, nameEn: true } });
+      if (!user) throw new NotFoundException("User was not found.");
+      if (user.nameAr === request.nameAr && user.nameEn === request.nameEn) return { updated: true };
+      await tx.user.update({ where: { id: user.id }, data: { nameAr: request.nameAr, nameEn: request.nameEn } });
+      await this.audit(tx, context, "administration.user.display_name_updated", "User", user.id, { nameAr: user.nameAr, nameEn: user.nameEn }, { nameAr: request.nameAr, nameEn: request.nameEn, reason: request.reason });
+      return { updated: true };
+    });
+  }  async replaceUserAccess(context: TrustedTenantAdministratorContext, userId: string, request: ReplaceAdministrationUserAccessRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const [user, role, companies, prior] = await Promise.all([
