@@ -2491,8 +2491,11 @@ html[dir="ltr"] .mobile-drawer__panel {
 .baseer-password-field { display: flex; gap: .5rem; }
 .baseer-password-field input { flex: 1; min-inline-size: 0; }
 /* Unified calendar period picker. */
-.baseer-period-filter { position: relative; display: inline-block; min-width: 258px; direction: inherit; }
-.baseer-period-filter__trigger { display: grid; width: 100%; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; min-height: 40px; padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); background: var(--surface); font: inherit; cursor: pointer; text-align: start; }
+.baseer-period-filter { position: relative; display: inline-block; width: fit-content; max-width: 100%; min-width: 0; direction: inherit; justify-self: start; align-self: start; }
+.baseer-period-filter__bar { display: inline-flex; align-items: stretch; max-width: 100%; gap: 5px; }
+.baseer-period-filter__trigger { display: grid; min-width: 0; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 9px; min-height: 40px; padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); background: var(--surface); font: inherit; cursor: pointer; text-align: start; }
+.baseer-period-filter__clear { flex: 0 0 40px; width: 40px; min-height: 40px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--muted); background: var(--surface); font: inherit; font-size: 1.35rem; line-height: 1; cursor: pointer; }
+.baseer-period-filter__clear:hover { color: var(--brand-deep); border-color: var(--brand); }
 .baseer-period-filter__trigger span { color: var(--muted); font-size: var(--font-label); }
 .baseer-period-filter__trigger strong { font-size: var(--font-body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .baseer-period-filter__trigger b { color: var(--brand); font-size: 1.1rem; }
