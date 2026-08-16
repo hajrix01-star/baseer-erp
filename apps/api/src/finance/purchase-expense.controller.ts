@@ -1,10 +1,11 @@
-import { createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowDocumentReceiptSchema } from '@baseer-erp/contracts';
-import { BadRequestException, Body, Controller, ForbiddenException, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
+import { createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema } from '@baseer-erp/contracts';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { PurchaseExpenseService } from './purchase-expense.service.js';
 
 const CREATE_CAPABILITY = 'finance.purchase_expense.create';
+const READ_CAPABILITY = 'finance.purchase_expense.read';
 
 @Controller('finance/purchase-expense-documents')
 export class PurchaseExpenseController {
@@ -30,12 +31,20 @@ export class PurchaseExpenseController {
     }));
   }
 
-  private async authorize(authorization: string | undefined, companyId: string | undefined) {
+  @Get()
+  async list(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    return financeOutflowDocumentsReceiptSchema.parse({
+      companyId: context.companyId,
+      documents: await this.documents.list(context),
+    });
+  }
+  private async authorize(authorization: string | undefined, companyId: string | undefined, capability = CREATE_CAPABILITY) {
     const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
     if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
     const parsedCompanyId = companyIdSchema.safeParse(companyId);
     if (!parsedCompanyId.success) throw new ForbiddenException('Company finance scope is not permitted.');
-    const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [CREATE_CAPABILITY] });
+    const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
   }
 }

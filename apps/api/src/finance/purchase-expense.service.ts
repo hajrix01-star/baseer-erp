@@ -40,7 +40,28 @@ export class PurchaseExpenseService {
       const receipt:PurchaseExpenseReceipt={documentId,documentNumber,journalEntryId:journal.journalEntryId,kind:r.kind,settlementKind:r.settlementKind,status:FinanceOutflowDocumentStatus.POSTED,grossAmount:gross.toFixed(4),netAmount:net.toFixed(4),vatAmount:vat.toFixed(4),supplierDueId}; await tx.auditEvent.create({data:{id:randomUUID(),tenantId:input.context.tenantId,companyId:input.context.companyId,actorUserId:input.context.actorUserId,action:'finance.purchase_expense.created',entityType:'FinanceOutflowDocument',entityId:documentId,requestId:`purchase-expense:${input.idempotencyKey}`,afterJson:receipt as Prisma.InputJsonValue}}); await this.idem.completeInTransaction(tx,input.context,{receiptId:begun.receiptId,response:{status:201,headers:null,body:receipt}});return receipt;
     }).catch(e=>{if(e instanceof IdempotencyPayloadMismatchError)throw new ConflictException('The idempotency key was used with a different request.');throw e;});
   }
-  private async account(tx:Prisma.TransactionClient,c:TrustedCompanyActorContext,key:string){const r=await tx.financeAccount.findFirst({where:{tenantId:c.tenantId,companyId:c.companyId,systemKey:key,status:FinanceAccountStatus.ACTIVE},select:{id:true}});if(!r)throw new BadRequestException('The company financial setup is incomplete.');return r.id;}
+  async list(context: TrustedCompanyActorContext) {
+    return this.db.inTenantTransaction(context.tenantId, async (tx) =>
+      tx.financeOutflowDocument.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+        orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }],
+        take: 250,
+        select: {
+          id: true, documentNumber: true, kind: true, settlementKind: true,
+          status: true, businessDate: true, grossAmount: true,
+          supplier: { select: { nameAr: true } },
+          category: { select: { nameAr: true } },
+        },
+      }).then((documents) => documents.map((document) => ({
+        id: document.id, documentNumber: document.documentNumber,
+        kind: document.kind, settlementKind: document.settlementKind,
+        status: document.status, businessDate: document.businessDate,
+        grossAmount: document.grossAmount.toFixed(4),
+        supplierNameAr: document.supplier?.nameAr ?? null,
+        categoryNameAr: document.category.nameAr,
+      }))),
+    );
+  }  private async account(tx:Prisma.TransactionClient,c:TrustedCompanyActorContext,key:string){const r=await tx.financeAccount.findFirst({where:{tenantId:c.tenantId,companyId:c.companyId,systemKey:key,status:FinanceAccountStatus.ACTIVE},select:{id:true}});if(!r)throw new BadRequestException('The company financial setup is incomplete.');return r.id;}
   private normalise(r:PurchaseExpenseRequest):PurchaseExpenseRequest{const invoice=r.supplierInvoiceNumber?.trim();const missing=r.supplierInvoiceMissingReason?.trim();if(!invoice&&!missing)throw new BadRequestException('Provide the supplier invoice number or a missing reason.');if(invoice&&missing)throw new BadRequestException('Provide an invoice number or a missing reason, not both.');return {...r,...(invoice?{supplierInvoiceNumber:invoice}:{}),...(missing?{supplierInvoiceMissingReason:missing}:{}),...(r.notes?.trim()?{notes:r.notes.trim()}:{} )};}
   private payload(r:PurchaseExpenseRequest){return {kind:r.kind,settlementKind:r.settlementKind,categoryId:r.categoryId,supplierId:r.supplierId??null,supplierInvoiceNumber:r.supplierInvoiceNumber??null,supplierInvoiceMissingReason:r.supplierInvoiceMissingReason??null,businessDate:r.businessDate.toISOString(),supplierInvoiceDate:r.supplierInvoiceDate?.toISOString()??null,grossAmount:r.grossAmount,isTaxable:r.isTaxable,allocations:r.allocations.map(a=>({vaultId:a.vaultId,grossAmount:a.grossAmount})),notes:r.notes??null}as const;}
 }

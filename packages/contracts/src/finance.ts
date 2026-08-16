@@ -761,4 +761,22 @@ export const financeOutflowDocumentReceiptSchema = z.object({
 }).strict();
 
 export type CreateFinanceOutflowDocumentRequest = z.infer<typeof createFinanceOutflowDocumentRequestSchema>;
+
+export const financeOutflowDocumentHistoryItemSchema = z.object({
+  id: z.string().uuid(),
+  documentNumber: z.string().min(1).max(80),
+  kind: financeOutflowKindSchema,
+  settlementKind: financeOutflowSettlementSchema,
+  status: financeOutflowStatusSchema,
+  businessDate: z.date(),
+  grossAmount: financeAmountSchema,
+  supplierNameAr: z.string().nullable(),
+  categoryNameAr: z.string().min(1).max(160),
+}).strict();
+
+export const financeOutflowDocumentsReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(250),
+}).strict();
 export type FinanceOutflowDocumentReceipt = z.infer<typeof financeOutflowDocumentReceiptSchema>;
+export type FinanceOutflowDocumentsReceipt = z.infer<typeof financeOutflowDocumentsReceiptSchema>;
