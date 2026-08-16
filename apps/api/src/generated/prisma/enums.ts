@@ -106,7 +106,7 @@ export type FinanceFiscalPeriodStatus = (typeof FinanceFiscalPeriodStatus)[keyof
 export const FinanceVaultType = {
   CASH: 'CASH',
   BANK: 'BANK',
-  ELECTRONIC: 'ELECTRONIC'
+  APP: 'APP'
 } as const
 
 export type FinanceVaultType = (typeof FinanceVaultType)[keyof typeof FinanceVaultType]

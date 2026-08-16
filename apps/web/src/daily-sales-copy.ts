@@ -118,7 +118,7 @@ export const dailySalesText = {
       "تنتهي جلسة العرض عند إغلاق المتصفح. لا يُحفظ رمز الدخول في ملفات النظام أو الكود.",
     CASH: "نقد",
     BANK: "بنك",
-    ELECTRONIC: "إلكتروني",
+    APP: "تطبيقات",
   },
   en: {
     eyebrow: "Sales operations",
@@ -239,6 +239,6 @@ export const dailySalesText = {
       "The viewing session ends when the browser closes. No sign-in token is stored in system files or source code.",
     CASH: "Cash",
     BANK: "Bank",
-    ELECTRONIC: "Electronic",
+    APP: "App",
   },
 } as const;

@@ -65,9 +65,9 @@ export class CompanyFinanceSetupService {
 const VAULT_DEFINITIONS: Record<CompanyVaultChoice, { nameAr: string; nameEn: string; type: FinanceVaultType; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number }> = {
   CASH: { nameAr: 'نقد', nameEn: 'Cash', type: FinanceVaultType.CASH, isSalesChannel: true, isPaymentDestination: true, sortOrder: 10 },
   BANK: { nameAr: 'بنك', nameEn: 'Bank', type: FinanceVaultType.BANK, isSalesChannel: false, isPaymentDestination: true, sortOrder: 20 },
-  HUNGERSTATION: { nameAr: 'هنقرستيشن', nameEn: 'HungerStation', type: FinanceVaultType.ELECTRONIC, isSalesChannel: true, isPaymentDestination: false, sortOrder: 30 },
-  JAHEZ: { nameAr: 'جاهز', nameEn: 'Jahez', type: FinanceVaultType.ELECTRONIC, isSalesChannel: true, isPaymentDestination: false, sortOrder: 40 },
-  KEETA: { nameAr: 'كيتا', nameEn: 'Keeta', type: FinanceVaultType.ELECTRONIC, isSalesChannel: true, isPaymentDestination: false, sortOrder: 50 },
+  HUNGERSTATION: { nameAr: 'هنقرستيشن', nameEn: 'HungerStation', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 30 },
+  JAHEZ: { nameAr: 'جاهز', nameEn: 'Jahez', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 40 },
+  KEETA: { nameAr: 'كيتا', nameEn: 'Keeta', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 50 },
 };
 function normalizeVaultChoices(value: readonly CompanyVaultChoice[]): CompanyVaultChoice[] { const unique = [...new Set(value)]; if (!unique.length || unique.some((item) => !COMPANY_VAULT_CHOICES.includes(item))) throw new BadRequestException('Select at least one supported company vault.'); return unique; }
 function requiredText(value: string, maximumLength: number): string { const text = value?.trim(); if (!text || text.length > maximumLength) throw new BadRequestException('A fiscal-period name is required.'); return text; }

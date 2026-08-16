@@ -165,7 +165,7 @@ export const createVaultRequestSchema = z
   .object({
     nameAr: z.string().trim().min(1).max(160),
     nameEn: z.string().trim().min(1).max(160),
-    type: z.enum(["CASH", "BANK", "ELECTRONIC"]),
+    type: z.enum(["CASH", "BANK", "APP"]),
     isSalesChannel: z.boolean().optional(),
     isPaymentDestination: z.boolean().optional(),
     idempotencyKey: idempotencyKeySchema,
@@ -601,7 +601,7 @@ export const dailySalesChannelVaultSchema = z
     id: z.string().uuid(),
     nameAr: z.string().min(1).max(160),
     nameEn: z.string().min(1).max(160),
-    type: z.enum(["CASH", "BANK", "ELECTRONIC"]),
+    type: z.enum(["CASH", "BANK", "APP"]),
     isSalesChannel: z.boolean(),
   })
   .strict();

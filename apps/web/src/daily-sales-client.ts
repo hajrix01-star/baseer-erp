@@ -4,7 +4,7 @@ export type Vault = {
   id: string;
   nameAr: string;
   nameEn: string;
-  type: "CASH" | "BANK" | "ELECTRONIC";
+  type: "CASH" | "BANK" | "APP";
   isSalesChannel: boolean;
 };
 export type Allocation = { vaultId: string; grossAmount: string };

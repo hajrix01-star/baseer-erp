@@ -71,7 +71,7 @@ enum FinanceFiscalPeriodStatus {
 enum FinanceVaultType {
   CASH
   BANK
-  ELECTRONIC
+  APP
 }
 
 enum FinanceVaultStatus {

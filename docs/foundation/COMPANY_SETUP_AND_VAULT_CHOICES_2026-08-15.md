@@ -11,11 +11,11 @@ The company setup flow presents these ready vault options and creates only the c
 | --- | --- | --- | --- |
 | نقد | Cash | Yes | Yes |
 | بنك | Bank | No | Yes |
-| هنقرستيشن | Electronic | Yes | No |
-| جاهز | Electronic | Yes | No |
-| كيتا | Electronic | Yes | No |
+| هنقرستيشن | App | Yes | No |
+| جاهز | App | Yes | No |
+| كيتا | App | Yes | No |
 
-The platforms are separate electronic collection/sales channels. They are not mixed with cash or bank balances and are not default sources for supplier or loan payments.
+The platforms are separate application collection/sales channels. They are not mixed with cash or bank balances and are not default sources for supplier or loan payments.
 
 ## Lifecycle
 
