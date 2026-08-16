@@ -136,7 +136,7 @@ button {
   place-items: center;
   font-size: var(--font-title-sm);
 }
-.app-modules-button { color: var(--brand); border-color: var(--brand); background: var(--canvas); font-size: 1.7rem; }
+.app-modules-button { color: var(--brand); border-color: var(--brand); background: var(--canvas); font-size: 2rem; line-height: 1; }
 .company-selector,
 .theme-button {
   display: inline-flex;
