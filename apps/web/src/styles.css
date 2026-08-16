@@ -1633,11 +1633,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: var(--muted);
   line-height: 1.7;
 }
-.administration-role-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
-}
 .is-active { color: #0a704a; background: #e7f7ed; }
 .is-disabled { color: #9b342a; background: #fff0ed; }.administration-user-avatar {
   display: inline-grid;
@@ -1660,14 +1655,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-user-avatar--female {
   background: #f9e7ef;
   border-color: #eccad9;
-}
-.administration-user-avatar.is-large {
-  width: 62px;
-  height: 62px;
-  font-size: var(--icon-size-lg);
-}
-.administration-user-dialog {
-  width: min(700px, 100%);
 }
 .administration-dialog-form {
   display: grid;
@@ -1795,7 +1782,9 @@ html[dir="ltr"] .mobile-drawer__panel {
   border-color: #dfc895;
 }
 .administration-role-cards {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
 }
 .administration-role-cards article {
   display: grid;
@@ -1868,7 +1857,7 @@ html[dir="ltr"] .mobile-drawer__panel {
     width: 100%;
   }
 }
-/* Compact administration desktop density */
+
 .administration-user-avatar.is-large {
   width: 52px;
   height: 52px;
@@ -1900,9 +1889,9 @@ html[dir="ltr"] .mobile-drawer__panel {
     grid-template-columns: 1fr;
   }
 }
-/* Keep sales register actions compact and legible on desktop. */
 
-/* Daily sales entry dialog: a single compact, Noorix-inspired layout. */
+
+
 .daily-sales-dialog {
   width: min(480px, calc(100vw - 28px));
   max-height: calc(100vh - 40px);
@@ -2502,5 +2491,6 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .administration-company-checkboxes input[type="checkbox"] { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; width: auto; min-height: 0; accent-color: #087f5b; }
 
+.administration-login-domain { display: flex; align-items: center; gap: .35rem; direction: ltr; }.administration-login-domain b { color: var(--muted); }.administration-login-domain input { min-inline-size: 0; flex: 1; }
 .baseer-password-field { display: flex; gap: .5rem; }
 .baseer-password-field input { flex: 1; min-inline-size: 0; }
