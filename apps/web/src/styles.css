@@ -42,6 +42,9 @@
   --font-display: clamp(2.25rem, 5vw, 3.5rem);
   --font-display-mobile: 2.1875rem;
   --icon-size-lg: 1.75rem;
+  --card-radius: 1rem;
+  --card-padding: 1.125rem;
+  --card-padding-compact: 0.875rem;
   font-family: "Noto Sans Arabic Variable", "IBM Plex Sans Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
 }
 * {
@@ -2897,4 +2900,43 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-record-dialog__close:focus-visible {
   outline: 2px solid var(--brand, #087a4a);
   outline-offset: 2px;
+}
+/* Central card primitive: shared surface, spacing, and interaction rules for every module. */
+.baseer-card {
+  min-width: 0;
+  border: 1px solid var(--line, #dce7e0);
+  border-radius: var(--card-radius);
+  background: var(--surface, #fff);
+  box-shadow: 0 8px 24px rgb(11 36 26 / 5%);
+}
+.baseer-card--default {
+  background: var(--surface, #fff);
+}
+.baseer-card--muted {
+  background: #f8fbf8;
+}
+.baseer-card--default,
+.baseer-card--muted {
+  padding: var(--card-padding);
+}
+.baseer-card--compact {
+  padding: var(--card-padding-compact);
+}
+.baseer-card--interactive {
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.baseer-card--interactive:hover {
+  border-color: #b5cdbd;
+  box-shadow: 0 12px 28px rgb(11 36 26 / 9%);
+  transform: translateY(-1px);
+}
+.baseer-card--interactive:focus-visible {
+  outline: 2px solid var(--brand, #08744d);
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .baseer-card--default,
+  .baseer-card--muted {
+    padding: var(--card-padding-compact);
+  }
 }

@@ -72,7 +72,7 @@ export function AdministrationUsersPanel({
       <div className="administration-user-cards">
         {overview.users.map((user) => (
           <button
-            className="administration-user-card"
+            className="baseer-card baseer-card--default baseer-card--compact baseer-card--interactive administration-user-card"
             type="button"
             key={user.id}
             onClick={() => openUser(user)}

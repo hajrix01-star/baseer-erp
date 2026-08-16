@@ -1,3 +1,4 @@
+import { BaseerCard } from "./baseer-card";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { CashHandoverReport, ShiftSummary } from "./daily-sales-client";
 import { formatMoney, formatNumber } from "./number-format";
@@ -14,7 +15,7 @@ export function DailySalesInsights({
   const copy = dailySalesText[language];
   return (
     <section className="daily-sales-insights" aria-label={copy.shiftReport}>
-      <article>
+      <BaseerCard>
         <p>{copy.shiftReport}</p>
         <div className="daily-sales-insights__shifts">
           {shifts.map((shift) => (
@@ -36,8 +37,8 @@ export function DailySalesInsights({
             </div>
           ))}
         </div>
-      </article>
-      <article>
+      </BaseerCard>
+      <BaseerCard>
         <p>{copy.cashHandoverReport}</p>
         <strong>
           {formatMoney(cashHandover?.totalCashHandoverAmount ?? "0")}
@@ -45,7 +46,7 @@ export function DailySalesInsights({
         <small>
           {formatNumber(cashHandover?.recordCount ?? 0)} {copy.handoverRecords}
         </small>
-      </article>
+      </BaseerCard>
     </section>
   );
 }
