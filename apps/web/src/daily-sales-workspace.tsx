@@ -3,6 +3,7 @@ import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { DailySalesClosingDialog } from "./daily-sales-closing-dialog";
 import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
+import { DailySalesRecordDialog } from "./daily-sales-record-dialog";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { DailySalesHistory } from "./daily-sales-history";
 import { DailySalesInsights } from "./daily-sales-insights";
@@ -69,6 +70,7 @@ export function DailySalesWorkspace({
   const [saving, setSaving] = useState(false);
   const [entryOpen, setEntryOpen] = useState(false);
   const [reversalTarget, setReversalTarget] = useState<Closing | null>(null);
+  const [recordTarget, setRecordTarget] = useState<Closing | null>(null);
   const [reversalReason, setReversalReason] = useState("");
 
   const load = useCallback(async () => {
@@ -396,6 +398,22 @@ export function DailySalesWorkspace({
         onDayOffReasonChange={setDayOffReason}
         onDayOffNoteChange={setDayOffNote}
       />
+      <DailySalesRecordDialog
+        language={language}
+        closing={recordTarget}
+        vaults={vaults}
+        canCorrect={canCorrect}
+        canReverse={canReverse}
+        onClose={() => setRecordTarget(null)}
+        onCorrect={(closing) => {
+          setRecordTarget(null);
+          selectForCorrection(closing);
+        }}
+        onReverse={(closing) => {
+          setRecordTarget(null);
+          requestReversal(closing);
+        }}
+      />
       {canReadManagementReports && (
         <DailySalesInsights
           language={language}
@@ -416,10 +434,7 @@ export function DailySalesWorkspace({
         language={language}
         closings={closings}
         historyLimit={historyLimit}
-        canCorrect={canCorrect}
-        canReverse={canReverse}
-        onCorrect={selectForCorrection}
-        onReverse={requestReversal}
+        onView={setRecordTarget}
       />
     </section>
   );

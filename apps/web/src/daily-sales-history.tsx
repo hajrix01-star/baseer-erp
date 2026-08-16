@@ -6,24 +6,17 @@ export function DailySalesHistory({
   language,
   closings,
   historyLimit,
-  canCorrect,
-  canReverse,
-  onCorrect,
-  onReverse,
+  onView,
 }: {
   language: DailySalesLanguage;
   closings: readonly Closing[];
   historyLimit: number | null;
-  canCorrect: boolean;
-  canReverse: boolean;
-  onCorrect: (closing: Closing) => void;
-  onReverse: (closing: Closing) => void;
+  onView: (closing: Closing) => void;
 }) {
   const copy = dailySalesText[language];
-  const cancellationLabel =
-    language === "ar" ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel";
-  const cancelledLabel =
-    language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
+  const cancelledLabel = language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
+  const recordLabel = language === "ar" ? "\u0627\u0644\u0633\u062c\u0644" : "Record";
+
   return (
     <section className="daily-sales-history">
       <div>
@@ -36,78 +29,42 @@ export function DailySalesHistory({
       {closings.length === 0 ? (
         <p className="daily-sales-empty-copy">{copy.noClosings}</p>
       ) : (
-        <div
-          className="daily-sales-register"
-          role="region"
-          aria-label={copy.closings}
-        >
+        <div className="daily-sales-register" role="region" aria-label={copy.closings}>
           <table>
+            <caption className="visually-hidden">{copy.closings}</caption>
             <thead>
               <tr>
-                <th>{copy.date}</th>
-                <th>{copy.scope}</th>
-                <th>{copy.gross}</th>
-                <th>{copy.customers}</th>
-                <th>{copy.cashHandoverShort}</th>
-                <th>{copy.status}</th>
-                <th>{copy.actions}</th>
+                <th scope="col">{recordLabel}</th>
+                <th scope="col">{copy.scope}</th>
+                <th scope="col" className="is-number">{copy.gross}</th>
+                <th scope="col" className="is-number">{copy.customers}</th>
+                <th scope="col" className="is-number">{copy.cashHandoverShort}</th>
+                <th scope="col" className="is-status">{copy.status}</th>
               </tr>
             </thead>
             <tbody>
               {closings.map((closing) => (
                 <tr key={closing.closingId}>
                   <td>
-                    <strong>{closing.documentNumber}</strong>
-                    <small>{closing.businessDate.slice(0, 10)}</small>
-                  </td>
-                  <td>
-                    {
-                      copy[
-                        closing.scope.toLowerCase() as
-                          "morning" | "evening" | "all"
-                      ]
-                    }
-                  </td>
-                  <td>{formatMoney(closing.grossAmount)}</td>
-                  <td>{formatNumber(closing.customerCount)}</td>
-                  <td>
-                    {closing.cashHandoverAmount
-                      ? formatMoney(closing.cashHandoverAmount)
-                      : "—"}
-                  </td>
-                  <td>
-                    <span
-                      className={`daily-sales-badge ${closing.status.toLowerCase()}`}
+                    <button
+                      className="daily-sales-record-link"
+                      type="button"
+                      onClick={() => onView(closing)}
                     >
-                      {closing.status === "REVERSED"
-                        ? cancelledLabel
-                        : copy[closing.status]}
-                    </span>
+                      <strong dir="ltr">{closing.documentNumber}</strong>
+                      <small>{closing.businessDate.slice(0, 10)}</small>
+                    </button>
                   </td>
-                  <td>
-                    {closing.status === "POSTED" &&
-                      (canCorrect || canReverse) && (
-                        <div className="daily-sales-register__actions">
-                          {canCorrect && (
-                            <button
-                              className="daily-sales-secondary"
-                              type="button"
-                              onClick={() => onCorrect(closing)}
-                            >
-                              {copy.edit}
-                            </button>
-                          )}
-                          {canReverse && (
-                            <button
-                              className="daily-sales-danger"
-                              type="button"
-                              onClick={() => onReverse(closing)}
-                            >
-                              {cancellationLabel}
-                            </button>
-                          )}
-                        </div>
-                      )}
+                  <td>{copy[closing.scope.toLowerCase() as "morning" | "evening" | "all"]}</td>
+                  <td className="is-number" dir="ltr">{formatMoney(closing.grossAmount)}</td>
+                  <td className="is-number" dir="ltr">{formatNumber(closing.customerCount)}</td>
+                  <td className="is-number" dir="ltr">
+                    {closing.cashHandoverAmount ? formatMoney(closing.cashHandoverAmount) : "\u2014"}
+                  </td>
+                  <td className="is-status">
+                    <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>
+                      {closing.status === "REVERSED" ? cancelledLabel : copy[closing.status]}
+                    </span>
                   </td>
                 </tr>
               ))}
