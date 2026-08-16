@@ -8,10 +8,10 @@ Current authority: `CURRENT_DELIVERY_AUTHORITY.md`
 
 | Field              | Value                                                                                                                                                                                                                                                     |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Active scope       | Purchase & Expense financial documents
-| Stage              | Gate A scope is complete: `../foundation/PURCHASE_AND_EXPENSE_FINANCIAL_DOCUMENTS_SCOPE_DECISION_2026-08-16.md` records the Noorix-derived workflow and Baseer boundaries. Gate B begins with contracts, database and server proof. S1 stabilization is closed locally; Daily Sales remains frozen pending owner acceptance; AI Gate B remains offline.
+| Active scope       | Finance Setup & Master Data
+| Stage              | The Noorix-derived dependency order is recorded in `../foundation/FINANCE_SETUP_AND_MASTER_DATA_SCOPE_DECISION_2026-08-16.md`: finance setup, vaults, categories and suppliers close before Purchase & Expense documents. S1 stabilization is closed locally; Daily Sales remains frozen pending owner acceptance; AI Gate B remains offline.
 | Deferred scope     | Marketing/Google and Inbound Evidence/Email/Telegram/OCR remain deferred until core financial documents and reports close, under `OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`.
-| Next decision gate | Complete the Purchase & Expense financial-document vertical slice; no marketing, email or AI provider integration beforehand.
+| Next decision gate | Close Finance Setup & Master Data vertical slices, then activate Purchase & Expense documents; no marketing, email or AI provider integration beforehand.
 
 ## Portfolio state
 

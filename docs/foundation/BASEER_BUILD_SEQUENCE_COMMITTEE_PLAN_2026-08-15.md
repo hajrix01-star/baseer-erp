@@ -10,7 +10,7 @@ The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOUR
 - Finance Phase 2 native UI remains deferred; it is not cancelled.
 - Marketing Performance & Google Hub is designed but has no backend models, commands, Google connection, facts, UI, or external calls yet.
 - AI Platform Gate B technical core is verified: versioned skills, company-authorized offline preflight, rate limit, idempotency, audit receipts and receipt-integrity constraints. It still has no provider call, conversation, memory, read tool or chat UI.
-- Daily Sales Closing is frozen pending owner acceptance as the official sales source. S1 stabilization is closed locally and recorded in `../governance/COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md`; the only active next business scope is **Purchase & Expense financial documents**. Marketing/Google, Inbound Evidence and a user-facing AI assistant remain deferred until the required financial documents and server read models close.
+- Daily Sales Closing is frozen pending owner acceptance as the official sales source. S1 stabilization is closed locally and recorded in `../governance/COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md`; the active next business scope is **Finance Setup & Master Data**: setup, vaults, categories and suppliers must close before **Purchase & Expense financial documents**. The governing scope record is `FINANCE_SETUP_AND_MASTER_DATA_SCOPE_DECISION_2026-08-16.md`. Marketing/Google, Inbound Evidence and a user-facing AI assistant remain deferred until the required financial documents and server read models close.
 
 ## Phase 0 — Build-control baseline
 
