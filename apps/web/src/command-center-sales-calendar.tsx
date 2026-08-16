@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import {
@@ -9,11 +9,13 @@ import {
   type CalendarDay,
 } from "./daily-sales-client";
 import type { DailySalesLanguage } from "./daily-sales-copy";
+import { formatMoney } from "./number-format";
 
 const statusCopy = {
   ar: {
     title: "تقويم التشغيل والمبيعات",
-    subtitle: "قراءة تنفيذية لحالة أيام التشغيل. لا تُدخل منه مبيعات أو تعدّل القيود.",
+    subtitle:
+      "قراءة تنفيذية لحالة أيام التشغيل. لا تُدخل منه مبيعات أو تعدّل القيود.",
     recorded: "تم التقفيل",
     pending: "بيانات ناقصة",
     dayOff: "بدون عمل",
@@ -25,7 +27,8 @@ const statusCopy = {
   },
   en: {
     title: "Operations and sales calendar",
-    subtitle: "Executive read-only operational status. Sales and journals are never edited here.",
+    subtitle:
+      "Executive read-only operational status. Sales and journals are never edited here.",
     recorded: "Closing recorded",
     pending: "Incomplete data",
     dayOff: "Day off",
@@ -37,7 +40,11 @@ const statusCopy = {
   },
 } as const;
 
-export function CommandCenterSalesCalendar({ language }: { language: DailySalesLanguage }) {
+export function CommandCenterSalesCalendar({
+  language,
+}: {
+  language: DailySalesLanguage;
+}) {
   const copy = statusCopy[language];
   const range = useMemo(monthRange, []);
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
@@ -50,7 +57,10 @@ export function CommandCenterSalesCalendar({ language }: { language: DailySalesL
     if (!current) return;
     try {
       const query = `fromBusinessDate=${range.from}&toBusinessDate=${range.to}`;
-      const result = await api<{ days: CalendarDay[] }>(current, `/finance/operational-calendar?${query}`);
+      const result = await api<{ days: CalendarDay[] }>(
+        current,
+        `/finance/operational-calendar?${query}`,
+      );
       setDays(result.days);
       setError("");
     } catch {
@@ -58,23 +68,52 @@ export function CommandCenterSalesCalendar({ language }: { language: DailySalesL
     }
   }, [copy.error, range.from, range.to]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
   if (!session) return <DailySalesSignIn language={language} />;
 
   return (
     <section className="command-sales-calendar">
       <header>
-        <div><p className="eyebrow">Baseer ERP</p><h2>{copy.title}</h2><p>{copy.subtitle}</p></div>
-        <button className="daily-sales-secondary" type="button" onClick={() => void load()}>{copy.refresh}</button>
+        <div>
+          <p className="eyebrow">Baseer ERP</p>
+          <h2>{copy.title}</h2>
+          <p>{copy.subtitle}</p>
+        </div>
+        <button
+          className="daily-sales-secondary"
+          type="button"
+          onClick={() => void load()}
+        >
+          {copy.refresh}
+        </button>
       </header>
       {error && <p className="daily-sales-message error">{error}</p>}
       <div className="command-sales-calendar__grid">
         {days.map((day) => {
-          const label = day.operationalStatus === "CLOSED" ? copy.dayOff : day.operationalStatus === "PARTIAL" ? copy.partial : day.dataStatus === "RECORDED" ? copy.recorded : day.dataStatus === "PENDING" ? copy.pending : copy.open;
-          return <article key={day.businessDate} className={`command-sales-calendar__day is-${day.dataStatus.toLowerCase()}`}>
-            <strong>{day.businessDate.slice(8, 10)}</strong><span>{label}</span>
-            <small>{copy.amount}: {day.salesGrossAmount} SAR</small>
-          </article>;
+          const label =
+            day.operationalStatus === "CLOSED"
+              ? copy.dayOff
+              : day.operationalStatus === "PARTIAL"
+                ? copy.partial
+                : day.dataStatus === "RECORDED"
+                  ? copy.recorded
+                  : day.dataStatus === "PENDING"
+                    ? copy.pending
+                    : copy.open;
+          return (
+            <article
+              key={day.businessDate}
+              className={`command-sales-calendar__day is-${day.dataStatus.toLowerCase()}`}
+            >
+              <strong>{day.businessDate.slice(8, 10)}</strong>
+              <span>{label}</span>
+              <small>
+                {copy.amount}: {formatMoney(day.salesGrossAmount)}
+              </small>
+            </article>
+          );
         })}
       </div>
     </section>

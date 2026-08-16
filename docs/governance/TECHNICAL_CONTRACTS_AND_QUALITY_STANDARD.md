@@ -163,3 +163,10 @@ No change is ready for review until it answers:
 7. Does it change schema, migration, external API, files, serials, dates, VAT, or migration mapping?
 8. What is the rollback/recovery behavior?
 
+
+## معيار عرض الأرقام في الواجهة
+
+- تبقى القيم المالية في الـAPI كسلاسل Decimal دقيقة؛ التقريب خاص بالعرض فقط ولا يعود أبداً إلى المدخلات أو القيود.
+- تعرض الواجهة الأرقام الصحيحة بلا كسور، والأرقام العشرية بمنزلة واحدة كحد أقصى (`100`، `100.5`).
+- النسب المئوية لا تستخدم تنسيق المبالغ؛ تعرض بدقتها المحددة في تعريف المؤشر، وبحد أقصى افتراضي منزلة واحدة.
+- تستخدم أي شاشة جديدة الدوال المركزية في `apps/web/src/number-format.ts`، ولا تستدعي `toFixed` أو تنسيقاً محلياً للمبالغ داخل المكونات.

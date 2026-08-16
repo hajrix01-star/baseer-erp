@@ -86,6 +86,11 @@ export function AdministrationUsersPanel({
               <strong>{user.nameAr}</strong>
               <small>{user.nameEn}</small>
               <span>{user.login}</span>
+              <small>
+                {user.preferredLanguage === "ar"
+                  ? "واجهة عربية"
+                  : "English interface"}
+              </small>
               <em
                 className={
                   user.status === "ACTIVE" ? "is-active" : "is-disabled"
@@ -139,6 +144,7 @@ function CreateUserDialog({
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
   const [password, setPassword] = useState("");
+  const [preferredLanguage, setPreferredLanguage] = useState<"ar" | "en">("ar");
   const [companyId, setCompanyId] = useState(overview.companies[0]?.id ?? "");
   const [roleId, setRoleId] = useState(overview.roles[0]?.id ?? "");
   const [avatarKind, setAvatarKind] = useState<UserAvatarKind>("INITIALS");
@@ -153,6 +159,7 @@ function CreateUserDialog({
         nameAr,
         nameEn,
         password,
+        preferredLanguage,
         companyId,
         roleId,
         avatarKind,
@@ -207,6 +214,19 @@ function CreateUserDialog({
             value={nameEn}
             onChange={(event) => setNameEn(event.target.value)}
           />
+        </label>{" "}
+        <label>
+          لغة الواجهة المفضلة
+          <select
+            value={preferredLanguage}
+            onChange={(event) =>
+              setPreferredLanguage(event.target.value as "ar" | "en")
+            }
+          >
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+          </select>
+          <small>يمكن تغيير لغة العرض من أعلى النظام بعد تسجيل الدخول.</small>
         </label>
         <label>
           كلمة المرور الأولية
@@ -314,6 +334,11 @@ function ManageUserDialog({
         <div>
           <strong>{user.nameAr}</strong>
           <span>{user.login}</span>
+          <small>
+            {user.preferredLanguage === "ar"
+              ? "واجهة عربية"
+              : "English interface"}
+          </small>
           <em
             className={user.status === "ACTIVE" ? "is-active" : "is-disabled"}
           >

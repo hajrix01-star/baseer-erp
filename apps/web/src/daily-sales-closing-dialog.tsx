@@ -1,6 +1,7 @@
 import { type FormEvent } from "react";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
+import { formatMoney } from "./number-format";
 import type {
   Closing,
   DailySalesEntryMode,
@@ -122,14 +123,16 @@ export function DailySalesClosingDialog({
                 >
                   {copy.create}
                 </button>
-                {allowDayOff && <button
-                  type="button"
-                  className={mode === "DAY_OFF" ? "is-selected" : ""}
-                  onClick={() => onModeChange("DAY_OFF")}
-                  disabled={saving}
-                >
-                  {copy.dayOffAction}
-                </button>}
+                {allowDayOff && (
+                  <button
+                    type="button"
+                    className={mode === "DAY_OFF" ? "is-selected" : ""}
+                    onClick={() => onModeChange("DAY_OFF")}
+                    disabled={saving}
+                  >
+                    {copy.dayOffAction}
+                  </button>
+                )}
               </div>
               <label>
                 <span>{copy.date}</span>
@@ -147,11 +150,13 @@ export function DailySalesClosingDialog({
               {!isDayOff && (
                 <fieldset className="daily-sales-dialog__scope-picker">
                   <legend>{copy.scope}</legend>
-                  {([
-                    ["MORNING", copy.morning],
-                    ["EVENING", copy.evening],
-                    ["ALL", copy.all],
-                  ] as const).map(([scope, label]) => (
+                  {(
+                    [
+                      ["MORNING", copy.morning],
+                      ["EVENING", copy.evening],
+                      ["ALL", copy.all],
+                    ] as const
+                  ).map(([scope, label]) => (
                     <button
                       key={scope}
                       type="button"
@@ -249,7 +254,7 @@ export function DailySalesClosingDialog({
                     {previewLoading
                       ? copy.previewLoading
                       : preview
-                        ? `${preview.grossAmount} SAR`
+                        ? formatMoney(preview.grossAmount)
                         : copy.previewUnavailable}
                   </strong>
                   <small>{copy.entryTotalHint}</small>
@@ -262,7 +267,10 @@ export function DailySalesClosingDialog({
                     inputMode="decimal"
                     value={form.cashHandoverAmount}
                     onChange={(event) =>
-                      onChange({ ...form, cashHandoverAmount: event.target.value })
+                      onChange({
+                        ...form,
+                        cashHandoverAmount: event.target.value,
+                      })
                     }
                     placeholder="0.0000"
                   />
@@ -272,14 +280,19 @@ export function DailySalesClosingDialog({
                   <select
                     value={form.cashHandoverVaultId}
                     onChange={(event) =>
-                      onChange({ ...form, cashHandoverVaultId: event.target.value })
+                      onChange({
+                        ...form,
+                        cashHandoverVaultId: event.target.value,
+                      })
                     }
                   >
-                    {vaults.filter((vault) => vault.type === "CASH").map((vault) => (
-                      <option key={vault.id} value={vault.id}>
-                        {language === "ar" ? vault.nameAr : vault.nameEn}
-                      </option>
-                    ))}
+                    {vaults
+                      .filter((vault) => vault.type === "CASH")
+                      .map((vault) => (
+                        <option key={vault.id} value={vault.id}>
+                          {language === "ar" ? vault.nameAr : vault.nameEn}
+                        </option>
+                      ))}
                   </select>
                 </label>
                 <small>{copy.recordedHint}</small>

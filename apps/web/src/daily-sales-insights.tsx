@@ -1,5 +1,6 @@
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { CashHandoverReport, ShiftSummary } from "./daily-sales-client";
+import { formatMoney, formatNumber } from "./number-format";
 
 export function DailySalesInsights({
   language,
@@ -19,13 +20,18 @@ export function DailySalesInsights({
           {shifts.map((shift) => (
             <div key={shift.scope}>
               <strong>
-                {copy[
-                  shift.scope.toLowerCase() as "morning" | "evening" | "all"
-                ]}
+                {
+                  copy[
+                    shift.scope.toLowerCase() as "morning" | "evening" | "all"
+                  ]
+                }
               </strong>
-              <span>{shift.grossAmount} SAR</span>
+              <span>{formatMoney(shift.grossAmount)}</span>
               <small>
-                {shift.customerCount} · {shift.averageOrderAmount ?? copy.notAvailable} SAR
+                {formatNumber(shift.customerCount)} ·{" "}
+                {shift.averageOrderAmount
+                  ? formatMoney(shift.averageOrderAmount)
+                  : copy.notAvailable}
               </small>
             </div>
           ))}
@@ -33,8 +39,12 @@ export function DailySalesInsights({
       </article>
       <article>
         <p>{copy.cashHandoverReport}</p>
-        <strong>{cashHandover?.totalCashHandoverAmount ?? "0.0000"} SAR</strong>
-        <small>{cashHandover?.recordCount ?? 0} {copy.handoverRecords}</small>
+        <strong>
+          {formatMoney(cashHandover?.totalCashHandoverAmount ?? "0")}
+        </strong>
+        <small>
+          {formatNumber(cashHandover?.recordCount ?? 0)} {copy.handoverRecords}
+        </small>
       </article>
     </section>
   );
