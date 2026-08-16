@@ -329,7 +329,7 @@ export function DailySalesClosingDialog({
                   ? copy.saveDayOff
                   : editing
                     ? copy.correct
-                    : copy.create}
+                    : copy.saveAndSend}
             </button>
           </footer>
         </form>

@@ -21,9 +21,7 @@ export function DailySalesHistory({
 }) {
   const copy = dailySalesText[language];
   const cancellationLabel =
-    language === "ar"
-      ? "\u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0642\u0641\u064a\u0644"
-      : "Cancel closing";
+    language === "ar" ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel";
   const cancelledLabel =
     language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
   return (
