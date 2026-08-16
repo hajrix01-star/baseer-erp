@@ -7,7 +7,7 @@ import { AdministrationWorkspace } from './administration-workspace';
 import { getModule, modules, type ModuleId } from './modules';
 
 type Language = 'ar' | 'en';
-type Theme = 'green' | 'classic';
+type Theme = 'green' | 'blue' | 'plum' | 'classic';
 type ResolvedRoute = { moduleId: ModuleId; section: number };
 
 type Route = ResolvedRoute | null;
@@ -31,6 +31,8 @@ const copy = {
     quickEntry: 'إدخال سريع',
     company: 'شركة نوركس الافتراضية',
     greenTheme: 'الثيم الأخضر',
+    blueTheme: 'الثيم الأزرق',
+    plumTheme: 'الثيم البنفسجي',
     classicTheme: 'الثيم الكلاسيكي',
     foundation: 'نواة واجهة فقط:',
     foundationText: 'كل رقم أو عملية أو فلتر سيأتي لاحقًا من العقد الخادمي الرسمي لهذا القسم، لا من الواجهة.',
@@ -52,6 +54,8 @@ const copy = {
     quickEntry: 'Quick entry',
     company: 'Noorix Default Company',
     greenTheme: 'Green theme',
+    blueTheme: 'Blue theme',
+    plumTheme: 'Plum theme',
     classicTheme: 'Classic theme',
     foundation: 'Interface foundation only:',
     foundationText: 'Every number, action, and filter will later come from this section’s official server contract, never from the interface.',
@@ -59,6 +63,14 @@ const copy = {
     openModules: 'Open modules',
   },
 } as const;
+
+const themeLabels: Record<Language, Record<Theme, string>> = {
+  ar: { green: "الأخضر", blue: "الأزرق", plum: "البنفسجي", classic: "الكلاسيكي" },
+  en: { green: "Green", blue: "Blue", plum: "Plum", classic: "Classic" },
+};
+function ThemePicker({ language, theme, onTheme }: { language: Language; theme: Theme; onTheme: (theme: Theme) => void }) {
+  return <label className="theme-button"><span className="theme-dot" /><select value={theme} onChange={(event) => onTheme(event.target.value as Theme)} aria-label={language === "ar" ? "اختيار الثيم" : "Choose theme"}>{(["green", "blue", "plum", "classic"] as const).map((item) => <option key={item} value={item}>{themeLabels[language][item]}</option>)}</select></label>;
+}
 
 function parseRoute(): Route {
   const params = new URLSearchParams(window.location.hash.slice(1));
@@ -95,26 +107,26 @@ function persistRecent(route: ResolvedRoute): void {
   localStorage.setItem(recentStorageKey, JSON.stringify([key, ...values].slice(0, 4)));
 }
 
-function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onModules: () => void }) {
+function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onModules: () => void }) {
   const text = copy[language];
   return <header className="topbar">
     <button className="icon-button app-modules-button" onClick={onModules} type="button" aria-label={text.allModules}>{"\u283f"}</button>
     <div className="topbar-spacer" />
     <CompanySessionControl language={language} />
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button>
-    <button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button>
+    <ThemePicker language={language} theme={theme} onTheme={onTheme} />
     <button className="avatar" type="button" aria-label="Profile">م</button>
   </header>;
 }
 
-function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onOpen: (route: ResolvedRoute) => void }) {
+function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onOpen: (route: ResolvedRoute) => void }) {
   const [query, setQuery] = useState('');
   const [recent, setRecent] = useState<ResolvedRoute[]>(readRecent);
   const text = copy[language];
   const visible = useMemo(() => modules.filter((module) => `${module.title.ar} ${module.title.en} ${module.description.ar} ${module.description.en}`.toLocaleLowerCase().includes(query.toLocaleLowerCase().trim())), [query]);
   const open = (route: ResolvedRoute) => { onOpen(route); setRecent(readRecent()); };
   return <div className="launcher-page">
-    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button><button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button><button className="avatar" type="button" aria-label="Profile">م</button></header>
+    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button><ThemePicker language={language} theme={theme} onTheme={onTheme} /><button className="avatar" type="button" aria-label="Profile">م</button></header>
     <main className="launcher-page__content">
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1><p>{text.chooseDescription}</p></div>
       <div className="launcher-page__tools"><label className="module-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text.search} /></label><span className="module-count">{visible.length} / {modules.length}</span></div>
@@ -130,7 +142,7 @@ function Navigation({ moduleId, active, language, onSelect }: { moduleId: Module
   const module = getModule(moduleId);
   return <nav className="module-navigation">{module.sections[language].map((label, index) => <button key={label} type="button" onClick={() => onSelect(index)} className={`nav-item${index === active ? " active" : ""}`}><span className="nav-dot" /><span>{label}</span></button>)}</nav>;
 }
-function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModules, onSection }: { route: ResolvedRoute; language: Language; theme: Theme; onLanguage: () => void; onTheme: () => void; onModules: () => void; onSection: (section: number) => void }) {
+function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModules, onSection }: { route: ResolvedRoute; language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onModules: () => void; onSection: (section: number) => void }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const module = getModule(route.moduleId);
   const text = copy[language];
@@ -148,14 +160,13 @@ function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModule
 
 export function App() {
   const [language, setLanguage] = useState<Language>('ar');
-  const [theme, setTheme] = useState<Theme>(() => localStorage.getItem(themeStorageKey) === 'classic' ? 'classic' : 'green');
+  const [theme, setTheme] = useState<Theme>(() => { const stored = localStorage.getItem(themeStorageKey); return stored === 'blue' || stored === 'plum' || stored === 'classic' || stored === 'green' ? stored : 'green'; });
   const [route, setRoute] = useState<Route>(parseRoute);
   useEffect(() => { document.documentElement.lang = language; document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr'; }, [language]);
-  useEffect(() => { document.body.classList.toggle('is-classic', theme === 'classic'); localStorage.setItem(themeStorageKey, theme); }, [theme]);
+  useEffect(() => { document.body.classList.remove('is-classic', 'is-blue', 'is-plum'); if (theme !== 'green') document.body.classList.add(`is-${theme}`); localStorage.setItem(themeStorageKey, theme); }, [theme]);
   useEffect(() => { const listener = () => setRoute(parseRoute()); window.addEventListener('hashchange', listener); return () => window.removeEventListener('hashchange', listener); }, []);
   const open = (next: ResolvedRoute) => { persistRecent(next); window.location.hash = `module=${next.moduleId}&section=${next.section}`; setRoute(next); };
   const clear = () => { history.replaceState(null, '', window.location.pathname); setRoute(null); };
   const toggleLanguage = () => setLanguage((current) => current === 'ar' ? 'en' : 'ar');
-  const toggleTheme = () => setTheme((current) => current === 'green' ? 'classic' : 'green');
-  return route ? <ModuleWorkspace route={route} language={language} theme={theme} onLanguage={toggleLanguage} onTheme={toggleTheme} onModules={clear} onSection={(section) => open({ moduleId: route.moduleId, section })} /> : <ModuleLauncher language={language} theme={theme} onLanguage={toggleLanguage} onTheme={toggleTheme} onOpen={open} />;
+  return route ? <ModuleWorkspace route={route} language={language} theme={theme} onLanguage={toggleLanguage} onTheme={setTheme} onModules={clear} onSection={(section) => open({ moduleId: route.moduleId, section })} /> : <ModuleLauncher language={language} theme={theme} onLanguage={toggleLanguage} onTheme={setTheme} onOpen={open} />;
 }
