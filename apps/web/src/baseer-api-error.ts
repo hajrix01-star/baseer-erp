@@ -59,16 +59,15 @@ export function presentBaseerApiError(
   fallback: string,
 ): string {
   if (!(error instanceof BaseerApiError)) return fallback;
-  const message = error.localizedMessage?.[language] ?? fallback;
+  // Internal failures are tracked server-side; the person using the ERP only needs a safe next step.
+  const message = error.code === "INTERNAL_ERROR" || error.code === "UNEXPECTED_RESPONSE"
+    ? fallback
+    : error.localizedMessage?.[language] ?? fallback;
   const retry = error.retry?.kind === "retry-after" && error.retry.retryAfterSeconds
     ? language === "ar"
       ? ` أعد المحاولة بعد ${error.retry.retryAfterSeconds} ثانية.`
       : ` Try again after ${error.retry.retryAfterSeconds} seconds.`
     : "";
-  const reference = error.correlationId
-    ? language === "ar"
-      ? ` رقم المتابعة: ${error.correlationId}.`
-      : ` Reference: ${error.correlationId}.`
-    : "";
-  return `${message}${retry}${reference}`;
+  // Correlation IDs stay in the server audit trail; they are not actionable UI copy.
+  return `${message}${retry}`;
 }

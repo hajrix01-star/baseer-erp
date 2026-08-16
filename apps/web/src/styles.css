@@ -2556,3 +2556,104 @@ html[dir="ltr"] .mobile-drawer__panel {
     min-height: 2.625rem;
   }
 }
+
+/* Final desktop shell and administration-card alignment. */
+.baseer-brand {
+  gap: 0.35rem;
+}
+.baseer-brand__mark {
+  width: 2rem;
+  height: 2.45rem;
+  flex: 0 0 auto;
+}
+.baseer-brand__word {
+  font-size: 1.875rem;
+  font-weight: 850;
+  letter-spacing: -0.045em;
+}
+.baseer-brand__word b {
+  display: inline-block;
+  margin-inline-start: 0.1em;
+  font-size: 0.56em;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  vertical-align: 0.1em;
+}
+.sidebar-brand .baseer-brand__mark {
+  color: #edf8f1;
+}
+.sidebar-brand .baseer-brand__word {
+  color: #edf8f1;
+  font-size: 2rem;
+}
+.sidebar-brand .baseer-brand__word b {
+  color: #8ad4ad;
+}
+@media (min-width: 801px) {
+  .module-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-inline: clamp(1.75rem, 2.5vw, 3rem);
+  }
+}
+.administration-user-cards {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--section-gap);
+}
+.administration-user-card {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 96px;
+  padding: var(--card-padding);
+  border-radius: var(--card-radius);
+  box-shadow: 0 8px 24px rgb(11 36 26 / 5%);
+  text-align: start;
+}
+.administration-user-card__body {
+  align-self: center;
+  gap: 0.2rem;
+}
+.administration-user-card__body strong {
+  font-size: var(--font-body);
+}
+.administration-user-card__body small {
+  display: none;
+}
+.administration-user-card__body > span {
+  font-size: var(--font-caption);
+}
+.administration-user-card__body em {
+  margin-top: 0.2rem;
+}
+.administration-user-card__access {
+  grid-column: auto;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  color: var(--brand);
+  font-size: var(--font-label);
+  white-space: nowrap;
+}
+.administration-user-dialog {
+  width: min(38.75rem, calc(100vw - 2rem));
+  overflow-x: hidden;
+}
+.administration-user-dialog .administration-sensitive-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.administration-user-dialog .administration-sensitive-actions label {
+  grid-column: 1 / -1;
+}
+@media (max-width: 640px) {
+  .administration-user-card {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 88px;
+  }
+  .administration-user-dialog .administration-sensitive-actions {
+    grid-template-columns: 1fr;
+  }
+  .administration-user-dialog .administration-sensitive-actions label {
+    grid-column: auto;
+  }
+}
