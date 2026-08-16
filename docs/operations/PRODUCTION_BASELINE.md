@@ -2,6 +2,8 @@
 
 ## Scope decision
 
+**Authority:** Backup and restore details are governed by `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
+
 BASEER ERP is a private online system for its owner and the owner's companies.
 It is not a SaaS product, marketplace, public multi-customer service, or public
 registration portal. The Baseer website is reachable over HTTPS only by users
@@ -41,14 +43,14 @@ access, or customer tenancy.
 | Network | Public HTTPS only through the owner-controlled domain/reverse proxy. PostgreSQL, Docker, backup, metrics, and administrative ports remain private. |
 | Logs/metrics | Keep Baseer's redacted JSON logs, request correlation, health/readiness, and protected in-process summary. Use Docker log rotation locally; no Loki/Grafana/SaaS collector is required initially. |
 | Alerts | The owner is the operational contact. Health checks and manual review are sufficient initially; external paging/webhook is deferred until needed. |
-| Backups | Scheduled encrypted PostgreSQL backups to a physically separate owner-controlled drive/device. Keep 35 daily and 12 weekly recovery points; never rely only on the active database disk. |
+| Backups | Hostinger daily server backups, under the owner subscription. Confirm coverage for the PostgreSQL volume and enabled application files, retention and restore request path before real data. This replaces the older 35-daily/12-weekly external-device wording. |
 | Restore | Restore only into an isolated disposable database first. Verify checksum, migrations, RLS, users, and company reconciliation before touching the live private system. |
 | Updates | Create a backup checkpoint, apply only tested additive migrations, run readiness/smoke checks, and retain the previous Docker image/version for rollback. |
 | Incidents | Owner decides whether to pause writes, restore an isolated copy, or roll back; no public status page or external incident process is required. |
 
 ## Before real private online use
 
-1. Choose the owner-controlled private server and encrypted backup device.
+1. Choose the owner-controlled Hostinger private server and confirm the subscribed daily server-backup coverage and retention.
 2. Create the private online Docker deployment configuration; never use the disposable test compose as the live database.
 3. Configure an owner-chosen available domain with HTTPS; keep database, Docker, backup, metrics, and administrative ports non-public. A future domain change must preserve the BASEER ERP brand and all data/identity boundaries.
 4. Create the owner and each company/user through the Baseer identity and company-context flows only; no public sign-up.

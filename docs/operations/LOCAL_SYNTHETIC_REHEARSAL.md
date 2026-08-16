@@ -10,4 +10,4 @@ Run it from the BASEER ERP workspace after the Gate B database verification has 
 
 The script creates a temporary custom PostgreSQL dump, restores it into a newly created PostgreSQL container with `--network none`, compares table and foundation record counts, verifies a non-superuser application role can authenticate, writes a non-secret receipt under `.rehearsal/gate-c`, and removes the restored container and temporary dump.
 
-This is evidence of a local synthetic restore path only. It does not replace the remaining Gate C requirements: HTTPS on the chosen private server, an encrypted backup on an owner-controlled separate device, and an isolated restore rehearsal using the selected operational setup.
+This is evidence of a local synthetic restore path only. It does not replace the remaining Gate C requirements: HTTPS on the chosen Hostinger private server, verified Hostinger daily-server-backup coverage, and an isolated restore rehearsal using the selected operational setup.

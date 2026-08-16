@@ -1,4 +1,4 @@
-﻿# Production operations evidence ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Gate A discovery and decision record
+# Production operations evidence ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Gate A discovery and decision record
 
 **Status:** Gate A decisions approved by delegated committee authority Ã¢â‚¬â€ Gate B operational baseline documentation complete; external provisioning and rehearsal evidence remain pending.
 **Capability:** The operational controls and evidence required to run Baseer ERP safely after the foundation Gate B build.  
@@ -60,7 +60,7 @@ The product owner delegated these technical defaults to the committee on 2026-08
 2. Use Baseer redacted JSON logs, health/readiness, and protected in-process metrics with Docker log rotation. External collector, SaaS, Grafana/Loki, and alert-routing integration are deferred until the owner needs them.
 3. Use the Baseer ERP product owner as the direct operational contact. External paging, SMTP, webhook, and public status integrations are deferred.
 4. Approve the provisional 99.5% availability and p95 latency targets stated in this record, measured in staging before enforcement; pause non-critical releases when the agreed error budget is consumed.
-5. Use scheduled encrypted PostgreSQL backups to a physically separate owner-controlled device, 35 daily and 12 weekly recovery points, and isolated-target restore/reconciliation drills only.
+5. Historical discovery assumption only: current backup policy is the Hostinger daily-server-backup decision in `../operations/HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`, with isolated restore/reconciliation drills required before real data.
 6. Use immutable release versions, staging rehearsal, preflighted additive migrations, backup checkpoint, smoke checks, explicit go/no-go, and controlled forward-fix/rollback policy.
 7. The Baseer ERP product owner owns the P0/P1/P2 policy; the repository-safe incident runbook is recorded without personal contacts.
 

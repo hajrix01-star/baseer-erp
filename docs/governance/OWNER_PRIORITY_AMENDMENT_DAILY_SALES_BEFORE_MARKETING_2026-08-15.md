@@ -1,7 +1,7 @@
 # Owner Priority Amendment — Official Sales Source Before Marketing and AI UI
 
 Date: 2026-08-15
-Status: Recorded owner-directed priority following independent project review.
+Status: Historical priority record. Superseded for all post–Daily Sales sequencing by `OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`; retained as evidence of why Daily Sales preceded Marketing.
 
 ## Decision
 

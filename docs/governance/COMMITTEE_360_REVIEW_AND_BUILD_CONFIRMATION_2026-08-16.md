@@ -35,4 +35,4 @@ The GitHub workflow will repeat these checks using its ephemeral restricted role
 
 ## Production boundary
 
-Local development may continue. Real financial data, external connectors or private production release require a documented Hostinger backup coverage decision and a successful isolated restore rehearsal. The current daily server-backup decision must be reconciled with older operations wording before release.
+Local development may continue. Real financial data, external connectors or private production release require a documented Hostinger backup coverage decision and a successful isolated restore rehearsal. The Hostinger daily server-backup decision is the governing backup policy; its required coverage confirmation and isolated restore rehearsal remain open before release.

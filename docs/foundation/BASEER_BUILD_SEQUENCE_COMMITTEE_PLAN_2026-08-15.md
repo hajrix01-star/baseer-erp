@@ -81,7 +81,7 @@ The owner-approved order after Daily Sales is governed by `../governance/OWNER_P
 
 1. Design source maps and stage an import rehearsal only after the corresponding BASEER source models exist.
 2. Reconcile company/month counts, status, gross/net/tax, debit/credit, serials, cancellations, attachments and operating dates.
-3. Complete private deployment, encrypted backup and isolated restore drill before cutover.
+3. Complete private Hostinger deployment, verified daily server-backup coverage and an isolated restore drill before cutover.
 
 ## Explicitly deferred
 

@@ -1,5 +1,7 @@
 # Quality stabilization closure — 2026-08-16
 
+> **Historical evidence only.** The current quality decision and open gates are consolidated in `COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md`.
+
 ## Scope closed in this change
 
 - Fresh PostgreSQL migrations now match the Prisma model for the optional vault reference on inclusive-loan installment plans. The relation is enforced with the same tenant and company as the vault.
