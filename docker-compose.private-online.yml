@@ -30,7 +30,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: ["npx", "prisma", "migrate", "deploy", "--schema", "apps/api/prisma/schema.prisma"]
+    command:
+      [
+        "npx",
+        "prisma",
+        "migrate",
+        "deploy",
+        "--schema",
+        "apps/api/prisma/schema.prisma",
+      ]
     networks:
       - database
   api:
@@ -45,6 +53,7 @@ services:
       BASEER_BIND_HOST: 0.0.0.0
       BASEER_API_PORT: "5200"
       BASEER_ALLOW_PUBLIC_SIGNUP: "false"
+      BASEER_SYSTEM_TENANT_CODE: ${BASEER_SYSTEM_TENANT_CODE:?BASEER_SYSTEM_TENANT_CODE is required}
       DATABASE_URL: postgresql://${BASEER_DB_APP_USER}:${BASEER_DB_APP_PASSWORD}@postgres:5432/${BASEER_DB_NAME}
       IDENTITY_JWT_SECRET: ${IDENTITY_JWT_SECRET:?IDENTITY_JWT_SECRET is required}
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}

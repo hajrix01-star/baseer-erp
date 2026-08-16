@@ -28,6 +28,8 @@ export type TenantAdministrationAssignmentMinAggregateOutputType = {
   tenantId: string | null
   userId: string | null
   isOwner: boolean | null
+  ownerActivationTokenHash: string | null
+  ownerActivationExpiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,6 +38,8 @@ export type TenantAdministrationAssignmentMaxAggregateOutputType = {
   tenantId: string | null
   userId: string | null
   isOwner: boolean | null
+  ownerActivationTokenHash: string | null
+  ownerActivationExpiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +48,8 @@ export type TenantAdministrationAssignmentCountAggregateOutputType = {
   tenantId: number
   userId: number
   isOwner: number
+  ownerActivationTokenHash: number
+  ownerActivationExpiresAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -54,6 +60,8 @@ export type TenantAdministrationAssignmentMinAggregateInputType = {
   tenantId?: true
   userId?: true
   isOwner?: true
+  ownerActivationTokenHash?: true
+  ownerActivationExpiresAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -62,6 +70,8 @@ export type TenantAdministrationAssignmentMaxAggregateInputType = {
   tenantId?: true
   userId?: true
   isOwner?: true
+  ownerActivationTokenHash?: true
+  ownerActivationExpiresAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,6 +80,8 @@ export type TenantAdministrationAssignmentCountAggregateInputType = {
   tenantId?: true
   userId?: true
   isOwner?: true
+  ownerActivationTokenHash?: true
+  ownerActivationExpiresAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -151,6 +163,8 @@ export type TenantAdministrationAssignmentGroupByOutputType = {
   tenantId: string
   userId: string
   isOwner: boolean
+  ownerActivationTokenHash: string | null
+  ownerActivationExpiresAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: TenantAdministrationAssignmentCountAggregateOutputType | null
@@ -180,6 +194,8 @@ export type TenantAdministrationAssignmentWhereInput = {
   tenantId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   userId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   isOwner?: Prisma.BoolFilter<"TenantAdministrationAssignment"> | boolean
+  ownerActivationTokenHash?: Prisma.StringNullableFilter<"TenantAdministrationAssignment"> | string | null
+  ownerActivationExpiresAt?: Prisma.DateTimeNullableFilter<"TenantAdministrationAssignment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -190,6 +206,8 @@ export type TenantAdministrationAssignmentOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   isOwner?: Prisma.SortOrder
+  ownerActivationTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerActivationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -204,6 +222,8 @@ export type TenantAdministrationAssignmentWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   userId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   isOwner?: Prisma.BoolFilter<"TenantAdministrationAssignment"> | boolean
+  ownerActivationTokenHash?: Prisma.StringNullableFilter<"TenantAdministrationAssignment"> | string | null
+  ownerActivationExpiresAt?: Prisma.DateTimeNullableFilter<"TenantAdministrationAssignment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -214,6 +234,8 @@ export type TenantAdministrationAssignmentOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   isOwner?: Prisma.SortOrder
+  ownerActivationTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerActivationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TenantAdministrationAssignmentCountOrderByAggregateInput
@@ -228,12 +250,16 @@ export type TenantAdministrationAssignmentScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.UuidWithAggregatesFilter<"TenantAdministrationAssignment"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"TenantAdministrationAssignment"> | string
   isOwner?: Prisma.BoolWithAggregatesFilter<"TenantAdministrationAssignment"> | boolean
+  ownerActivationTokenHash?: Prisma.StringNullableWithAggregatesFilter<"TenantAdministrationAssignment"> | string | null
+  ownerActivationExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TenantAdministrationAssignment"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TenantAdministrationAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TenantAdministrationAssignment"> | Date | string
 }
 
 export type TenantAdministrationAssignmentCreateInput = {
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutAdministrationAssignmentsInput
@@ -244,12 +270,16 @@ export type TenantAdministrationAssignmentUncheckedCreateInput = {
   tenantId: string
   userId: string
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type TenantAdministrationAssignmentUpdateInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAdministrationAssignmentsNestedInput
@@ -260,6 +290,8 @@ export type TenantAdministrationAssignmentUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -268,12 +300,16 @@ export type TenantAdministrationAssignmentCreateManyInput = {
   tenantId: string
   userId: string
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type TenantAdministrationAssignmentUpdateManyMutationInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -282,6 +318,8 @@ export type TenantAdministrationAssignmentUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -305,6 +343,8 @@ export type TenantAdministrationAssignmentCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   isOwner?: Prisma.SortOrder
+  ownerActivationTokenHash?: Prisma.SortOrder
+  ownerActivationExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -313,6 +353,8 @@ export type TenantAdministrationAssignmentMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   isOwner?: Prisma.SortOrder
+  ownerActivationTokenHash?: Prisma.SortOrder
+  ownerActivationExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -321,6 +363,8 @@ export type TenantAdministrationAssignmentMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   isOwner?: Prisma.SortOrder
+  ownerActivationTokenHash?: Prisma.SortOrder
+  ownerActivationExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -413,8 +457,18 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type TenantAdministrationAssignmentCreateWithoutTenantInput = {
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTenantAdministrationAssignmentsInput
@@ -423,6 +477,8 @@ export type TenantAdministrationAssignmentCreateWithoutTenantInput = {
 export type TenantAdministrationAssignmentUncheckedCreateWithoutTenantInput = {
   userId: string
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -460,12 +516,16 @@ export type TenantAdministrationAssignmentScalarWhereInput = {
   tenantId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   userId?: Prisma.UuidFilter<"TenantAdministrationAssignment"> | string
   isOwner?: Prisma.BoolFilter<"TenantAdministrationAssignment"> | boolean
+  ownerActivationTokenHash?: Prisma.StringNullableFilter<"TenantAdministrationAssignment"> | string | null
+  ownerActivationExpiresAt?: Prisma.DateTimeNullableFilter<"TenantAdministrationAssignment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TenantAdministrationAssignment"> | Date | string
 }
 
 export type TenantAdministrationAssignmentCreateWithoutUserInput = {
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutAdministrationAssignmentsInput
@@ -473,6 +533,8 @@ export type TenantAdministrationAssignmentCreateWithoutUserInput = {
 
 export type TenantAdministrationAssignmentUncheckedCreateWithoutUserInput = {
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -506,12 +568,16 @@ export type TenantAdministrationAssignmentUpdateManyWithWhereWithoutUserInput = 
 export type TenantAdministrationAssignmentCreateManyTenantInput = {
   userId: string
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type TenantAdministrationAssignmentUpdateWithoutTenantInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTenantAdministrationAssignmentsNestedInput
@@ -520,6 +586,8 @@ export type TenantAdministrationAssignmentUpdateWithoutTenantInput = {
 export type TenantAdministrationAssignmentUncheckedUpdateWithoutTenantInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -527,18 +595,24 @@ export type TenantAdministrationAssignmentUncheckedUpdateWithoutTenantInput = {
 export type TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TenantAdministrationAssignmentCreateManyUserInput = {
   isOwner?: boolean
+  ownerActivationTokenHash?: string | null
+  ownerActivationExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type TenantAdministrationAssignmentUpdateWithoutUserInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAdministrationAssignmentsNestedInput
@@ -546,12 +620,16 @@ export type TenantAdministrationAssignmentUpdateWithoutUserInput = {
 
 export type TenantAdministrationAssignmentUncheckedUpdateWithoutUserInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserInput = {
   isOwner?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ownerActivationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerActivationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -562,6 +640,8 @@ export type TenantAdministrationAssignmentSelect<ExtArgs extends runtime.Types.E
   tenantId?: boolean
   userId?: boolean
   isOwner?: boolean
+  ownerActivationTokenHash?: boolean
+  ownerActivationExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -572,6 +652,8 @@ export type TenantAdministrationAssignmentSelectCreateManyAndReturn<ExtArgs exte
   tenantId?: boolean
   userId?: boolean
   isOwner?: boolean
+  ownerActivationTokenHash?: boolean
+  ownerActivationExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -582,6 +664,8 @@ export type TenantAdministrationAssignmentSelectUpdateManyAndReturn<ExtArgs exte
   tenantId?: boolean
   userId?: boolean
   isOwner?: boolean
+  ownerActivationTokenHash?: boolean
+  ownerActivationExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -592,11 +676,13 @@ export type TenantAdministrationAssignmentSelectScalar = {
   tenantId?: boolean
   userId?: boolean
   isOwner?: boolean
+  ownerActivationTokenHash?: boolean
+  ownerActivationExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TenantAdministrationAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"tenantId" | "userId" | "isOwner" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantAdministrationAssignment"]>
+export type TenantAdministrationAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"tenantId" | "userId" | "isOwner" | "ownerActivationTokenHash" | "ownerActivationExpiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantAdministrationAssignment"]>
 export type TenantAdministrationAssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -620,6 +706,8 @@ export type $TenantAdministrationAssignmentPayload<ExtArgs extends runtime.Types
     tenantId: string
     userId: string
     isOwner: boolean
+    ownerActivationTokenHash: string | null
+    ownerActivationExpiresAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tenantAdministrationAssignment"]>
@@ -1050,6 +1138,8 @@ export interface TenantAdministrationAssignmentFieldRefs {
   readonly tenantId: Prisma.FieldRef<"TenantAdministrationAssignment", 'String'>
   readonly userId: Prisma.FieldRef<"TenantAdministrationAssignment", 'String'>
   readonly isOwner: Prisma.FieldRef<"TenantAdministrationAssignment", 'Boolean'>
+  readonly ownerActivationTokenHash: Prisma.FieldRef<"TenantAdministrationAssignment", 'String'>
+  readonly ownerActivationExpiresAt: Prisma.FieldRef<"TenantAdministrationAssignment", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"TenantAdministrationAssignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TenantAdministrationAssignment", 'DateTime'>
 }

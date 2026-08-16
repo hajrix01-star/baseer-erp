@@ -152,6 +152,8 @@ export const TenantAdministrationAssignmentScalarFieldEnum = {
   tenantId: 'tenantId',
   userId: 'userId',
   isOwner: 'isOwner',
+  ownerActivationTokenHash: 'ownerActivationTokenHash',
+  ownerActivationExpiresAt: 'ownerActivationExpiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

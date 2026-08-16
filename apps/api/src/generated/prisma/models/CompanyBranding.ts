@@ -353,10 +353,6 @@ export type CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyBrandingUpdateToOneWithWhereWithoutCompanyInput, Prisma.CompanyBrandingUpdateWithoutCompanyInput>, Prisma.CompanyBrandingUncheckedUpdateWithoutCompanyInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type CompanyBrandingCreateWithoutCompanyInput = {
   logoFileMetadataId?: string | null
   createdAt?: Date | string

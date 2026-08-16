@@ -561,10 +561,6 @@ export type EnumSessionStatusFieldUpdateOperationsInput = {
   set?: $Enums.SessionStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type AppSessionCreateWithoutTenantInput = {
   id?: string
   refreshTokenHash: string

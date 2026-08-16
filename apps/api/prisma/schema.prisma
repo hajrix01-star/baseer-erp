@@ -254,9 +254,11 @@ model Company {
 model TenantAdministrationAssignment {
   tenantId  String   @db.Uuid
   userId    String   @db.Uuid
-  isOwner   Boolean  @default(false)
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  isOwner                 Boolean   @default(false)
+  ownerActivationTokenHash String?   @db.VarChar(255)
+  ownerActivationExpiresAt DateTime? @db.Timestamptz(6)
+  createdAt               DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt               DateTime  @updatedAt @db.Timestamptz(6)
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   user   User   @relation(fields: [userId, tenantId], references: [id, tenantId], onDelete: Restrict)

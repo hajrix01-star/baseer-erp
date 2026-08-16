@@ -4,6 +4,7 @@ coverage/
 .env
 .env.*
 !.env.example
+!ops/private-online/.env.private-online.example
 *.log
 .DS_Store
 .rehearsal/
