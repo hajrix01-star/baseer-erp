@@ -98,7 +98,6 @@ button {
 .baseer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   color: var(--brand-deep);
   line-height: 1;
 }
@@ -137,6 +136,7 @@ button {
   place-items: center;
   font-size: var(--font-title-sm);
 }
+.app-modules-button { color: var(--brand); border-color: var(--brand); background: var(--canvas); font-size: 1.25rem; }
 .company-selector,
 .theme-button {
   display: inline-flex;
