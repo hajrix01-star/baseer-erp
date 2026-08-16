@@ -349,9 +349,8 @@ button {
   }
   .module-sidebar {
     position: relative;
-    z-index: 11;
-    min-height: 100vh;
-    margin-top: -72px;
+    z-index: 1;
+    min-height: 0;
   }
 }
 .sidebar-product {
@@ -2498,7 +2497,7 @@ html[dir="ltr"] .mobile-drawer__panel {
 .administration-status-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; font-weight: 700; }
 .administration-status-pill.is-active { background: #e8f7ee; color: #087f5b; }
 .administration-status-pill.is-disabled { background: #f8e9e7; color: #b42318; }
-@media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-sidebar { height: 100vh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
+@media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-sidebar { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
 @media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
 .administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .administration-company-checkboxes input[type="checkbox"] { inline-size: 1rem; block-size: 1rem; flex: 0 0 auto; width: auto; min-height: 0; accent-color: #087f5b; }
