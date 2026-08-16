@@ -1,6 +1,6 @@
 # BASEER ERP — Governed Google Review Reply Automation Policy
 
-Date: 2026-08-16  
+Date: 2026-08-16
 Status: Approved owner policy; implementation is deferred until the Marketing Google Business Profile provider gate passes.
 
 ## Outcome

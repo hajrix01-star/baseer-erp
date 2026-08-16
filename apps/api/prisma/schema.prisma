@@ -1004,6 +1004,9 @@ model AiExecutionReceipt {
   identityId              String?            @db.Uuid
   moduleKey               String             @db.VarChar(80)
   capability              String             @db.VarChar(120)
+  skillKey                String?            @db.VarChar(120)
+  skillVersion            Int?
+  policyVersion           Int?
   outcome                 AiExecutionOutcome
   providerSnapshot        AiProviderKind?
   modelSnapshot           String?            @db.VarChar(160)
@@ -1022,6 +1025,7 @@ model AiExecutionReceipt {
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
   @@index([tenantId, companyId, moduleKey, capability, createdAt])
+  @@index([tenantId, companyId, skillKey, createdAt])
 }
 
 model AiSystemIdentity {

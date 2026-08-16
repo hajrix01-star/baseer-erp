@@ -22,6 +22,7 @@ jobs:
       - run: git diff --check
       - run: npm run check:architecture
       - run: npm run check:permissions
+      - run: npm run check:ai-gate-b
       - run: npm run check:web-financial-boundaries
       - run: npm run check --workspace @baseer-erp/contracts
       - run: npm run check --workspace @baseer-erp/api

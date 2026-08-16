@@ -5,6 +5,9 @@ import { AdministrationController } from './administration/administration.contro
 import { AdministrationService } from './administration/administration.service.js';
 import { TenantAdministrationContextService } from './administration/tenant-administration-context.service.js';
 import { AiPlatformController } from './ai-platform/ai-platform.controller.js';
+import { AiRuntimeController } from './ai-platform/ai-runtime.controller.js';
+import { AiProviderAdapterRegistry } from './ai-platform/ai-provider-adapter-registry.js';
+import { AiRuntimeService } from './ai-platform/ai-runtime.service.js';
 import { AiPlatformService } from './ai-platform/ai-platform.service.js';
 
 import { BusinessDateController } from './business-date/business-date.controller.js';
@@ -59,13 +62,15 @@ import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
     AdministrationService,
     AiCredentialVault,
     AiPlatformService,
+    AiProviderAdapterRegistry,
+    AiRuntimeService,
     { provide: BUSINESS_DATE_CLOCK, useValue: { now: () => new Date() } },
     BusinessDateService,
     AuthService,

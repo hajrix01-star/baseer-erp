@@ -1,6 +1,6 @@
 # BASEER ERP — AI Skill Readiness Gate
 
-Date: 2026-08-16  
+Date: 2026-08-16
 Status: Approved mandatory delivery rule
 
 ## Simple rule

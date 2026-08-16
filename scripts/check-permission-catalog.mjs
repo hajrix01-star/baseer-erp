@@ -8,7 +8,7 @@ const required = [
   "finance.loans.write", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "finance.daily_sales.create",
   "finance.daily_sales.correct", "finance.daily_sales.reverse", "finance.operational_calendar.manage",
   "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.observability.read",
-  "platform.output.preview", "platform.output.export", "platform.ai.configuration.read", "platform.ai.configuration.write",
+  "platform.output.preview", "platform.output.export", "platform.ai.use", "platform.ai.configuration.read", "platform.ai.configuration.write",
   "platform.ai.provider.configure", "platform.ai.identity.read", "platform.ai.identity.write",
   "platform.ai.identity.create_version", "platform.ai.system_identity.read", "platform.ai.system_identity.write",
   "platform.ai.system_identity.create_version",

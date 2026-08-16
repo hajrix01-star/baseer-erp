@@ -109,3 +109,57 @@ export type ConfigureAiProviderRequest = z.infer<
 >;
 export type CreateAiIdentityRequest = z.infer<typeof createAiIdentityRequestSchema>;
 export type CreateAiSystemIdentityRequest = z.infer<typeof createAiSystemIdentityRequestSchema>;
+export const aiSkillRiskTierSchema = z.enum(["S1", "S2", "S3", "S4"]);
+export const aiSkillStatusSchema = z.enum([
+  "PLANNED",
+  "VALIDATED",
+  "PILOT",
+  "ACTIVE",
+  "SUSPENDED",
+]);
+
+export const aiSkillCatalogItemSchema = z
+  .object({
+    key: z.string().min(1).max(120),
+    version: z.number().int().positive(),
+    nameAr: z.string().min(1).max(160),
+    nameEn: z.string().min(1).max(160),
+    allowedModules: z.array(z.string().min(1).max(80)).min(1),
+    riskTier: aiSkillRiskTierSchema,
+    status: aiSkillStatusSchema,
+    purpose: z.string().min(1).max(1_000),
+    activationCondition: z.string().min(1).max(1_000),
+  })
+  .strict();
+
+export const aiRuntimePreflightRequestSchema = z
+  .object({
+    moduleKey: z.string().trim().min(1).max(80),
+    skillKey: z.string().trim().min(1).max(120),
+    idempotencyKey: aiIdempotencyKeySchema,
+  })
+  .strict();
+
+export const aiRuntimePreflightReceiptSchema = z
+  .object({
+    receiptId: z.string().uuid(),
+    skillKey: z.string().min(1).max(120),
+    skillVersion: z.number().int().positive(),
+    riskTier: aiSkillRiskTierSchema,
+    status: aiSkillStatusSchema,
+    outcome: z.literal("BLOCKED"),
+    safeReasonCode: z.string().min(1).max(120),
+    companyId: companyIdSchema,
+    requestId: z.string().min(1).max(120),
+    createdAt: z.coerce.date(),
+    replayed: z.boolean(),
+  })
+  .strict();
+
+export type AiSkillCatalogItem = z.infer<typeof aiSkillCatalogItemSchema>;
+export type AiRuntimePreflightRequest = z.infer<
+  typeof aiRuntimePreflightRequestSchema
+>;
+export type AiRuntimePreflightReceipt = z.infer<
+  typeof aiRuntimePreflightReceiptSchema
+>;

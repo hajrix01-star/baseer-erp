@@ -31,6 +31,14 @@ The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOUR
 
 **Closure:** the backend, database/HTTP/concurrency tests and the narrow operating journey are accepted together. Daily sales is an authoritative, versioned source that distinguishes a non-working day from a zero-sales day.
 
+## Effective priority amendment (2026-08-16)
+
+The owner-approved order after the Daily Sales scope is governed by `../governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`: AI Gate B technical core first, then core Finance documents/treasury/reports, with Marketing/Google and Inbound Email/Telegram/OCR deferred. The phase headings below remain the scoped designs; this amendment controls their activation order.
+
+## Effective priority amendment (2026-08-16)
+
+The owner-approved order after the Daily Sales scope is governed by `../governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`: AI Gate B technical core first, then core Finance documents/treasury/reports, with Marketing/Google and Inbound Email/Telegram/OCR deferred. The phase headings below remain the scoped designs; this amendment controls their activation order.
+
 ## Phase 2 — Marketing Performance Gate A
 
 1. Company-scoped manual campaign register: channel, dates, status, objective, location/reference and immutable revisions where required.
