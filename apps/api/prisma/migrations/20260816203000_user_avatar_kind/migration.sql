@@ -1,0 +1,9 @@
+ALTER TABLE "User"
+  ADD COLUMN IF NOT EXISTS "avatarKind" VARCHAR(16) NOT NULL DEFAULT 'INITIALS';
+
+ALTER TABLE "User"
+  DROP CONSTRAINT IF EXISTS "User_avatarKind_valid";
+
+ALTER TABLE "User"
+  ADD CONSTRAINT "User_avatarKind_valid"
+  CHECK ("avatarKind" IN ('INITIALS', 'MALE', 'FEMALE'));

@@ -13,7 +13,6 @@ type Props = {
 };
 type Permission = AdministrationOverview["permissions"][number];
 type PermissionSection = { title: string; match: (code: string) => boolean };
-
 const permissionModules: ReadonlyArray<{
   key: string;
   title: string;
@@ -117,13 +116,23 @@ export function AdministrationRolesPanel({
   onDone,
   onError,
 }: Props) {
+  const [editing, setEditing] = useState(false);
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
   const [code, setCode] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const reset = () => {
+    setEditing(false);
+    setNameAr("");
+    setNameEn("");
+    setCode("");
+    setSelected([]);
+  };
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!owner) return;
+    setBusy(true);
     try {
       await createAdministrationRole(session, {
         code,
@@ -131,76 +140,76 @@ export function AdministrationRolesPanel({
         nameEn,
         permissionCodes: selected,
       });
-      setNameAr("");
-      setNameEn("");
-      setCode("");
-      setSelected([]);
       await onDone();
+      reset();
     } catch (error) {
       onError(error);
+    } finally {
+      setBusy(false);
     }
   };
-  const togglePermission = (permissionCode: string, checked: boolean) =>
+  const toggle = (code: string, checked: boolean) =>
     setSelected((current) =>
       checked
-        ? [...current, permissionCode]
-        : current.filter((code) => code !== permissionCode),
+        ? [...new Set([...current, code])]
+        : current.filter((item) => item !== code),
     );
-
-  return (
-    <div className="administration-section">
-      <h3>الأدوار والصلاحيات</h3>
-      <p className="administration-copy">
-        اختر صلاحيات الدور من الموديولات والأقسام أدناه. الصلاحية تُفحص من
-        الخادم، وخانة الاختيار لا تمنح وصولًا وحدها.
-      </p>
-      <div className="administration-list">
-        {overview.roles.map((role) => (
-          <article key={role.id}>
-            <strong>
-              {role.nameAr}
-              {role.isSystem ? " · قالب نظام" : ""}
-            </strong>
-            <span>{role.permissionCodes.length} صلاحية</span>
-            <small>{role.permissionCodes.join("، ")}</small>
-          </article>
-        ))}
-      </div>
-      {owner && (
+  if (editing)
+    return (
+      <section className="administration-section administration-role-editor">
+        <header className="administration-section-heading">
+          <div>
+            <p className="eyebrow">الأدوار والصلاحيات</p>
+            <h3>إضافة دور مخصص</h3>
+            <p>
+              حدد الصلاحيات حسب الموديول والقسم. خانات الاختيار لا تمنح أي وصول
+              وحدها؛ الخادم يفحصها عند كل طلب.
+            </p>
+          </div>
+          <button
+            className="daily-sales-secondary"
+            type="button"
+            onClick={reset}
+            disabled={busy}
+          >
+            ← العودة إلى الأدوار
+          </button>
+        </header>
         <form
-          className="administration-form"
+          className="administration-role-form"
           onSubmit={(event) => void submit(event)}
         >
-          <h4>دور مخصص</h4>
-          <label>
-            رمز الدور
-            <input
-              required
-              pattern="[A-Z][A-Z0-9_]*"
-              value={code}
-              onChange={(event) => setCode(event.target.value.toUpperCase())}
-            />
-          </label>
-          <label>
-            الاسم بالعربي
-            <input
-              required
-              value={nameAr}
-              onChange={(event) => setNameAr(event.target.value)}
-            />
-          </label>
-          <label>
-            الاسم بالإنجليزية
-            <input
-              required
-              value={nameEn}
-              onChange={(event) => setNameEn(event.target.value)}
-            />
-          </label>
+          <div className="administration-role-basics">
+            <label>
+              رمز الدور
+              <input
+                required
+                pattern="[A-Z][A-Z0-9_]*"
+                value={code}
+                onChange={(event) => setCode(event.target.value.toUpperCase())}
+                placeholder="CUSTOM_SALES_ROLE"
+              />
+            </label>
+            <label>
+              الاسم بالعربية
+              <input
+                required
+                value={nameAr}
+                onChange={(event) => setNameAr(event.target.value)}
+              />
+            </label>
+            <label>
+              الاسم بالإنجليزية
+              <input
+                required
+                value={nameEn}
+                onChange={(event) => setNameEn(event.target.value)}
+              />
+            </label>
+          </div>
           <fieldset className="administration-permission-picker">
             <legend>
-              الصلاحيات حسب الموديول والقسم{" "}
-              <small>{selected.length} محددة</small>
+              الصلاحيات المحددة <small>{selected.length}</small>
             </legend>
             {permissionModules.map((module) => (
               <PermissionModule
@@ -209,16 +218,68 @@ export function AdministrationRolesPanel({
                 sections={module.sections}
                 permissions={overview.permissions}
                 selected={selected}
-                onToggle={togglePermission}
+                onToggle={toggle}
               />
             ))}
           </fieldset>
-          <button className="daily-sales-primary" disabled={!selected.length}>
-            حفظ الدور
-          </button>
+          <footer className="administration-role-editor__footer">
+            <button
+              className="daily-sales-secondary"
+              type="button"
+              onClick={reset}
+              disabled={busy}
+            >
+              إلغاء
+            </button>
+            <button
+              className="daily-sales-primary"
+              disabled={busy || !selected.length}
+            >
+              {busy ? "جارٍ الحفظ…" : "حفظ الدور"}
+            </button>
+          </footer>
         </form>
-      )}
-    </div>
+      </section>
+    );
+  return (
+    <section className="administration-section administration-roles-section">
+      <header className="administration-section-heading">
+        <div>
+          <h3>الأدوار والصلاحيات</h3>
+          <p>
+            القوالب النظامية محمية. أضف دوراً مخصصاً عندما تحتاج صلاحيات مختلفة
+            لموظف أو فريق.
+          </p>
+        </div>
+        {owner && (
+          <button
+            className="daily-sales-primary"
+            type="button"
+            onClick={() => setEditing(true)}
+          >
+            + إضافة دور
+          </button>
+        )}
+      </header>
+      <div className="administration-role-cards">
+        {overview.roles.map((role) => (
+          <article key={role.id}>
+            <span
+              className={
+                role.isSystem
+                  ? "administration-role-card__system"
+                  : "administration-role-card__custom"
+              }
+            >
+              {role.isSystem ? "قالب نظام" : "دور مخصص"}
+            </span>
+            <strong>{role.nameAr}</strong>
+            <small>{role.nameEn}</small>
+            <p>{role.permissionCodes.length} صلاحية مفعلة</p>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -235,7 +296,7 @@ function PermissionModule({
   selected: string[];
   onToggle: (permissionCode: string, checked: boolean) => void;
 }) {
-  const visibleSections = sections
+  const visible = sections
     .map((section) => ({
       ...section,
       permissions: permissions.filter((permission) =>
@@ -243,8 +304,8 @@ function PermissionModule({
       ),
     }))
     .filter((section) => section.permissions.length > 0);
-  if (!visibleSections.length) return null;
-  const count = visibleSections.reduce(
+  if (!visible.length) return null;
+  const count = visible.reduce(
     (total, section) => total + section.permissions.length,
     0,
   );
@@ -255,7 +316,7 @@ function PermissionModule({
         <span>{count} صلاحية</span>
       </header>
       <div className="administration-permission-sections">
-        {visibleSections.map((section) => (
+        {visible.map((section) => (
           <section
             className="administration-permission-section"
             key={section.title}

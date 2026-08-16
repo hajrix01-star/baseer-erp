@@ -26,7 +26,7 @@ export class AdministrationService {
         owner: context.isOwner,
         permissions: ADMINISTRATION_PERMISSION_CATALOG,
         companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null })),
-        users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, status: user.status, memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
+        users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, avatarKind: user.avatarKind as "INITIALS" | "MALE" | "FEMALE", status: user.status, memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
         roles: roles.map((role) => ({ id: role.id, code: role.code, nameAr: role.nameAr, nameEn: role.nameEn, isSystem: role.isSystem, permissionCodes: role.grants.map((grant) => grant.permissionCode) })),
       };
     });
@@ -71,7 +71,7 @@ export class AdministrationService {
       ]);
       if (!company || !role) throw new NotFoundException("Company or role was not found."); if (existing) throw new ConflictException("User login already exists.");
       const id = randomUUID();
-      await tx.user.create({ data: { id, tenantId: context.tenantId, loginNormalized, nameAr: request.nameAr, nameEn: request.nameEn, preferredLanguage: request.preferredLanguage, passwordHash } });
+      await tx.user.create({ data: { id, tenantId: context.tenantId, loginNormalized, nameAr: request.nameAr, nameEn: request.nameEn, preferredLanguage: request.preferredLanguage, avatarKind: request.avatarKind, passwordHash } });
       await tx.companyMembership.create({ data: { tenantId: context.tenantId, userId: id, companyId: company.id, roleId: role.id } });
       await this.audit(tx, context, "administration.user.created", "User", id, null, { companyId: company.id, roleId: role.id }); return { id };
     });

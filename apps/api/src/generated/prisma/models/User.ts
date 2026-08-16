@@ -41,6 +41,7 @@ export type UserMinAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   preferredLanguage: string | null
+  avatarKind: string | null
   passwordHash: string | null
   status: $Enums.UserStatus | null
   sessionVersion: number | null
@@ -55,6 +56,7 @@ export type UserMaxAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   preferredLanguage: string | null
+  avatarKind: string | null
   passwordHash: string | null
   status: $Enums.UserStatus | null
   sessionVersion: number | null
@@ -69,6 +71,7 @@ export type UserCountAggregateOutputType = {
   nameAr: number
   nameEn: number
   preferredLanguage: number
+  avatarKind: number
   passwordHash: number
   status: number
   sessionVersion: number
@@ -93,6 +96,7 @@ export type UserMinAggregateInputType = {
   nameAr?: true
   nameEn?: true
   preferredLanguage?: true
+  avatarKind?: true
   passwordHash?: true
   status?: true
   sessionVersion?: true
@@ -107,6 +111,7 @@ export type UserMaxAggregateInputType = {
   nameAr?: true
   nameEn?: true
   preferredLanguage?: true
+  avatarKind?: true
   passwordHash?: true
   status?: true
   sessionVersion?: true
@@ -121,6 +126,7 @@ export type UserCountAggregateInputType = {
   nameAr?: true
   nameEn?: true
   preferredLanguage?: true
+  avatarKind?: true
   passwordHash?: true
   status?: true
   sessionVersion?: true
@@ -222,6 +228,7 @@ export type UserGroupByOutputType = {
   nameAr: string
   nameEn: string
   preferredLanguage: string
+  avatarKind: string
   passwordHash: string
   status: $Enums.UserStatus
   sessionVersion: number
@@ -259,6 +266,7 @@ export type UserWhereInput = {
   nameAr?: Prisma.StringFilter<"User"> | string
   nameEn?: Prisma.StringFilter<"User"> | string
   preferredLanguage?: Prisma.StringFilter<"User"> | string
+  avatarKind?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   sessionVersion?: Prisma.IntFilter<"User"> | number
@@ -281,6 +289,7 @@ export type UserOrderByWithRelationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   preferredLanguage?: Prisma.SortOrder
+  avatarKind?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
@@ -308,6 +317,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   nameAr?: Prisma.StringFilter<"User"> | string
   nameEn?: Prisma.StringFilter<"User"> | string
   preferredLanguage?: Prisma.StringFilter<"User"> | string
+  avatarKind?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   sessionVersion?: Prisma.IntFilter<"User"> | number
@@ -330,6 +340,7 @@ export type UserOrderByWithAggregationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   preferredLanguage?: Prisma.SortOrder
+  avatarKind?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
@@ -352,6 +363,7 @@ export type UserScalarWhereWithAggregatesInput = {
   nameAr?: Prisma.StringWithAggregatesFilter<"User"> | string
   nameEn?: Prisma.StringWithAggregatesFilter<"User"> | string
   preferredLanguage?: Prisma.StringWithAggregatesFilter<"User"> | string
+  avatarKind?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   sessionVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -365,6 +377,7 @@ export type UserCreateInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -387,6 +400,7 @@ export type UserUncheckedCreateInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -407,6 +421,7 @@ export type UserUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -429,6 +444,7 @@ export type UserUncheckedUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -450,6 +466,7 @@ export type UserCreateManyInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -463,6 +480,7 @@ export type UserUpdateManyMutationInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -477,6 +495,7 @@ export type UserUncheckedUpdateManyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -511,6 +530,7 @@ export type UserCountOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   preferredLanguage?: Prisma.SortOrder
+  avatarKind?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
@@ -529,6 +549,7 @@ export type UserMaxOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   preferredLanguage?: Prisma.SortOrder
+  avatarKind?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
@@ -543,6 +564,7 @@ export type UserMinOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   preferredLanguage?: Prisma.SortOrder
+  avatarKind?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
@@ -724,6 +746,7 @@ export type UserCreateWithoutTenantInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -744,6 +767,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -794,6 +818,7 @@ export type UserScalarWhereInput = {
   nameAr?: Prisma.StringFilter<"User"> | string
   nameEn?: Prisma.StringFilter<"User"> | string
   preferredLanguage?: Prisma.StringFilter<"User"> | string
+  avatarKind?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   sessionVersion?: Prisma.IntFilter<"User"> | number
@@ -807,6 +832,7 @@ export type UserCreateWithoutTenantAdministrationAssignmentsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -828,6 +854,7 @@ export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -863,6 +890,7 @@ export type UserUpdateWithoutTenantAdministrationAssignmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -884,6 +912,7 @@ export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -903,6 +932,7 @@ export type UserCreateWithoutMembershipsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -924,6 +954,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -959,6 +990,7 @@ export type UserUpdateWithoutMembershipsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -980,6 +1012,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -999,6 +1032,7 @@ export type UserCreateWithoutSessionsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1020,6 +1054,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1055,6 +1090,7 @@ export type UserUpdateWithoutSessionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1076,6 +1112,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1095,6 +1132,7 @@ export type UserCreateWithoutAuditEventsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1116,6 +1154,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1151,6 +1190,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1172,6 +1212,7 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1191,6 +1232,7 @@ export type UserCreateWithoutIdempotencyReceiptsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1212,6 +1254,7 @@ export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1247,6 +1290,7 @@ export type UserUpdateWithoutIdempotencyReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1268,6 +1312,7 @@ export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1287,6 +1332,7 @@ export type UserCreateWithoutCreatedFileMetadataInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1308,6 +1354,7 @@ export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1343,6 +1390,7 @@ export type UserUpdateWithoutCreatedFileMetadataInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1364,6 +1412,7 @@ export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1383,6 +1432,7 @@ export type UserCreateWithoutCreatedJournalEntriesInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1404,6 +1454,7 @@ export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1439,6 +1490,7 @@ export type UserUpdateWithoutCreatedJournalEntriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1460,6 +1512,7 @@ export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1479,6 +1532,7 @@ export type UserCreateManyTenantInput = {
   nameAr: string
   nameEn: string
   preferredLanguage?: string
+  avatarKind?: string
   passwordHash: string
   status?: $Enums.UserStatus
   sessionVersion?: number
@@ -1492,6 +1546,7 @@ export type UserUpdateWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1512,6 +1567,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1532,6 +1588,7 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1631,6 +1688,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   nameAr?: boolean
   nameEn?: boolean
   preferredLanguage?: boolean
+  avatarKind?: boolean
   passwordHash?: boolean
   status?: boolean
   sessionVersion?: boolean
@@ -1654,6 +1712,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   nameAr?: boolean
   nameEn?: boolean
   preferredLanguage?: boolean
+  avatarKind?: boolean
   passwordHash?: boolean
   status?: boolean
   sessionVersion?: boolean
@@ -1669,6 +1728,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   nameAr?: boolean
   nameEn?: boolean
   preferredLanguage?: boolean
+  avatarKind?: boolean
   passwordHash?: boolean
   status?: boolean
   sessionVersion?: boolean
@@ -1684,6 +1744,7 @@ export type UserSelectScalar = {
   nameAr?: boolean
   nameEn?: boolean
   preferredLanguage?: boolean
+  avatarKind?: boolean
   passwordHash?: boolean
   status?: boolean
   sessionVersion?: boolean
@@ -1691,7 +1752,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "loginNormalized" | "nameAr" | "nameEn" | "preferredLanguage" | "passwordHash" | "status" | "sessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "loginNormalized" | "nameAr" | "nameEn" | "preferredLanguage" | "avatarKind" | "passwordHash" | "status" | "sessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
@@ -1729,6 +1790,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     nameAr: string
     nameEn: string
     preferredLanguage: string
+    avatarKind: string
     passwordHash: string
     status: $Enums.UserStatus
     sessionVersion: number
@@ -2171,6 +2233,7 @@ export interface UserFieldRefs {
   readonly nameAr: Prisma.FieldRef<"User", 'String'>
   readonly nameEn: Prisma.FieldRef<"User", 'String'>
   readonly preferredLanguage: Prisma.FieldRef<"User", 'String'>
+  readonly avatarKind: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly sessionVersion: Prisma.FieldRef<"User", 'Int'>

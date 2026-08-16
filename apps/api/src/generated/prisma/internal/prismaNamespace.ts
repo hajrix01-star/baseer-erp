@@ -3248,6 +3248,7 @@ export const UserScalarFieldEnum = {
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   preferredLanguage: 'preferredLanguage',
+  avatarKind: 'avatarKind',
   passwordHash: 'passwordHash',
   status: 'status',
   sessionVersion: 'sessionVersion',

@@ -188,6 +188,7 @@ model User {
   nameAr            String     @db.VarChar(160)
   nameEn            String     @db.VarChar(160)
   preferredLanguage String     @default("ar") @db.VarChar(2)
+  avatarKind       String     @default("INITIALS") @db.VarChar(16)
   passwordHash      String     @db.VarChar(255)
   status            UserStatus @default(ACTIVE)
   sessionVersion    Int        @default(0)
