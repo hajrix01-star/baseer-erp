@@ -9,6 +9,7 @@
 2. [Committee build sequence](../foundation/BASEER_BUILD_SEQUENCE_COMMITTEE_PLAN_2026-08-15.md) — the only active execution order.
 3. [Module delivery register](MODULE_DELIVERY_REGISTER.md) — the current state of every scope.
 4. [Hostinger private hosting and backup decision](../operations/HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md) — the current hosting, backup and restore policy.
+5. [Quality evidence and committee register](QUALITY_EVIDENCE_AND_COMMITTEE_REGISTER.md) — the single ledger of recorded checks, committee outcomes and open quality gates.
 
 When status or priority changes, the current 360 review, build sequence and module register are updated in the same change. If they disagree, this file directs the reader to the 360 review first, then the build sequence, then the register; the discrepancy must be corrected before a new scope starts.
 
