@@ -2384,9 +2384,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   padding: 20px;
   border-radius: 18px;
 }
-.daily-sales-dialog--noorix.daily-sales-dialog--batch {
-  width: min(720px, calc(100vw - 28px));
-}
+
 .daily-sales-dialog--noorix .daily-sales-dialog__header {
   padding-bottom: 12px;
 }
@@ -2578,4 +2576,28 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog--noorix .daily-sales-dialog__summary {
   grid-column: 1 / -1;
   width: 100%;
+}
+/* Readable desktop and touch-target scale for the daily-sales dialog. */
+.daily-sales-dialog--noorix .daily-sales-dialog__header h3 {
+  font-size: 20px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__form label > span,
+.daily-sales-dialog--noorix .daily-sales-dialog__channels legend,
+.daily-sales-dialog--noorix .daily-sales-dialog__vault > span {
+  font-size: 14px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__form input,
+.daily-sales-dialog--noorix .daily-sales-dialog__form select,
+.daily-sales-dialog--noorix .daily-sales-dialog__form textarea,
+.daily-sales-dialog--noorix .daily-sales-dialog__mode button,
+.daily-sales-dialog--noorix .daily-sales-dialog__scope-picker button,
+.daily-sales-dialog--noorix .daily-sales-dialog__actions button {
+  font-size: 16px;
+}
+.daily-sales-dialog--noorix .daily-sales-dialog__vault small,
+.daily-sales-dialog--noorix .daily-sales-dialog__summary small {
+  font-size: 12px;
+}
+.daily-sales-dialog--noorix.daily-sales-dialog--batch {
+  width: min(480px, calc(100vw - 28px));
 }
