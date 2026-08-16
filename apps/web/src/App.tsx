@@ -102,7 +102,6 @@ function AppHeader({ language, theme, onLanguage, onTheme, onModules }: { langua
     <button className="brand brand-button" onClick={onModules} type="button"><BaseerBrand /></button>
     <div className="topbar-spacer" />
     <CompanySessionControl language={language} />
-    <button className="icon-button" type="button" aria-label={text.quickEntry}>＋</button>
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? 'EN' : 'ع'}</button>
     <button className="theme-button" onClick={onTheme} type="button"><span className="theme-dot" /><span>{theme === 'green' ? text.greenTheme : text.classicTheme}</span></button>
     <button className="avatar" type="button" aria-label="Profile">م</button>

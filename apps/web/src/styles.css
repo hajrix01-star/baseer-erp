@@ -103,15 +103,15 @@ button {
   line-height: 1;
 }
 .baseer-brand__mark {
-  width: 27px;
-  height: 33px;
+  width: 32px;
+  height: 39px;
   overflow: visible;
 }
 .baseer-brand__word {
   color: var(--ink);
-  font-size: var(--font-body);
+  font-size: var(--font-title-sm);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 .baseer-brand__word b {
   color: var(--brand);
@@ -2511,7 +2511,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   line-height: 1.2;
 }
 .workspace {
-  padding-inline: var(--page-gutter);
+  padding-inline: 0;
 }
 .module-page,
 .administration-section,
