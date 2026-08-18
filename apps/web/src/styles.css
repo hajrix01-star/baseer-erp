@@ -2145,8 +2145,8 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 /* Unified calendar period picker. */
 .baseer-period-filter { position: relative; display: inline-block; width: fit-content; max-width: 100%; min-width: 0; direction: inherit; justify-self: start; align-self: start; }
 .baseer-period-filter__bar { display: inline-flex; max-width: 100%; gap: 5px; }
-.baseer-period-filter__trigger { display: grid; min-width: 0; grid-template-columns: 24px auto minmax(0, 1fr); align-items: center; gap: 8px; min-height: 44px; padding: 6px 12px 6px 9px; border: 1px solid color-mix(in srgb, var(--brand) 40%, var(--line)); border-radius: var(--radius-sm); color: var(--ink); background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 7%, var(--surface)), var(--surface)); cursor: pointer; text-align: start; }
-.baseer-period-filter__trigger:hover,.baseer-filter-bar__select:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
+.baseer-period-filter__trigger { display: grid; min-width: 0; grid-template-columns: 20px auto minmax(0, 1fr); align-items: center; gap: 6px; min-height: 36px; padding: 2px 0; border: 0; border-radius: 0; color: var(--ink); background: transparent; cursor: pointer; text-align: start; }
+.baseer-period-filter__trigger:hover { color: var(--brand); }.baseer-period-filter__trigger:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }.baseer-filter-bar__select:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
 .baseer-period-filter__calendar { display: grid; place-items: center; width: 20px; height: 20px; color: var(--brand); line-height: 1; }
 .baseer-period-filter__label { color: var(--muted); font-size: var(--font-label); font-weight: 700; white-space: nowrap; }
 .baseer-period-filter__trigger strong { min-width: 0; color: var(--brand-deep); font-size: var(--font-body); font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
