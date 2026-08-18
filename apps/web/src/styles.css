@@ -1550,46 +1550,51 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog {
   width: min(480px, calc(100vw - 28px));
   max-height: calc(100vh - 40px);
-  padding: 20px;
+  padding: 14px;
   border-radius: var(--card-radius);
 }
-.daily-sales-dialog__header { padding-bottom: 12px; }
+.daily-sales-dialog__header { padding-bottom: 8px; }
 .daily-sales-dialog__header .eyebrow,
 .daily-sales-dialog__header p:last-child { display: none; }
 .daily-sales-dialog__header h3 { margin: 0; font-size: var(--font-title-sm); }
-.daily-sales-dialog__form { display: flex; flex-direction: column; gap: 12px; }
+.daily-sales-dialog__form { display: flex; flex-direction: column; gap: 8px; }
 .daily-sales-dialog__mode,
-.daily-sales-dialog__scope-picker { display: grid; width: 100%; gap: 6px; padding: 3px; }
+.daily-sales-dialog__scope-picker { display: grid; width: 100%; gap: 4px; padding: 2px; }
 .daily-sales-dialog__mode { grid-template-columns: repeat(2, 1fr); }
 .daily-sales-dialog__scope-picker { grid-template-columns: repeat(3, 1fr); }
 .daily-sales-dialog__scope-picker legend,
 .daily-sales-dialog__scope-picker small { grid-column: 1 / -1; }
 .daily-sales-dialog__mode button,
-.daily-sales-dialog__scope-picker button { min-height: 38px; min-width: 0; padding: 7px; border-radius: 9px; }
-.daily-sales-dialog__date { display: grid; grid-template-columns: 1fr; gap: 4px; }
+.daily-sales-dialog__scope-picker button { min-height: 36px; min-width: 0; padding: 5px; border-radius: 7px; }
+.daily-sales-dialog__date { display: grid; grid-template-columns: minmax(0, 1fr) 9rem; align-items: end; gap: 8px; }
 .daily-sales-dialog__date small { font-size: var(--font-caption); }
 .daily-sales-dialog__day-off,
 .daily-sales-dialog__shift-stack { width: 100%; }
-.daily-sales-dialog__shift-stack { display: grid; grid-template-columns: 1fr; gap: 10px; }
-.daily-sales-dialog__shift-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fcfefd; }
+.daily-sales-dialog__shift-stack { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.daily-sales-dialog__shift-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: #fcfefd; }
 .daily-sales-dialog__shift-card h4 { margin: 0; font-size: var(--font-body); }
 .daily-sales-dialog__entry-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .daily-sales-dialog__entry-fields label { gap: 4px; }
-.daily-sales-dialog__channels { margin: 0; padding: 8px 10px 10px; }
+.daily-sales-dialog__channels { margin: 0; padding: 5px 7px 7px; }
 .daily-sales-dialog__channels legend { margin-inline: 0; padding-inline: 4px; }
-.daily-sales-dialog__vault-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 8px; }
-.daily-sales-dialog__vault { gap: 5px; padding: 0; border: 0; background: transparent; }
+.daily-sales-dialog__vault-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px 6px; }
+.daily-sales-dialog__vault { gap: 3px; padding: 0; border: 0; background: transparent; }
 .daily-sales-dialog__vault > span { min-height: 16px; font-size: var(--font-caption); }
-.daily-sales-dialog__wide textarea { min-height: 48px; }
+.daily-sales-dialog__wide textarea { min-height: 36px; }
 .daily-sales-dialog__summary { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: 12px; }
-.daily-sales-dialog__summary > span { display: grid; gap: 4px; min-height: 56px; padding: 8px 9px; border-inline-start: 1px solid var(--line); }
+.daily-sales-dialog__summary > span { display: grid; gap: 3px; min-height: 48px; padding: 6px 8px; border-inline-start: 1px solid var(--line); }
 .daily-sales-dialog__summary > span:first-child { border-inline-start: 0; }
 .daily-sales-dialog__summary small { color: var(--muted); font-size: var(--font-caption); }
 .daily-sales-dialog__summary strong { color: var(--brand); font-size: var(--font-body); }
 .daily-sales-dialog__actions { gap: 8px; padding-top: 4px; }
 @media (max-width: 520px) {
-  .daily-sales-dialog { width: calc(100vw - 12px); padding: 14px; }
-  .daily-sales-dialog__entry-fields { grid-template-columns: 1fr; }
+  .daily-sales-dialog { width: calc(100vw - 12px); padding: 10px; }
+  .daily-sales-dialog__entry-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 360px) {
+  .daily-sales-dialog__date,
+  .daily-sales-dialog__entry-fields,
+  .daily-sales-dialog__vault-grid { grid-template-columns: 1fr; }
 }
 /* Sales register: records open their own detail view; row actions do not crowd the table. */
 .visually-hidden {
