@@ -2169,7 +2169,7 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .baseer-period-filter__months, .baseer-period-filter__quarters, .baseer-period-filter__years { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .baseer-period-filter__quarters { grid-template-columns: repeat(2, 1fr); }
 
-.baseer-period-filter__months button, .baseer-period-filter__quarters button, .baseer-period-filter__years button { min-height: 34px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); font-size: var(--font-label); font-weight: 700; cursor: pointer; }
+.baseer-period-filter__months button, .baseer-period-filter__quarters button, .baseer-period-filter__years button { min-height: 34px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); font-size: var(--font-label); font-weight: 400; cursor: pointer; }
 .baseer-period-filter__popover footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-block-start: 10px; padding-block-start: 10px; border-block-start: 1px solid var(--line); color: var(--muted); font-size: var(--font-label); }
 .baseer-period-filter__popover footer button { min-height: 32px; padding-inline: 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--brand-deep); background: var(--surface); font-size: var(--font-label); font-weight: 700; cursor: pointer; }
 .baseer-period-filter__popover footer div { display: inline-flex; gap: 6px; }
