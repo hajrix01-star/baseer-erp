@@ -2160,7 +2160,7 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .baseer-period-filter__nav strong { font-size: var(--font-body); }
 .baseer-period-filter__weekdays, .baseer-period-filter__days { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
 .baseer-period-filter__weekdays { margin-block: 4px; color: var(--muted); font-size: .72rem; font-weight: 700; }
-.baseer-period-filter__days button { aspect-ratio: 1; margin: 1px; border: 0; border-radius: 7px; color: var(--ink); background: transparent; font-size: var(--font-label); font-weight: 700; cursor: pointer; }
+.baseer-period-filter__days button { aspect-ratio: 1; margin: 1px; border: 0; border-radius: 7px; color: var(--ink); background: transparent; font-size: var(--font-label); font-weight: 400; cursor: pointer; }
 .baseer-period-filter__days button:hover, .baseer-period-filter__months button:hover, .baseer-period-filter__quarters button:hover, .baseer-period-filter__years button:hover { background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
 .baseer-period-filter button.is-outside { color: #aab8ae; }
 .baseer-period-filter button.is-today { outline: 1px solid var(--brand); outline-offset: -2px; }
