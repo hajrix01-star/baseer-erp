@@ -93,8 +93,8 @@ export function RecurringExpensePaymentBatch({ language, configuration, profiles
       setRows(recurringBatchRows(businessDate)); setPaymentDate(businessDate); setMessage({ type: "success", text: text.recurringBatchSaved(receipt.documentCount) }); await reload();
     } catch (error) { setMessage({ type: "error", text: presentBaseerApiError(error, language, text.recurringBatchTitle) }); } finally { setSaving(false); }
   };
-  return <BaseerCard><form className="purchase-batch-form" onSubmit={(event) => void submit(event)}>
-    <div className="purchase-batch-header"><label>{text.paymentDate}<BaseerDatePicker language={language} label={text.paymentDate} max={businessDate} value={paymentDate} onChange={setPaymentDate} /></label></div>
+  return <BaseerCard className="baseer-batch-workspace"><form className="baseer-batch-form" onSubmit={(event) => void submit(event)}>
+    <div className="baseer-batch-header"><label>{text.paymentDate}<BaseerDatePicker language={language} label={text.paymentDate} max={businessDate} value={paymentDate} onChange={setPaymentDate} /></label></div>
     {message.type !== "idle" ? <p className={`daily-sales-message ${message.type}`}>{message.text}</p> : null}
     <DataTable ariaLabel={text.recurringBatchTitle} caption={text.recurringBatchTitle} className="baseer-batch-entry-table" rowKey={(row) => row.id} rows={rows} columns={[
       { id: "row", header: text.rowNumber, align: "center", cell: (row) => <span className="baseer-batch-entry-table__row-number">{rows.indexOf(row) + 1}</span> },
@@ -108,6 +108,6 @@ export function RecurringExpensePaymentBatch({ language, configuration, profiles
       { id: "tax", header: text.tax, align: "center", cell: (row) => <BaseerButton aria-label={row.isTaxable ? text.taxOn : text.taxOff} title={row.isTaxable ? text.taxOn : text.taxOff} className="baseer-batch-entry-table__tax" disabled={!configuration.profile?.vatAccountingEnabled} type="button" variant="secondary" onClick={() => change(row.id, "isTaxable", !row.isTaxable)}>{row.isTaxable && configuration.profile?.vatAccountingEnabled ? `${(configuration.profile?.vatRateBasisPoints ?? 1500) / 100}%` : "—"}</BaseerButton> },
       { id: "remove", header: "", align: "center", cell: (row) => <BaseerButton aria-label={text.removeRow} type="button" variant="secondary" className="baseer-batch-entry-table__remove" disabled={rows.length === 1} onClick={() => remove(row.id)}>×</BaseerButton> },
     ]} />
-    <footer className="purchase-batch-footer"><span className="purchase-batch-total" aria-hidden="true" /><div><BaseerButton type="button" variant="secondary" onClick={() => setRows((current) => [...current, newRecurringBatchRow(businessDate)])}>{text.addRow}</BaseerButton><BaseerButton variant="primary" disabled={saving}>{saving ? text.saving : text.savePaymentCount(enteredRows.length)}</BaseerButton></div></footer>
+    <footer className="baseer-batch-footer"><div className="baseer-batch-total" /><div><BaseerButton type="button" variant="secondary" onClick={() => setRows((current) => [...current, newRecurringBatchRow(businessDate)])}>{text.addRow}</BaseerButton><BaseerButton variant="primary" disabled={saving}>{saving ? text.saving : text.savePaymentCount(enteredRows.length)}</BaseerButton></div></footer>
   </form></BaseerCard>;
 }

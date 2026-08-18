@@ -1974,7 +1974,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   opacity: 0.55;
   transform: none;
 }
-:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form, .purchase-batch-header) :is(input, select, textarea) {
+:where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form, .baseer-batch-header) :is(input, select, textarea) {
   width: 100%;
   min-height: var(--control-height);
   padding: 0.625rem 0.75rem;
@@ -2177,10 +2177,10 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 @media (max-width: 640px) { .baseer-period-filter { display: block; min-width: 0; width: 100%; } .baseer-period-filter__popover { width: min(340px, calc(100vw - 24px)); } }
 .baseer-date-picker{width:100%}.baseer-date-picker__trigger { grid-template-columns:18px 1fr; min-height:36px; padding:4px 8px; border-color:var(--line); border-radius:6px; background:var(--surface); box-shadow:none; }.baseer-date-picker__trigger:focus-visible{outline:2px solid var(--brand)}
 .baseer-date-picker__trigger-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.purchase-batch-header { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); align-items: start; gap: .5rem; }
-.purchase-batch-header label { display: grid; gap: .3rem; color: var(--muted); font-size: var(--font-label); font-weight: 700; }
-.purchase-batch-workspace { --control-radius: 6px; --card-radius: 8px; --section-gap: .5rem; --control-height: 2.25rem; }
-.purchase-batch-workspace .baseer-card { box-shadow: none; }
+.baseer-batch-header { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); align-items: start; gap: .5rem; }
+.baseer-batch-header label { display: grid; gap: .3rem; color: var(--muted); font-size: var(--font-label); font-weight: 700; }
+.baseer-batch-workspace { --control-radius: 6px; --card-radius: 8px; --section-gap: .5rem; --control-height: 2.25rem; }
+.baseer-batch-workspace .baseer-card { box-shadow: none; }
 .baseer-batch-entry-table { border-radius: var(--card-radius); }
 .baseer-batch-entry-table table { min-width: 82rem; table-layout: fixed; }
 .baseer-batch-entry-table :is(th, td) { padding: .4rem .35rem; }
@@ -2190,12 +2190,12 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .baseer-batch-entry-table :is(input, select):focus-visible { outline: 2px solid color-mix(in srgb, var(--brand) 55%, transparent); outline-offset: -2px; }
 .baseer-batch-entry-table__tax { min-height: 0; padding: 0; border: 0; color: var(--ink); background: transparent; font-size: .78rem; }
 .baseer-batch-entry-table__remove { inline-size: 2.25rem; min-height: 2.25rem; padding: 0; border: 0; color: #bf2c2c; background: transparent; font-size: 1.35rem; }
-.purchase-batch-add-row { inline-size: 2.5rem; min-height: 2.5rem; padding: 0; border: 0; color: var(--brand); background: transparent; font-size: 1.7rem; }
-.purchase-batch-footer { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .75rem; border-top: 1px solid var(--line); }
-.purchase-batch-footer > div:last-child { display: flex; flex-wrap: wrap; gap: .625rem; }
-.purchase-batch-total { display: flex; flex-wrap: wrap; gap: .75rem 1rem; color: var(--muted); font-size: var(--font-caption); }
+.baseer-batch-add-row { inline-size: 2.5rem; min-height: 2.5rem; padding: 0; border: 0; color: var(--brand); background: transparent; font-size: 1.7rem; }
+.baseer-batch-footer { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+.baseer-batch-footer > div:last-child { display: flex; flex-wrap: wrap; gap: .625rem; }
+.baseer-batch-total { display: flex; flex-wrap: wrap; gap: .75rem 1rem; color: var(--muted); font-size: var(--font-caption); }
 .expenses-obligations-batches { display: grid; gap: var(--section-gap); }
-@media (max-width: 640px) { .purchase-batch-workspace { --control-height: 2.75rem; } .purchase-batch-header { grid-template-columns: 1fr; } .purchase-batch-footer { align-items: stretch; flex-direction: column; } .purchase-batch-footer > div:last-child { display: grid; grid-template-columns: 1fr 1fr; } .baseer-batch-entry-table { margin-inline: calc(var(--card-padding) * -1); border-inline: 0; border-radius: 0; } }
+@media (max-width: 640px) { .baseer-batch-workspace { --control-height: 2.75rem; } .baseer-batch-header { grid-template-columns: 1fr; } .baseer-batch-footer { align-items: stretch; flex-direction: column; } .baseer-batch-footer > div:last-child { display: grid; grid-template-columns: 1fr 1fr; } .baseer-batch-entry-table { margin-inline: calc(var(--card-padding) * -1); border-inline: 0; border-radius: 0; } }
 /* Recurring expenses: a profile is an obligation; payment remains an explicit financial command. */
 .recurring-expense-workspace { display: grid; gap: 14px; margin-block: 18px; }
 .recurring-expense-heading, .recurring-expense-form > header, .recurring-profile { display: flex; align-items: center; justify-content: space-between; gap: 14px; }

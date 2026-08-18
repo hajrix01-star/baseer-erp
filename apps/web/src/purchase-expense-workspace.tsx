@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
+import { BaseerBatchFooter, BaseerBatchHeader, BaseerBatchPanel, BaseerBatchTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -52,51 +53,27 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   const remove = (rowId: string) => setRows((current) => current.length === 1 ? current : current.filter((row) => row.id !== rowId));
   const submit = async (event: React.FormEvent) => { event.preventDefault(); const current = activeSession(); if (!current || saving) return; if (!businessDate) { setMessage({ kind: "error", text: text.selectDate }); return; } if (!enteredRows.length) { setMessage({ kind: "error", text: text.atLeastOneRow }); return; } for (const [index, row] of enteredRows.entries()) { if (!row.kind || !row.categoryId || !row.grossAmount || !Number.isFinite(Number(row.grossAmount)) || Number(row.grossAmount) <= 0 || (!row.invoiceNumber.trim() && !row.missingReason.trim()) || (row.invoiceNumber.trim() && row.missingReason.trim()) || (row.settlementKind === "PAYABLE" && !row.supplierId) || (row.settlementKind === "PAID" && !row.vaultId)) { setMessage({ kind: "error", text: text.invoiceValidation(index + 1) }); return; } } setSaving(true); setMessage({ kind: "idle", text: "" }); try { const receipt = await api<{ documentCount: number; grossAmount: string; netAmount: string; vatAmount: string }>(current, "/finance/purchase-expense-documents/batch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ businessDate, ...(batchNotes.trim() ? { notes: batchNotes.trim() } : {}), items: enteredRows.map((row) => ({ kind: row.kind, settlementKind: row.settlementKind, categoryId: row.categoryId, ...(row.supplierId ? { supplierId: row.supplierId } : {}), ...(row.invoiceNumber.trim() ? { supplierInvoiceNumber: row.invoiceNumber.trim() } : { supplierInvoiceMissingReason: row.missingReason.trim() }), ...(row.supplierInvoiceDate ? { supplierInvoiceDate: row.supplierInvoiceDate } : {}), grossAmount: row.grossAmount, isTaxable: row.isTaxable, allocations: row.settlementKind === "PAID" ? [{ vaultId: row.vaultId, grossAmount: row.grossAmount }] : [], ...(row.notes.trim() ? { notes: row.notes.trim() } : {}) })), idempotencyKey: requestId() }) }); setRows(initialRows()); setBatchNotes(""); setLastReceipt(receipt); setMessage({ kind: "success", text: text.batchSaved(receipt.documentCount) }); await Promise.all([load(), loadCredit()]); } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.saveBatch) }); } finally { setSaving(false); } };
   if (!session) return <DailySalesSignIn language={language} />;
-  const activeTabStyle = {
-    minHeight: "2.5rem",
-    paddingInline: "1rem",
-    border: "1px solid var(--line)",
-    borderBottom: "1px solid var(--surface)",
-    borderRadius: "8px 8px 0 0",
-    color: "var(--brand-deep)",
-    background: "var(--surface)",
-    boxShadow: "none",
-  };
-  const inactiveTabStyle = {
-    minHeight: "2.5rem",
-    paddingInline: "1rem",
-    border: "1px solid transparent",
-    borderBottom: "1px solid var(--line)",
-    borderRadius: "8px 8px 0 0",
-    color: "var(--muted)",
-    background: "transparent",
-    boxShadow: "none",
-  };
-
-  return <section className="daily-sales-workspace purchase-batch-workspace" aria-label={text.purchases}>
+  return <section className="daily-sales-workspace baseer-batch-workspace" aria-label={text.purchases}>
     {message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}
     {!configuration ? <BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard> : <section style={{ minWidth: 0 }}>
-      <nav aria-label={text.batchInvoices} role="tablist" style={{ display: "inline-flex", alignSelf: "flex-start", gap: 0, marginBlockEnd: "-1px", position: "relative", zIndex: 1 }}>
-        <BaseerButton id="purchase-tab-entry" role="tab" aria-selected={tab === "entry"} aria-controls="purchase-panel-entry" type="button" variant="secondary" style={tab === "entry" ? activeTabStyle : inactiveTabStyle} onClick={() => setTab("entry")}>{text.entry}</BaseerButton>
-        <BaseerButton id="purchase-tab-credit" role="tab" aria-selected={tab === "credit"} aria-controls="purchase-panel-credit" type="button" variant="secondary" style={tab === "credit" ? activeTabStyle : inactiveTabStyle} onClick={() => setTab("credit")}>{text.credit}</BaseerButton>
-      </nav>
-      <div id={`purchase-panel-${tab}`} role="tabpanel" aria-labelledby={`purchase-tab-${tab}`} style={{ minWidth: 0, border: "1px solid var(--line)", borderRadius: "8px", borderStartStartRadius: 0, background: "var(--surface)", boxShadow: "none", padding: "var(--card-padding-compact)" }}>
+      <BaseerBatchTabs ariaLabel={text.batchInvoices} idPrefix="purchase-tab" activeId={tab} tabs={[{ id: "entry", label: text.entry }, { id: "credit", label: text.credit }]} onChange={(id) => setTab(id as typeof tab)} />
+      <BaseerBatchPanel id={`purchase-tab-panel-${tab}`} labelledBy={`purchase-tab-${tab}`}>
         {tab === "entry" ? <>
           {!configuration.profile && <p className="daily-sales-message error">{text.setupRequired}</p>}
-          <form onSubmit={(event) => void submit(event)} className="purchase-batch-form">
-            <div className="purchase-batch-header">
+          <form onSubmit={(event) => void submit(event)} className="baseer-batch-form">
+            <BaseerBatchHeader>
               <label>{text.batchDate}<BaseerDatePicker plain presentation="popover" language={language} label={text.batchDate} value={businessDate} onChange={setBusinessDate} /></label>
               <label>{text.batchNotes}<input value={batchNotes} placeholder={text.optional} onChange={(event) => setBatchNotes(event.target.value)} /></label>
-            </div>
+            </BaseerBatchHeader>
             <OutflowBatchEntryTable language={language} text={text} ariaLabel={text.batchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={paymentVaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["PURCHASE", "EXPENSE"]} maxInvoiceDate={businessDate || undefined} onChange={change} onSupplierChange={chooseSupplier} renderSupplierAction={renderSupplierAction} onRemove={remove} />
-            <footer className="purchase-batch-footer"><div className="purchase-batch-total">{lastReceipt ? <><span>{text.net} <strong>{formatMoney(lastReceipt.netAmount)}</strong></span><span>{text.tax} <strong>{formatMoney(lastReceipt.vatAmount)}</strong></span><span>{text.lastBatchTotal} <strong>{formatMoney(lastReceipt.grossAmount)}</strong></span></> : null}</div><div><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="purchase-batch-add-row" onClick={() => setRows((current) => [...current, newRow()])}>+</BaseerButton><BaseerButton variant="secondary" style={{ minHeight: "2.5rem", padding: "0 .25rem", border: 0, background: "transparent", boxShadow: "none", color: "var(--brand)" }} disabled={saving || !configuration.profile}>{saving ? text.saving : text.saveInvoiceCount(enteredRows.length)}</BaseerButton></div></footer>
+            <BaseerBatchFooter summary={lastReceipt ? <><span>{text.net} <strong>{formatMoney(lastReceipt.netAmount)}</strong></span><span>{text.tax} <strong>{formatMoney(lastReceipt.vatAmount)}</strong></span><span>{text.lastBatchTotal} <strong>{formatMoney(lastReceipt.grossAmount)}</strong></span></> : null}><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="baseer-batch-add-row" onClick={() => setRows((current) => [...current, newRow()])}>+</BaseerButton><BaseerButton variant="secondary" style={{ minHeight: "2.5rem", padding: "0 .25rem", border: 0, background: "transparent", boxShadow: "none", color: "var(--brand)" }} disabled={saving || !configuration.profile}>{saving ? text.saving : text.saveInvoiceCount(enteredRows.length)}</BaseerButton></BaseerBatchFooter>
           </form>
           <section style={{ marginTop: "var(--section-gap)", paddingTop: "var(--section-gap)", borderTop: "1px solid var(--line)" }}>
             <div className="administration-section-heading"><div><h3>{text.invoiceHistory}</h3></div><span>{documents.length} {text.invoiceCount}</span></div>
             {documents.length ? <div className="administration-list">{documents.map((document) => <article key={document.id}><strong>{document.documentNumber}</strong><span>{document.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {document.businessDate.slice(0, 10)}</span><span>{displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}{document.supplierNameAr ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}` : ""}</span><strong>{formatMoney(document.grossAmount)}</strong></article>)}</div> : <p className="empty-results">{text.noInvoices}</p>}
           </section>
         </> : <CreditPanel credit={credit} language={language} vaults={paymentVaults} reload={loadCredit} />}
-      </div>
+      </BaseerBatchPanel>
     </section>}
   </section>;
 }
