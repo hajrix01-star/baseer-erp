@@ -1,4 +1,8 @@
 # Noorix to Baseer ERP — Proposed Module Map
+## Current navigation note — 2026-08-17
+
+This is historical comparison/migration evidence, not navigation authority. Baseer V3 places Daily Sales, Purchases and Expenses & Obligations in Operations; Finance remains the financial-record and reporting authority. See BASEER_ERP_USER_MODULES_V3.md.
+
 
 **Status:** Portfolio discovery baseline — not a build authorization  
 **Source reviewed:** Noorix application module catalogue, route/screen structure, backend module catalogue, current Baseer transition surfaces, and the finance/HR/operations/admin discovery already recorded.  

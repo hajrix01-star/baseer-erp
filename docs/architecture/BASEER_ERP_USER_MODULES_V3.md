@@ -3,6 +3,9 @@
 **Status:** Proposed user navigation architecture  
 **Supersedes for navigation:** `BASEER_ERP_MODULE_TAXONOMY_V2.md`  
 **Keeps from v2:** Its detailed boundaries remain internal implementation subdomains; they are not all separate launcher modules.
+## Current navigation clarification — 2026-08-17
+
+Operational entry screens for **Daily Sales**, **Purchases**, and **Expenses & Obligations** belong to the **Operations** module. Finance remains the authority for the ledger, periods, vault definition, tax and reconciled reporting facts. This changes navigation only; it does not create a second financial source of truth.
 
 ## 1. Decision
 
@@ -50,14 +53,12 @@ It is a read-only decision workspace. It links contextually to the responsible m
 
 ```text
 المالية
-├─ النظرة المالية
-├─ المبيعات اليومية
-├─ المشتريات والموردون
-├─ الفواتير والدفعات
-├─ المصروفات والالتزامات
+├─ إعدادات المالية
+├─ السجل المالي الموحّد
 ├─ الخزائن والبنوك
-├─ القروض والالتزامات المالية
 ├─ الحسابات والدفتر
+├─ الفئات والتصنيفات
+├─ الفترات والسياسات المالية
 ├─ الضريبة وحجري تاكس
 └─ التسويات المالية
 ```
@@ -71,6 +72,9 @@ It is a read-only decision workspace. It links contextually to the responsible m
 ```text
 العمليات
 ├─ النظرة التشغيلية
+├─ المبيعات اليومية
+├─ المشتريات والموردون
+├─ المصروفات والالتزامات
 ├─ الأصناف والوحدات
 ├─ المستودعات والمخزون
 ├─ الطلبات والموافقات

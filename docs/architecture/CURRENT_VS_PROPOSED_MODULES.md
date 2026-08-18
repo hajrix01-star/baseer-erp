@@ -1,4 +1,8 @@
 # Current Noorix vs Proposed Baseer ERP Modules
+## Current navigation note — 2026-08-17
+
+This is historical comparison/migration evidence, not navigation authority. Baseer V3 places Daily Sales, Purchases and Expenses & Obligations in Operations; Finance remains the financial-record and reporting authority. See BASEER_ERP_USER_MODULES_V3.md.
+
 
 | النظام الحالي في نوركس | الوضع الحالي / ما يحتويه | المقترح في Baseer ERP | ما سيكون تحته في المقترح |
 | --- | --- | --- | --- |
