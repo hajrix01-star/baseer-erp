@@ -7,6 +7,7 @@ import { DatabaseService } from '../database/database.service.js';
 import {
   FinanceAccountStatus,
   FinanceCategoryStatus,
+  FinanceSupplierDueStatus,
   Prisma,
 } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
@@ -14,10 +15,11 @@ import {
   FINANCE_BASE_ACCOUNT_SEEDS,
   FINANCE_BASE_CATEGORY_SEEDS,
   FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS,
+  STANDARD_SUPPLIER_SEEDS,
 } from './finance-foundation-seeds.js';
 
-// v6 adds the cash-basis control account used by credit supplier invoices.
-const BASE_SEED_VERSION = 6;
+// v7 adds the utility parent/leaves and supplier suggestions for recurring costs.
+const BASE_SEED_VERSION = 7;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;
@@ -111,6 +113,9 @@ export class FinanceFoundationService {
       where: { tenantId: context.tenantId, companyId: context.companyId, code: { in: parentCodes }, parentId: null },
       data: { isPosting: false },
     });
+    if (existingProfile && existingProfile.baseSeedVersion < BASE_SEED_VERSION) {
+      await this.upgradeUtilities(transaction, context, categoriesByCode);
+    }
     if (!existingProfile) {
       await transaction.companyFinanceProfile.create({
         data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true },
@@ -142,5 +147,75 @@ export class FinanceFoundationService {
       },
     });
     return receipt;
+  }
+
+  private async upgradeUtilities(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    categoriesByCode: ReadonlyMap<string, { id: string; code: string; accountId: string | null; parentId: string | null }>,
+  ): Promise<void> {
+    const utilityCodesBySupplierName = new Map(
+      STANDARD_SUPPLIER_SEEDS
+        .filter((supplier) => ['SAUDI_ENERGY', 'STC', 'MOBILY', 'ZAIN_SAUDI', 'SALAM', 'GO_TELECOM', 'NATIONAL_WATER_COMPANY'].includes(supplier.key))
+        .map((supplier) => [supplier.nameAr, supplier.categoryCode]),
+    );
+    const utilities = await transaction.financeSupplier.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, nameAr: { in: [...utilityCodesBySupplierName.keys()] } },
+      select: { id: true, nameAr: true },
+    });
+    const targetBySupplierId = new Map(
+      utilities.flatMap((supplier) => {
+        const code = utilityCodesBySupplierName.get(supplier.nameAr);
+        const category = code ? categoriesByCode.get(code) : null;
+        return category ? [[supplier.id, category.id] as const] : [];
+      }),
+    );
+    let suppliersReassigned = 0;
+    for (const [supplierId, categoryId] of targetBySupplierId) {
+      const result = await transaction.financeSupplier.updateMany({ where: { id: supplierId, tenantId: context.tenantId, companyId: context.companyId, categoryId: { not: categoryId } }, data: { categoryId } });
+      suppliersReassigned += result.count;
+    }
+
+    const fallbackCategoryId = categoriesByCode.get('UTIL-001-OTHER')?.id;
+    const profiles = await transaction.financeRecurringExpenseProfile.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, category: { code: 'UTIL-001' }, status: 'ACTIVE' },
+      select: { id: true, supplierId: true },
+    });
+    const dues = await transaction.financeSupplierDue.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, category: { code: 'UTIL-001' }, status: { in: [FinanceSupplierDueStatus.OPEN, FinanceSupplierDueStatus.PARTIALLY_PAID] } },
+      select: { id: true, supplierId: true },
+    });
+    let recurringProfilesReassigned = 0;
+    for (const profile of profiles) {
+      const categoryId = (profile.supplierId ? targetBySupplierId.get(profile.supplierId) : null) ?? fallbackCategoryId;
+      if (!categoryId) continue;
+      const result = await transaction.financeRecurringExpenseProfile.updateMany({ where: { id: profile.id, tenantId: context.tenantId, companyId: context.companyId, categoryId: { not: categoryId } }, data: { categoryId } });
+      recurringProfilesReassigned += result.count;
+    }
+    let openDuesReassigned = 0;
+    for (const due of dues) {
+      const categoryId = targetBySupplierId.get(due.supplierId) ?? fallbackCategoryId;
+      if (!categoryId) continue;
+      const result = await transaction.financeSupplierDue.updateMany({ where: { id: due.id, tenantId: context.tenantId, companyId: context.companyId, categoryId: { not: categoryId } }, data: { categoryId } });
+      openDuesReassigned += result.count;
+    }
+
+    const preferredSupplierKeys: ReadonlyArray<readonly [string, string]> = [
+      ['E3-2', 'SAUDI_ENERGY'], ['E3-3', 'STC'], ['E3-4', 'NATIONAL_WATER_COMPANY'],
+    ];
+    for (const [categoryCode, supplierKey] of preferredSupplierKeys) {
+      const category = categoriesByCode.get(categoryCode);
+      const supplier = STANDARD_SUPPLIER_SEEDS.find((item) => item.key === supplierKey);
+      const supplierId = supplier ? utilities.find((item) => item.nameAr === supplier.nameAr)?.id : null;
+      if (category && supplierId) await transaction.financeCategory.updateMany({ where: { id: category.id, tenantId: context.tenantId, companyId: context.companyId, suggestedSupplierId: null }, data: { suggestedSupplierId: supplierId } });
+    }
+    await transaction.auditEvent.create({
+      data: {
+        id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId,
+        action: 'finance.foundation.utilities_upgraded', entityType: 'CompanyFinanceProfile', entityId: context.companyId,
+        requestId: RequestContext.correlationId() ?? randomUUID(),
+        afterJson: { suppliersReassigned, recurringProfilesReassigned, openDuesReassigned, baseSeedVersion: BASE_SEED_VERSION } as Prisma.InputJsonValue,
+      },
+    });
   }
 }

@@ -90,19 +90,25 @@ export class CompanyFinanceSetupService {
     if (!selectedSuppliers.length) return { supplierIds: [], taxNumbersUpdated: 0 };
     const categories = await transaction.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, code: { in: selectedSuppliers.map((supplier) => supplier.categoryCode) } }, select: { id: true, code: true, kind: true } });
     const categoriesByCode = new Map(categories.map((category) => [category.code, category]));
-    const supplierIds: string[] = []; let taxNumbersUpdated = 0;
+    const supplierIds: string[] = []; const supplierIdsByKey = new Map<StandardSupplierKey, string>(); let taxNumbersUpdated = 0;
     for (const supplier of selectedSuppliers) {
       const category = categoriesByCode.get(supplier.categoryCode);
       const categoryId = category?.id;
       if (!categoryId) throw new BadRequestException(`The seeded category for ${supplier.key} is missing.`);
-      const prior = await transaction.financeSupplier.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, nameAr: supplier.nameAr }, select: { id: true, taxNumber: true, isTaxRegistered: true } });
+      const prior = await transaction.financeSupplier.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, nameAr: supplier.nameAr }, select: { id: true, taxNumber: true, isTaxRegistered: true, categoryId: true, supplierType: true } });
       if (prior) {
-        if (supplier.taxNumber && (!prior.taxNumber || !prior.isTaxRegistered)) { await transaction.financeSupplier.update({ where: { id: prior.id }, data: { taxNumber: supplier.taxNumber, isTaxRegistered: true } }); taxNumbersUpdated += 1; }
-        supplierIds.push(prior.id); continue;
+        const taxData = supplier.taxNumber && (!prior.taxNumber || !prior.isTaxRegistered) ? { taxNumber: supplier.taxNumber, isTaxRegistered: true } : {};
+        if (supplier.taxNumber && (!prior.taxNumber || !prior.isTaxRegistered)) taxNumbersUpdated += 1;
+        if (prior.categoryId !== categoryId || prior.supplierType !== (category!.kind === FinanceCategoryKind.EXPENSE ? FinanceSupplierType.EXPENSE : FinanceSupplierType.PURCHASE) || Object.keys(taxData).length) await transaction.financeSupplier.update({ where: { id: prior.id }, data: { categoryId, supplierType: category!.kind === FinanceCategoryKind.EXPENSE ? FinanceSupplierType.EXPENSE : FinanceSupplierType.PURCHASE, ...taxData } });
+        supplierIds.push(prior.id); supplierIdsByKey.set(supplier.key, prior.id); continue;
       }
       const id = randomUUID();
       await transaction.financeSupplier.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, categoryId, supplierType: category!.kind === FinanceCategoryKind.EXPENSE ? FinanceSupplierType.EXPENSE : FinanceSupplierType.PURCHASE, nameAr: supplier.nameAr, nameEn: supplier.nameEn, taxNumber: supplier.taxNumber ?? null, isTaxRegistered: Boolean(supplier.taxNumber) } });
-      supplierIds.push(id);
+      supplierIds.push(id); supplierIdsByKey.set(supplier.key, id);
+    }
+    for (const [categoryCode, supplierKey] of [['E3-2', 'SAUDI_ENERGY'], ['E3-3', 'STC'], ['E3-4', 'NATIONAL_WATER_COMPANY']] as const) {
+      const categoryId = categoriesByCode.get(categoryCode)?.id; const supplierId = supplierIdsByKey.get(supplierKey);
+      if (categoryId && supplierId) await transaction.financeCategory.updateMany({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, suggestedSupplierId: null }, data: { suggestedSupplierId: supplierId } });
     }
     return { supplierIds, taxNumbersUpdated };
   }

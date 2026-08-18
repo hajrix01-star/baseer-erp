@@ -256,6 +256,7 @@ export type FinanceSupplierWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   category?: Prisma.XOR<Prisma.FinanceCategoryNullableScalarRelationFilter, Prisma.FinanceCategoryWhereInput> | null
+  suggestedForCategories?: Prisma.FinanceCategoryListRelationFilter
   provenance?: Prisma.XOR<Prisma.SupplierCopyProvenanceNullableScalarRelationFilter, Prisma.SupplierCopyProvenanceWhereInput> | null
   dues?: Prisma.FinanceSupplierDueListRelationFilter
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
@@ -280,6 +281,7 @@ export type FinanceSupplierOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   category?: Prisma.FinanceCategoryOrderByWithRelationInput
+  suggestedForCategories?: Prisma.FinanceCategoryOrderByRelationAggregateInput
   provenance?: Prisma.SupplierCopyProvenanceOrderByWithRelationInput
   dues?: Prisma.FinanceSupplierDueOrderByRelationAggregateInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileOrderByRelationAggregateInput
@@ -308,6 +310,7 @@ export type FinanceSupplierWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   category?: Prisma.XOR<Prisma.FinanceCategoryNullableScalarRelationFilter, Prisma.FinanceCategoryWhereInput> | null
+  suggestedForCategories?: Prisma.FinanceCategoryListRelationFilter
   provenance?: Prisma.XOR<Prisma.SupplierCopyProvenanceNullableScalarRelationFilter, Prisma.SupplierCopyProvenanceWhereInput> | null
   dues?: Prisma.FinanceSupplierDueListRelationFilter
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
@@ -369,6 +372,7 @@ export type FinanceSupplierCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
@@ -391,6 +395,7 @@ export type FinanceSupplierUncheckedCreateInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
@@ -412,6 +417,7 @@ export type FinanceSupplierUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
@@ -434,6 +440,7 @@ export type FinanceSupplierUncheckedUpdateInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
@@ -499,6 +506,11 @@ export type FinanceSupplierOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type FinanceSupplierNullableScalarRelationFilter = {
+  is?: Prisma.FinanceSupplierWhereInput | null
+  isNot?: Prisma.FinanceSupplierWhereInput | null
+}
+
 export type FinanceSupplierIdTenantIdCompanyIdCompoundUniqueInput = {
   id: string
   tenantId: string
@@ -561,11 +573,6 @@ export type FinanceSupplierScalarRelationFilter = {
   isNot?: Prisma.FinanceSupplierWhereInput
 }
 
-export type FinanceSupplierNullableScalarRelationFilter = {
-  is?: Prisma.FinanceSupplierWhereInput | null
-  isNot?: Prisma.FinanceSupplierWhereInput | null
-}
-
 export type FinanceSupplierCreateNestedManyWithoutCompanyInput = {
   create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutCompanyInput, Prisma.FinanceSupplierUncheckedCreateWithoutCompanyInput> | Prisma.FinanceSupplierCreateWithoutCompanyInput[] | Prisma.FinanceSupplierUncheckedCreateWithoutCompanyInput[]
   connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutCompanyInput | Prisma.FinanceSupplierCreateOrConnectWithoutCompanyInput[]
@@ -608,6 +615,12 @@ export type FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.FinanceSupplierScalarWhereInput | Prisma.FinanceSupplierScalarWhereInput[]
 }
 
+export type FinanceSupplierCreateNestedOneWithoutSuggestedForCategoriesInput = {
+  create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput>
+  connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutSuggestedForCategoriesInput
+  connect?: Prisma.FinanceSupplierWhereUniqueInput
+}
+
 export type FinanceSupplierCreateNestedManyWithoutCategoryInput = {
   create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutCategoryInput, Prisma.FinanceSupplierUncheckedCreateWithoutCategoryInput> | Prisma.FinanceSupplierCreateWithoutCategoryInput[] | Prisma.FinanceSupplierUncheckedCreateWithoutCategoryInput[]
   connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutCategoryInput | Prisma.FinanceSupplierCreateOrConnectWithoutCategoryInput[]
@@ -620,6 +633,16 @@ export type FinanceSupplierUncheckedCreateNestedManyWithoutCategoryInput = {
   connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutCategoryInput | Prisma.FinanceSupplierCreateOrConnectWithoutCategoryInput[]
   createMany?: Prisma.FinanceSupplierCreateManyCategoryInputEnvelope
   connect?: Prisma.FinanceSupplierWhereUniqueInput | Prisma.FinanceSupplierWhereUniqueInput[]
+}
+
+export type FinanceSupplierUpdateOneWithoutSuggestedForCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput>
+  connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutSuggestedForCategoriesInput
+  upsert?: Prisma.FinanceSupplierUpsertWithoutSuggestedForCategoriesInput
+  disconnect?: Prisma.FinanceSupplierWhereInput | boolean
+  delete?: Prisma.FinanceSupplierWhereInput | boolean
+  connect?: Prisma.FinanceSupplierWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceSupplierUpdateToOneWithWhereWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUpdateWithoutSuggestedForCategoriesInput>, Prisma.FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput>
 }
 
 export type FinanceSupplierUpdateManyWithoutCategoryNestedInput = {
@@ -747,6 +770,7 @@ export type FinanceSupplierCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
@@ -767,6 +791,7 @@ export type FinanceSupplierUncheckedCreateWithoutCompanyInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
@@ -820,6 +845,54 @@ export type FinanceSupplierScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
 }
 
+export type FinanceSupplierCreateWithoutSuggestedForCategoriesInput = {
+  id?: string
+  supplierType: $Enums.FinanceSupplierType
+  nameAr: string
+  nameEn?: string | null
+  phone?: string | null
+  taxNumber?: string | null
+  isTaxRegistered?: boolean
+  isFavorite?: boolean
+  status?: $Enums.FinanceSupplierStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
+  category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
+  dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
+}
+
+export type FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  categoryId?: string | null
+  supplierType: $Enums.FinanceSupplierType
+  nameAr: string
+  nameEn?: string | null
+  phone?: string | null
+  taxNumber?: string | null
+  isTaxRegistered?: boolean
+  isFavorite?: boolean
+  status?: $Enums.FinanceSupplierStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
+  dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
+}
+
+export type FinanceSupplierCreateOrConnectWithoutSuggestedForCategoriesInput = {
+  where: Prisma.FinanceSupplierWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput>
+}
+
 export type FinanceSupplierCreateWithoutCategoryInput = {
   id?: string
   supplierType: $Enums.FinanceSupplierType
@@ -833,6 +906,7 @@ export type FinanceSupplierCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
@@ -852,6 +926,7 @@ export type FinanceSupplierUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
@@ -867,6 +942,60 @@ export type FinanceSupplierCreateOrConnectWithoutCategoryInput = {
 export type FinanceSupplierCreateManyCategoryInputEnvelope = {
   data: Prisma.FinanceSupplierCreateManyCategoryInput | Prisma.FinanceSupplierCreateManyCategoryInput[]
   skipDuplicates?: boolean
+}
+
+export type FinanceSupplierUpsertWithoutSuggestedForCategoriesInput = {
+  update: Prisma.XOR<Prisma.FinanceSupplierUpdateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput>
+  create: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput>
+  where?: Prisma.FinanceSupplierWhereInput
+}
+
+export type FinanceSupplierUpdateToOneWithWhereWithoutSuggestedForCategoriesInput = {
+  where?: Prisma.FinanceSupplierWhereInput
+  data: Prisma.XOR<Prisma.FinanceSupplierUpdateWithoutSuggestedForCategoriesInput, Prisma.FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput>
+}
+
+export type FinanceSupplierUpdateWithoutSuggestedForCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierType?: Prisma.EnumFinanceSupplierTypeFieldUpdateOperationsInput | $Enums.FinanceSupplierType
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
+  dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
+}
+
+export type FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierType?: Prisma.EnumFinanceSupplierTypeFieldUpdateOperationsInput | $Enums.FinanceSupplierType
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
+  dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -899,6 +1028,7 @@ export type FinanceSupplierCreateWithoutProvenanceInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
@@ -920,6 +1050,7 @@ export type FinanceSupplierUncheckedCreateWithoutProvenanceInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
@@ -956,6 +1087,7 @@ export type FinanceSupplierUpdateWithoutProvenanceInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
@@ -977,6 +1109,7 @@ export type FinanceSupplierUncheckedUpdateWithoutProvenanceInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
@@ -997,6 +1130,7 @@ export type FinanceSupplierCreateWithoutDuesInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
@@ -1018,6 +1152,7 @@ export type FinanceSupplierUncheckedCreateWithoutDuesInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
@@ -1054,6 +1189,7 @@ export type FinanceSupplierUpdateWithoutDuesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
@@ -1075,6 +1211,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDuesInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
@@ -1095,6 +1232,7 @@ export type FinanceSupplierCreateWithoutOutflowDocumentsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
@@ -1116,6 +1254,7 @@ export type FinanceSupplierUncheckedCreateWithoutOutflowDocumentsInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
@@ -1152,6 +1291,7 @@ export type FinanceSupplierUpdateWithoutOutflowDocumentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
@@ -1173,6 +1313,7 @@ export type FinanceSupplierUncheckedUpdateWithoutOutflowDocumentsInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1193,6 +1334,7 @@ export type FinanceSupplierCreateWithoutDailySalesClosingsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
@@ -1214,6 +1356,7 @@ export type FinanceSupplierUncheckedCreateWithoutDailySalesClosingsInput = {
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
@@ -1250,6 +1393,7 @@ export type FinanceSupplierUpdateWithoutDailySalesClosingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
@@ -1271,6 +1415,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDailySalesClosingsInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1291,6 +1436,7 @@ export type FinanceSupplierCreateWithoutRecurringExpenseProfilesInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
@@ -1312,6 +1458,7 @@ export type FinanceSupplierUncheckedCreateWithoutRecurringExpenseProfilesInput =
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
@@ -1348,6 +1495,7 @@ export type FinanceSupplierUpdateWithoutRecurringExpenseProfilesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
@@ -1369,6 +1517,7 @@ export type FinanceSupplierUncheckedUpdateWithoutRecurringExpenseProfilesInput =
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
@@ -1403,6 +1552,7 @@ export type FinanceSupplierUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
@@ -1423,6 +1573,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCompanyInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1472,6 +1623,7 @@ export type FinanceSupplierUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
@@ -1491,6 +1643,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
   provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1518,6 +1671,7 @@ export type FinanceSupplierUncheckedUpdateManyWithoutCategoryInput = {
  */
 
 export type FinanceSupplierCountOutputType = {
+  suggestedForCategories: number
   dues: number
   recurringExpenseProfiles: number
   dailySalesClosings: number
@@ -1525,6 +1679,7 @@ export type FinanceSupplierCountOutputType = {
 }
 
 export type FinanceSupplierCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  suggestedForCategories?: boolean | FinanceSupplierCountOutputTypeCountSuggestedForCategoriesArgs
   dues?: boolean | FinanceSupplierCountOutputTypeCountDuesArgs
   recurringExpenseProfiles?: boolean | FinanceSupplierCountOutputTypeCountRecurringExpenseProfilesArgs
   dailySalesClosings?: boolean | FinanceSupplierCountOutputTypeCountDailySalesClosingsArgs
@@ -1539,6 +1694,13 @@ export type FinanceSupplierCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
    * Select specific fields to fetch from the FinanceSupplierCountOutputType
    */
   select?: Prisma.FinanceSupplierCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FinanceSupplierCountOutputType without action
+ */
+export type FinanceSupplierCountOutputTypeCountSuggestedForCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceCategoryWhereInput
 }
 
 /**
@@ -1587,6 +1749,7 @@ export type FinanceSupplierSelect<ExtArgs extends runtime.Types.Extensions.Inter
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   category?: boolean | Prisma.FinanceSupplier$categoryArgs<ExtArgs>
+  suggestedForCategories?: boolean | Prisma.FinanceSupplier$suggestedForCategoriesArgs<ExtArgs>
   provenance?: boolean | Prisma.FinanceSupplier$provenanceArgs<ExtArgs>
   dues?: boolean | Prisma.FinanceSupplier$duesArgs<ExtArgs>
   recurringExpenseProfiles?: boolean | Prisma.FinanceSupplier$recurringExpenseProfilesArgs<ExtArgs>
@@ -1654,6 +1817,7 @@ export type FinanceSupplierOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type FinanceSupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   category?: boolean | Prisma.FinanceSupplier$categoryArgs<ExtArgs>
+  suggestedForCategories?: boolean | Prisma.FinanceSupplier$suggestedForCategoriesArgs<ExtArgs>
   provenance?: boolean | Prisma.FinanceSupplier$provenanceArgs<ExtArgs>
   dues?: boolean | Prisma.FinanceSupplier$duesArgs<ExtArgs>
   recurringExpenseProfiles?: boolean | Prisma.FinanceSupplier$recurringExpenseProfilesArgs<ExtArgs>
@@ -1675,6 +1839,7 @@ export type $FinanceSupplierPayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     category: Prisma.$FinanceCategoryPayload<ExtArgs> | null
+    suggestedForCategories: Prisma.$FinanceCategoryPayload<ExtArgs>[]
     provenance: Prisma.$SupplierCopyProvenancePayload<ExtArgs> | null
     dues: Prisma.$FinanceSupplierDuePayload<ExtArgs>[]
     recurringExpenseProfiles: Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>[]
@@ -2092,6 +2257,7 @@ export interface Prisma__FinanceSupplierClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.FinanceSupplier$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$categoryArgs<ExtArgs>>): Prisma.Prisma__FinanceCategoryClient<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  suggestedForCategories<T extends Prisma.FinanceSupplier$suggestedForCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$suggestedForCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   provenance<T extends Prisma.FinanceSupplier$provenanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$provenanceArgs<ExtArgs>>): Prisma.Prisma__SupplierCopyProvenanceClient<runtime.Types.Result.GetResult<Prisma.$SupplierCopyProvenancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   dues<T extends Prisma.FinanceSupplier$duesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$duesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierDuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recurringExpenseProfiles<T extends Prisma.FinanceSupplier$recurringExpenseProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$recurringExpenseProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2557,6 +2723,30 @@ export type FinanceSupplier$categoryArgs<ExtArgs extends runtime.Types.Extension
    */
   include?: Prisma.FinanceCategoryInclude<ExtArgs> | null
   where?: Prisma.FinanceCategoryWhereInput
+}
+
+/**
+ * FinanceSupplier.suggestedForCategories
+ */
+export type FinanceSupplier$suggestedForCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceCategory
+   */
+  select?: Prisma.FinanceCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceCategory
+   */
+  omit?: Prisma.FinanceCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceCategoryInclude<ExtArgs> | null
+  where?: Prisma.FinanceCategoryWhereInput
+  orderBy?: Prisma.FinanceCategoryOrderByWithRelationInput | Prisma.FinanceCategoryOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceCategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceCategoryScalarFieldEnum | Prisma.FinanceCategoryScalarFieldEnum[]
 }
 
 /**

@@ -17,7 +17,7 @@ import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
 type Configuration = {
   profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null;
   vaults: Array<{ id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }>;
-  categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE"; status: "ACTIVE"; isPosting?: boolean }>;
+  categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE"; status: "ACTIVE"; isPosting?: boolean; suggestedSupplierId: string | null }>;
   suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE"; categoryId: string | null }>;
 };
 type Loan = {

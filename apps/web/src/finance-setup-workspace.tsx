@@ -18,7 +18,7 @@ type SupplierRecord = { id: string; nameAr: string; nameEn: string | null; phone
 type SupplierForm = { nameAr: string; nameEn: string; phone: string; taxNumber: string; supplierType: "PURCHASE" | "EXPENSE"; categoryId: string; isTaxRegistered: boolean };
 type Configuration = { profile: { baseSeedVersion: number; accountingMode: string; vatAccountingEnabled: boolean; initializedAt: string } | null; periods: Array<{ id: string; nameAr: string; nameEn: string; startDate: string; endDate: string; status: "OPEN" | "CLOSED" | "LOCKED" }>; vaults: Array<{ id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; status: "ACTIVE" | "ARCHIVED"; isSalesChannel: boolean; isPaymentDestination: boolean }>; categories: Array<{ id: string; code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; status: "ACTIVE" | "ARCHIVED"; parentId: string | null; isPosting: boolean }>; suppliers: SupplierRecord[]; standardSuppliers: Array<{ key: string; nameAr: string; nameEn: string }> };
 type VaultChoice = "CASH" | "BANK" | "HUNGERSTATION" | "JAHEZ" | "KEETA";
-const BASE_FINANCE_SEED_VERSION = 6;
+const BASE_FINANCE_SEED_VERSION = 7;
 const vaultChoices: Array<{ value: VaultChoice; nameAr: string; nameEn: string }> = [{ value: "CASH", nameAr: "نقد", nameEn: "Cash" }, { value: "BANK", nameAr: "بنك", nameEn: "Bank" }, { value: "HUNGERSTATION", nameAr: "هنقرستيشن", nameEn: "HungerStation" }, { value: "JAHEZ", nameAr: "جاهز", nameEn: "Jahez" }, { value: "KEETA", nameAr: "كيتا", nameEn: "Keeta" }];
 const dateValue = (offset = 0) => { const date = new Date(); date.setDate(date.getDate() + offset); return date.toISOString().slice(0, 10); };
 

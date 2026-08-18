@@ -3760,6 +3760,7 @@ export const FinanceCategoryScalarFieldEnum = {
   companyId: 'companyId',
   parentId: 'parentId',
   accountId: 'accountId',
+  suggestedSupplierId: 'suggestedSupplierId',
   code: 'code',
   nameAr: 'nameAr',
   nameEn: 'nameEn',

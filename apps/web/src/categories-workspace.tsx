@@ -15,16 +15,18 @@ import { categoryText } from "./categories-copy";
 import { FinanceCategoryTree, type FinanceCategoryKind, type FinanceCategoryTreeItem } from "./finance-category-tree";
 
 type CategoryKind = FinanceCategoryKind;
-type Category = FinanceCategoryTreeItem;
-type Configuration = { categories: Category[] };
-type Form = { code: string; nameAr: string; nameEn: string; kind: CategoryKind; parentId: string; isPosting: boolean };
-const blankForm = (): Form => ({ code: "", nameAr: "", nameEn: "", kind: "PURCHASE", parentId: "", isPosting: true });
+type Category = FinanceCategoryTreeItem & { suggestedSupplierId: string | null };
+type Supplier = { id: string; nameAr: string; nameEn: string | null; supplierType: "PURCHASE" | "EXPENSE"; status: "ACTIVE" };
+type Configuration = { categories: Category[]; suppliers: Supplier[] };
+type Form = { code: string; nameAr: string; nameEn: string; kind: CategoryKind; parentId: string; suggestedSupplierId: string; isPosting: boolean };
+const blankForm = (): Form => ({ code: "", nameAr: "", nameEn: "", kind: "PURCHASE", parentId: "", suggestedSupplierId: "", isPosting: true });
 
 export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   const text = categoryText(language);
   const shared = uiCopy(language);
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ kind: "idle" | "success" | "error"; text: string }>({ kind: "idle", text: "" });
@@ -44,7 +46,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
     setLoading(true);
     try {
       const result = await api<Configuration>(current, "/finance/configuration");
-      setCategories(result.categories);
+      setCategories(result.categories); setSuppliers(result.suppliers);
     } catch (error) {
       setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.loading) });
     } finally { setLoading(false); }
@@ -63,6 +65,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   }, [categories, kind, search, showArchived]);
   const active = useMemo(() => categories.filter((item) => item.status === "ACTIVE"), [categories]);
   const parentOptions = useMemo(() => active.filter((item) => !item.isPosting && item.kind === form.kind && item.id !== editing?.id), [active, editing?.id, form.kind]);
+  const suggestedSupplierOptions = useMemo(() => suppliers.filter((item) => item.status === "ACTIVE" && item.supplierType === (form.kind === "PURCHASE" ? "PURCHASE" : "EXPENSE")), [form.kind, suppliers]);
   const clearFilters = () => { setSearch(""); setShowArchived(false); };
   const appliedFilters = [
     ...(search.trim() ? [{ id: "search", label: search.trim(), onRemove: () => setSearch("") }] : []),
@@ -70,7 +73,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   ];
   const openDialog = (item?: Category) => {
     setEditing(item ?? null);
-    setForm(item ? { code: item.code, nameAr: item.nameAr, nameEn: item.nameEn, kind: item.kind, parentId: item.parentId ?? "", isPosting: item.isPosting } : blankForm());
+    setForm(item ? { code: item.code, nameAr: item.nameAr, nameEn: item.nameEn, kind: item.kind, parentId: item.parentId ?? "", suggestedSupplierId: item.suggestedSupplierId ?? "", isPosting: item.isPosting } : blankForm());
     setDialogOpen(true);
   };
   const save = async (event: React.FormEvent) => {
@@ -78,7 +81,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
     const current = activeSession();
     if (!current || saving) return;
     setSaving(true); setMessage({ kind: "idle", text: "" });
-    const payload = { ...form, parentId: form.parentId || undefined, idempotencyKey: requestId() };
+    const payload = { ...form, parentId: form.parentId || undefined, suggestedSupplierId: form.isPosting ? form.suggestedSupplierId || undefined : undefined, idempotencyKey: requestId() };
     try {
       await api(current, editing ? "/finance/master-data/categories/update" : "/finance/master-data/categories", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editing ? { ...payload, categoryId: editing.id } : payload) });
       setDialogOpen(false); setEditing(null); setMessage({ kind: "success", text: text.categorySaved }); await load();
@@ -100,9 +103,9 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
     <header className="administration-section-heading"><h3>{text.title}</h3><span className="baseer-inline-actions"><BaseerButton type="button" variant="primary" onClick={() => openDialog()} disabled={saving}>{text.addCategory}</BaseerButton></span></header>
     {message.kind !== "idle" ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
     <BaseerWorkspaceTabs ariaLabel={text.kind} idPrefix="finance-category-kind" activeId={kind} onChange={(value) => setKind(value as CategoryKind)} tabs={[{ id: "PURCHASE", label: localizedEnum(language, "PURCHASE") }, { id: "EXPENSE", label: localizedEnum(language, "EXPENSE") }, { id: "SALE", label: localizedEnum(language, "SALE") }]} />
-    <BaseerBatchPanel id={`finance-category-kind-panel-${kind}`} labelledBy={`finance-category-kind-${kind}`}><BaseerFilterBar controlsPresentation="menu" language={language} search={search} searchLabel={text.search} searchPlaceholder={text.search} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={clearFilters} controls={<BaseerFilterToggle label={text.showArchived} checked={showArchived} onChange={setShowArchived} />} />{loading ? <p>{text.loading}</p> : visible.length ? <FinanceCategoryTree key={kind} language={language} categories={visible} onOpen={setDetails} /> : <p>{text.noResults}</p>}</BaseerBatchPanel>
-    <BaseerDialog open={details !== null} title={details ? displayName(language, details) : text.title} language={language} busy={saving} onClose={() => setDetails(null)} footer={details ? <><BaseerButton type="button" variant="secondary" disabled={details.status !== "ACTIVE"} onClick={() => { const item = details; setDetails(null); openDialog(item); }}>{text.edit}</BaseerButton>{details.status === "ACTIVE" ? <BaseerButton type="button" variant="danger" onClick={() => { setArchiveTarget(details); setDetails(null); }}>{text.archive}</BaseerButton> : null}</> : null}>{details ? <div className="administration-list"><article><strong>{text.code}: {details.code}</strong><span>{text.kind}: {localizedEnum(language, details.kind)}</span><span>{text.parent}: {details.parentId ? displayName(language, categories.find((item) => item.id === details.parentId) ?? { nameAr: "—", nameEn: "—" }) : text.noParent}</span><span>{details.isPosting ? text.acceptsPosting : text.groupOnly}</span><span>{details.status === "ACTIVE" ? text.active : text.archived}</span></article></div> : null}</BaseerDialog>
-    <BaseerDialog open={dialogOpen} title={editing ? text.editCategory : text.addCategory} language={language} busy={saving} onClose={() => { setDialogOpen(false); setEditing(null); }} footer={<><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => { setDialogOpen(false); setEditing(null); }}>{shared.cancel}</BaseerButton><BaseerButton type="submit" form="category-form" variant="primary" disabled={saving}>{editing ? text.save : text.add}</BaseerButton></>}><form id="category-form" className="administration-form" onSubmit={(event) => void save(event)}><label>{text.code}<input required value={form.code} onChange={(event) => setForm((value) => ({ ...value, code: event.target.value }))} /></label><label>{text.nameAr}<input required value={form.nameAr} onChange={(event) => setForm((value) => ({ ...value, nameAr: event.target.value }))} /></label><label>{text.nameEn}<input required value={form.nameEn} onChange={(event) => setForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{text.kind}<select value={form.kind} disabled={Boolean(editing)} onChange={(event) => setForm((value) => ({ ...value, kind: event.target.value as CategoryKind, parentId: "" }))}><option value="PURCHASE">{localizedEnum(language, "PURCHASE")}</option><option value="EXPENSE">{localizedEnum(language, "EXPENSE")}</option><option value="SALE">{localizedEnum(language, "SALE")}</option></select>{editing ? <small>{text.accountingTypeFixed}</small> : null}</label><label>{text.parent}<select value={form.parentId} onChange={(event) => setForm((value) => ({ ...value, parentId: event.target.value }))}><option value="">{text.noParent}</option>{parentOptions.map((item) => <option key={item.id} value={item.id}>{displayName(language, item)}</option>)}</select></label><label><input type="checkbox" checked={form.isPosting} onChange={(event) => setForm((value) => ({ ...value, isPosting: event.target.checked }))} /> {form.isPosting ? text.acceptsPosting : text.groupOnly}</label></form></BaseerDialog>
+    <BaseerBatchPanel id={`finance-category-kind-panel-${kind}`} labelledBy={`finance-category-kind-${kind}`}><BaseerFilterBar controlsPresentation="menu" language={language} search={search} searchLabel={text.search} searchPlaceholder={text.search} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={clearFilters} controls={<BaseerFilterToggle label={text.showArchived} checked={showArchived} onChange={setShowArchived} />} />{loading ? <p>{text.loading}</p> : visible.length ? <FinanceCategoryTree key={kind} language={language} categories={visible} onOpen={(item) => setDetails(categories.find((category) => category.id === item.id) ?? null)} /> : <p>{text.noResults}</p>}</BaseerBatchPanel>
+    <BaseerDialog open={details !== null} title={details ? displayName(language, details) : text.title} language={language} busy={saving} onClose={() => setDetails(null)} footer={details ? <><BaseerButton type="button" variant="secondary" disabled={details.status !== "ACTIVE"} onClick={() => { const item = details; setDetails(null); openDialog(item); }}>{text.edit}</BaseerButton>{details.status === "ACTIVE" ? <BaseerButton type="button" variant="danger" onClick={() => { setArchiveTarget(details); setDetails(null); }}>{text.archive}</BaseerButton> : null}</> : null}>{details ? <div className="administration-list"><article><strong>{text.code}: {details.code}</strong><span>{text.kind}: {localizedEnum(language, details.kind)}</span><span>{text.parent}: {details.parentId ? displayName(language, categories.find((item) => item.id === details.parentId) ?? { nameAr: "—", nameEn: "—" }) : text.noParent}</span><span>{text.suggestedSupplier}: {details.suggestedSupplierId ? displayName(language, suppliers.find((item) => item.id === details.suggestedSupplierId) ?? { nameAr: "—", nameEn: "—" }) : text.noSuggestedSupplier}</span><span>{details.isPosting ? text.acceptsPosting : text.groupOnly}</span><span>{details.status === "ACTIVE" ? text.active : text.archived}</span></article></div> : null}</BaseerDialog>
+    <BaseerDialog open={dialogOpen} title={editing ? text.editCategory : text.addCategory} language={language} busy={saving} onClose={() => { setDialogOpen(false); setEditing(null); }} footer={<><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => { setDialogOpen(false); setEditing(null); }}>{shared.cancel}</BaseerButton><BaseerButton type="submit" form="category-form" variant="primary" disabled={saving}>{editing ? text.save : text.add}</BaseerButton></>}><form id="category-form" className="administration-form" onSubmit={(event) => void save(event)}><label>{text.code}<input required value={form.code} onChange={(event) => setForm((value) => ({ ...value, code: event.target.value }))} /></label><label>{text.nameAr}<input required value={form.nameAr} onChange={(event) => setForm((value) => ({ ...value, nameAr: event.target.value }))} /></label><label>{text.nameEn}<input required value={form.nameEn} onChange={(event) => setForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{text.kind}<select value={form.kind} disabled={Boolean(editing)} onChange={(event) => setForm((value) => ({ ...value, kind: event.target.value as CategoryKind, parentId: "", suggestedSupplierId: "" }))}><option value="PURCHASE">{localizedEnum(language, "PURCHASE")}</option><option value="EXPENSE">{localizedEnum(language, "EXPENSE")}</option><option value="SALE">{localizedEnum(language, "SALE")}</option></select>{editing ? <small>{text.accountingTypeFixed}</small> : null}</label><label>{text.parent}<select value={form.parentId} onChange={(event) => setForm((value) => ({ ...value, parentId: event.target.value }))}><option value="">{text.noParent}</option>{parentOptions.map((item) => <option key={item.id} value={item.id}>{displayName(language, item)}</option>)}</select></label>{form.kind !== "SALE" && form.isPosting ? <label>{text.suggestedSupplier}<select value={form.suggestedSupplierId} onChange={(event) => setForm((value) => ({ ...value, suggestedSupplierId: event.target.value }))}><option value="">{text.noSuggestedSupplier}</option>{suggestedSupplierOptions.map((item) => <option key={item.id} value={item.id}>{displayName(language, item)}</option>)}</select></label> : null}<label><input type="checkbox" checked={form.isPosting} onChange={(event) => setForm((value) => ({ ...value, isPosting: event.target.checked }))} /> {form.isPosting ? text.acceptsPosting : text.groupOnly}</label></form></BaseerDialog>
     <BaseerConfirmDialog open={Boolean(archiveTarget)} language={language} busy={saving} destructive title={text.archiveTitle} message={text.archiveMessage} confirmLabel={text.archiveCategory} onCancel={() => setArchiveTarget(null)} onConfirm={() => void archive()} />
   </section>;
 }

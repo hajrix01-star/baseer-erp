@@ -235,6 +235,7 @@ export const createFinanceCategoryRequestSchema = z
     nameEn: z.string().trim().min(1).max(160),
     kind: financeCategoryKindSchema,
     parentId: z.string().uuid().optional(),
+    suggestedSupplierId: z.string().uuid().optional(),
     isPosting: z.boolean().default(true),
     idempotencyKey: idempotencyKeySchema,
   })
@@ -248,6 +249,7 @@ export const updateFinanceCategoryRequestSchema = z
     nameEn: z.string().trim().min(1).max(160),
     kind: financeCategoryKindSchema,
     parentId: z.string().uuid().optional(),
+    suggestedSupplierId: z.string().uuid().optional(),
     isPosting: z.boolean(),
     idempotencyKey: idempotencyKeySchema,
   })
@@ -516,6 +518,7 @@ const financeConfigurationCategorySchema = z
     status: z.string().min(1).max(40),
     accountId: z.string().uuid().nullable(),
     parentId: z.string().uuid().nullable(),
+    suggestedSupplierId: z.string().uuid().nullable(),
     isPosting: z.boolean(),
   })
   .strict();

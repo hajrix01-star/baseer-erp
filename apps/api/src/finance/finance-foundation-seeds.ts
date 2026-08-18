@@ -70,9 +70,7 @@ export const FINANCE_BASE_CATEGORY_SEEDS: readonly FinanceCategorySeed[] = [
   { code: 'EXP-006', accountCode: 'EXP-006', nameAr: 'تسويق وهدايا', nameEn: 'Marketing and gifts', kind: FinanceCategoryKind.EXPENSE, sortOrder: 100 },
   { code: 'EXP-007', accountCode: 'EXP-007', nameAr: 'مصروفات مالية أخرى', nameEn: 'Other financial expenses', kind: FinanceCategoryKind.EXPENSE, sortOrder: 110 },
   { code: 'EXP-008', accountCode: 'EXP-008', nameAr: 'أصول ومعدات تاريخية', nameEn: 'Legacy assets and equipment expense', kind: FinanceCategoryKind.EXPENSE, sortOrder: 120 },
-  // A single posting category is the default for small private companies.
-  // Detailed Noorix utility categories are mapped here on import; companies can
-  // add a deliberate local split later if materiality warrants it.
+  // This is a navigation group. Its reporting account is shared by the leaves.
   { code: 'UTIL-001', accountCode: 'UTIL-001', nameAr: 'مرافق وخدمات', nameEn: 'Utilities and services', kind: FinanceCategoryKind.EXPENSE, sortOrder: 130 },
 ] as const;
 
@@ -85,8 +83,7 @@ export type FinanceCategoryHierarchySeed = Readonly<{
   sortOrder: number;
 }>;
 
-// The hierarchy follows Noorix's proven restaurant master-data taxonomy. Utilities
-// are consolidated into UTIL-001 for BASEER's small-company default.
+// The hierarchy follows Noorix's proven restaurant master-data taxonomy.
 export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHierarchySeed[] = [
   { code: 'P1-1', parentCode: 'PUR-001', nameAr: 'لحوم', nameEn: 'Meat', kind: FinanceCategoryKind.PURCHASE, sortOrder: 10 },
   { code: 'P1-2', parentCode: 'PUR-001', nameAr: 'دجاج', nameEn: 'Poultry', kind: FinanceCategoryKind.PURCHASE, sortOrder: 20 },
@@ -114,6 +111,11 @@ export const FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS: readonly FinanceCategoryHier
   { code: 'E2-10', parentCode: 'EXP-002', nameAr: 'رسوم منصات حكومية', nameEn: 'Government platform fees', kind: FinanceCategoryKind.EXPENSE, sortOrder: 80 },
   { code: 'E2-11', parentCode: 'EXP-002', nameAr: 'شهادات صحية وتصاريح موظفين', nameEn: 'Health certificates and employee permits', kind: FinanceCategoryKind.EXPENSE, sortOrder: 90 },
   { code: 'E3-1', parentCode: 'EXP-003', nameAr: 'إيجارات', nameEn: 'Rent', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E3-2', parentCode: 'UTIL-001', nameAr: 'كهرباء', nameEn: 'Electricity', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
+  { code: 'E3-3', parentCode: 'UTIL-001', nameAr: 'اتصالات وإنترنت', nameEn: 'Telecommunications and internet', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
+  { code: 'E3-4', parentCode: 'UTIL-001', nameAr: 'مياه وصرف', nameEn: 'Water and sanitation', kind: FinanceCategoryKind.EXPENSE, sortOrder: 30 },
+  { code: 'E3-5', parentCode: 'UTIL-001', nameAr: 'غاز', nameEn: 'Gas', kind: FinanceCategoryKind.EXPENSE, sortOrder: 40 },
+  { code: 'UTIL-001-OTHER', parentCode: 'UTIL-001', nameAr: 'خدمات ومرافق أخرى', nameEn: 'Other utilities and services', kind: FinanceCategoryKind.EXPENSE, sortOrder: 50 },
   { code: 'E4-1', parentCode: 'EXP-004', nameAr: 'رواتب وأجور', nameEn: 'Salaries and wages', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
   { code: 'E4-2', parentCode: 'EXP-004', nameAr: 'التأمينات الاجتماعية', nameEn: 'GOSI employer contributions', kind: FinanceCategoryKind.EXPENSE, sortOrder: 20 },
   { code: 'E5-1', parentCode: 'EXP-005', nameAr: 'صيانة آلات', nameEn: 'Equipment maintenance', kind: FinanceCategoryKind.EXPENSE, sortOrder: 10 },
@@ -141,13 +143,13 @@ export const STANDARD_SUPPLIER_KEYS = [
 export type StandardSupplierKey = (typeof STANDARD_SUPPLIER_KEYS)[number];
 export type StandardSupplierSeed = Readonly<{ key: StandardSupplierKey; nameAr: string; nameEn: string; categoryCode: string; taxNumber?: string }>;
 export const STANDARD_SUPPLIER_SEEDS: readonly StandardSupplierSeed[] = [
-  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "UTIL-001" },
-  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "UTIL-001" },
-  { key: "MOBILY", nameAr: "شركة اتحاد اتصالات (موبايلي)", nameEn: "Etihad Etisalat Company (Mobily)", categoryCode: "UTIL-001", taxNumber: "300000699600003" },
-  { key: "ZAIN_SAUDI", nameAr: "الشركة السعودية للاتصالات المتنقلة (زين)", nameEn: "Mobile Telecommunications Company Saudi Arabia (Zain)", categoryCode: "UTIL-001" },
-  { key: "SALAM", nameAr: "شركة الاتصالات المتكاملة (سلام)", nameEn: "Integrated Telecom Company (Salam)", categoryCode: "UTIL-001" },
-  { key: "GO_TELECOM", nameAr: "شركة اتحاد عذيب للاتصالات (جو)", nameEn: "Etihad Atheeb Telecommunication Company (GO)", categoryCode: "UTIL-001" },
-  { key: "NATIONAL_WATER_COMPANY", nameAr: "شركة المياه الوطنية", nameEn: "National Water Company", categoryCode: "UTIL-001" },
+  { key: "SAUDI_ENERGY", nameAr: "الشركة السعودية للكهرباء", nameEn: "Saudi Electricity Company", categoryCode: "E3-2" },
+  { key: "STC", nameAr: "شركة الاتصالات السعودية", nameEn: "Saudi Telecom Company", categoryCode: "E3-3" },
+  { key: "MOBILY", nameAr: "شركة اتحاد اتصالات (موبايلي)", nameEn: "Etihad Etisalat Company (Mobily)", categoryCode: "E3-3", taxNumber: "300000699600003" },
+  { key: "ZAIN_SAUDI", nameAr: "الشركة السعودية للاتصالات المتنقلة (زين)", nameEn: "Mobile Telecommunications Company Saudi Arabia (Zain)", categoryCode: "E3-3" },
+  { key: "SALAM", nameAr: "شركة الاتصالات المتكاملة (سلام)", nameEn: "Integrated Telecom Company (Salam)", categoryCode: "E3-3" },
+  { key: "GO_TELECOM", nameAr: "شركة اتحاد عذيب للاتصالات (جو)", nameEn: "Etihad Atheeb Telecommunication Company (GO)", categoryCode: "E3-3" },
+  { key: "NATIONAL_WATER_COMPANY", nameAr: "شركة المياه الوطنية", nameEn: "National Water Company", categoryCode: "E3-4" },
   { key: "GOSI", nameAr: "المؤسسة العامة للتأمينات الاجتماعية", nameEn: "General Organization for Social Insurance", categoryCode: "E4-2" },
   { key: "ZATCA", nameAr: "هيئة الزكاة والضريبة والجمارك", nameEn: "Zakat, Tax and Customs Authority", categoryCode: "E2-7" },
   { key: "MINISTRY_OF_COMMERCE", nameAr: "وزارة التجارة", nameEn: "Ministry of Commerce", categoryCode: "E2-1" },

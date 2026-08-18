@@ -516,6 +516,7 @@ model FinanceCategory {
   companyId String                @db.Uuid
   parentId  String?               @db.Uuid
   accountId String?               @db.Uuid
+  suggestedSupplierId String?     @db.Uuid
   code      String                @db.VarChar(80)
   nameAr    String                @db.VarChar(160)
   nameEn    String                @db.VarChar(160)
@@ -530,6 +531,7 @@ model FinanceCategory {
   account                  FinanceAccount?                  @relation(fields: [accountId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   parent                   FinanceCategory?                 @relation("FinanceCategoryTree", fields: [parentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   children                 FinanceCategory[]                @relation("FinanceCategoryTree")
+  suggestedSupplier        FinanceSupplier?                 @relation("FinanceCategorySuggestedSupplier", fields: [suggestedSupplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   suppliers                FinanceSupplier[]
   dues                     FinanceSupplierDue[]
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
@@ -540,6 +542,7 @@ model FinanceCategory {
   @@unique([companyId, code])
   @@index([tenantId, companyId, status, sortOrder])
   @@index([companyId, parentId])
+  @@index([tenantId, companyId, suggestedSupplierId])
 }
 
 model FinanceSupplier {
@@ -560,6 +563,7 @@ model FinanceSupplier {
 
   company                  Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   category                 FinanceCategory?                 @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  suggestedForCategories   FinanceCategory[]                @relation("FinanceCategorySuggestedSupplier")
   provenance               SupplierCopyProvenance?
   dues                     FinanceSupplierDue[]
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
