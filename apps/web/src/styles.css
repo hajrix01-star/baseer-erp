@@ -1127,7 +1127,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   border: 1px solid var(--line, #d9e4dd);
   border-radius: 0.8rem;
   background: var(--surface, #fff);
-  box-shadow: 0 0.8rem 2rem rgb(19 58 38 / 18%);
+  box-shadow: none;
 }
 
 .company-session-control__menu button {
