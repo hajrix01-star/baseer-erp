@@ -6,9 +6,9 @@ export type FinanceCategoryKind = "PURCHASE" | "EXPENSE" | "SALE";
 export type FinanceCategoryTreeItem = { id: string; code: string; nameAr: string; nameEn: string; kind: FinanceCategoryKind; status: "ACTIVE" | "ARCHIVED"; parentId: string | null; isPosting: boolean };
 
 const rowStyle: CSSProperties = { display: "grid", gridTemplateColumns: "1.75rem minmax(0, 1fr) auto", alignItems: "center", gap: ".5rem", minHeight: "2.75rem", paddingInline: ".25rem", borderBlockEnd: "1px solid var(--line)" };
-const cardGridStyle: CSSProperties = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 18rem), 1fr))", gap: ".75rem" };
+const cardGridStyle: CSSProperties = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 24rem), 1fr))", gap: ".75rem" };
 const cardStyle: CSSProperties = { minWidth: 0, padding: ".625rem", border: "1px solid var(--line)", borderRadius: "var(--card-radius)", background: "var(--surface)", boxShadow: "0 8px 24px rgb(11 36 26 / 5%)" };
-const itemButtonStyle: CSSProperties = { minWidth: 0, padding: 0, border: 0, color: "var(--ink)", background: "transparent", font: "inherit", fontWeight: 700, cursor: "pointer", textAlign: "start", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
+const itemButtonStyle: CSSProperties = { minWidth: 0, padding: 0, border: 0, color: "var(--ink)", background: "transparent", font: "inherit", fontWeight: 700, cursor: "pointer", textAlign: "start", lineHeight: 1.45, overflowWrap: "anywhere" };
 const toggleStyle: CSSProperties = { width: "1.75rem", height: "1.75rem", padding: 0, border: 0, color: "var(--muted)", background: "transparent", font: "inherit", cursor: "pointer" };
 const codeStyle: CSSProperties = { padding: ".125rem .375rem", borderRadius: "999px", color: "var(--muted)", background: "color-mix(in srgb, var(--brand) 7%, var(--surface))", fontSize: "var(--font-caption)", fontVariantNumeric: "tabular-nums" };
 const badgeStyle: CSSProperties = { justifySelf: "end", padding: ".125rem .375rem", borderRadius: "999px", color: "var(--brand-deep)", background: "color-mix(in srgb, var(--brand) 10%, var(--surface))", fontSize: "var(--font-caption)", whiteSpace: "nowrap" };
