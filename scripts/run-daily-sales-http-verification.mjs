@@ -306,7 +306,8 @@ try {
     headers,
   });
   assert.equal(closingHistory.statusCode, 200, closingHistory.body);
-  assert.equal(closingHistory.json().historyLimit, 400, "Supervisor history is not cashier-limited.");
+  assert.equal(closingHistory.json().historyLimit, 50, "Supervisor history uses the bounded default page size.");
+  assert.equal(closingHistory.json().hasMore, false, "A complete one-record history must not advertise a next page.");
   assert.equal(
     closingHistory.json().closings[0].documentNumber,
     closing.documentNumber,

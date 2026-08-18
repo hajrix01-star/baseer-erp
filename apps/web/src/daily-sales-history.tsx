@@ -1,4 +1,5 @@
 import { DataTable, type DataTableColumn } from "./data-table";
+import { BaseerButton } from "./baseer-button";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing } from "./daily-sales-client";
 import { formatMoney, formatNumber } from "./number-format";
@@ -7,11 +8,15 @@ export function DailySalesHistory({
   language,
   closings,
   historyLimit,
+  hasMore,
+  onLoadMore,
   onView,
 }: {
   language: DailySalesLanguage;
   closings: readonly Closing[];
   historyLimit: number | null;
+  hasMore: boolean;
+  onLoadMore?: () => void;
   onView: (closing: Closing) => void;
 }) {
   const copy = dailySalesText[language];
@@ -80,7 +85,7 @@ export function DailySalesHistory({
       <div>
         <h3>{copy.closings}</h3>
         <p>{copy.reversalHint}</p>
-        {historyLimit !== null && historyLimit < 400 && (
+        {historyLimit !== null && historyLimit <= 7 && (
           <p>{copy.historyLimited.replace("{count}", String(historyLimit))}</p>
         )}
       </div>
@@ -96,6 +101,7 @@ export function DailySalesHistory({
           rowKey={(closing) => closing.closingId}
         />
       )}
+      {hasMore && onLoadMore ? <BaseerButton type="button" variant="secondary" onClick={onLoadMore}>{copy.loadMore}</BaseerButton> : null}
     </section>
   );
 }

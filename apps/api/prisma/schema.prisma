@@ -924,6 +924,7 @@ model FinanceDailySalesClosing {
   @@unique([companyId, businessDate, scope])
   @@index([tenantId, companyId, businessDate, status])
   @@index([tenantId, companyId, businessDate, status, cashHandoverVaultId], map: "FinanceDailySalesClosing_tenant_company_date_handover_idx")
+  @@index([tenantId, companyId, businessDate, id], map: "FinanceDailySalesClosing_tenant_company_date_id_idx")
 }
 
 model FinanceDailySalesAllocation {

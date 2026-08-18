@@ -37,6 +37,8 @@ export type DailySalesEntryDate = {
 export type ClosingsReceipt = {
   historyLimit: number;
   closings: Closing[];
+  hasMore: boolean;
+  nextCursor: string | null;
 };
 export type CashHandoverReport = {
   totalCashHandoverAmount: string;
@@ -68,6 +70,8 @@ export type DailySalesWorkspaceReceipt = {
   vaults: Vault[];
   historyLimit: number;
   closings: Closing[];
+  hasMore: boolean;
+  nextCursor: string | null;
   cashHandovers: CashHandoverReport;
   shifts: ShiftSummary[];
 };

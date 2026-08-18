@@ -4,9 +4,9 @@ import type { TrustedCompanyActorContext } from "../core-controls/trusted-contex
 import { DatabaseService } from "../database/database.service.js";
 import { Prisma } from "../generated/prisma/client.js";
 
-const MAX_RANGE_DAYS = 400;
 export const CASHIER_CLOSING_HISTORY_LIMIT = 7;
-export const FULL_CLOSING_HISTORY_LIMIT = MAX_RANGE_DAYS;
+export const FULL_CLOSING_HISTORY_LIMIT = 100;
+const MAX_HANDOVER_ROWS = 100;
 
 type DateRange = Readonly<{ fromBusinessDate: Date; toBusinessDate: Date; businessMonths?: readonly string[] }>;
 
@@ -14,31 +14,28 @@ type DateRange = Readonly<{ fromBusinessDate: Date; toBusinessDate: Date; busine
 export class DailySalesReadService {
   constructor(private readonly database: DatabaseService) {}
 
-  async listClosings(
-    context: TrustedCompanyActorContext,
-    range: DateRange,
-    options: Readonly<{ limit?: number }> = {},
-  ) {
+  async listClosings(context: TrustedCompanyActorContext, range: DateRange, options: Readonly<{ cursor?: string; pageSize: number }>) {
     this.assertRange(range);
-    const limit = options.limit ?? FULL_CLOSING_HISTORY_LIMIT;
-    if (!Number.isInteger(limit) || limit < 1 || limit > FULL_CLOSING_HISTORY_LIMIT) {
+    if (!Number.isInteger(options.pageSize) || options.pageSize < 1 || options.pageSize > FULL_CLOSING_HISTORY_LIMIT) {
       throw new BadRequestException("Invalid daily-sales history limit.");
     }
     return this.database.inTenantTransaction(
       context.tenantId,
       async (transaction) => {
-        const closings = await transaction.financeDailySalesClosing.findMany({
-          where: {
+        const baseWhere = {
             tenantId: context.tenantId,
             companyId: context.companyId,
             ...this.businessDateWhere(range),
-          },
+        };
+        const cursor = options.cursor ? await transaction.financeDailySalesClosing.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, id: options.cursor }, select: { id: true, businessDate: true } }) : null;
+        if (options.cursor && !cursor) throw new BadRequestException("The daily-sales page cursor is invalid.");
+        const closings = await transaction.financeDailySalesClosing.findMany({
+          where: cursor ? { ...baseWhere, OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : baseWhere,
           orderBy: [
             { businessDate: "desc" },
-            { scope: "asc" },
-            { postingVersion: "desc" },
+            { id: "desc" },
           ],
-          take: limit,
+          take: options.pageSize + 1,
           select: {
             id: true,
             documentNumber: true,
@@ -60,7 +57,12 @@ export class DailySalesReadService {
             },
           },
         });
-        return closings.map((closing) => ({
+        const hasMore = closings.length > options.pageSize;
+        const page = hasMore ? closings.slice(0, options.pageSize) : closings;
+        return {
+          hasMore,
+          nextCursor: hasMore ? page.at(-1)?.id ?? null : null,
+          closings: page.map((closing) => ({
           closingId: closing.id,
           documentNumber: closing.documentNumber,
           businessDate: closing.businessDate,
@@ -80,7 +82,8 @@ export class DailySalesReadService {
             vaultId: allocation.vaultId,
             grossAmount: allocation.grossAmount.toFixed(4),
           })),
-        }));
+          })),
+        };
       },
     );
   }
@@ -106,7 +109,7 @@ export class DailySalesReadService {
           orderBy: [{ businessDate: "desc" }, { scope: "asc" }],
           // The list is intentionally capped for the screen. Totals are always
           // computed by the aggregate above and hasMore makes truncation explicit.
-          take: MAX_RANGE_DAYS,
+          take: MAX_HANDOVER_ROWS,
           select: {
             id: true,
             documentNumber: true,
@@ -229,13 +232,5 @@ export class DailySalesReadService {
         "The start date must not be after the end date.",
       );
     }
-    const days = this.periods(range).reduce(
-      (total, period) => total + Math.floor((period.to.getTime() - period.from.getTime()) / 86_400_000) + 1,
-      0,
-    );
-    if (days > MAX_RANGE_DAYS)
-      throw new BadRequestException(
-        "The daily-sales range may not exceed 400 days.",
-      );
   }
 }

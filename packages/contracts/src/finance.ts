@@ -662,7 +662,7 @@ const businessMonthsQuerySchema = z
   .string()
   .trim()
   .regex(/^\d{4}-(0[1-9]|1[0-2])(,\d{4}-(0[1-9]|1[0-2]))*$/)
-  .max(95)
+  .max(959)
   .optional()
   .transform((value) => (value ? [...new Set(value.split(","))].sort() : []));
 
@@ -677,7 +677,10 @@ export const dailySalesCalendarQuerySchema = z
     businessMonths: businessMonthsQuerySchema,
   })
   .strict();
-export const dailySalesClosingsQuerySchema = dailySalesCalendarQuerySchema;
+export const dailySalesClosingsQuerySchema = dailySalesCalendarQuerySchema.extend({
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
+}).strict();
 
 const dailySalesAllocationReceiptSchema = z
   .object({ vaultId: z.string().uuid(), grossAmount: financeAmountSchema })
@@ -789,8 +792,10 @@ export const dailySalesClosingsReceiptSchema = z
     companyId: companyIdSchema,
     fromBusinessDate: z.date(),
     toBusinessDate: z.date(),
-    historyLimit: z.number().int().min(1).max(400),
-    closings: z.array(dailySalesClosingHistoryItemSchema).max(400),
+    historyLimit: z.number().int().min(1).max(100),
+    closings: z.array(dailySalesClosingHistoryItemSchema).max(100),
+    hasMore: z.boolean(),
+    nextCursor: z.string().uuid().nullable(),
   })
   .strict();
 
@@ -849,8 +854,10 @@ export const dailySalesWorkspaceReceiptSchema = z
     permissionCodes: z.array(z.string().min(3).max(120)).max(250),
     entryDate: dailySalesEntryDateReceiptSchema.omit({ companyId: true }),
     vaults: z.array(dailySalesChannelVaultSchema).max(100),
-    historyLimit: z.number().int().min(1).max(400),
-    closings: z.array(dailySalesClosingHistoryItemSchema).max(400),
+    historyLimit: z.number().int().min(1).max(100),
+    closings: z.array(dailySalesClosingHistoryItemSchema).max(100),
+    hasMore: z.boolean(),
+    nextCursor: z.string().uuid().nullable(),
     cashHandovers: dailySalesCashHandoversReceiptSchema.omit({
       companyId: true,
       fromBusinessDate: true,

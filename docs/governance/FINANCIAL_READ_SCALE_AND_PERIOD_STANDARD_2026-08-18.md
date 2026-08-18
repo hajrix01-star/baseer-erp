@@ -11,12 +11,13 @@ This applies to the current Sales, operational dashboard, unified invoice regist
 - Financial register filters, counts, money totals, ordering, and pagination are calculated on the server.
 - The invoice register uses a stable keyset cursor with a default page of 50 and a maximum of 100 records. It is ordered by business date, posting timestamp, and id.
 - Credit summary amounts cover every open due. Credit detail records use the same bounded cursor-page pattern.
+- Daily-sales history uses a stable keyset cursor with the same 50/100 bounds; a longer selected period changes only the server scope, never the number of records loaded into the browser.
 - No browser is allowed to calculate monetary totals from a partially loaded page.
 - A database index supports the register’s company/status/date/posting/id access path.
 - Client options remain bounded; a future unbounded master-data chooser must use server-backed search rather than loading every option.
 
 ## Evidence and remaining work
 
-`verify:daily-sales-http` now proves the register’s bounded server page and full-scope summary, plus the credit workspace’s full-scope open count with a one-record page. Contract/API/Web type checks must pass for every change.
+`verify:daily-sales-http` now proves the register’s bounded server page and full-scope summary, the credit workspace’s full-scope open count with a one-record page, and the bounded daily-sales history response. Contract/API/Web type checks must pass for every change.
 
-This is a local-development scale foundation, not a production capacity claim. Before production with five-plus years of high-volume data, add a repeatable seeded volume benchmark, EXPLAIN/ANALYZE evidence on the deployed database, retention/archival policy, and cursorized historical Sales and supplier-payment reports.
+This is a local-development scale foundation, not a production capacity claim. Before production with long-running high-volume data, add a repeatable seeded volume benchmark, EXPLAIN/ANALYZE evidence on the deployed database, retention/archival policy, and a cursorized supplier-payment report.

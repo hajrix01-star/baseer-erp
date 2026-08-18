@@ -88,6 +88,7 @@ export const dailySalesText = defineLocalizedCopy({
     version: "الإصدار",
     status: "الحالة",
     loaded: "تم التحديث من الخادم",
+    loadMore: "تحميل المزيد",
     saving: "جارٍ الحفظ…",
     error:
       "تعذر إتمام العملية. تحقق من الصلاحية والفترة المالية ثم أعد المحاولة.",
@@ -208,6 +209,7 @@ export const dailySalesText = defineLocalizedCopy({
     version: "Version",
     status: "Status",
     loaded: "Updated from the server",
+    loadMore: "Load more",
     saving: "Saving…",
     error:
       "The operation could not be completed. Check access and the financial period, then try again.",

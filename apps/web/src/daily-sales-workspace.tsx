@@ -43,6 +43,8 @@ export function DailySalesWorkspace({
   const [permissionCodes, setPermissionCodes] = useState<string[]>([]);
   const [closings, setClosings] = useState<Closing[]>([]);
   const [historyLimit, setHistoryLimit] = useState<number | null>(null);
+  const [closingsHasMore, setClosingsHasMore] = useState(false);
+  const [closingsNextCursor, setClosingsNextCursor] = useState<string | null>(null);
   const [entryDate, setEntryDate] = useState<string | null>(null);
   const [cashHandover, setCashHandover] = useState<CashHandoverReport | null>(
     null,
@@ -72,11 +74,11 @@ export function DailySalesWorkspace({
   const [recordTarget, setRecordTarget] = useState<Closing | null>(null);
   const [reversalReason, setReversalReason] = useState("");
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (cursor?: string) => {
     const current = activeSession();
     setSession(current);
     if (!current) return;
-    const query = baseerPeriodQuery(range);
+    const query = `${baseerPeriodQuery(range)}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
     const workspace = await api<DailySalesWorkspaceReceipt>(
       current,
       `/finance/daily-sales/workspace?${query}`,
@@ -84,8 +86,10 @@ export function DailySalesWorkspace({
     setVaults(workspace.vaults);
     setPermissionCodes(workspace.permissionCodes);
     setEntryDate(workspace.entryDate.businessDate);
-    setClosings(workspace.closings);
+    setClosings((currentClosings) => cursor ? [...currentClosings, ...workspace.closings] : workspace.closings);
     setHistoryLimit(workspace.historyLimit);
+    setClosingsHasMore(workspace.hasMore);
+    setClosingsNextCursor(workspace.nextCursor);
     setCashHandover(workspace.cashHandovers);
     setShiftSummary(workspace.shifts);
     setShiftForms((currentForms) =>
@@ -432,6 +436,8 @@ export function DailySalesWorkspace({
         language={language}
         closings={closings}
         historyLimit={historyLimit}
+        hasMore={closingsHasMore}
+        onLoadMore={closingsNextCursor ? () => void load(closingsNextCursor) : undefined}
         onView={setRecordTarget}
       />
     </section>

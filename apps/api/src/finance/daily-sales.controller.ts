@@ -92,10 +92,11 @@ export class DailySalesController {
     const historyLimit = fullHistory
       ? FULL_CLOSING_HISTORY_LIMIT
       : CASHIER_CLOSING_HISTORY_LIMIT;
-    const [vaults, closings, entryDate, companies, managementReports] =
+    const pageSize = Math.min(parsed.data.pageSize, historyLimit);
+    const [vaults, closingPage, entryDate, companies, managementReports] =
       await Promise.all([
         this.reads.listChannelVaults(context),
-        this.reads.listClosings(context, parsed.data, { limit: historyLimit }),
+        this.reads.listClosings(context, parsed.data, { pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) }),
         this.businessDates.currentForTrustedContext(context),
         this.companyAccess.listAvailableCompanies(accessToken),
         fullHistory
@@ -120,8 +121,10 @@ export class DailySalesController {
         timezone: entryDate.timezone,
       },
       vaults,
-      historyLimit,
-      closings,
+      historyLimit: pageSize,
+      closings: closingPage.closings,
+      hasMore: closingPage.hasMore,
+      nextCursor: closingPage.nextCursor,
       cashHandovers: managementReports?.[0] ?? {
         totalCashHandoverAmount: "0.0000",
         recordCount: 0,
@@ -151,14 +154,19 @@ export class DailySalesController {
     const historyLimit = fullHistory
       ? FULL_CLOSING_HISTORY_LIMIT
       : CASHIER_CLOSING_HISTORY_LIMIT;
+    const pageSize = Math.min(parsed.data.pageSize, historyLimit);
+    const closingPage = await this.reads.listClosings(context, parsed.data, {
+      pageSize,
+      ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
+    });
     return dailySalesClosingsReceiptSchema.parse({
       companyId: context.companyId,
       fromBusinessDate: parsed.data.fromBusinessDate,
       toBusinessDate: parsed.data.toBusinessDate,
-      historyLimit,
-      closings: await this.reads.listClosings(context, parsed.data, {
-        limit: historyLimit,
-      }),
+      historyLimit: pageSize,
+      closings: closingPage.closings,
+      hasMore: closingPage.hasMore,
+      nextCursor: closingPage.nextCursor,
     });
   }
 
