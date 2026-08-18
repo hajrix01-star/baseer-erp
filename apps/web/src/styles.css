@@ -54,7 +54,7 @@
   --field-border: #cbdad0;
   --page-gutter: clamp(1rem, 2vw, 2.5rem);
   --section-gap: clamp(0.75rem, 1.25vw, 1rem);
-  --shell-header-height: 3.5rem;
+  --shell-header-height: 4rem;
   --shell-brand-height: 4rem;
   --nav-row-height: 2.5rem;
   font-family: "Noto Sans Arabic Variable", "IBM Plex Sans Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
