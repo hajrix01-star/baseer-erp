@@ -4,6 +4,7 @@ export type DataTableColumn<Row> = {
   id: string;
   header: ReactNode;
   cell: (row: Row) => ReactNode;
+  width?: string;
   align?: "start" | "end" | "center";
   numeric?: boolean;
   className?: string;
@@ -30,6 +31,9 @@ export function DataTable<Row>({
     <div className={tableClassName} role="region" aria-label={ariaLabel} tabIndex={0}>
       <table>
         <caption className="visually-hidden">{caption}</caption>
+        <colgroup>
+          {columns.map((column) => <col key={column.id} style={column.width ? { width: column.width } : undefined} />)}
+        </colgroup>
         <thead>
           <tr>
             {columns.map((column) => (
