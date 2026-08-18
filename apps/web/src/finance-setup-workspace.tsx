@@ -8,14 +8,17 @@ import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect, BaseerFilterToggle } from "./baseer-filter-controls";
 import { DataTable, type DataTableColumn } from "./data-table";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerStepper } from "./baseer-stepper";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { displayName, localizedEnum } from "./baseer-localization";
 import { financeText } from "./finance-copy";
+import { uiCopy } from "./baseer-ui-copy";
 
 type SupplierRecord = { id: string; nameAr: string; nameEn: string | null; phone: string | null; taxNumber: string | null; isTaxRegistered: boolean; supplierType: "PURCHASE" | "EXPENSE"; status: "ACTIVE" | "ARCHIVED"; categoryId: string | null };
 type SupplierForm = { nameAr: string; nameEn: string; phone: string; taxNumber: string; supplierType: "PURCHASE" | "EXPENSE"; categoryId: string; isTaxRegistered: boolean };
+type InitialFinanceForm = { nameAr: string; nameEn: string; startDate: string; endDate: string; selectedVaults: VaultChoice[]; selectedStandardSupplierKeys: string[] };
 type Configuration = { profile: { baseSeedVersion: number; accountingMode: string; vatAccountingEnabled: boolean; initializedAt: string } | null; periods: Array<{ id: string; nameAr: string; nameEn: string; startDate: string; endDate: string; status: "OPEN" | "CLOSED" | "LOCKED" }>; vaults: Array<{ id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; status: "ACTIVE" | "ARCHIVED"; isSalesChannel: boolean; isPaymentDestination: boolean }>; categories: Array<{ id: string; code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; status: "ACTIVE" | "ARCHIVED"; parentId: string | null; isPosting: boolean }>; suppliers: SupplierRecord[]; standardSuppliers: Array<{ key: string; nameAr: string; nameEn: string }> };
 type VaultChoice = "CASH" | "BANK" | "HUNGERSTATION" | "JAHEZ" | "KEETA";
 const BASE_FINANCE_SEED_VERSION = 7;
@@ -28,7 +31,7 @@ export function FinanceSetupWorkspace({ language, view = "setup" }: { language: 
   const [configuration, setConfiguration] = useState<Configuration | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ kind: "idle" | "success" | "error"; text: string }>({ kind: "idle", text: "" });
-  const [form, setForm] = useState({ nameAr: "الفترة المالية الحالية", nameEn: "Current fiscal period", startDate: dateValue(-30), endDate: dateValue(), selectedVaults: ["CASH", "BANK"] as VaultChoice[], selectedStandardSupplierKeys: [] as string[] });
+  const [form, setForm] = useState<InitialFinanceForm>({ nameAr: "الفترة المالية الحالية", nameEn: "Current fiscal period", startDate: dateValue(-30), endDate: dateValue(), selectedVaults: ["CASH", "BANK"], selectedStandardSupplierKeys: [] });
   const [categoryForm, setCategoryForm] = useState({ code: "", nameAr: "", nameEn: "", kind: "PURCHASE" as "PURCHASE" | "EXPENSE" | "SALE", parentId: "" });
   const [supplierForm, setSupplierForm] = useState<SupplierForm>({ nameAr: "", nameEn: "", phone: "", taxNumber: "", supplierType: "PURCHASE", categoryId: "", isTaxRegistered: false });
   const [supplierDialogOpen, setSupplierDialogOpen] = useState(false);
@@ -65,7 +68,57 @@ export function FinanceSetupWorkspace({ language, view = "setup" }: { language: 
   };
   if (!session) return <DailySalesSignIn language={language} />;
   if (view === "suppliers") return <SuppliersWorkspacePanel language={language} configuration={configuration} loading={!configuration} saving={saving} message={message} form={supplierForm} editingSupplier={editingSupplier} supplierDetails={supplierDetails} dialogOpen={supplierDialogOpen} archiveTarget={archiveTarget} onOpen={openSupplierDialog} onOpenDetails={setSupplierDetails} onClose={() => { setSupplierDialogOpen(false); setEditingSupplier(null); }} onCloseDetails={() => setSupplierDetails(null)} onChange={setSupplierForm} onSave={saveSupplier} onArchiveRequest={setArchiveTarget} onArchiveCancel={() => setArchiveTarget(null)} onArchive={archiveSupplier} />;
+  if (!configuration) return <section className="daily-sales-workspace finance-setup-workspace" aria-label={text.setup}><header className="administration-section-heading"><div><p className="eyebrow">{text.finance}</p><h3>{text.setup}</h3></div></header><BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard></section>;
+  if (!configuration.profile) return <InitialFinanceSetup language={language} text={text} form={form} saving={saving} standardSuppliers={configuration.standardSuppliers ?? []} onChange={(patch) => setForm((current) => ({ ...current, ...patch }))} onSubmit={setup} />;
   return <section className="daily-sales-workspace finance-setup-workspace" aria-label={text.setup}><header className="administration-section-heading"><div><p className="eyebrow">{text.finance}</p><h3>{text.setup}</h3></div></header>{message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}{!configuration ? <BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard> : !configuration.profile ? <BaseerCard><form className="administration-form" onSubmit={(event) => void setup(event)}><h3>{text.initialiseFinance}</h3><label>{text.periodNameArabic}<input required value={form.nameAr} onChange={(event) => setForm((value) => ({ ...value, nameAr: event.target.value }))} /></label><label>{text.periodNameEnglish}<input required value={form.nameEn} onChange={(event) => setForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{text.periodStart}<BaseerDatePicker language={language} label={text.periodStart} max={dateValue()} value={form.startDate} onChange={(startDate) => setForm((value) => ({ ...value, startDate }))} /></label><label>{text.periodEnd}<BaseerDatePicker language={language} label={text.periodEnd} max={dateValue()} min={form.startDate} value={form.endDate} onChange={(endDate) => setForm((value) => ({ ...value, endDate }))} /></label><fieldset className="finance-setup-choices"><legend>{text.initialVaults}</legend>{vaultChoices.map((choice) => <label key={choice.value}><input type="checkbox" checked={form.selectedVaults.includes(choice.value)} onChange={(event) => setForm((value) => ({ ...value, selectedVaults: event.target.checked ? [...value.selectedVaults, choice.value] : value.selectedVaults.filter((item) => item !== choice.value) }))} /> {displayName(language, choice)}</label>)}</fieldset><fieldset className="finance-setup-choices"><legend>{text.optionalStandardSuppliers}</legend>{(configuration.standardSuppliers ?? []).map((choice) => <label key={choice.key}><input type="checkbox" checked={form.selectedStandardSupplierKeys.includes(choice.key)} onChange={(event) => setForm((value) => ({ ...value, selectedStandardSupplierKeys: event.target.checked ? [...value.selectedStandardSupplierKeys, choice.key] : value.selectedStandardSupplierKeys.filter((item) => item !== choice.key) }))} /> {displayName(language, choice)}</label>)}</fieldset><BaseerButton variant="primary" disabled={saving || !form.selectedVaults.length}>{saving ? text.saving : text.saveFinanceSetup}</BaseerButton></form></BaseerCard> : <><div className="baseer-card-grid finance-setup-readiness"><BaseerCard><span>{text.currentPeriod}</span><strong>{configuration.periods.find((item) => item.status === "OPEN") ? displayName(language, configuration.periods.find((item) => item.status === "OPEN") ?? { nameAr: language === "ar" ? "لا توجد فترة مفتوحة" : "No open period" }) : (language === "ar" ? "لا توجد فترة مفتوحة" : "No open period")}</strong></BaseerCard><BaseerCard><span>{text.activeVaults}</span><strong>{configuration.vaults.filter((item) => item.status === "ACTIVE").length}</strong></BaseerCard><BaseerCard><span>{text.activeCategories}</span><strong>{activeCategories.length}</strong></BaseerCard><BaseerCard><span>{text.activeSuppliers}</span><strong>{activeSuppliers.length}</strong></BaseerCard></div>{configuration.profile.baseSeedVersion < BASE_FINANCE_SEED_VERSION && <BaseerCard><h3>{text.seedUpdate}</h3><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => void refreshFoundation()}>{text.updateFinanceSeed}</BaseerButton></BaseerCard>}<BaseerCard><h3>{text.standardSuppliers}</h3><form className="finance-setup-choices" onSubmit={(event) => void syncStandardSuppliers(event)}><fieldset><legend>{text.chooseSuppliers}</legend>{(configuration.standardSuppliers ?? []).map((choice) => <label key={choice.key}><input type="checkbox" checked={selectedStandardSupplierKeys.includes(choice.key)} onChange={(event) => setSelectedStandardSupplierKeys((value) => event.target.checked ? [...value, choice.key] : value.filter((item) => item !== choice.key))} /> {displayName(language, choice)}</label>)}</fieldset><BaseerButton variant="secondary" disabled={saving || !selectedStandardSupplierKeys.length}>{saving ? text.savingSuppliers : text.addSelectedSuppliers}</BaseerButton></form></BaseerCard><BaseerCard><h3>{text.categories}</h3><div className="administration-list">{categoryRows.map((category) => <article key={category.id}><strong>{category.parentId ? "↳ " : ""}{displayName(language, category)}</strong><span>{category.code}</span><span>{category.isPosting !== false ? text.postingCategory : text.mainGroup}</span></article>)}</div><form className="administration-form" onSubmit={(event) => void createCategory(event)}><label>{text.categoryCode}<input required value={categoryForm.code} onChange={(event) => setCategoryForm((value) => ({ ...value, code: event.target.value }))} /></label><label>{text.nameArabic}<input required value={categoryForm.nameAr} onChange={(event) => setCategoryForm((value) => ({ ...value, nameAr: event.target.value }))} /></label><label>{text.nameEnglish}<input required value={categoryForm.nameEn} onChange={(event) => setCategoryForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{text.vaultType}<select value={categoryForm.kind} onChange={(event) => setCategoryForm((value) => ({ ...value, kind: event.target.value as typeof value.kind, parentId: "" }))}><option value="PURCHASE">{localizedEnum(language, "PURCHASE")}</option><option value="EXPENSE">{localizedEnum(language, "EXPENSE")}</option><option value="SALE">{localizedEnum(language, "SALE")}</option></select></label><label>{text.categoryParent}<select value={categoryForm.parentId} onChange={(event) => setCategoryForm((value) => ({ ...value, parentId: event.target.value }))}><option value="">{text.noParent}</option>{activeCategories.filter((item) => !item.isPosting && item.kind === categoryForm.kind).map((category) => <option key={category.id} value={category.id}>{displayName(language, category)}</option>)}</select></label><BaseerButton variant="secondary" disabled={saving}>{text.add} {text.categories}</BaseerButton></form></BaseerCard><BaseerCard><h3>{text.suppliers}</h3><strong>{activeSuppliers.length}</strong></BaseerCard></>}</section>;
+}
+
+function InitialFinanceSetup({ language, text, form, saving, standardSuppliers, onChange, onSubmit }: {
+  language: "ar" | "en";
+  text: ReturnType<typeof financeText>;
+  form: InitialFinanceForm;
+  saving: boolean;
+  standardSuppliers: Array<{ key: string; nameAr: string; nameEn: string }>;
+  onChange: (patch: Partial<InitialFinanceForm>) => void;
+  onSubmit: (event: React.FormEvent) => Promise<void>;
+}) {
+  const copy = uiCopy(language);
+  const [step, setStep] = useState(0);
+  const steps = [
+    { id: "period", label: text.currentPeriod },
+    { id: "vaults", label: text.initialVaults },
+    { id: "suppliers", label: text.optionalStandardSuppliers },
+    { id: "review", label: text.saveFinanceSetup },
+  ];
+  const canProceed = step === 0
+    ? Boolean(form.nameAr.trim() && form.nameEn.trim() && form.startDate && form.endDate && form.startDate <= form.endDate)
+    : step === 1 ? form.selectedVaults.length > 0 : true;
+  const toggleVault = (vault: VaultChoice, checked: boolean) => onChange({ selectedVaults: checked ? [...form.selectedVaults, vault] : form.selectedVaults.filter((item) => item !== vault) });
+  const toggleSupplier = (key: string, checked: boolean) => onChange({ selectedStandardSupplierKeys: checked ? [...form.selectedStandardSupplierKeys, key] : form.selectedStandardSupplierKeys.filter((item) => item !== key) });
+
+  return <section className="daily-sales-workspace finance-setup-workspace" aria-label={text.setup}>
+    <header className="administration-section-heading"><div><p className="eyebrow">{text.finance}</p><h3>{text.initialiseFinance}</h3></div></header>
+    <BaseerCard>
+      <form className="administration-form" onSubmit={(event) => void onSubmit(event)}>
+        <BaseerStepper ariaLabel={text.initialiseFinance} steps={steps} activeStep={step} onStepChange={setStep} footer={<>
+          <BaseerButton type="button" variant="secondary" disabled={step === 0 || saving} onClick={() => setStep((current) => current - 1)}>{copy.previous}</BaseerButton>
+          {step < steps.length - 1
+            ? <BaseerButton type="button" variant="primary" disabled={!canProceed || saving} onClick={() => setStep((current) => current + 1)}>{copy.next}</BaseerButton>
+            : <BaseerButton type="submit" variant="primary" disabled={saving || !form.selectedVaults.length}>{saving ? text.saving : text.saveFinanceSetup}</BaseerButton>}
+        </>}>
+          {step === 0 ? <div className="administration-form">
+            <label>{text.periodNameArabic}<input required value={form.nameAr} onChange={(event) => onChange({ nameAr: event.target.value })} /></label>
+            <label>{text.periodNameEnglish}<input required value={form.nameEn} onChange={(event) => onChange({ nameEn: event.target.value })} /></label>
+            <label>{text.periodStart}<BaseerDatePicker language={language} label={text.periodStart} max={dateValue()} value={form.startDate} onChange={(startDate) => onChange({ startDate })} /></label>
+            <label>{text.periodEnd}<BaseerDatePicker language={language} label={text.periodEnd} max={dateValue()} min={form.startDate} value={form.endDate} onChange={(endDate) => onChange({ endDate })} /></label>
+          </div> : null}
+          {step === 1 ? <fieldset className="finance-setup-choices"><legend>{text.initialVaults}</legend>{vaultChoices.map((choice) => <label key={choice.value}><input type="checkbox" checked={form.selectedVaults.includes(choice.value)} onChange={(event) => toggleVault(choice.value, event.target.checked)} /> {displayName(language, choice)}</label>)}</fieldset> : null}
+          {step === 2 ? <fieldset className="finance-setup-choices"><legend>{text.chooseSuppliers}</legend>{standardSuppliers.map((choice) => <label key={choice.key}><input type="checkbox" checked={form.selectedStandardSupplierKeys.includes(choice.key)} onChange={(event) => toggleSupplier(choice.key, event.target.checked)} /> {displayName(language, choice)}</label>)}</fieldset> : null}
+          {step === 3 ? <div className="administration-list"><article><span>{text.currentPeriod}: {form.nameAr}</span><span>{text.initialVaults}: {form.selectedVaults.length}</span><span>{text.standardSuppliers}: {form.selectedStandardSupplierKeys.length}</span></article></div> : null}
+        </BaseerStepper>
+      </form>
+    </BaseerCard>
+  </section>;
 }
 
 function SuppliersWorkspacePanel({
