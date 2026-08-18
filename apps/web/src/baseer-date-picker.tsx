@@ -32,7 +32,6 @@ export function BaseerDatePicker({ language, value, onChange, label, max, min, c
   const rootRef = useRef<HTMLDivElement>(null);
   const dialogId = useId();
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState(value);
   const [cursor, setCursor] = useState(cursorFor(value));
   const days = useMemo(() => daysForCalendar(cursor), [cursor]);
   const { year, month, day } = riyadhToday();
@@ -50,15 +49,14 @@ export function BaseerDatePicker({ language, value, onChange, label, max, min, c
     document.addEventListener("pointerdown", dismissOutside);
     return () => document.removeEventListener("pointerdown", dismissOutside);
   }, [open, presentation]);
-  const show = () => { setDraft(value); setCursor(cursorFor(value)); setOpen(true); };
+  const show = () => { setCursor(cursorFor(value)); setOpen(true); };
   const dismiss = () => { setOpen(false); triggerRef.current?.focus(); };
-  const apply = () => { if (draft && !invalid(draft)) onChange(draft); dismiss(); };
   const clear = () => { onChange(""); dismiss(); };
   const calendar = <div className="baseer-period-filter__popover" style={presentation === "modal" ? { position: "static", width: "auto", padding: 0, border: 0, boxShadow: "none" } : { width: "14.5rem", padding: "8px", borderRadius: "2px", boxShadow: "0 4px 12px rgb(10 45 31 / 12%)" }}>
     <header className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>‹</button><strong>{monthName("en", cursor)}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>›</button></header>
     <div className="baseer-period-filter__weekdays">{weekdays[language].map((item) => <span key={item}>{item}</span>)}</div>
-    <div className="baseer-period-filter__days">{days.map((item) => <button key={item.iso} type="button" disabled={invalid(item.iso)} className={[!item.inMonth ? "is-outside" : "", item.iso === draft ? "is-selected" : "", item.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} onClick={() => setDraft(item.iso)}>{item.day}</button>)}</div>
-    <footer>{clearable ? <button type="button" onClick={clear}>{language === "ar" ? "مسح" : "Clear"}</button> : <span>{dateLabel(language, draft)}</span>}<div><button type="button" onClick={dismiss}>{language === "ar" ? "إلغاء" : "Cancel"}</button><button className="baseer-period-filter__apply" type="button" disabled={!draft || invalid(draft)} onClick={apply}>{language === "ar" ? "تطبيق" : "Apply"}</button></div></footer>
+    <div className="baseer-period-filter__days">{days.map((item) => <button key={item.iso} type="button" disabled={invalid(item.iso)} className={[!item.inMonth ? "is-outside" : "", item.iso === value ? "is-selected" : "", item.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} onClick={() => { onChange(item.iso); dismiss(); }}>{item.day}</button>)}</div>
+    {clearable ? <footer><button type="button" onClick={clear}>{language === "ar" ? "مسح" : "Clear"}</button><span>{dateLabel(language, value)}</span></footer> : null}
   </div>;
   const dialog = open && presentation === "modal" ? <div className="daily-sales-dialog-backdrop" role="presentation" onMouseDown={dismiss}>
     <section id={dialogId} className="daily-sales-dialog" role="dialog" aria-modal="true" aria-label={label} onMouseDown={(event) => event.stopPropagation()}>
