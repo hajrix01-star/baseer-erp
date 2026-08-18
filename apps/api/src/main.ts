@@ -16,6 +16,17 @@ async function bootstrap(): Promise<void> {
     new FastifyAdapter({ logger: false }),
   );
   app.setGlobalPrefix('v1');
+  // Authenticated ERP receipts must always be read from the live company
+  // projection. The client also requests no-store; this response policy keeps
+  // intermediaries from retaining a stale financial workspace response.
+  const fastify = app.getHttpAdapter().getInstance() as {
+    addHook(name: 'onSend', handler: (request: { headers: Record<string, string | string[] | undefined> }, reply: { header(name: string, value: string): unknown }) => Promise<void>): void;
+  };
+  fastify.addHook('onSend', async (request, reply) => {
+    if (request.headers.authorization) {
+      reply.header('Cache-Control', 'no-store, private');
+    }
+  });
   app.useGlobalFilters(new ApiExceptionFilter());
   app.useGlobalInterceptors(app.get(RequestObservabilityInterceptor));
   app.enableShutdownHooks();

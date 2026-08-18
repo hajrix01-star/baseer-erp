@@ -218,6 +218,9 @@ export async function api<T>(
 ): Promise<T> {
   const response = await fetch(`${baseerApiBaseUrl}${path}`, {
     ...options,
+    // Financial workspace receipts are live, company-scoped data. Never let a
+    // browser reuse a prior company's or prior visit's response.
+    cache: "no-store",
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${session.accessToken}`,

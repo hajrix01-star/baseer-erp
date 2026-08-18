@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 
 import { displayName, localizedEnum } from "./baseer-localization";
 
@@ -10,16 +10,23 @@ const cardGridStyle: CSSProperties = { display: "grid", gridTemplateColumns: "re
 const cardStyle: CSSProperties = { minWidth: 0, padding: ".625rem", border: "1px solid var(--line)", borderRadius: "var(--card-radius)", background: "var(--surface)", boxShadow: "0 8px 24px rgb(11 36 26 / 5%)" };
 const itemButtonStyle: CSSProperties = { minWidth: 0, padding: 0, border: 0, color: "var(--ink)", background: "transparent", font: "inherit", fontWeight: 700, cursor: "pointer", textAlign: "start", lineHeight: 1.45, overflowWrap: "anywhere" };
 const toggleStyle: CSSProperties = { width: "1.75rem", height: "1.75rem", padding: 0, border: 0, color: "var(--muted)", background: "transparent", font: "inherit", cursor: "pointer" };
-const codeStyle: CSSProperties = { color: "var(--muted)", fontSize: "var(--font-caption)", fontVariantNumeric: "tabular-nums" };
-const badgeStyle: CSSProperties = { justifySelf: "end", color: "var(--muted)", fontSize: "var(--font-caption)", whiteSpace: "nowrap" };
+const metadataStyle: CSSProperties = { justifySelf: "end", display: "inline-flex", alignItems: "center", color: "var(--muted)", fontSize: "var(--font-caption)", whiteSpace: "nowrap" };
+const metadataPartStyle: CSSProperties = { paddingInline: ".4rem", fontVariantNumeric: "tabular-nums" };
+const metadataDividerStyle: CSSProperties = { width: "1px", height: ".95rem", background: "var(--line)" };
+const codeOrder = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
 
 /** Shared, ledger-safe presentation of category groups and posting leaves. */
 export function FinanceCategoryTree({ language, categories, onOpen }: { language: "ar" | "en"; categories: readonly FinanceCategoryTreeItem[]; onOpen: (item: FinanceCategoryTreeItem) => void }) {
-  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set(categories.filter((item) => !item.parentId).map((item) => item.id)));
+  const rootIds = useMemo(() => categories.filter((item) => !item.parentId).map((item) => item.id), [categories]);
+  const treeVersion = useMemo(() => categories.map((item) => `${item.id}:${item.parentId ?? ""}:${item.status}`).join("|"), [categories]);
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set(rootIds));
+  // The workspace receives its tree asynchronously. Open roots when that data
+  // arrives, while preserving a person's manual collapse state afterwards.
+  useEffect(() => { setExpanded(new Set(rootIds)); }, [rootIds, treeVersion]);
   const children = useMemo(() => {
     const grouped = new Map<string | null, FinanceCategoryTreeItem[]>();
     for (const item of categories) grouped.set(item.parentId && categories.some((candidate) => candidate.id === item.parentId) ? item.parentId : null, [...(grouped.get(item.parentId && categories.some((candidate) => candidate.id === item.parentId) ? item.parentId : null) ?? []), item]);
-    for (const items of grouped.values()) items.sort((left, right) => left.code.localeCompare(right.code));
+    for (const items of grouped.values()) items.sort((left, right) => codeOrder.compare(left.code, right.code));
     return grouped;
   }, [categories]);
   const roots = children.get(null) ?? [];
@@ -31,8 +38,14 @@ export function FinanceCategoryTree({ language, categories, onOpen }: { language
     return <div key={item.id} role="treeitem" aria-level={level} aria-expanded={hasChildren ? isExpanded : undefined} style={{ marginInlineStart: `${(level - 1) * 1.1}rem` }}>
       <div style={rowStyle}>
         {hasChildren ? <button type="button" style={toggleStyle} onClick={() => toggle(item.id)} aria-label={isExpanded ? (language === "ar" ? "طي المجموعة" : "Collapse group") : (language === "ar" ? "فتح المجموعة" : "Expand group")}>{isExpanded ? "▾" : "▸"}</button> : <span aria-hidden="true" style={{ color: "var(--line)", textAlign: "center" }}>•</span>}
-        <button type="button" style={itemButtonStyle} onClick={() => onOpen(item)}>{displayName(language, item)} <span style={codeStyle}>{item.code}</span></button>
-        <span style={badgeStyle}>{localizedEnum(language, item.kind)} · {item.isPosting ? (language === "ar" ? "يقبل القيود" : "Posting") : (language === "ar" ? "مجموعة" : "Group")}</span>
+        <button type="button" style={itemButtonStyle} onClick={() => onOpen(item)}>{displayName(language, item)}</button>
+        <span style={metadataStyle}>
+          <span style={metadataPartStyle}>{localizedEnum(language, item.kind)}</span>
+          <span aria-hidden="true" style={metadataDividerStyle} />
+          <span style={metadataPartStyle}>{item.code}</span>
+          <span aria-hidden="true" style={metadataDividerStyle} />
+          <span style={metadataPartStyle}>{item.isPosting ? (language === "ar" ? "يقبل القيود" : "Posting") : (language === "ar" ? "مجموعة" : "Group")}</span>
+        </span>
       </div>
       {hasChildren && isExpanded ? <div role="group">{nested.map((child) => render(child, level + 1))}</div> : null}
     </div>;
