@@ -117,7 +117,7 @@ function ExpenseSettlementBatch({ language, configuration, profiles, businessDat
   const categories = useMemo(() => configuration.categories.filter((item) => item.status === "ACTIVE" && item.kind === "EXPENSE" && item.isPosting !== false), [configuration]);
   const suppliers = useMemo(() => configuration.suppliers.filter((item) => item.status === "ACTIVE"), [configuration]);
   const vaults = useMemo(() => configuration.vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination), [configuration]);
-  const enteredRows = useMemo(() => rows.filter((row) => Boolean(row.categoryId || row.supplierId || row.invoiceNumber || row.missingReason || row.supplierInvoiceDate || row.grossAmount || row.vaultId || row.notes )), [rows]);
+  const enteredRows = useMemo(() => rows.filter((row) => Boolean(row.categoryId || row.supplierId || row.invoiceNumber.trim() || row.missingReason.trim() || row.supplierInvoiceDate || row.grossAmount.trim() || row.vaultId || row.notes.trim())), [rows]);
   const change = <K extends keyof ExpenseRow>(id: string, key: K, value: ExpenseRow[K]) => setRows((current) => current.map((row) => row.id === id ? { ...row, [key]: value } : row));
   const chooseSupplier = (id: string, supplierId: string) => setRows((current) => current.map((row) => {
     if (row.id !== id) return row;

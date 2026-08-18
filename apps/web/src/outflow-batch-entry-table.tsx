@@ -6,7 +6,7 @@ import { DataTable } from "./data-table";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 
-export type OutflowBatchEntryRow = { id: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string };
+export type OutflowBatchEntryRow = { id: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
 type Category = { id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" };
 type Supplier = { id: string; nameAr: string; nameEn: string | null; isFavorite?: boolean };
 type Vault = { id: string; nameAr: string; nameEn: string };
@@ -23,6 +23,7 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({ langu
     { id: "category", header: text.financialCategory, width: "11rem", cell: (row) => <BaseerSearchSelect id={`category-${row.id}`} label={text.financialCategory} required value={row.categoryId} placeholder={text.selectCategory} options={categories.filter((category) => category.kind === row.kind).map((category) => ({ id: category.id, label: displayName(language, category) }))} onChange={(categoryId) => onChange(row.id, "categoryId" as keyof Row, categoryId as Row[keyof Row])} /> },
     { id: "invoice", header: text.invoiceNumber, width: "9rem", cell: (row) => <input aria-label={text.invoiceNumber} value={row.invoiceNumber} placeholder={text.supplierInvoiceNumber} onChange={(event) => onChange(row.id, "invoiceNumber" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "invoiceDate", header: text.supplierInvoiceDate, width: "8.25rem", cell: (row) => <input aria-label={text.supplierInvoiceDate} type="date" max={maxInvoiceDate} value={row.supplierInvoiceDate} onChange={(event) => onChange(row.id, "supplierInvoiceDate" as keyof Row, event.target.value as Row[keyof Row])} /> },
+    { id: "notes", header: text.notes, width: "11rem", cell: (row) => <input aria-label={text.notes} value={row.notes} placeholder={text.optional} onChange={(event) => onChange(row.id, "notes" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "amount", header: text.totalAmount, width: "8rem", numeric: true, cell: (row) => <input aria-label={text.totalAmount} required inputMode="decimal" placeholder={text.enterAmount} value={row.grossAmount} onChange={(event) => onChange(row.id, "grossAmount" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "taxAmount", header: text.tax, width: "6.5rem", numeric: true, cell: (row) => {
       const amount = row.isTaxable && vatEnabled ? inclusiveTaxAmount(row.grossAmount, vatRateBasisPoints) : null;
