@@ -113,6 +113,7 @@ export class JournalPostingService {
         description: line.description ?? null,
       })),
     });
+    await this.updateDailyBalances(transaction, input, normalizedLines);
     await transaction.financeJournalEntry.update({
       where: { id: journalEntryId },
       data: { isSealed: true, sealedAt: new Date() },
@@ -199,6 +200,23 @@ export class JournalPostingService {
         description: line.description ?? null,
       })),
     });
+    // The projection must follow the same POSTED-only rule as ledger reads:
+    // remove the original contribution once its status becomes REVERSED, then
+    // add the reversal entry's opposite lines.
+    await this.updateDailyBalances(transaction, {
+      tenantId: input.tenantId,
+      companyId: input.companyId,
+      businessDate: original.businessDate,
+    }, original.lines, -1);
+    await this.updateDailyBalances(transaction, {
+      tenantId: input.tenantId,
+      companyId: input.companyId,
+      businessDate: input.businessDate,
+    }, original.lines.map((line) => ({
+      accountId: line.accountId,
+      debitAmount: line.creditAmount,
+      creditAmount: line.debitAmount,
+    })));
     await transaction.financeJournalEntry.update({
       where: { id: journalEntryId },
       data: { isSealed: true, sealedAt: new Date() },
@@ -273,6 +291,31 @@ export class JournalPostingService {
     if (accounts.length !== uniqueAccountIds.length) {
       throw new BadRequestException('Every journal line must use an active account from the selected company.');
     }
+  }
+
+  /**
+   * Keeps the bounded daily read projection in the exact transaction that
+   * changes the immutable journal. It is a cache of POSTED journal totals,
+   * not a second ledger: the migration can rebuild it deterministically.
+   */
+  private async updateDailyBalances(
+    transaction: Prisma.TransactionClient,
+    input: Readonly<{ tenantId: string; companyId: string; businessDate: Date }>,
+    lines: readonly Readonly<{ accountId: string; debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>[],
+    multiplier = 1,
+  ) {
+    const byAccount = new Map<string, { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>();
+    for (const line of lines) {
+      const current = byAccount.get(line.accountId) ?? { debitAmount: new Prisma.Decimal(0), creditAmount: new Prisma.Decimal(0) };
+      current.debitAmount = current.debitAmount.plus(line.debitAmount).mul(multiplier);
+      current.creditAmount = current.creditAmount.plus(line.creditAmount).mul(multiplier);
+      byAccount.set(line.accountId, current);
+    }
+    await Promise.all([...byAccount.entries()].map(([accountId, amount]) => transaction.financeAccountDailyBalance.upsert({
+      where: { tenantId_companyId_accountId_businessDate: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate } },
+      create: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate, debitAmount: amount.debitAmount, creditAmount: amount.creditAmount },
+      update: { debitAmount: { increment: amount.debitAmount }, creditAmount: { increment: amount.creditAmount } },
+    })));
   }
 
   private decimalAmount(value: string | undefined): Prisma.Decimal {

@@ -153,6 +153,12 @@ export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
  */
 export type FinanceJournalLine = Prisma.FinanceJournalLineModel
 /**
+ * Model FinanceAccountDailyBalance
+ * Read projection only. Its values are rebuilt from posted journal lines and
+ * never replace the journal as the accounting source of truth.
+ */
+export type FinanceAccountDailyBalance = Prisma.FinanceAccountDailyBalanceModel
+/**
  * Model FinanceOperationalDay
  * 
  */

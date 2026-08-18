@@ -867,6 +867,21 @@ model FinanceJournalLine {
   @@index([tenantId, companyId, journalEntryId])
 }
 
+/// Read projection only. Its values are rebuilt from posted journal lines and
+/// never replace the journal as the accounting source of truth.
+model FinanceAccountDailyBalance {
+  tenantId    String   @db.Uuid
+  companyId   String   @db.Uuid
+  accountId   String   @db.Uuid
+  businessDate DateTime @db.Date
+  debitAmount Decimal  @default(0) @db.Decimal(18, 4)
+  creditAmount Decimal @default(0) @db.Decimal(18, 4)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@id([tenantId, companyId, accountId, businessDate])
+  @@index([tenantId, companyId, accountId, businessDate], map: "FinanceAccountDailyBalance_tenant_company_account_date_idx")
+}
+
 model FinanceOperationalDay {
   id              String                      @id @default(uuid()) @db.Uuid
   tenantId        String                      @db.Uuid

@@ -166,16 +166,16 @@ export class TreasuryService {
     if (!vaults.length) return results;
     const accountIds = vaults.map((vault) => vault.accountId);
     const accountToVault = new Map(vaults.map((vault) => [vault.accountId, vault.id]));
-    const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds }, journalEntry: { status: "POSTED" as const } };
+    const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
     const [balanceGroups, periodGroups] = await Promise.all([
-      tx.financeJournalLine.groupBy({
+      tx.financeAccountDailyBalance.groupBy({
         by: ["accountId"],
-        where: { ...common, journalEntry: { status: "POSTED", businessDate: { lte: asOf } } },
+        where: { ...common, businessDate: { lte: asOf } },
         _sum: { debitAmount: true, creditAmount: true },
       }),
-      tx.financeJournalLine.groupBy({
+      tx.financeAccountDailyBalance.groupBy({
         by: ["accountId"],
-        where: { ...common, journalEntry: { status: "POSTED", ...(dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : {}) } },
+        where: { ...common, ...(dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : {}) },
         _sum: { debitAmount: true, creditAmount: true },
       }),
     ]);

@@ -424,6 +424,7 @@ export const ModelName = {
   FinanceOutflowBatch: 'FinanceOutflowBatch',
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
+  FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
   FinanceDailySalesClosing: 'FinanceDailySalesClosing',
   FinanceDailySalesAllocation: 'FinanceDailySalesAllocation',
@@ -453,7 +454,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "financeJournalLine" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2455,6 +2456,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FinanceAccountDailyBalance: {
+      payload: Prisma.$FinanceAccountDailyBalancePayload<ExtArgs>
+      fields: Prisma.FinanceAccountDailyBalanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceAccountDailyBalanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceAccountDailyBalanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceAccountDailyBalanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceAccountDailyBalanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        findMany: {
+          args: Prisma.FinanceAccountDailyBalanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>[]
+        }
+        create: {
+          args: Prisma.FinanceAccountDailyBalanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        createMany: {
+          args: Prisma.FinanceAccountDailyBalanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceAccountDailyBalanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceAccountDailyBalanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        update: {
+          args: Prisma.FinanceAccountDailyBalanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceAccountDailyBalanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceAccountDailyBalanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceAccountDailyBalanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceAccountDailyBalanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountDailyBalancePayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceAccountDailyBalanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceAccountDailyBalance>
+        }
+        groupBy: {
+          args: Prisma.FinanceAccountDailyBalanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceAccountDailyBalanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceAccountDailyBalanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceAccountDailyBalanceCountAggregateOutputType> | number
+        }
+      }
+    }
     FinanceOperationalDay: {
       payload: Prisma.$FinanceOperationalDayPayload<ExtArgs>
       fields: Prisma.FinanceOperationalDayFieldRefs
@@ -3997,6 +4072,19 @@ export const FinanceJournalLineScalarFieldEnum = {
 export type FinanceJournalLineScalarFieldEnum = (typeof FinanceJournalLineScalarFieldEnum)[keyof typeof FinanceJournalLineScalarFieldEnum]
 
 
+export const FinanceAccountDailyBalanceScalarFieldEnum = {
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  accountId: 'accountId',
+  businessDate: 'businessDate',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceAccountDailyBalanceScalarFieldEnum = (typeof FinanceAccountDailyBalanceScalarFieldEnum)[keyof typeof FinanceAccountDailyBalanceScalarFieldEnum]
+
+
 export const FinanceOperationalDayScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -5063,6 +5151,7 @@ export type GlobalOmitConfig = {
   financeOutflowBatch?: Prisma.FinanceOutflowBatchOmit
   financeOutflowAllocation?: Prisma.FinanceOutflowAllocationOmit
   financeJournalLine?: Prisma.FinanceJournalLineOmit
+  financeAccountDailyBalance?: Prisma.FinanceAccountDailyBalanceOmit
   financeOperationalDay?: Prisma.FinanceOperationalDayOmit
   financeDailySalesClosing?: Prisma.FinanceDailySalesClosingOmit
   financeDailySalesAllocation?: Prisma.FinanceDailySalesAllocationOmit
