@@ -1147,9 +1147,8 @@ html[dir="ltr"] .mobile-drawer__panel {
   z-index: 30;
   top: calc(100% + 0.5rem);
   inset-inline-end: 0;
-  inline-size: 100%;
-  min-inline-size: 0;
-  max-inline-size: min(22rem, calc(100vw - 2rem));
+  inline-size: min(20rem, calc(100vw - 2rem));
+  min-inline-size: 16rem;
   display: grid;
   gap: 0.25rem;
   padding: 0.4rem;
@@ -1166,7 +1165,10 @@ html[dir="ltr"] .mobile-drawer__panel {
   color: inherit;
   cursor: pointer;
   padding: 0.7rem 0.8rem;
+  overflow: hidden;
   text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .company-session-control__menu button:hover,
