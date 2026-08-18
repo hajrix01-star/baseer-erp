@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
-import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange } from "./baseer-period-filter";
 import { DailySalesClosingDialog } from "./daily-sales-closing-dialog";
 import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
@@ -338,7 +337,7 @@ export function DailySalesWorkspace({
     setEntryOpen(true);
   };
 
-  if (!session) return <DailySalesSignIn language={language} />;
+  if (!session) return <section className="daily-sales-shell" aria-live="polite">{language === "ar" ? "انتهت الجلسة. أعد تسجيل الدخول." : "Your session has ended. Please sign in again."}</section>;
   return (
     <section className="daily-sales-shell">
       <header className="daily-sales-heading">

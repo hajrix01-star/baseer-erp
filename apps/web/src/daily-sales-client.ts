@@ -179,6 +179,14 @@ export function clearActiveSession(): void {
   sessionStorage.removeItem(companyStorageKey);
 }
 
+/** Best-effort server revocation. Callers clear local state regardless of network outcome. */
+export async function signOutActiveSession(accessToken: string): Promise<void> {
+  await fetch(`${baseerApiBaseUrl}/auth/sign-out`, {
+    method: "POST",
+    headers: { Accept: "application/json", Authorization: `Bearer ${accessToken}` },
+  });
+}
+
 function clearExpiredSession(): void {
   clearActiveSession();
   if (sessionExpiryReloadScheduled) return;

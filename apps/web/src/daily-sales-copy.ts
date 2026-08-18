@@ -1,6 +1,8 @@
+import { defineLocalizedCopy } from "./baseer-ui-copy";
+
 export type DailySalesLanguage = "ar" | "en";
 
-export const dailySalesText = {
+export const dailySalesText = defineLocalizedCopy({
   ar: {
     eyebrow: "المبيعات اليومية",
     title: "ملخص المبيعات اليومي",
@@ -241,4 +243,4 @@ export const dailySalesText = {
     BANK: "Bank",
     APP: "App",
   },
-} as const;
+});

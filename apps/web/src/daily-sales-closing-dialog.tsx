@@ -1,6 +1,7 @@
 import { type FormEvent } from "react";
 
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
+import { BaseerDatePicker } from "./baseer-date-picker";
 import { formatMoney } from "./number-format";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 import { useDailySalesPreview } from "./use-daily-sales-preview";
@@ -164,7 +165,7 @@ function ShiftCard({
         <span>
           <small>{copy.entryTotal}</small>
           <strong dir="ltr">
-            {displayGrossAmount > 0
+            {displayGrossAmount !== null && displayGrossAmount > 0
               ? formatMoney(String(displayGrossAmount))
               : copy.previewUnavailable}
           </strong>
@@ -290,13 +291,7 @@ export function DailySalesClosingDialog({
               </div>
               <label className="daily-sales-dialog__date">
                 <span>{copy.date}</span>
-                <input
-                  type="date"
-                  value={businessDate}
-                  max={maxBusinessDate}
-                  onChange={(event) => setDate(event.target.value)}
-                  required
-                />
+                <BaseerDatePicker language={language} label={copy.date} max={maxBusinessDate} value={businessDate} onChange={setDate} disabled={saving} />
               </label>
               {!isDayOff && (
                 <fieldset className="daily-sales-dialog__scope-picker">
