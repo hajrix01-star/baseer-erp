@@ -183,6 +183,11 @@ export type FinanceDailySalesChannelSummary = Prisma.FinanceDailySalesChannelSum
  */
 export type FinanceRecurringExpenseProfile = Prisma.FinanceRecurringExpenseProfileModel
 /**
+ * Model FinanceRecurringExpenseCoverage
+ * 
+ */
+export type FinanceRecurringExpenseCoverage = Prisma.FinanceRecurringExpenseCoverageModel
+/**
  * Model FinanceInclusiveLoan
  * 
  */

@@ -430,6 +430,7 @@ export const ModelName = {
   FinanceDailyFinancialSummary: 'FinanceDailyFinancialSummary',
   FinanceDailySalesChannelSummary: 'FinanceDailySalesChannelSummary',
   FinanceRecurringExpenseProfile: 'FinanceRecurringExpenseProfile',
+  FinanceRecurringExpenseCoverage: 'FinanceRecurringExpenseCoverage',
   FinanceInclusiveLoan: 'FinanceInclusiveLoan',
   FinanceInclusiveLoanPayment: 'FinanceInclusiveLoanPayment',
   FinanceInclusiveLoanInstallmentPlan: 'FinanceInclusiveLoanInstallmentPlan',
@@ -452,7 +453,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "financeJournalLine" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "financeJournalLine" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2898,6 +2899,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FinanceRecurringExpenseCoverage: {
+      payload: Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>
+      fields: Prisma.FinanceRecurringExpenseCoverageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceRecurringExpenseCoverageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceRecurringExpenseCoverageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceRecurringExpenseCoverageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceRecurringExpenseCoverageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        findMany: {
+          args: Prisma.FinanceRecurringExpenseCoverageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>[]
+        }
+        create: {
+          args: Prisma.FinanceRecurringExpenseCoverageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        createMany: {
+          args: Prisma.FinanceRecurringExpenseCoverageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceRecurringExpenseCoverageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceRecurringExpenseCoverageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        update: {
+          args: Prisma.FinanceRecurringExpenseCoverageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceRecurringExpenseCoverageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceRecurringExpenseCoverageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceRecurringExpenseCoverageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceRecurringExpenseCoverageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceRecurringExpenseCoveragePayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceRecurringExpenseCoverageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceRecurringExpenseCoverage>
+        }
+        groupBy: {
+          args: Prisma.FinanceRecurringExpenseCoverageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceRecurringExpenseCoverageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceRecurringExpenseCoverageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceRecurringExpenseCoverageCountAggregateOutputType> | number
+        }
+      }
+    }
     FinanceInclusiveLoan: {
       payload: Prisma.$FinanceInclusiveLoanPayload<ExtArgs>
       fields: Prisma.FinanceInclusiveLoanFieldRefs
@@ -3704,6 +3779,7 @@ export const FinanceSupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   companyId: 'companyId',
   categoryId: 'categoryId',
+  supplierType: 'supplierType',
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   phone: 'phone',
@@ -3760,6 +3836,8 @@ export const FinanceVaultScalarFieldEnum = {
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   type: 'type',
+  paymentMethod: 'paymentMethod',
+  paymentMethods: 'paymentMethods',
   status: 'status',
   isSalesChannel: 'isSalesChannel',
   isPaymentDestination: 'isPaymentDestination',
@@ -3800,6 +3878,7 @@ export const FinanceSupplierDuePaymentScalarFieldEnum = {
   dueId: 'dueId',
   vaultId: 'vaultId',
   amount: 'amount',
+  recognizedNetAmount: 'recognizedNetAmount',
   businessDate: 'businessDate',
   status: 'status',
   reversalOfId: 'reversalOfId',
@@ -3844,6 +3923,10 @@ export const FinanceOutflowDocumentScalarFieldEnum = {
   settlementKind: 'settlementKind',
   documentNumber: 'documentNumber',
   batchId: 'batchId',
+  recurringExpenseProfileId: 'recurringExpenseProfileId',
+  coverageYear: 'coverageYear',
+  coverageStartMonth: 'coverageStartMonth',
+  coverageMonths: 'coverageMonths',
   supplierId: 'supplierId',
   categoryId: 'categoryId',
   supplierInvoiceNumber: 'supplierInvoiceNumber',
@@ -4021,6 +4104,9 @@ export const FinanceRecurringExpenseProfileScalarFieldEnum = {
   expectedAmount: 'expectedAmount',
   intervalMonths: 'intervalMonths',
   nextReminderDate: 'nextReminderDate',
+  serviceNumber: 'serviceNumber',
+  defaultVaultId: 'defaultVaultId',
+  allowAmountOverride: 'allowAmountOverride',
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -4028,6 +4114,20 @@ export const FinanceRecurringExpenseProfileScalarFieldEnum = {
 } as const
 
 export type FinanceRecurringExpenseProfileScalarFieldEnum = (typeof FinanceRecurringExpenseProfileScalarFieldEnum)[keyof typeof FinanceRecurringExpenseProfileScalarFieldEnum]
+
+
+export const FinanceRecurringExpenseCoverageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  profileId: 'profileId',
+  coverageYear: 'coverageYear',
+  coverageMonth: 'coverageMonth',
+  documentId: 'documentId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceRecurringExpenseCoverageScalarFieldEnum = (typeof FinanceRecurringExpenseCoverageScalarFieldEnum)[keyof typeof FinanceRecurringExpenseCoverageScalarFieldEnum]
 
 
 export const FinanceInclusiveLoanScalarFieldEnum = {
@@ -4421,6 +4521,20 @@ export type ListEnumFinanceCategoryStatusFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
+ * Reference to a field of type 'FinanceSupplierType'
+ */
+export type EnumFinanceSupplierTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceSupplierType'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceSupplierType[]'
+ */
+export type ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceSupplierType[]'>
+    
+
+
+/**
  * Reference to a field of type 'FinanceSupplierStatus'
  */
 export type EnumFinanceSupplierStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceSupplierStatus'>
@@ -4459,6 +4573,20 @@ export type EnumFinanceVaultTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'FinanceVaultType[]'
  */
 export type ListEnumFinanceVaultTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceVaultPaymentMethod'
+ */
+export type EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultPaymentMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceVaultPaymentMethod[]'
+ */
+export type ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultPaymentMethod[]'>
     
 
 
@@ -4939,6 +5067,7 @@ export type GlobalOmitConfig = {
   financeDailyFinancialSummary?: Prisma.FinanceDailyFinancialSummaryOmit
   financeDailySalesChannelSummary?: Prisma.FinanceDailySalesChannelSummaryOmit
   financeRecurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileOmit
+  financeRecurringExpenseCoverage?: Prisma.FinanceRecurringExpenseCoverageOmit
   financeInclusiveLoan?: Prisma.FinanceInclusiveLoanOmit
   financeInclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentOmit
   financeInclusiveLoanInstallmentPlan?: Prisma.FinanceInclusiveLoanInstallmentPlanOmit

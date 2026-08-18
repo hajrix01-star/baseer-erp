@@ -169,17 +169,61 @@ export const reverseInclusiveLoanRepaymentRequestSchema = z
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
+export const inclusiveLoanRecordSchema = z
+  .object({
+    id: z.string().uuid(),
+    sourceDocumentNumber: z.string(),
+    originalAmount: z.string(),
+    openingOutstandingAmount: z.string(),
+    paidAmount: z.string(),
+    remainingAmount: z.string(),
+    installmentAmount: z.string(),
+    termMonths: z.number().int().positive(),
+    firstInstallmentDueDate: financeDateSchema,
+    openingBusinessDate: financeDateSchema,
+    status: z.enum(["ACTIVE", "SETTLED"]),
+    notes: z.string().nullable(),
+  })
+  .strict();
+
+export const inclusiveLoansReceiptSchema = z
+  .object({ companyId: z.string().uuid(), loans: z.array(inclusiveLoanRecordSchema) })
+  .strict();
 export const createVaultRequestSchema = z
   .object({
     nameAr: z.string().trim().min(1).max(160),
     nameEn: z.string().trim().min(1).max(160),
     type: z.enum(["CASH", "BANK", "APP"]),
+  paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional(),
+    paymentMethods: z.array(z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"])).min(1).max(3).optional(),
     isSalesChannel: z.boolean().optional(),
     isPaymentDestination: z.boolean().optional(),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
+export const updateVaultRequestSchema = z
+  .object({
+    vaultId: z.string().uuid(),
+    nameAr: z.string().trim().min(1).max(160),
+    nameEn: z.string().trim().min(1).max(160),
+    type: z.enum(["CASH", "BANK", "APP"]),
+  paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional(),
+    paymentMethods: z.array(z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"])).min(1).max(3).optional(),
+    isSalesChannel: z.boolean(),
+    isPaymentDestination: z.boolean(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+export const reorderVaultsRequestSchema = z
+  .object({ vaultIds: z.array(z.string().uuid()).min(1).max(100), idempotencyKey: idempotencyKeySchema })
+  .strict();
+export const financeVaultOrderReceiptSchema = z
+  .object({ vaultIds: z.array(z.string().uuid()).min(1).max(100) })
+  .strict();
 export const removeVaultRequestSchema = z
+  .object({ vaultId: z.string().uuid(), idempotencyKey: idempotencyKeySchema })
+  .strict();
+export const restoreVaultRequestSchema = z
   .object({ vaultId: z.string().uuid(), idempotencyKey: idempotencyKeySchema })
   .strict();
 const financeCategoryKindSchema = z.enum(["PURCHASE", "EXPENSE", "SALE"]);
@@ -191,6 +235,20 @@ export const createFinanceCategoryRequestSchema = z
     nameEn: z.string().trim().min(1).max(160),
     kind: financeCategoryKindSchema,
     parentId: z.string().uuid().optional(),
+    isPosting: z.boolean().default(true),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
+export const updateFinanceCategoryRequestSchema = z
+  .object({
+    categoryId: z.string().uuid(),
+    code: z.string().trim().min(2).max(80).regex(/^[A-Za-z0-9_-]+$/),
+    nameAr: z.string().trim().min(1).max(160),
+    nameEn: z.string().trim().min(1).max(160),
+    kind: financeCategoryKindSchema,
+    parentId: z.string().uuid().optional(),
+    isPosting: z.boolean(),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
@@ -206,7 +264,8 @@ export const createFinanceSupplierRequestSchema = z
     phone: z.string().trim().max(30).optional(),
     taxNumber: z.string().trim().max(32).optional(),
     isTaxRegistered: z.boolean().default(false),
-    categoryId: z.string().uuid().optional(),
+    supplierType: z.enum(["PURCHASE", "EXPENSE"]),
+    categoryId: z.string().uuid(),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
@@ -219,7 +278,8 @@ export const updateFinanceSupplierRequestSchema = z
     phone: z.string().trim().max(30).optional(),
     taxNumber: z.string().trim().max(32).optional(),
     isTaxRegistered: z.boolean(),
-    categoryId: z.string().uuid().nullable().optional(),
+    supplierType: z.enum(["PURCHASE", "EXPENSE"]),
+    categoryId: z.string().uuid(),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict();
@@ -261,6 +321,7 @@ export const supplierDueCashProjectionItemSchema = z
     businessDate: z.date(),
     amount: financeAmountSchema,
     vaultId: z.string().uuid(),
+    recognizedNetAmount: financeAmountSchema,
     categoryCode: z.string().min(1).max(80),
     categoryNameAr: z.string().min(1).max(160),
     categoryKind: z.enum(["PURCHASE", "EXPENSE"]),
@@ -391,6 +452,7 @@ const financeConfigurationProfileSchema = z
     baseSeedVersion: z.number().int().positive(),
     accountingMode: z.string().min(1).max(80),
     vatAccountingEnabled: z.boolean(),
+    vatRateBasisPoints: z.number().int().min(0).max(10_000),
     initializedAt: z.date(),
   })
   .strict();
@@ -411,9 +473,12 @@ const financeConfigurationVaultSchema = z
     nameAr: z.string().min(1).max(160),
     nameEn: z.string().min(1).max(160),
     type: z.string().min(1).max(40),
+    paymentMethod: z.string().min(1).max(40),
+    paymentMethods: z.array(z.string().min(1).max(40)).min(1).max(3),
     status: z.string().min(1).max(40),
     isSalesChannel: z.boolean(),
     isPaymentDestination: z.boolean(),
+    sortOrder: z.number().int().min(0).max(10_000),
     account: z
       .object({
         id: z.string().uuid(),
@@ -450,6 +515,10 @@ const financeConfigurationCategorySchema = z
     isPosting: z.boolean(),
   })
   .strict();
+const financeConfigurationStandardSupplierSchema = z
+  .object({ key: standardSupplierKeySchema, nameAr: z.string().min(1).max(160), nameEn: z.string().min(1).max(160) })
+  .strict();
+
 const financeConfigurationSupplierSchema = z
   .object({
     id: z.string().uuid(),
@@ -458,6 +527,7 @@ const financeConfigurationSupplierSchema = z
     phone: z.string().max(30).nullable(),
     taxNumber: z.string().max(32).nullable(),
     isTaxRegistered: z.boolean(),
+    supplierType: z.enum(["PURCHASE", "EXPENSE"]),
     status: z.string().min(1).max(40),
     categoryId: z.string().uuid().nullable(),
   })
@@ -471,8 +541,19 @@ export const financeConfigurationReceiptSchema = z
     accounts: z.array(financeConfigurationAccountSchema).max(500),
     categories: z.array(financeConfigurationCategorySchema).max(500),
     suppliers: z.array(financeConfigurationSupplierSchema).max(1_000),
+    standardSuppliers: z.array(financeConfigurationStandardSupplierSchema).max(32),
   })
   .strict();
+
+/** The company rate is authoritative for future documents only. Posted documents retain their own rate snapshot. */
+export const updateCompanyVatRateRequestSchema = z.object({
+  vatRateBasisPoints: z.number().int().min(0).max(10_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const updateCompanyVatRateReceiptSchema = z.object({
+  vatRateBasisPoints: z.number().int().min(0).max(10_000),
+  vatAccountingEnabled: z.literal(true),
+}).strict();
 
 const dailySalesScopeSchema = z.enum(["MORNING", "EVENING", "ALL"]);
 const operationalDayStatusSchema = z.enum(["OPEN", "CLOSED", "PARTIAL"]);
@@ -671,7 +752,8 @@ export const dailySalesChannelVaultSchema = z
     nameAr: z.string().min(1).max(160),
     nameEn: z.string().min(1).max(160),
     type: z.enum(["CASH", "BANK", "APP"]),
-    isSalesChannel: z.boolean(),
+  sortOrder: z.number().int().min(0).max(10_000),
+  isSalesChannel: z.boolean(),
   })
   .strict();
 
@@ -866,9 +948,225 @@ export const financeOutflowDocumentHistoryItemSchema = z.object({
   categoryNameAr: z.string().min(1).max(160),
 }).strict();
 
+export const financeCreditDueItemSchema = z.object({
+  id: z.string().uuid(), documentNumber: z.string().min(1).max(160), kind: financeOutflowKindSchema, businessDate: z.date(), dueDate: z.date().nullable(), categoryNameAr: z.string().min(1).max(160).nullable(), categoryNameEn: z.string().max(160).nullable(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema,
+}).strict();
+export const financeCreditSupplierGroupSchema = z.object({
+  supplierId: z.string().uuid(), supplierNameAr: z.string().min(1).max(160), supplierNameEn: z.string().max(160).nullable(), invoiceCount: z.number().int().positive(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema, dues: z.array(financeCreditDueItemSchema).min(1).max(500),
+}).strict();
+export const financeCreditWorkspaceReceiptSchema = z.object({
+  companyId: companyIdSchema, asOfBusinessDate: businessDateSchema, openSupplierCount: z.number().int().nonnegative(), openInvoiceCount: z.number().int().nonnegative(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema, suppliers: z.array(financeCreditSupplierGroupSchema).max(500),
+}).strict();
 export const financeOutflowDocumentsReceiptSchema = z.object({
   companyId: companyIdSchema,
   documents: z.array(financeOutflowDocumentHistoryItemSchema).max(250),
 }).strict();
 export type FinanceOutflowDocumentReceipt = z.infer<typeof financeOutflowDocumentReceiptSchema>;
 export type FinanceOutflowDocumentsReceipt = z.infer<typeof financeOutflowDocumentsReceiptSchema>;
+
+const recurringIntervalMonthsSchema = z.number().int().refine(
+  (value) => [1, 2, 3, 4, 6, 12].includes(value),
+  "Recurring interval must divide a calendar year.",
+);
+
+export const financeRecurringExpenseProfileSchema = z.object({
+  id: z.string().uuid(),
+  nameAr: z.string().min(1).max(160),
+  nameEn: z.string().min(1).max(160),
+  supplierId: z.string().uuid().nullable(),
+  supplierNameAr: z.string().nullable(),
+  categoryId: z.string().uuid(),
+  categoryNameAr: z.string().min(1).max(160),
+  serviceNumber: z.string().max(160).nullable(),
+  expectedAmount: financeAmountSchema,
+  intervalMonths: recurringIntervalMonthsSchema,
+  nextReminderDate: financeDateSchema,
+  defaultVaultId: z.string().uuid().nullable(),
+  allowAmountOverride: z.boolean(),
+  status: z.enum(["ACTIVE", "ARCHIVED"]),
+  notes: z.string().max(2_000).nullable(),
+}).strict();
+
+export const financeRecurringExpenseProfilesReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  profiles: z.array(financeRecurringExpenseProfileSchema).max(500),
+}).strict();
+
+export const createFinanceRecurringExpenseProfileRequestSchema = z.object({
+  nameAr: z.string().trim().min(1).max(160),
+  nameEn: z.string().trim().min(1).max(160).optional(),
+  categoryId: z.string().uuid(),
+  supplierId: financeSupplierIdSchema.optional(),
+  serviceNumber: z.string().trim().min(1).max(160).optional(),
+  expectedAmount: financeAmountSchema,
+  intervalMonths: recurringIntervalMonthsSchema,
+  nextReminderDate: financeDateSchema,
+  defaultVaultId: z.string().uuid().optional(),
+  allowAmountOverride: z.boolean().default(true),
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const archiveFinanceRecurringExpenseProfileRequestSchema = z.object({
+  profileId: z.string().uuid(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const createFinanceRecurringExpensePaymentRequestSchema = z.object({
+  profileId: z.string().uuid(),
+  businessDate: financeDateSchema,
+  coverageYear: z.number().int().min(2000).max(2100),
+  coverageStartMonth: z.number().int().min(1).max(12),
+  grossAmount: financeAmountSchema,
+  isTaxable: z.boolean().default(false),
+  vaultId: z.string().uuid(),
+  supplierInvoiceNumber: z.string().trim().min(1).max(160).optional(),
+  supplierInvoiceMissingReason: z.string().trim().min(1).max(500).optional(),
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const financeRecurringExpensePaymentReceiptSchema = financeOutflowDocumentReceiptSchema.extend({
+  profileId: z.string().uuid(),
+  coverageYear: z.number().int().min(2000).max(2100),
+  coverageStartMonth: z.number().int().min(1).max(12),
+  coverageMonths: z.number().int().min(1).max(12),
+}).strict();
+
+// A recurring-payment batch is one atomic command. Each row remains its own
+// journal-backed document and coverage reservation, but the batch either posts
+// completely or rolls back completely.
+export const financeRecurringExpensePaymentBatchItemSchema = createFinanceRecurringExpensePaymentRequestSchema.omit({ businessDate: true, idempotencyKey: true });
+export const createFinanceRecurringExpensePaymentBatchRequestSchema = z.object({
+  businessDate: financeDateSchema,
+  items: z.array(financeRecurringExpensePaymentBatchItemSchema).min(1).max(25),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const financeRecurringExpensePaymentBatchReceiptSchema = z.object({
+  batchId: z.string().uuid(),
+  batchNumber: z.string().min(1).max(80),
+  businessDate: z.date(),
+  documentCount: z.number().int().positive(),
+  grossAmount: financeAmountSchema,
+  netAmount: financeAmountSchema,
+  vatAmount: financeAmountSchema,
+  payments: z.array(financeRecurringExpensePaymentReceiptSchema).min(1).max(25),
+}).strict();
+
+export type CreateFinanceRecurringExpenseProfileRequest = z.infer<typeof createFinanceRecurringExpenseProfileRequestSchema>;
+export type CreateFinanceRecurringExpensePaymentRequest = z.infer<typeof createFinanceRecurringExpensePaymentRequestSchema>;
+export type CreateFinanceRecurringExpensePaymentBatchRequest = z.infer<typeof createFinanceRecurringExpensePaymentBatchRequestSchema>;
+/** A bounded, server-authorized read model for the Operations expenses and obligations workspace. */
+export const expensesObligationsWorkspaceReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  businessDate: businessDateSchema,
+  configuration: financeConfigurationReceiptSchema,
+  loans: z.array(inclusiveLoanRecordSchema).max(500),
+  recurringProfiles: z.array(financeRecurringExpenseProfileSchema).max(500),
+  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(250),
+}).strict();
+export type ExpensesObligationsWorkspaceReceipt = z.infer<typeof expensesObligationsWorkspaceReceiptSchema>;
+export const treasuryTransferRequestSchema = z.object({
+  fromVaultId: z.string().uuid(),
+  toVaultId: z.string().uuid(),
+  amount: financeAmountSchema,
+  businessDate: financeDateSchema,
+  notes: z.string().trim().max(1_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const treasuryTransferReceiptSchema = z.object({
+  transferReference: z.string().uuid(),
+  journalEntryId: z.string().uuid(),
+  fromVaultId: z.string().uuid(),
+  toVaultId: z.string().uuid(),
+  amount: financeAmountSchema,
+}).strict();
+export const treasuryWorkspaceQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  includeArchived: z.coerce.boolean().optional().default(false),
+}).strict();
+const treasuryVaultSchema = z.object({
+  id: z.string().uuid(),
+  nameAr: z.string(),
+  nameEn: z.string(),
+  type: z.enum(["CASH", "BANK", "APP"]),
+  paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]),
+  paymentMethods: z.array(z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"])).min(1).max(3),
+  status: z.enum(["ACTIVE", "ARCHIVED"]),
+  isSalesChannel: z.boolean(),
+  isPaymentDestination: z.boolean(),
+  sortOrder: z.number().int().min(0).max(10_000),
+  balanceAsOf: financeAmountSchema,
+  inflow: financeAmountSchema,
+  outflow: financeAmountSchema,
+}).strict();
+const treasuryGroupSchema = z.object({
+  key: z.enum(["COLLECTION_CHANNELS", "OTHER_VAULTS", "ARCHIVED"]),
+  count: z.number().int().min(0).max(500),
+  balanceAsOf: financeAmountSchema,
+  inflow: financeAmountSchema,
+  outflow: financeAmountSchema,
+}).strict();
+export const treasuryWorkspaceReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  businessDate: businessDateSchema,
+  asOfBusinessDate: businessDateSchema,
+  fromBusinessDate: businessDateSchema.nullable(),
+  toBusinessDate: businessDateSchema.nullable(),
+  summary: z.object({ balanceAsOf: financeAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeAmountSchema }).strict(),
+  groups: z.array(treasuryGroupSchema).length(3),
+  vaults: z.array(treasuryVaultSchema).max(500),
+}).strict();
+export const treasuryVaultActivityQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
+}).strict();
+export const treasuryVaultActivityReceiptSchema = z.object({
+  vault: treasuryVaultSchema,
+  asOfBusinessDate: businessDateSchema,
+  fromBusinessDate: businessDateSchema.nullable(),
+  toBusinessDate: businessDateSchema.nullable(),
+  summary: z.object({ balanceAsOf: financeAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeAmountSchema }).strict(),
+  items: z.array(z.object({
+    id: z.string().uuid(),
+    journalEntryId: z.string().uuid(),
+    businessDate: businessDateSchema,
+    sourceType: z.string(),
+    sourceReference: z.string(),
+    description: z.string().nullable(),
+    counterpartNameAr: z.string().nullable(),
+    counterpartNameEn: z.string().nullable(),
+    inflow: financeAmountSchema,
+    outflow: financeAmountSchema,
+  }).strict()).max(100),
+  nextCursor: z.string().uuid().nullable(),
+}).strict();
+const financeInvoiceRegisterKindSchema = z.enum(["SALE", "PURCHASE", "EXPENSE", "OBLIGATION", "OTHER"]);
+const financeInvoiceRegisterStatusSchema = z.enum(["POSTED", "CANCELLED"]);
+
+export const financeInvoiceRegisterQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  businessMonths: z.string().trim().regex(/^\d{4}-\d{2}(,\d{4}-\d{2})*$/).optional(),
+  kinds: z.string().trim().regex(/^(SALE|PURCHASE|EXPENSE|OBLIGATION|OTHER)(,(SALE|PURCHASE|EXPENSE|OBLIGATION|OTHER))*$/).optional(),
+  supplierIds: z.string().trim().regex(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(,\w{8}-\w{4}-\w{4}-\w{4}-\w{12})*$/).optional(),
+  categoryIds: z.string().trim().regex(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(,\w{8}-\w{4}-\w{4}-\w{4}-\w{12})*$/).optional(),
+  statuses: z.string().trim().regex(/^(POSTED|CANCELLED)(,(POSTED|CANCELLED))*$/).optional(),
+  q: z.string().trim().min(1).max(160).optional(),
+}).strict();
+
+const financeInvoiceRegisterOptionSchema = z.object({ id: z.string().uuid(), nameAr: z.string().min(1).max(160), nameEn: z.string().max(160).nullable() }).strict();
+export const financeInvoiceRegisterReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  appliedPeriod: z.object({ fromBusinessDate: businessDateSchema.nullable(), toBusinessDate: businessDateSchema.nullable(), businessMonths: z.array(z.string().regex(/^\d{4}-\d{2}$/)).max(24) }).strict(),
+  summary: z.object({ documentCount: z.number().int().nonnegative(), salesCount: z.number().int().nonnegative(), purchaseCount: z.number().int().nonnegative(), expenseCount: z.number().int().nonnegative(), obligationCount: z.number().int().nonnegative(), otherCount: z.number().int().nonnegative(), paidCount: z.number().int().nonnegative(), payableCount: z.number().int().nonnegative(), grossAmount: financeAmountSchema, netAmount: financeAmountSchema, vatAmount: financeAmountSchema }).strict(),
+  filters: z.object({ suppliers: z.array(financeInvoiceRegisterOptionSchema).max(1000), categories: z.array(financeInvoiceRegisterOptionSchema).max(500) }).strict(),
+  records: z.array(z.object({
+    id: z.string().uuid(), source: z.enum(["DAILY_SALES", "OUTFLOW_DOCUMENT", "SUPPLIER_DUE_PAYMENT", "LOAN_OPENING", "LOAN_REPAYMENT", "JOURNAL"]), sourceType: z.string().min(1).max(80), documentNumber: z.string().min(1).max(160), businessDate: businessDateSchema, supplierInvoiceDate: businessDateSchema.nullable(), kind: financeInvoiceRegisterKindSchema, settlementKind: financeOutflowSettlementSchema.nullable(), status: financeInvoiceRegisterStatusSchema, supplier: financeInvoiceRegisterOptionSchema.nullable(), category: financeInvoiceRegisterOptionSchema.nullable(), grossAmount: financeAmountSchema, netAmount: financeAmountSchema, vatAmount: financeAmountSchema, journalEntryId: z.string().uuid(), batchNumber: z.string().max(80).nullable(), notes: z.string().max(2_000).nullable(), recurring: z.boolean(), createdAt: z.date(),
+  }).strict()).max(500),
+  hasMore: z.boolean(),
+}).strict();
+export type FinanceInvoiceRegisterReceipt = z.infer<typeof financeInvoiceRegisterReceiptSchema>;

@@ -27,6 +27,9 @@ export type AggregateFinanceOutflowDocument = {
 }
 
 export type FinanceOutflowDocumentAvgAggregateOutputType = {
+  coverageYear: number | null
+  coverageStartMonth: number | null
+  coverageMonths: number | null
   grossAmount: runtime.Decimal | null
   netAmount: runtime.Decimal | null
   vatAmount: runtime.Decimal | null
@@ -34,6 +37,9 @@ export type FinanceOutflowDocumentAvgAggregateOutputType = {
 }
 
 export type FinanceOutflowDocumentSumAggregateOutputType = {
+  coverageYear: number | null
+  coverageStartMonth: number | null
+  coverageMonths: number | null
   grossAmount: runtime.Decimal | null
   netAmount: runtime.Decimal | null
   vatAmount: runtime.Decimal | null
@@ -49,6 +55,10 @@ export type FinanceOutflowDocumentMinAggregateOutputType = {
   settlementKind: $Enums.FinanceOutflowSettlementKind | null
   documentNumber: string | null
   batchId: string | null
+  recurringExpenseProfileId: string | null
+  coverageYear: number | null
+  coverageStartMonth: number | null
+  coverageMonths: number | null
   supplierId: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
@@ -76,6 +86,10 @@ export type FinanceOutflowDocumentMaxAggregateOutputType = {
   settlementKind: $Enums.FinanceOutflowSettlementKind | null
   documentNumber: string | null
   batchId: string | null
+  recurringExpenseProfileId: string | null
+  coverageYear: number | null
+  coverageStartMonth: number | null
+  coverageMonths: number | null
   supplierId: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
@@ -103,6 +117,10 @@ export type FinanceOutflowDocumentCountAggregateOutputType = {
   settlementKind: number
   documentNumber: number
   batchId: number
+  recurringExpenseProfileId: number
+  coverageYear: number
+  coverageStartMonth: number
+  coverageMonths: number
   supplierId: number
   categoryId: number
   supplierInvoiceNumber: number
@@ -124,6 +142,9 @@ export type FinanceOutflowDocumentCountAggregateOutputType = {
 
 
 export type FinanceOutflowDocumentAvgAggregateInputType = {
+  coverageYear?: true
+  coverageStartMonth?: true
+  coverageMonths?: true
   grossAmount?: true
   netAmount?: true
   vatAmount?: true
@@ -131,6 +152,9 @@ export type FinanceOutflowDocumentAvgAggregateInputType = {
 }
 
 export type FinanceOutflowDocumentSumAggregateInputType = {
+  coverageYear?: true
+  coverageStartMonth?: true
+  coverageMonths?: true
   grossAmount?: true
   netAmount?: true
   vatAmount?: true
@@ -146,6 +170,10 @@ export type FinanceOutflowDocumentMinAggregateInputType = {
   settlementKind?: true
   documentNumber?: true
   batchId?: true
+  recurringExpenseProfileId?: true
+  coverageYear?: true
+  coverageStartMonth?: true
+  coverageMonths?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -173,6 +201,10 @@ export type FinanceOutflowDocumentMaxAggregateInputType = {
   settlementKind?: true
   documentNumber?: true
   batchId?: true
+  recurringExpenseProfileId?: true
+  coverageYear?: true
+  coverageStartMonth?: true
+  coverageMonths?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -200,6 +232,10 @@ export type FinanceOutflowDocumentCountAggregateInputType = {
   settlementKind?: true
   documentNumber?: true
   batchId?: true
+  recurringExpenseProfileId?: true
+  coverageYear?: true
+  coverageStartMonth?: true
+  coverageMonths?: true
   supplierId?: true
   categoryId?: true
   supplierInvoiceNumber?: true
@@ -314,6 +350,10 @@ export type FinanceOutflowDocumentGroupByOutputType = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId: string | null
+  recurringExpenseProfileId: string | null
+  coverageYear: number | null
+  coverageStartMonth: number | null
+  coverageMonths: number | null
   supplierId: string | null
   categoryId: string
   supplierInvoiceNumber: string | null
@@ -364,6 +404,10 @@ export type FinanceOutflowDocumentWhereInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
   batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  recurringExpenseProfileId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  coverageYear?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -382,10 +426,12 @@ export type FinanceOutflowDocumentWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   batch?: Prisma.XOR<Prisma.FinanceOutflowBatchNullableScalarRelationFilter, Prisma.FinanceOutflowBatchWhereInput> | null
+  recurringExpenseProfile?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileNullableScalarRelationFilter, Prisma.FinanceRecurringExpenseProfileWhereInput> | null
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.FinanceOutflowAllocationListRelationFilter
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
 }
 
 export type FinanceOutflowDocumentOrderByWithRelationInput = {
@@ -397,6 +443,10 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
   batchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringExpenseProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -415,10 +465,12 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   batch?: Prisma.FinanceOutflowBatchOrderByWithRelationInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileOrderByWithRelationInput
   supplier?: Prisma.FinanceSupplierOrderByWithRelationInput
   category?: Prisma.FinanceCategoryOrderByWithRelationInput
   journalEntry?: Prisma.FinanceJournalEntryOrderByWithRelationInput
   allocations?: Prisma.FinanceOutflowAllocationOrderByRelationAggregateInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageOrderByRelationAggregateInput
 }
 
 export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -436,6 +488,10 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
   batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  recurringExpenseProfileId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  coverageYear?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -454,10 +510,12 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   batch?: Prisma.XOR<Prisma.FinanceOutflowBatchNullableScalarRelationFilter, Prisma.FinanceOutflowBatchWhereInput> | null
+  recurringExpenseProfile?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileNullableScalarRelationFilter, Prisma.FinanceRecurringExpenseProfileWhereInput> | null
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.FinanceOutflowAllocationListRelationFilter
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
 }, "id" | "id_tenantId_companyId" | "journalEntryId_tenantId_companyId" | "companyId_documentNumber">
 
 export type FinanceOutflowDocumentOrderByWithAggregationInput = {
@@ -469,6 +527,10 @@ export type FinanceOutflowDocumentOrderByWithAggregationInput = {
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
   batchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringExpenseProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -504,6 +566,10 @@ export type FinanceOutflowDocumentScalarWhereWithAggregatesInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindWithAggregatesFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringWithAggregatesFilter<"FinanceOutflowDocument"> | string
   batchId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
+  recurringExpenseProfileId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
+  coverageYear?: Prisma.IntNullableWithAggregatesFilter<"FinanceOutflowDocument"> | number | null
+  coverageStartMonth?: Prisma.IntNullableWithAggregatesFilter<"FinanceOutflowDocument"> | number | null
+  coverageMonths?: Prisma.IntNullableWithAggregatesFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidWithAggregatesFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
@@ -528,6 +594,9 @@ export type FinanceOutflowDocumentCreateInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -543,10 +612,12 @@ export type FinanceOutflowDocumentCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateInput = {
@@ -558,6 +629,10 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -575,6 +650,7 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUpdateInput = {
@@ -583,6 +659,9 @@ export type FinanceOutflowDocumentUpdateInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -598,10 +677,12 @@ export type FinanceOutflowDocumentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateInput = {
@@ -613,6 +694,10 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -630,6 +715,7 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyInput = {
@@ -641,6 +727,10 @@ export type FinanceOutflowDocumentCreateManyInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -665,6 +755,9 @@ export type FinanceOutflowDocumentUpdateManyMutationInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -689,6 +782,10 @@ export type FinanceOutflowDocumentUncheckedUpdateManyInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -748,6 +845,10 @@ export type FinanceOutflowDocumentCountOrderByAggregateInput = {
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
   batchId?: Prisma.SortOrder
+  recurringExpenseProfileId?: Prisma.SortOrder
+  coverageYear?: Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -767,6 +868,9 @@ export type FinanceOutflowDocumentCountOrderByAggregateInput = {
 }
 
 export type FinanceOutflowDocumentAvgOrderByAggregateInput = {
+  coverageYear?: Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
   netAmount?: Prisma.SortOrder
   vatAmount?: Prisma.SortOrder
@@ -782,6 +886,10 @@ export type FinanceOutflowDocumentMaxOrderByAggregateInput = {
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
   batchId?: Prisma.SortOrder
+  recurringExpenseProfileId?: Prisma.SortOrder
+  coverageYear?: Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -809,6 +917,10 @@ export type FinanceOutflowDocumentMinOrderByAggregateInput = {
   settlementKind?: Prisma.SortOrder
   documentNumber?: Prisma.SortOrder
   batchId?: Prisma.SortOrder
+  recurringExpenseProfileId?: Prisma.SortOrder
+  coverageYear?: Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
@@ -828,6 +940,9 @@ export type FinanceOutflowDocumentMinOrderByAggregateInput = {
 }
 
 export type FinanceOutflowDocumentSumOrderByAggregateInput = {
+  coverageYear?: Prisma.SortOrder
+  coverageStartMonth?: Prisma.SortOrder
+  coverageMonths?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
   netAmount?: Prisma.SortOrder
   vatAmount?: Prisma.SortOrder
@@ -1065,12 +1180,73 @@ export type FinanceOutflowDocumentUpdateOneRequiredWithoutAllocationsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateToOneWithWhereWithoutAllocationsInput, Prisma.FinanceOutflowDocumentUpdateWithoutAllocationsInput>, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput>
 }
 
+export type FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput> | Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInputEnvelope
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+}
+
+export type FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput> | Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInputEnvelope
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+}
+
+export type FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput> | Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput[]
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutRecurringExpenseProfileInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInputEnvelope
+  set?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  disconnect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  delete?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  update?: Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutRecurringExpenseProfileInput[]
+  updateMany?: Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutRecurringExpenseProfileInput[]
+  deleteMany?: Prisma.FinanceOutflowDocumentScalarWhereInput | Prisma.FinanceOutflowDocumentScalarWhereInput[]
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput> | Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput[]
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput[]
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpsertWithWhereUniqueWithoutRecurringExpenseProfileInput[]
+  createMany?: Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInputEnvelope
+  set?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  disconnect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  delete?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput | Prisma.FinanceOutflowDocumentWhereUniqueInput[]
+  update?: Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutRecurringExpenseProfileInput[]
+  updateMany?: Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutRecurringExpenseProfileInput[]
+  deleteMany?: Prisma.FinanceOutflowDocumentScalarWhereInput | Prisma.FinanceOutflowDocumentScalarWhereInput[]
+}
+
+export type FinanceOutflowDocumentCreateNestedOneWithoutRecurringCoverageInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringCoverageInput
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+}
+
+export type FinanceOutflowDocumentUpdateOneWithoutRecurringCoverageNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringCoverageInput
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithoutRecurringCoverageInput
+  disconnect?: Prisma.FinanceOutflowDocumentWhereInput | boolean
+  delete?: Prisma.FinanceOutflowDocumentWhereInput | boolean
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateToOneWithWhereWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput>, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput>
+}
+
 export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   id?: string
   kind: $Enums.FinanceOutflowDocumentKind
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1085,10 +1261,12 @@ export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
@@ -1098,6 +1276,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1115,6 +1297,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCompanyInput = {
@@ -1155,6 +1338,10 @@ export type FinanceOutflowDocumentScalarWhereInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFilter<"FinanceOutflowDocument"> | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFilter<"FinanceOutflowDocument"> | string
   batchId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  recurringExpenseProfileId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  coverageYear?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
+  coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -1179,6 +1366,9 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1194,9 +1384,11 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
@@ -1206,6 +1398,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1222,6 +1418,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCategoryInput = {
@@ -1256,6 +1453,9 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1271,9 +1471,11 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
@@ -1283,6 +1485,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1299,6 +1505,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutSupplierInput = {
@@ -1333,6 +1540,9 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1348,9 +1558,11 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
@@ -1360,6 +1572,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1376,6 +1592,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutJournalEntryInput = {
@@ -1400,6 +1617,9 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1415,9 +1635,11 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
@@ -1427,6 +1649,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1443,6 +1669,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutBatchInput = {
@@ -1451,6 +1678,9 @@ export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1465,10 +1695,12 @@ export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
@@ -1477,6 +1709,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1494,6 +1730,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutBatchInput = {
@@ -1528,6 +1765,9 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1543,9 +1783,11 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
   batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
@@ -1557,6 +1799,10 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1573,6 +1819,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutAllocationsInput = {
@@ -1597,6 +1844,9 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1612,9 +1862,11 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
@@ -1626,6 +1878,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1642,6 +1898,236 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
+  journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  batchId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput>
+}
+
+export type FinanceOutflowDocumentCreateManyRecurringExpenseProfileInputEnvelope = {
+  data: Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateManyRecurringExpenseProfileInput[]
+  skipDuplicates?: boolean
+}
+
+export type FinanceOutflowDocumentUpsertWithWhereUniqueWithoutRecurringExpenseProfileInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  update: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileInput>
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput>
+}
+
+export type FinanceOutflowDocumentUpdateWithWhereUniqueWithoutRecurringExpenseProfileInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileInput>
+}
+
+export type FinanceOutflowDocumentUpdateManyWithWhereWithoutRecurringExpenseProfileInput = {
+  where: Prisma.FinanceOutflowDocumentScalarWhereInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateManyMutationInput, Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileInput>
+}
+
+export type FinanceOutflowDocumentCreateWithoutRecurringCoverageInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
+  journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringCoverageInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput>
+}
+
+export type FinanceOutflowDocumentUpsertWithoutRecurringCoverageInput = {
+  update: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput>
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput>
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+}
+
+export type FinanceOutflowDocumentUpdateToOneWithWhereWithoutRecurringCoverageInput = {
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput>
+}
+
+export type FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyCompanyInput = {
@@ -1651,6 +2137,10 @@ export type FinanceOutflowDocumentCreateManyCompanyInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1675,6 +2165,9 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1689,10 +2182,12 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
@@ -1702,6 +2197,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1719,6 +2218,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
@@ -1728,6 +2228,10 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1753,6 +2257,10 @@ export type FinanceOutflowDocumentCreateManyCategoryInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1776,6 +2284,9 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1791,9 +2302,11 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
@@ -1803,6 +2316,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1819,6 +2336,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
@@ -1828,6 +2346,10 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1852,6 +2374,10 @@ export type FinanceOutflowDocumentCreateManySupplierInput = {
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
   batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1875,6 +2401,9 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1890,9 +2419,11 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
@@ -1902,6 +2433,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1918,6 +2453,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
@@ -1927,6 +2463,10 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
   batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1950,6 +2490,10 @@ export type FinanceOutflowDocumentCreateManyBatchInput = {
   status?: $Enums.FinanceOutflowDocumentStatus
   settlementKind: $Enums.FinanceOutflowSettlementKind
   documentNumber: string
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
   supplierId?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
@@ -1974,6 +2518,9 @@ export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1988,10 +2535,12 @@ export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
@@ -2000,6 +2549,10 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2017,6 +2570,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
@@ -2025,6 +2579,127 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
   status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
   settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
   documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FinanceOutflowDocumentCreateManyRecurringExpenseProfileInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  batchId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2050,10 +2725,12 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
 
 export type FinanceOutflowDocumentCountOutputType = {
   allocations: number
+  recurringCoverage: number
 }
 
 export type FinanceOutflowDocumentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   allocations?: boolean | FinanceOutflowDocumentCountOutputTypeCountAllocationsArgs
+  recurringCoverage?: boolean | FinanceOutflowDocumentCountOutputTypeCountRecurringCoverageArgs
 }
 
 /**
@@ -2073,6 +2750,13 @@ export type FinanceOutflowDocumentCountOutputTypeCountAllocationsArgs<ExtArgs ex
   where?: Prisma.FinanceOutflowAllocationWhereInput
 }
 
+/**
+ * FinanceOutflowDocumentCountOutputType without action
+ */
+export type FinanceOutflowDocumentCountOutputTypeCountRecurringCoverageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceRecurringExpenseCoverageWhereInput
+}
+
 
 export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2083,6 +2767,10 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   settlementKind?: boolean
   documentNumber?: boolean
   batchId?: boolean
+  recurringExpenseProfileId?: boolean
+  coverageYear?: boolean
+  coverageStartMonth?: boolean
+  coverageMonths?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -2101,10 +2789,12 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>
+  recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeOutflowDocument"]>
 
@@ -2117,6 +2807,10 @@ export type FinanceOutflowDocumentSelectCreateManyAndReturn<ExtArgs extends runt
   settlementKind?: boolean
   documentNumber?: boolean
   batchId?: boolean
+  recurringExpenseProfileId?: boolean
+  coverageYear?: boolean
+  coverageStartMonth?: boolean
+  coverageMonths?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -2135,6 +2829,7 @@ export type FinanceOutflowDocumentSelectCreateManyAndReturn<ExtArgs extends runt
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -2149,6 +2844,10 @@ export type FinanceOutflowDocumentSelectUpdateManyAndReturn<ExtArgs extends runt
   settlementKind?: boolean
   documentNumber?: boolean
   batchId?: boolean
+  recurringExpenseProfileId?: boolean
+  coverageYear?: boolean
+  coverageStartMonth?: boolean
+  coverageMonths?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -2167,6 +2866,7 @@ export type FinanceOutflowDocumentSelectUpdateManyAndReturn<ExtArgs extends runt
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -2181,6 +2881,10 @@ export type FinanceOutflowDocumentSelectScalar = {
   settlementKind?: boolean
   documentNumber?: boolean
   batchId?: boolean
+  recurringExpenseProfileId?: boolean
+  coverageYear?: boolean
+  coverageStartMonth?: boolean
+  coverageMonths?: boolean
   supplierId?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
@@ -2199,19 +2903,22 @@ export type FinanceOutflowDocumentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "batchId" | "supplierId" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "notes" | "journalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
+export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "batchId" | "recurringExpenseProfileId" | "coverageYear" | "coverageStartMonth" | "coverageMonths" | "supplierId" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "notes" | "journalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
 export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>
+  recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceOutflowDocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -2219,6 +2926,7 @@ export type FinanceOutflowDocumentIncludeCreateManyAndReturn<ExtArgs extends run
 export type FinanceOutflowDocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
+  recurringExpenseProfile?: boolean | Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
@@ -2229,10 +2937,12 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     batch: Prisma.$FinanceOutflowBatchPayload<ExtArgs> | null
+    recurringExpenseProfile: Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs> | null
     supplier: Prisma.$FinanceSupplierPayload<ExtArgs> | null
     category: Prisma.$FinanceCategoryPayload<ExtArgs>
     journalEntry: Prisma.$FinanceJournalEntryPayload<ExtArgs>
     allocations: Prisma.$FinanceOutflowAllocationPayload<ExtArgs>[]
+    recurringCoverage: Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2243,6 +2953,10 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
     settlementKind: $Enums.FinanceOutflowSettlementKind
     documentNumber: string
     batchId: string | null
+    recurringExpenseProfileId: string | null
+    coverageYear: number | null
+    coverageStartMonth: number | null
+    coverageMonths: number | null
     supplierId: string | null
     categoryId: string
     supplierInvoiceNumber: string | null
@@ -2655,10 +3369,12 @@ export interface Prisma__FinanceOutflowDocumentClient<T, Null = never, ExtArgs e
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   batch<T extends Prisma.FinanceOutflowDocument$batchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>>): Prisma.Prisma__FinanceOutflowBatchClient<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  recurringExpenseProfile<T extends Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs>>): Prisma.Prisma__FinanceRecurringExpenseProfileClient<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   supplier<T extends Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$supplierArgs<ExtArgs>>): Prisma.Prisma__FinanceSupplierClient<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.FinanceCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceCategoryClient<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   journalEntry<T extends Prisma.FinanceJournalEntryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceJournalEntryClient<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   allocations<T extends Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recurringCoverage<T extends Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2696,6 +3412,10 @@ export interface FinanceOutflowDocumentFieldRefs {
   readonly settlementKind: Prisma.FieldRef<"FinanceOutflowDocument", 'FinanceOutflowSettlementKind'>
   readonly documentNumber: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly batchId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
+  readonly recurringExpenseProfileId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
+  readonly coverageYear: Prisma.FieldRef<"FinanceOutflowDocument", 'Int'>
+  readonly coverageStartMonth: Prisma.FieldRef<"FinanceOutflowDocument", 'Int'>
+  readonly coverageMonths: Prisma.FieldRef<"FinanceOutflowDocument", 'Int'>
   readonly supplierId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly categoryId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly supplierInvoiceNumber: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
@@ -3132,6 +3852,25 @@ export type FinanceOutflowDocument$batchArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
+ * FinanceOutflowDocument.recurringExpenseProfile
+ */
+export type FinanceOutflowDocument$recurringExpenseProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceRecurringExpenseProfile
+   */
+  select?: Prisma.FinanceRecurringExpenseProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceRecurringExpenseProfile
+   */
+  omit?: Prisma.FinanceRecurringExpenseProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceRecurringExpenseProfileInclude<ExtArgs> | null
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+}
+
+/**
  * FinanceOutflowDocument.supplier
  */
 export type FinanceOutflowDocument$supplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3172,6 +3911,30 @@ export type FinanceOutflowDocument$allocationsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.FinanceOutflowAllocationScalarFieldEnum | Prisma.FinanceOutflowAllocationScalarFieldEnum[]
+}
+
+/**
+ * FinanceOutflowDocument.recurringCoverage
+ */
+export type FinanceOutflowDocument$recurringCoverageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceRecurringExpenseCoverage
+   */
+  select?: Prisma.FinanceRecurringExpenseCoverageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceRecurringExpenseCoverage
+   */
+  omit?: Prisma.FinanceRecurringExpenseCoverageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceRecurringExpenseCoverageInclude<ExtArgs> | null
+  where?: Prisma.FinanceRecurringExpenseCoverageWhereInput
+  orderBy?: Prisma.FinanceRecurringExpenseCoverageOrderByWithRelationInput | Prisma.FinanceRecurringExpenseCoverageOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceRecurringExpenseCoverageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum | Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum[]
 }
 
 /**

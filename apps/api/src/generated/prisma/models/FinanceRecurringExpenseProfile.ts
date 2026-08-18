@@ -47,6 +47,9 @@ export type FinanceRecurringExpenseProfileMinAggregateOutputType = {
   expectedAmount: runtime.Decimal | null
   intervalMonths: number | null
   nextReminderDate: Date | null
+  serviceNumber: string | null
+  defaultVaultId: string | null
+  allowAmountOverride: boolean | null
   status: $Enums.FinanceRecurringExpenseStatus | null
   notes: string | null
   createdAt: Date | null
@@ -64,6 +67,9 @@ export type FinanceRecurringExpenseProfileMaxAggregateOutputType = {
   expectedAmount: runtime.Decimal | null
   intervalMonths: number | null
   nextReminderDate: Date | null
+  serviceNumber: string | null
+  defaultVaultId: string | null
+  allowAmountOverride: boolean | null
   status: $Enums.FinanceRecurringExpenseStatus | null
   notes: string | null
   createdAt: Date | null
@@ -81,6 +87,9 @@ export type FinanceRecurringExpenseProfileCountAggregateOutputType = {
   expectedAmount: number
   intervalMonths: number
   nextReminderDate: number
+  serviceNumber: number
+  defaultVaultId: number
+  allowAmountOverride: number
   status: number
   notes: number
   createdAt: number
@@ -110,6 +119,9 @@ export type FinanceRecurringExpenseProfileMinAggregateInputType = {
   expectedAmount?: true
   intervalMonths?: true
   nextReminderDate?: true
+  serviceNumber?: true
+  defaultVaultId?: true
+  allowAmountOverride?: true
   status?: true
   notes?: true
   createdAt?: true
@@ -127,6 +139,9 @@ export type FinanceRecurringExpenseProfileMaxAggregateInputType = {
   expectedAmount?: true
   intervalMonths?: true
   nextReminderDate?: true
+  serviceNumber?: true
+  defaultVaultId?: true
+  allowAmountOverride?: true
   status?: true
   notes?: true
   createdAt?: true
@@ -144,6 +159,9 @@ export type FinanceRecurringExpenseProfileCountAggregateInputType = {
   expectedAmount?: true
   intervalMonths?: true
   nextReminderDate?: true
+  serviceNumber?: true
+  defaultVaultId?: true
+  allowAmountOverride?: true
   status?: true
   notes?: true
   createdAt?: true
@@ -248,6 +266,9 @@ export type FinanceRecurringExpenseProfileGroupByOutputType = {
   expectedAmount: runtime.Decimal
   intervalMonths: number
   nextReminderDate: Date
+  serviceNumber: string | null
+  defaultVaultId: string | null
+  allowAmountOverride: boolean
   status: $Enums.FinanceRecurringExpenseStatus
   notes: string | null
   createdAt: Date
@@ -288,6 +309,9 @@ export type FinanceRecurringExpenseProfileWhereInput = {
   expectedAmount?: Prisma.DecimalFilter<"FinanceRecurringExpenseProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFilter<"FinanceRecurringExpenseProfile"> | number
   nextReminderDate?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
+  serviceNumber?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  defaultVaultId?: Prisma.UuidNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  allowAmountOverride?: Prisma.BoolFilter<"FinanceRecurringExpenseProfile"> | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFilter<"FinanceRecurringExpenseProfile"> | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
@@ -295,6 +319,9 @@ export type FinanceRecurringExpenseProfileWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
+  defaultVault?: Prisma.XOR<Prisma.FinanceVaultNullableScalarRelationFilter, Prisma.FinanceVaultWhereInput> | null
+  documents?: Prisma.FinanceOutflowDocumentListRelationFilter
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
 }
 
 export type FinanceRecurringExpenseProfileOrderByWithRelationInput = {
@@ -308,6 +335,9 @@ export type FinanceRecurringExpenseProfileOrderByWithRelationInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
   nextReminderDate?: Prisma.SortOrder
+  serviceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultVaultId?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowAmountOverride?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -315,6 +345,9 @@ export type FinanceRecurringExpenseProfileOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   supplier?: Prisma.FinanceSupplierOrderByWithRelationInput
   category?: Prisma.FinanceCategoryOrderByWithRelationInput
+  defaultVault?: Prisma.FinanceVaultOrderByWithRelationInput
+  documents?: Prisma.FinanceOutflowDocumentOrderByRelationAggregateInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageOrderByRelationAggregateInput
 }
 
 export type FinanceRecurringExpenseProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +365,9 @@ export type FinanceRecurringExpenseProfileWhereUniqueInput = Prisma.AtLeast<{
   expectedAmount?: Prisma.DecimalFilter<"FinanceRecurringExpenseProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFilter<"FinanceRecurringExpenseProfile"> | number
   nextReminderDate?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
+  serviceNumber?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  defaultVaultId?: Prisma.UuidNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  allowAmountOverride?: Prisma.BoolFilter<"FinanceRecurringExpenseProfile"> | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFilter<"FinanceRecurringExpenseProfile"> | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
@@ -339,6 +375,9 @@ export type FinanceRecurringExpenseProfileWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryScalarRelationFilter, Prisma.FinanceCategoryWhereInput>
+  defaultVault?: Prisma.XOR<Prisma.FinanceVaultNullableScalarRelationFilter, Prisma.FinanceVaultWhereInput> | null
+  documents?: Prisma.FinanceOutflowDocumentListRelationFilter
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type FinanceRecurringExpenseProfileOrderByWithAggregationInput = {
@@ -352,6 +391,9 @@ export type FinanceRecurringExpenseProfileOrderByWithAggregationInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
   nextReminderDate?: Prisma.SortOrder
+  serviceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultVaultId?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowAmountOverride?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -377,6 +419,9 @@ export type FinanceRecurringExpenseProfileScalarWhereWithAggregatesInput = {
   expectedAmount?: Prisma.DecimalWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | number
   nextReminderDate?: Prisma.DateTimeWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | Date | string
+  serviceNumber?: Prisma.StringNullableWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | string | null
+  defaultVaultId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | string | null
+  allowAmountOverride?: Prisma.BoolWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.StringNullableWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceRecurringExpenseProfile"> | Date | string
@@ -390,6 +435,8 @@ export type FinanceRecurringExpenseProfileCreateInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
@@ -397,6 +444,9 @@ export type FinanceRecurringExpenseProfileCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedCreateInput = {
@@ -410,10 +460,15 @@ export type FinanceRecurringExpenseProfileUncheckedCreateInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileUpdateInput = {
@@ -423,6 +478,8 @@ export type FinanceRecurringExpenseProfileUpdateInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +487,9 @@ export type FinanceRecurringExpenseProfileUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateInput = {
@@ -443,10 +503,15 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileCreateManyInput = {
@@ -460,6 +525,9 @@ export type FinanceRecurringExpenseProfileCreateManyInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
@@ -473,6 +541,8 @@ export type FinanceRecurringExpenseProfileUpdateManyMutationInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -490,6 +560,9 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateManyInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -504,6 +577,11 @@ export type FinanceRecurringExpenseProfileListRelationFilter = {
 
 export type FinanceRecurringExpenseProfileOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FinanceRecurringExpenseProfileNullableScalarRelationFilter = {
+  is?: Prisma.FinanceRecurringExpenseProfileWhereInput | null
+  isNot?: Prisma.FinanceRecurringExpenseProfileWhereInput | null
 }
 
 export type FinanceRecurringExpenseProfileIdTenantIdCompanyIdCompoundUniqueInput = {
@@ -523,6 +601,9 @@ export type FinanceRecurringExpenseProfileCountOrderByAggregateInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
   nextReminderDate?: Prisma.SortOrder
+  serviceNumber?: Prisma.SortOrder
+  defaultVaultId?: Prisma.SortOrder
+  allowAmountOverride?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -545,6 +626,9 @@ export type FinanceRecurringExpenseProfileMaxOrderByAggregateInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
   nextReminderDate?: Prisma.SortOrder
+  serviceNumber?: Prisma.SortOrder
+  defaultVaultId?: Prisma.SortOrder
+  allowAmountOverride?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -562,6 +646,9 @@ export type FinanceRecurringExpenseProfileMinOrderByAggregateInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
   nextReminderDate?: Prisma.SortOrder
+  serviceNumber?: Prisma.SortOrder
+  defaultVaultId?: Prisma.SortOrder
+  allowAmountOverride?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -571,6 +658,11 @@ export type FinanceRecurringExpenseProfileMinOrderByAggregateInput = {
 export type FinanceRecurringExpenseProfileSumOrderByAggregateInput = {
   expectedAmount?: Prisma.SortOrder
   intervalMonths?: Prisma.SortOrder
+}
+
+export type FinanceRecurringExpenseProfileScalarRelationFilter = {
+  is?: Prisma.FinanceRecurringExpenseProfileWhereInput
+  isNot?: Prisma.FinanceRecurringExpenseProfileWhereInput
 }
 
 export type FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput = {
@@ -699,8 +791,80 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNest
   deleteMany?: Prisma.FinanceRecurringExpenseProfileScalarWhereInput | Prisma.FinanceRecurringExpenseProfileScalarWhereInput[]
 }
 
+export type FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput> | Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput[] | Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput[]
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput[]
+  createMany?: Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInputEnvelope
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+}
+
+export type FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput> | Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput[] | Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput[]
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput[]
+  createMany?: Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInputEnvelope
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+}
+
+export type FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput> | Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput[] | Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput[]
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput[]
+  upsert?: Prisma.FinanceRecurringExpenseProfileUpsertWithWhereUniqueWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpsertWithWhereUniqueWithoutDefaultVaultInput[]
+  createMany?: Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInputEnvelope
+  set?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  disconnect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  delete?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  update?: Prisma.FinanceRecurringExpenseProfileUpdateWithWhereUniqueWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpdateWithWhereUniqueWithoutDefaultVaultInput[]
+  updateMany?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutDefaultVaultInput[]
+  deleteMany?: Prisma.FinanceRecurringExpenseProfileScalarWhereInput | Prisma.FinanceRecurringExpenseProfileScalarWhereInput[]
+}
+
+export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput> | Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput[] | Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput[]
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput[]
+  upsert?: Prisma.FinanceRecurringExpenseProfileUpsertWithWhereUniqueWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpsertWithWhereUniqueWithoutDefaultVaultInput[]
+  createMany?: Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInputEnvelope
+  set?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  disconnect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  delete?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput | Prisma.FinanceRecurringExpenseProfileWhereUniqueInput[]
+  update?: Prisma.FinanceRecurringExpenseProfileUpdateWithWhereUniqueWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpdateWithWhereUniqueWithoutDefaultVaultInput[]
+  updateMany?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutDefaultVaultInput[]
+  deleteMany?: Prisma.FinanceRecurringExpenseProfileScalarWhereInput | Prisma.FinanceRecurringExpenseProfileScalarWhereInput[]
+}
+
+export type FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+}
+
+export type FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.FinanceRecurringExpenseProfileUpsertWithoutDocumentsInput
+  disconnect?: Prisma.FinanceRecurringExpenseProfileWhereInput | boolean
+  delete?: Prisma.FinanceRecurringExpenseProfileWhereInput | boolean
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateToOneWithWhereWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUpdateWithoutDocumentsInput>, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutDocumentsInput>
+}
+
 export type EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput = {
   set?: $Enums.FinanceRecurringExpenseStatus
+}
+
+export type FinanceRecurringExpenseProfileCreateNestedOneWithoutCoverageSlotsInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutCoverageSlotsInput>
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutCoverageSlotsInput
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+}
+
+export type FinanceRecurringExpenseProfileUpdateOneRequiredWithoutCoverageSlotsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutCoverageSlotsInput>
+  connectOrCreate?: Prisma.FinanceRecurringExpenseProfileCreateOrConnectWithoutCoverageSlotsInput
+  upsert?: Prisma.FinanceRecurringExpenseProfileUpsertWithoutCoverageSlotsInput
+  connect?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateToOneWithWhereWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUpdateWithoutCoverageSlotsInput>, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutCoverageSlotsInput>
 }
 
 export type FinanceRecurringExpenseProfileCreateWithoutCompanyInput = {
@@ -710,12 +874,17 @@ export type FinanceRecurringExpenseProfileCreateWithoutCompanyInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedCreateWithoutCompanyInput = {
@@ -727,10 +896,15 @@ export type FinanceRecurringExpenseProfileUncheckedCreateWithoutCompanyInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileCreateOrConnectWithoutCompanyInput = {
@@ -773,6 +947,9 @@ export type FinanceRecurringExpenseProfileScalarWhereInput = {
   expectedAmount?: Prisma.DecimalFilter<"FinanceRecurringExpenseProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFilter<"FinanceRecurringExpenseProfile"> | number
   nextReminderDate?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
+  serviceNumber?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  defaultVaultId?: Prisma.UuidNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
+  allowAmountOverride?: Prisma.BoolFilter<"FinanceRecurringExpenseProfile"> | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFilter<"FinanceRecurringExpenseProfile"> | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.StringNullableFilter<"FinanceRecurringExpenseProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FinanceRecurringExpenseProfile"> | Date | string
@@ -786,12 +963,17 @@ export type FinanceRecurringExpenseProfileCreateWithoutCategoryInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedCreateWithoutCategoryInput = {
@@ -802,10 +984,15 @@ export type FinanceRecurringExpenseProfileUncheckedCreateWithoutCategoryInput = 
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileCreateOrConnectWithoutCategoryInput = {
@@ -841,12 +1028,17 @@ export type FinanceRecurringExpenseProfileCreateWithoutSupplierInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
   category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedCreateWithoutSupplierInput = {
@@ -857,10 +1049,15 @@ export type FinanceRecurringExpenseProfileUncheckedCreateWithoutSupplierInput = 
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type FinanceRecurringExpenseProfileCreateOrConnectWithoutSupplierInput = {
@@ -889,6 +1086,267 @@ export type FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutSupplierInpu
   data: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateManyMutationInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierInput>
 }
 
+export type FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput = {
+  id?: string
+  supplierId?: string | null
+  categoryId: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type FinanceRecurringExpenseProfileCreateOrConnectWithoutDefaultVaultInput = {
+  where: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput>
+}
+
+export type FinanceRecurringExpenseProfileCreateManyDefaultVaultInputEnvelope = {
+  data: Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInput | Prisma.FinanceRecurringExpenseProfileCreateManyDefaultVaultInput[]
+  skipDuplicates?: boolean
+}
+
+export type FinanceRecurringExpenseProfileUpsertWithWhereUniqueWithoutDefaultVaultInput = {
+  where: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutDefaultVaultInput>
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDefaultVaultInput>
+}
+
+export type FinanceRecurringExpenseProfileUpdateWithWhereUniqueWithoutDefaultVaultInput = {
+  where: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutDefaultVaultInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutDefaultVaultInput>
+}
+
+export type FinanceRecurringExpenseProfileUpdateManyWithWhereWithoutDefaultVaultInput = {
+  where: Prisma.FinanceRecurringExpenseProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateManyMutationInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultInput>
+}
+
+export type FinanceRecurringExpenseProfileCreateWithoutDocumentsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutProfileInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  supplierId?: string | null
+  categoryId: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type FinanceRecurringExpenseProfileCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDocumentsInput>
+}
+
+export type FinanceRecurringExpenseProfileUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+}
+
+export type FinanceRecurringExpenseProfileUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+  data: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutDocumentsInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type FinanceRecurringExpenseProfileUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type FinanceRecurringExpenseProfileCreateWithoutCoverageSlotsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutRecurringExpenseProfilesInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutRecurringExpenseProfilesInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutRecurringExpenseProfilesInput
+  defaultVault?: Prisma.FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput
+  documents?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedCreateWithoutCoverageSlotsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  supplierId?: string | null
+  categoryId: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutRecurringExpenseProfileInput
+}
+
+export type FinanceRecurringExpenseProfileCreateOrConnectWithoutCoverageSlotsInput = {
+  where: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutCoverageSlotsInput>
+}
+
+export type FinanceRecurringExpenseProfileUpsertWithoutCoverageSlotsInput = {
+  update: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutCoverageSlotsInput>
+  create: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileCreateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedCreateWithoutCoverageSlotsInput>
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+}
+
+export type FinanceRecurringExpenseProfileUpdateToOneWithWhereWithoutCoverageSlotsInput = {
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+  data: Prisma.XOR<Prisma.FinanceRecurringExpenseProfileUpdateWithoutCoverageSlotsInput, Prisma.FinanceRecurringExpenseProfileUncheckedUpdateWithoutCoverageSlotsInput>
+}
+
+export type FinanceRecurringExpenseProfileUpdateWithoutCoverageSlotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutCoverageSlotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+}
+
 export type FinanceRecurringExpenseProfileCreateManyCompanyInput = {
   id?: string
   supplierId?: string | null
@@ -898,6 +1356,9 @@ export type FinanceRecurringExpenseProfileCreateManyCompanyInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
@@ -911,12 +1372,17 @@ export type FinanceRecurringExpenseProfileUpdateWithoutCompanyInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutCompanyInput = {
@@ -928,10 +1394,15 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutCompanyInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyInput = {
@@ -943,6 +1414,9 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyInput
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -957,6 +1431,9 @@ export type FinanceRecurringExpenseProfileCreateManyCategoryInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
@@ -970,12 +1447,17 @@ export type FinanceRecurringExpenseProfileUpdateWithoutCategoryInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutCategoryInput = {
@@ -986,10 +1468,15 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutCategoryInput = 
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryInput = {
@@ -1000,6 +1487,9 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryInpu
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1014,6 +1504,9 @@ export type FinanceRecurringExpenseProfileCreateManySupplierInput = {
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths: number
   nextReminderDate: Date | string
+  serviceNumber?: string | null
+  defaultVaultId?: string | null
+  allowAmountOverride?: boolean
   status?: $Enums.FinanceRecurringExpenseStatus
   notes?: string | null
   createdAt?: Date | string
@@ -1027,12 +1520,17 @@ export type FinanceRecurringExpenseProfileUpdateWithoutSupplierInput = {
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  defaultVault?: Prisma.FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutSupplierInput = {
@@ -1043,10 +1541,15 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutSupplierInput = 
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierInput = {
@@ -1057,12 +1560,126 @@ export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierInpu
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
   nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultVaultId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type FinanceRecurringExpenseProfileCreateManyDefaultVaultInput = {
+  id?: string
+  supplierId?: string | null
+  categoryId: string
+  nameAr: string
+  nameEn: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths: number
+  nextReminderDate: Date | string
+  serviceNumber?: string | null
+  allowAmountOverride?: boolean
+  status?: $Enums.FinanceRecurringExpenseStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FinanceRecurringExpenseProfileUpdateWithoutDefaultVaultInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutRecurringExpenseProfilesNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutRecurringExpenseProfilesNestedInput
+  documents?: Prisma.FinanceOutflowDocumentUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutProfileNestedInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedUpdateWithoutDefaultVaultInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileNestedInput
+  coverageSlots?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  intervalMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  nextReminderDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowAmountOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceRecurringExpenseStatusFieldUpdateOperationsInput | $Enums.FinanceRecurringExpenseStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type FinanceRecurringExpenseProfileCountOutputType
+ */
+
+export type FinanceRecurringExpenseProfileCountOutputType = {
+  documents: number
+  coverageSlots: number
+}
+
+export type FinanceRecurringExpenseProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  documents?: boolean | FinanceRecurringExpenseProfileCountOutputTypeCountDocumentsArgs
+  coverageSlots?: boolean | FinanceRecurringExpenseProfileCountOutputTypeCountCoverageSlotsArgs
+}
+
+/**
+ * FinanceRecurringExpenseProfileCountOutputType without action
+ */
+export type FinanceRecurringExpenseProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceRecurringExpenseProfileCountOutputType
+   */
+  select?: Prisma.FinanceRecurringExpenseProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FinanceRecurringExpenseProfileCountOutputType without action
+ */
+export type FinanceRecurringExpenseProfileCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+}
+
+/**
+ * FinanceRecurringExpenseProfileCountOutputType without action
+ */
+export type FinanceRecurringExpenseProfileCountOutputTypeCountCoverageSlotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceRecurringExpenseCoverageWhereInput
+}
 
 
 export type FinanceRecurringExpenseProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1076,6 +1693,9 @@ export type FinanceRecurringExpenseProfileSelect<ExtArgs extends runtime.Types.E
   expectedAmount?: boolean
   intervalMonths?: boolean
   nextReminderDate?: boolean
+  serviceNumber?: boolean
+  defaultVaultId?: boolean
+  allowAmountOverride?: boolean
   status?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -1083,6 +1703,10 @@ export type FinanceRecurringExpenseProfileSelect<ExtArgs extends runtime.Types.E
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
+  documents?: boolean | Prisma.FinanceRecurringExpenseProfile$documentsArgs<ExtArgs>
+  coverageSlots?: boolean | Prisma.FinanceRecurringExpenseProfile$coverageSlotsArgs<ExtArgs>
+  _count?: boolean | Prisma.FinanceRecurringExpenseProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeRecurringExpenseProfile"]>
 
 export type FinanceRecurringExpenseProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1096,6 +1720,9 @@ export type FinanceRecurringExpenseProfileSelectCreateManyAndReturn<ExtArgs exte
   expectedAmount?: boolean
   intervalMonths?: boolean
   nextReminderDate?: boolean
+  serviceNumber?: boolean
+  defaultVaultId?: boolean
+  allowAmountOverride?: boolean
   status?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -1103,6 +1730,7 @@ export type FinanceRecurringExpenseProfileSelectCreateManyAndReturn<ExtArgs exte
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeRecurringExpenseProfile"]>
 
 export type FinanceRecurringExpenseProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1116,6 +1744,9 @@ export type FinanceRecurringExpenseProfileSelectUpdateManyAndReturn<ExtArgs exte
   expectedAmount?: boolean
   intervalMonths?: boolean
   nextReminderDate?: boolean
+  serviceNumber?: boolean
+  defaultVaultId?: boolean
+  allowAmountOverride?: boolean
   status?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -1123,6 +1754,7 @@ export type FinanceRecurringExpenseProfileSelectUpdateManyAndReturn<ExtArgs exte
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeRecurringExpenseProfile"]>
 
 export type FinanceRecurringExpenseProfileSelectScalar = {
@@ -1136,27 +1768,36 @@ export type FinanceRecurringExpenseProfileSelectScalar = {
   expectedAmount?: boolean
   intervalMonths?: boolean
   nextReminderDate?: boolean
+  serviceNumber?: boolean
+  defaultVaultId?: boolean
+  allowAmountOverride?: boolean
   status?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FinanceRecurringExpenseProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "supplierId" | "categoryId" | "nameAr" | "nameEn" | "expectedAmount" | "intervalMonths" | "nextReminderDate" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["financeRecurringExpenseProfile"]>
+export type FinanceRecurringExpenseProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "supplierId" | "categoryId" | "nameAr" | "nameEn" | "expectedAmount" | "intervalMonths" | "nextReminderDate" | "serviceNumber" | "defaultVaultId" | "allowAmountOverride" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["financeRecurringExpenseProfile"]>
 export type FinanceRecurringExpenseProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
+  documents?: boolean | Prisma.FinanceRecurringExpenseProfile$documentsArgs<ExtArgs>
+  coverageSlots?: boolean | Prisma.FinanceRecurringExpenseProfile$coverageSlotsArgs<ExtArgs>
+  _count?: boolean | Prisma.FinanceRecurringExpenseProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceRecurringExpenseProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
 }
 export type FinanceRecurringExpenseProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>
   category?: boolean | Prisma.FinanceCategoryDefaultArgs<ExtArgs>
+  defaultVault?: boolean | Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>
 }
 
 export type $FinanceRecurringExpenseProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1165,6 +1806,9 @@ export type $FinanceRecurringExpenseProfilePayload<ExtArgs extends runtime.Types
     company: Prisma.$CompanyPayload<ExtArgs>
     supplier: Prisma.$FinanceSupplierPayload<ExtArgs> | null
     category: Prisma.$FinanceCategoryPayload<ExtArgs>
+    defaultVault: Prisma.$FinanceVaultPayload<ExtArgs> | null
+    documents: Prisma.$FinanceOutflowDocumentPayload<ExtArgs>[]
+    coverageSlots: Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1177,6 +1821,9 @@ export type $FinanceRecurringExpenseProfilePayload<ExtArgs extends runtime.Types
     expectedAmount: runtime.Decimal
     intervalMonths: number
     nextReminderDate: Date
+    serviceNumber: string | null
+    defaultVaultId: string | null
+    allowAmountOverride: boolean
     status: $Enums.FinanceRecurringExpenseStatus
     notes: string | null
     createdAt: Date
@@ -1578,6 +2225,9 @@ export interface Prisma__FinanceRecurringExpenseProfileClient<T, Null = never, E
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   supplier<T extends Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceRecurringExpenseProfile$supplierArgs<ExtArgs>>): Prisma.Prisma__FinanceSupplierClient<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.FinanceCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceCategoryClient<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  defaultVault<T extends Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs>>): Prisma.Prisma__FinanceVaultClient<runtime.Types.Result.GetResult<Prisma.$FinanceVaultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  documents<T extends Prisma.FinanceRecurringExpenseProfile$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceRecurringExpenseProfile$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  coverageSlots<T extends Prisma.FinanceRecurringExpenseProfile$coverageSlotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceRecurringExpenseProfile$coverageSlotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1617,6 +2267,9 @@ export interface FinanceRecurringExpenseProfileFieldRefs {
   readonly expectedAmount: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'Decimal'>
   readonly intervalMonths: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'Int'>
   readonly nextReminderDate: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'DateTime'>
+  readonly serviceNumber: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'String'>
+  readonly defaultVaultId: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'String'>
+  readonly allowAmountOverride: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'Boolean'>
   readonly status: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'FinanceRecurringExpenseStatus'>
   readonly notes: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"FinanceRecurringExpenseProfile", 'DateTime'>
@@ -2038,6 +2691,73 @@ export type FinanceRecurringExpenseProfile$supplierArgs<ExtArgs extends runtime.
    */
   include?: Prisma.FinanceSupplierInclude<ExtArgs> | null
   where?: Prisma.FinanceSupplierWhereInput
+}
+
+/**
+ * FinanceRecurringExpenseProfile.defaultVault
+ */
+export type FinanceRecurringExpenseProfile$defaultVaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceVault
+   */
+  select?: Prisma.FinanceVaultSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceVault
+   */
+  omit?: Prisma.FinanceVaultOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceVaultInclude<ExtArgs> | null
+  where?: Prisma.FinanceVaultWhereInput
+}
+
+/**
+ * FinanceRecurringExpenseProfile.documents
+ */
+export type FinanceRecurringExpenseProfile$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceOutflowDocument
+   */
+  select?: Prisma.FinanceOutflowDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceOutflowDocument
+   */
+  omit?: Prisma.FinanceOutflowDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceOutflowDocumentInclude<ExtArgs> | null
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+  orderBy?: Prisma.FinanceOutflowDocumentOrderByWithRelationInput | Prisma.FinanceOutflowDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceOutflowDocumentScalarFieldEnum | Prisma.FinanceOutflowDocumentScalarFieldEnum[]
+}
+
+/**
+ * FinanceRecurringExpenseProfile.coverageSlots
+ */
+export type FinanceRecurringExpenseProfile$coverageSlotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceRecurringExpenseCoverage
+   */
+  select?: Prisma.FinanceRecurringExpenseCoverageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceRecurringExpenseCoverage
+   */
+  omit?: Prisma.FinanceRecurringExpenseCoverageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceRecurringExpenseCoverageInclude<ExtArgs> | null
+  where?: Prisma.FinanceRecurringExpenseCoverageWhereInput
+  orderBy?: Prisma.FinanceRecurringExpenseCoverageOrderByWithRelationInput | Prisma.FinanceRecurringExpenseCoverageOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceRecurringExpenseCoverageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum | Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum[]
 }
 
 /**

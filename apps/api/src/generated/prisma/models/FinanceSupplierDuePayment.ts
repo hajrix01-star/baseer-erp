@@ -28,10 +28,12 @@ export type AggregateFinanceSupplierDuePayment = {
 
 export type FinanceSupplierDuePaymentAvgAggregateOutputType = {
   amount: runtime.Decimal | null
+  recognizedNetAmount: runtime.Decimal | null
 }
 
 export type FinanceSupplierDuePaymentSumAggregateOutputType = {
   amount: runtime.Decimal | null
+  recognizedNetAmount: runtime.Decimal | null
 }
 
 export type FinanceSupplierDuePaymentMinAggregateOutputType = {
@@ -41,6 +43,7 @@ export type FinanceSupplierDuePaymentMinAggregateOutputType = {
   dueId: string | null
   vaultId: string | null
   amount: runtime.Decimal | null
+  recognizedNetAmount: runtime.Decimal | null
   businessDate: Date | null
   status: $Enums.FinanceSupplierDuePaymentStatus | null
   reversalOfId: string | null
@@ -58,6 +61,7 @@ export type FinanceSupplierDuePaymentMaxAggregateOutputType = {
   dueId: string | null
   vaultId: string | null
   amount: runtime.Decimal | null
+  recognizedNetAmount: runtime.Decimal | null
   businessDate: Date | null
   status: $Enums.FinanceSupplierDuePaymentStatus | null
   reversalOfId: string | null
@@ -75,6 +79,7 @@ export type FinanceSupplierDuePaymentCountAggregateOutputType = {
   dueId: number
   vaultId: number
   amount: number
+  recognizedNetAmount: number
   businessDate: number
   status: number
   reversalOfId: number
@@ -89,10 +94,12 @@ export type FinanceSupplierDuePaymentCountAggregateOutputType = {
 
 export type FinanceSupplierDuePaymentAvgAggregateInputType = {
   amount?: true
+  recognizedNetAmount?: true
 }
 
 export type FinanceSupplierDuePaymentSumAggregateInputType = {
   amount?: true
+  recognizedNetAmount?: true
 }
 
 export type FinanceSupplierDuePaymentMinAggregateInputType = {
@@ -102,6 +109,7 @@ export type FinanceSupplierDuePaymentMinAggregateInputType = {
   dueId?: true
   vaultId?: true
   amount?: true
+  recognizedNetAmount?: true
   businessDate?: true
   status?: true
   reversalOfId?: true
@@ -119,6 +127,7 @@ export type FinanceSupplierDuePaymentMaxAggregateInputType = {
   dueId?: true
   vaultId?: true
   amount?: true
+  recognizedNetAmount?: true
   businessDate?: true
   status?: true
   reversalOfId?: true
@@ -136,6 +145,7 @@ export type FinanceSupplierDuePaymentCountAggregateInputType = {
   dueId?: true
   vaultId?: true
   amount?: true
+  recognizedNetAmount?: true
   businessDate?: true
   status?: true
   reversalOfId?: true
@@ -240,6 +250,7 @@ export type FinanceSupplierDuePaymentGroupByOutputType = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal
+  recognizedNetAmount: runtime.Decimal
   businessDate: Date
   status: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId: string | null
@@ -280,6 +291,7 @@ export type FinanceSupplierDuePaymentWhereInput = {
   dueId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   vaultId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   amount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFilter<"FinanceSupplierDuePayment"> | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFilter<"FinanceSupplierDuePayment"> | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.UuidNullableFilter<"FinanceSupplierDuePayment"> | string | null
@@ -303,6 +315,7 @@ export type FinanceSupplierDuePaymentOrderByWithRelationInput = {
   dueId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reversalOfId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -334,6 +347,7 @@ export type FinanceSupplierDuePaymentWhereUniqueInput = Prisma.AtLeast<{
   dueId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   vaultId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   amount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFilter<"FinanceSupplierDuePayment"> | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFilter<"FinanceSupplierDuePayment"> | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.StringNullableFilter<"FinanceSupplierDuePayment"> | string | null
@@ -355,6 +369,7 @@ export type FinanceSupplierDuePaymentOrderByWithAggregationInput = {
   dueId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reversalOfId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -380,6 +395,7 @@ export type FinanceSupplierDuePaymentScalarWhereWithAggregatesInput = {
   dueId?: Prisma.UuidWithAggregatesFilter<"FinanceSupplierDuePayment"> | string
   vaultId?: Prisma.UuidWithAggregatesFilter<"FinanceSupplierDuePayment"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalWithAggregatesFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeWithAggregatesFilter<"FinanceSupplierDuePayment"> | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusWithAggregatesFilter<"FinanceSupplierDuePayment"> | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceSupplierDuePayment"> | string | null
@@ -393,6 +409,7 @@ export type FinanceSupplierDuePaymentScalarWhereWithAggregatesInput = {
 export type FinanceSupplierDuePaymentCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -414,6 +431,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -428,6 +446,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateInput = {
 export type FinanceSupplierDuePaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -449,6 +468,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -467,6 +487,7 @@ export type FinanceSupplierDuePaymentCreateManyInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -480,6 +501,7 @@ export type FinanceSupplierDuePaymentCreateManyInput = {
 export type FinanceSupplierDuePaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -495,6 +517,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateManyInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -545,6 +568,7 @@ export type FinanceSupplierDuePaymentCountOrderByAggregateInput = {
   dueId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reversalOfId?: Prisma.SortOrder
@@ -557,6 +581,7 @@ export type FinanceSupplierDuePaymentCountOrderByAggregateInput = {
 
 export type FinanceSupplierDuePaymentAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
 }
 
 export type FinanceSupplierDuePaymentMaxOrderByAggregateInput = {
@@ -566,6 +591,7 @@ export type FinanceSupplierDuePaymentMaxOrderByAggregateInput = {
   dueId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reversalOfId?: Prisma.SortOrder
@@ -583,6 +609,7 @@ export type FinanceSupplierDuePaymentMinOrderByAggregateInput = {
   dueId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reversalOfId?: Prisma.SortOrder
@@ -595,6 +622,7 @@ export type FinanceSupplierDuePaymentMinOrderByAggregateInput = {
 
 export type FinanceSupplierDuePaymentSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  recognizedNetAmount?: Prisma.SortOrder
 }
 
 export type FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput = {
@@ -814,6 +842,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateOneWithoutJournalEntryNested
 export type FinanceSupplierDuePaymentCreateWithoutCompanyInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -832,6 +861,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutCompanyInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -879,6 +909,7 @@ export type FinanceSupplierDuePaymentScalarWhereInput = {
   dueId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   vaultId?: Prisma.UuidFilter<"FinanceSupplierDuePayment"> | string
   amount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFilter<"FinanceSupplierDuePayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFilter<"FinanceSupplierDuePayment"> | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFilter<"FinanceSupplierDuePayment"> | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.UuidNullableFilter<"FinanceSupplierDuePayment"> | string | null
@@ -892,6 +923,7 @@ export type FinanceSupplierDuePaymentScalarWhereInput = {
 export type FinanceSupplierDuePaymentCreateWithoutVaultInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -909,6 +941,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutVaultInput = {
   id?: string
   dueId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -949,6 +982,7 @@ export type FinanceSupplierDuePaymentUpdateManyWithWhereWithoutVaultInput = {
 export type FinanceSupplierDuePaymentCreateWithoutDueInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -966,6 +1000,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutDueInput = {
   id?: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1006,6 +1041,7 @@ export type FinanceSupplierDuePaymentUpdateManyWithWhereWithoutDueInput = {
 export type FinanceSupplierDuePaymentCreateWithoutReversalPaymentInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -1026,6 +1062,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutReversalPaymentInput 
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1044,6 +1081,7 @@ export type FinanceSupplierDuePaymentCreateOrConnectWithoutReversalPaymentInput 
 export type FinanceSupplierDuePaymentCreateWithoutReversalOfInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -1062,6 +1100,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutReversalOfInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   journalEntryId?: string | null
@@ -1091,6 +1130,7 @@ export type FinanceSupplierDuePaymentUpdateToOneWithWhereWithoutReversalPaymentI
 export type FinanceSupplierDuePaymentUpdateWithoutReversalPaymentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1111,6 +1151,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutReversalPaymentInput 
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1135,6 +1176,7 @@ export type FinanceSupplierDuePaymentUpdateToOneWithWhereWithoutReversalOfInput 
 export type FinanceSupplierDuePaymentUpdateWithoutReversalOfInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1153,6 +1195,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutReversalOfInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1166,6 +1209,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutReversalOfInput = {
 export type FinanceSupplierDuePaymentCreateWithoutJournalEntryInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: string | null
@@ -1184,6 +1228,7 @@ export type FinanceSupplierDuePaymentUncheckedCreateWithoutJournalEntryInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1213,6 +1258,7 @@ export type FinanceSupplierDuePaymentUpdateToOneWithWhereWithoutJournalEntryInpu
 export type FinanceSupplierDuePaymentUpdateWithoutJournalEntryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1231,6 +1277,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutJournalEntryInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1246,6 +1293,7 @@ export type FinanceSupplierDuePaymentCreateManyCompanyInput = {
   dueId: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1259,6 +1307,7 @@ export type FinanceSupplierDuePaymentCreateManyCompanyInput = {
 export type FinanceSupplierDuePaymentUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1277,6 +1326,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutCompanyInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1293,6 +1343,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyInput = {
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1307,6 +1358,7 @@ export type FinanceSupplierDuePaymentCreateManyVaultInput = {
   id?: string
   dueId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1320,6 +1372,7 @@ export type FinanceSupplierDuePaymentCreateManyVaultInput = {
 export type FinanceSupplierDuePaymentUpdateWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1337,6 +1390,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1352,6 +1406,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dueId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1366,6 +1421,7 @@ export type FinanceSupplierDuePaymentCreateManyDueInput = {
   id?: string
   vaultId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate: Date | string
   status?: $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: string | null
@@ -1379,6 +1435,7 @@ export type FinanceSupplierDuePaymentCreateManyDueInput = {
 export type FinanceSupplierDuePaymentUpdateWithoutDueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   categoryCodeSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1396,6 +1453,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateWithoutDueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1411,6 +1469,7 @@ export type FinanceSupplierDuePaymentUncheckedUpdateManyWithoutDueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  recognizedNetAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierDuePaymentStatus
   reversalOfId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1430,6 +1489,7 @@ export type FinanceSupplierDuePaymentSelect<ExtArgs extends runtime.Types.Extens
   dueId?: boolean
   vaultId?: boolean
   amount?: boolean
+  recognizedNetAmount?: boolean
   businessDate?: boolean
   status?: boolean
   reversalOfId?: boolean
@@ -1453,6 +1513,7 @@ export type FinanceSupplierDuePaymentSelectCreateManyAndReturn<ExtArgs extends r
   dueId?: boolean
   vaultId?: boolean
   amount?: boolean
+  recognizedNetAmount?: boolean
   businessDate?: boolean
   status?: boolean
   reversalOfId?: boolean
@@ -1475,6 +1536,7 @@ export type FinanceSupplierDuePaymentSelectUpdateManyAndReturn<ExtArgs extends r
   dueId?: boolean
   vaultId?: boolean
   amount?: boolean
+  recognizedNetAmount?: boolean
   businessDate?: boolean
   status?: boolean
   reversalOfId?: boolean
@@ -1497,6 +1559,7 @@ export type FinanceSupplierDuePaymentSelectScalar = {
   dueId?: boolean
   vaultId?: boolean
   amount?: boolean
+  recognizedNetAmount?: boolean
   businessDate?: boolean
   status?: boolean
   reversalOfId?: boolean
@@ -1507,7 +1570,7 @@ export type FinanceSupplierDuePaymentSelectScalar = {
   createdAt?: boolean
 }
 
-export type FinanceSupplierDuePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "dueId" | "vaultId" | "amount" | "businessDate" | "status" | "reversalOfId" | "journalEntryId" | "categoryCodeSnapshot" | "categoryNameArSnapshot" | "categoryKindSnapshot" | "createdAt", ExtArgs["result"]["financeSupplierDuePayment"]>
+export type FinanceSupplierDuePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "dueId" | "vaultId" | "amount" | "recognizedNetAmount" | "businessDate" | "status" | "reversalOfId" | "journalEntryId" | "categoryCodeSnapshot" | "categoryNameArSnapshot" | "categoryKindSnapshot" | "createdAt", ExtArgs["result"]["financeSupplierDuePayment"]>
 export type FinanceSupplierDuePaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   due?: boolean | Prisma.FinanceSupplierDueDefaultArgs<ExtArgs>
@@ -1548,6 +1611,7 @@ export type $FinanceSupplierDuePaymentPayload<ExtArgs extends runtime.Types.Exte
     dueId: string
     vaultId: string
     amount: runtime.Decimal
+    recognizedNetAmount: runtime.Decimal
     businessDate: Date
     status: $Enums.FinanceSupplierDuePaymentStatus
     reversalOfId: string | null
@@ -1991,6 +2055,7 @@ export interface FinanceSupplierDuePaymentFieldRefs {
   readonly dueId: Prisma.FieldRef<"FinanceSupplierDuePayment", 'String'>
   readonly vaultId: Prisma.FieldRef<"FinanceSupplierDuePayment", 'String'>
   readonly amount: Prisma.FieldRef<"FinanceSupplierDuePayment", 'Decimal'>
+  readonly recognizedNetAmount: Prisma.FieldRef<"FinanceSupplierDuePayment", 'Decimal'>
   readonly businessDate: Prisma.FieldRef<"FinanceSupplierDuePayment", 'DateTime'>
   readonly status: Prisma.FieldRef<"FinanceSupplierDuePayment", 'FinanceSupplierDuePaymentStatus'>
   readonly reversalOfId: Prisma.FieldRef<"FinanceSupplierDuePayment", 'String'>

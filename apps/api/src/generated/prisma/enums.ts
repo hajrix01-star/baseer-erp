@@ -94,6 +94,14 @@ export const FinanceSupplierStatus = {
 export type FinanceSupplierStatus = (typeof FinanceSupplierStatus)[keyof typeof FinanceSupplierStatus]
 
 
+export const FinanceSupplierType = {
+  PURCHASE: 'PURCHASE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type FinanceSupplierType = (typeof FinanceSupplierType)[keyof typeof FinanceSupplierType]
+
+
 export const FinanceFiscalPeriodStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
@@ -110,6 +118,17 @@ export const FinanceVaultType = {
 } as const
 
 export type FinanceVaultType = (typeof FinanceVaultType)[keyof typeof FinanceVaultType]
+
+
+export const FinanceVaultPaymentMethod = {
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  BANK_CARD: 'BANK_CARD',
+  BANK_PAYMENT: 'BANK_PAYMENT',
+  APP: 'APP'
+} as const
+
+export type FinanceVaultPaymentMethod = (typeof FinanceVaultPaymentMethod)[keyof typeof FinanceVaultPaymentMethod]
 
 
 export const FinanceVaultStatus = {

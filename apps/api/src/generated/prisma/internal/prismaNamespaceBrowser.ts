@@ -84,6 +84,7 @@ export const ModelName = {
   FinanceDailyFinancialSummary: 'FinanceDailyFinancialSummary',
   FinanceDailySalesChannelSummary: 'FinanceDailySalesChannelSummary',
   FinanceRecurringExpenseProfile: 'FinanceRecurringExpenseProfile',
+  FinanceRecurringExpenseCoverage: 'FinanceRecurringExpenseCoverage',
   FinanceInclusiveLoan: 'FinanceInclusiveLoan',
   FinanceInclusiveLoanPayment: 'FinanceInclusiveLoanPayment',
   FinanceInclusiveLoanInstallmentPlan: 'FinanceInclusiveLoanInstallmentPlan',
@@ -358,6 +359,7 @@ export const FinanceSupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   companyId: 'companyId',
   categoryId: 'categoryId',
+  supplierType: 'supplierType',
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   phone: 'phone',
@@ -414,6 +416,8 @@ export const FinanceVaultScalarFieldEnum = {
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   type: 'type',
+  paymentMethod: 'paymentMethod',
+  paymentMethods: 'paymentMethods',
   status: 'status',
   isSalesChannel: 'isSalesChannel',
   isPaymentDestination: 'isPaymentDestination',
@@ -454,6 +458,7 @@ export const FinanceSupplierDuePaymentScalarFieldEnum = {
   dueId: 'dueId',
   vaultId: 'vaultId',
   amount: 'amount',
+  recognizedNetAmount: 'recognizedNetAmount',
   businessDate: 'businessDate',
   status: 'status',
   reversalOfId: 'reversalOfId',
@@ -498,6 +503,10 @@ export const FinanceOutflowDocumentScalarFieldEnum = {
   settlementKind: 'settlementKind',
   documentNumber: 'documentNumber',
   batchId: 'batchId',
+  recurringExpenseProfileId: 'recurringExpenseProfileId',
+  coverageYear: 'coverageYear',
+  coverageStartMonth: 'coverageStartMonth',
+  coverageMonths: 'coverageMonths',
   supplierId: 'supplierId',
   categoryId: 'categoryId',
   supplierInvoiceNumber: 'supplierInvoiceNumber',
@@ -675,6 +684,9 @@ export const FinanceRecurringExpenseProfileScalarFieldEnum = {
   expectedAmount: 'expectedAmount',
   intervalMonths: 'intervalMonths',
   nextReminderDate: 'nextReminderDate',
+  serviceNumber: 'serviceNumber',
+  defaultVaultId: 'defaultVaultId',
+  allowAmountOverride: 'allowAmountOverride',
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -682,6 +694,20 @@ export const FinanceRecurringExpenseProfileScalarFieldEnum = {
 } as const
 
 export type FinanceRecurringExpenseProfileScalarFieldEnum = (typeof FinanceRecurringExpenseProfileScalarFieldEnum)[keyof typeof FinanceRecurringExpenseProfileScalarFieldEnum]
+
+
+export const FinanceRecurringExpenseCoverageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  profileId: 'profileId',
+  coverageYear: 'coverageYear',
+  coverageMonth: 'coverageMonth',
+  documentId: 'documentId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceRecurringExpenseCoverageScalarFieldEnum = (typeof FinanceRecurringExpenseCoverageScalarFieldEnum)[keyof typeof FinanceRecurringExpenseCoverageScalarFieldEnum]
 
 
 export const FinanceInclusiveLoanScalarFieldEnum = {

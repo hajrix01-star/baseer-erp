@@ -487,11 +487,28 @@ export type EnumFinanceCategoryStatusWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumFinanceCategoryStatusFilter<$PrismaModel>
 }
 
+export type EnumFinanceSupplierTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierType | Prisma.EnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel> | $Enums.FinanceSupplierType
+}
+
 export type EnumFinanceSupplierStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceSupplierStatus | Prisma.EnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceSupplierStatus[] | Prisma.ListEnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.FinanceSupplierStatus[] | Prisma.ListEnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumFinanceSupplierStatusFilter<$PrismaModel> | $Enums.FinanceSupplierStatus
+}
+
+export type EnumFinanceSupplierTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierType | Prisma.EnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierTypeWithAggregatesFilter<$PrismaModel> | $Enums.FinanceSupplierType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel>
 }
 
 export type EnumFinanceSupplierStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -528,6 +545,13 @@ export type EnumFinanceVaultTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel> | $Enums.FinanceVaultType
 }
 
+export type EnumFinanceVaultPaymentMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultPaymentMethod | Prisma.EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel> | $Enums.FinanceVaultPaymentMethod
+}
+
 export type EnumFinanceVaultStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceVaultStatus | Prisma.EnumFinanceVaultStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceVaultStatus[] | Prisma.ListEnumFinanceVaultStatusFieldRefInput<$PrismaModel>
@@ -543,6 +567,16 @@ export type EnumFinanceVaultTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel>
+}
+
+export type EnumFinanceVaultPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultPaymentMethod | Prisma.EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultPaymentMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel>
 }
 
 export type EnumFinanceVaultStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -1404,11 +1438,28 @@ export type NestedEnumFinanceCategoryStatusWithAggregatesFilter<$PrismaModel = n
   _max?: Prisma.NestedEnumFinanceCategoryStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumFinanceSupplierTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierType | Prisma.EnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel> | $Enums.FinanceSupplierType
+}
+
 export type NestedEnumFinanceSupplierStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceSupplierStatus | Prisma.EnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceSupplierStatus[] | Prisma.ListEnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.FinanceSupplierStatus[] | Prisma.ListEnumFinanceSupplierStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumFinanceSupplierStatusFilter<$PrismaModel> | $Enums.FinanceSupplierStatus
+}
+
+export type NestedEnumFinanceSupplierTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierType | Prisma.EnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierType[] | Prisma.ListEnumFinanceSupplierTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierTypeWithAggregatesFilter<$PrismaModel> | $Enums.FinanceSupplierType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceSupplierTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceSupplierStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -1445,6 +1496,13 @@ export type NestedEnumFinanceVaultTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel> | $Enums.FinanceVaultType
 }
 
+export type NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultPaymentMethod | Prisma.EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel> | $Enums.FinanceVaultPaymentMethod
+}
+
 export type NestedEnumFinanceVaultStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceVaultStatus | Prisma.EnumFinanceVaultStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceVaultStatus[] | Prisma.ListEnumFinanceVaultStatusFieldRefInput<$PrismaModel>
@@ -1460,6 +1518,16 @@ export type NestedEnumFinanceVaultTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFinanceVaultTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceVaultPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultPaymentMethod | Prisma.EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultPaymentMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultPaymentMethodFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceVaultStatusWithAggregatesFilter<$PrismaModel = never> = {

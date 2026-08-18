@@ -42,6 +42,7 @@ export type FinanceVaultMinAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   type: $Enums.FinanceVaultType | null
+  paymentMethod: $Enums.FinanceVaultPaymentMethod | null
   status: $Enums.FinanceVaultStatus | null
   isSalesChannel: boolean | null
   isPaymentDestination: boolean | null
@@ -58,6 +59,7 @@ export type FinanceVaultMaxAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   type: $Enums.FinanceVaultType | null
+  paymentMethod: $Enums.FinanceVaultPaymentMethod | null
   status: $Enums.FinanceVaultStatus | null
   isSalesChannel: boolean | null
   isPaymentDestination: boolean | null
@@ -74,6 +76,8 @@ export type FinanceVaultCountAggregateOutputType = {
   nameAr: number
   nameEn: number
   type: number
+  paymentMethod: number
+  paymentMethods: number
   status: number
   isSalesChannel: number
   isPaymentDestination: number
@@ -100,6 +104,7 @@ export type FinanceVaultMinAggregateInputType = {
   nameAr?: true
   nameEn?: true
   type?: true
+  paymentMethod?: true
   status?: true
   isSalesChannel?: true
   isPaymentDestination?: true
@@ -116,6 +121,7 @@ export type FinanceVaultMaxAggregateInputType = {
   nameAr?: true
   nameEn?: true
   type?: true
+  paymentMethod?: true
   status?: true
   isSalesChannel?: true
   isPaymentDestination?: true
@@ -132,6 +138,8 @@ export type FinanceVaultCountAggregateInputType = {
   nameAr?: true
   nameEn?: true
   type?: true
+  paymentMethod?: true
+  paymentMethods?: true
   status?: true
   isSalesChannel?: true
   isPaymentDestination?: true
@@ -235,6 +243,8 @@ export type FinanceVaultGroupByOutputType = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods: $Enums.FinanceVaultPaymentMethod[]
   status: $Enums.FinanceVaultStatus
   isSalesChannel: boolean
   isPaymentDestination: boolean
@@ -274,6 +284,8 @@ export type FinanceVaultWhereInput = {
   nameAr?: Prisma.StringFilter<"FinanceVault"> | string
   nameEn?: Prisma.StringFilter<"FinanceVault"> | string
   type?: Prisma.EnumFinanceVaultTypeFilter<"FinanceVault"> | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceVault"> | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.EnumFinanceVaultPaymentMethodNullableListFilter<"FinanceVault">
   status?: Prisma.EnumFinanceVaultStatusFilter<"FinanceVault"> | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFilter<"FinanceVault"> | boolean
   isPaymentDestination?: Prisma.BoolFilter<"FinanceVault"> | boolean
@@ -290,6 +302,7 @@ export type FinanceVaultWhereInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
   outflowAllocations?: Prisma.FinanceOutflowAllocationListRelationFilter
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
 }
 
 export type FinanceVaultOrderByWithRelationInput = {
@@ -300,6 +313,8 @@ export type FinanceVaultOrderByWithRelationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isSalesChannel?: Prisma.SortOrder
   isPaymentDestination?: Prisma.SortOrder
@@ -316,6 +331,7 @@ export type FinanceVaultOrderByWithRelationInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingOrderByRelationAggregateInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryOrderByRelationAggregateInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationOrderByRelationAggregateInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileOrderByRelationAggregateInput
 }
 
 export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +348,8 @@ export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
   nameAr?: Prisma.StringFilter<"FinanceVault"> | string
   nameEn?: Prisma.StringFilter<"FinanceVault"> | string
   type?: Prisma.EnumFinanceVaultTypeFilter<"FinanceVault"> | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceVault"> | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.EnumFinanceVaultPaymentMethodNullableListFilter<"FinanceVault">
   status?: Prisma.EnumFinanceVaultStatusFilter<"FinanceVault"> | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFilter<"FinanceVault"> | boolean
   isPaymentDestination?: Prisma.BoolFilter<"FinanceVault"> | boolean
@@ -348,6 +366,7 @@ export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingListRelationFilter
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
   outflowAllocations?: Prisma.FinanceOutflowAllocationListRelationFilter
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_nameAr" | "companyId_accountId">
 
 export type FinanceVaultOrderByWithAggregationInput = {
@@ -358,6 +377,8 @@ export type FinanceVaultOrderByWithAggregationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isSalesChannel?: Prisma.SortOrder
   isPaymentDestination?: Prisma.SortOrder
@@ -382,6 +403,8 @@ export type FinanceVaultScalarWhereWithAggregatesInput = {
   nameAr?: Prisma.StringWithAggregatesFilter<"FinanceVault"> | string
   nameEn?: Prisma.StringWithAggregatesFilter<"FinanceVault"> | string
   type?: Prisma.EnumFinanceVaultTypeWithAggregatesFilter<"FinanceVault"> | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodWithAggregatesFilter<"FinanceVault"> | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.EnumFinanceVaultPaymentMethodNullableListFilter<"FinanceVault">
   status?: Prisma.EnumFinanceVaultStatusWithAggregatesFilter<"FinanceVault"> | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolWithAggregatesFilter<"FinanceVault"> | boolean
   isPaymentDestination?: Prisma.BoolWithAggregatesFilter<"FinanceVault"> | boolean
@@ -395,6 +418,8 @@ export type FinanceVaultCreateInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -411,6 +436,7 @@ export type FinanceVaultCreateInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateInput = {
@@ -421,6 +447,8 @@ export type FinanceVaultUncheckedCreateInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -435,6 +463,7 @@ export type FinanceVaultUncheckedCreateInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUpdateInput = {
@@ -442,6 +471,8 @@ export type FinanceVaultUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -458,6 +489,7 @@ export type FinanceVaultUpdateInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateInput = {
@@ -468,6 +500,8 @@ export type FinanceVaultUncheckedUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -482,6 +516,7 @@ export type FinanceVaultUncheckedUpdateInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateManyInput = {
@@ -492,6 +527,8 @@ export type FinanceVaultCreateManyInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -505,6 +542,8 @@ export type FinanceVaultUpdateManyMutationInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -521,6 +560,8 @@ export type FinanceVaultUncheckedUpdateManyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -537,6 +578,14 @@ export type FinanceVaultListRelationFilter = {
 
 export type FinanceVaultOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type EnumFinanceVaultPaymentMethodNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel> | null
+  has?: $Enums.FinanceVaultPaymentMethod | Prisma.EnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.FinanceVaultPaymentMethod[] | Prisma.ListEnumFinanceVaultPaymentMethodFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type FinanceVaultIdTenantIdCompanyIdCompoundUniqueInput = {
@@ -563,6 +612,8 @@ export type FinanceVaultCountOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isSalesChannel?: Prisma.SortOrder
   isPaymentDestination?: Prisma.SortOrder
@@ -583,6 +634,7 @@ export type FinanceVaultMaxOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isSalesChannel?: Prisma.SortOrder
   isPaymentDestination?: Prisma.SortOrder
@@ -599,6 +651,7 @@ export type FinanceVaultMinOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isSalesChannel?: Prisma.SortOrder
   isPaymentDestination?: Prisma.SortOrder
@@ -705,8 +758,21 @@ export type FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput = {
   deleteMany?: Prisma.FinanceVaultScalarWhereInput | Prisma.FinanceVaultScalarWhereInput[]
 }
 
+export type FinanceVaultCreatepaymentMethodsInput = {
+  set: $Enums.FinanceVaultPaymentMethod[]
+}
+
 export type EnumFinanceVaultTypeFieldUpdateOperationsInput = {
   set?: $Enums.FinanceVaultType
+}
+
+export type EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput = {
+  set?: $Enums.FinanceVaultPaymentMethod
+}
+
+export type FinanceVaultUpdatepaymentMethodsInput = {
+  set?: $Enums.FinanceVaultPaymentMethod[]
+  push?: $Enums.FinanceVaultPaymentMethod | $Enums.FinanceVaultPaymentMethod[]
 }
 
 export type EnumFinanceVaultStatusFieldUpdateOperationsInput = {
@@ -801,6 +867,22 @@ export type FinanceVaultUpdateOneRequiredWithoutDailySalesChannelSummariesNested
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutDailySalesChannelSummariesInput, Prisma.FinanceVaultUpdateWithoutDailySalesChannelSummariesInput>, Prisma.FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput>
 }
 
+export type FinanceVaultCreateNestedOneWithoutRecurringExpenseDefaultsInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutRecurringExpenseDefaultsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+}
+
+export type FinanceVaultUpdateOneWithoutRecurringExpenseDefaultsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutRecurringExpenseDefaultsInput
+  upsert?: Prisma.FinanceVaultUpsertWithoutRecurringExpenseDefaultsInput
+  disconnect?: Prisma.FinanceVaultWhereInput | boolean
+  delete?: Prisma.FinanceVaultWhereInput | boolean
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput>
+}
+
 export type FinanceVaultCreateNestedOneWithoutInclusiveLoanPaymentsInput = {
   create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutInclusiveLoanPaymentsInput, Prisma.FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput>
   connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutInclusiveLoanPaymentsInput
@@ -836,6 +918,8 @@ export type FinanceVaultCreateWithoutCompanyInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -851,6 +935,7 @@ export type FinanceVaultCreateWithoutCompanyInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
@@ -859,6 +944,8 @@ export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -873,6 +960,7 @@ export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutCompanyInput = {
@@ -912,6 +1000,8 @@ export type FinanceVaultScalarWhereInput = {
   nameAr?: Prisma.StringFilter<"FinanceVault"> | string
   nameEn?: Prisma.StringFilter<"FinanceVault"> | string
   type?: Prisma.EnumFinanceVaultTypeFilter<"FinanceVault"> | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceVault"> | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.EnumFinanceVaultPaymentMethodNullableListFilter<"FinanceVault">
   status?: Prisma.EnumFinanceVaultStatusFilter<"FinanceVault"> | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFilter<"FinanceVault"> | boolean
   isPaymentDestination?: Prisma.BoolFilter<"FinanceVault"> | boolean
@@ -925,6 +1015,8 @@ export type FinanceVaultCreateWithoutAccountInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -940,6 +1032,7 @@ export type FinanceVaultCreateWithoutAccountInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutAccountInput = {
@@ -947,6 +1040,8 @@ export type FinanceVaultUncheckedCreateWithoutAccountInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -961,6 +1056,7 @@ export type FinanceVaultUncheckedCreateWithoutAccountInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutAccountInput = {
@@ -994,6 +1090,8 @@ export type FinanceVaultCreateWithoutSupplierDuePaymentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1009,6 +1107,7 @@ export type FinanceVaultCreateWithoutSupplierDuePaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
@@ -1019,6 +1118,8 @@ export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1032,6 +1133,7 @@ export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutSupplierDuePaymentsInput = {
@@ -1055,6 +1157,8 @@ export type FinanceVaultUpdateWithoutSupplierDuePaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1070,6 +1174,7 @@ export type FinanceVaultUpdateWithoutSupplierDuePaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
@@ -1080,6 +1185,8 @@ export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1093,6 +1200,7 @@ export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
@@ -1100,6 +1208,8 @@ export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1115,6 +1225,7 @@ export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
@@ -1125,6 +1236,8 @@ export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1138,6 +1251,7 @@ export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutOutflowAllocationsInput = {
@@ -1161,6 +1275,8 @@ export type FinanceVaultUpdateWithoutOutflowAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1176,6 +1292,7 @@ export type FinanceVaultUpdateWithoutOutflowAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
@@ -1186,6 +1303,8 @@ export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1199,6 +1318,7 @@ export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
@@ -1206,6 +1326,8 @@ export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1221,6 +1343,7 @@ export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
@@ -1231,6 +1354,8 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1244,6 +1369,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashObservationsInput = {
@@ -1256,6 +1382,8 @@ export type FinanceVaultCreateWithoutDailyCashHandoversInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1271,6 +1399,7 @@ export type FinanceVaultCreateWithoutDailyCashHandoversInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
@@ -1281,6 +1410,8 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1294,6 +1425,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashHandoversInput = {
@@ -1317,6 +1449,8 @@ export type FinanceVaultUpdateWithoutDailyCashObservationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1332,6 +1466,7 @@ export type FinanceVaultUpdateWithoutDailyCashObservationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
@@ -1342,6 +1477,8 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1355,6 +1492,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUpsertWithoutDailyCashHandoversInput = {
@@ -1373,6 +1511,8 @@ export type FinanceVaultUpdateWithoutDailyCashHandoversInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1388,6 +1528,7 @@ export type FinanceVaultUpdateWithoutDailyCashHandoversInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
@@ -1398,6 +1539,8 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1411,6 +1554,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
@@ -1418,6 +1562,8 @@ export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1433,6 +1579,7 @@ export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
@@ -1443,6 +1590,8 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1456,6 +1605,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesAllocationsInput = {
@@ -1479,6 +1629,8 @@ export type FinanceVaultUpdateWithoutDailySalesAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1494,6 +1646,7 @@ export type FinanceVaultUpdateWithoutDailySalesAllocationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
@@ -1504,6 +1657,8 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1517,6 +1672,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
@@ -1524,6 +1680,8 @@ export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1539,6 +1697,7 @@ export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = {
@@ -1549,6 +1708,8 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = 
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1562,6 +1723,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = 
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesChannelSummariesInput = {
@@ -1585,6 +1747,8 @@ export type FinanceVaultUpdateWithoutDailySalesChannelSummariesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1600,6 +1764,7 @@ export type FinanceVaultUpdateWithoutDailySalesChannelSummariesInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
@@ -1610,6 +1775,8 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = 
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1623,6 +1790,125 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = 
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
+}
+
+export type FinanceVaultCreateWithoutRecurringExpenseDefaultsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
+  account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  accountId: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultCreateOrConnectWithoutRecurringExpenseDefaultsInput = {
+  where: Prisma.FinanceVaultWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput>
+}
+
+export type FinanceVaultUpsertWithoutRecurringExpenseDefaultsInput = {
+  update: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput>
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput>
+  where?: Prisma.FinanceVaultWhereInput
+}
+
+export type FinanceVaultUpdateToOneWithWhereWithoutRecurringExpenseDefaultsInput = {
+  where?: Prisma.FinanceVaultWhereInput
+  data: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput, Prisma.FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput>
+}
+
+export type FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
+  account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
@@ -1630,6 +1916,8 @@ export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1645,6 +1933,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
@@ -1655,6 +1944,8 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1668,6 +1959,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanPaymentsInput = {
@@ -1691,6 +1983,8 @@ export type FinanceVaultUpdateWithoutInclusiveLoanPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1706,6 +2000,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanPaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
@@ -1716,6 +2011,8 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1729,6 +2026,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -1736,6 +2034,8 @@ export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1751,6 +2051,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -1761,6 +2062,8 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1774,6 +2077,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanInstallmentsInput = {
@@ -1797,6 +2101,8 @@ export type FinanceVaultUpdateWithoutInclusiveLoanInstallmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1812,6 +2118,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
@@ -1822,6 +2129,8 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1835,6 +2144,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultCreateManyCompanyInput = {
@@ -1843,6 +2153,8 @@ export type FinanceVaultCreateManyCompanyInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1856,6 +2168,8 @@ export type FinanceVaultUpdateWithoutCompanyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1871,6 +2185,7 @@ export type FinanceVaultUpdateWithoutCompanyInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
@@ -1879,6 +2194,8 @@ export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1893,6 +2210,7 @@ export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutCompanyInput = {
@@ -1901,6 +2219,8 @@ export type FinanceVaultUncheckedUpdateManyWithoutCompanyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1914,6 +2234,8 @@ export type FinanceVaultCreateManyAccountInput = {
   nameAr: string
   nameEn: string
   type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: $Enums.FinanceVaultStatus
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -1927,6 +2249,8 @@ export type FinanceVaultUpdateWithoutAccountInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1942,6 +2266,7 @@ export type FinanceVaultUpdateWithoutAccountInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
@@ -1949,6 +2274,8 @@ export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1963,6 +2290,7 @@ export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutAccountInput = {
@@ -1970,6 +2298,8 @@ export type FinanceVaultUncheckedUpdateManyWithoutAccountInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
   status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
   isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1992,6 +2322,7 @@ export type FinanceVaultCountOutputType = {
   dailyCashHandovers: number
   dailySalesChannelSummaries: number
   outflowAllocations: number
+  recurringExpenseDefaults: number
 }
 
 export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2003,6 +2334,7 @@ export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   dailyCashHandovers?: boolean | FinanceVaultCountOutputTypeCountDailyCashHandoversArgs
   dailySalesChannelSummaries?: boolean | FinanceVaultCountOutputTypeCountDailySalesChannelSummariesArgs
   outflowAllocations?: boolean | FinanceVaultCountOutputTypeCountOutflowAllocationsArgs
+  recurringExpenseDefaults?: boolean | FinanceVaultCountOutputTypeCountRecurringExpenseDefaultsArgs
 }
 
 /**
@@ -2071,6 +2403,13 @@ export type FinanceVaultCountOutputTypeCountOutflowAllocationsArgs<ExtArgs exten
   where?: Prisma.FinanceOutflowAllocationWhereInput
 }
 
+/**
+ * FinanceVaultCountOutputType without action
+ */
+export type FinanceVaultCountOutputTypeCountRecurringExpenseDefaultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+}
+
 
 export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2080,6 +2419,8 @@ export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.Internal
   nameAr?: boolean
   nameEn?: boolean
   type?: boolean
+  paymentMethod?: boolean
+  paymentMethods?: boolean
   status?: boolean
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -2096,6 +2437,7 @@ export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.Internal
   dailyCashHandovers?: boolean | Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>
   dailySalesChannelSummaries?: boolean | Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>
   outflowAllocations?: boolean | Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>
+  recurringExpenseDefaults?: boolean | Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeVault"]>
 
@@ -2107,6 +2449,8 @@ export type FinanceVaultSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   nameAr?: boolean
   nameEn?: boolean
   type?: boolean
+  paymentMethod?: boolean
+  paymentMethods?: boolean
   status?: boolean
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -2125,6 +2469,8 @@ export type FinanceVaultSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   nameAr?: boolean
   nameEn?: boolean
   type?: boolean
+  paymentMethod?: boolean
+  paymentMethods?: boolean
   status?: boolean
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -2143,6 +2489,8 @@ export type FinanceVaultSelectScalar = {
   nameAr?: boolean
   nameEn?: boolean
   type?: boolean
+  paymentMethod?: boolean
+  paymentMethods?: boolean
   status?: boolean
   isSalesChannel?: boolean
   isPaymentDestination?: boolean
@@ -2151,7 +2499,7 @@ export type FinanceVaultSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FinanceVaultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "accountId" | "nameAr" | "nameEn" | "type" | "status" | "isSalesChannel" | "isPaymentDestination" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["financeVault"]>
+export type FinanceVaultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "accountId" | "nameAr" | "nameEn" | "type" | "paymentMethod" | "paymentMethods" | "status" | "isSalesChannel" | "isPaymentDestination" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["financeVault"]>
 export type FinanceVaultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   account?: boolean | Prisma.FinanceAccountDefaultArgs<ExtArgs>
@@ -2163,6 +2511,7 @@ export type FinanceVaultInclude<ExtArgs extends runtime.Types.Extensions.Interna
   dailyCashHandovers?: boolean | Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>
   dailySalesChannelSummaries?: boolean | Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>
   outflowAllocations?: boolean | Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>
+  recurringExpenseDefaults?: boolean | Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceVaultIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2187,6 +2536,7 @@ export type $FinanceVaultPayload<ExtArgs extends runtime.Types.Extensions.Intern
     dailyCashHandovers: Prisma.$FinanceDailySalesClosingPayload<ExtArgs>[]
     dailySalesChannelSummaries: Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>[]
     outflowAllocations: Prisma.$FinanceOutflowAllocationPayload<ExtArgs>[]
+    recurringExpenseDefaults: Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2196,6 +2546,8 @@ export type $FinanceVaultPayload<ExtArgs extends runtime.Types.Extensions.Intern
     nameAr: string
     nameEn: string
     type: $Enums.FinanceVaultType
+    paymentMethod: $Enums.FinanceVaultPaymentMethod
+    paymentMethods: $Enums.FinanceVaultPaymentMethod[]
     status: $Enums.FinanceVaultStatus
     isSalesChannel: boolean
     isPaymentDestination: boolean
@@ -2606,6 +2958,7 @@ export interface Prisma__FinanceVaultClient<T, Null = never, ExtArgs extends run
   dailyCashHandovers<T extends Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailyCashHandoversArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesClosingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dailySalesChannelSummaries<T extends Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailySalesChannelSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   outflowAllocations<T extends Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$outflowAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recurringExpenseDefaults<T extends Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2642,6 +2995,8 @@ export interface FinanceVaultFieldRefs {
   readonly nameAr: Prisma.FieldRef<"FinanceVault", 'String'>
   readonly nameEn: Prisma.FieldRef<"FinanceVault", 'String'>
   readonly type: Prisma.FieldRef<"FinanceVault", 'FinanceVaultType'>
+  readonly paymentMethod: Prisma.FieldRef<"FinanceVault", 'FinanceVaultPaymentMethod'>
+  readonly paymentMethods: Prisma.FieldRef<"FinanceVault", 'FinanceVaultPaymentMethod[]'>
   readonly status: Prisma.FieldRef<"FinanceVault", 'FinanceVaultStatus'>
   readonly isSalesChannel: Prisma.FieldRef<"FinanceVault", 'Boolean'>
   readonly isPaymentDestination: Prisma.FieldRef<"FinanceVault", 'Boolean'>
@@ -3238,6 +3593,30 @@ export type FinanceVault$outflowAllocationsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.FinanceOutflowAllocationScalarFieldEnum | Prisma.FinanceOutflowAllocationScalarFieldEnum[]
+}
+
+/**
+ * FinanceVault.recurringExpenseDefaults
+ */
+export type FinanceVault$recurringExpenseDefaultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceRecurringExpenseProfile
+   */
+  select?: Prisma.FinanceRecurringExpenseProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceRecurringExpenseProfile
+   */
+  omit?: Prisma.FinanceRecurringExpenseProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceRecurringExpenseProfileInclude<ExtArgs> | null
+  where?: Prisma.FinanceRecurringExpenseProfileWhereInput
+  orderBy?: Prisma.FinanceRecurringExpenseProfileOrderByWithRelationInput | Prisma.FinanceRecurringExpenseProfileOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceRecurringExpenseProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceRecurringExpenseProfileScalarFieldEnum | Prisma.FinanceRecurringExpenseProfileScalarFieldEnum[]
 }
 
 /**
