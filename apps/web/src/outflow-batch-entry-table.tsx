@@ -6,7 +6,7 @@ import { DataTable } from "./data-table";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 
-export type OutflowBatchEntryRow = { id: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
+export type OutflowBatchEntryRow = { id: string; kind: "" | "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
 type Category = { id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" };
 type Supplier = { id: string; nameAr: string; nameEn: string | null; isFavorite?: boolean };
 type Vault = { id: string; nameAr: string; nameEn: string };
@@ -15,7 +15,7 @@ type FinanceText = ReturnType<typeof financeText>;
 /** Shared Noorix-style row grid. A row is one independently journal-posted invoice. */
 export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({ language, text, ariaLabel, rows, categories, suppliers, vaults, vatEnabled, vatRateBasisPoints, allowedKinds, maxInvoiceDate, onChange, onSupplierChange, renderSupplierAction, onRemove }: { language: "ar" | "en"; text: FinanceText; ariaLabel: string; rows: readonly Row[]; categories: readonly Category[]; suppliers: readonly Supplier[]; vaults: readonly Vault[]; vatEnabled: boolean; vatRateBasisPoints: number; allowedKinds: readonly Row["kind"][]; maxInvoiceDate?: string; onChange: <K extends keyof Row>(id: string, key: K, value: Row[K]) => void; onSupplierChange: (id: string, supplierId: string) => void; renderSupplierAction?: (supplier: Supplier) => ReactNode; onRemove: (id: string) => void }) {
   const taxRate = `${vatRateBasisPoints / 100}%`;
-  const typeLabel = (kind: Row["kind"]) => kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice;
+  const typeLabel = (kind: Row["kind"]) => kind === "PURCHASE" ? text.purchaseInvoice : kind === "EXPENSE" ? text.expenseInvoice : text.invoiceType;
   return <DataTable ariaLabel={ariaLabel} caption={ariaLabel} className="baseer-batch-entry-table" rowKey={(row) => row.id} rows={rows} columns={[
     { id: "row", header: text.rowNumber, width: "2.75rem", align: "center", className: "baseer-batch-entry-table__row", cell: (row) => rows.indexOf(row) + 1 },
     { id: "kind", header: text.invoiceType, width: "6.5rem", cell: (row) => allowedKinds.length === 1 ? <span>{typeLabel(row.kind)}</span> : <BaseerSearchSelect searchable={false} id={`kind-${row.id}`} label={text.invoiceType} value={row.kind} placeholder={text.invoiceType} options={allowedKinds.map((kind) => ({ id: kind, label: typeLabel(kind) }))} onChange={(kind) => onChange(row.id, "kind" as keyof Row, kind as Row[keyof Row])} /> },
