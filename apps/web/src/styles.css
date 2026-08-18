@@ -291,7 +291,10 @@ button {
   border-radius: 15px;
   color: var(--module);
   background: color-mix(in srgb, var(--module) 12%, #fff);
-  font-size: var(--font-title-md);
+}
+.module-icon svg {
+  width: 31px;
+  height: 31px;
 }
 .module-copy {
   display: grid;

@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { BaseerBrand } from './baseer-brand';
 import { BaseerLogin } from './baseer-login';
+import { BaseerModuleIcon } from './baseer-module-icon';
 import { CompanySessionControl } from './company-session-control';
 const AdministrationWorkspace = lazy(async () => ({ default: (await import('./administration-workspace')).AdministrationWorkspace }));
 const CommandCenterSalesCalendar = lazy(async () => ({ default: (await import('./command-center-sales-calendar')).CommandCenterSalesCalendar }));
@@ -100,7 +101,7 @@ function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen, onSignOu
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1></div>
       <div className="launcher-page__tools"><label className="module-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text.search} /></label><span className="module-count">{visible.length} / {modules.length}</span></div>
       {recent.filter((route) => canOpenRoute(route, permissionCodes)).length > 0 && <section className="recent"><h2>{text.recent}</h2><div className="recent__list">{recent.filter((route) => canOpenRoute(route, permissionCodes)).map((route) => { const module = getModule(route.moduleId); return <button key={`${route.moduleId}:${route.section}`} onClick={() => open(route)} type="button">{module.title[language]} · {module.sections[language][route.section]}</button>; })}</div></section>}
-      <section className="modules-grid launcher-page__grid">{visible.map((module) => <button key={module.id} type="button" className="module-card" style={{ '--module': module.accent } as React.CSSProperties} onClick={() => { const route = firstAllowedRoute(module.id, permissionCodes); if (route) open(route); }}><span className="module-icon" aria-hidden="true">{module.icon}</span><span className="module-copy"><strong>{module.title[language]}</strong></span><span className="module-arrow" aria-hidden="true">←</span></button>)}</section>
+      <section className="modules-grid launcher-page__grid">{visible.map((module) => <button key={module.id} type="button" className="module-card" style={{ '--module': module.accent, '--module-alt': module.accentAlt } as React.CSSProperties} onClick={() => { const route = firstAllowedRoute(module.id, permissionCodes); if (route) open(route); }}><span className="module-icon" aria-hidden="true"><BaseerModuleIcon moduleId={module.id} /></span><span className="module-copy"><strong>{module.title[language]}</strong></span><span className="module-arrow" aria-hidden="true">←</span></button>)}</section>
       {visible.length === 0 && <p className="empty-results">{text.noResults}</p>}
 
     </main>
