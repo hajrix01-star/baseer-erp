@@ -604,9 +604,17 @@ html[dir="ltr"] .mobile-drawer__panel {
     padding: 0 12px;
     gap: 7px;
   }
-  .company-selector span:nth-of-type(2),
   .topbar .theme-button {
     display: none;
+  }
+  .topbar .company-selector {
+    min-width: 0;
+    max-width: calc(100vw - 12rem);
+  }
+  .topbar .company-selector span:nth-of-type(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .topbar :is(.text-button, .theme-button, .company-selector),
   .launcher-topbar :is(.text-button, .theme-button) {
