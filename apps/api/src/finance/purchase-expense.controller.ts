@@ -1,4 +1,4 @@
-import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
+import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsQuerySchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -58,11 +58,16 @@ export class PurchaseExpenseController {
     return financeCreditWorkspaceReceiptSchema.parse(await this.documents.creditWorkspace(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) }));
   }
   @Get()
-  async list(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async list(@Query() query: Record<string, unknown>, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsedQuery = financeOutflowDocumentsQuerySchema.safeParse(query);
+    if (!parsedQuery.success) throw new BadRequestException('Invalid document history query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    const page = await this.documents.list(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) });
     return financeOutflowDocumentsReceiptSchema.parse({
       companyId: context.companyId,
-      documents: await this.documents.list(context),
+      documents: page.documents,
+      hasMore: page.hasMore,
+      nextCursor: page.nextCursor,
     });
   }
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability = CREATE_CAPABILITY) {

@@ -40,12 +40,12 @@ export class ExpensesObligationsReadService {
       companyId: authorized.company.id,
       actorUserId: authorized.principal.userId,
     };
-    const [businessDate, configuration, loans, profiles, documents] = await Promise.all([
+    const [businessDate, configuration, loans, profiles, documentPage] = await Promise.all([
       this.businessDates.currentForTrustedContext(context),
       this.configuration.read({ accessToken: input.accessToken, companyId: context.companyId }),
       this.loans.list(context),
       this.recurring.list(context),
-      this.documents.list(context),
+      this.documents.list(context, { pageSize: 50 }),
     ]);
     return {
       companyId: context.companyId,
@@ -53,7 +53,7 @@ export class ExpensesObligationsReadService {
       configuration,
       loans,
       recurringProfiles: profiles,
-      documents,
+      documents: documentPage.documents,
     };
   }
 }

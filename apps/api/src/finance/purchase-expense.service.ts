@@ -192,11 +192,24 @@ export class PurchaseExpenseService {
     const suppliers = [...groups.values()].map((group) => ({ supplierId: group.supplierId, supplierNameAr: group.supplierNameAr, supplierNameEn: group.supplierNameEn, invoiceCount: group.dues.length, originalAmount: group.original.toFixed(4), paidAmount: group.paid.toFixed(4), remainingAmount: group.remaining.toFixed(4), dues: group.dues }));
     return { companyId: context.companyId, asOfBusinessDate: date.businessDate, openSupplierCount: result.openSupplierCount, openInvoiceCount: result.summary._count._all, originalAmount: (result.summary._sum.originalAmount ?? new Prisma.Decimal(0)).toFixed(4), paidAmount: (result.summary._sum.paidAmount ?? new Prisma.Decimal(0)).toFixed(4), remainingAmount: (result.summary._sum.remainingAmount ?? new Prisma.Decimal(0)).toFixed(4), suppliers, hasMore: result.hasMore, nextCursor: result.nextCursor };
   }
-  async list(context: TrustedCompanyActorContext) {
-    return this.db.inTenantTransaction(context.tenantId, async (tx) => tx.financeOutflowDocument.findMany({
-      where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: [{ businessDate: 'desc' }, { createdAt: 'desc' }], take: 250,
-      select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, businessDate: true, grossAmount: true, batch: { select: { batchNumber: true } }, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } } },
-    }).then((documents) => documents.map((document) => ({ id: document.id, documentNumber: document.documentNumber, kind: document.kind, settlementKind: document.settlementKind, status: document.status, businessDate: document.businessDate, grossAmount: document.grossAmount.toFixed(4), batchNumber: document.batch?.batchNumber ?? null, supplierNameAr: document.supplier?.nameAr ?? null, supplierNameEn: document.supplier?.nameEn ?? null, categoryNameAr: document.category.nameAr, categoryNameEn: document.category.nameEn }))));
+  async list(context: TrustedCompanyActorContext, input: { cursor?: string; pageSize: number }) {
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const baseWhere: Prisma.FinanceOutflowDocumentWhereInput = { tenantId: context.tenantId, companyId: context.companyId };
+      const cursor = input.cursor ? await tx.financeOutflowDocument.findFirst({ where: { ...baseWhere, id: input.cursor }, select: { id: true, businessDate: true, createdAt: true } }) : null;
+      if (input.cursor && !cursor) throw new BadRequestException('The document history cursor is no longer valid.');
+      const rows = await tx.financeOutflowDocument.findMany({
+        where: cursor ? { ...baseWhere, OR: [
+          { businessDate: { lt: cursor.businessDate } },
+          { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
+          { businessDate: cursor.businessDate, createdAt: cursor.createdAt, id: { lt: cursor.id } },
+        ] } : baseWhere,
+        orderBy: [{ businessDate: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }], take: input.pageSize + 1,
+        select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, businessDate: true, grossAmount: true, batch: { select: { batchNumber: true } }, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } } },
+      });
+      const hasMore = rows.length > input.pageSize;
+      const documents = hasMore ? rows.slice(0, input.pageSize) : rows;
+      return { documents: documents.map((document) => ({ id: document.id, documentNumber: document.documentNumber, kind: document.kind, settlementKind: document.settlementKind, status: document.status, businessDate: document.businessDate, grossAmount: document.grossAmount.toFixed(4), batchNumber: document.batch?.batchNumber ?? null, supplierNameAr: document.supplier?.nameAr ?? null, supplierNameEn: document.supplier?.nameEn ?? null, categoryNameAr: document.category.nameAr, categoryNameEn: document.category.nameEn })), hasMore, nextCursor: hasMore ? documents.at(-1)?.id ?? null : null };
+    });
   }
 
   private async postDocument(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, raw: PurchaseExpenseRequest, requestId: string, batchId?: string, recurring?: { profileId: string; coverageYear: number; coverageStartMonth: number; coverageMonths: number }): Promise<PurchaseExpenseReceipt> {

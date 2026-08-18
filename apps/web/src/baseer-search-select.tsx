@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 
 export type BaseerSearchOption = { id: string; label: string; isFavorite?: boolean };
 
-export function BaseerSearchSelect({ id, label, value, options, placeholder, disabled, required, className, searchable = true, onChange }: { id?: string; label: string; value: string; options: readonly BaseerSearchOption[]; placeholder: string; disabled?: boolean; required?: boolean; className?: string; searchable?: boolean; onChange: (value: string) => void }) {
+export function BaseerSearchSelect({ id, label, value, options, placeholder, disabled, required, className, searchable = true, remoteSearch, onChange }: { id?: string; label: string; value: string; options: readonly BaseerSearchOption[]; placeholder: string; disabled?: boolean; required?: boolean; className?: string; searchable?: boolean; remoteSearch?: (query: string) => Promise<readonly BaseerSearchOption[]>; onChange: (value: string) => void }) {
   const generatedId = useId();
   const inputId = id ?? `baseer-search-select-${generatedId}`;
   const rootRef = useRef<HTMLDivElement>(null);
@@ -12,12 +12,23 @@ export function BaseerSearchSelect({ id, label, value, options, placeholder, dis
   const suppressNextFocusOpenRef = useRef(false);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [remoteOptions, setRemoteOptions] = useState<readonly BaseerSearchOption[]>([]);
   const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
-  const selected = useMemo(() => options.find((option) => option.id === value), [options, value]);
+  const selected = useMemo(() => options.find((option) => option.id === value) ?? remoteOptions.find((option) => option.id === value), [options, remoteOptions, value]);
   const matches = useMemo(() => {
+    if (remoteSearch) return remoteOptions;
     const term = query.trim().toLocaleLowerCase();
     return options.filter((option) => !term || option.label.toLocaleLowerCase().includes(term));
-  }, [options, query]);
+  }, [options, query, remoteOptions, remoteSearch]);
+
+  useEffect(() => {
+    if (!open || !remoteSearch) return;
+    let active = true;
+    const timeout = window.setTimeout(() => {
+      void remoteSearch(query).then((next) => { if (active) setRemoteOptions(next); }).catch(() => { if (active) setRemoteOptions([]); });
+    }, 180);
+    return () => { active = false; window.clearTimeout(timeout); };
+  }, [open, query, remoteSearch]);
 
   const positionMenu = () => {
     const rect = inputRef.current?.getBoundingClientRect();

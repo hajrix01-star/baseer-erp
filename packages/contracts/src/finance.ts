@@ -317,6 +317,8 @@ export const supplierDueCashProjectionQuerySchema = z
         value ? new Date(`${value}T00:00:00.000Z`) : undefined,
       ),
     vaultId: z.string().uuid().optional(),
+    cursor: z.string().uuid().optional(),
+    pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
   })
   .strict();
 export const supplierDueCashProjectionItemSchema = z
@@ -336,7 +338,9 @@ export const supplierDueCashProjectionItemSchema = z
 export const supplierDueCashProjectionReceiptSchema = z
   .object({
     companyId: companyIdSchema,
-    payments: z.array(supplierDueCashProjectionItemSchema).max(10_000),
+    payments: z.array(supplierDueCashProjectionItemSchema).max(100),
+    hasMore: z.boolean(),
+    nextCursor: z.string().uuid().nullable(),
   })
   .strict();
 export const financeVaultCreateReceiptSchema = z
@@ -414,6 +418,8 @@ export const supplierDueHistoryQuerySchema = z
   .object({
     supplierId: z.string().uuid().optional(),
     status: financeDueStatusSchema.optional(),
+    cursor: z.string().uuid().optional(),
+    pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
   })
   .strict();
 export const supplierDueHistoryPaymentSchema = z
@@ -442,13 +448,31 @@ export const supplierDueHistoryItemSchema = z
     paidAmount: financeAmountSchema,
     remainingAmount: financeAmountSchema,
     status: financeDueStatusSchema,
-    payments: z.array(supplierDueHistoryPaymentSchema).max(10_000),
+    paymentCount: z.number().int().nonnegative(),
   })
   .strict();
 export const supplierDueHistoryReceiptSchema = z
   .object({
     companyId: companyIdSchema,
-    dues: z.array(supplierDueHistoryItemSchema).max(10_000),
+    dues: z.array(supplierDueHistoryItemSchema).max(100),
+    hasMore: z.boolean(),
+    nextCursor: z.string().uuid().nullable(),
+  })
+  .strict();
+
+export const supplierDuePaymentHistoryQuerySchema = z
+  .object({
+    cursor: z.string().uuid().optional(),
+    pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
+  })
+  .strict();
+export const supplierDuePaymentHistoryReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    dueId: z.string().uuid(),
+    payments: z.array(supplierDueHistoryPaymentSchema).max(100),
+    hasMore: z.boolean(),
+    nextCursor: z.string().uuid().nullable(),
   })
   .strict();
 
@@ -550,6 +574,46 @@ export const financeConfigurationReceiptSchema = z
     categories: z.array(financeConfigurationCategorySchema).max(500),
     suppliers: z.array(financeConfigurationSupplierSchema).max(1_000),
     standardSuppliers: z.array(financeConfigurationStandardSupplierSchema).max(32),
+  })
+  .strict();
+
+/** Bounded server search used by long reference lists; results are never a financial aggregate. */
+export const financeReferenceSearchQuerySchema = z
+  .object({
+    q: z.string().trim().min(1).max(160).optional(),
+    kind: z.enum(["PURCHASE", "EXPENSE", "SALE"]).optional(),
+    pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
+  })
+  .strict();
+export const financeSupplierReferenceOptionSchema = z
+  .object({
+    id: z.string().uuid(),
+    nameAr: z.string().min(1).max(160),
+    nameEn: z.string().max(160).nullable(),
+    categoryId: z.string().uuid().nullable(),
+    supplierType: z.enum(["PURCHASE", "EXPENSE"]),
+    isFavorite: z.boolean(),
+  })
+  .strict();
+export const financeSupplierReferenceSearchReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    suppliers: z.array(financeSupplierReferenceOptionSchema).max(100),
+  })
+  .strict();
+export const financeCategoryReferenceOptionSchema = z
+  .object({
+    id: z.string().uuid(),
+    code: z.string().min(1).max(80),
+    nameAr: z.string().min(1).max(160),
+    nameEn: z.string().max(160).nullable(),
+    kind: z.enum(["PURCHASE", "EXPENSE", "SALE"]),
+  })
+  .strict();
+export const financeCategoryReferenceSearchReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    categories: z.array(financeCategoryReferenceOptionSchema).max(100),
   })
   .strict();
 
@@ -980,7 +1044,13 @@ export const financeCreditWorkspaceReceiptSchema = z.object({
 }).strict();
 export const financeOutflowDocumentsReceiptSchema = z.object({
   companyId: companyIdSchema,
-  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(250),
+  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(100),
+  hasMore: z.boolean(),
+  nextCursor: z.string().uuid().nullable(),
+}).strict();
+export const financeOutflowDocumentsQuerySchema = z.object({
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
 export type FinanceOutflowDocumentReceipt = z.infer<typeof financeOutflowDocumentReceiptSchema>;
 export type FinanceOutflowDocumentsReceipt = z.infer<typeof financeOutflowDocumentsReceiptSchema>;
@@ -1084,7 +1154,7 @@ export const expensesObligationsWorkspaceReceiptSchema = z.object({
   configuration: financeConfigurationReceiptSchema,
   loans: z.array(inclusiveLoanRecordSchema).max(500),
   recurringProfiles: z.array(financeRecurringExpenseProfileSchema).max(500),
-  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(250),
+  documents: z.array(financeOutflowDocumentHistoryItemSchema).max(100),
 }).strict();
 export type ExpensesObligationsWorkspaceReceipt = z.infer<typeof expensesObligationsWorkspaceReceiptSchema>;
 export const treasuryTransferRequestSchema = z.object({

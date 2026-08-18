@@ -27,8 +27,8 @@ export class DailySalesReadService {
             companyId: context.companyId,
             ...this.businessDateWhere(range),
         };
-        const cursor = options.cursor ? await transaction.financeDailySalesClosing.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, id: options.cursor }, select: { id: true, businessDate: true } }) : null;
-        if (options.cursor && !cursor) throw new BadRequestException("The daily-sales page cursor is invalid.");
+        const cursor = options.cursor ? await transaction.financeDailySalesClosing.findFirst({ where: { ...baseWhere, id: options.cursor }, select: { id: true, businessDate: true } }) : null;
+        if (options.cursor && !cursor) throw new BadRequestException("The daily-sales page cursor is invalid for the active period.");
         const closings = await transaction.financeDailySalesClosing.findMany({
           where: cursor ? { ...baseWhere, OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : baseWhere,
           orderBy: [

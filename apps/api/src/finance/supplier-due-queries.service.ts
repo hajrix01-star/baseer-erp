@@ -10,6 +10,13 @@ import {
 export type SupplierDueHistoryInput = Readonly<{
   status?: FinanceSupplierDueStatus;
   supplierId?: string;
+  cursor?: string;
+  pageSize: number;
+}>;
+
+export type SupplierDuePaymentHistoryInput = Readonly<{
+  cursor?: string;
+  pageSize: number;
 }>;
 
 @Injectable()
@@ -23,13 +30,35 @@ export class SupplierDueQueriesService {
     return this.database.inTenantTransaction(
       context.tenantId,
       async (transaction) => {
-        const dues = await transaction.financeSupplierDue.findMany({
-          where: {
+        const baseWhere: Prisma.FinanceSupplierDueWhereInput = {
             tenantId: context.tenantId,
             companyId: context.companyId,
             ...(input.status ? { status: input.status } : {}),
             ...(input.supplierId ? { supplierId: input.supplierId } : {}),
-          },
+          };
+        const cursor = input.cursor
+          ? await transaction.financeSupplierDue.findFirst({
+              where: { ...baseWhere, id: input.cursor },
+              select: { id: true, originalBusinessDate: true },
+            })
+          : null;
+        if (input.cursor && !cursor)
+          throw new ConflictException(
+            "The supplier-due history cursor is no longer valid.",
+          );
+        const dues = await transaction.financeSupplierDue.findMany({
+          where: cursor
+            ? {
+                ...baseWhere,
+                OR: [
+                  { originalBusinessDate: { lt: cursor.originalBusinessDate } },
+                  {
+                    originalBusinessDate: cursor.originalBusinessDate,
+                    id: { lt: cursor.id },
+                  },
+                ],
+              }
+            : baseWhere,
           select: {
             id: true,
             supplierId: true,
@@ -43,23 +72,16 @@ export class SupplierDueQueriesService {
             status: true,
             supplier: { select: { nameAr: true, nameEn: true } },
             category: { select: { code: true, nameAr: true } },
-            payments: {
-              select: {
-                id: true,
-                vaultId: true,
-                businessDate: true,
-                amount: true,
-                status: true,
-                journalEntryId: true,
-              },
-              orderBy: [{ businessDate: "asc" }, { id: "asc" }],
-              take: 10_000,
-            },
+            _count: { select: { payments: true } },
           },
           orderBy: [{ originalBusinessDate: "desc" }, { id: "desc" }],
-          take: 10_000,
+          take: input.pageSize + 1,
         });
-        return dues.map((due) => {
+        const hasMore = dues.length > input.pageSize;
+        const page = hasMore ? dues.slice(0, input.pageSize) : dues;
+        const nextCursor = hasMore ? page.at(-1)?.id ?? null : null;
+        return {
+          dues: page.map((due) => {
           if (!due.category)
             throw new ConflictException(
               "A supplier due is missing its category history.",
@@ -79,17 +101,68 @@ export class SupplierDueQueriesService {
             paidAmount: due.paidAmount.toFixed(4),
             remainingAmount: due.remainingAmount.toFixed(4),
             status: due.status,
-            payments: due.payments.map((payment) => ({
-              id: payment.id,
-              vaultId: payment.vaultId,
-              businessDate: payment.businessDate,
-              amount: payment.amount.toFixed(4),
-              status: payment.status,
-              journalEntryId: payment.journalEntryId,
-            })),
+            paymentCount: due._count.payments,
           };
-        });
+          }),
+          hasMore,
+          nextCursor,
+        };
       },
     );
+  }
+
+  async listPayments(
+    context: TrustedCompanyActorContext,
+    dueId: string,
+    input: SupplierDuePaymentHistoryInput,
+  ) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const due = await transaction.financeSupplierDue.findFirst({
+        where: { id: dueId, tenantId: context.tenantId, companyId: context.companyId },
+        select: { id: true },
+      });
+      if (!due) throw new ConflictException("The supplier due was not found.");
+      const cursor = input.cursor
+        ? await transaction.financeSupplierDuePayment.findFirst({
+            where: { id: input.cursor, tenantId: context.tenantId, companyId: context.companyId, dueId },
+            select: { id: true, businessDate: true },
+          })
+        : null;
+      if (input.cursor && !cursor)
+        throw new ConflictException("The supplier-due payment cursor is no longer valid.");
+      const payments = await transaction.financeSupplierDuePayment.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          dueId,
+          ...(cursor
+            ? {
+                OR: [
+                  { businessDate: { lt: cursor.businessDate } },
+                  { businessDate: cursor.businessDate, id: { lt: cursor.id } },
+                ],
+              }
+            : {}),
+        },
+        select: { id: true, vaultId: true, businessDate: true, amount: true, status: true, journalEntryId: true },
+        orderBy: [{ businessDate: "desc" }, { id: "desc" }],
+        take: input.pageSize + 1,
+      });
+      const hasMore = payments.length > input.pageSize;
+      const page = hasMore ? payments.slice(0, input.pageSize) : payments;
+      return {
+        dueId: due.id,
+        payments: page.map((payment) => ({
+          id: payment.id,
+          vaultId: payment.vaultId,
+          businessDate: payment.businessDate,
+          amount: payment.amount.toFixed(4),
+          status: payment.status,
+          journalEntryId: payment.journalEntryId,
+        })),
+        hasMore,
+        nextCursor: hasMore ? page.at(-1)?.id ?? null : null,
+      };
+    });
   }
 }

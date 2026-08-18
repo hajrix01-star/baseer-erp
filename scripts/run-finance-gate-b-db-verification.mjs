@@ -98,12 +98,32 @@ try {
   assert.equal(paymentRecognition.lines.some((line) => line.accountId === cashBasisPosting.category.accountId && line.debitAmount.equals('40.0000')), true, 'The payment journal must debit P&L only for the paid proportion.');
   assert.equal(paymentRecognition.lines.some((line) => line.accountId === cashBasisPosting.pending.id && line.creditAmount.equals('40.0000')), true, 'The payment journal must release the pending-outflow balance.');
 
-  const projectionBeforeReverse = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
-    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId }),
+  const pagedDue = await services.dues.createDue({
+    context,
+    idempotencyKey: randomUUID(),
+    request: { supplierId: master.supplierId, categoryId: master.categoryId, sourceDocumentNumber: `DUE-PAGE-${suffix}`, businessDate: date('2026-08-16'), amount: '20.0000' },
+  });
+  const pagedPayment = await services.dues.recordPayment({
+    context,
+    idempotencyKey: randomUUID(),
+    request: { dueId: pagedDue.dueId, vaultId: master.vaultId, businessDate: date('2026-08-17'), amount: '20.0000' },
+  });
+  const projectionFirstPage = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
+    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId, pageSize: 1 }),
   );
-  assert.equal(projectionBeforeReverse.length, 1, 'Only the paid amount must appear in cash projection.');
-  assert.equal(projectionBeforeReverse[0].amount, '40.0000');
-  assert.equal(projectionBeforeReverse[0].recognizedNetAmount, '40.0000');
+  assert.equal(projectionFirstPage.hasMore, true, 'Cash projection must expose a bounded next page.');
+  const projectionSecondPage = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
+    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId, pageSize: 1, cursor: projectionFirstPage.nextCursor }),
+  );
+  assert.equal(projectionSecondPage.payments.length, 1, 'Cash projection cursor must return the next row.');
+  assert.notEqual(projectionSecondPage.payments[0].paymentId, projectionFirstPage.payments[0].paymentId, 'Cash projection cursor must not repeat a row.');
+
+  const projectionBeforeReverse = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
+    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId, pageSize: 50 }),
+  );
+  assert.equal(projectionBeforeReverse.payments.length, 2, 'Every posted paid amount must appear in cash projection.');
+  assert.equal(projectionBeforeReverse.payments.some((item) => item.amount === '40.0000' && item.recognizedNetAmount === '40.0000'), true);
+  assert.equal(projectionBeforeReverse.payments.some((item) => item.amount === '20.0000' && item.recognizedNetAmount === '20.0000'), true);
 
   await assert.rejects(
     () => services.dues.recordPayment({ context: otherContext, idempotencyKey: randomUUID(), request: { dueId: due.dueId, vaultId: master.vaultId, businessDate: date('2026-08-16'), amount: '1.0000' } }),
@@ -116,10 +136,15 @@ try {
     request: { paymentId: payment.paymentId, businessDate: date('2026-08-17'), reason: 'Finance gate reversal' },
   });
   assert.equal(reversedDuePayment.remainingAmount, '100.0000');
+  await services.dues.reversePayment({
+    context,
+    idempotencyKey: randomUUID(),
+    request: { paymentId: pagedPayment.paymentId, businessDate: date('2026-08-18'), reason: 'Finance gate page reversal' },
+  });
   const projectionAfterReverse = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
-    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId }),
+    services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId, pageSize: 50 }),
   );
-  assert.equal(projectionAfterReverse.length, 0, 'A reversed payment must leave cash projection.');
+  assert.equal(projectionAfterReverse.payments.length, 0, 'A reversed payment must leave cash projection.');
 
   const loan = await services.loans.createOpeningLoan({
     context,
@@ -258,15 +283,20 @@ try {
   assert.equal(transfer.amount, "25.0000");
   const transferReplay = await services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "25.0000", businessDate: date("2026-08-20"), idempotencyKey: transferKey });
   assert.equal(transferReplay.journalEntryId, transfer.journalEntryId, "A vault transfer must replay idempotently.");
+  const earlierTransfer = await services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "10.0000", businessDate: date("2026-08-19"), idempotencyKey: randomUUID() });
   await assert.rejects(() => services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.vaultId, amount: "1.0000", businessDate: date("2026-08-20"), idempotencyKey: randomUUID() }), "A transfer must require distinct vaults.");
   await assert.rejects(() => services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "1.0000", businessDate: date("2099-01-01"), idempotencyKey: randomUUID() }), "A future vault transfer must be rejected.");
   const treasury = await services.treasury.workspace(context, { includeArchived: false });
-  assert.ok(treasury.vaults.some((vault) => vault.id === master.bankVaultId && vault.inflow === "25.0000"), "Treasury read model must derive the destination inflow from the journal.");
+  assert.ok(treasury.vaults.some((vault) => vault.id === master.bankVaultId && vault.inflow === "35.0000"), "Treasury read model must derive the destination inflow from the journal.");
   assert.ok(treasury.groups.some((group) => group.key === "COLLECTION_CHANNELS"), "Treasury workspace must return server-owned vault groups.");
   const activity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 1 });
   assert.equal(activity.items.length, 1, "Vault activity must be paginated by the server.");
   assert.equal(activity.items[0].journalEntryId, transfer.journalEntryId, "Vault activity must expose the transfer entry for its vault.");
-  assert.equal(activity.summary.inflow, "25.0000", "Vault activity totals must be derived from the server ledger.");
+  assert.equal(activity.summary.inflow, "35.0000", "Vault activity totals must be derived from the server ledger.");
+  assert.ok(activity.nextCursor, "Vault activity must return a stable cursor when more rows exist.");
+  const secondActivity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 1, cursor: activity.nextCursor });
+  assert.equal(secondActivity.items.length, 1, "Vault activity cursor must return the next row.");
+  assert.equal(secondActivity.items[0].journalEntryId, earlierTransfer.journalEntryId, "Vault activity cursor must preserve chronological ordering.");
   await verifySealedBalancedJournals();
   await verifySealedLineCannotChange(due.journalEntryId);
 

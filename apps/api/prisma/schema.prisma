@@ -682,6 +682,8 @@ model FinanceSupplierDue {
   @@unique([journalEntryId, tenantId, companyId])
   @@unique([companyId, supplierId, sourceDocumentNumber])
   @@index([tenantId, companyId, status, originalBusinessDate])
+  @@index([tenantId, companyId, status, originalBusinessDate, id], map: "FinanceSupplierDue_tenant_company_status_date_id_idx")
+  @@index([tenantId, companyId, supplierId, originalBusinessDate, id], map: "FinanceSupplierDue_tenant_company_supplier_date_id_idx")
 }
 
 model FinanceSupplierDuePayment {
@@ -712,6 +714,8 @@ model FinanceSupplierDuePayment {
   @@unique([reversalOfId, tenantId, companyId])
   @@unique([journalEntryId, tenantId, companyId])
   @@index([tenantId, companyId, dueId, businessDate])
+  @@index([tenantId, companyId, dueId, businessDate, id], map: "FinanceSupplierDuePayment_tenant_company_due_date_id_idx")
+  @@index([tenantId, companyId, status, businessDate, id], map: "FinanceSupplierDuePayment_tenant_company_status_date_id_idx")
 }
 
 model FinanceJournalEntry {
@@ -799,6 +803,7 @@ model FinanceOutflowDocument {
   @@index([tenantId, companyId, supplierId, businessDate])
   @@index([tenantId, companyId, batchId])
   @@index([tenantId, companyId, recurringExpenseProfileId, coverageYear])
+  @@index([tenantId, companyId, businessDate, createdAt, id], map: "FinanceOutflowDocument_tenant_company_date_created_id_idx")
 }
 
 model FinanceOutflowBatch {
@@ -858,6 +863,7 @@ model FinanceJournalLine {
   @@unique([id, tenantId, companyId])
   @@unique([journalEntryId, lineNumber])
   @@index([tenantId, companyId, accountId, createdAt])
+  @@index([tenantId, companyId, accountId, journalEntryId, createdAt, id], map: "FinanceJournalLine_tenant_company_account_entry_created_id_idx")
   @@index([tenantId, companyId, journalEntryId])
 }
 

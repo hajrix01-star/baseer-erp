@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -43,6 +43,8 @@ export function ExpensesObligationsWorkspace({ language }: { language: "ar" | "e
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [tab, setTab] = useState<"items" | "batch" | "history">("items");
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [remoteSuppliers, setRemoteSuppliers] = useState<Configuration["suppliers"]>([]);
+  const [remoteCategories, setRemoteCategories] = useState<Configuration["categories"]>([]);
   const [loadError, setLoadError] = useState("");
   const loadWorkspace = useCallback(async () => {
     const current = activeSession(); setSession(current); if (!current) return;
@@ -59,7 +61,7 @@ export function ExpensesObligationsWorkspace({ language }: { language: "ar" | "e
     <BaseerWorkspaceTabs ariaLabel={text.expensesObligations} idPrefix="expenses-tab" activeId={tab} tabs={[{ id: "items", label: text.itemsAndObligations }, { id: "batch", label: text.batchPayment }, { id: "history", label: text.settlementHistory }]} onChange={(id) => setTab(id as typeof tab)} />
     <BaseerBatchPanel id={`expenses-tab-panel-${tab}`} labelledBy={`expenses-tab-${tab}`}>
       {tab === "items" ? <ItemsAndObligations language={language} workspace={workspace} reload={loadWorkspace} /> : null}
-      {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} /> : null}
+      {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} remoteSuppliers={remoteSuppliers} setRemoteSuppliers={setRemoteSuppliers} remoteCategories={remoteCategories} setRemoteCategories={setRemoteCategories} /> : null}
       {tab === "history" ? <SettlementHistory language={language} documents={workspace.documents} loans={workspace.loans} /> : null}
     </BaseerBatchPanel>
   </section>;
@@ -107,14 +109,22 @@ function ItemsAndObligations({ language, workspace, reload }: { language: "ar" |
   </>;
 }
 
-function ExpenseSettlementBatch({ language, configuration, profiles, businessDate: serverBusinessDate, reload }: { language: "ar" | "en"; configuration: Configuration; profiles: Profile[]; businessDate: string; reload: () => Promise<void> }) {
+function ExpenseSettlementBatch({ language, configuration, profiles, businessDate: serverBusinessDate, reload, remoteSuppliers, setRemoteSuppliers, remoteCategories, setRemoteCategories }: { language: "ar" | "en"; configuration: Configuration; profiles: Profile[]; businessDate: string; reload: () => Promise<void>; remoteSuppliers: Configuration["suppliers"]; setRemoteSuppliers: Dispatch<SetStateAction<Configuration["suppliers"]>>; remoteCategories: Configuration["categories"]; setRemoteCategories: Dispatch<SetStateAction<Configuration["categories"]>> }) {
   const text = financeText(language);
   const [rows, setRows] = useState<ExpenseRow[]>(() => Array.from({ length: 3 }, () => newExpenseRow()));
   const [businessDate, setBusinessDate] = useState(serverBusinessDate);
   const [message, setMessage] = useState<{ kind: "idle" | "error" | "success"; text: string }>({ kind: "idle", text: "" });
   const [saving, setSaving] = useState(false);
-  const categories = useMemo(() => configuration.categories.filter((item) => item.status === "ACTIVE" && item.kind === "EXPENSE" && item.isPosting !== false), [configuration]);
-  const suppliers = useMemo(() => configuration.suppliers.filter((item) => item.status === "ACTIVE"), [configuration]);
+  const categories = useMemo(() => {
+    const byId = new Map<string, Configuration["categories"][number]>();
+    for (const category of [...configuration.categories, ...remoteCategories]) if (category.status === "ACTIVE" && category.kind === "EXPENSE" && category.isPosting !== false) byId.set(category.id, category);
+    return [...byId.values()];
+  }, [configuration, remoteCategories]);
+  const suppliers = useMemo(() => {
+    const byId = new Map<string, Configuration["suppliers"][number]>();
+    for (const supplier of [...configuration.suppliers, ...remoteSuppliers]) if (supplier.status === "ACTIVE") byId.set(supplier.id, supplier);
+    return [...byId.values()];
+  }, [configuration, remoteSuppliers]);
   const vaults = useMemo(() => configuration.vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination), [configuration]);
   const enteredRows = useMemo(() => rows.filter((row) => Boolean(row.categoryId || row.supplierId || row.invoiceNumber.trim() || row.missingReason.trim() || row.supplierInvoiceDate || row.grossAmount.trim() || row.vaultId || row.notes.trim())), [rows]);
   const change = <K extends keyof ExpenseRow>(id: string, key: K, value: ExpenseRow[K]) => setRows((current) => current.map((row) => row.id === id ? { ...row, [key]: value } : row));
@@ -123,6 +133,26 @@ function ExpenseSettlementBatch({ language, configuration, profiles, businessDat
     const supplier = suppliers.find((item) => item.id === supplierId);
     return { ...row, supplierId, categoryId: supplier?.categoryId && categories.some((category) => category.id === supplier.categoryId) ? supplier.categoryId : row.categoryId };
   }));
+  const remoteSupplierSearch = useCallback(async (query: string) => {
+    const current = activeSession(); if (!current) return [];
+    const receipt = await api<{ suppliers: Array<Pick<Configuration["suppliers"][number], "id" | "nameAr" | "nameEn" | "categoryId">> }>(current, `/finance/configuration/suppliers?pageSize=50${query.trim() ? `&q=${encodeURIComponent(query.trim())}` : ""}`);
+    setRemoteSuppliers((previous) => {
+      const byId = new Map(previous.map((supplier) => [supplier.id, supplier]));
+      for (const supplier of receipt.suppliers) byId.set(supplier.id, { ...supplier, status: "ACTIVE" });
+      return [...byId.values()];
+    });
+    return receipt.suppliers.map((supplier) => ({ id: supplier.id, label: displayName(language, supplier) }));
+  }, [language, setRemoteSuppliers]);
+  const remoteCategorySearch = useCallback(async (_kind: ExpenseRow["kind"], query: string) => {
+    const current = activeSession(); if (!current) return [];
+    const receipt = await api<{ categories: Array<Pick<Configuration["categories"][number], "id" | "nameAr" | "nameEn" | "kind">> }>(current, `/finance/configuration/categories?pageSize=50&kind=EXPENSE${query.trim() ? `&q=${encodeURIComponent(query.trim())}` : ""}`);
+    setRemoteCategories((previous) => {
+      const byId = new Map(previous.map((category) => [category.id, category]));
+      for (const category of receipt.categories) byId.set(category.id, { ...category, status: "ACTIVE", isPosting: true, suggestedSupplierId: null });
+      return [...byId.values()];
+    });
+    return receipt.categories.map((category) => ({ id: category.id, label: displayName(language, category) }));
+  }, [language, setRemoteCategories]);
   const remove = (id: string) => setRows((current) => current.length === 1 ? current : current.filter((row) => row.id !== id));
   const submit = async (event: React.FormEvent) => {
     event.preventDefault(); const current = activeSession(); if (!current || saving) return;
@@ -138,7 +168,7 @@ function ExpenseSettlementBatch({ language, configuration, profiles, businessDat
   };
   return <div className="expenses-obligations-batches baseer-batch-workspace">
     <BaseerCard><form className="baseer-batch-form" onSubmit={(event) => void submit(event)}><div className="baseer-batch-header"><label>{text.batchDate}<BaseerDatePicker language={language} label={text.batchDate} max={serverBusinessDate} value={businessDate} onChange={setBusinessDate} /></label></div>{message.kind !== "idle" ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
-      <OutflowBatchEntryTable language={language} text={text} ariaLabel={text.expenseBatchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={vaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["EXPENSE"]} maxInvoiceDate={businessDate} onChange={change} onSupplierChange={chooseSupplier} onRemove={remove} />
+      <OutflowBatchEntryTable language={language} text={text} ariaLabel={text.expenseBatchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={vaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["EXPENSE"]} maxInvoiceDate={businessDate} onChange={change} onSupplierChange={chooseSupplier} remoteSupplierSearch={remoteSupplierSearch} remoteCategorySearch={remoteCategorySearch} onRemove={remove} />
       <footer className="baseer-batch-footer"><div className="baseer-batch-total" /><div><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="baseer-batch-add-row" onClick={() => setRows((current) => [...current, newExpenseRow()])}>+</BaseerButton><BaseerButton variant="secondary" style={{ minHeight: "2.5rem", padding: "0 .25rem", border: 0, background: "transparent", boxShadow: "none", color: "var(--brand)" }} disabled={saving}>{saving ? text.saving : text.savePaymentCount(enteredRows.length)}</BaseerButton></div></footer>
     </form></BaseerCard>
     <Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><RecurringExpensePaymentBatch language={language} configuration={configuration} profiles={profiles} businessDate={serverBusinessDate} reload={reload} /></Suspense>

@@ -77,15 +77,33 @@ export class TreasuryService {
       const amounts = await this.amountsForVaults(tx, context, [vault], input.from, input.to, asOf);
       const amount = amounts.get(vault.id) ?? zeroAmounts();
       const periodDate = dateFilter(input.from, input.to);
-      const lines = await tx.financeJournalLine.findMany({
-        where: {
+      const baseWhere: Prisma.FinanceJournalLineWhereInput = {
           tenantId: context.tenantId,
           companyId: context.companyId,
           accountId: vault.accountId,
-          journalEntry: { status: "POSTED", ...(periodDate ? { businessDate: periodDate } : {}) },
-        },
+          journalEntry: { is: { status: "POSTED", ...(periodDate ? { businessDate: periodDate } : {}) } },
+        };
+      const cursor = input.cursor
+        ? await tx.financeJournalLine.findFirst({
+            where: { ...baseWhere, id: input.cursor },
+            select: { id: true, createdAt: true, lineNumber: true, journalEntry: { select: { businessDate: true } } },
+          })
+        : null;
+      if (input.cursor && !cursor)
+        throw new BadRequestException("The vault activity cursor is no longer valid.");
+      const lines = await tx.financeJournalLine.findMany({
+        where: cursor
+          ? {
+              ...baseWhere,
+              OR: [
+                { journalEntry: { is: { businessDate: { lt: cursor.journalEntry.businessDate } } } },
+                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: { lt: cursor.createdAt } },
+                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
+                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
+              ],
+            }
+          : baseWhere,
         orderBy: [{ journalEntry: { businessDate: "desc" } }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
-        ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         take: input.pageSize + 1,
         select: {
           id: true,

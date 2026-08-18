@@ -104,6 +104,13 @@ export type SupplierDueCashPaymentProjectionInput = Readonly<{
   fromBusinessDate?: Date;
   toBusinessDate?: Date;
   vaultId?: string;
+  cursor?: string;
+  pageSize: number;
+}>;
+export type SupplierDueCashPaymentProjectionPage = Readonly<{
+  payments: readonly SupplierDueCashPaymentProjection[];
+  hasMore: boolean;
+  nextCursor: string | null;
 }>;
 export type SupplierDuePaymentReversalReceipt = Readonly<{
   reversalPaymentId: string;
@@ -549,7 +556,7 @@ export class SupplierDuesService {
   async listPostedCashPaymentProjectionInTransaction(
     transaction: Prisma.TransactionClient,
     input: SupplierDueCashPaymentProjectionInput,
-  ): Promise<readonly SupplierDueCashPaymentProjection[]> {
+  ): Promise<SupplierDueCashPaymentProjectionPage> {
     const fromBusinessDate = input.fromBusinessDate
       ? this.requiredDate(input.fromBusinessDate, 'The cash-report start date is invalid.')
       : undefined;
@@ -559,8 +566,7 @@ export class SupplierDuesService {
     if (fromBusinessDate && toBusinessDate && fromBusinessDate > toBusinessDate) {
       throw new BadRequestException('The cash-report start date cannot be after its end date.');
     }
-    const rows = await transaction.financeSupplierDuePayment.findMany({
-      where: {
+    const baseWhere: Prisma.FinanceSupplierDuePaymentWhereInput = {
         tenantId: input.tenantId,
         companyId: input.companyId,
         status: FinanceSupplierDuePaymentStatus.POSTED,
@@ -573,7 +579,25 @@ export class SupplierDuesService {
           ? { businessDate: { ...(fromBusinessDate ? { gte: fromBusinessDate } : {}), ...(toBusinessDate ? { lte: toBusinessDate } : {}) } }
           : {}),
         journalEntry: { is: { status: 'POSTED', isSealed: true } },
-      },
+      };
+    const cursor = input.cursor
+      ? await transaction.financeSupplierDuePayment.findFirst({
+          where: { ...baseWhere, id: input.cursor },
+          select: { id: true, businessDate: true },
+        })
+      : null;
+    if (input.cursor && !cursor)
+      throw new BadRequestException('The cash-report cursor is no longer valid.');
+    const rows = await transaction.financeSupplierDuePayment.findMany({
+      where: cursor
+        ? {
+            ...baseWhere,
+            OR: [
+              { businessDate: { gt: cursor.businessDate } },
+              { businessDate: cursor.businessDate, id: { gt: cursor.id } },
+            ],
+          }
+        : baseWhere,
       select: {
         id: true,
         dueId: true,
@@ -587,8 +611,12 @@ export class SupplierDuesService {
         categoryKindSnapshot: true,
       },
       orderBy: [{ businessDate: 'asc' }, { id: 'asc' }],
+      take: input.pageSize + 1,
     });
-    return rows.map((row) => {
+    const hasMore = rows.length > input.pageSize;
+    const page = hasMore ? rows.slice(0, input.pageSize) : rows;
+    return {
+      payments: page.map((row) => {
       if (
         !row.journalEntryId
         || !row.categoryCodeSnapshot
@@ -609,7 +637,10 @@ export class SupplierDuesService {
         categoryNameAr: row.categoryNameArSnapshot,
         categoryKind: row.categoryKindSnapshot,
       };
-    });
+      }),
+      hasMore,
+      nextCursor: hasMore ? page.at(-1)?.id ?? null : null,
+    };
   }
   private async dueAccount(transaction: Prisma.TransactionClient, context: TrustedCompanyActorContext): Promise<{ id: string }> {
     const account = await transaction.financeAccount.findFirst({

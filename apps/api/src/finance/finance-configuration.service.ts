@@ -6,6 +6,7 @@ import { STANDARD_SUPPLIER_SEEDS } from './finance-foundation-seeds.js';
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { IdempotencyService } from '../core-controls/idempotency.service.js';
+import { FinanceCategoryStatus, FinanceSupplierStatus, Prisma } from '../generated/prisma/client.js';
 
 const FINANCE_CONFIGURATION_READ_CAPABILITY = 'finance.configuration.read';
 
@@ -34,6 +35,69 @@ export class FinanceConfigurationService {
         transaction.financeSupplier.findMany({ where: { tenantId: authorized.principal.tenantId, companyId }, orderBy: [{ isFavorite: 'desc' }, { nameAr: 'asc' }], take: 1_000, select: { id: true, nameAr: true, nameEn: true, phone: true, taxNumber: true, isTaxRegistered: true, isFavorite: true, supplierType: true, status: true, categoryId: true } }),
       ]);
       return { companyId, profile, periods, vaults, accounts, categories, suppliers, standardSuppliers: STANDARD_SUPPLIER_SEEDS.map((supplier) => ({ key: supplier.key, nameAr: supplier.nameAr, nameEn: supplier.nameEn })) };
+    });
+  }
+
+  /**
+   * Long master-data lists are searched at the server, rather than shipped to
+   * a browser and filtered there. An empty search intentionally returns only
+   * the first useful choices (favourites first); typing reaches every record.
+   */
+  async searchSuppliers(input: { accessToken: string; companyId: string; q?: string; pageSize: number }) {
+    const authorized = await this.companyContext.authorize({
+      accessToken: input.accessToken,
+      companyId: input.companyId,
+      requiredCapabilities: [FINANCE_CONFIGURATION_READ_CAPABILITY],
+    });
+    return this.database.inTenantTransaction(authorized.principal.tenantId, async (transaction) => {
+      const term = input.q?.trim();
+      const where: Prisma.FinanceSupplierWhereInput = {
+        tenantId: authorized.principal.tenantId,
+        companyId: authorized.company.id,
+        status: FinanceSupplierStatus.ACTIVE,
+        ...(term ? { OR: [
+          { nameAr: { startsWith: term, mode: 'insensitive' } },
+          { nameEn: { startsWith: term, mode: 'insensitive' } },
+          { taxNumber: { startsWith: term, mode: 'insensitive' } },
+        ] } : {}),
+      };
+      const suppliers = await transaction.financeSupplier.findMany({
+        where,
+        orderBy: [{ isFavorite: 'desc' }, { nameAr: 'asc' }, { id: 'asc' }],
+        take: input.pageSize,
+        select: { id: true, nameAr: true, nameEn: true, categoryId: true, supplierType: true, isFavorite: true },
+      });
+      return { companyId: authorized.company.id, suppliers };
+    });
+  }
+
+  async searchCategories(input: { accessToken: string; companyId: string; q?: string; kind?: 'PURCHASE' | 'EXPENSE' | 'SALE'; pageSize: number }) {
+    const authorized = await this.companyContext.authorize({
+      accessToken: input.accessToken,
+      companyId: input.companyId,
+      requiredCapabilities: [FINANCE_CONFIGURATION_READ_CAPABILITY],
+    });
+    return this.database.inTenantTransaction(authorized.principal.tenantId, async (transaction) => {
+      const term = input.q?.trim();
+      const where: Prisma.FinanceCategoryWhereInput = {
+        tenantId: authorized.principal.tenantId,
+        companyId: authorized.company.id,
+        status: FinanceCategoryStatus.ACTIVE,
+        isPosting: true,
+        ...(input.kind ? { kind: input.kind } : {}),
+        ...(term ? { OR: [
+          { code: { startsWith: term.toUpperCase(), mode: 'insensitive' } },
+          { nameAr: { startsWith: term, mode: 'insensitive' } },
+          { nameEn: { startsWith: term, mode: 'insensitive' } },
+        ] } : {}),
+      };
+      const categories = await transaction.financeCategory.findMany({
+        where,
+        orderBy: [{ sortOrder: 'asc' }, { code: 'asc' }, { id: 'asc' }],
+        take: input.pageSize,
+        select: { id: true, code: true, nameAr: true, nameEn: true, kind: true },
+      });
+      return { companyId: authorized.company.id, categories };
     });
   }
 

@@ -4,6 +4,8 @@ import {
   supplierDueCashProjectionReceiptSchema,
   supplierDueHistoryQuerySchema,
   supplierDueHistoryReceiptSchema,
+  supplierDuePaymentHistoryQuerySchema,
+  supplierDuePaymentHistoryReceiptSchema,
 } from "@baseer-erp/contracts";
 import {
   BadRequestException,
@@ -11,6 +13,7 @@ import {
   ForbiddenException,
   Get,
   Headers,
+  Param,
   Query,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -46,10 +49,38 @@ export class SupplierDueReportsController {
       ...(filters.data.supplierId
         ? { supplierId: filters.data.supplierId }
         : {}),
+      pageSize: filters.data.pageSize,
+      ...(filters.data.cursor ? { cursor: filters.data.cursor } : {}),
     });
     return supplierDueHistoryReceiptSchema.parse({
       companyId: context.companyId,
-      dues,
+      dues: dues.dues,
+      hasMore: dues.hasMore,
+      nextCursor: dues.nextCursor,
+    });
+  }
+
+  @Get(":dueId/payments")
+  async paymentHistory(
+    @Param("dueId") dueId: string,
+    @Query() query: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const filters = supplierDuePaymentHistoryQuerySchema.safeParse(query);
+    if (!filters.success)
+      throw new BadRequestException("Invalid supplier-due payment history filters.");
+    const context = await this.authorize(authorization, companyId);
+    const page = await this.dueQueries.listPayments(context, dueId, {
+      pageSize: filters.data.pageSize,
+      ...(filters.data.cursor ? { cursor: filters.data.cursor } : {}),
+    });
+    return supplierDuePaymentHistoryReceiptSchema.parse({
+      companyId: context.companyId,
+      dueId: page.dueId,
+      payments: page.payments,
+      hasMore: page.hasMore,
+      nextCursor: page.nextCursor,
     });
   }
 
@@ -65,7 +96,7 @@ export class SupplierDueReportsController {
         "Invalid supplier-due cash projection filters.",
       );
     const context = await this.authorize(authorization, companyId);
-    const payments = await this.database.inTenantTransaction(
+    const page = await this.database.inTenantTransaction(
       context.tenantId,
       (transaction) =>
         this.dues.listPostedCashPaymentProjectionInTransaction(transaction, {
@@ -78,11 +109,15 @@ export class SupplierDueReportsController {
             ? { toBusinessDate: filters.data.toBusinessDate }
             : {}),
           ...(filters.data.vaultId ? { vaultId: filters.data.vaultId } : {}),
+          pageSize: filters.data.pageSize,
+          ...(filters.data.cursor ? { cursor: filters.data.cursor } : {}),
         }),
     );
     return supplierDueCashProjectionReceiptSchema.parse({
       companyId: context.companyId,
-      payments,
+      payments: page.payments,
+      hasMore: page.hasMore,
+      nextCursor: page.nextCursor,
     });
   }
 

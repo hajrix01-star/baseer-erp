@@ -16,6 +16,10 @@ export class InvoiceRegisterService {
     return this.db.inTenantTransaction(context.tenantId, async (tx) => {
       const cursor = query.cursor ? await tx.financeJournalEntry.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true, postedAt: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException("The register cursor is not available for this company.");
+      if (cursor) {
+        const matchingCursor = await tx.$queryRaw<Array<{ id: string }>>(Prisma.sql`SELECT j."id" ${joins()} WHERE ${registerPredicate(context, query, null)} AND j."id" = ${cursor.id}::uuid LIMIT 1`);
+        if (!matchingCursor.length) throw new BadRequestException("The register cursor does not match the active filters.");
+      }
       const predicate = registerPredicate(context, query, cursor);
       const [summaryRows, pageRows, suppliers, categories] = await Promise.all([
         tx.$queryRaw<SummaryRow[]>(summarySql(predicate)),
