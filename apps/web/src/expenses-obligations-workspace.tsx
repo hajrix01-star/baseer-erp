@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
+import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { DataTable } from "./data-table";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
-import { RecurringExpensePaymentBatch, RecurringExpenseWorkspace, type Profile } from "./recurring-expense-workspace";
+import type { Profile } from "./recurring-expense-workspace";
 import { formatNumber } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
@@ -32,6 +33,8 @@ type Workspace = { companyId: string; businessDate: string; configuration: Confi
 
 
 const money = (value: string) => formatNumber(value);
+const RecurringExpenseWorkspace = lazy(async () => ({ default: (await import("./recurring-expense-workspace")).RecurringExpenseWorkspace }));
+const RecurringExpensePaymentBatch = lazy(async () => ({ default: (await import("./recurring-expense-workspace")).RecurringExpensePaymentBatch }));
 const newExpenseRow = (): ExpenseRow => ({ id: requestId(), kind: "EXPENSE", settlementKind: "PAID", categoryId: "", supplierId: "", invoiceNumber: "", missingReason: "", supplierInvoiceDate: "", grossAmount: "", isTaxable: true, vaultId: "", notes: "" });
 const emptyLoan = (businessDate: string): LoanForm => ({ sourceDocumentNumber: "", originalAmount: "", openingOutstandingAmount: "", installmentAmount: "", termMonths: "", firstInstallmentDueDate: businessDate, openingBusinessDate: businessDate, notes: "" });
 
@@ -53,16 +56,12 @@ export function ExpensesObligationsWorkspace({ language }: { language: "ar" | "e
     <header className="administration-section-heading">
       <div><p className="eyebrow">{text.operations}</p><h3>{text.expensesObligations}</h3></div>
     </header>
-    <nav className="baseer-section-tabs" aria-label={text.expensesObligations} role="tablist">
-      <BaseerButton id="expenses-tab-items" role="tab" aria-selected={tab === "items"} aria-controls="expenses-panel-items" type="button" variant={tab === "items" ? "primary" : "secondary"} onClick={() => setTab("items")}>{text.itemsAndObligations}</BaseerButton>
-      <BaseerButton id="expenses-tab-batch" role="tab" aria-selected={tab === "batch"} aria-controls="expenses-panel-batch" type="button" variant={tab === "batch" ? "primary" : "secondary"} onClick={() => setTab("batch")}>{text.batchPayment}</BaseerButton>
-      <BaseerButton id="expenses-tab-history" role="tab" aria-selected={tab === "history"} aria-controls="expenses-panel-history" type="button" variant={tab === "history" ? "primary" : "secondary"} onClick={() => setTab("history")}>{text.settlementHistory}</BaseerButton>
-    </nav>
-    <div id={`expenses-panel-${tab}`} role="tabpanel" aria-labelledby={`expenses-tab-${tab}`}>
+    <BaseerWorkspaceTabs ariaLabel={text.expensesObligations} idPrefix="expenses-tab" activeId={tab} tabs={[{ id: "items", label: text.itemsAndObligations }, { id: "batch", label: text.batchPayment }, { id: "history", label: text.settlementHistory }]} onChange={(id) => setTab(id as typeof tab)} />
+    <BaseerBatchPanel id={`expenses-tab-panel-${tab}`} labelledBy={`expenses-tab-${tab}`}>
       {tab === "items" ? <ItemsAndObligations language={language} workspace={workspace} reload={loadWorkspace} /> : null}
       {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} /> : null}
       {tab === "history" ? <SettlementHistory language={language} documents={workspace.documents} loans={workspace.loans} /> : null}
-    </div>
+    </BaseerBatchPanel>
   </section>;
 }
 
@@ -99,7 +98,7 @@ function ItemsAndObligations({ language, workspace, reload }: { language: "ar" |
   return <>
     {message.kind !== "idle" ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
     <div className="expenses-obligations-subhead"><div><h4>{text.recurringObligations}</h4></div></div>
-    <RecurringExpenseWorkspace language={language} configuration={configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={reload} />
+    <Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><RecurringExpenseWorkspace language={language} configuration={configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={reload} /></Suspense>
     <div className="expenses-obligations-subhead"><div><h4>{text.loans}</h4></div><BaseerButton type="button" variant="primary" onClick={() => { setShowLoan(true); setPaying(null); }}>{text.addLoan}</BaseerButton></div>
     {showLoan ? <BaseerCard><form className="recurring-expense-form" onSubmit={(event) => void saveLoan(event)}><div className="recurring-expense-grid"><label>{text.loanReference}<input required value={loanForm.sourceDocumentNumber} placeholder={text.loanReference} onChange={(event) => updateLoan("sourceDocumentNumber", event.target.value)} /></label><label>{text.originalLoanAmount} (SAR)<input required inputMode="decimal" value={loanForm.originalAmount} placeholder={text.originalLoanAmount} onChange={(event) => updateLoan("originalAmount", event.target.value)} /></label><label>{text.openingOutstandingAmount} (SAR)<input required inputMode="decimal" value={loanForm.openingOutstandingAmount} placeholder={text.openingOutstandingAmount} onChange={(event) => updateLoan("openingOutstandingAmount", event.target.value)} /></label><label>{text.monthlyInstallment} (SAR)<input required inputMode="decimal" value={loanForm.installmentAmount} placeholder={text.monthlyInstallment} onChange={(event) => updateLoan("installmentAmount", event.target.value)} /></label><label>{text.totalTermMonths}<input required type="number" min="1" max="600" value={loanForm.termMonths} placeholder="24" onChange={(event) => updateLoan("termMonths", event.target.value)} /></label><label>{text.firstDueDate}<BaseerDatePicker language={language} label={text.firstDueDate} value={loanForm.firstInstallmentDueDate} onChange={(value) => updateLoan("firstInstallmentDueDate", value)} /></label><label>{text.trackingStartDate}<BaseerDatePicker language={language} label={text.trackingStartDate} max={workspace.businessDate} value={loanForm.openingBusinessDate} onChange={(value) => updateLoan("openingBusinessDate", value)} /></label><label className="recurring-span">{text.notes}<input value={loanForm.notes} placeholder={text.optional} onChange={(event) => updateLoan("notes", event.target.value)} /></label></div><footer><BaseerButton type="button" variant="secondary" onClick={() => setShowLoan(false)}>{text.cancel}</BaseerButton><BaseerButton variant="primary" disabled={saving}>{saving ? text.saving : text.save}</BaseerButton></footer></form></BaseerCard> : null}
     <div className="recurring-profile-list">{loans.map((loan) => <BaseerCard key={loan.id}><article className="recurring-profile"><div><span className="eyebrow">{text.financialObligation} · {loan.status === "SETTLED" ? text.settled : text.active}</span><h4>{loan.sourceDocumentNumber}</h4><p>{text.term}: {loan.termMonths} · {text.firstDue}: {loan.firstInstallmentDueDate.slice(0, 10)}</p></div><div className="recurring-profile__amount"><span>{text.remainingLoan}</span><strong>SAR {money(loan.remainingAmount)}</strong><small>{text.repaid}: SAR {money(loan.paidAmount)} · {text.installment}: SAR {money(loan.installmentAmount)}</small></div><div className="recurring-profile__actions">{loan.status === "ACTIVE" ? <BaseerButton type="button" variant="primary" onClick={() => { setPaying(loan); setRepayment({ loanId: loan.id, vaultId: "", amount: loan.installmentAmount, businessDate: workspace.businessDate }); }}>{text.recordRepayment}</BaseerButton> : null}</div></article></BaseerCard>)}</div>
@@ -142,7 +141,7 @@ function ExpenseSettlementBatch({ language, configuration, profiles, businessDat
       <OutflowBatchEntryTable language={language} text={text} ariaLabel={text.expenseBatchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={vaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["EXPENSE"]} maxInvoiceDate={businessDate} onChange={change} onSupplierChange={chooseSupplier} onRemove={remove} />
       <footer className="baseer-batch-footer"><div className="baseer-batch-total" /><div><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="baseer-batch-add-row" onClick={() => setRows((current) => [...current, newExpenseRow()])}>+</BaseerButton><BaseerButton variant="secondary" style={{ minHeight: "2.5rem", padding: "0 .25rem", border: 0, background: "transparent", boxShadow: "none", color: "var(--brand)" }} disabled={saving}>{saving ? text.saving : text.savePaymentCount(enteredRows.length)}</BaseerButton></div></footer>
     </form></BaseerCard>
-    <RecurringExpensePaymentBatch language={language} configuration={configuration} profiles={profiles} businessDate={serverBusinessDate} reload={reload} />
+    <Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><RecurringExpensePaymentBatch language={language} configuration={configuration} profiles={profiles} businessDate={serverBusinessDate} reload={reload} /></Suspense>
   </div>;
 }
 function SettlementHistory({ language, documents: sourceDocuments, loans }: { language: "ar" | "en"; documents: Document[]; loans: Loan[] }) {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
-import { BaseerBatchFooter, BaseerBatchHeader, BaseerBatchPanel, BaseerBatchTabs } from "./baseer-batch-layout";
+import { BaseerBatchFooter, BaseerBatchHeader, BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -56,7 +56,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   return <section className="daily-sales-workspace baseer-batch-workspace" aria-label={text.purchases}>
     {message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}
     {!configuration ? <BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard> : <section style={{ minWidth: 0 }}>
-      <BaseerBatchTabs ariaLabel={text.batchInvoices} idPrefix="purchase-tab" activeId={tab} tabs={[{ id: "entry", label: text.entry }, { id: "credit", label: text.credit }]} onChange={(id) => setTab(id as typeof tab)} />
+      <BaseerWorkspaceTabs ariaLabel={text.batchInvoices} idPrefix="purchase-tab" activeId={tab} tabs={[{ id: "entry", label: text.entry }, { id: "credit", label: text.credit }]} onChange={(id) => setTab(id as typeof tab)} />
       <BaseerBatchPanel id={`purchase-tab-panel-${tab}`} labelledBy={`purchase-tab-${tab}`}>
         {tab === "entry" ? <>
           {!configuration.profile && <p className="daily-sales-message error">{text.setupRequired}</p>}
