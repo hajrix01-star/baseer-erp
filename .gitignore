@@ -1,6 +1,9 @@
 node_modules/
 dist/
 coverage/
+test-results/
+*.tsbuildinfo
+.codex-localization-literals.txt
 .env
 .env.*
 !.env.example
