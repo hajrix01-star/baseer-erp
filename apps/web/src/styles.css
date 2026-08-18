@@ -1566,7 +1566,8 @@ html[dir="ltr"] .mobile-drawer__panel {
 .daily-sales-dialog__scope-picker small { grid-column: 1 / -1; }
 .daily-sales-dialog__mode button,
 .daily-sales-dialog__scope-picker button { min-height: 36px; min-width: 0; padding: 5px; border-radius: 7px; }
-.daily-sales-dialog__date { display: grid; grid-template-columns: minmax(0, 1fr) 9rem; align-items: end; gap: 8px; }
+.daily-sales-dialog__date { display: flex; justify-content: flex-start; }
+.daily-sales-dialog__date .baseer-date-picker { width: 9rem; }
 .daily-sales-dialog__date small { font-size: var(--font-caption); }
 .daily-sales-dialog__day-off,
 .daily-sales-dialog__shift-stack { width: 100%; }

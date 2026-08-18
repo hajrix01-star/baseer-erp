@@ -2,6 +2,7 @@ import { type FormEvent } from "react";
 
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { iso, riyadhToday } from "./baseer-period-filter";
 import { formatMoney } from "./number-format";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 import { useDailySalesPreview } from "./use-daily-sales-preview";
@@ -215,6 +216,8 @@ export function DailySalesClosingDialog({
   const isDayOff = !editing && mode === "DAY_OFF";
   const activeScopes = editing ? [editing.scope] : selectedScopes;
   const businessDate = forms[activeScopes[0] ?? "ALL"].businessDate;
+  const today = riyadhToday();
+  const maximumEntryDate = maxBusinessDate ?? iso(today.year, today.month, today.day);
   const setDate = (value: string) =>
     onFormsChange({
       ...forms,
@@ -289,10 +292,9 @@ export function DailySalesClosingDialog({
                   </button>
                 )}
               </div>
-              <label className="daily-sales-dialog__date">
-                <span>{copy.date}</span>
-                <BaseerDatePicker language={language} label={copy.date} max={maxBusinessDate} value={businessDate} onChange={setDate} disabled={saving} />
-              </label>
+              <div className="daily-sales-dialog__date">
+                <BaseerDatePicker language={language} label={copy.date} max={maximumEntryDate} value={businessDate} onChange={setDate} disabled={saving} />
+              </div>
               {!isDayOff && (
                 <fieldset className="daily-sales-dialog__scope-picker">
                   <legend>{copy.scope}</legend>
