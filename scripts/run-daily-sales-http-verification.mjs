@@ -146,6 +146,43 @@ try {
   const closing = created.json();
   assert.equal(closing.netAmount, "100.0000");
   assert.equal(closing.vatAmount, "15.0000");
+  const financialRegister = await server.inject({
+    method: "GET",
+    url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-15&toBusinessDate=2026-08-15&pageSize=1",
+    headers,
+  });
+  assert.equal(financialRegister.statusCode, 200, financialRegister.body);
+  assert.equal(financialRegister.json().summary.salesCount, 1, "The financial register summary must be calculated from the full server filter scope.");
+  assert.equal(financialRegister.json().records.length, 1, "The financial register must return the requested bounded page size.");
+  assert.equal(financialRegister.json().hasMore, false, "A complete one-record register scope must not advertise a next page.");
+  const creditCategory = await server.inject({ method: "POST", url: "/v1/finance/master-data/categories", headers, payload: { code: `HTTP-CREDIT-${suffix}`, nameAr: "مصروف اختبار آجل", nameEn: "HTTP credit expense", kind: "EXPENSE", isPosting: true, idempotencyKey: randomUUID() } });
+  assert.equal(creditCategory.statusCode, 201, creditCategory.body);
+  const creditSupplier = await server.inject({ method: "POST", url: "/v1/finance/master-data/suppliers", headers, payload: { nameAr: "مورد اختبار آجل", nameEn: "HTTP credit supplier", isTaxRegistered: false, supplierType: "EXPENSE", categoryId: creditCategory.json().id, idempotencyKey: randomUUID() } });
+  assert.equal(creditSupplier.statusCode, 201, creditSupplier.body);
+  const payable = await server.inject({
+    method: "POST",
+    url: "/v1/finance/purchase-expense-documents",
+    headers,
+    payload: { kind: "EXPENSE", settlementKind: "PAYABLE", categoryId: creditCategory.json().id, supplierId: creditSupplier.json().id, supplierInvoiceMissingReason: "Scale verification fixture", businessDate: "2026-08-14", grossAmount: "100.0000", isTaxable: false, allocations: [], idempotencyKey: randomUUID() },
+  });
+  assert.equal(payable.statusCode, 201, payable.body);
+  const secondPayable = await server.inject({
+    method: "POST",
+    url: "/v1/finance/purchase-expense-documents",
+    headers,
+    payload: { kind: "EXPENSE", settlementKind: "PAYABLE", categoryId: creditCategory.json().id, supplierId: creditSupplier.json().id, supplierInvoiceMissingReason: "Scale verification fixture", businessDate: "2026-08-13", grossAmount: "80.0000", isTaxable: false, allocations: [], idempotencyKey: randomUUID() },
+  });
+  assert.equal(secondPayable.statusCode, 201, secondPayable.body);
+  const creditWorkspace = await server.inject({ method: "GET", url: "/v1/finance/purchase-expense-documents/credit-workspace?pageSize=1", headers });
+  assert.equal(creditWorkspace.statusCode, 200, creditWorkspace.body);
+  assert.equal(creditWorkspace.json().openInvoiceCount, 2, "The credit summary must cover every open due, independently of the page size.");
+  assert.equal(creditWorkspace.json().suppliers.flatMap((supplier) => supplier.dues).length, 1, "The credit detail page must be bounded by the requested page size.");
+  assert.equal(creditWorkspace.json().hasMore, true, "A bounded first credit page must advertise the next page.");
+  assert.ok(creditWorkspace.json().nextCursor, "A bounded first credit page must return an opaque cursor.");
+  const creditWorkspaceNext = await server.inject({ method: "GET", url: `/v1/finance/purchase-expense-documents/credit-workspace?pageSize=1&cursor=${creditWorkspace.json().nextCursor}`, headers });
+  assert.equal(creditWorkspaceNext.statusCode, 200, creditWorkspaceNext.body);
+  assert.equal(creditWorkspaceNext.json().suppliers.flatMap((supplier) => supplier.dues).length, 1, "The following credit page must preserve its bounded page size.");
+  assert.equal(creditWorkspaceNext.json().hasMore, false, "The final credit page must not advertise another cursor.");
   const futureClosing = await server.inject({
     method: "POST",
     url: "/v1/finance/daily-sales/closings",
@@ -434,6 +471,10 @@ async function seedFixture() {
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
       [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read"],
+    );
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
+      [fixture.tenantId, roleId, "finance.purchase_expense.create", "finance.categories.write", "finance.suppliers.write"],
     );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4)',

@@ -17,7 +17,7 @@ import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 
 type Configuration = { profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null; vaults: Array<{ id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }>; categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE"; status: "ACTIVE"; isPosting?: boolean }>; suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE"; categoryId: string | null; isFavorite: boolean }> };
 type Document = { id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; status: "POSTED" | "CANCELLED"; businessDate: string; grossAmount: string; batchNumber: string | null; supplierNameAr: string | null; supplierNameEn: string | null; categoryNameAr: string; categoryNameEn: string };
-type CreditWorkspace = { companyId: string; asOfBusinessDate: string; openSupplierCount: number; openInvoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; suppliers: Array<{ supplierId: string; supplierNameAr: string; supplierNameEn: string | null; invoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; dues: Array<{ id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; businessDate: string; dueDate: string | null; categoryNameAr: string | null; categoryNameEn: string | null; originalAmount: string; paidAmount: string; remainingAmount: string }> }> };
+type CreditWorkspace = { companyId: string; asOfBusinessDate: string; openSupplierCount: number; openInvoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; suppliers: Array<{ supplierId: string; supplierNameAr: string; supplierNameEn: string | null; invoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; dues: Array<{ id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; businessDate: string; dueDate: string | null; categoryNameAr: string | null; categoryNameEn: string | null; originalAmount: string; paidAmount: string; remainingAmount: string }> }>; hasMore: boolean; nextCursor: string | null };
 type BatchRow = { id: string; kind: "" | "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; missingReason: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
 
 const newRow = (): BatchRow => ({ id: requestId(), kind: "", settlementKind: "PAID", categoryId: "", supplierId: "", invoiceNumber: "", missingReason: "", supplierInvoiceDate: "", grossAmount: "", isTaxable: true, vaultId: "", notes: "" });
@@ -38,7 +38,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   const [message, setMessage] = useState<{ kind: "idle" | "success" | "error"; text: string }>({ kind: "idle", text: "" });
   const [saving, setSaving] = useState(false);
   const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) return; const [nextConfiguration, nextDocuments] = await Promise.all([api<Configuration>(current, "/finance/configuration"), api<{ documents: Document[] }>(current, "/finance/purchase-expense-documents")]); setConfiguration(nextConfiguration); setDocuments(nextDocuments.documents); }, []);
-  const loadCredit = useCallback(async () => { const current = activeSession(); if (!current) return; const snapshot = await api<CreditWorkspace>(current, "/finance/purchase-expense-documents/credit-workspace"); setCredit(snapshot); setBusinessDate((currentDate) => currentDate || snapshot.asOfBusinessDate.slice(0, 10)); }, []);
+  const loadCredit = useCallback(async (cursor?: string) => { const current = activeSession(); if (!current) return; const snapshot = await api<CreditWorkspace>(current, `/finance/purchase-expense-documents/credit-workspace?pageSize=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`); setCredit((previous) => cursor && previous ? { ...snapshot, suppliers: mergeCreditSupplierPages(previous.suppliers, snapshot.suppliers) } : snapshot); setBusinessDate((currentDate) => currentDate || snapshot.asOfBusinessDate.slice(0, 10)); }, []);
   useEffect(() => { void load().catch((error) => setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.loadingPurchaseData) })); }, [language, load, text.loadingPurchaseData]);
   useEffect(() => { if (tab === "credit") void loadCredit().catch((error) => setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.credit) })); }, [language, loadCredit, tab, text.credit]);
 
@@ -78,7 +78,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   </section>;
 }
 
-function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorkspace | null; language: "ar" | "en"; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; reload: () => Promise<void> }) {
+function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorkspace | null; language: "ar" | "en"; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; reload: (cursor?: string) => Promise<void> }) {
   const text = financeText(language);
   const [target, setTarget] = useState<CreditWorkspace["suppliers"][number]["dues"][number] | null>(null);
   const [message, setMessage] = useState("");
@@ -103,9 +103,20 @@ function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorks
         { id: "remaining", header: text.outstanding, width: "9rem", numeric: true, cell: (invoice) => formatMoney(invoice.remainingAmount) },
         { id: "action", header: "", width: "10rem", cell: (invoice) => <BaseerButton type="button" variant="secondary" onClick={() => setTarget(invoice)}>{text.recordSettlement}</BaseerButton> },
       ]} rows={invoices} /> : <p className="empty-results">{text.noCreditInvoices}</p>}
+      {credit.hasMore && credit.nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void reload(credit.nextCursor ?? undefined)}>{text.loadMore}</BaseerButton> : null}
     </section>
     <CreditPaymentDialog language={language} due={target} vaults={vaults} defaultBusinessDate={credit.asOfBusinessDate.slice(0, 10)} onClose={() => setTarget(null)} onSaved={async () => { setTarget(null); setMessage(text.repaymentSaved); await reload(); }} />
   </>;
+}
+
+function mergeCreditSupplierPages(current: CreditWorkspace["suppliers"], next: CreditWorkspace["suppliers"]) {
+  const groups = new Map(current.map((supplier) => [supplier.supplierId, { ...supplier, dues: [...supplier.dues] }]));
+  for (const supplier of next) {
+    const existing = groups.get(supplier.supplierId);
+    if (existing) { existing.dues.push(...supplier.dues); existing.invoiceCount += supplier.invoiceCount; }
+    else groups.set(supplier.supplierId, supplier);
+  }
+  return [...groups.values()];
 }
 
 function CreditPaymentDialog({ language, due, vaults, defaultBusinessDate, onClose, onSaved }: { language: "ar" | "en"; due: CreditWorkspace["suppliers"][number]["dues"][number] | null; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; defaultBusinessDate: string; onClose: () => void; onSaved: () => Promise<void> }) {

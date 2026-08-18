@@ -749,6 +749,7 @@ model FinanceJournalEntry {
   @@unique([reversalOfEntryId, tenantId, companyId])
   @@unique([companyId, sourceType, sourceReference])
   @@index([tenantId, companyId, businessDate, status])
+  @@index([tenantId, companyId, status, businessDate, postedAt, id], map: "FinanceJournalEntry_tenant_company_status_date_posted_id_idx")
   @@index([tenantId, companyId, fiscalPeriodId, businessDate])
 }
 

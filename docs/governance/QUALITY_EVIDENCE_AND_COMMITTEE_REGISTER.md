@@ -163,3 +163,13 @@ Every future committee report uses this compact structure:
 - Production build uses Terser to retain the enforced raw release budgets without raising any threshold.
 - Local evidence: contracts/API/web TypeScript PASS; production web build PASS; release budget PASS (initial JS **298,343 / 300,000 B**, deferred JS **124,997 / 125,000 B**, CSS **61,910 / 62,000 B**); architecture, permission catalogue (50), financial-boundary, dialog-convention, and localization guards PASS; targeted `git diff --check` PASS.
 - **Acceptance still required:** one owner browser pass for correct login, wrong login, multi-company selection, sign-out, reload/back after sign-out, Arabic/English RTL/LTR, keyboard focus, and a 320px mobile viewport. The 3-byte deferred-budget headroom is a stabilization warning; additional web code requires first removing or splitting existing code.
+
+## 2026-08-18 — Financial register and credit read-scale correction
+
+**Status:** Implemented and verified locally; production-volume benchmark remains open.
+
+- The unified invoice register now applies its financial filters and summaries in PostgreSQL, then returns a stable keyset page (default 50, maximum 100). It no longer reads the first 500 journal entries and filters them in the browser/service memory.
+- The open-credit workspace now returns its full server-owned summary across every open due while the visible dues load in bounded, cursorized pages.
+- `BaseerPeriodFilter` remains the central source of a current-Riyadh-month default for all period-aware financial views, with multi-month and explicit range choices. The credit view intentionally remains an as-of open-liability view.
+- Local evidence: contracts build, API check, web check, Prisma client generation, and `npm run verify:daily-sales-http` PASS. The HTTP verifier asserts bounded register and credit pages with full-scope summary values.
+- Governing record: `FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md`. Before production-scale acceptance, add seeded multi-year volume tests and database query-plan evidence.

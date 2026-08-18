@@ -16,7 +16,7 @@ export class InvoiceRegisterController {
     const supplierIds = parsed.data.supplierIds?.split(",") ?? [];
     const categoryIds = parsed.data.categoryIds?.split(",") ?? [];
     const statuses = parsed.data.statuses?.split(",") as ("POSTED" | "CANCELLED")[] | undefined;
-    return financeInvoiceRegisterReceiptSchema.parse(await this.register.workspace(context, { ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}), ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}), businessMonths: months, kinds: kinds ?? [], supplierIds, categoryIds, statuses: statuses ?? [], ...(parsed.data.q ? { q: parsed.data.q } : {}) }));
+    return financeInvoiceRegisterReceiptSchema.parse(await this.register.workspace(context, { ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}), ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}), businessMonths: months, kinds: kinds ?? [], supplierIds, categoryIds, statuses: statuses ?? [], ...(parsed.data.q ? { q: parsed.data.q } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), pageSize: parsed.data.pageSize }));
   }
   private async authorize(authorization: string | undefined, companyId: string | undefined) {
     const token = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1]; if (!token) throw new UnauthorizedException("Invalid authentication credentials.");

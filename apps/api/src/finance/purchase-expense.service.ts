@@ -157,16 +157,31 @@ export class PurchaseExpenseService {
     return receipt;
   }
 
-  /** Server-owned open-credit snapshot. The browser never derives supplier balances. */
-  async creditWorkspace(context: TrustedCompanyActorContext) {
-    const [date, dues] = await Promise.all([
+  /** Server-owned open-credit snapshot. Summary is complete; details use stable keyset pages. */
+  async creditWorkspace(context: TrustedCompanyActorContext, query: { cursor?: string; pageSize: number }) {
+    const [date, result] = await Promise.all([
       this.dates.currentForTrustedContext(context),
-      this.db.inTenantTransaction(context.tenantId, (tx) => tx.financeSupplierDue.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: [FinanceSupplierDueStatus.OPEN, FinanceSupplierDueStatus.PARTIALLY_PAID] } },
-        orderBy: [{ supplier: { nameAr: 'asc' } }, { originalBusinessDate: 'desc' }, { id: 'desc' }], take: 500,
-        select: { id: true, supplierId: true, sourceDocumentNumber: true, originalBusinessDate: true, dueDate: true, originalAmount: true, paidAmount: true, remainingAmount: true, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } }, journalEntry: { select: { sourceReference: true } } },
-      })),
+      this.db.inTenantTransaction(context.tenantId, async (tx) => {
+        const baseWhere = { tenantId: context.tenantId, companyId: context.companyId, status: { in: [FinanceSupplierDueStatus.OPEN, FinanceSupplierDueStatus.PARTIALLY_PAID] } };
+        const cursor = query.cursor ? await tx.financeSupplierDue.findFirst({ where: { ...baseWhere, id: query.cursor }, select: { id: true, originalBusinessDate: true } }) : null;
+        if (query.cursor && !cursor) throw new BadRequestException('The credit page cursor is invalid.');
+        const where = cursor ? { ...baseWhere, OR: [{ originalBusinessDate: { lt: cursor.originalBusinessDate } }, { originalBusinessDate: cursor.originalBusinessDate, id: { lt: cursor.id } }] } : baseWhere;
+        const [summary, supplierCountRows, rows] = await Promise.all([
+          tx.financeSupplierDue.aggregate({ where: baseWhere, _count: { _all: true }, _sum: { originalAmount: true, paidAmount: true, remainingAmount: true } }),
+          tx.$queryRaw<Array<{ count: number }>>`SELECT COUNT(DISTINCT "supplierId")::int AS "count" FROM "FinanceSupplierDue" WHERE "tenantId" = ${context.tenantId} AND "companyId" = ${context.companyId} AND "status"::text IN ('OPEN', 'PARTIALLY_PAID')`,
+          tx.financeSupplierDue.findMany({
+            where,
+            orderBy: [{ originalBusinessDate: 'desc' }, { id: 'desc' }],
+            take: query.pageSize + 1,
+            select: { id: true, supplierId: true, sourceDocumentNumber: true, originalBusinessDate: true, dueDate: true, originalAmount: true, paidAmount: true, remainingAmount: true, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } }, journalEntry: { select: { sourceReference: true } } },
+          }),
+        ]);
+        const hasMore = rows.length > query.pageSize;
+        const dues = hasMore ? rows.slice(0, query.pageSize) : rows;
+        return { summary, openSupplierCount: supplierCountRows[0]?.count ?? 0, dues, hasMore, nextCursor: hasMore ? dues.at(-1)?.id ?? null : null };
+      }),
     ]);
+    const { dues } = result;
     const groups = new Map<string, { supplierId: string; supplierNameAr: string; supplierNameEn: string | null; original: Prisma.Decimal; paid: Prisma.Decimal; remaining: Prisma.Decimal; dues: Array<{ id: string; documentNumber: string; kind: 'PURCHASE' | 'EXPENSE'; businessDate: Date; dueDate: Date | null; categoryNameAr: string | null; categoryNameEn: string | null; originalAmount: string; paidAmount: string; remainingAmount: string }> }>();
     for (const due of dues) {
       const group = groups.get(due.supplierId) ?? { supplierId: due.supplierId, supplierNameAr: due.supplier.nameAr, supplierNameEn: due.supplier.nameEn, original: new Prisma.Decimal(0), paid: new Prisma.Decimal(0), remaining: new Prisma.Decimal(0), dues: [] };
@@ -175,8 +190,7 @@ export class PurchaseExpenseService {
       group.dues.push({ id: due.id, documentNumber: due.sourceDocumentNumber, kind, businessDate: due.originalBusinessDate, dueDate: due.dueDate, categoryNameAr: due.category?.nameAr ?? null, categoryNameEn: due.category?.nameEn ?? null, originalAmount: due.originalAmount.toFixed(4), paidAmount: due.paidAmount.toFixed(4), remainingAmount: due.remainingAmount.toFixed(4) }); groups.set(due.supplierId, group);
     }
     const suppliers = [...groups.values()].map((group) => ({ supplierId: group.supplierId, supplierNameAr: group.supplierNameAr, supplierNameEn: group.supplierNameEn, invoiceCount: group.dues.length, originalAmount: group.original.toFixed(4), paidAmount: group.paid.toFixed(4), remainingAmount: group.remaining.toFixed(4), dues: group.dues }));
-    const total = suppliers.reduce((sum, supplier) => ({ original: sum.original.plus(supplier.originalAmount), paid: sum.paid.plus(supplier.paidAmount), remaining: sum.remaining.plus(supplier.remainingAmount) }), { original: new Prisma.Decimal(0), paid: new Prisma.Decimal(0), remaining: new Prisma.Decimal(0) });
-    return { companyId: context.companyId, asOfBusinessDate: date.businessDate, openSupplierCount: suppliers.length, openInvoiceCount: dues.length, originalAmount: total.original.toFixed(4), paidAmount: total.paid.toFixed(4), remainingAmount: total.remaining.toFixed(4), suppliers };
+    return { companyId: context.companyId, asOfBusinessDate: date.businessDate, openSupplierCount: result.openSupplierCount, openInvoiceCount: result.summary._count._all, originalAmount: (result.summary._sum.originalAmount ?? new Prisma.Decimal(0)).toFixed(4), paidAmount: (result.summary._sum.paidAmount ?? new Prisma.Decimal(0)).toFixed(4), remainingAmount: (result.summary._sum.remainingAmount ?? new Prisma.Decimal(0)).toFixed(4), suppliers, hasMore: result.hasMore, nextCursor: result.nextCursor };
   }
   async list(context: TrustedCompanyActorContext) {
     return this.db.inTenantTransaction(context.tenantId, async (tx) => tx.financeOutflowDocument.findMany({

@@ -1,5 +1,5 @@
-import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
+import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { PurchaseExpenseService } from './purchase-expense.service.js';
@@ -51,9 +51,11 @@ export class PurchaseExpenseController {
     }));
   }
   @Get('credit-workspace')
-  async creditWorkspace(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async creditWorkspace(@Query() query: Record<string, unknown>, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsedQuery = financeCreditWorkspaceQuerySchema.safeParse(query);
+    if (!parsedQuery.success) throw new BadRequestException('Invalid credit workspace query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
-    return financeCreditWorkspaceReceiptSchema.parse(await this.documents.creditWorkspace(context));
+    return financeCreditWorkspaceReceiptSchema.parse(await this.documents.creditWorkspace(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) }));
   }
   @Get()
   async list(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {

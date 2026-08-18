@@ -953,7 +953,9 @@ export const financeOutflowDocumentHistoryItemSchema = z.object({
   grossAmount: financeAmountSchema,
   batchNumber: z.string().min(1).max(80).nullable(),
   supplierNameAr: z.string().nullable(),
+  supplierNameEn: z.string().max(160).nullable(),
   categoryNameAr: z.string().min(1).max(160),
+  categoryNameEn: z.string().max(160).nullable(),
 }).strict();
 
 export const financeCreditDueItemSchema = z.object({
@@ -962,8 +964,12 @@ export const financeCreditDueItemSchema = z.object({
 export const financeCreditSupplierGroupSchema = z.object({
   supplierId: z.string().uuid(), supplierNameAr: z.string().min(1).max(160), supplierNameEn: z.string().max(160).nullable(), invoiceCount: z.number().int().positive(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema, dues: z.array(financeCreditDueItemSchema).min(1).max(500),
 }).strict();
+export const financeCreditWorkspaceQuerySchema = z.object({
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
+}).strict();
 export const financeCreditWorkspaceReceiptSchema = z.object({
-  companyId: companyIdSchema, asOfBusinessDate: businessDateSchema, openSupplierCount: z.number().int().nonnegative(), openInvoiceCount: z.number().int().nonnegative(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema, suppliers: z.array(financeCreditSupplierGroupSchema).max(500),
+  companyId: companyIdSchema, asOfBusinessDate: businessDateSchema, openSupplierCount: z.number().int().nonnegative(), openInvoiceCount: z.number().int().nonnegative(), originalAmount: financeAmountSchema, paidAmount: financeAmountSchema, remainingAmount: financeAmountSchema, suppliers: z.array(financeCreditSupplierGroupSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable(),
 }).strict();
 export const financeOutflowDocumentsReceiptSchema = z.object({
   companyId: companyIdSchema,
@@ -1164,17 +1170,20 @@ export const financeInvoiceRegisterQuerySchema = z.object({
   categoryIds: z.string().trim().regex(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(,\w{8}-\w{4}-\w{4}-\w{4}-\w{12})*$/).optional(),
   statuses: z.string().trim().regex(/^(POSTED|CANCELLED)(,(POSTED|CANCELLED))*$/).optional(),
   q: z.string().trim().min(1).max(160).optional(),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
 
 const financeInvoiceRegisterOptionSchema = z.object({ id: z.string().uuid(), nameAr: z.string().min(1).max(160), nameEn: z.string().max(160).nullable() }).strict();
 export const financeInvoiceRegisterReceiptSchema = z.object({
   companyId: companyIdSchema,
-  appliedPeriod: z.object({ fromBusinessDate: businessDateSchema.nullable(), toBusinessDate: businessDateSchema.nullable(), businessMonths: z.array(z.string().regex(/^\d{4}-\d{2}$/)).max(24) }).strict(),
+  appliedPeriod: z.object({ fromBusinessDate: businessDateSchema.nullable(), toBusinessDate: businessDateSchema.nullable(), businessMonths: z.array(z.string().regex(/^\d{4}-\d{2}$/)).max(120) }).strict(),
   summary: z.object({ documentCount: z.number().int().nonnegative(), salesCount: z.number().int().nonnegative(), purchaseCount: z.number().int().nonnegative(), expenseCount: z.number().int().nonnegative(), obligationCount: z.number().int().nonnegative(), otherCount: z.number().int().nonnegative(), paidCount: z.number().int().nonnegative(), payableCount: z.number().int().nonnegative(), grossAmount: financeAmountSchema, netAmount: financeAmountSchema, vatAmount: financeAmountSchema }).strict(),
   filters: z.object({ suppliers: z.array(financeInvoiceRegisterOptionSchema).max(1000), categories: z.array(financeInvoiceRegisterOptionSchema).max(500) }).strict(),
   records: z.array(z.object({
     id: z.string().uuid(), source: z.enum(["DAILY_SALES", "OUTFLOW_DOCUMENT", "SUPPLIER_DUE_PAYMENT", "LOAN_OPENING", "LOAN_REPAYMENT", "JOURNAL"]), sourceType: z.string().min(1).max(80), documentNumber: z.string().min(1).max(160), businessDate: businessDateSchema, supplierInvoiceDate: businessDateSchema.nullable(), kind: financeInvoiceRegisterKindSchema, settlementKind: financeOutflowSettlementSchema.nullable(), status: financeInvoiceRegisterStatusSchema, supplier: financeInvoiceRegisterOptionSchema.nullable(), category: financeInvoiceRegisterOptionSchema.nullable(), grossAmount: financeAmountSchema, netAmount: financeAmountSchema, vatAmount: financeAmountSchema, journalEntryId: z.string().uuid(), batchNumber: z.string().max(80).nullable(), notes: z.string().max(2_000).nullable(), recurring: z.boolean(), createdAt: z.date(),
-  }).strict()).max(500),
+  }).strict()).max(100),
   hasMore: z.boolean(),
+  nextCursor: z.string().uuid().nullable(),
 }).strict();
 export type FinanceInvoiceRegisterReceipt = z.infer<typeof financeInvoiceRegisterReceiptSchema>;
