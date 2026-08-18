@@ -19,13 +19,14 @@ import { appText } from './app-copy';
 
 type Language = 'ar' | 'en';
 type Theme = 'green' | 'blue' | 'plum' | 'classic';
-type ResolvedRoute = { moduleId: ModuleId; section: number };
+type ResolvedRoute = { moduleId: ModuleId; section: number; stage?: string };
 
 type Route = ResolvedRoute | null;
 
 const recentStorageKey = 'baseer-erp.shell.recent.v1';
 const themeStorageKey = 'baseer-erp.shell.theme.v1';
 const languageStorageKey = 'baseer.ui.locale.v1';
+const routeSessionKey = 'baseer.erp.shell.route.v1';
 
 
 
@@ -42,13 +43,26 @@ function readLanguagePreference(): Language {
     return 'ar';
   }
 }
-function parseRoute(): Route {
-  const params = new URLSearchParams(window.location.hash.slice(1));
+function routeHash(route: ResolvedRoute): string {
+  return `module=${route.moduleId}&section=${route.section}${route.stage ? `&stage=${encodeURIComponent(route.stage)}` : ''}`;
+}
+function persistRoute(route: ResolvedRoute): void {
+  try { sessionStorage.setItem(routeSessionKey, routeHash(route)); } catch { /* session storage can be unavailable */ }
+}
+function parseRouteValue(value: string): Route {
+  const params = new URLSearchParams(value.replace(/^#/, ''));
   const moduleId = params.get('module');
   const section = Number(params.get('section'));
+  const stage = params.get('stage');
   const module = modules.find((item) => item.id === moduleId);
-  if (!module || !Number.isInteger(section) || section < 0 || section >= module.sections.ar.length) return null;
-  return { moduleId: module.id, section };
+  if (!module || !Number.isInteger(section) || section < 0 || section >= module.sections.ar.length || (stage !== null && !/^[a-z][a-z0-9-]{0,31}$/.test(stage))) return null;
+  return { moduleId: module.id, section, ...(stage ? { stage } : {}) };
+}
+function parseRoute(): Route {
+  const fromHash = parseRouteValue(window.location.hash);
+  if (fromHash) { persistRoute(fromHash); return fromHash; }
+  if (window.location.hash) return null;
+  try { return parseRouteValue(sessionStorage.getItem(routeSessionKey) ?? ''); } catch { return null; }
 }
 
 function readRecent(): ResolvedRoute[] {
@@ -118,7 +132,7 @@ function Navigation({ moduleId, active, language, onSelect, permissionCodes }: {
     return <button key={label} type="button" onClick={() => onSelect(index)} className={"nav-item" + (index === active ? " active" : "")}><span className="nav-dot" /><span>{label}</span></button>;
   })}</nav>;
 }
-function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModules, onSection, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onModules: () => void; onSection: (section: number) => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
+function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModules, onSection, onStage, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onModules: () => void; onSection: (section: number) => void; onStage: (stage: string) => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   useEffect(() => {
     if (!drawerOpen) return;
@@ -136,7 +150,7 @@ function ModuleWorkspace({ route, language, theme, onLanguage, onTheme, onModule
     <AppHeader language={language} theme={theme} onLanguage={onLanguage} onTheme={onTheme} onModules={onModules} onSignOut={onSignOut} />
     <main className="workspace">
       <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside>
-      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div>{route.moduleId === 'operations' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DailySalesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingPurchases}</section>}><PurchaseExpenseWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><InvoiceRegisterWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingVaults}</section>}><TreasuryWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><CategoriesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 3 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingExpensesObligations}</section>}><ExpensesObligationsWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} view="suppliers" /></Suspense> : route.moduleId === 'administration' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingAdministration}</section>}><AdministrationWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'command' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><CommandCenterSalesCalendar language={language} /></Suspense> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2></div></section><section className="module-page__placeholder" /></>}</section>
+      <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div>{route.moduleId === 'operations' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DailySalesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingPurchases}</section>}><PurchaseExpenseWorkspace language={language} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} /></Suspense> : route.moduleId === 'finance' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><InvoiceRegisterWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingVaults}</section>}><TreasuryWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><CategoriesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 3 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingExpensesObligations}</section>}><ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} /></Suspense> : route.moduleId === 'operations' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} view="suppliers" /></Suspense> : route.moduleId === 'administration' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingAdministration}</section>}><AdministrationWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'command' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><CommandCenterSalesCalendar language={language} /></Suspense> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2></div></section><section className="module-page__placeholder" /></>}</section>
     </main>
     {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
   </>;
@@ -179,16 +193,19 @@ export function App() {
 
   const open = (next: ResolvedRoute) => {
     persistRecent(next);
-    window.location.hash = "module=" + next.moduleId + "&section=" + next.section;
+    persistRoute(next);
+    window.location.hash = routeHash(next);
     setRoute(next);
   };
   const clear = () => {
+    try { sessionStorage.removeItem(routeSessionKey); } catch { /* session storage can be unavailable */ }
     history.replaceState(null, "", window.location.pathname);
     setRoute(null);
   };
   const toggleLanguage = () => setLanguage((current) => current === "ar" ? "en" : "ar");
   const signOut = () => {
     const session = activeSession();
+    try { sessionStorage.removeItem(routeSessionKey); } catch { /* session storage can be unavailable */ }
     clearActiveSession();
     const reload = () => window.location.reload();
     if (!session) { reload(); return; }
@@ -209,6 +226,6 @@ export function App() {
     return <BaseerLogin language={language} onLanguage={toggleLanguage} themeControl={<ThemePicker language={language} theme={theme} onTheme={setTheme} />} />;
   }
   return route
-    ? <ModuleWorkspace route={route} language={language} theme={theme} onLanguage={toggleLanguage} onTheme={setTheme} onModules={clear} onSection={(section) => open({ moduleId: route.moduleId, section })} onSignOut={signOut} permissionCodes={permissionCodes} />
+    ? <ModuleWorkspace route={route} language={language} theme={theme} onLanguage={toggleLanguage} onTheme={setTheme} onModules={clear} onSection={(section) => open({ moduleId: route.moduleId, section })} onStage={(stage) => open({ ...route, stage })} onSignOut={signOut} permissionCodes={permissionCodes} />
     : <ModuleLauncher language={language} theme={theme} onLanguage={toggleLanguage} onTheme={setTheme} onOpen={open} onSignOut={signOut} permissionCodes={permissionCodes} />;
 }

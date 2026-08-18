@@ -38,10 +38,12 @@ const RecurringExpensePaymentBatch = lazy(async () => ({ default: (await import(
 const newExpenseRow = (): ExpenseRow => ({ id: requestId(), kind: "EXPENSE", settlementKind: "PAID", categoryId: "", supplierId: "", invoiceNumber: "", missingReason: "", supplierInvoiceDate: "", grossAmount: "", isTaxable: true, vaultId: "", notes: "" });
 const emptyLoan = (businessDate: string): LoanForm => ({ sourceDocumentNumber: "", originalAmount: "", openingOutstandingAmount: "", installmentAmount: "", termMonths: "", firstInstallmentDueDate: businessDate, openingBusinessDate: businessDate, notes: "" });
 
-export function ExpensesObligationsWorkspace({ language }: { language: "ar" | "en" }) {
+type ExpensesWorkspaceTab = "items" | "batch" | "history";
+
+export function ExpensesObligationsWorkspace({ language, activeTab = "items", onTabChange }: { language: "ar" | "en"; activeTab?: ExpensesWorkspaceTab; onTabChange?: (tab: ExpensesWorkspaceTab) => void }) {
   const text = financeText(language);
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
-  const [tab, setTab] = useState<"items" | "batch" | "history">("items");
+  const [tab, setTab] = useState<ExpensesWorkspaceTab>(activeTab);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [remoteSuppliers, setRemoteSuppliers] = useState<Configuration["suppliers"]>([]);
   const [remoteCategories, setRemoteCategories] = useState<Configuration["categories"]>([]);
@@ -52,13 +54,14 @@ export function ExpensesObligationsWorkspace({ language }: { language: "ar" | "e
     setWorkspace(receipt); setLoadError("");
   }, []);
   useEffect(() => { void loadWorkspace().catch((error) => setLoadError(presentBaseerApiError(error, language, text.expensesObligations))); }, [language, loadWorkspace]);
+  useEffect(() => { setTab(activeTab); }, [activeTab]);
   if (!session) return <DailySalesSignIn language={language} />;
   if (!workspace) return <BaseerCard><p className={`daily-sales-message ${loadError ? "error" : "success"}`}>{loadError || text.loading}</p></BaseerCard>;
   return <section className="daily-sales-workspace expenses-obligations-workspace" aria-label={text.expensesObligations}>
     <header className="administration-section-heading">
       <div><p className="eyebrow">{text.operations}</p><h3>{text.expensesObligations}</h3></div>
     </header>
-    <BaseerWorkspaceTabs ariaLabel={text.expensesObligations} idPrefix="expenses-tab" activeId={tab} tabs={[{ id: "items", label: text.itemsAndObligations }, { id: "batch", label: text.batchPayment }, { id: "history", label: text.settlementHistory }]} onChange={(id) => setTab(id as typeof tab)} />
+    <BaseerWorkspaceTabs ariaLabel={text.expensesObligations} idPrefix="expenses-tab" activeId={tab} tabs={[{ id: "items", label: text.itemsAndObligations }, { id: "batch", label: text.batchPayment }, { id: "history", label: text.settlementHistory }]} onChange={(id) => { const next = id as ExpensesWorkspaceTab; setTab(next); onTabChange?.(next); }} />
     <BaseerBatchPanel id={`expenses-tab-panel-${tab}`} labelledBy={`expenses-tab-${tab}`}>
       {tab === "items" ? <ItemsAndObligations language={language} workspace={workspace} reload={loadWorkspace} /> : null}
       {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} remoteSuppliers={remoteSuppliers} setRemoteSuppliers={setRemoteSuppliers} remoteCategories={remoteCategories} setRemoteCategories={setRemoteCategories} /> : null}

@@ -68,6 +68,12 @@ The production web budget measures a real user journey from the Vite manifest: *
 
 Shared shell rules remain in `styles.css`. Feature styles that are not needed at startup live beside their owning shared component or workspace and load with that feature. Any threshold increase still requires removing duplicate rules or a new explicit UI-system decision; the preferred response is route splitting or consolidation, not raising a global limit.
 
+### Stable navigation state
+
+The application shell is the single owner of stable navigation state. It writes the current module and section to the URL hash as `#module=<id>&section=<index>` and may add a validated `stage` for a durable workspace tab. A refresh therefore restores the same place; if a hash is absent, the same browser session may restore the last valid route. Signing out clears that session route.
+
+Only durable navigation is restored. Draft financial rows, dialog visibility, search text, and unsaved forms are deliberately not persisted or replayed after refresh.
+
 ## Central authentication shell — 2026-08-18
 
 - `BaseerLogin` is the only unauthenticated web landing. It provides username/email sign-in, password visibility, loading/error feedback, Arabic/English display, and server-authorized company choice.

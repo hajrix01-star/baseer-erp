@@ -24,7 +24,9 @@ const newRow = (): BatchRow => ({ id: requestId(), kind: "", settlementKind: "PA
 const initialRows = () => Array.from({ length: 3 }, newRow);
 const rowHasValue = (row: BatchRow) => Boolean(row.categoryId || row.supplierId || row.invoiceNumber.trim() || row.missingReason.trim() || row.supplierInvoiceDate || row.grossAmount.trim() || row.vaultId || row.notes.trim());
 
-export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }) {
+type PurchaseWorkspaceTab = "entry" | "credit";
+
+export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabChange }: { language: "ar" | "en"; activeTab?: PurchaseWorkspaceTab; onTabChange?: (tab: PurchaseWorkspaceTab) => void }) {
   const text = financeText(language);
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [configuration, setConfiguration] = useState<Configuration | null>(null);
@@ -32,7 +34,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   const [remoteCategories, setRemoteCategories] = useState<Configuration["categories"]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [credit, setCredit] = useState<CreditWorkspace | null>(null);
-  const [tab, setTab] = useState<"entry" | "credit">("entry");
+  const [tab, setTab] = useState<PurchaseWorkspaceTab>(activeTab);
   const [businessDate, setBusinessDate] = useState("");
   const [lastReceipt, setLastReceipt] = useState<{ grossAmount: string; netAmount: string; vatAmount: string; documentCount: number } | null>(null);
   const [batchNotes, setBatchNotes] = useState("");
@@ -42,6 +44,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) return; const [nextConfiguration, nextDocuments] = await Promise.all([api<Configuration>(current, "/finance/configuration"), api<{ documents: Document[] }>(current, "/finance/purchase-expense-documents")]); setConfiguration(nextConfiguration); setDocuments(nextDocuments.documents); }, []);
   const loadCredit = useCallback(async (cursor?: string) => { const current = activeSession(); if (!current) return; const snapshot = await api<CreditWorkspace>(current, `/finance/purchase-expense-documents/credit-workspace?pageSize=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`); setCredit((previous) => cursor && previous ? { ...snapshot, suppliers: mergeCreditSupplierPages(previous.suppliers, snapshot.suppliers) } : snapshot); setBusinessDate((currentDate) => currentDate || snapshot.asOfBusinessDate.slice(0, 10)); }, []);
   useEffect(() => { void load().catch((error) => setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.loadingPurchaseData) })); }, [language, load, text.loadingPurchaseData]);
+  useEffect(() => { setTab(activeTab); }, [activeTab]);
   useEffect(() => { if (tab === "credit") void loadCredit().catch((error) => setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.credit) })); }, [language, loadCredit, tab, text.credit]);
 
   const categories = useMemo(() => {
@@ -86,7 +89,7 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   return <section className="daily-sales-workspace baseer-batch-workspace" aria-label={text.purchases}>
     {message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}
     {!configuration ? <BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard> : <section style={{ minWidth: 0 }}>
-      <BaseerWorkspaceTabs ariaLabel={text.batchInvoices} idPrefix="purchase-tab" activeId={tab} tabs={[{ id: "entry", label: text.entry }, { id: "credit", label: text.credit }]} onChange={(id) => setTab(id as typeof tab)} />
+      <BaseerWorkspaceTabs ariaLabel={text.batchInvoices} idPrefix="purchase-tab" activeId={tab} tabs={[{ id: "entry", label: text.entry }, { id: "credit", label: text.credit }]} onChange={(id) => { const next = id as PurchaseWorkspaceTab; setTab(next); onTabChange?.(next); }} />
       <BaseerBatchPanel id={`purchase-tab-panel-${tab}`} labelledBy={`purchase-tab-${tab}`}>
         {tab === "entry" ? <>
           {!configuration.profile && <p className="daily-sales-message error">{text.setupRequired}</p>}
