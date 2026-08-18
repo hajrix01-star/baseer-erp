@@ -2152,9 +2152,9 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .baseer-period-filter__trigger strong { min-width: 0; color: var(--brand-deep); font-size: var(--font-body); font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .baseer-period-filter__clear { flex: 0 0 44px; min-height: 44px; padding: 0; border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--line)); border-radius: var(--radius-sm); color: var(--muted); background: var(--surface); font: inherit; font-size: 1.35rem; line-height: 1; cursor: pointer; }
 .baseer-period-filter__clear:hover { color: var(--brand-deep); border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); }
-.baseer-period-filter__popover { position: absolute; z-index: 40; inset-block-start: calc(100% + 8px); inset-inline-start: 0; width: min(340px, calc(100vw - 32px)); padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); box-shadow: 0 16px 34px rgb(10 45 31 / 18%); }
-.baseer-period-filter__popover header { display: grid; gap: 8px; margin-block-end: 10px; }
-.baseer-period-filter__popover select { min-height: 36px; width: 100%; padding-inline: 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font: inherit; font-size: var(--font-body); }
+.baseer-period-filter__popover { position: absolute; z-index: 40; inset-block-start: calc(100% + 8px); inset-inline-start: 0; width: min(14.5rem, calc(100vw - 24px)); padding: 8px; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); box-shadow: 0 4px 12px rgb(10 45 31 / 12%); }
+.baseer-period-filter__popover header { display: grid; gap: 6px; margin-block-end: 8px; }
+.baseer-period-filter__popover select { min-height: 34px; width: 100%; padding-inline: 8px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); font: inherit; font-size: var(--font-label); }
 .baseer-period-filter__nav { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 6px; min-height: 34px; text-align: center; }
 .baseer-period-filter__nav button { width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 8px; color: var(--brand-deep); background: var(--surface); font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .baseer-period-filter__nav strong { font-size: var(--font-body); }
@@ -2166,15 +2166,15 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .baseer-period-filter button.is-today { outline: 1px solid var(--brand); outline-offset: -2px; }
 .baseer-period-filter button.is-between { border-radius: 0; background: color-mix(in srgb, var(--brand) 14%, var(--surface)); }
 .baseer-period-filter button.is-selected { color: #fff; background: var(--brand); }
-.baseer-period-filter__months, .baseer-period-filter__quarters, .baseer-period-filter__years { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.baseer-period-filter__months, .baseer-period-filter__quarters, .baseer-period-filter__years { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .baseer-period-filter__quarters { grid-template-columns: repeat(2, 1fr); }
 
-.baseer-period-filter__months button, .baseer-period-filter__quarters button, .baseer-period-filter__years button { min-height: 40px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font-size: var(--font-label); font-weight: 700; cursor: pointer; }
+.baseer-period-filter__months button, .baseer-period-filter__quarters button, .baseer-period-filter__years button { min-height: 34px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); font-size: var(--font-label); font-weight: 700; cursor: pointer; }
 .baseer-period-filter__popover footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-block-start: 10px; padding-block-start: 10px; border-block-start: 1px solid var(--line); color: var(--muted); font-size: var(--font-label); }
 .baseer-period-filter__popover footer button { min-height: 32px; padding-inline: 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--brand-deep); background: var(--surface); font-size: var(--font-label); font-weight: 700; cursor: pointer; }
 .baseer-period-filter__popover footer div { display: inline-flex; gap: 6px; }
 .baseer-period-filter__popover footer .baseer-period-filter__apply { border-color: var(--brand); color: #fff; background: var(--brand); }
-@media (max-width: 640px) { .baseer-period-filter { display: block; min-width: 0; width: 100%; } .baseer-period-filter__popover { width: min(340px, calc(100vw - 24px)); } }
+@media (max-width: 640px) { .baseer-period-filter { display: block; min-width: 0; width: 100%; } .baseer-period-filter__popover { width: min(14.5rem, calc(100vw - 24px)); } }
 .baseer-date-picker{width:100%}.baseer-date-picker__trigger { grid-template-columns:18px 1fr; min-height:36px; padding:4px 8px; border-color:var(--line); border-radius:6px; background:var(--surface); box-shadow:none; }.baseer-date-picker__trigger:focus-visible{outline:2px solid var(--brand)}
 .baseer-date-picker__trigger-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .baseer-batch-header { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); align-items: start; gap: .5rem; }

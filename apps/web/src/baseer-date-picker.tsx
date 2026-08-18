@@ -26,8 +26,8 @@ function dateLabel(language: Language, value: string) {
   return `${value.slice(5, 7)}/${value.slice(8, 10)}/${value.slice(0, 4)}`;
 }
 
-/** Shared single-date control. A popover keeps table dates inside their own workspace. */
-export function BaseerDatePicker({ language, value, onChange, label, max, min, clearable = false, presentation = "modal", plain = false, disabled = false, className }: Props) {
+/** Shared single-date control. Every form uses the compact anchored calendar by default. */
+export function BaseerDatePicker({ language, value, onChange, label, max, min, clearable = false, presentation = "popover", plain = false, disabled = false, className }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const dialogId = useId();
@@ -52,7 +52,7 @@ export function BaseerDatePicker({ language, value, onChange, label, max, min, c
   const show = () => { setCursor(cursorFor(value)); setOpen(true); };
   const dismiss = () => { setOpen(false); triggerRef.current?.focus(); };
   const clear = () => { onChange(""); dismiss(); };
-  const calendar = <div className="baseer-period-filter__popover" style={presentation === "modal" ? { position: "static", width: "auto", padding: 0, border: 0, boxShadow: "none" } : { width: "14.5rem", padding: "8px", borderRadius: "2px", boxShadow: "0 4px 12px rgb(10 45 31 / 12%)" }}>
+  const calendar = <div className="baseer-period-filter__popover" style={presentation === "modal" ? { position: "static", width: "auto", padding: 0, border: 0, boxShadow: "none" } : undefined}>
     <header className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>‹</button><strong>{monthName("en", cursor)}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>›</button></header>
     <div className="baseer-period-filter__weekdays">{weekdays[language].map((item) => <span key={item}>{item}</span>)}</div>
     <div className="baseer-period-filter__days">{days.map((item) => <button key={item.iso} type="button" disabled={invalid(item.iso)} className={[!item.inMonth ? "is-outside" : "", item.iso === value ? "is-selected" : "", item.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} onClick={() => { onChange(item.iso); dismiss(); }}>{item.day}</button>)}</div>
