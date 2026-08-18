@@ -1,51 +1,56 @@
 # BASEER ERP Module Delivery Register
 
-Last updated: 2026-08-17
-Control protocol: `DELIVERY_CONTROL_PROTOCOL.md`
-Current authority: `CURRENT_DELIVERY_AUTHORITY.md`
+**Last updated:** 2026-08-18
+**Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
 
-| Field              | Value                                                                                                                                                                                                                                                     |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Active scope       | Treasury and vault movements — verification
-| Stage              | Purchase & Expense plus Expenses & Obligations is in owner verification; it is not closed. Treasury is the single active verification scope; bounded owner-authorized Suppliers workspace and Finance Invoice Register read-model implementations are recorded in `SCOPE_EXCEPTION_LOG.md`; neither changes Treasury acceptance. Treasury provides: ledger-derived vault balances, add/archive lifecycle, balanced internal transfers and bounded history; isolated DB and HTTP verification passes, while owner acceptance remains open. Cash count/handover reporting, bank reconciliation and transfer reversal remain excluded. Daily Sales remains frozen pending owner acceptance; AI Gate B remains offline. |
-| Deferred scope     | Marketing/Google and Inbound Evidence/Email/Telegram/OCR remain deferred until core financial documents and reconciled reports close, under `OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md`. |
-| Next decision gate | Accept the native Treasury journey; then complete Purchase & Expense owner acceptance and the correction/cancellation decision before reconciled reporting. Assets & Warranty is a planned operational Gate A after that reporting gate; marketing, email and AI provider work remain later. |
+| Field | Value |
+| --- | --- |
+| Active work | Local stabilization of financial read scale and owner verification of existing Finance journeys. |
+| Open owner acceptance | Purchase & Expense, Expenses & Obligations, Treasury, Suppliers, Categories, and Invoice Register in AR/EN, RTL/LTR, desktop and mobile. |
+| Next decision gate | Record owner acceptance and the correction/cancellation policy before official financial reporting. |
+| Explicitly deferred | Noorix import/cutover, production release, bank reconciliation, cash count/handover accounting, transfer reversal, official reports/P&L, assets accounting, external marketing/AI work. |
 
 ## Portfolio state
 
-| Scope                              | State                                                       | Evidence / boundary                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Platform foundation                | Verified                                                    | Identity, trusted company context, RBAC, audit, idempotency, serials, business date, files, output and observability are verified.                                                                                                                                                                                                                                                                                                                                                                               |
-| Finance                            | Phase 1 verified; Treasury in verification; Purchase & Expense in owner verification | Journal, periods, company setup, master data, supplier dues, recurring profiles, inclusive loans and journal-posted purchase/expense documents are implemented. Suppliers now have a native Operations workspace with server-owned configuration read, central table, add/edit/archive dialogs and auditable endpoints; Finance section 4 now provides the corresponding native Categories workspace with a searchable tree, create/update and safeguarded archive lifecycle. Both remain in owner verification. Finance section 1 also provides a read-only, ledger-derived unified financial register for all posted financial movements except internal vault transfers; its filters and dynamic cards are server-owned and it does not activate document editing. Newly recorded supplier credit documents use cash-on-payment recognition: the unpaid balance is an obligation and the P&L entry is released only on settlement. Treasury has ledger-derived vault balances, archive lifecycle and balanced transfer commands with isolated DB/HTTP verification; cash count/handover reporting, bank reconciliation and transfer reversal remain separate scopes. |
-| Daily Sales Closing                | Ready for owner acceptance                                  | Official versioned source for operating-day analytics and later sales/marketing correlation. An employee records an external-POS aggregate by morning, evening, or whole-day scope; it is not POS. Sales is shown as a register; the read-only operating calendar lives in Command Center. Explicit cash handover is accumulated only in its management report and never creates a journal. The user meaning is fixed in `../foundation/DAILY_SALES_CLOSING_OPERATIONAL_PURPOSE_DECISION_2026-08-16.md`. Database, concurrency and HTTP tests pass; the narrow native operational UI awaits owner review. |
-| Marketing Performance & Google Hub | Approved design — backend not started                       | Scope is bounded by `docs/marketing/MARKETING_PERFORMANCE_AND_GOOGLE_HUB_SCOPE_DECISION_2026-08-15.md`. The governed Google-review automation policy is approved in `docs/marketing/GOOGLE_REVIEW_REPLY_AUTOMATION_POLICY_DECISION_2026-08-16.md`, but no models, API, OAuth, sync, UI or external call exists yet.                                                                                                                                                                                                                                                                                                                                             |
-| Administration and access          | Foundation enhanced                                         | Central owner administration now has company/user/role setup plus user disable/activate, password reset, membership withdrawal, immediate session revocation, audit redaction, and last-active-owner protection. Role/archive lifecycle, invitations, MFA and production file upload remain separate scoped work. |
-| AI Platform                        | Gate B verified — provider offline | Skill registry, company-authorized runtime preflight, idempotency, audit receipts and RLS verification exist. There is no provider call, chat, memory, read tool or AI UI.
-| Inbound Evidence & Payment Hub     | Queued — backend not started                                | Work-only central email routing, Telegram then SMS evidence, trusted bank-account/service matching, manual company-first linking, payment orders and payment vouchers are bounded by `docs/foundation/INBOUND_EVIDENCE_AND_PAYMENT_HUB_SCOPE_DECISION_2026-08-15.md`. It follows core financial documents and reconciled reports, then a separate owner priority decision. No connector, inbound model, payment-order/voucher model, API or UI exists yet. Bank reconciliation and automatic payment/posting are excluded. |
-| Reports and Command Center         | Not started                                                 | Begin after official source operations and central filter contract exist.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| Assets & Warranty                  | Planned — not started                                       | Purchase/expense documents will offer an optional follow-up marker that feeds a company-scoped operational queue. Completing a queue item creates a separately governed asset/warranty register entry and changes no journal. Asset capitalization/depreciation requires a separate asset-accounting policy; warranty attachment upload waits for File Storage Gate A. Scope and migration boundary: docs/foundation/ASSETS_AND_WARRANTY_SCOPE_DECISION_2026-08-17.md. |
-| Migration and cutover              | Discovery                                                   | No Noorix import or cutover before source maps, staging rehearsal and reconciliation gates.                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| All other modules                  | Not started                                                 | Kept out of scope while the active vertical slice is incomplete.                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Scope | State | Delivered locally | Boundary still open |
+| --- | --- | --- | --- |
+| Platform foundation | Verified locally | Identity, company context, RBAC, audit, idempotency, business date, sequences, files, output and observability foundations. | Production backup/restore evidence and production deployment. |
+| Finance journal and master data | Phase 1 verified locally | Posted balanced journal, periods, accounts/categories, suppliers, tax-rate configuration, recurring profiles, dues and inclusive loans. | Financial correction/cancellation policy; tax-code model beyond one company VAT rate. |
+| Purchase & Expense | Owner verification | Batch purchase/expense input, VAT-inclusive server calculation, supplier credit on cash payment, recurring expenses and payment histories. | AR/EN/RTL/LTR/mobile owner acceptance; correction/cancellation. |
+| Expenses & Obligations | Owner verification | Cash payments, supplier dues, recurring profiles, loan obligations and settlement paths. | Owner acceptance; official long-range reporting. |
+| Treasury and vaults | Owner verification | Ledger-derived balances, vault lifecycle, payment methods, balanced internal transfer, bounded activity and daily account-balance read projection. | Owner acceptance; cash count, reconciliation, external transfer and reversal are excluded. |
+| Suppliers and categories | Owner verification | Company-scoped master-data maintenance, safeguarded archive, category hierarchy and server-backed lookup for long lists. | Owner acceptance and final seed/business-profile policy. |
+| Unified Invoice Register | Read-only local delivery | Posted financial movements except internal vault transfers, server filters, dynamic server summaries and stable pages. | Official report/P&L scope; multi-year aggregate read model and volume proof. |
+| Daily Sales Closing | Ready for owner acceptance | Aggregated operating-day close, bounded history and read-only operational calendar. | Owner UI acceptance; it is not a POS or formal reporting replacement. |
+| Administration and access | Foundation enhanced | Company/user/role management, session revocation, audit redaction and last-owner protection. | Invitations, MFA and production file lifecycle. |
+| Reports and Command Center | Not started as official reporting | Operational cards/calendar exist where stated by the source module. | Reconciled reports, P&L, exports and official report read models. |
+| Assets & Warranty | Planned | Purchase follow-up marker only. | Dedicated asset/warranty register and separate capitalization/depreciation policy. |
+| Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
+| Marketing, inbound, AI provider, remaining modules | Not started or deferred | AI platform guardrails only; no provider execution. | Separate authorized scopes after core finance gates. |
 
-## Delivery evidence
+## Financial read-scale baseline
 
-- `scripts/run-gate-b-db-verification.mjs` — platform isolation and Finance HTTP boundary checks.
-- `scripts/run-administration-lifecycle-verification.mjs` — isolated HTTP proof for user disable/activate, password reset, membership withdrawal, session revocation, audit redaction and last-owner protection.
-- `scripts/run-finance-gate-b-db-verification.mjs` — Finance migration, RLS, journal, audit, idempotency and data-integrity checks.
-- `scripts/run-finance-period-race-verification.mjs` — close-versus-post locking verification.
-- `docs/governance/FINANCE_PHASE_1_CLOSURE_RECORD_2026-08-15.md` — Finance Phase 1 closure evidence.
-- `docs/governance/DAILY_SALES_CLOSING_GATE_B_VERIFICATION_2026-08-15.md` — Daily Sales Closing database, HTTP, concurrency and UI-build evidence.
-- `docs/governance/AI_PLATFORM_FOUNDATION_GATE_A_DELIVERY_2026-08-15.md` — AI configuration foundation boundary.
-- `docs/governance/AI_GATE_B_RUNTIME_DELIVERY_2026-08-16.md` — AI runtime boundary, database verification and explicit offline limit.
-- `docs/governance/OWNER_PRIORITY_AMENDMENT_AI_AND_FINANCE_SEQUENCE_2026-08-16.md` — owner-approved delivery order after Daily Sales.
-- `docs/foundation/BASEER_BUILD_SEQUENCE_COMMITTEE_PLAN_2026-08-15.md` — mandatory active build order.
+The following are implemented locally and governed by [FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md](FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md):
+
+- current Riyadh business month as the shared default for period-aware views;
+- bounded server pages and stable cursors for the financial register, supplier due/payment history, daily sales, outflow history, and treasury activity;
+- server-owned financial totals and filters; no browser totals from partially loaded records;
+- remote lookup for large supplier/category selections;
+- a rebuildable `FinanceAccountDailyBalance` projection sourced from posted journal lines for vault balance reads.
+
+This baseline is not a production-volume certificate. Multi-year benchmark datasets, query plans, p95 measurements, and reporting fact/rollup models remain open.
+
+## Required evidence before a state change
+
+- `scripts/run-finance-gate-b-db-verification.mjs` for financial journal/integrity evidence.
+- `scripts/run-finance-period-race-verification.mjs` for close-versus-post locking.
+- `scripts/run-daily-sales-http-verification.mjs` for bounded financial read receipts.
+- Contracts/API/Web checks and builds relevant to the change.
+- Owner browser acceptance for user-facing financial journeys.
+- Before production or cutover: backup/restore rehearsal, Noorix dry run/reconciliation, and the scale evidence described above.
 
 ## Control rule
 
-Exactly one business scope may be in active build or verification. A phase changes only when its stated closure evidence is recorded. No browser calculation, direct database write, manual journal route, live Noorix migration, production deployment, external marketing action or AI side effect is allowed outside the approved plan.
-
-- 2026-08-17 — [Recurring expense payment flow](../foundation/RECURRING_EXPENSES_PAYMENT_FLOW_2026-08-17.md): profiles plus explicit, journal-posted payments and unique coverage slots; the isolated-local migration and verifier are complete, while owner acceptance remains required.
-
-- المصروفات والالتزامات: قسم تشغيلي موحّد داخل موديول العمليات (بنود دورية وقروض، سداد جماعي للمصروفات، وسجل سداد). القرض التزام خارج الربح والخسارة وسداده ينقص رصيده؛ التفاصيل في `docs/foundation/EXPENSES_AND_OBLIGATIONS_WORKSPACE_2026-08-17.md`.
+Exactly one business scope may be active for new implementation or verification. A historical document is evidence, not an activation instruction. No browser calculation, direct database write, manual journal route, live Noorix migration, production deployment, external marketing action, or AI side effect is allowed outside the approved authority.

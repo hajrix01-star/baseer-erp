@@ -1,24 +1,29 @@
 # Baseer ERP
 
-Baseer ERP is the replacement, modular ERP for the owner and their companies.
+Baseer ERP هو نظام ERP مستقل متعدد الشركات، مبني كـ **Modular Monolith**: منصة واحدة، قاعدة بيانات واحدة لكل بيئة، ونواة مركزية للهوية والشركات والصلاحيات والتدقيق والتواريخ والتسلسلات.
 
-It is built as one application, one production database, and one shared core:
+## الحالة الحالية
 
-- company context, users, permissions, theme, audit, files, dates, and sequences are central;
-- modules are Finance, Operations, People, Documents, Reports, Administration, Growth, and Command Center;
-- the legacy Noorix system is read-only discovery and migration source until the final cutover;
-- no Baseer module may hand off a core workflow to the legacy system.
+**بيئة تطوير محلية مع قبول مشروط فقط.**
 
-## Current stage
+تم تنفيذ نواة المنصة والمالية، والمشتريات والمصروفات والالتزامات والخزائن والتصنيفات والموردين وسجل الحركات المالي بصورة محلية. ما زالت بعض الرحلات في قبول المالك، ولا يوجد في المستودع استيراد فعلي من Noorix أو قطع نهائي أو دليل نسخ احتياطي/استعادة لبيئة إنتاج.
 
-Foundation only. No production data connection, import, migration, or deployment is configured in this repository.
+لا ينبغي وصف المشروع بأنه جاهز للإنتاج أو لبيانات تاريخية ضخمة قبل إغلاق بوابات القبول والأداء والترحيل المبيّنة في الوثائق الحاكمة.
 
-## Build order
+## ابدأ من هنا
 
-1. Core platform: identity, companies, authorization, audit, business date, document sequence, files.
-2. Finance end-to-end: financial kernel, dashboard, sales, treasury, expenses, purchases, liabilities, VAT.
-3. Migration rehearsal and finance reconciliation.
-4. Remaining modules, one completed module at a time.
-5. Final cutover from Noorix after owner approval.
+1. [دليل الوثائق](docs/README.md)
+2. [ملخص التسليم الحالي](BASEER_ERP_HANDOFF.md)
+3. [سلطة التسليم الحالية](docs/governance/CURRENT_DELIVERY_AUTHORITY.md)
+4. [سجل تسليم الموديولات](docs/governance/MODULE_DELIVERY_REGISTER.md)
+5. [سجل أدلة الجودة](docs/governance/QUALITY_EVIDENCE_AND_COMMITTEE_REGISTER.md)
+6. [معيار قراءة المالية والتوسع والفترات](docs/governance/FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md)
 
-Read [the architecture decision](docs/architecture/ADR-001-GREENFIELD-BASEER-ERP.md) and [the module rulebook](docs/governance/MODULE_DELIVERY_RULEBOOK.md) before adding a feature.
+## حدود ثابتة
+
+- Noorix مرجع قراءة وترحيل مستقبلي فقط؛ لا يوجد ربط تشغيلي أو كتابة مزدوجة بينه وبين Baseer.
+- دفتر اليومية المنشور هو مصدر الحقيقة المالي؛ الواجهات وقراءات الأداء لا تحسب مبالغ مالية من صفحات جزئية.
+- سجلات القراءة الكبيرة تُحدّ بصفحات ومؤشرات خادم (cursor)، والفترة الافتراضية للواجهات المالية هي شهر العمل الحالي في الرياض.
+- أي قراءة أداء أو ملخص يومي هي **إسقاط قراءة قابل لإعادة البناء** من الدفتر، وليست مصدراً مستقلاً للحقيقة.
+
+قبل إضافة نطاق جديد، راجع [ميثاق البناء](docs/BASEER_ERP_MASTER_BUILD_CHARTER.md) و[سلطة التسليم الحالية](docs/governance/CURRENT_DELIVERY_AUTHORITY.md).

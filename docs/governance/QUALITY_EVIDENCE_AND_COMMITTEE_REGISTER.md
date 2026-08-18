@@ -173,3 +173,13 @@ Every future committee report uses this compact structure:
 - `BaseerPeriodFilter` remains the central source of a current-Riyadh-month default for all period-aware financial views, with multi-month and explicit range choices. The credit view intentionally remains an as-of open-liability view.
 - Local evidence: contracts build, API check, web check, Prisma client generation, and `npm run verify:daily-sales-http` PASS. The HTTP verifier asserts bounded register and credit pages with full-scope summary values.
 - Governing record: `FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md`. Before production-scale acceptance, add seeded multi-year volume tests and database query-plan evidence.
+
+## 2026-08-18 — Bounded finance history and daily ledger balance projection
+
+**Status:** Implemented and verified locally; performance certification and owner acceptance remain open.
+
+- Commits `ff0afe4` and `bca5d87` extended the bounded-read correction to supplier due/payment history, outflow history, Treasury activity, and server-backed supplier/category lookup. Every supported financial history response has a bounded page contract rather than an implicit full-history fetch.
+- `FinanceAccountDailyBalance` was added as a separate daily read projection for posted journal lines. Journal posting updates it inside the same transaction; reversals remove the original posted contribution and add the reversal contribution. Treasury balance reads use the projection, while the posted journal remains the accounting truth.
+- A local migration rehearsal first attempted to denormalize protected journal history and was rejected by the database immutability guard. The rejected shape was discarded; the accepted migration creates and backfills a separate projection without changing journal rows. This is evidence that the history-protection control operated as intended.
+- Local evidence: Prisma generation, contracts check, API check/build, `npm run verify:finance-gate-b-db`, and `npm run verify:finance-period-race` PASS after the corrected projection migration. Earlier 2026-08-18 read-scale work also passed web check/build and `npm run verify:daily-sales-http`.
+- **Open condition:** no synthetic 100k/1m volume run, deployed-database `EXPLAIN ANALYZE`, or p95 evidence was executed; the owner deferred that benchmark. The Invoice Register still needs a monthly fact/rollup (or equivalent) before it can claim efficient multi-year official-report summaries. This result is therefore conditional local readiness, not an enterprise-volume or production claim.

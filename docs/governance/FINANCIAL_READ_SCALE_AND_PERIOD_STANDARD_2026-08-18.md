@@ -1,23 +1,63 @@
 # Financial read scale and period standard — 2026-08-18
 
+**Status:** local implementation standard; not a production-volume certification.
+
 ## Decision
 
-All period-aware financial workspaces open on the **current Riyadh business month**. The shared `defaultBaseerPeriodRange()` is the only default. Users may then choose a single day, month, multiple months, quarter, year, or a custom date range through `BaseerPeriodFilter`.
+All period-aware financial workspaces open on the **current Riyadh business month**. The shared `defaultBaseerPeriodRange()` is the only default. Users can then select a day, month, multiple months, quarter, year, or custom range through `BaseerPeriodFilter`.
 
-This applies to the current Sales, operational dashboard, unified invoice register, and Treasury views. Master data (suppliers, categories, vault setup) is timeless and does not receive a cosmetic period filter. Open-credit is an **as-of** liability view: it must include unpaid invoices from previous months, so it deliberately does not discard them on the first day of a new month.
+This applies to Sales, operational dashboard views, the unified invoice register, Treasury, and future financial reports. Master data is timeless and must not receive a cosmetic period filter. Open credit is an **as-of** liability view: unpaid prior-month documents remain visible on the first day of a new month.
 
-## Read-scale rules
+## Non-negotiable read rules
 
-- Financial register filters, counts, money totals, ordering, and pagination are calculated on the server.
-- The invoice register uses a stable keyset cursor with a default page of 50 and a maximum of 100 records. It is ordered by business date, posting timestamp, and id.
-- Credit summary amounts cover every open due. Credit detail records use the same bounded cursor-page pattern.
-- Daily-sales history uses a stable keyset cursor with the same 50/100 bounds; a longer selected period changes only the server scope, never the number of records loaded into the browser.
-- No browser is allowed to calculate monetary totals from a partially loaded page.
-- A database index supports the register’s company/status/date/posting/id access path.
-- Client options remain bounded; a future unbounded master-data chooser must use server-backed search rather than loading every option.
+- The server owns financial filtering, sorting, totals, currency math, and pagination.
+- A browser never derives monetary totals from a partially loaded page.
+- Every long-running financial list has a bounded `pageSize`, a stable cursor, and a maximum page size.
+- A cursor is valid only for the same company and normalized filter/sort scope that issued it.
+- Range selection changes server scope, not how many records the browser fetches.
+- Long master-data option lists use server-backed lookup; they are not loaded without a bound merely to populate a select.
+- A read projection may accelerate reads, but the posted journal remains the accounting source of truth.
 
-## Evidence and remaining work
+## Implemented local baseline
 
-`verify:daily-sales-http` now proves the register’s bounded server page and full-scope summary, the credit workspace’s full-scope open count with a one-record page, and the bounded daily-sales history response. Contract/API/Web type checks must pass for every change.
+| Surface | Local implementation |
+| --- | --- |
+| Unified invoice register | Server-side filters/summaries and a stable keyset page; default 50, maximum 100. |
+| Supplier dues and cash payments | Full-scope server summary with bounded due pages; payment history and cash projection are cursorized. |
+| Purchase/expense history | Bounded outflow-document page rather than an implicit growing list. |
+| Daily Sales history | Stable cursor page with 50/100 bounds. |
+| Treasury activity | Tuple cursor aligned to the displayed activity order; bounded page. |
+| Treasury balances | `FinanceAccountDailyBalance` reads daily ledger-derived deltas instead of scanning all journal lines on each workspace opening. |
+| Supplier/category selection | Server-backed typeahead endpoints for long lists. |
 
-This is a local-development scale foundation, not a production capacity claim. Before production with long-running high-volume data, add a repeatable seeded volume benchmark, EXPLAIN/ANALYZE evidence on the deployed database, retention/archival policy, and a cursorized supplier-payment report.
+The corrections were delivered in commits `7d962d5`, `2c9edfe`, `ff0afe4`, and `bca5d87`.
+
+## Daily account balance projection
+
+`FinanceAccountDailyBalance` is a company/tenant/account/business-date projection containing the summed debit, credit, and signed delta of **posted** journal lines.
+
+- The migration backfills from posted journal lines only.
+- Journal posting updates the projection in the same database transaction.
+- Reversal removes the original posted contribution and adds the reversal contribution, matching the existing posted-ledger read semantics.
+- The projection is disposable and rebuildable. It never changes historical journal lines and is not a second accounting ledger.
+
+This design is deliberate: an earlier local migration rehearsal correctly failed when it attempted to write a denormalized field to protected journal history. The accepted design uses a separate projection table instead, preserving journal immutability.
+
+## What this standard does not claim
+
+This baseline is safe for bounded operational reads, but it does **not** prove unlimited historical scale or enterprise-size performance.
+
+Before claiming readiness for multi-year, high-volume production data, all of the following must be evidenced:
+
+1. Seeded benchmarks at the intended volume (at least 100k, then 1m journal entries and representative journal lines).
+2. `EXPLAIN ANALYZE` evidence on the deployed PostgreSQL version and indexes for the slowest financial reads.
+3. p95 targets for pages, current-period summaries, and longer ranges, plus no missing/duplicate cursor records under concurrent posting.
+4. A monthly fact/rollup or equivalent for multi-year invoice-register/report summaries; the current exact register summary still uses relational aggregation.
+5. A specialized Treasury activity projection/query plan if the joined business-date sort is shown to be a bottleneck at benchmark scale.
+6. Production monitoring, retention/archive policy, and async output/report jobs for unbounded exports.
+
+The owner explicitly deferred the synthetic-volume benchmark for the current work. Therefore no document may claim that Baseer has been load-tested for five years, millions of transactions, or a production target volume.
+
+## Evidence
+
+The normal local verification set includes contracts/API/Web checks and builds, `verify:finance-gate-b-db`, `verify:finance-period-race`, and `verify:daily-sales-http`. The executed evidence and open acceptance gates belong in [QUALITY_EVIDENCE_AND_COMMITTEE_REGISTER.md](QUALITY_EVIDENCE_AND_COMMITTEE_REGISTER.md).
