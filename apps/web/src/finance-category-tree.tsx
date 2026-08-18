@@ -1,6 +1,6 @@
 import { useMemo, useState, type CSSProperties } from "react";
 
-import { displayName } from "./baseer-localization";
+import { displayName, localizedEnum } from "./baseer-localization";
 
 export type FinanceCategoryKind = "PURCHASE" | "EXPENSE" | "SALE";
 export type FinanceCategoryTreeItem = { id: string; code: string; nameAr: string; nameEn: string; kind: FinanceCategoryKind; status: "ACTIVE" | "ARCHIVED"; parentId: string | null; isPosting: boolean };
@@ -10,8 +10,8 @@ const cardGridStyle: CSSProperties = { display: "grid", gridTemplateColumns: "re
 const cardStyle: CSSProperties = { minWidth: 0, padding: ".625rem", border: "1px solid var(--line)", borderRadius: "var(--card-radius)", background: "var(--surface)", boxShadow: "0 8px 24px rgb(11 36 26 / 5%)" };
 const itemButtonStyle: CSSProperties = { minWidth: 0, padding: 0, border: 0, color: "var(--ink)", background: "transparent", font: "inherit", fontWeight: 700, cursor: "pointer", textAlign: "start", lineHeight: 1.45, overflowWrap: "anywhere" };
 const toggleStyle: CSSProperties = { width: "1.75rem", height: "1.75rem", padding: 0, border: 0, color: "var(--muted)", background: "transparent", font: "inherit", cursor: "pointer" };
-const codeStyle: CSSProperties = { padding: ".125rem .375rem", borderRadius: "999px", color: "var(--muted)", background: "color-mix(in srgb, var(--brand) 7%, var(--surface))", fontSize: "var(--font-caption)", fontVariantNumeric: "tabular-nums" };
-const badgeStyle: CSSProperties = { justifySelf: "end", padding: ".125rem .375rem", borderRadius: "999px", color: "var(--brand-deep)", background: "color-mix(in srgb, var(--brand) 10%, var(--surface))", fontSize: "var(--font-caption)", whiteSpace: "nowrap" };
+const codeStyle: CSSProperties = { color: "var(--muted)", fontSize: "var(--font-caption)", fontVariantNumeric: "tabular-nums" };
+const badgeStyle: CSSProperties = { justifySelf: "end", color: "var(--muted)", fontSize: "var(--font-caption)", whiteSpace: "nowrap" };
 
 /** Shared, ledger-safe presentation of category groups and posting leaves. */
 export function FinanceCategoryTree({ language, categories, onOpen }: { language: "ar" | "en"; categories: readonly FinanceCategoryTreeItem[]; onOpen: (item: FinanceCategoryTreeItem) => void }) {
@@ -32,7 +32,7 @@ export function FinanceCategoryTree({ language, categories, onOpen }: { language
       <div style={rowStyle}>
         {hasChildren ? <button type="button" style={toggleStyle} onClick={() => toggle(item.id)} aria-label={isExpanded ? (language === "ar" ? "طي المجموعة" : "Collapse group") : (language === "ar" ? "فتح المجموعة" : "Expand group")}>{isExpanded ? "▾" : "▸"}</button> : <span aria-hidden="true" style={{ color: "var(--line)", textAlign: "center" }}>•</span>}
         <button type="button" style={itemButtonStyle} onClick={() => onOpen(item)}>{displayName(language, item)} <span style={codeStyle}>{item.code}</span></button>
-        <span style={badgeStyle}>{item.isPosting ? (language === "ar" ? "يقبل القيود" : "Posting") : (language === "ar" ? "مجموعة" : "Group")}</span>
+        <span style={badgeStyle}>{localizedEnum(language, item.kind)} · {item.isPosting ? (language === "ar" ? "يقبل القيود" : "Posting") : (language === "ar" ? "مجموعة" : "Group")}</span>
       </div>
       {hasChildren && isExpanded ? <div role="group">{nested.map((child) => render(child, level + 1))}</div> : null}
     </div>;
