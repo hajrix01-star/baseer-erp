@@ -119,6 +119,7 @@ button {
 .icon-button,
 .avatar,
 .text-button,
+.header-signout,
 .theme-button,
 .company-selector {
   min-height: 44px;
@@ -158,6 +159,23 @@ button {
   padding: 0 9px;
   font-weight: 600;
 }
+.header-signout {
+  display: grid;
+  inline-size: 36px;
+  min-height: 36px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+}
+.header-signout:hover,
+.header-signout:focus-visible {
+  color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  outline: 0;
+}
+.header-signout svg { inline-size: 1.2rem; block-size: 1.2rem; }
 .avatar {
   width: 38px;
   border: 0;
@@ -198,40 +216,6 @@ button {
   color: var(--muted);
   font-size: var(--font-body);
   line-height: 1.8;
-}
-.launcher-page__tools {
-  display: grid;
-  grid-template-columns: minmax(0, 28rem) auto;
-  align-items: center;
-  gap: 12px;
-  margin-top: 34px;
-}
-.module-search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 50px;
-  padding: 0 15px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  color: var(--muted);
-  background: #fff;
-}
-.module-search input {
-  width: 100%;
-  border: 0;
-  outline: 0;
-  color: var(--ink);
-  background: transparent;
-}
-.module-count {
-  padding: 7px 10px;
-  border-radius: 999px;
-  color: var(--brand);
-  background: #e8f5ed;
-  font-size: var(--font-label);
-  font-weight: 800;
-  direction: ltr;
 }
 .recent {
   margin-top: 28px;
@@ -396,7 +380,7 @@ button {
   padding: 0 10px;
   border: 0;
   border-radius: 10px;
-  color: #c6d8ce;
+  color: #fff;
   background: transparent;
   font-size: var(--font-navigation);
   font-weight: 500;
@@ -606,6 +590,10 @@ html[dir="ltr"] .mobile-drawer__panel {
   .company-selector span:nth-of-type(2),
   .topbar .theme-button {
     display: none;
+  }
+  .header-signout {
+    inline-size: 44px;
+    min-height: 44px;
   }
   .workspace {
     grid-template-columns: 1fr;

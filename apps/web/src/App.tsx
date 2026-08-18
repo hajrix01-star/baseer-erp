@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { BaseerBrand } from './baseer-brand';
 import { BaseerLogin } from './baseer-login';
 import { BaseerModuleIcon } from './baseer-module-icon';
@@ -77,6 +77,10 @@ function persistRecent(route: ResolvedRoute): void {
   localStorage.setItem(recentStorageKey, JSON.stringify([key, ...values].slice(0, 4)));
 }
 
+function SignOutIcon() {
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20H10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><path d="m14 8 4 4-4 4M18 12H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
 function AppHeader({ language, theme, onLanguage, onTheme, onModules, onSignOut }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onModules: () => void; onSignOut: () => void }) {
   const text = appText(language);
   return <header className="topbar">
@@ -85,21 +89,19 @@ function AppHeader({ language, theme, onLanguage, onTheme, onModules, onSignOut 
     <CompanySessionControl language={language} />
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? text.switchToEnglish : text.switchToArabic}</button>
     <ThemePicker language={language} theme={theme} onTheme={onTheme} />
-    <button className="text-button" onClick={onSignOut} type="button">{language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}</button>
+    <button className="header-signout" onClick={onSignOut} type="button" aria-label={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'} title={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}><SignOutIcon /></button>
   </header>;
 }
 
 function ModuleLauncher({ language, theme, onLanguage, onTheme, onOpen, onSignOut, permissionCodes }: { language: Language; theme: Theme; onLanguage: () => void; onTheme: (theme: Theme) => void; onOpen: (route: ResolvedRoute) => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
-  const [query, setQuery] = useState('');
   const [recent, setRecent] = useState<ResolvedRoute[]>(readRecent);
   const text = appText(language);
-  const visible = useMemo(() => visibleModules(permissionCodes).filter((module) => `${module.title.ar} ${module.title.en}`.toLocaleLowerCase().includes(query.toLocaleLowerCase().trim())), [permissionCodes, query]);
+  const visible = visibleModules(permissionCodes);
   const open = (route: ResolvedRoute) => { if (!canOpenRoute(route, permissionCodes)) return; onOpen(route); setRecent(readRecent()); };
   return <div className="launcher-page">
-    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? text.switchToEnglish : text.switchToArabic}</button><ThemePicker language={language} theme={theme} onTheme={onTheme} /><button className="text-button" onClick={onSignOut} type="button">{language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}</button></header>
+    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? text.switchToEnglish : text.switchToArabic}</button><ThemePicker language={language} theme={theme} onTheme={onTheme} /><button className="header-signout" onClick={onSignOut} type="button" aria-label={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'} title={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}><SignOutIcon /></button></header>
     <main className="launcher-page__content">
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1></div>
-      <div className="launcher-page__tools"><label className="module-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text.search} /></label><span className="module-count">{visible.length} / {modules.length}</span></div>
       {recent.filter((route) => canOpenRoute(route, permissionCodes)).length > 0 && <section className="recent"><h2>{text.recent}</h2><div className="recent__list">{recent.filter((route) => canOpenRoute(route, permissionCodes)).map((route) => { const module = getModule(route.moduleId); return <button key={`${route.moduleId}:${route.section}`} onClick={() => open(route)} type="button">{module.title[language]} · {module.sections[language][route.section]}</button>; })}</div></section>}
       <section className="modules-grid launcher-page__grid">{visible.map((module) => <button key={module.id} type="button" className="module-card" style={{ '--module': module.accent, '--module-alt': module.accentAlt } as React.CSSProperties} onClick={() => { const route = firstAllowedRoute(module.id, permissionCodes); if (route) open(route); }}><span className="module-icon" aria-hidden="true"><BaseerModuleIcon moduleId={module.id} /></span><span className="module-copy"><strong>{module.title[language]}</strong></span><span className="module-arrow" aria-hidden="true">←</span></button>)}</section>
       {visible.length === 0 && <p className="empty-results">{text.noResults}</p>}
