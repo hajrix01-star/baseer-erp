@@ -1,4 +1,4 @@
-import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema } from '@baseer-erp/contracts';
+import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -49,6 +49,11 @@ export class PurchaseExpenseController {
         ...(item.notes ? { notes: item.notes } : {}),
       })) },
     }));
+  }
+  @Get('credit-workspace')
+  async creditWorkspace(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    return financeCreditWorkspaceReceiptSchema.parse(await this.documents.creditWorkspace(context));
   }
   @Get()
   async list(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {

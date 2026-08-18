@@ -29,6 +29,7 @@ export const FINANCE_BASE_ACCOUNT_SEEDS: readonly FinanceAccountSeed[] = [
   { code: 'AR-001', systemKey: 'RECEIVABLES', nameAr: 'ذمم العملاء', nameEn: 'Accounts receivable', type: FinanceAccountType.ASSET },
   { code: 'ADV-001', systemKey: 'EMPLOYEE_ADVANCES', nameAr: 'سلف الموظفين', nameEn: 'Employee advances', type: FinanceAccountType.ASSET },
   { code: 'PREPAID-001', systemKey: 'PREPAID_EXPENSES', nameAr: 'مصروفات مقدمة', nameEn: 'Prepaid expenses', type: FinanceAccountType.ASSET },
+  { code: 'PEND-001', systemKey: 'CASH_BASIS_PENDING_OUTFLOWS', nameAr: 'مصروفات معلّقة حتى السداد', nameEn: 'Pending outflows until payment', type: FinanceAccountType.ASSET },
   { code: 'VAT-IN-001', systemKey: 'VAT_INPUT', nameAr: 'ضريبة مدخلات', nameEn: 'Input VAT', type: FinanceAccountType.ASSET },
   { code: 'AP-001', systemKey: 'SUPPLIER_DUES', nameAr: 'ذمم الموردين', nameEn: 'Supplier dues', type: FinanceAccountType.LIABILITY },
   { code: 'VAT-OUT-001', systemKey: 'VAT_OUTPUT', nameAr: 'ضريبة مخرجات', nameEn: 'Output VAT', type: FinanceAccountType.LIABILITY },

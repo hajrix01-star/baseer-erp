@@ -1,4 +1,4 @@
-import { archiveFinanceCategoryRequestSchema, archiveFinanceSupplierRequestSchema, companyIdSchema, createFinanceCategoryRequestSchema, createFinanceSupplierRequestSchema, financeMasterDataEntityReceiptSchema, updateFinanceSupplierRequestSchema } from "@baseer-erp/contracts";
+import { archiveFinanceCategoryRequestSchema, archiveFinanceSupplierRequestSchema, companyIdSchema, createFinanceCategoryRequestSchema, createFinanceSupplierRequestSchema, financeMasterDataEntityReceiptSchema, updateFinanceCategoryRequestSchema, updateFinanceSupplierRequestSchema } from "@baseer-erp/contracts";
 import { BadRequestException, Body, Controller, ForbiddenException, Headers, HttpCode, Post, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -15,6 +15,15 @@ export class FinanceMasterDataController {
     if (!request.success) throw new BadRequestException("Invalid category request.");
     const context = await this.authorize(authorization, companyId, "finance.categories.write");
     return financeMasterDataEntityReceiptSchema.parse(await this.masterData.createCategory(context, request.data, request.data.idempotencyKey));
+  }
+
+  @Post("categories/update")
+  async updateCategory(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const request = updateFinanceCategoryRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException("Invalid category update request.");
+    const context = await this.authorize(authorization, companyId, "finance.categories.write");
+    const { categoryId, idempotencyKey, ...input } = request.data;
+    return financeMasterDataEntityReceiptSchema.parse(await this.masterData.updateCategory(context, categoryId, input, idempotencyKey));
   }
 
   @Post("categories/archive")

@@ -186,6 +186,7 @@ export class DailySalesReadService {
             nameAr: true,
             nameEn: true,
             type: true,
+            sortOrder: true,
             isSalesChannel: true,
           },
         });

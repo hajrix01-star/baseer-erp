@@ -32,6 +32,7 @@ const CREATE_DUE_OPERATION = 'finance.supplier_due.create';
 const RECORD_PAYMENT_OPERATION = 'finance.supplier_due.payment.record';
 const REVERSE_PAYMENT_OPERATION = 'finance.supplier_due.payment.reverse';
 const SUPPLIER_DUES_SYSTEM_KEY = 'SUPPLIER_DUES';
+const CASH_BASIS_PENDING_OUTFLOWS_SYSTEM_KEY = 'CASH_BASIS_PENDING_OUTFLOWS';
 const MAX_DECIMAL_18_4 = new Prisma.Decimal('99999999999999.9999');
 
 export type CreateSupplierDueRequest = Readonly<{
@@ -90,6 +91,7 @@ export type SupplierDueCashPaymentProjection = Readonly<{
   journalEntryId: string;
   businessDate: Date;
   amount: string;
+  recognizedNetAmount: string;
   vaultId: string;
   categoryCode: string;
   categoryNameAr: string;
@@ -228,7 +230,7 @@ export class SupplierDuesService {
     await transaction.$executeRaw`
       SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:supplier-due:${request.supplierId}:${sourceDocumentNumber}`}, 0))
     `;
-    const [supplier, category, duesAccount] = await Promise.all([
+    const [supplier, category, duesAccount, pendingOutflowsAccount, profile] = await Promise.all([
       transaction.financeSupplier.findFirst({
         where: { id: request.supplierId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceSupplierStatus.ACTIVE },
         select: { id: true },
@@ -248,16 +250,25 @@ export class SupplierDuesService {
         where: { tenantId: context.tenantId, companyId: context.companyId, systemKey: SUPPLIER_DUES_SYSTEM_KEY, status: FinanceAccountStatus.ACTIVE },
         select: { id: true },
       }),
+      transaction.financeAccount.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, systemKey: CASH_BASIS_PENDING_OUTFLOWS_SYSTEM_KEY, status: FinanceAccountStatus.ACTIVE },
+        select: { id: true },
+      }),
+      transaction.companyFinanceProfile.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+        select: { accountingMode: true },
+      }),
     ]);
     if (!supplier) throw new NotFoundException('The active supplier was not found for this company.');
     if (
       !category?.accountId
       || category.account?.status !== FinanceAccountStatus.ACTIVE
-      || category.account.type !== FinanceAccountType.EXPENSE
+      || (category.account.type !== FinanceAccountType.EXPENSE && category.account.type !== FinanceAccountType.ASSET)
     ) {
-      throw new ConflictException('The selected active purchase or expense category has no active expense account.');
+      throw new ConflictException('The selected active purchase or expense category has no active posting account.');
     }
     if (!duesAccount) throw new ConflictException('The active supplier-dues system account is not available.');
+    if (profile?.accountingMode === 'management_cash' && !pendingOutflowsAccount) throw new ConflictException('The cash-basis pending-outflows account is not available.');
 
     const duplicate = await transaction.financeSupplierDue.findFirst({
       where: { tenantId: context.tenantId, companyId: context.companyId, supplierId: supplier.id, sourceDocumentNumber },
@@ -283,6 +294,7 @@ export class SupplierDuesService {
         notes,
       },
     });
+    const dueDebitAccountId = profile?.accountingMode === 'management_cash' ? pendingOutflowsAccount!.id : category.accountId;
     const journal = await this.journals.postInTransaction(transaction, {
       tenantId: context.tenantId,
       companyId: context.companyId,
@@ -293,7 +305,7 @@ export class SupplierDuesService {
       businessDate,
       description: `Supplier due ${sourceDocumentNumber}`,
       lines: [
-        { accountId: category.accountId, debitAmount: amount.toFixed(4) },
+        { accountId: dueDebitAccountId, debitAmount: amount.toFixed(4) },
         { accountId: duesAccount.id, creditAmount: amount.toFixed(4) },
       ],
     });
@@ -340,15 +352,53 @@ export class SupplierDuesService {
       where: { id: dueId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [FinanceSupplierDueStatus.OPEN, FinanceSupplierDueStatus.PARTIALLY_PAID] } },
       select: {
         id: true,
+        originalAmount: true,
         remainingAmount: true,
         paidAmount: true,
-        category: { select: { code: true, nameAr: true, kind: true } },
+        sourceDocumentNumber: true,
+        category: { select: { code: true, nameAr: true, kind: true, accountId: true, account: { select: { status: true } } } },
       },
     });
     if (!due) throw new NotFoundException('The active supplier due was not found.');
     if (!due.category) throw new ConflictException('The supplier due has no category snapshot source for cash reporting.');
     if (amount.gt(due.remainingAmount)) throw new ConflictException('The payment exceeds the remaining supplier due.');
     const duesAccount = await this.dueAccount(transaction, context);
+    const profile = await transaction.companyFinanceProfile.findFirst({
+      where: { tenantId: context.tenantId, companyId: context.companyId },
+      select: { accountingMode: true },
+    });
+    const cashOnPayment = profile?.accountingMode === 'management_cash';
+    let recognizedNetAmount = new Prisma.Decimal(0);
+    const lines: { accountId: string; debitAmount?: string; creditAmount?: string; description?: string }[] = [
+      { accountId: duesAccount.id, debitAmount: amount.toFixed(4) },
+      { accountId: vault.accountId, creditAmount: amount.toFixed(4) },
+    ];
+    if (cashOnPayment) {
+      if (!due.category.accountId || due.category.account?.status !== FinanceAccountStatus.ACTIVE) {
+        throw new ConflictException('The supplier due category has no active posting account.');
+      }
+      const pendingOutflowsAccount = await transaction.financeAccount.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, systemKey: CASH_BASIS_PENDING_OUTFLOWS_SYSTEM_KEY, status: FinanceAccountStatus.ACTIVE },
+        select: { id: true },
+      });
+      if (!pendingOutflowsAccount) throw new ConflictException('The cash-basis pending-outflows account is not available.');
+      const document = await transaction.financeOutflowDocument.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, documentNumber: due.sourceDocumentNumber },
+        select: { netAmount: true },
+      });
+      const recognitionBase = document?.netAmount ?? due.originalAmount;
+      const paidAfterThisPayment = due.paidAmount.plus(amount);
+      const cumulativeRecognition = due.remainingAmount.eq(amount)
+        ? recognitionBase
+        : recognitionBase.mul(paidAfterThisPayment).div(due.originalAmount).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+      const priorRecognition = recognitionBase.mul(due.paidAmount).div(due.originalAmount).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+      recognizedNetAmount = cumulativeRecognition.minus(priorRecognition);
+      if (recognizedNetAmount.lt(0)) throw new ConflictException('The supplier due has an invalid cash-recognition state.');
+      if (!recognizedNetAmount.isZero()) {
+        lines.push({ accountId: due.category.accountId, debitAmount: recognizedNetAmount.toFixed(4) });
+        lines.push({ accountId: pendingOutflowsAccount.id, creditAmount: recognizedNetAmount.toFixed(4) });
+      }
+    }
     const paymentId = randomUUID();
     const journal = await this.journals.postInTransaction(transaction, {
       tenantId: context.tenantId,
@@ -359,10 +409,7 @@ export class SupplierDuesService {
       sourceReference: `${paymentId}:v1`,
       businessDate,
       description: `Supplier due payment ${paymentId}`,
-      lines: [
-        { accountId: duesAccount.id, debitAmount: amount.toFixed(4) },
-        { accountId: vault.accountId, creditAmount: amount.toFixed(4) },
-      ],
+      lines,
     });
     const remainingAmount = due.remainingAmount.minus(amount);
     const status = remainingAmount.eq(0) ? FinanceSupplierDueStatus.PAID : FinanceSupplierDueStatus.PARTIALLY_PAID;
@@ -379,6 +426,7 @@ export class SupplierDuesService {
         dueId: due.id,
         vaultId: vault.id,
         amount,
+        recognizedNetAmount,
         businessDate,
         status: FinanceSupplierDuePaymentStatus.POSTED,
         journalEntryId: journal.journalEntryId,
@@ -471,6 +519,7 @@ export class SupplierDuesService {
         dueId: payment.dueId,
         vaultId: payment.vaultId,
         amount: payment.amount,
+        recognizedNetAmount: payment.recognizedNetAmount,
         businessDate,
         status: FinanceSupplierDuePaymentStatus.REVERSED,
         reversalOfId: payment.id,
@@ -531,6 +580,7 @@ export class SupplierDuesService {
         journalEntryId: true,
         businessDate: true,
         amount: true,
+        recognizedNetAmount: true,
         vaultId: true,
         categoryCodeSnapshot: true,
         categoryNameArSnapshot: true,
@@ -553,6 +603,7 @@ export class SupplierDuesService {
         journalEntryId: row.journalEntryId,
         businessDate: row.businessDate,
         amount: row.amount.toFixed(4),
+        recognizedNetAmount: row.recognizedNetAmount.toFixed(4),
         vaultId: row.vaultId,
         categoryCode: row.categoryCodeSnapshot,
         categoryNameAr: row.categoryNameArSnapshot,

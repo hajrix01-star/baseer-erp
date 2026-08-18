@@ -191,7 +191,7 @@ export class SupplierCopyService {
         companyId: request.sourceCompanyId,
         status: FinanceSupplierStatus.ACTIVE,
       },
-      include: { category: { select: { code: true } } },
+      include: { category: { select: { code: true, kind: true } } },
     });
     if (!source) throw new NotFoundException('The selected source supplier was not found.');
 
@@ -204,11 +204,12 @@ export class SupplierCopyService {
           code: source.category.code,
           status: 'ACTIVE',
         },
-        select: { id: true },
+        select: { id: true, kind: true },
       });
       if (!category) {
         throw new ConflictException('The source supplier category is not available in the target company.');
       }
+      if (category.kind !== (source.supplierType === "EXPENSE" ? "EXPENSE" : "PURCHASE")) throw new ConflictException("The target supplier category does not match the supplier type.");
       categoryId = category.id;
     }
 
@@ -252,6 +253,7 @@ export class SupplierCopyService {
         tenantId: target.tenantId,
         companyId: target.companyId,
         categoryId,
+        supplierType: source.supplierType,
         nameAr: source.nameAr,
         nameEn: source.nameEn,
         phone: source.phone,

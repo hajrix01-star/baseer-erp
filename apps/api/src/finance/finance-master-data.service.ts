@@ -4,36 +4,71 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { IdempotencyService } from "../core-controls/idempotency.service.js";
 import { DatabaseService } from "../database/database.service.js";
-import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceSupplierStatus, Prisma } from "../generated/prisma/client.js";
+import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryKind, FinanceCategoryStatus, FinanceSupplierStatus, FinanceSupplierType, Prisma } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 
 type EntityReceipt = Readonly<{ id: string; status: "ACTIVE" | "ARCHIVED"; replayed: boolean }>;
-type CategoryCreate = Readonly<{ code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; parentId?: string | undefined }>;
-type SupplierWrite = Readonly<{ nameAr: string; nameEn?: string | undefined; phone?: string | undefined; taxNumber?: string | undefined; isTaxRegistered: boolean; categoryId?: string | null | undefined }>;
+type CategoryWrite = Readonly<{ code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; parentId?: string | undefined; isPosting: boolean }>;
+type SupplierWrite = Readonly<{ nameAr: string; nameEn?: string | undefined; phone?: string | undefined; taxNumber?: string | undefined; isTaxRegistered: boolean; supplierType: "PURCHASE" | "EXPENSE"; categoryId: string }>;
 
 @Injectable()
 export class FinanceMasterDataService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
-  async createCategory(context: TrustedCompanyActorContext, request: CategoryCreate, idempotencyKey: string): Promise<EntityReceipt> {
-    const payload = { ...request, code: request.code.trim().toUpperCase(), nameAr: required(request.nameAr, 160), nameEn: required(request.nameEn, 160), parentId: request.parentId ?? null };
+  async createCategory(context: TrustedCompanyActorContext, request: CategoryWrite, idempotencyKey: string): Promise<EntityReceipt> {
+    const payload = { ...request, code: request.code.trim().toUpperCase(), nameAr: required(request.nameAr, 160), nameEn: required(request.nameEn, 160), parentId: request.parentId ?? null, isPosting: request.isPosting };
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: "finance.category.create", key: idempotencyKey, request: payload, expiresAt: tomorrow() });
       if (begun.kind === "replay") return { ...(begun.response.body as EntityReceipt), replayed: true };
       if (begun.kind === "in-progress") throw new ConflictException("The category request is still in progress.");
       if (await tx.financeCategory.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, code: payload.code }, select: { id: true } })) throw new ConflictException("A category with this code already exists.");
       if (payload.parentId) {
-        const parent = await tx.financeCategory.findFirst({ where: { id: payload.parentId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE }, select: { kind: true } });
+        const parent = await tx.financeCategory.findFirst({ where: { id: payload.parentId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE }, select: { kind: true, isPosting: true } });
         if (!parent) throw new NotFoundException("The selected active parent category was not found.");
         if (parent.kind !== payload.kind) throw new BadRequestException("A child category must use the same kind as its parent.");
+        if (parent.isPosting) throw new BadRequestException("A posting category cannot be used as a parent group.");
       }
       const id = randomUUID();
       const accountId = randomUUID();
       await tx.financeAccount.create({ data: { id: accountId, tenantId: context.tenantId, companyId: context.companyId, code: `CAT-${id.slice(0, 12).toUpperCase()}`, nameAr: payload.nameAr, nameEn: payload.nameEn, type: payload.kind === "SALE" ? FinanceAccountType.REVENUE : FinanceAccountType.EXPENSE, isSystem: false, status: FinanceAccountStatus.ACTIVE } });
-      await tx.financeCategory.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, parentId: payload.parentId, accountId, code: payload.code, nameAr: payload.nameAr, nameEn: payload.nameEn, kind: payload.kind, status: FinanceCategoryStatus.ACTIVE, sortOrder: await tx.financeCategory.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }) + 1 } });
+      await tx.financeCategory.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, parentId: payload.parentId, accountId, code: payload.code, nameAr: payload.nameAr, nameEn: payload.nameEn, kind: payload.kind, status: FinanceCategoryStatus.ACTIVE, isPosting: payload.isPosting, sortOrder: await tx.financeCategory.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }) + 1 } });
       const receipt: EntityReceipt = { id, status: "ACTIVE", replayed: false };
       await this.audit(tx, context, "finance.category.created", "FinanceCategory", id, null, { ...payload, accountId });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    });
+  }
+
+
+  async updateCategory(context: TrustedCompanyActorContext, categoryId: string, request: CategoryWrite, idempotencyKey: string): Promise<EntityReceipt> {
+    const payload = { ...request, code: request.code.trim().toUpperCase(), nameAr: required(request.nameAr, 160), nameEn: required(request.nameEn, 160), parentId: request.parentId ?? null };
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, { operation: "finance.category.update", key: idempotencyKey, request: { categoryId, ...payload }, expiresAt: tomorrow() });
+      if (begun.kind === "replay") return { ...(begun.response.body as EntityReceipt), replayed: true };
+      if (begun.kind === "in-progress") throw new ConflictException("The category request is still in progress.");
+      const current = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, code: true, nameAr: true, nameEn: true, kind: true, parentId: true, isPosting: true, status: true, accountId: true } });
+      if (!current) throw new NotFoundException("The category was not found.");
+      if (current.status !== FinanceCategoryStatus.ACTIVE) throw new BadRequestException("Archived categories cannot be edited.");
+      if (current.kind !== payload.kind) throw new BadRequestException("The accounting category type cannot be changed.");
+      const tree = await tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, parentId: true, kind: true, status: true, isPosting: true } });
+      const children = tree.filter((item) => item.parentId === current.id && item.status === FinanceCategoryStatus.ACTIVE);
+      if (payload.isPosting && children.length) throw new BadRequestException("A category with active children must remain a non-posting group.");
+      if (payload.parentId) {
+        if (payload.parentId === current.id) throw new BadRequestException("A category cannot be its own parent.");
+        const parent = tree.find((item) => item.id === payload.parentId && item.status === FinanceCategoryStatus.ACTIVE);
+        if (!parent || parent.kind !== current.kind || parent.isPosting) throw new BadRequestException("The selected parent group is not valid for this category.");
+        let cursor: string | null = parent.parentId;
+        while (cursor) {
+          if (cursor === current.id) throw new BadRequestException("A category cannot be moved into its own branch.");
+          cursor = tree.find((item) => item.id === cursor)?.parentId ?? null;
+        }
+      }
+      if (payload.code !== current.code && await tx.financeCategory.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, code: payload.code, id: { not: current.id } }, select: { id: true } })) throw new ConflictException("A category with this code already exists.");
+      await tx.financeCategory.update({ where: { id: current.id }, data: { code: payload.code, nameAr: payload.nameAr, nameEn: payload.nameEn, parentId: payload.parentId, isPosting: payload.isPosting } });
+      if (current.accountId) await tx.financeAccount.update({ where: { id: current.accountId }, data: { nameAr: payload.nameAr, nameEn: payload.nameEn } });
+      const receipt: EntityReceipt = { id: current.id, status: "ACTIVE", replayed: false };
+      await this.audit(tx, context, "finance.category.updated", "FinanceCategory", current.id, current, payload);
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
       return receipt;
     });
   }
@@ -45,6 +80,10 @@ export class FinanceMasterDataService {
       if (begun.kind === "in-progress") throw new ConflictException("The category request is still in progress.");
       const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, accountId: true, status: true, account: { select: { isSystem: true } } } });
       if (!category) throw new NotFoundException("The category was not found.");
+      const activeChildren = await tx.financeCategory.count({ where: { tenantId: context.tenantId, companyId: context.companyId, parentId: category.id, status: FinanceCategoryStatus.ACTIVE } });
+      const linkedSuppliers = await tx.financeSupplier.count({ where: { tenantId: context.tenantId, companyId: context.companyId, categoryId: category.id, status: FinanceSupplierStatus.ACTIVE } });
+      const linkedRecurring = await tx.financeRecurringExpenseProfile.count({ where: { tenantId: context.tenantId, companyId: context.companyId, categoryId: category.id } });
+      if (activeChildren || linkedSuppliers || linkedRecurring) throw new BadRequestException("Archive child categories, reassign active suppliers and close recurring profiles before archiving this category.");
       if (category.status !== FinanceCategoryStatus.ARCHIVED) await tx.financeCategory.update({ where: { id: category.id }, data: { status: FinanceCategoryStatus.ARCHIVED } });
       if (category.accountId && !category.account?.isSystem) await tx.financeAccount.update({ where: { id: category.accountId }, data: { status: FinanceAccountStatus.ARCHIVED } });
       const receipt: EntityReceipt = { id: category.id, status: "ARCHIVED", replayed: false };
@@ -60,7 +99,7 @@ export class FinanceMasterDataService {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: "finance.supplier.create", key: idempotencyKey, request: payload, expiresAt: tomorrow() });
       if (begun.kind === "replay") return { ...(begun.response.body as EntityReceipt), replayed: true };
       if (begun.kind === "in-progress") throw new ConflictException("The supplier request is still in progress.");
-      await this.assertCategory(tx, context, payload.categoryId);
+      await this.assertCategory(tx, context, payload.categoryId, payload.supplierType);
       const id = randomUUID();
       await tx.financeSupplier.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...payload, status: FinanceSupplierStatus.ACTIVE } });
       const receipt: EntityReceipt = { id, status: "ACTIVE", replayed: false };
@@ -76,9 +115,9 @@ export class FinanceMasterDataService {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: "finance.supplier.update", key: idempotencyKey, request: { supplierId, ...payload }, expiresAt: tomorrow() });
       if (begun.kind === "replay") return { ...(begun.response.body as EntityReceipt), replayed: true };
       if (begun.kind === "in-progress") throw new ConflictException("The supplier request is still in progress.");
-      const current = await tx.financeSupplier.findFirst({ where: { id: supplierId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, nameAr: true, nameEn: true, phone: true, taxNumber: true, isTaxRegistered: true, categoryId: true, status: true } });
+      const current = await tx.financeSupplier.findFirst({ where: { id: supplierId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, nameAr: true, nameEn: true, phone: true, taxNumber: true, isTaxRegistered: true, supplierType: true, categoryId: true, status: true } });
       if (!current) throw new NotFoundException("The supplier was not found.");
-      await this.assertCategory(tx, context, payload.categoryId);
+      await this.assertCategory(tx, context, payload.categoryId, payload.supplierType);
       await tx.financeSupplier.update({ where: { id: current.id }, data: payload });
       const receipt: EntityReceipt = { id: current.id, status: current.status, replayed: false };
       await this.audit(tx, context, "finance.supplier.updated", "FinanceSupplier", current.id, current, payload);
@@ -102,10 +141,10 @@ export class FinanceMasterDataService {
     });
   }
 
-  private async assertCategory(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, categoryId: string | null | undefined): Promise<void> {
-    if (!categoryId) return;
-    const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true }, select: { id: true } });
+  private async assertCategory(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, categoryId: string, supplierType: FinanceSupplierType): Promise<void> {
+    const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true }, select: { id: true, kind: true } });
     if (!category) throw new BadRequestException("The selected supplier category is not active.");
+    if (category.kind !== (supplierType === FinanceSupplierType.PURCHASE ? FinanceCategoryKind.PURCHASE : FinanceCategoryKind.EXPENSE)) throw new BadRequestException("The supplier type must match the default category.");
   }
 
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, beforeJson: unknown, afterJson: unknown): Promise<void> {
@@ -115,5 +154,5 @@ export class FinanceMasterDataService {
 
 function required(value: string, max: number): string { const normalized = value.trim(); if (!normalized || normalized.length > max) throw new BadRequestException("A required text value is invalid."); return normalized; }
 function optional(value: string | undefined): string | null { const normalized = value?.trim(); return normalized ? normalized : null; }
-function normaliseSupplier(value: SupplierWrite): { nameAr: string; nameEn: string | null; phone: string | null; taxNumber: string | null; isTaxRegistered: boolean; categoryId: string | null } { return { nameAr: required(value.nameAr, 160), nameEn: optional(value.nameEn), phone: optional(value.phone), taxNumber: optional(value.taxNumber), isTaxRegistered: value.isTaxRegistered, categoryId: value.categoryId ?? null }; }
+function normaliseSupplier(value: SupplierWrite): { nameAr: string; nameEn: string | null; phone: string | null; taxNumber: string | null; isTaxRegistered: boolean; supplierType: FinanceSupplierType; categoryId: string } { return { nameAr: required(value.nameAr, 160), nameEn: optional(value.nameEn), phone: optional(value.phone), taxNumber: optional(value.taxNumber), isTaxRegistered: value.isTaxRegistered, supplierType: value.supplierType === "EXPENSE" ? FinanceSupplierType.EXPENSE : FinanceSupplierType.PURCHASE, categoryId: value.categoryId }; }
 function tomorrow(): Date { return new Date(Date.now() + 86_400_000); }

@@ -5,6 +5,7 @@ import {
   reverseInclusiveLoanRepaymentRequestSchema,
   inclusiveLoanOpeningReceiptSchema,
   inclusiveLoanRepaymentReceiptSchema,
+  inclusiveLoansReceiptSchema,
 } from "@baseer-erp/contracts";
 import {
   BadRequestException,
@@ -13,6 +14,7 @@ import {
   ForbiddenException,
   Headers,
   HttpCode,
+  Get,
   Post,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -21,6 +23,7 @@ import { CompanyContextService } from "../company-context/company-context.servic
 import { InclusiveLoanRepaymentService } from "./inclusive-loan-repayment.service.js";
 import { InclusiveLoanService } from "./inclusive-loan.service.js";
 
+const LOANS_READ_CAPABILITY = "finance.loans.read";
 const LOANS_WRITE_CAPABILITY = "finance.loans.write";
 
 @Controller("finance/inclusive-loans")
@@ -31,6 +34,17 @@ export class InclusiveLoansController {
     private readonly repayments: InclusiveLoanRepaymentService,
   ) {}
 
+  @Get()
+  async list(
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const context = await this.authorize(authorization, companyId, LOANS_READ_CAPABILITY);
+    return inclusiveLoansReceiptSchema.parse({
+      companyId: context.companyId,
+      loans: await this.loans.list(context),
+    });
+  }
   @Post()
   @HttpCode(201)
   async createOpening(
@@ -107,6 +121,7 @@ export class InclusiveLoansController {
   private async authorize(
     authorization: string | undefined,
     companyId: string | undefined,
+    capability = LOANS_WRITE_CAPABILITY,
   ) {
     const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1];
     if (!accessToken)
@@ -117,7 +132,7 @@ export class InclusiveLoansController {
     const authorized = await this.companyContext.authorize({
       accessToken,
       companyId: parsedCompanyId.data,
-      requiredCapabilities: [LOANS_WRITE_CAPABILITY],
+      requiredCapabilities: [capability],
     });
     return {
       tenantId: authorized.principal.tenantId,

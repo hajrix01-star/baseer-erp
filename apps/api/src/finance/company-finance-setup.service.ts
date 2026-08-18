@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceVaultStatus, FinanceVaultType, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryKind, FinanceCategoryStatus, FinanceSupplierType, FinanceVaultPaymentMethod, FinanceVaultStatus, FinanceVaultType, Prisma } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
 import { FinanceFoundationService } from './finance-foundation.service.js';
 import { STANDARD_SUPPLIER_KEYS, STANDARD_SUPPLIER_SEEDS, type StandardSupplierKey } from './finance-foundation-seeds.js';
@@ -59,7 +59,7 @@ export class CompanyFinanceSetupService {
         const account = accounts.find((item) => item.systemKey === choice)!; const prior = existingByAccount.get(account.id);
         if (prior) { vaultIds.push(prior); continue; }
         const definition = VAULT_DEFINITIONS[choice]; const id = randomUUID();
-        await transaction.financeVault.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, accountId: account.id, nameAr: definition.nameAr, nameEn: definition.nameEn, type: definition.type, status: FinanceVaultStatus.ACTIVE, isSalesChannel: definition.isSalesChannel, isPaymentDestination: definition.isPaymentDestination, sortOrder: definition.sortOrder } });
+        await transaction.financeVault.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, accountId: account.id, nameAr: definition.nameAr, nameEn: definition.nameEn, type: definition.type, paymentMethod: definition.paymentMethod, paymentMethods: [definition.paymentMethod], status: FinanceVaultStatus.ACTIVE, isSalesChannel: definition.isSalesChannel, isPaymentDestination: definition.isPaymentDestination, sortOrder: definition.sortOrder } });
         vaultIds.push(id);
       }
       const suppliers = await this.upsertStandardSuppliers(transaction, context, standardSupplierKeys);
@@ -88,11 +88,12 @@ export class CompanyFinanceSetupService {
   private async upsertStandardSuppliers(transaction: Prisma.TransactionClient, context: TrustedCompanyActorContext, standardSupplierKeys: readonly StandardSupplierKey[]): Promise<StandardSupplierSyncReceipt> {
     const selectedSuppliers = STANDARD_SUPPLIER_SEEDS.filter((supplier) => standardSupplierKeys.includes(supplier.key));
     if (!selectedSuppliers.length) return { supplierIds: [], taxNumbersUpdated: 0 };
-    const categories = await transaction.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, code: { in: selectedSuppliers.map((supplier) => supplier.categoryCode) } }, select: { id: true, code: true } });
-    const categoriesByCode = new Map(categories.map((category) => [category.code, category.id]));
+    const categories = await transaction.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, code: { in: selectedSuppliers.map((supplier) => supplier.categoryCode) } }, select: { id: true, code: true, kind: true } });
+    const categoriesByCode = new Map(categories.map((category) => [category.code, category]));
     const supplierIds: string[] = []; let taxNumbersUpdated = 0;
     for (const supplier of selectedSuppliers) {
-      const categoryId = categoriesByCode.get(supplier.categoryCode);
+      const category = categoriesByCode.get(supplier.categoryCode);
+      const categoryId = category?.id;
       if (!categoryId) throw new BadRequestException(`The seeded category for ${supplier.key} is missing.`);
       const prior = await transaction.financeSupplier.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, nameAr: supplier.nameAr }, select: { id: true, taxNumber: true, isTaxRegistered: true } });
       if (prior) {
@@ -100,19 +101,19 @@ export class CompanyFinanceSetupService {
         supplierIds.push(prior.id); continue;
       }
       const id = randomUUID();
-      await transaction.financeSupplier.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, categoryId, nameAr: supplier.nameAr, nameEn: supplier.nameEn, taxNumber: supplier.taxNumber ?? null, isTaxRegistered: Boolean(supplier.taxNumber) } });
+      await transaction.financeSupplier.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, categoryId, supplierType: category!.kind === FinanceCategoryKind.EXPENSE ? FinanceSupplierType.EXPENSE : FinanceSupplierType.PURCHASE, nameAr: supplier.nameAr, nameEn: supplier.nameEn, taxNumber: supplier.taxNumber ?? null, isTaxRegistered: Boolean(supplier.taxNumber) } });
       supplierIds.push(id);
     }
     return { supplierIds, taxNumbersUpdated };
   }
 }
 
-const VAULT_DEFINITIONS: Record<CompanyVaultChoice, { nameAr: string; nameEn: string; type: FinanceVaultType; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number }> = {
-  CASH: { nameAr: 'نقد', nameEn: 'Cash', type: FinanceVaultType.CASH, isSalesChannel: true, isPaymentDestination: true, sortOrder: 10 },
-  BANK: { nameAr: 'بنك', nameEn: 'Bank', type: FinanceVaultType.BANK, isSalesChannel: false, isPaymentDestination: true, sortOrder: 20 },
-  HUNGERSTATION: { nameAr: 'هنقرستيشن', nameEn: 'HungerStation', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 30 },
-  JAHEZ: { nameAr: 'جاهز', nameEn: 'Jahez', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 40 },
-  KEETA: { nameAr: 'كيتا', nameEn: 'Keeta', type: FinanceVaultType.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 50 },
+const VAULT_DEFINITIONS: Record<CompanyVaultChoice, { nameAr: string; nameEn: string; type: FinanceVaultType; paymentMethod: FinanceVaultPaymentMethod; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number }> = {
+  CASH: { nameAr: 'نقد', nameEn: 'Cash', type: FinanceVaultType.CASH, paymentMethod: FinanceVaultPaymentMethod.CASH, isSalesChannel: true, isPaymentDestination: true, sortOrder: 10 },
+  BANK: { nameAr: 'بنك', nameEn: 'Bank', type: FinanceVaultType.BANK, paymentMethod: FinanceVaultPaymentMethod.BANK_TRANSFER, isSalesChannel: false, isPaymentDestination: true, sortOrder: 20 },
+  HUNGERSTATION: { nameAr: 'هنقرستيشن', nameEn: 'HungerStation', type: FinanceVaultType.APP, paymentMethod: FinanceVaultPaymentMethod.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 30 },
+  JAHEZ: { nameAr: 'جاهز', nameEn: 'Jahez', type: FinanceVaultType.APP, paymentMethod: FinanceVaultPaymentMethod.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 40 },
+  KEETA: { nameAr: 'كيتا', nameEn: 'Keeta', type: FinanceVaultType.APP, paymentMethod: FinanceVaultPaymentMethod.APP, isSalesChannel: true, isPaymentDestination: false, sortOrder: 50 },
 };
 function normalizeVaultChoices(value: readonly CompanyVaultChoice[]): CompanyVaultChoice[] { const unique = [...new Set(value)]; if (!unique.length || unique.some((item) => !COMPANY_VAULT_CHOICES.includes(item))) throw new BadRequestException('Select at least one supported company vault.'); return unique; }
 function requiredText(value: string, maximumLength: number): string { const text = value?.trim(); if (!text || text.length > maximumLength) throw new BadRequestException('A fiscal-period name is required.'); return text; }

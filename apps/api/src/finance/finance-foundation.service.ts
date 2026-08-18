@@ -16,7 +16,8 @@ import {
   FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS,
 } from './finance-foundation-seeds.js';
 
-const BASE_SEED_VERSION = 5;
+// v6 adds the cash-basis control account used by credit supplier invoices.
+const BASE_SEED_VERSION = 6;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;
@@ -112,7 +113,7 @@ export class FinanceFoundationService {
     });
     if (!existingProfile) {
       await transaction.companyFinanceProfile.create({
-        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: false },
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true },
       });
     } else if (existingProfile.baseSeedVersion < BASE_SEED_VERSION) {
       await transaction.companyFinanceProfile.update({ where: { id: existingProfile.id }, data: { baseSeedVersion: BASE_SEED_VERSION } });

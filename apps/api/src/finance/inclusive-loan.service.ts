@@ -55,6 +55,33 @@ export class InclusiveLoanService {
     private readonly businessDates: BusinessDateService,
   ) {}
 
+  async list(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const loans = await transaction.financeInclusiveLoan.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+        orderBy: [{ status: "asc" }, { firstInstallmentDueDate: "asc" }, { createdAt: "desc" }],
+        select: {
+          id: true, sourceDocumentNumber: true, originalAmount: true, openingOutstandingAmount: true,
+          paidAmount: true, remainingAmount: true, installmentAmount: true, termMonths: true,
+          firstInstallmentDueDate: true, openingBusinessDate: true, status: true, notes: true,
+        },
+      });
+      return loans.map((loan) => ({
+        id: loan.id,
+        sourceDocumentNumber: loan.sourceDocumentNumber,
+        originalAmount: loan.originalAmount.toFixed(4),
+        openingOutstandingAmount: loan.openingOutstandingAmount.toFixed(4),
+        paidAmount: loan.paidAmount.toFixed(4),
+        remainingAmount: loan.remainingAmount.toFixed(4),
+        installmentAmount: loan.installmentAmount.toFixed(4),
+        termMonths: loan.termMonths,
+        firstInstallmentDueDate: loan.firstInstallmentDueDate,
+        openingBusinessDate: loan.openingBusinessDate,
+        status: loan.status,
+        notes: loan.notes,
+      }));
+    });
+  }
   async createOpeningLoan(command: OpeningInclusiveLoanCommand): Promise<OpeningInclusiveLoanReceipt> {
     const { context, request } = command;
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {

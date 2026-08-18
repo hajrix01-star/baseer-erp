@@ -9,6 +9,17 @@ import {
 
 @Injectable()
 export class FinanceVaultService {
+  async assertActiveVault(
+    transaction: Prisma.TransactionClient,
+    input: { tenantId: string; companyId: string; vaultId: string },
+  ): Promise<{ id: string; accountId: string }> {
+    const vault = await transaction.financeVault.findFirst({
+      where: { id: input.vaultId, tenantId: input.tenantId, companyId: input.companyId, status: FinanceVaultStatus.ACTIVE, account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE } },
+      select: { id: true, accountId: true },
+    });
+    if (!vault) throw new BadRequestException("The selected vault is not active for this company.");
+    return vault;
+  }
   async assertActiveSalesChannel(
     transaction: Prisma.TransactionClient,
     input: { tenantId: string; companyId: string; vaultId: string },

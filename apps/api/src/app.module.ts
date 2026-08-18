@@ -35,6 +35,7 @@ import { SupplierDuesController } from './finance/supplier-dues.controller.js';
 import { PurchaseExpenseController } from './finance/purchase-expense.controller.js';
 import { PurchaseExpenseService } from './finance/purchase-expense.service.js';
 import { SupplierDueReportsController } from './finance/supplier-due-reports.controller.js';
+import { RecurringExpenseController } from './finance/recurring-expense.controller.js';
 import { RecurringExpenseService } from './finance/recurring-expense.service.js';
 import { InclusiveLoanService } from './finance/inclusive-loan.service.js';
 import { InclusiveLoanRepaymentService } from './finance/inclusive-loan-repayment.service.js';
@@ -43,8 +44,14 @@ import { CompanyFinanceSetupService } from './finance/company-finance-setup.serv
 import { CompanyFinanceSetupController } from './finance/company-finance-setup.controller.js';
 import { VaultManagementService } from './finance/vault-management.service.js';
 import { VaultManagementController } from './finance/vault-management.controller.js';
+import { TreasuryController } from './finance/treasury.controller.js';
+import { InvoiceRegisterController } from './finance/invoice-register.controller.js';
+import { TreasuryService } from './finance/treasury.service.js';
+import { InvoiceRegisterService } from './finance/invoice-register.service.js';
 import { FinanceConfigurationService } from './finance/finance-configuration.service.js';
 import { FinanceConfigurationController } from './finance/finance-configuration.controller.js';
+import { ExpensesObligationsReadController } from './finance/expenses-obligations-read.controller.js';
+import { ExpensesObligationsReadService } from './finance/expenses-obligations-read.service.js';
 import { FinanceMasterDataController } from './finance/finance-master-data.controller.js';
 import { FinanceMasterDataService } from './finance/finance-master-data.service.js';
 import { DailySalesController } from './finance/daily-sales.controller.js';
@@ -67,7 +74,7 @@ import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, FinanceMasterDataController, VaultManagementController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -101,8 +108,9 @@ import { OutputService } from './output/output.service.js';
     InclusiveLoanService,
     InclusiveLoanRepaymentService,
     CompanyFinanceSetupService,
-    VaultManagementService,
+    VaultManagementService, TreasuryService, InvoiceRegisterService,
     FinanceConfigurationService,
+    ExpensesObligationsReadService,
     FinanceMasterDataService,
     DailySalesProjectionService,
     DailySalesReadService,
