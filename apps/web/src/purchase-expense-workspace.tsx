@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { DataTable } from "./data-table";
 import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
@@ -107,14 +108,12 @@ function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorks
   if (!credit) return <BaseerCard><p>{text.loading}</p></BaseerCard>;
 
   const invoices = credit.suppliers.flatMap((supplier) => supplier.dues.map((due) => ({ ...due, supplierNameAr: supplier.supplierNameAr, supplierNameEn: supplier.supplierNameEn })));
-  const metricCardStyle = { display: "grid", alignContent: "center", gap: ".35rem", minBlockSize: "5.5rem" };
-
   return <>
-    <div aria-label={text.credit} role="list" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(10rem, 1fr))", gap: "var(--section-gap)" }}>
-      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.openCreditSuppliers}</p><strong>{credit.openSupplierCount}</strong></BaseerCard>
-      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.openCreditInvoices}</p><strong>{credit.openInvoiceCount}</strong></BaseerCard>
-      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.creditOutstanding}</p><strong>{formatMoney(credit.remainingAmount)}</strong></BaseerCard>
-    </div>
+    <BaseerSummaryMetricGrid ariaLabel={text.credit} role="list">
+      <BaseerSummaryMetric role="listitem" label={text.openCreditSuppliers} value={credit.openSupplierCount} />
+      <BaseerSummaryMetric role="listitem" label={text.openCreditInvoices} value={credit.openInvoiceCount} />
+      <BaseerSummaryMetric role="listitem" label={text.creditOutstanding} value={formatMoney(credit.remainingAmount)} />
+    </BaseerSummaryMetricGrid>
     {message ? <p className="daily-sales-message success">{message}</p> : null}
     <section style={{ marginTop: "var(--section-gap)", paddingTop: "var(--section-gap)", borderTop: "1px solid var(--line)" }}>
       <div className="administration-section-heading"><div><h3>{text.openCreditInvoices}</h3><p>{text.creditAsOf} {credit.asOfBusinessDate.slice(0, 10)}</p></div></div>
