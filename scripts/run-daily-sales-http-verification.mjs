@@ -55,7 +55,7 @@ try {
     fiscalPeriodNameEn: "HTTP test period",
     fiscalPeriodStartDate: date("2026-01-01"),
     fiscalPeriodEndDate: date("2026-12-31"),
-    selectedVaults: ["CASH"],
+    selectedVaults: ["CASH", "BANK"],
   });
   const cashVault = await database.inTenantTransaction(
     fixture.tenantId,
@@ -75,6 +75,7 @@ try {
       });
     },
   );
+  const bankVault = await database.inTenantTransaction(fixture.tenantId, (transaction) => transaction.financeVault.findFirstOrThrow({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, type: "BANK", status: "ACTIVE" }, select: { id: true } }));
   const auth = app.get(AuthService);
   const session = await auth.signIn({
     login: `daily-http-${suffix}@baseer.test`,
@@ -244,6 +245,24 @@ try {
   assert.equal(workspace.json().shifts.find((item) => item.scope === "ALL").grossAmount, "115.0000");
   assert.equal(workspace.json().vaults.length, 1);
   assert.ok(workspace.json().permissionCodes.includes("finance.daily_sales.read"));
+  const expensesWorkspace = await server.inject({
+    method: "GET",
+    url: "/v1/finance/expenses-obligations-workspace",
+    headers,
+  });
+  assert.equal(expensesWorkspace.statusCode, 200, expensesWorkspace.body);
+  assert.equal(expensesWorkspace.json().companyId, fixture.companyId);
+  assert.match(expensesWorkspace.json().businessDate, /^\d{4}-\d{2}-\d{2}$/, "Expenses workspace business date must be server-owned.");
+  assert.equal(expensesWorkspace.json().configuration.companyId, fixture.companyId);
+  const cashierExpensesWorkspace = await server.inject({
+    method: "GET",
+    url: "/v1/finance/expenses-obligations-workspace",
+    headers: {
+      authorization: `Bearer ${cashierSession.accessToken}`,
+      "x-baseer-company-id": fixture.companyId,
+    },
+  });
+  assert.equal(cashierExpensesWorkspace.statusCode, 403, "A cashier must not read expenses and obligations without its read capabilities.");
   const closingHistory = await server.inject({
     method: "GET",
     url: "/v1/finance/daily-sales/closings?fromBusinessDate=2026-08-15&toBusinessDate=2026-08-15",
@@ -271,6 +290,24 @@ try {
     authorization: `Bearer ${cashierSession.accessToken}`,
     "x-baseer-company-id": fixture.companyId,
   };
+  const treasuryRead = await server.inject({ method: "GET", url: "/v1/finance/treasury", headers });
+  assert.equal(treasuryRead.statusCode, 200, treasuryRead.body);
+  const transferKey = randomUUID();
+  const treasuryTransfer = await server.inject({ method: "POST", url: "/v1/finance/treasury/transfers", headers, payload: { fromVaultId: cashVault.id, toVaultId: bankVault.id, amount: "10.0000", businessDate: "2026-08-15", idempotencyKey: transferKey } });
+  assert.equal(treasuryTransfer.statusCode, 201, treasuryTransfer.body);
+  const treasuryReplay = await server.inject({ method: "POST", url: "/v1/finance/treasury/transfers", headers, payload: { fromVaultId: cashVault.id, toVaultId: bankVault.id, amount: "10.0000", businessDate: "2026-08-15", idempotencyKey: transferKey } });
+  assert.equal(treasuryReplay.statusCode, 201, treasuryReplay.body);
+  assert.equal(treasuryReplay.json().journalEntryId, treasuryTransfer.json().journalEntryId, "Treasury HTTP transfer must replay idempotently.");
+  const vaultActivity = await server.inject({ method: "GET", url: `/v1/finance/treasury/${bankVault.id}/activity?toBusinessDate=2026-08-15&pageSize=1`, headers });
+  assert.equal(vaultActivity.statusCode, 200, vaultActivity.body);
+  assert.equal(vaultActivity.json().items[0].journalEntryId, treasuryTransfer.json().journalEntryId, "Vault activity must return the company's posted transfer movement.");
+  assert.equal(vaultActivity.json().summary.inflow, "10.0000", "Vault activity totals must be server-owned.");
+  const treasuryMismatch = await server.inject({ method: "POST", url: "/v1/finance/treasury/transfers", headers, payload: { fromVaultId: cashVault.id, toVaultId: bankVault.id, amount: "26.0000", businessDate: "2026-08-15", idempotencyKey: transferKey } });
+  assert.equal(treasuryMismatch.statusCode, 409, "Treasury transfer must reject a reused idempotency key with different data.");
+  const futureTreasuryTransfer = await server.inject({ method: "POST", url: "/v1/finance/treasury/transfers", headers, payload: { fromVaultId: cashVault.id, toVaultId: bankVault.id, amount: "10.0000", businessDate: "2099-01-01", idempotencyKey: randomUUID() } });
+  assert.equal(futureTreasuryTransfer.statusCode, 400, "Future treasury transfer must be denied.");
+  const cashierTreasury = await server.inject({ method: "GET", url: "/v1/finance/treasury", headers: cashierHeaders });
+  assert.equal(cashierTreasury.statusCode, 403, "Cashiers must not read Treasury.");
   const cashierCreate = await server.inject({
     method: "POST",
     url: "/v1/finance/daily-sales/closings",
@@ -331,7 +368,7 @@ try {
     "A foreign company identifier must be denied.",
   );
   console.log(
-    "Daily Sales HTTP verification passed: authentication, company capability scope, cashier server history limit, idempotent create, VAT receipt, server-owned preview, shift summary, cumulative cash handovers, documented Day Off without journal creation, calendar, channel vaults, one bounded workspace read, and closing history.",
+    "Daily Sales HTTP verification passed: authentication, company capability scope, cashier server history limit, idempotent create, VAT receipt, server-owned preview, shift summary, cumulative cash handovers, documented Day Off without journal creation, calendar, channel vaults, company-authorized bounded sales and expenses workspaces, and closing history.",
   );
 } finally {
   if (app) await app.close();
@@ -393,6 +430,14 @@ async function seedFixture() {
         "finance.daily_sales.write",
         "finance.daily_sales.history.read_all",
       ],
+    );
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
+      [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read"],
+    );
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4)',
+      [fixture.tenantId, roleId, "finance.vaults.read", "finance.vaults.transfer"],
     );
     await client.query(
       'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5)',

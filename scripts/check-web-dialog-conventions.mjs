@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+﻿import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const sourceRoot = join(process.cwd(), "apps", "web", "src");
@@ -19,6 +19,10 @@ const failures = dialogFiles.flatMap((file) => {
   return duplicateDismissal.test(source) ? [file] : [];
 });
 
+const browserConfirmFiles = dialogFiles.filter((file) => readFileSync(file, "utf8").includes("window.confirm("));
+if (browserConfirmFiles.length) {
+  throw new Error(`Use BaseerConfirmDialog instead of browser confirm: ${browserConfirmFiles.join(", ")}`);
+}
 if (failures.length) {
   throw new Error(`Dialogs with a header close icon must not repeat a textual dismiss button: ${failures.join(", ")}`);
 }

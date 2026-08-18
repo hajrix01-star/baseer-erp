@@ -35,18 +35,22 @@ try {
 
   const master = await database.inTenantTransaction(fixture.tenantId, async (transaction) => {
     const category = await transaction.financeCategory.findFirstOrThrow({
-      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, kind: 'EXPENSE', status: 'ACTIVE' },
+      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, kind: 'EXPENSE', status: 'ACTIVE', isPosting: true },
       select: { id: true },
     });
     const vault = await transaction.financeVault.findFirstOrThrow({
-      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, isPaymentDestination: true, status: 'ACTIVE' },
+      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, type: 'CASH', isPaymentDestination: true, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    const bankVault = await transaction.financeVault.findFirstOrThrow({
+      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, type: "BANK", status: "ACTIVE" },
       select: { id: true },
     });
     const supplier = await transaction.financeSupplier.create({
       data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, categoryId: category.id, nameAr: `مورد ${suffix}`, nameEn: `Supplier ${suffix}` },
       select: { id: true },
     });
-    return { categoryId: category.id, vaultId: vault.id, supplierId: supplier.id };
+    return { categoryId: category.id, vaultId: vault.id, bankVaultId: bankVault.id, supplierId: supplier.id };
   });
 
   const due = await services.dues.createDue({
@@ -54,7 +58,16 @@ try {
     idempotencyKey: randomUUID(),
     request: { supplierId: master.supplierId, categoryId: master.categoryId, sourceDocumentNumber: `DUE-${suffix}`, businessDate: date('2026-08-15'), amount: '100.0000' },
   });
-  assert.equal(due.remainingAmount, '100.0000');
+  assert.equal(due.remainingAmount, '100.0000');  const cashBasisPosting = await database.inTenantTransaction(fixture.tenantId, async (transaction) => {
+    const [pending, category] = await Promise.all([
+      transaction.financeAccount.findFirstOrThrow({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, systemKey: 'CASH_BASIS_PENDING_OUTFLOWS' }, select: { id: true } }),
+      transaction.financeCategory.findFirstOrThrow({ where: { id: master.categoryId }, select: { accountId: true } }),
+    ]);
+    const lines = await transaction.financeJournalLine.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, journalEntryId: due.journalEntryId }, select: { accountId: true, debitAmount: true, creditAmount: true } });
+    return { pending, category, lines };
+  });
+  assert.equal(cashBasisPosting.lines.some((line) => line.accountId === cashBasisPosting.pending.id && line.debitAmount.equals('100.0000')), true, 'A credit due must debit pending outflows, not P&L.');
+  assert.equal(cashBasisPosting.lines.some((line) => line.accountId === cashBasisPosting.category.accountId && line.debitAmount.gt(0)), false, 'An unpaid due must not debit its P&L category.');
   await assert.rejects(
     () => services.dues.createDue({
       context,
@@ -69,13 +82,21 @@ try {
     idempotencyKey: randomUUID(),
     request: { dueId: due.dueId, vaultId: master.vaultId, businessDate: date('2026-08-16'), amount: '40.0000' },
   });
-  assert.equal(payment.remainingAmount, '60.0000');
+  assert.equal(payment.remainingAmount, '60.0000');  const paymentRecognition = await database.inTenantTransaction(fixture.tenantId, async (transaction) => {
+    const paymentRow = await transaction.financeSupplierDuePayment.findFirstOrThrow({ where: { id: payment.paymentId }, select: { recognizedNetAmount: true } });
+    const lines = await transaction.financeJournalLine.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, journalEntryId: payment.journalEntryId }, select: { accountId: true, debitAmount: true, creditAmount: true } });
+    return { paymentRow, lines };
+  });
+  assert.equal(paymentRecognition.paymentRow.recognizedNetAmount.toFixed(4), '40.0000', 'A partial cash payment must recognise the matching net expense.');
+  assert.equal(paymentRecognition.lines.some((line) => line.accountId === cashBasisPosting.category.accountId && line.debitAmount.equals('40.0000')), true, 'The payment journal must debit P&L only for the paid proportion.');
+  assert.equal(paymentRecognition.lines.some((line) => line.accountId === cashBasisPosting.pending.id && line.creditAmount.equals('40.0000')), true, 'The payment journal must release the pending-outflow balance.');
 
   const projectionBeforeReverse = await database.inTenantTransaction(fixture.tenantId, (transaction) =>
     services.dues.listPostedCashPaymentProjectionInTransaction(transaction, { tenantId: fixture.tenantId, companyId: fixture.companyId }),
   );
   assert.equal(projectionBeforeReverse.length, 1, 'Only the paid amount must appear in cash projection.');
   assert.equal(projectionBeforeReverse[0].amount, '40.0000');
+  assert.equal(projectionBeforeReverse[0].recognizedNetAmount, '40.0000');
 
   await assert.rejects(
     () => services.dues.recordPayment({ context: otherContext, idempotencyKey: randomUUID(), request: { dueId: due.dueId, vaultId: master.vaultId, businessDate: date('2026-08-16'), amount: '1.0000' } }),
@@ -112,33 +133,165 @@ try {
   });
   assert.equal(reversedLoanPayment.remainingAmount, '600.0000');
 
+  const recurring = await services.recurring.createProfile(context, {
+    nameAr: `كهرباء ${suffix}`,
+    categoryId: master.categoryId,
+    supplierId: master.supplierId,
+    expectedAmount: '115.0000',
+    intervalMonths: 1,
+    nextReminderDate: date('2026-08-20'),
+    defaultVaultId: master.vaultId,
+    allowAmountOverride: true,
+  }, randomUUID());
+  const recurringPayment = await services.documents.createRecurringPayment({
+    context,
+    idempotencyKey: randomUUID(),
+    request: {
+      profileId: recurring.id,
+      businessDate: date('2026-08-20'),
+      coverageYear: 2026,
+      coverageStartMonth: 8,
+      grossAmount: '115.0000',
+      isTaxable: false,
+      vaultId: master.vaultId,
+      supplierInvoiceMissingReason: 'Finance gate test receipt unavailable',
+    },
+  });
+  assert.equal(recurringPayment.coverageMonths, 1);
+  await assert.rejects(
+    () => services.documents.createRecurringPayment({
+      context,
+      idempotencyKey: randomUUID(),
+      request: {
+        profileId: recurring.id,
+        businessDate: date('2026-08-20'),
+        coverageYear: 2026,
+        coverageStartMonth: 8,
+        grossAmount: '115.0000',
+        isTaxable: false,
+        vaultId: master.vaultId,
+        supplierInvoiceMissingReason: 'Duplicate coverage must fail',
+      },
+    }),
+    'A recurring coverage slot must not be paid twice.',
+  );
+
+  const recurringBatchProfile = await services.recurring.createProfile(context, {
+    nameAr: 'اتصالات ' + suffix,
+    categoryId: master.categoryId,
+    supplierId: master.supplierId,
+    expectedAmount: '85.0000',
+    intervalMonths: 1,
+    nextReminderDate: date('2026-08-20'),
+    defaultVaultId: master.vaultId,
+    allowAmountOverride: true,
+  }, randomUUID());
+  const recurringBatchKey = randomUUID();
+  const recurringBatch = await services.documents.createRecurringPaymentBatch({
+    context,
+    idempotencyKey: recurringBatchKey,
+    request: {
+      businessDate: date('2026-08-20'),
+      items: [
+        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
+        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
+      ],
+    },
+  });
+  assert.equal(recurringBatch.documentCount, 2, 'A recurring batch must persist every valid row.');
+  const recurringBatchReplay = await services.documents.createRecurringPaymentBatch({
+    context,
+    idempotencyKey: recurringBatchKey,
+    request: {
+      businessDate: date('2026-08-20'),
+      items: [
+        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
+        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
+      ],
+    },
+  });
+  assert.equal(recurringBatchReplay.batchId, recurringBatch.batchId, 'A recurring batch must replay idempotently.');
+  await assert.rejects(
+    () => services.documents.createRecurringPaymentBatch({
+      context,
+      idempotencyKey: randomUUID(),
+      request: {
+        businessDate: date('2026-08-20'),
+        items: [
+          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'First duplicate candidate' },
+          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Second duplicate candidate' },
+        ],
+      },
+    }),
+    'A duplicate recurring-coverage row must roll back its entire batch.',
+  );
+  const rollbackProof = await services.documents.createRecurringPayment({
+    context,
+    idempotencyKey: randomUUID(),
+    request: { profileId: recurringBatchProfile.id, businessDate: date('2026-08-20'), coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Rollback coverage proof' },
+  });
+  assert.equal(rollbackProof.coverageMonths, 1, 'A failed recurring batch must not reserve coverage slots.');
+  const payableBatch = await services.documents.createBatch({
+    context,
+    idempotencyKey: randomUUID(),
+    request: {
+      businessDate: date('2026-08-20'),
+      items: [{
+        kind: 'EXPENSE', settlementKind: 'PAYABLE', categoryId: master.categoryId,
+        supplierId: master.supplierId, supplierInvoiceMissingReason: 'Finance gate payable',
+        grossAmount: '50.0000', isTaxable: false, allocations: [],
+      }],
+    },
+  });
+  assert.equal(payableBatch.documentCount, 1);
+  assert.ok(payableBatch.documents[0].supplierDueId, 'A payable batch item must create a supplier due without a vault allocation.');
+
+  const transferKey = randomUUID();
+  const transfer = await services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "25.0000", businessDate: date("2026-08-20"), idempotencyKey: transferKey });
+  assert.equal(transfer.amount, "25.0000");
+  const transferReplay = await services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "25.0000", businessDate: date("2026-08-20"), idempotencyKey: transferKey });
+  assert.equal(transferReplay.journalEntryId, transfer.journalEntryId, "A vault transfer must replay idempotently.");
+  await assert.rejects(() => services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.vaultId, amount: "1.0000", businessDate: date("2026-08-20"), idempotencyKey: randomUUID() }), "A transfer must require distinct vaults.");
+  await assert.rejects(() => services.treasury.transfer(context, { fromVaultId: master.vaultId, toVaultId: master.bankVaultId, amount: "1.0000", businessDate: date("2099-01-01"), idempotencyKey: randomUUID() }), "A future vault transfer must be rejected.");
+  const treasury = await services.treasury.workspace(context, { includeArchived: false });
+  assert.ok(treasury.vaults.some((vault) => vault.id === master.bankVaultId && vault.inflow === "25.0000"), "Treasury read model must derive the destination inflow from the journal.");
+  assert.ok(treasury.groups.some((group) => group.key === "COLLECTION_CHANNELS"), "Treasury workspace must return server-owned vault groups.");
+  const activity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 1 });
+  assert.equal(activity.items.length, 1, "Vault activity must be paginated by the server.");
+  assert.equal(activity.items[0].journalEntryId, transfer.journalEntryId, "Vault activity must expose the transfer entry for its vault.");
+  assert.equal(activity.summary.inflow, "25.0000", "Vault activity totals must be derived from the server ledger.");
   await verifySealedBalancedJournals();
   await verifySealedLineCannotChange(due.journalEntryId);
 
-  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier-due partial payment/reversal/cash projection, and inclusive-loan repayment/reversal.');
+  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier dues, inclusive loans, recurring coverage and atomic recurring batches, payable batches and idempotent ledger-derived vault transfers.');
 } finally {
   if (database) await database.onModuleDestroy();
   await pool.end();
 }
 
 async function loadServices() {
-  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { BusinessDateService }] = await Promise.all([
+  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
     import('../apps/api/dist/finance/finance-period.service.js'),
     import('../apps/api/dist/finance/journal/journal-posting.service.js'),
     import('../apps/api/dist/finance/finance-vault.service.js'),
     import('../apps/api/dist/core-controls/idempotency.service.js'),
+    import('../apps/api/dist/core-controls/document-serial.service.js'),
     import('../apps/api/dist/finance/company-finance-setup.service.js'),
     import('../apps/api/dist/finance/supplier-dues.service.js'),
     import('../apps/api/dist/finance/inclusive-loan.service.js'),
     import('../apps/api/dist/finance/inclusive-loan-repayment.service.js'),
+    import('../apps/api/dist/finance/recurring-expense.service.js'),
+    import('../apps/api/dist/finance/purchase-expense.service.js'),
     import('../apps/api/dist/business-date/business-date.service.js'),
   ]);
+  const { TreasuryService } = await import('../apps/api/dist/finance/treasury.service.js');
   database = new DatabaseService();
   const periods = new FinancePeriodService(database);
   const journals = new JournalPostingService(periods);
   const idempotency = new IdempotencyService(database);
+  const serials = new DocumentSerialService();
   const foundation = new FinanceFoundationService(database);
   const businessDates = new BusinessDateService(
     database,
@@ -150,6 +303,9 @@ async function loadServices() {
     dues: new SupplierDuesService(database, idempotency, journals, new FinanceVaultService(), businessDates),
     loans: new InclusiveLoanService(database, idempotency, journals, businessDates),
     repayments: new InclusiveLoanRepaymentService(database, idempotency, journals, businessDates),
+    recurring: new RecurringExpenseService(database, idempotency),
+    documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
+    treasury: new TreasuryService(database, idempotency, journals, new FinanceVaultService(), businessDates),
   };
 }
 

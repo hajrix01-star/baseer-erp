@@ -57,6 +57,7 @@ jobs:
       - run: npm run check:ai-gate-b
       - run: npm run check:web-financial-boundaries
       - run: npm run check:web-dialog-conventions
+      - run: npm run check:web-localization
       - run: npm run check --workspace @baseer-erp/contracts
       - run: npm run check --workspace @baseer-erp/api
       - run: npm run check --workspace @baseer-erp/web

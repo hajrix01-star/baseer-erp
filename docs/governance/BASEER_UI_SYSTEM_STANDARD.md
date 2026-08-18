@@ -21,7 +21,12 @@
 | كرت | `BaseerCard` / `.baseer-card` |
 | جدول | `DataTable` / `.baseer-data-table` |
 | زر | `BaseerButton` / `.baseer-button` |
-| حقل | قواعد الحقول المركزية في `styles.css` |
+| حقل | قواعد الحقول المركزية في styles.css |
+| اختيار متعدد | input[type=checkbox] مركزي بقياس 18px × 18px؛ لا يوسّع إلى عرض الحقل أو مساحة البطاقة |
+| تاريخ قيد / تاريخ فاتورة | `input type="date"` الأصلي: تقويم المتصفح وسرعة إدخال موحّدة |
+| فلتر فترة | `BaseerPeriodFilter`: يوم/شهر/أشهر/ربع/سنة/نطاق، ثم «تطبيق» |
+| شريط فلاتر قائمة | `BaseerFilterBar` مع `BaseerFilterSelect` و`BaseerFilterToggle`: بحث، فلاتر سياقية، شرائح للفلاتر المطبقة، إزالة فردية ومسح الكل |
+| إكمال تلقائي | `BaseerFilterAutocomplete` كمربع بحث واقتراحات مملوك لبصير (لا قائمة متصفح أصلية): يعرض الاسم المحلي ويعيد معرف السجل الثابت للخادم |
 | نافذة | طبقة الحوار المركزية (`daily-sales-dialog-backdrop` وعقد الحوار) |
 | حالة | شارة الحالة المركزية (`daily-sales-badge` وعقد الحالات) |
 
@@ -33,10 +38,30 @@
 4. الأزرار الخطرة تبقى حمراء ولا تستخدم للإغلاق؛ الإغلاق يكون بزر × أو زر إغلاق محايد.
 5. مصدر الألوان والمسافات والارتفاعات هو CSS tokens في `apps/web/src/styles.css`.
 6. أي استثناء بصري يجب أن يقتصر على محتوى الموديول، لا أن يغيّر شكل المكوّن الأساسي.
+7. التأكيدات تستخدم BaseerConfirmDialog؛ يمنع window.confirm في الواجهة.
+8. النصوص المشتركة تأتي من قاموس مركزي؛ لا تكرر نصوص الإغلاق والإلغاء وحالات المعالجة.
+9. التنقل والأزرار تسترشد بصلاحيات الشركة الحية لإخفاء ما لا يتاح؛ الخادم يعيد التحقق من كل طلب ولا تعتمد الحماية على الواجهة.
+10. كل نص يراه المستخدم يأتي من مفتاح ترجمة مركزي للعربية والإنجليزية، ويشمل العناوين والحقول والأزرار والخيارات ورسائل الخطأ وحالات التحميل والطباعة والتصدير.
+11. البيانات الأساسية تحمل اسم عرض عربي وإنجليزي متى كانت من بصير (شركة، بند، مورد، فئة، تصنيف). الكود والمعرّف والرقم المالي حقائق ثابتة ولا تترجم. البيانات المرحّلة التي ينقصها اسم إنجليزي توسم صراحة وتدخل قائمة استكمال، ولا تستبدل بقيمة مخمّنة.
+12. لا يقبل القسم عند اختيار EN إذا بقيت محتويات الأعمال عربية بلا سبب بيانات موثق؛ يثبت ذلك باختبار عربي/إنجليزي وRTL/LTR.
+13. تحفظ لغة الواجهة فقط محلياً بمفتاح `baseer.ui.locale.v1` وتستعاد بعد إعادة التحميل؛ لا تخزن معه الجلسة أو الصلاحيات أو الشركة أو أي بيانات مالية.
+14. تاريخ القيد وتاريخ الفاتورة يستخدمان `input type="date"` الأصلي في المتصفح. أما التواريخ التي تتطلب اختياراً مسوداً ثم «تطبيق» (مثل سداد الأجل أو التزام دوري) فتستخدم `BaseerDatePicker`.
+15. فلترة البيانات حسب الوقت تستخدم `BaseerPeriodFilter`، ولا تستعمل حقل تاريخ منفرداً مكان فترة التقرير.
+16. لا تتغير قاعدة الخادم: منع التاريخ المستقبلي وتاريخ العمل والتحقق المحاسبي مسؤولية الخادم مهما اختلف شكل الحقل.
+17. أي قائمة أو سجل قابل للتصفية يستعمل `BaseerFilterBar` بدلاً من عناصر `input` و`select` وcheckbox متناثرة. يضع المكوّن البحث والفلاتر السياقية في شريط واحد؛ في القوائم الكثيفة تستخدم الفلاتر وضع القائمة المنبثقة المدمج مع حقل البحث وتغلق بالنقر خارجه أو Esc. يعرض الفلاتر الفعالة في صف ثانٍ قابلة للإزالة، ويعرض «مسح الكل» فقط عند وجود فلتر فعّال.
+18. فلاتر الشركة والفترة تظل خادمية ومرتبطة بـ`BaseerPeriodFilter`؛ شريط الفلاتر لا يحسب أرقاماً مالية ولا يبدل نطاق التفويض.
+19. تستخدم القوائم الديناميكية الطويلة (مثل المورد أو الفئة أو العميل) `BaseerFilterAutocomplete`؛ أما الخيارات القصيرة والثابتة (مثل الحالة والنوع) فتستخدم `BaseerFilterSelect`. الاختيار التلقائي يعرض الاسم فقط لكنه يرسل المعرّف الثابت إلى الخادم. تظهر شرائح الفلاتر المطبقة دائماً في صف ثانٍ مستقل عن أدوات الفلترة. الشاشات غير القائمة لا تضيف بحثاً شكلياً؛ تستخدم فلتر الفترة المركزي فقط متى كان لها مصدر زمني.
+20. أسهم القوائم المملوكة لواجهة Baseer تستخدم المثلث المغلق ▾؛ لا تستخدم علامة V المفتوحة لتمييز القائمة المنسدلة.
 
 ## بوابة التسليم
 
-قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق.
+قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق. أضف اختبار Playwright لمسار لوحة المفاتيح/الـEscape والاتجاهات عند تغير التنقل أو الحوار، ثم اختبارات authenticated/visual للمسارات ذات البيانات.
 ## Release-budget rule (2026-08-16)
 
-The production web budget is **300 KB initial JavaScript**, **100 KB deferred route JavaScript**, and **58 KB CSS** (raw generated assets). Lazy route chunks are measured separately so a new screen cannot increase startup cost; both budgets remain enforced. The CSS ceiling covers the shared bilingual RTL/LTR application stylesheet. Any increase requires removal of duplicate rules or an explicit UI-system decision; the compressed CSS target remains below 11 KB.
+The production web budget is **300 KB initial JavaScript**, **127 KB deferred route JavaScript**, and **62 KB CSS** (raw generated assets). Lazy route chunks are measured separately so a new screen cannot increase startup cost; both budgets remain enforced. The 127 KB deferred ceiling is an explicit 2026-08-18 UI-system decision for the verified lazy finance and administration workspaces; it does not weaken the startup limit. The CSS ceiling covers the shared bilingual RTL/LTR application stylesheet. Any future increase requires removal of duplicate rules or a new explicit UI-system decision; the compressed CSS target remains below 11 KB.
+
+## Central authentication shell — 2026-08-18
+
+- `BaseerLogin` is the only unauthenticated web landing. It provides username/email sign-in, password visibility, loading/error feedback, Arabic/English display, and server-authorized company choice.
+- A signed-in header exposes an explicit sign-out action instead of a placeholder profile action. It calls the audited server sign-out endpoint best-effort and always clears the current device session.
+- The login surface uses existing central layout, button, field, brand, theme, and localization primitives; it must not introduce a second design system or persist secrets outside `sessionStorage`.
