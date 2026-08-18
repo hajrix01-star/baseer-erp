@@ -20,7 +20,7 @@ Build the financial prerequisites before exposing Purchase & Expense as an opera
 1. **Setup hub and initialization:** current fiscal period, base chart, selected initial vaults, and readiness receipt.
 2. **Vault management:** cards, add and archive lifecycle; account linkage remains server-owned.
 3. **Category management:** parent-aware financial categories, type, linked account and archive safeguards.
-4. **Supplier management:** profile, optional default category, tax/phone fields, archive safeguards and separate copy workflow.
+4. **Supplier management:** profile, optional default category, tax/phone fields, archive safeguards, company-scoped favourites for faster invoice selection, and separate copy workflow.
 5. **Purchase gate:** enable purchase/expense input only after setup readiness; corrections, cancellation and attachments remain later document-scope work.
 
 ## Explicitly excluded
@@ -37,5 +37,6 @@ Each slice closes only with contracts, API/DB authorization proof, idempotency/a
 
 - `S1` مكتمل: شاشة إعدادات المالية، تهيئة الشركة والخزائن، وإضافة خزينة مرتبطة بحساب خادمي.
 - `S2` بدأ: API محمي للفئات والموردين. إنشاء الفئة ينشئ حسابها المالي تلقائيًا، والمورد يمكن ربطه بفئة نشطة فقط. جميع الأوامر تحمل مفتاح منع تكرار وسجل تدقيق، ولا يوجد حذف نهائي للبيانات الأساسية.
+- المورد المفضّل إعداد تشغيلي محفوظ ومراجع داخل الشركة: يظهر أولًا بعلامة نجمة في إدخال الفواتير، ويمكن تبديله بصلاحية الموردين، ولا يغيّر الفئة أو القيد أو أي تقرير مالي.
 - إدارة `S2` مقيدة حاليًا بالمالك العام حتى يصدر قرار تفويض صريح لأدوار الشركة؛ هذا يمنع منح صلاحيات مالية حساسة تلقائيًا.
 - اكتملت واجهة إدارة الفئات كقسم مالي مستقل: بحث وفلاتر، عرض شجري، إضافة وتعديل مدققان، وأرشفة محمية من وجود أبناء أو موردين أو التزامات نشطة. تبقى في قبول المالك المحلي ولا تُغلق النطاقات المالية الأخرى.

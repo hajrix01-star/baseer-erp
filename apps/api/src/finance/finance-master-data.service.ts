@@ -141,6 +141,22 @@ export class FinanceMasterDataService {
     });
   }
 
+  async setSupplierFavorite(context: TrustedCompanyActorContext, supplierId: string, isFavorite: boolean, idempotencyKey: string): Promise<EntityReceipt> {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const payload = { supplierId, isFavorite };
+      const begun = await this.idempotency.beginInTransaction(tx, context, { operation: "finance.supplier.favorite", key: idempotencyKey, request: payload, expiresAt: tomorrow() });
+      if (begun.kind === "replay") return { ...(begun.response.body as EntityReceipt), replayed: true };
+      if (begun.kind === "in-progress") throw new ConflictException("The supplier favorite request is still in progress.");
+      const supplier = await tx.financeSupplier.findFirst({ where: { id: supplierId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, status: true, isFavorite: true } });
+      if (!supplier || supplier.status !== FinanceSupplierStatus.ACTIVE) throw new NotFoundException("The active supplier was not found.");
+      if (supplier.isFavorite !== isFavorite) await tx.financeSupplier.update({ where: { id: supplier.id }, data: { isFavorite } });
+      const receipt: EntityReceipt = { id: supplier.id, status: "ACTIVE", replayed: false };
+      await this.audit(tx, context, "finance.supplier.favorite_updated", "FinanceSupplier", supplier.id, { isFavorite: supplier.isFavorite }, { isFavorite });
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    });
+  }
+
   private async assertCategory(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, categoryId: string, supplierType: FinanceSupplierType): Promise<void> {
     const category = await tx.financeCategory.findFirst({ where: { id: categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true }, select: { id: true, kind: true } });
     if (!category) throw new BadRequestException("The selected supplier category is not active.");

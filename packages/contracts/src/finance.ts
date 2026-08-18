@@ -288,6 +288,10 @@ export const archiveFinanceSupplierRequestSchema = z
   .object({ supplierId: financeSupplierIdSchema, idempotencyKey: idempotencyKeySchema })
   .strict();
 
+export const setFinanceSupplierFavoriteRequestSchema = z
+  .object({ supplierId: financeSupplierIdSchema, isFavorite: z.boolean(), idempotencyKey: idempotencyKeySchema })
+  .strict();
+
 export const financeMasterDataEntityReceiptSchema = z
   .object({ id: z.string().uuid(), status: z.enum(["ACTIVE", "ARCHIVED"]), replayed: z.boolean() })
   .strict();
@@ -527,6 +531,7 @@ const financeConfigurationSupplierSchema = z
     phone: z.string().max(30).nullable(),
     taxNumber: z.string().max(32).nullable(),
     isTaxRegistered: z.boolean(),
+    isFavorite: z.boolean(),
     supplierType: z.enum(["PURCHASE", "EXPENSE"]),
     status: z.string().min(1).max(40),
     categoryId: z.string().uuid().nullable(),

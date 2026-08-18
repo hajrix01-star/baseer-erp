@@ -47,11 +47,18 @@ try {
       select: { id: true },
     });
     const supplier = await transaction.financeSupplier.create({
-      data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, categoryId: category.id, nameAr: `مورد ${suffix}`, nameEn: `Supplier ${suffix}` },
+      data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, categoryId: category.id, supplierType: 'EXPENSE', nameAr: `مورد ${suffix}`, nameEn: `Supplier ${suffix}` },
       select: { id: true },
     });
     return { categoryId: category.id, vaultId: vault.id, bankVaultId: bankVault.id, supplierId: supplier.id };
   });
+  const favoriteKey = randomUUID();
+  const favorite = await services.masterData.setSupplierFavorite(context, master.supplierId, true, favoriteKey);
+  assert.equal(favorite.replayed, false, 'A first supplier favorite command must not replay.');
+  const favoriteReplay = await services.masterData.setSupplierFavorite(context, master.supplierId, true, favoriteKey);
+  assert.equal(favoriteReplay.replayed, true, 'A repeated supplier favorite command must replay safely.');
+  const favoriteSupplier = await database.inTenantTransaction(fixture.tenantId, (transaction) => transaction.financeSupplier.findFirstOrThrow({ where: { id: master.supplierId, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { isFavorite: true } }));
+  assert.equal(favoriteSupplier.isFavorite, true, 'A supplier favorite must be persisted within its company scope.');
 
   const due = await services.dues.createDue({
     context,
@@ -263,14 +270,14 @@ try {
   await verifySealedBalancedJournals();
   await verifySealedLineCannotChange(due.journalEntryId);
 
-  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier dues, inclusive loans, recurring coverage and atomic recurring batches, payable batches and idempotent ledger-derived vault transfers.');
+  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier favorites, supplier dues, inclusive loans, recurring coverage and atomic recurring batches, payable batches and idempotent ledger-derived vault transfers.');
 } finally {
   if (database) await database.onModuleDestroy();
   await pool.end();
 }
 
 async function loadServices() {
-  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }] = await Promise.all([
+  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }, { FinanceMasterDataService }] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
     import('../apps/api/dist/finance/finance-period.service.js'),
@@ -285,6 +292,7 @@ async function loadServices() {
     import('../apps/api/dist/finance/recurring-expense.service.js'),
     import('../apps/api/dist/finance/purchase-expense.service.js'),
     import('../apps/api/dist/business-date/business-date.service.js'),
+    import('../apps/api/dist/finance/finance-master-data.service.js'),
   ]);
   const { TreasuryService } = await import('../apps/api/dist/finance/treasury.service.js');
   database = new DatabaseService();
@@ -305,6 +313,7 @@ async function loadServices() {
     repayments: new InclusiveLoanRepaymentService(database, idempotency, journals, businessDates),
     recurring: new RecurringExpenseService(database, idempotency),
     documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
+    masterData: new FinanceMasterDataService(database, idempotency),
     treasury: new TreasuryService(database, idempotency, journals, new FinanceVaultService(), businessDates),
   };
 }

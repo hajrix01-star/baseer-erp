@@ -1,4 +1,4 @@
-import { archiveFinanceCategoryRequestSchema, archiveFinanceSupplierRequestSchema, companyIdSchema, createFinanceCategoryRequestSchema, createFinanceSupplierRequestSchema, financeMasterDataEntityReceiptSchema, updateFinanceCategoryRequestSchema, updateFinanceSupplierRequestSchema } from "@baseer-erp/contracts";
+import { archiveFinanceCategoryRequestSchema, archiveFinanceSupplierRequestSchema, companyIdSchema, createFinanceCategoryRequestSchema, createFinanceSupplierRequestSchema, financeMasterDataEntityReceiptSchema, setFinanceSupplierFavoriteRequestSchema, updateFinanceCategoryRequestSchema, updateFinanceSupplierRequestSchema } from "@baseer-erp/contracts";
 import { BadRequestException, Body, Controller, ForbiddenException, Headers, HttpCode, Post, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -58,6 +58,14 @@ export class FinanceMasterDataController {
     if (!request.success) throw new BadRequestException("Invalid supplier archive request.");
     const context = await this.authorize(authorization, companyId, "finance.suppliers.write");
     return financeMasterDataEntityReceiptSchema.parse(await this.masterData.archiveSupplier(context, request.data.supplierId, request.data.idempotencyKey));
+  }
+
+  @Post("suppliers/favorite")
+  async setSupplierFavorite(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const request = setFinanceSupplierFavoriteRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException("Invalid supplier favorite request.");
+    const context = await this.authorize(authorization, companyId, "finance.suppliers.write");
+    return financeMasterDataEntityReceiptSchema.parse(await this.masterData.setSupplierFavorite(context, request.data.supplierId, request.data.isFavorite, request.data.idempotencyKey));
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string) {

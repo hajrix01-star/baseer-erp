@@ -35,6 +35,7 @@ export type FinanceSupplierMinAggregateOutputType = {
   phone: string | null
   taxNumber: string | null
   isTaxRegistered: boolean | null
+  isFavorite: boolean | null
   status: $Enums.FinanceSupplierStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +52,7 @@ export type FinanceSupplierMaxAggregateOutputType = {
   phone: string | null
   taxNumber: string | null
   isTaxRegistered: boolean | null
+  isFavorite: boolean | null
   status: $Enums.FinanceSupplierStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,6 +69,7 @@ export type FinanceSupplierCountAggregateOutputType = {
   phone: number
   taxNumber: number
   isTaxRegistered: number
+  isFavorite: number
   status: number
   createdAt: number
   updatedAt: number
@@ -85,6 +88,7 @@ export type FinanceSupplierMinAggregateInputType = {
   phone?: true
   taxNumber?: true
   isTaxRegistered?: true
+  isFavorite?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -101,6 +105,7 @@ export type FinanceSupplierMaxAggregateInputType = {
   phone?: true
   taxNumber?: true
   isTaxRegistered?: true
+  isFavorite?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -117,6 +122,7 @@ export type FinanceSupplierCountAggregateInputType = {
   phone?: true
   taxNumber?: true
   isTaxRegistered?: true
+  isFavorite?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -206,6 +212,7 @@ export type FinanceSupplierGroupByOutputType = {
   phone: string | null
   taxNumber: string | null
   isTaxRegistered: boolean
+  isFavorite: boolean
   status: $Enums.FinanceSupplierStatus
   createdAt: Date
   updatedAt: Date
@@ -243,6 +250,7 @@ export type FinanceSupplierWhereInput = {
   phone?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   taxNumber?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   isTaxRegistered?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
+  isFavorite?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
   status?: Prisma.EnumFinanceSupplierStatusFilter<"FinanceSupplier"> | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
@@ -266,6 +274,7 @@ export type FinanceSupplierOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   taxNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   isTaxRegistered?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -293,6 +302,7 @@ export type FinanceSupplierWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   taxNumber?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   isTaxRegistered?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
+  isFavorite?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
   status?: Prisma.EnumFinanceSupplierStatusFilter<"FinanceSupplier"> | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
@@ -316,6 +326,7 @@ export type FinanceSupplierOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   taxNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   isTaxRegistered?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -338,6 +349,7 @@ export type FinanceSupplierScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"FinanceSupplier"> | string | null
   taxNumber?: Prisma.StringNullableWithAggregatesFilter<"FinanceSupplier"> | string | null
   isTaxRegistered?: Prisma.BoolWithAggregatesFilter<"FinanceSupplier"> | boolean
+  isFavorite?: Prisma.BoolWithAggregatesFilter<"FinanceSupplier"> | boolean
   status?: Prisma.EnumFinanceSupplierStatusWithAggregatesFilter<"FinanceSupplier"> | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceSupplier"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceSupplier"> | Date | string
@@ -351,6 +363,7 @@ export type FinanceSupplierCreateInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -374,6 +387,7 @@ export type FinanceSupplierUncheckedCreateInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -392,6 +406,7 @@ export type FinanceSupplierUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -415,6 +430,7 @@ export type FinanceSupplierUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -436,6 +452,7 @@ export type FinanceSupplierCreateManyInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -449,6 +466,7 @@ export type FinanceSupplierUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -465,6 +483,7 @@ export type FinanceSupplierUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -497,6 +516,7 @@ export type FinanceSupplierCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   taxNumber?: Prisma.SortOrder
   isTaxRegistered?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -513,6 +533,7 @@ export type FinanceSupplierMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   taxNumber?: Prisma.SortOrder
   isTaxRegistered?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -529,6 +550,7 @@ export type FinanceSupplierMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   taxNumber?: Prisma.SortOrder
   isTaxRegistered?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -720,6 +742,7 @@ export type FinanceSupplierCreateWithoutCompanyInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -740,6 +763,7 @@ export type FinanceSupplierUncheckedCreateWithoutCompanyInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -790,6 +814,7 @@ export type FinanceSupplierScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   taxNumber?: Prisma.StringNullableFilter<"FinanceSupplier"> | string | null
   isTaxRegistered?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
+  isFavorite?: Prisma.BoolFilter<"FinanceSupplier"> | boolean
   status?: Prisma.EnumFinanceSupplierStatusFilter<"FinanceSupplier"> | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
@@ -803,6 +828,7 @@ export type FinanceSupplierCreateWithoutCategoryInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -822,6 +848,7 @@ export type FinanceSupplierUncheckedCreateWithoutCategoryInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -866,6 +893,7 @@ export type FinanceSupplierCreateWithoutProvenanceInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -888,6 +916,7 @@ export type FinanceSupplierUncheckedCreateWithoutProvenanceInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -921,6 +950,7 @@ export type FinanceSupplierUpdateWithoutProvenanceInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -943,6 +973,7 @@ export type FinanceSupplierUncheckedUpdateWithoutProvenanceInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -960,6 +991,7 @@ export type FinanceSupplierCreateWithoutDuesInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -982,6 +1014,7 @@ export type FinanceSupplierUncheckedCreateWithoutDuesInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1015,6 +1048,7 @@ export type FinanceSupplierUpdateWithoutDuesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1037,6 +1071,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDuesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1054,6 +1089,7 @@ export type FinanceSupplierCreateWithoutOutflowDocumentsInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1076,6 +1112,7 @@ export type FinanceSupplierUncheckedCreateWithoutOutflowDocumentsInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1109,6 +1146,7 @@ export type FinanceSupplierUpdateWithoutOutflowDocumentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1131,6 +1169,7 @@ export type FinanceSupplierUncheckedUpdateWithoutOutflowDocumentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1148,6 +1187,7 @@ export type FinanceSupplierCreateWithoutDailySalesClosingsInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1170,6 +1210,7 @@ export type FinanceSupplierUncheckedCreateWithoutDailySalesClosingsInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1203,6 +1244,7 @@ export type FinanceSupplierUpdateWithoutDailySalesClosingsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1225,6 +1267,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDailySalesClosingsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1242,6 +1285,7 @@ export type FinanceSupplierCreateWithoutRecurringExpenseProfilesInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1264,6 +1308,7 @@ export type FinanceSupplierUncheckedCreateWithoutRecurringExpenseProfilesInput =
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1297,6 +1342,7 @@ export type FinanceSupplierUpdateWithoutRecurringExpenseProfilesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1319,6 +1365,7 @@ export type FinanceSupplierUncheckedUpdateWithoutRecurringExpenseProfilesInput =
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1337,6 +1384,7 @@ export type FinanceSupplierCreateManyCompanyInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1350,6 +1398,7 @@ export type FinanceSupplierUpdateWithoutCompanyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1370,6 +1419,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCompanyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1389,6 +1439,7 @@ export type FinanceSupplierUncheckedUpdateManyWithoutCompanyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1402,6 +1453,7 @@ export type FinanceSupplierCreateManyCategoryInput = {
   phone?: string | null
   taxNumber?: string | null
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: $Enums.FinanceSupplierStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1415,6 +1467,7 @@ export type FinanceSupplierUpdateWithoutCategoryInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1434,6 +1487,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCategoryInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1452,6 +1506,7 @@ export type FinanceSupplierUncheckedUpdateManyWithoutCategoryInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1526,6 +1581,7 @@ export type FinanceSupplierSelect<ExtArgs extends runtime.Types.Extensions.Inter
   phone?: boolean
   taxNumber?: boolean
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1550,6 +1606,7 @@ export type FinanceSupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   phone?: boolean
   taxNumber?: boolean
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1568,6 +1625,7 @@ export type FinanceSupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   phone?: boolean
   taxNumber?: boolean
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1586,12 +1644,13 @@ export type FinanceSupplierSelectScalar = {
   phone?: boolean
   taxNumber?: boolean
   isTaxRegistered?: boolean
+  isFavorite?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FinanceSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "categoryId" | "supplierType" | "nameAr" | "nameEn" | "phone" | "taxNumber" | "isTaxRegistered" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["financeSupplier"]>
+export type FinanceSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "categoryId" | "supplierType" | "nameAr" | "nameEn" | "phone" | "taxNumber" | "isTaxRegistered" | "isFavorite" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["financeSupplier"]>
 export type FinanceSupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   category?: boolean | Prisma.FinanceSupplier$categoryArgs<ExtArgs>
@@ -1633,6 +1692,7 @@ export type $FinanceSupplierPayload<ExtArgs extends runtime.Types.Extensions.Int
     phone: string | null
     taxNumber: string | null
     isTaxRegistered: boolean
+    isFavorite: boolean
     status: $Enums.FinanceSupplierStatus
     createdAt: Date
     updatedAt: Date
@@ -2076,6 +2136,7 @@ export interface FinanceSupplierFieldRefs {
   readonly phone: Prisma.FieldRef<"FinanceSupplier", 'String'>
   readonly taxNumber: Prisma.FieldRef<"FinanceSupplier", 'String'>
   readonly isTaxRegistered: Prisma.FieldRef<"FinanceSupplier", 'Boolean'>
+  readonly isFavorite: Prisma.FieldRef<"FinanceSupplier", 'Boolean'>
   readonly status: Prisma.FieldRef<"FinanceSupplier", 'FinanceSupplierStatus'>
   readonly createdAt: Prisma.FieldRef<"FinanceSupplier", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FinanceSupplier", 'DateTime'>

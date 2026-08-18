@@ -365,6 +365,7 @@ export const FinanceSupplierScalarFieldEnum = {
   phone: 'phone',
   taxNumber: 'taxNumber',
   isTaxRegistered: 'isTaxRegistered',
+  isFavorite: 'isFavorite',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

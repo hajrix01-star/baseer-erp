@@ -553,6 +553,7 @@ model FinanceSupplier {
   phone           String?               @db.VarChar(30)
   taxNumber       String?               @db.VarChar(32)
   isTaxRegistered Boolean               @default(false)
+  isFavorite      Boolean               @default(false)
   status          FinanceSupplierStatus @default(ACTIVE)
   createdAt       DateTime              @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime              @updatedAt @db.Timestamptz(6)
@@ -568,6 +569,7 @@ model FinanceSupplier {
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status])
   @@index([tenantId, companyId, supplierType, status])
+  @@index([tenantId, companyId, isFavorite, status])
   @@index([companyId, taxNumber])
 }
 
