@@ -1119,7 +1119,8 @@ html[dir="ltr"] .mobile-drawer__panel {
   z-index: 30;
   top: calc(100% + 0.5rem);
   inset-inline-end: 0;
-  min-inline-size: 14rem;
+  inline-size: 100%;
+  min-inline-size: 0;
   max-inline-size: min(22rem, calc(100vw - 2rem));
   display: grid;
   gap: 0.25rem;
