@@ -71,9 +71,6 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
   };
 
   return <section className="daily-sales-workspace purchase-batch-workspace" aria-label={text.purchases}>
-    <header className="administration-section-heading" style={{ marginBlockEnd: 0 }}>
-      <div><h3>{text.batchInvoices}</h3></div>
-    </header>
     {message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}
     {!configuration ? <BaseerCard><p>{text.loadingCompanySetup}</p></BaseerCard> : <section style={{ minWidth: 0 }}>
       <nav aria-label={text.batchInvoices} role="tablist" style={{ display: "inline-flex", alignSelf: "flex-start", gap: 0, marginBlockEnd: "-1px", position: "relative", zIndex: 1 }}>
