@@ -53,8 +53,8 @@ export function BaseerDatePicker({ language, value, onChange, label, max, min, c
   const dismiss = () => { setOpen(false); triggerRef.current?.focus(); };
   const clear = () => { onChange(""); dismiss(); };
   const calendar = <div className="baseer-period-filter__popover" style={presentation === "modal" ? { position: "static", width: "auto", padding: 0, border: 0, boxShadow: "none" } : undefined}>
-    <header className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>‹</button><strong>{monthName("en", cursor)}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>›</button></header>
-    <div className="baseer-period-filter__weekdays">{weekdays[language].map((item) => <span key={item}>{item}</span>)}</div>
+    <header className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>‹</button><strong>{monthName("en", cursor, "short")}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>›</button></header>
+    <div className="baseer-period-filter__weekdays">{weekdays.en.map((item) => <span key={item}>{item}</span>)}</div>
     <div className="baseer-period-filter__days">{days.map((item) => <button key={item.iso} type="button" disabled={invalid(item.iso)} className={[!item.inMonth ? "is-outside" : "", item.iso === value ? "is-selected" : "", item.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} onClick={() => { onChange(item.iso); dismiss(); }}>{item.day}</button>)}</div>
     {clearable ? <footer><button type="button" onClick={clear}>{language === "ar" ? "مسح" : "Clear"}</button><span>{dateLabel(language, value)}</span></footer> : null}
   </div>;
