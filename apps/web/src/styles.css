@@ -118,10 +118,7 @@ button {
 }
 .icon-button,
 .avatar,
-.text-button,
-.header-signout,
-.theme-button,
-.company-selector {
+.header-signout {
   min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -139,25 +136,44 @@ button {
 .theme-button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 12px;
+  min-height: 32px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
   font-size: var(--font-label);
   font-weight: 600;
 }
+.company-selector { gap: 0.4rem; padding-inline: 0.35rem; }
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 999px;
   background: #20ae70;
-  box-shadow: 0 0 0 3px #dff5e7;
+  box-shadow: none;
 }
-.theme-button { position: relative; inline-size: 44px; justify-content: center; padding: 0; }.theme-button summary { display: grid; place-items: center; list-style: none; cursor: pointer; }.theme-button summary::-webkit-details-marker { display: none; }
+.theme-button { position: relative; inline-size: 28px; justify-content: center; padding: 0; }.theme-button summary { display: grid; place-items: center; list-style: none; cursor: pointer; }.theme-button summary::-webkit-details-marker { display: none; }
 .is-blue { --brand: #1268a7; --brand-deep: #0a385f; --canvas: #f3f7fb; } .is-blue .module-sidebar, .is-blue .mobile-drawer__panel { background: #102b43; } .is-blue .hero-panel { background: linear-gradient(135deg, #0b3b62, #1877b8); }
 .is-plum { --brand: #7650a7; --brand-deep: #372052; --canvas: #f8f5fb; } .is-plum .module-sidebar, .is-plum .mobile-drawer__panel { background: #30213f; } .is-plum .hero-panel { background: linear-gradient(135deg, #3c2854, #7b58a7); }
 .text-button {
-  min-width: 44px;
-  padding: 0 9px;
+  min-width: 0;
+  min-height: 32px;
+  padding-inline: 0.35rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  background: transparent;
+  font-size: var(--font-label);
   font-weight: 600;
+}
+.text-button:hover,
+.theme-button:hover,
+.company-selector:hover,
+.text-button:focus-visible,
+.theme-button:focus-visible,
+.company-selector:focus-visible {
+  color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  outline: 0;
 }
 .header-signout {
   display: grid;
@@ -592,6 +608,12 @@ html[dir="ltr"] .mobile-drawer__panel {
   .topbar .theme-button {
     display: none;
   }
+  .topbar :is(.text-button, .theme-button, .company-selector),
+  .launcher-topbar :is(.text-button, .theme-button) {
+    min-height: 44px;
+  }
+  .topbar .theme-button,
+  .launcher-topbar .theme-button { inline-size: 44px; }
   .header-signout {
     inline-size: 44px;
     min-height: 44px;
