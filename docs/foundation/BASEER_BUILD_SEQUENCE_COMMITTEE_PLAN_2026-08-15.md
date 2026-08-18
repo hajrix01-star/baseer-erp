@@ -10,7 +10,19 @@ The mandatory cross-module policy is `docs/governance/FINANCIAL_AND_FACTUAL_SOUR
 - Finance Phase 2 native UI remains deferred; it is not cancelled.
 - Marketing Performance & Google Hub is designed but has no backend models, commands, Google connection, facts, UI, or external calls yet.
 - AI Platform Gate B technical core is verified: versioned skills, company-authorized offline preflight, rate limit, idempotency, audit receipts and receipt-integrity constraints. It still has no provider call, conversation, memory, read tool or chat UI.
-- Daily Sales Closing is frozen pending owner acceptance as the official sales source. S1 stabilization is closed locally and recorded in `../governance/COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md`; the active next business scope is **Finance Setup & Master Data**: setup, vaults, categories and suppliers must close before **Purchase & Expense financial documents**. The governing scope record is `FINANCE_SETUP_AND_MASTER_DATA_SCOPE_DECISION_2026-08-16.md`. Marketing/Google, Inbound Evidence and a user-facing AI assistant remain deferred until the required financial documents and server read models close.
+- Daily Sales Closing is frozen pending owner acceptance as the official sales source. Finance Setup & Master Data is implemented as the prerequisite. Purchase & Expense, including the Operations-facing Expenses & Obligations workspace, is in owner verification: recurring-payment local DB/HTTP evidence passes, while bilingual/RTL acceptance and correction/cancellation scope remain open. The owner has activated **Treasury and vault movements** as the one active build scope: ledger-derived vault balances, lifecycle and balanced internal transfers. Marketing/Google, Inbound Evidence and a user-facing AI assistant remain deferred until required financial documents and reconciled server read models close.
+
+## Executable order — 2026-08-17
+
+The following order controls the active build. Older phase headings below remain historical scope evidence where they differ:
+
+1. **Treasury and vault movements — verification (active):** ledger-derived balances, add/archive lifecycle, bounded history and balanced internal transfer commands. Cash count/handover reporting, bank reconciliation and transfer reversal remain separate.
+2. **Purchase & Expense / Expenses & Obligations — owner verification:** local recurring migration and DB/HTTP evidence pass; bilingual/RTL owner acceptance and the correction/cancellation decision remain open.
+3. **Reconciled finance read models:** server-owned financial reporting facts and management cash reporting after source operations close.
+4. **Daily Sales owner acceptance:** keep its operating workflow frozen except for confirmed defects.
+5. **Assets & Warranty — planned Gate A:** after finance reporting, deliver the source-document queue and operational register only; automatic capitalization, depreciation and warranty-file upload remain separately gated by the asset-accounting policy and File Storage Gate A.
+6. **Owner priority gate:** select Inbound Evidence E1/E2 or Marketing Gate A only after the finance-reporting and Assets & Warranty Gate A decisions; neither starts automatically.
+7. **AI read tools and Basira UI:** only after verified read models and skill evaluations; provider/chat are not in the active scope.
 
 ## Phase 0 — Build-control baseline
 

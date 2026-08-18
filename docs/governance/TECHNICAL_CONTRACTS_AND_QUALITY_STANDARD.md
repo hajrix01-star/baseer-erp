@@ -69,6 +69,12 @@ Every API capability has a versioned, typed contract before UI work begins.
 - Error receipts have stable machine codes, safe bilingual user messages, correlation ID, and appropriate retry guidance; stack traces and private data never leave the server.
 - Contracts are backward compatible within a released version. Breaking changes require a new version or approved migration path.
 
+## 4.1 Bilingual copy and display-data rules
+
+- Every user-visible label, message, placeholder, accessible label, and empty/loading state is supplied by a domain copy dictionary; no feature JSX may introduce an Arabic literal directly.
+- Each dictionary is declared through `defineLocalizedCopy()` so Arabic and English keys must match at TypeScript build time. User-entered values and server-owned Arabic/English names remain data, not UI literals.
+- Stored entities use verified `nameAr` / `nameEn` fields and the central `displayName()` helper. The browser never invents an English company, supplier, category, or classification name.
+- `npm run check:web-localization` is mandatory locally and in CI. It rejects visible Arabic JSX/attribute text outside approved copy dictionaries.
 ## 5. Web adapters and the no-business-logic rule
 
 The adapter may read only the module’s published server projection. Any financial display must be a journal-reconciled read model; operational/provider facts must carry provenance, freshness and quality in accordance with `FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md`.

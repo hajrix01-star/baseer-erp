@@ -36,3 +36,20 @@ The GitHub workflow will repeat these checks using its ephemeral restricted role
 ## Production boundary
 
 Local development may continue. Real financial data, external connectors or private production release require a documented Hostinger backup coverage decision and a successful isolated restore rehearsal. The Hostinger daily server-backup decision is the governing backup policy; its required coverage confirmation and isolated restore rehearsal remain open before release.
+## Verification addendum — 2026-08-17
+
+- Finance Setup & Master Data is implemented as the prerequisite for the only active scope: **Purchase & Expense financial documents, including Operations → Expenses & Obligations**.
+- The scope now exposes a bounded, company-authorized server workspace receipt. It provides business date, financial configuration, recurring profiles, loans and document history; the browser no longer needs to assemble the section from independent reads or calculate financial totals.
+- Read access for loans is distinct from write access. Company manager, accountant and reader templates receive only the capabilities appropriate to their role; financial commands remain re-authorized on the server.
+- A payable batch item is valid without a vault allocation and requires a supplier; a paid item requires a payment destination. Recurring-payment coverage uniqueness and payable-batch behavior are now included in the Finance DB verifier.
+- **Status remains in verification.** The migration `20260817230000_recurring_expense_payments` is applied on the isolated local test database and the expanded database/HTTP evidence passes. Bilingual/RTL owner acceptance remains required. No correction/cancel scope is claimed until it is separately implemented.
+## 2026-08-17 implementation evidence update
+
+- The recurring-expense payment migration was applied to the isolated local test database.
+- The Finance DB verifier now covers recurring-payment coverage uniqueness and payable-batch posting without a vault; it passes.
+- The Daily Sales HTTP verifier additionally proves the company-authorized bounded Expenses & Obligations workspace and a denied cashier access path; it passes.
+- The scope remains **in verification**: native Arabic/English owner acceptance and the correction/cancellation decision are still required. This record does not claim a Noorix importer or production readiness.
+
+## Current execution addendum — 2026-08-17
+
+This addendum supersedes the historical Confirmed delivery order above. Treasury and vault movements is the single active verification scope; Purchase & Expense and Expenses & Obligations remain in owner verification. The controlling next sequence is reconciled finance read models, Daily Sales owner acceptance, then planned Assets & Warranty Gate A before the later owner-priority choice between Inbound Evidence and Marketing. Assets & Warranty uses a source-document follow-up queue only; its asset-accounting policy, attachment storage and Noorix Import Run are separate gates described in ../foundation/ASSETS_AND_WARRANTY_SCOPE_DECISION_2026-08-17.md.

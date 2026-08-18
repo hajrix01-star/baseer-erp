@@ -23,6 +23,17 @@ Authorized business command
 
 The journal is not exposed for manual posting. A module may not calculate a different financial balance, duplicate monetary totals, or query another module's private financial tables.
 
+## 2.1 Number-source acceptance rule
+
+Every user-visible number must declare its class and source in the read-model contract and BAQC evidence:
+
+- **Financial number:** derived only from the sealed journal through the chart of accounts and a server-owned reconciled read model. The UI, export, print template and AI may display it but never calculate or replace it.
+- **Operational or external number:** comes from its approved operational record or provider snapshot, with source, timestamp, freshness and quality. It must not be labelled or aggregated as a financial amount unless a documented posting reconciles it to the journal.
+- **Mixed view:** shows the two classes separately and labels their different sources and dates; a missing fact is incomplete, not zero.
+
+This is an acceptance obligation for BAQC-03 (financial scope), BAQC-04 (contract/data scope) and BAQC-06 (test/export evidence).
+
+
 ## 3. Operational and external facts
 
 Not every useful number is monetary. Operational and external facts retain their own immutable, company-scoped source, timestamp, freshness and quality:

@@ -58,7 +58,7 @@ At the end of every implementation task, the delivery lead records:
 
 ## 5. Independent review control
 
-Before a scope can enter Verification or Complete, an independent reviewer checks:
+Before a scope can enter Verification or Complete, the [Baseer Acceptance & Quality Council](ACCEPTANCE_AND_QUALITY_COMMITTEE_CHARTER.md) appoints the relevant independent reviewers. They check:
 
 - it satisfies the Noorix discovery and parity standard;
 - its server owns calculations and business rules;

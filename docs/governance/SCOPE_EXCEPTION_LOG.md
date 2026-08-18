@@ -1,0 +1,10 @@
+# BASEER ERP — سجل استثناءات النطاق
+
+**الغرض:** توثيق أي عمل مقيّد يبدأ قبل الإغلاق التشغيلي للنطاق السابق، كما يفرض بروتوكول التسليم. لا يغيّر هذا السجل أولوية البناء من تلقاء نفسه.
+
+| التاريخ | النطاق السابق | الاستثناء المسموح | المرحلة | السبب وقرار المالك | الدليل | شرط الاستئناف/الإغلاق |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-08-17 | Purchase & Expense / Expenses & Obligations — Owner verification | Treasury and vault movements | Verification فقط | طلب المالك البدء بالخزائن قبل إدخال الفواتير؛ الخزائن اعتماد تشغيلي للشراء والسداد. | `CURRENT_DELIVERY_AUTHORITY.md`، وثائق Treasury، فحوص Finance DB/HTTP | يبقى Purchase & Expense في قبول المالك، ولا يبدأ نطاق أعمال جديد قبل إغلاق ملاحظات Treasury وP&E المسجلة. |
+| 2026-08-17 | Treasury and vault movements — verification | Suppliers native workspace in Operations | Implementation only | طلب المالك البدء بالموردين أثناء وجوده خارج المكتب؛ الموردون بيانات أساسية لازمة للفواتير، ولا يغيّر ذلك قبول الخزائن أو يفتح الفواتير. | عقود `finance/master-data/suppliers`، قراءة `finance/configuration`، وفحوص build/budget/localization | يبقى Treasury في قبول المالك؛ الموردون لا يغلقون قبل فحص CRUD/RBAC وAR/EN وقبول الواجهة. |
+| 2026-08-17 | Treasury and vault movements — verification | Unified Financial Register read-model | Read-only implementation | طلب المالك سجلاً مالياً موحّداً لكل الحركات المثبتة عدا تحويلات الخزائن الداخلية؛ لا يدخل مستندات ولا يغير مصدر الحقيقة. | finance/invoice-register، INVOICE_REGISTER_READ_SCOPE_DECISION_2026-08-17.md، بوابات build/budget | يبقى Treasury وPurchase & Expense في قبول المالك؛ لا طباعة/تصدير أو تعديل مستندات من السجل قبل عقود الإخراج والتصحيح المعتمدة. |
+| 2026-08-17 | Treasury and vault movements — verification | Categories management workspace in Finance | Implementation only | طلب المالك إكمال إدارة الفئات بعد الموردين؛ الفئات بيانات أساسية مرتبطة بالشجرة ولا تُنشئ مستندات أو قيوداً مباشرة. | `finance/master-data/categories`، `categories-workspace`، عقود build/web gates | تبقى في قبول المالك ولا تغيّر إغلاق الخزائن أو الفواتير. |

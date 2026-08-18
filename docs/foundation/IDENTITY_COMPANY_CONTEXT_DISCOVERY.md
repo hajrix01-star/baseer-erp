@@ -37,3 +37,11 @@
 3. Permission denied/default-deny proofs.
 4. Audited session lifecycle receipts with no secret or password data.
 5. Arabic/English safe error receipts and typed web contracts.
+
+## Central web sign-in and sign-out shell — 2026-08-18
+
+- The web shell renders the sign-in landing before any module launcher, company name, or operational data when no active browser session exists.
+- Sign-in sends only `login` and `password` to `/auth/sign-in`; the tenant is resolved by the server. The client then requests `/companies/available` and chooses the only company automatically or asks the user to choose one from the server-authorized list.
+- The current-device session stores only the access token and selected company in `sessionStorage`. It does not persist the refresh token, password, permissions, or financial data.
+- Central sign-out clears the local session first and requests `/auth/sign-out` with the access token as best effort. A network failure still signs the current device out locally and does not claim server revocation succeeded.
+- First-time owner activation remains a separate setup flow; it is not presented as a normal sign-in action.

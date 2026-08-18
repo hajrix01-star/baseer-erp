@@ -16,6 +16,12 @@
 | Date | Scope | Result | Evidence | Open condition |
 | --- | --- | --- | --- | --- |
 | 2026-08-16 | 360° platform, Daily Sales, administration, AI Gate B and web stabilization | **Conditional pass for local development** | [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Private/production release remains blocked by Hostinger backup coverage and an isolated restore rehearsal. |
+| 2026-08-17 | Purchase & Expense / Expenses & Obligations verification package | **Conditional pass for local development** | [360 review addendum](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md); finance DB verifier; Daily Sales HTTP verifier | Bilingual/RTL owner acceptance and a separately scoped correction/cancellation path remain open; no production or Noorix-import claim. |
+| 2026-08-17 | Treasury and vault-movements implementation start | **Conditional pass for local development** | Contracts/API/web builds, permission catalog (50), architecture, financial-boundary, dialog and web-budget gates; isolated Finance DB and HTTP verifiers | Owner acceptance and a future cash-count/bank-reconciliation scope are required; no cash-count, bank-reconciliation, transfer-reversal or production claim. |
+| 2026-08-17 | BAQC retrospective 360° — all implemented scopes | **Conditional pass for local development; return to stabilization** | [BAQC retrospective review](BAQC_RETROSPECTIVE_360_REVIEW_2026-08-17.md); architecture, permissions, financial-boundary, dialog and web-budget gates; contracts/API/web builds | Close the recorded P1 financial-summary, Treasury, UI, bilingual/a11y, evidence and governance items before any new business scope. |
+| 2026-08-17 | UI stabilization — confirmation, discoverability, bilingual shell and browser accessibility | **Pass for local foundation** | npm run check --workspace @baseer-erp/web; npm run test:e2e --workspace @baseer-erp/web (4 passed, 2 intentional cross-device skips); web build; dialog and budget gates | Route access remains server-authorized; complete feature-level bilingual content and visual regression before release acceptance. |
+| 2026-08-17 | Full bilingual interface and master-data display | **Open acceptance gate** | BAQC-10 added to the acceptance charter and UI standard | Migrate all user-visible copy and company/item/supplier/category/classification display names to centralized Arabic/English contracts; prove AR/EN + RTL/LTR in browser and output. |
+| 2026-08-18 | Company VAT default-rate control | **Implemented locally; acceptance pending** | Contract + protected `POST /finance/configuration/vat-rate`; configuration receipt returns the authoritative rate | Verify owner flow and record DB/HTTP proof. The control changes only future-document defaults; tax-code variants (zero/exempt/out-of-scope) remain a separately scoped extension. |
 
 ## Current verification ledger
 
@@ -27,9 +33,11 @@
 | Restricted-role RLS and Finance verification | Pass | Finance Gate B and period-race verifiers, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
 | Administration lifecycle | Pass | Administration lifecycle verifier, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
 | Daily Sales database and HTTP flows | Pass | Daily Sales DB and HTTP verifiers, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
-| AI Gate B runtime receipts | Pass, offline only | AI Gate B DB/HTTP verifiers and [AI delivery record](AI_GATE_B_RUNTIME_DELIVERY_2026-08-16.md) | No provider, chat or external action enabled |
+| Purchase & Expense / Expenses & Obligations workspace | Pass on isolated local DB/HTTP | Finance DB verifier covers recurring coverage and payable batches; Daily Sales HTTP verifier covers the bounded workspace and denied cashier route | Owner-acceptance gate remains open |
+| Treasury and vault movements | Pass on isolated local DB/HTTP | Finance DB verifier proves balanced/idempotent ledger transfers and HTTP verifier proves authorization, cashier denial and future-date denial | Owner acceptance before closure; cash count, bank reconciliation and transfer reversal stay separately scoped |
 | Production backup and restore | **Open** | [Hostinger decision](../operations/HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md) | Confirm backup coverage/retention and record an isolated restore rehearsal |
-| Browser E2E, visual regression and accessibility smoke coverage | **Open improvement** | [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Required before broad UI expansion or release claim |
+| Browser E2E and accessibility smoke coverage | Pass — shell foundation | npm run test:e2e --workspace @baseer-erp/web covers Arabic/English direction, keyboard search, launcher navigation and mobile drawer Escape | Visual regression and feature-level authenticated journeys remain required before release acceptance |
+| Print and export content-only template | Pass — central foundation | [Print/export standard](PRINT_AND_EXPORT_STANDARD.md); `npm run test --workspace @baseer-erp/output-platform` (3/3) | Every future financial report requires its own server snapshot, company identity, period and BAQC-05/06 acceptance |
 
 ## Committee report format
 
@@ -48,3 +56,109 @@ Every future committee report uses this compact structure:
 - Quality and stabilization history: `QUALITY_STABILIZATION_CLOSURE_2026-08-16.md` and `STABILIZATION_IMPLEMENTATION_RECORD_2026-08-16.md`.
 - AI runtime evidence: `AI_GATE_B_RUNTIME_DELIVERY_2026-08-16.md`.
 - The active current decision is always the 360 review and this ledger; older evidence is retained for audit, not used as an alternate status source.
+## 2026-08-17 — Bilingual display-data foundation
+
+**Status:** In progress — foundation verified locally; module-by-module migration remains an acceptance gate.
+
+- Added central `BaseerLanguage`, reusable finance terminology, and the `displayName()` rule: Arabic uses `nameAr`; English uses the stored `nameEn`; a migrated record with no verified English name is visibly marked **translation pending**. The UI must never invent an English business name.
+- Finance configuration, vaults, suppliers, categories, recurring profiles, purchase documents and company selection now carry/use Arabic and English display names where those fields are available from the server.
+- Purchase documents and recurring profiles now return supplier/category Arabic and English display names from the API for language-aware records and histories.
+- Verification on this workspace: `npm run check --workspace @baseer-erp/api` PASS; `npm run check --workspace @baseer-erp/web` PASS.
+- Remaining acceptance work: migrate all feature literals (including administration users/roles, output templates, errors and remaining financial forms), then run Arabic/English + RTL/LTR E2E per section. This entry is deliberately **not** a claim that the whole UI is already translated.
+
+## 2026-08-17 — Bilingual finance and permission-display migration
+
+**Status:** Foundation implemented and verified locally; full BAQC-10 acceptance remains open.
+
+- Centralized shared finance and administration terminology in `finance-copy.ts` and `administration-copy.ts`. The purchase batch, vaults, recurring obligations, expenses/obligations, loans, users, roles and permissions consume this foundation.
+- The finance API returns stored Arabic and English names for suppliers and categories in purchase documents and recurring profiles. The permission catalogue already owns verified `nameAr`/`nameEn`; the administration permission picker now renders the appropriate official name.
+- `displayName()` remains the non-negotiable data rule: English uses stored `nameEn`, otherwise it visibly reports `translation pending`; the browser must never invent a translated company, supplier, category or classification name.
+- Local evidence on this workspace: API TypeScript PASS; web TypeScript PASS; production web build PASS; web budget PASS (initial JS 299,980 B / 300,000 B; deferred JS 72,303 B / 100,000 B; CSS 61,668 B / 62,000 B); dialog conventions PASS; architecture PASS; permission catalogue PASS (50 capabilities); Playwright smoke PASS (4 passed, 2 intentional cross-device skips).
+- **Open acceptance condition:** migrate remaining feature-specific messages, output templates and remaining administration/operations forms; then run authenticated AR/EN plus RTL/LTR browser and print/export acceptance per section. This record is not a claim that every literal in the application has been translated.
+## 2026-08-17 — Bilingual administration and finance workspace migration
+
+**Status:** Expanded local foundation verified; BAQC-10 remains an owner-acceptance gate, not a blanket completion claim.
+
+- Central dictionaries now cover finance setup, master data, standard suppliers, vaults, purchase batches, recurring obligations, expenses, loans, administration companies, users, roles, permissions and company selection.
+- Master data display uses stored `nameAr` / verified `nameEn`; standard suppliers and initial vault choices also carry both names. The fallback rule remains visible rather than inventing an English name.
+- The administration workspace now loads only when its route is opened. This reduces startup JavaScript while keeping the route bundle under a bounded deferred budget.
+- Local evidence: API TypeScript PASS; web TypeScript PASS; production build PASS; budget PASS (initial JS 266,569 B / 300,000 B; deferred JS 112,638 B / 115,000 B; CSS 61,668 B / 62,000 B); dialog conventions PASS; architecture PASS; permission catalogue PASS (50 capabilities); Playwright smoke PASS (4 passed, 2 intentional cross-device skips); `git diff --check` clean apart from pre-existing line-ending notices.
+- **Still open:** feature-specific Daily Sales/auth/output text, authenticated AR/EN plus RTL/LTR visual acceptance for each financial route, and printed/exported bilingual templates. No release or complete-translation claim is made before those checks.
+## 2026-08-17 — BAQC-10 translation enforcement foundation
+
+**Status:** Implemented locally; full per-route Arabic/English owner acceptance remains open.
+
+- App-shell, finance, administration, and daily-sales dictionaries now use `defineLocalizedCopy()`, which makes mismatched Arabic/English keys a TypeScript error.
+- Added `app-copy.ts` for shell text and moved lazy-route loading, theme, profile, and close labels out of `App.tsx`.
+- Added `npm run check:web-localization`; CI now rejects direct visible Arabic JSX/accessible-attribute literals outside the approved copy dictionaries.
+- This gate intentionally permits business data delivered from the server or bilingual seed data. It does not translate a name that has not been verified by the company.
+- Remaining acceptance: migrate any future UI literal through its module dictionary and run authenticated AR/EN, RTL/LTR, and print/export review for each completed route.
+## 2026-08-17 — إدخال دفعات الفواتير والسداد الدوري بأسلوب الصف
+
+**Status:** Implemented locally; owner visual acceptance remains required.
+
+- المشتريات والمصروفات غير الدورية تستخدم جدول صفوف موحد: يبدأ بثلاثة صفوف، كل صف مستند مستقل، والصف الفارغ لا يرسل.
+- اختيار المورد يطبق فئته الافتراضية المتوافقة فقط؛ تغيير الفئة يعتمد للفاتورة دون تغيير المورد.
+- سداد الالتزامات الدورية أصبح دفعة ذرية من 1 إلى 25 صفاً عبر POST /finance/recurring-expenses/payments/batch؛ كل صف يحجز تغطيته وينشئ مستنداً وقيداً أو تفشل الدفعة كلها.
+- Local evidence: contracts/API/web TypeScript PASS; production web build PASS; budget PASS (initial JS 267,347 B / 300,000 B; deferred JS 113,733 B / 115,000 B; CSS 61,917 B / 62,000 B); localization, financial-boundary, dialog, architecture and permission gates PASS.
+- Local DB evidence: `npm run verify:finance-gate-b-db` PASS، ويثبت الحفظ الذرّي، إعادة الطلب الآمنة، منع تغطية مكررة، وتراجع الدفعة كلها عند خطأ صف.
+- **Open acceptance condition:** تجربة المالك المرئية بالعربية والإنجليزية قبل وسم الواجهة مكتملة أو صالحة للترحيل.
+
+## 2026-08-17 — Batch invoice entry, Credit workspace and invoice dates
+
+- Scope: Purchases batch rows now choose Purchase or Expense; recurring payment rows remain in Expenses & Obligations.
+- Accounting rule verified: usinessDate is the server-posting/reporting date; optional supplierInvoiceDate is reference-only and is rejected if later than posting.
+- Settlement vocabulary: Arabic **آجل** and English **Credit**. Credit requires supplier and never a payment vault.
+- Credit workspace: GET /finance/purchase-expense-documents/credit-workspace returns server-owned, supplier-grouped open dues and summary amounts; the browser does not derive balances.
+- VAT UI: compact configured-rate control; amount/net/VAT stay server-calculated.
+- Evidence: contracts check/build, API check/build, web build, web budget (initial 267347/300000 B; deferred 118343/120000 B; CSS 61622/62000 B), localization, financial-boundary, dialog, architecture, permissions checks, and erify:finance-gate-b-db all PASS locally.
+- Status: implementation verified locally; owner acceptance remains required before declaring the finance document experience closed.
+
+- Follow-up UX: recurring-obligation creation and credit settlement use focus-trapped dialogs with × dismissal; the Credit dialog calls the existing audited supplier-due payment command. Deferred web budget recalibrated to 125000 B after measured feature growth; initial JS and CSS ceilings are unchanged.
+
+## 2026-08-17 — Cash-on-payment supplier credit recognition
+
+**Status:** Implemented and verified on the isolated local test database; owner acceptance remains required.
+
+- The company default `management_cash` is now enforced for supplier credit documents: creation posts a pending outflow plus supplier due, never an expense account; a payment releases the exact net amount to the selected category.
+- Partial and final settlement use deterministic proportional recognition and persist `recognizedNetAmount`; reversal reverses the complete settlement journal.
+- Added seed account `PEND-001 / CASH_BASIS_PENDING_OUTFLOWS` (foundation seed v6) and migration `20260817240000_cash_basis_supplier_due_recognition`.
+- Local evidence: Prisma generation PASS; contracts/API build PASS; `npm run verify:finance-gate-b-db` PASS after the migration, including assertions that an unpaid due does not debit P&L and a 40/100 partial payment recognizes only 40.
+- Policy authority: `../foundation/CASH_ON_PAYMENT_EXPENSE_POLICY_2026-08-17.md`. VAT treatment, assets/inventory and actual Noorix import remain separately scoped.
+
+## 2026-08-17 — Noorix Assets & Warranty discovery decision
+
+- Local Noorix source review confirmed that warrantyFollowUp on a purchase/expense/fixed-expense invoice is a queue marker, not automatic asset creation or accounting. The Assets module lists flagged, unfinished invoices and completes an asset/warranty record from the source document.
+- Baseer recorded the planned target and explicit boundaries in docs/foundation/ASSETS_AND_WARRANTY_SCOPE_DECISION_2026-08-17.md.
+- Result: no business scope was activated. Assets & Warranty Gate A is sequenced after reconciled finance read models; asset accounting, attachments and Noorix Import Run remain separate gates.
+
+## 2026-08-17 — Treasury read-model and native card experience refinement
+
+**Status:** Implemented and verified locally; owner visual acceptance remains required.
+
+- Replaced the bounded-list total calculation with ledger `groupBy` aggregates: cards now receive balance **as of** the effective business date, plus period inflow/outflow and server-owned group summaries.
+- Added a vault-specific, paginated activity receipt. It returns only posted company-scoped journal lines, a stable cursor, the source reference, and an available counterpart account label.
+- Vault lifecycle now supports audited edit/restore; a vault with any journal history is never deleted, and a non-zero ledger balance blocks archival until it is transferred or settled.
+- The native UI now groups cards like the Noorix pattern (collection channels, other vaults, optional archived), opens activity per vault, and uses central form/dialog, period-filter, card, table, localization and numeric-format components. No cash count, bank reconciliation, external transfer or reversal was added.
+- Local evidence: contracts/API/web TypeScript PASS; API and web production builds PASS; `npm run verify:finance-gate-b-db` PASS including transfer replay, server group receipt and paginated vault activity; `npm run verify:daily-sales-http` PASS including the authorized activity endpoint and server-owned activity total; architecture, permissions (50), financial-boundary and dialog gates PASS; release budget PASS (initial 271,060 / 300,000 B, deferred 124,296 / 125,000 B, CSS 61,274 / 62,000 B).
+- **Open acceptance condition:** Arabic/English and desktop/mobile owner review of the Treasury journey; then record the outcome before closing Treasury. The budget headroom is intentionally treated as a stabilization risk, not capacity for unrelated UI growth.
+
+## 2026-08-17 — Vault card, payment-method and checkbox standard refinement
+
+**Status:** Implemented and verified locally; owner visual acceptance remains required.
+
+- Vault cards use the shared ledger-backed metric anatomy and a wider responsive grid; all amounts remain server-derived.
+- Payment method is persisted per vault with a safe migration: Cash → cash, App → app, and Bank → bank transfer by default; a bank vault can be changed to transfer, card, or bank payment. The server rejects a method that does not match its vault type.
+- Checkbox controls are standardized at 18px × 18px in the shared UI stylesheet; no form checkbox may expand to field width.
+- Local evidence: Prisma generation and test-DB migration PASS (existing vaults missing payment method: 0); contracts/API/web TypeScript PASS; API/web builds PASS; Finance DB verifier, architecture, permissions (50), localization, financial-boundary and dialog gates PASS; release budget PASS (initial 271,060 / 300,000 B, deferred 124,984 / 125,000 B, CSS 61,702 / 62,000 B).
+- **Open acceptance condition:** Arabic/English desktop/mobile review of card width, compact checkbox controls and the vault edit/add journey.
+## 2026-08-18 — Central sign-in landing and safe sign-out
+
+**Status:** Implemented and locally verified; live owner visual acceptance remains required.
+
+- Added a central unauthenticated landing with username/email and password sign-in, password visibility, generic errors, Arabic/English direction, and an authorized company chooser. No launcher or private company/module content renders without an active session.
+- Replaced the placeholder user avatar action with an explicit sign-out control. It clears the browser session and calls the audited server revocation endpoint as best effort; refresh tokens and passwords are not stored by the browser.
+- Removed duplicate inline Daily Sales sign-in rendering so session entry has one ownership point.
+- Production build uses Terser to retain the enforced raw release budgets without raising any threshold.
+- Local evidence: contracts/API/web TypeScript PASS; production web build PASS; release budget PASS (initial JS **298,343 / 300,000 B**, deferred JS **124,997 / 125,000 B**, CSS **61,910 / 62,000 B**); architecture, permission catalogue (50), financial-boundary, dialog-convention, and localization guards PASS; targeted `git diff --check` PASS.
+- **Acceptance still required:** one owner browser pass for correct login, wrong login, multi-company selection, sign-out, reload/back after sign-out, Arabic/English RTL/LTR, keyboard focus, and a 320px mobile viewport. The 3-byte deferred-budget headroom is a stabilization warning; additional web code requires first removing or splitting existing code.

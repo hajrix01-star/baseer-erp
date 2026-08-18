@@ -1,6 +1,6 @@
 # Finance Setup & Master Data — Scope Decision
 
-**Status:** Active build scope — owner approved on 2026-08-16.
+**Status:** Completed prerequisite / historical scope — verified locally; current work is Treasury stabilization and owner verification.
 
 ## Purpose
 
@@ -13,6 +13,7 @@ Build the financial prerequisites before exposing Purchase & Expense as an opera
 - Categories and suppliers are master data with active/archive lifecycle. They must be created and governed before a purchase document depends on them.
 - Purchase & Expense UI remains gated by its required readiness data. No quick-create supplier/category inside a financial document.
 - All commands require company context derived on the server, RBAC, idempotency, audit events, and RLS.
+- **VAT baseline:** a newly initialised company uses the standard 15% rate. The authorised finance setup command may change the rate when the statutory rate changes; it applies only to documents posted after the change. Each posted document retains its own VAT-rate snapshot, so history and journals are never recalculated.
 
 ## Delivery slices
 
@@ -37,4 +38,4 @@ Each slice closes only with contracts, API/DB authorization proof, idempotency/a
 - `S1` مكتمل: شاشة إعدادات المالية، تهيئة الشركة والخزائن، وإضافة خزينة مرتبطة بحساب خادمي.
 - `S2` بدأ: API محمي للفئات والموردين. إنشاء الفئة ينشئ حسابها المالي تلقائيًا، والمورد يمكن ربطه بفئة نشطة فقط. جميع الأوامر تحمل مفتاح منع تكرار وسجل تدقيق، ولا يوجد حذف نهائي للبيانات الأساسية.
 - إدارة `S2` مقيدة حاليًا بالمالك العام حتى يصدر قرار تفويض صريح لأدوار الشركة؛ هذا يمنع منح صلاحيات مالية حساسة تلقائيًا.
-- ما زال تعديل الفئة، أرشفة الفئات/الموردين من واجهة المستخدم، وتعديل المورد في واجهة التفاصيل ضمن شريحة الإكمال التالية قبل فتح رحلة فواتير مكتملة.
+- اكتملت واجهة إدارة الفئات كقسم مالي مستقل: بحث وفلاتر، عرض شجري، إضافة وتعديل مدققان، وأرشفة محمية من وجود أبناء أو موردين أو التزامات نشطة. تبقى في قبول المالك المحلي ولا تُغلق النطاقات المالية الأخرى.
