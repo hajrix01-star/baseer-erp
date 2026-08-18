@@ -176,6 +176,7 @@ button {
   outline: 0;
 }
 .header-signout svg { inline-size: 1.2rem; block-size: 1.2rem; }
+html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
 .avatar {
   width: 38px;
   border: 0;
