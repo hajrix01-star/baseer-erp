@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { DataTable } from "./data-table";
 import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
 import { formatMoney } from "./number-format";
 import { presentBaseerApiError } from "./baseer-api-error";
@@ -101,9 +102,35 @@ export function PurchaseExpenseWorkspace({ language }: { language: "ar" | "en" }
 }
 
 function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorkspace | null; language: "ar" | "en"; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; reload: () => Promise<void> }) {
-  const text = financeText(language); const [target, setTarget] = useState<CreditWorkspace["suppliers"][number]["dues"][number] | null>(null); const [message, setMessage] = useState("");
+  const text = financeText(language);
+  const [target, setTarget] = useState<CreditWorkspace["suppliers"][number]["dues"][number] | null>(null);
+  const [message, setMessage] = useState("");
   if (!credit) return <BaseerCard><p>{text.loading}</p></BaseerCard>;
-  return <><div className="baseer-card-grid" aria-label={text.credit}><BaseerCard><p>{text.openCreditSuppliers}</p><strong>{credit.openSupplierCount}</strong></BaseerCard><BaseerCard><p>{text.openCreditInvoices}</p><strong>{credit.openInvoiceCount}</strong></BaseerCard><BaseerCard><p>{text.creditOutstanding}</p><strong>{formatMoney(credit.remainingAmount)}</strong></BaseerCard></div>{message ? <p className="daily-sales-message success">{message}</p> : null}<BaseerCard><div className="administration-section-heading"><div><h3>{text.credit}</h3><p>{text.creditAsOf} {credit.asOfBusinessDate.slice(0, 10)}</p></div></div>{credit.suppliers.length ? credit.suppliers.map((supplier) => <details key={supplier.supplierId}><summary><strong>{displayName(language, { nameAr: supplier.supplierNameAr, nameEn: supplier.supplierNameEn })}</strong> · {supplier.invoiceCount} · {formatMoney(supplier.remainingAmount)}</summary><div className="administration-list">{supplier.dues.map((due) => <article key={due.id}><strong>{due.documentNumber}</strong><span>{due.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {due.businessDate.slice(0, 10)}</span><span>{displayName(language, { nameAr: due.categoryNameAr ?? "—", nameEn: due.categoryNameEn ?? "—" })}</span><strong>{formatMoney(due.remainingAmount)}</strong><BaseerButton type="button" variant="secondary" onClick={() => setTarget(due)}>{text.recordSettlement}</BaseerButton></article>)}</div></details>) : <p className="empty-results">{text.noCreditInvoices}</p>}</BaseerCard><CreditPaymentDialog language={language} due={target} vaults={vaults} defaultBusinessDate={credit.asOfBusinessDate.slice(0, 10)} onClose={() => setTarget(null)} onSaved={async () => { setTarget(null); setMessage(text.repaymentSaved); await reload(); }} /></>;
+
+  const invoices = credit.suppliers.flatMap((supplier) => supplier.dues.map((due) => ({ ...due, supplierNameAr: supplier.supplierNameAr, supplierNameEn: supplier.supplierNameEn })));
+  const metricCardStyle = { display: "grid", alignContent: "center", gap: ".35rem", minBlockSize: "5.5rem" };
+
+  return <>
+    <div aria-label={text.credit} role="list" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(10rem, 1fr))", gap: "var(--section-gap)" }}>
+      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.openCreditSuppliers}</p><strong>{credit.openSupplierCount}</strong></BaseerCard>
+      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.openCreditInvoices}</p><strong>{credit.openInvoiceCount}</strong></BaseerCard>
+      <BaseerCard padding="compact" role="listitem" style={metricCardStyle}><p style={{ margin: 0 }}>{text.creditOutstanding}</p><strong>{formatMoney(credit.remainingAmount)}</strong></BaseerCard>
+    </div>
+    {message ? <p className="daily-sales-message success">{message}</p> : null}
+    <section style={{ marginTop: "var(--section-gap)", paddingTop: "var(--section-gap)", borderTop: "1px solid var(--line)" }}>
+      <div className="administration-section-heading"><div><h3>{text.openCreditInvoices}</h3><p>{text.creditAsOf} {credit.asOfBusinessDate.slice(0, 10)}</p></div></div>
+      {invoices.length ? <DataTable ariaLabel={text.openCreditInvoices} caption={text.openCreditInvoices} rowKey={(invoice) => invoice.id} columns={[
+        { id: "supplier", header: text.supplier, width: "15rem", cell: (invoice) => displayName(language, { nameAr: invoice.supplierNameAr, nameEn: invoice.supplierNameEn }) },
+        { id: "number", header: text.invoiceNumber, width: "10rem", cell: (invoice) => invoice.documentNumber },
+        { id: "kind", header: text.invoiceType, width: "8rem", cell: (invoice) => invoice.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice },
+        { id: "category", header: text.financialCategory, width: "13rem", cell: (invoice) => displayName(language, { nameAr: invoice.categoryNameAr ?? "—", nameEn: invoice.categoryNameEn ?? "—" }) },
+        { id: "date", header: text.supplierInvoiceDate, width: "9rem", cell: (invoice) => invoice.businessDate.slice(0, 10) },
+        { id: "remaining", header: text.outstanding, width: "9rem", numeric: true, cell: (invoice) => formatMoney(invoice.remainingAmount) },
+        { id: "action", header: "", width: "10rem", cell: (invoice) => <BaseerButton type="button" variant="secondary" onClick={() => setTarget(invoice)}>{text.recordSettlement}</BaseerButton> },
+      ]} rows={invoices} /> : <p className="empty-results">{text.noCreditInvoices}</p>}
+    </section>
+    <CreditPaymentDialog language={language} due={target} vaults={vaults} defaultBusinessDate={credit.asOfBusinessDate.slice(0, 10)} onClose={() => setTarget(null)} onSaved={async () => { setTarget(null); setMessage(text.repaymentSaved); await reload(); }} />
+  </>;
 }
 
 function CreditPaymentDialog({ language, due, vaults, defaultBusinessDate, onClose, onSaved }: { language: "ar" | "en"; due: CreditWorkspace["suppliers"][number]["dues"][number] | null; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; defaultBusinessDate: string; onClose: () => void; onSaved: () => Promise<void> }) {
