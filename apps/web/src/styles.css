@@ -41,6 +41,8 @@
   --font-page: clamp(1.75rem, 2.5vw, 2.25rem);
   --font-display: clamp(2rem, 4vw, 2.75rem);
   --font-display-mobile: 1.875rem;
+  --font-navigation: 0.8125rem;
+  --font-heading-weight: 700;
   --icon-size-lg: 1.5rem;
   --card-radius: 0.75rem;
   --card-padding: 0.875rem;
@@ -52,6 +54,9 @@
   --field-border: #cbdad0;
   --page-gutter: clamp(1rem, 2vw, 2.5rem);
   --section-gap: clamp(0.75rem, 1.25vw, 1rem);
+  --shell-header-height: 3.5rem;
+  --shell-brand-height: 4rem;
+  --nav-row-height: 2.5rem;
   font-family: "Noto Sans Arabic Variable", "IBM Plex Sans Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
 }
 * {
@@ -78,7 +83,7 @@ button {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 72px;
+  min-height: var(--shell-header-height);
   padding: 0 clamp(18px, 4vw, 52px);
   border-bottom: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.92);
@@ -136,7 +141,7 @@ button {
   gap: 8px;
   padding: 0 12px;
   font-size: var(--font-label);
-  font-weight: 700;
+  font-weight: 600;
 }
 .status-dot {
   width: 8px;
@@ -151,7 +156,7 @@ button {
 .text-button {
   min-width: 44px;
   padding: 0 9px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .avatar {
   width: 38px;
@@ -318,7 +323,7 @@ button {
   text-align: center;
 }
 .workspace {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh - var(--shell-header-height));
 }
 @media (min-width: 801px) {
   .topbar > .brand { display: none; }
@@ -346,14 +351,14 @@ button {
     display: flex;
     align-items: center;
     flex: 0 0 248px;
-    min-height: 72px;
+    min-height: var(--shell-brand-height);
     padding-inline: 18px;
   }
 }
 .sidebar-product {
   display: flex;
   align-items: center;
-  min-height: 72px;
+  min-height: var(--shell-brand-height);
   margin-inline: -18px;
   padding: 0 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -361,13 +366,13 @@ button {
 .module-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 0 18px 26px;
+  gap: 16px;
+  padding: 0 16px 20px;
   color: #e8f5ed;
   background: #10241b;
 }
 .sidebar-head {
-  padding: 8px 12px 18px;
+  padding: 6px 10px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .module-sidebar .overline {
@@ -376,6 +381,7 @@ button {
 .sidebar-head h2 {
   margin: 5px 0 0;
   font-size: var(--font-title-sm);
+  font-weight: var(--font-heading-weight);
 }
 .module-navigation {
   display: grid;
@@ -386,17 +392,20 @@ button {
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 44px;
-  padding: 0 12px;
+  min-height: var(--nav-row-height);
+  padding: 0 10px;
   border: 0;
   border-radius: 10px;
   color: #c6d8ce;
   background: transparent;
+  font-size: var(--font-navigation);
+  font-weight: 500;
   text-align: start;
 }
 .nav-item.active {
   color: #fff;
   background: #086b49;
+  font-weight: 650;
 }
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.08);
@@ -412,23 +421,24 @@ button {
 .module-page {
   width: min(1440px, 100%);
   margin: 0 auto;
-  padding: 28px clamp(20px, 2.5vw, 40px) 40px;
+  padding: 20px clamp(20px, 2.5vw, 40px) 32px;
 }
 .page-breadcrumb {
   color: var(--brand);
   font-size: var(--font-label);
-  font-weight: 700;
+  font-weight: 500;
 }
 .page-heading {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 16px;
-  margin: 8px 0 20px;
+  margin: 6px 0 14px;
 }
 .page-heading h1 {
   margin: 0;
   font-size: var(--font-page);
+  font-weight: var(--font-heading-weight);
   letter-spacing: -0.035em;
 }
 .page-heading p {
@@ -599,6 +609,7 @@ html[dir="ltr"] .mobile-drawer__panel {
   }
   .workspace {
     grid-template-columns: 1fr;
+    min-height: calc(100vh - 64px);
   }
   .module-sidebar {
     display: none;
@@ -608,6 +619,10 @@ html[dir="ltr"] .mobile-drawer__panel {
   }
   .page-heading {
     align-items: flex-start;
+  }
+  .nav-item {
+    min-height: 44px;
+    font-size: var(--font-label);
   }
   .mobile-sections {
     display: inline-flex;

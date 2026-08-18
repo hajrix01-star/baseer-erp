@@ -193,3 +193,9 @@ Every future committee report uses this compact structure:
 - Shared buttons, fields, table headings, vault metrics, and action menus use calmer text weights. The change removes broad visual heaviness without reducing emphasis for important financial values.
 - Local evidence: `npm run check --workspace @baseer-erp/web`, `npm run build --workspace @baseer-erp/web`, `npm run verify:web-budget`, and `git diff --check` PASS. Generated budget: startup JS 222,148 / 250,000 B; largest route 74,253 / 85,000 B; startup CSS 56,808 / 58,000 B.
 - **Open condition:** inspect authenticated desktop and mobile routes with the owner before calling every legacy local style migrated; later visual corrections must continue to use the shared density tokens rather than reintroducing per-workspace sizes.
+
+## 2026-08-19 — Shell hierarchy and Odoo-density refinement
+
+- **Decision:** retain the brand in its own sidebar masthead (`64px`) and reduce only the desktop work header to `56px`; this preserves the logo's visual prominence without making every workspace header tall.
+- **Central tokens:** navigation rows are `40px` / `13px` / 500 (650 active); page heading is `24–30px` / 700; breadcrumb and header actions use 500–600. Mobile restores `44px` navigation targets.
+- **Scope:** App shell only. Tables, financial forms, and mobile input targets are unchanged.
