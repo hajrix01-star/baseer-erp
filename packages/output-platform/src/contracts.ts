@@ -1,4 +1,4 @@
-export const OUTPUT_FORMATS = ['preview', 'xlsx'] as const;
+﻿export const OUTPUT_FORMATS = ['preview', 'xlsx'] as const;
 export type OutputFormat = (typeof OUTPUT_FORMATS)[number];
 
 export type ReportLocale = 'ar' | 'en';
@@ -41,6 +41,8 @@ export interface ReportSnapshot {
   readonly locale: ReportLocale;
   readonly generatedAtRiyadh: string;
   readonly companies: readonly { readonly id: string; readonly name: string }[];
+  /** Optional server-embedded logo. Print previews must never depend on the application chrome. */
+  readonly companyLogoDataUri?: string | null;
   readonly periodLabel: string;
   readonly taxPresentation: TaxPresentation;
   readonly columns: readonly ReportColumn[];

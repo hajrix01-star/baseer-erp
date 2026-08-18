@@ -1,4 +1,6 @@
-import { createHash, randomUUID } from 'node:crypto';
+﻿import { createHash, randomUUID } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import { join, resolve, sep } from 'node:path';
 
 import {
   outputReceiptSchema,
@@ -170,20 +172,22 @@ export class OutputService {
     const dateResolution = await this.businessDate.resolveInTransaction(transaction, context);
     const company = await transaction.company.findFirst({
       where: { id: context.companyId, tenantId: context.tenantId },
-      select: { id: true, nameAr: true, nameEn: true, businessTimezone: true, status: true },
+      select: { id: true, nameAr: true, nameEn: true, businessTimezone: true, status: true, branding: { select: { logoFileMetadataId: true } } },
     });
     if (!company) throw new ForbiddenException('Company output scope is not permitted.');
 
     const arabic = request.locale === 'ar';
+    const companyLogoDataUri = await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null);
     return {
       snapshotId: randomUUID(),
       reportCode,
-      templateVersion: '1',
+      templateVersion: '2',
       title: arabic ? 'إثبات سياق الشركة' : 'Company Context Proof',
       direction: arabic ? 'rtl' : 'ltr',
       locale: request.locale,
       generatedAtRiyadh: dateResolution.generatedAt,
       companies: [{ id: company.id, name: arabic ? company.nameAr : company.nameEn }],
+      companyLogoDataUri,
       periodLabel: arabic ? 'اللقطة الحالية' : 'Current snapshot',
       taxPresentation: 'gross',
       columns: [
@@ -200,6 +204,28 @@ export class OutputService {
     };
   }
 
+  private async readPrintLogo(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    logoFileMetadataId: string | null,
+  ): Promise<string | null> {
+    if (!logoFileMetadataId) return null;
+    const file = await transaction.fileMetadata.findFirst({
+      where: { id: logoFileMetadataId, tenantId: context.tenantId, companyId: context.companyId, sourceType: "company.branding", sourceId: context.companyId, purpose: "logo" },
+      select: { declaredMimeType: true, storageReference: true },
+    });
+    if (!file || !/^image\/(png|jpeg|webp)$/.test(file.declaredMimeType)) return null;
+    if (!/^company-branding\/[0-9a-f-]+\/[0-9a-f-]+\/[0-9a-f-]+\.(png|jpg|webp)$/.test(file.storageReference)) return null;
+    const root = resolve(process.env.BASEER_COMPANY_LOGO_STORAGE_ROOT ?? join(process.cwd(), "storage"));
+    const target = resolve(root, file.storageReference);
+    if (!target.startsWith(`${root}${sep}`)) return null;
+    try {
+      const bytes = await readFile(target);
+      return `data:${file.declaredMimeType};base64,${bytes.toString("base64")}`;
+    } catch {
+      return null;
+    }
+  }
   private async renderReceipt(
     snapshot: ReportSnapshot,
     request: OutputRequest,

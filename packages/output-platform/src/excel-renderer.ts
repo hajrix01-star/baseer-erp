@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx';
+﻿import * as XLSX from 'xlsx';
 
 import type { OutputArtifact, ReportSnapshot } from './contracts.js';
 import { formatReportCell } from './formatting.js';
@@ -13,6 +13,7 @@ export async function renderExcel(snapshot: ReportSnapshot): Promise<OutputArtif
   const rows = [
     [snapshot.title],
     [`${snapshot.periodLabel} \u2022 ${snapshot.sourceLabel}`],
+    [snapshot.generatedAtRiyadh],
     [snapshot.companies.map((company) => company.name).join('\u060C ')],
     [],
     snapshot.columns.map((column) => column.label),
@@ -23,7 +24,7 @@ export async function renderExcel(snapshot: ReportSnapshot): Promise<OutputArtif
   const worksheet = XLSX.utils.aoa_to_sheet(rows);
   const lastColumn = XLSX.utils.encode_cell({ r: 0, c: columnCount - 1 }).replace(/\d+$/, '');
 
-  worksheet['!merges'] = [1, 2, 3].map((row) => XLSX.utils.decode_range(`A${row}:${lastColumn}${row}`));
+  worksheet['!merges'] = [1, 2, 3, 4].map((row) => XLSX.utils.decode_range(`A${row}:${lastColumn}${row}`));
   worksheet['!cols'] = snapshot.columns.map((column) => ({ wch: column.width ?? 18 }));
   worksheet['!pageSetup'] = { orientation: 'landscape', fitToWidth: 1, fitToHeight: 0 };
 
