@@ -2182,8 +2182,8 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .purchase-batch-workspace { --control-radius: 6px; --card-radius: 8px; --section-gap: .5rem; --control-height: 2.25rem; }
 .purchase-batch-workspace .baseer-card { box-shadow: none; }
 .baseer-batch-entry-table { border-radius: var(--card-radius); }
-.baseer-batch-entry-table table { min-width: 91rem; table-layout: fixed; }
-.baseer-batch-entry-table :is(th, td) { padding: .5rem .6rem; }
+.baseer-batch-entry-table table { min-width: 82rem; table-layout: fixed; }
+.baseer-batch-entry-table :is(th, td) { padding: .4rem .35rem; }
 .baseer-batch-entry-table :is(input, select) { width: 100%; min-height: var(--control-height); padding: .45rem .55rem; border: 0; border-radius: 0; color: var(--ink); background: transparent; font: inherit; font-size: var(--font-label); }
 .baseer-batch-entry-table select { appearance: none; padding-inline-start: 1.6rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6h8L8 10z' fill='%231b3529'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left .45rem center; background-size: .8rem; }
 [dir="ltr"] .baseer-batch-entry-table select { background-position: right .45rem center; }
