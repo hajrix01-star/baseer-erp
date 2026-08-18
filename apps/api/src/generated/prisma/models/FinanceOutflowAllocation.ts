@@ -41,6 +41,7 @@ export type FinanceOutflowAllocationMinAggregateOutputType = {
   documentId: string | null
   vaultId: string | null
   grossAmount: runtime.Decimal | null
+  paymentMethod: $Enums.FinanceVaultPaymentMethod | null
   createdAt: Date | null
 }
 
@@ -51,6 +52,7 @@ export type FinanceOutflowAllocationMaxAggregateOutputType = {
   documentId: string | null
   vaultId: string | null
   grossAmount: runtime.Decimal | null
+  paymentMethod: $Enums.FinanceVaultPaymentMethod | null
   createdAt: Date | null
 }
 
@@ -61,6 +63,7 @@ export type FinanceOutflowAllocationCountAggregateOutputType = {
   documentId: number
   vaultId: number
   grossAmount: number
+  paymentMethod: number
   createdAt: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type FinanceOutflowAllocationMinAggregateInputType = {
   documentId?: true
   vaultId?: true
   grossAmount?: true
+  paymentMethod?: true
   createdAt?: true
 }
 
@@ -91,6 +95,7 @@ export type FinanceOutflowAllocationMaxAggregateInputType = {
   documentId?: true
   vaultId?: true
   grossAmount?: true
+  paymentMethod?: true
   createdAt?: true
 }
 
@@ -101,6 +106,7 @@ export type FinanceOutflowAllocationCountAggregateInputType = {
   documentId?: true
   vaultId?: true
   grossAmount?: true
+  paymentMethod?: true
   createdAt?: true
   _all?: true
 }
@@ -198,6 +204,7 @@ export type FinanceOutflowAllocationGroupByOutputType = {
   documentId: string
   vaultId: string
   grossAmount: runtime.Decimal
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt: Date
   _count: FinanceOutflowAllocationCountAggregateOutputType | null
   _avg: FinanceOutflowAllocationAvgAggregateOutputType | null
@@ -231,6 +238,7 @@ export type FinanceOutflowAllocationWhereInput = {
   documentId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   vaultId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   grossAmount?: Prisma.DecimalFilter<"FinanceOutflowAllocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceOutflowAllocation"> | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFilter<"FinanceOutflowAllocation"> | Date | string
   document?: Prisma.XOR<Prisma.FinanceOutflowDocumentScalarRelationFilter, Prisma.FinanceOutflowDocumentWhereInput>
   vault?: Prisma.XOR<Prisma.FinanceVaultScalarRelationFilter, Prisma.FinanceVaultWhereInput>
@@ -243,6 +251,7 @@ export type FinanceOutflowAllocationOrderByWithRelationInput = {
   documentId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   document?: Prisma.FinanceOutflowDocumentOrderByWithRelationInput
   vault?: Prisma.FinanceVaultOrderByWithRelationInput
@@ -251,7 +260,7 @@ export type FinanceOutflowAllocationOrderByWithRelationInput = {
 export type FinanceOutflowAllocationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   id_tenantId_companyId?: Prisma.FinanceOutflowAllocationIdTenantIdCompanyIdCompoundUniqueInput
-  documentId_vaultId?: Prisma.FinanceOutflowAllocationDocumentIdVaultIdCompoundUniqueInput
+  documentId_vaultId_paymentMethod?: Prisma.FinanceOutflowAllocationDocumentIdVaultIdPaymentMethodCompoundUniqueInput
   AND?: Prisma.FinanceOutflowAllocationWhereInput | Prisma.FinanceOutflowAllocationWhereInput[]
   OR?: Prisma.FinanceOutflowAllocationWhereInput[]
   NOT?: Prisma.FinanceOutflowAllocationWhereInput | Prisma.FinanceOutflowAllocationWhereInput[]
@@ -260,10 +269,11 @@ export type FinanceOutflowAllocationWhereUniqueInput = Prisma.AtLeast<{
   documentId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   vaultId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   grossAmount?: Prisma.DecimalFilter<"FinanceOutflowAllocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceOutflowAllocation"> | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFilter<"FinanceOutflowAllocation"> | Date | string
   document?: Prisma.XOR<Prisma.FinanceOutflowDocumentScalarRelationFilter, Prisma.FinanceOutflowDocumentWhereInput>
   vault?: Prisma.XOR<Prisma.FinanceVaultScalarRelationFilter, Prisma.FinanceVaultWhereInput>
-}, "id" | "id_tenantId_companyId" | "documentId_vaultId">
+}, "id" | "id_tenantId_companyId" | "documentId_vaultId_paymentMethod">
 
 export type FinanceOutflowAllocationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -272,6 +282,7 @@ export type FinanceOutflowAllocationOrderByWithAggregationInput = {
   documentId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.FinanceOutflowAllocationCountOrderByAggregateInput
   _avg?: Prisma.FinanceOutflowAllocationAvgOrderByAggregateInput
@@ -290,12 +301,14 @@ export type FinanceOutflowAllocationScalarWhereWithAggregatesInput = {
   documentId?: Prisma.UuidWithAggregatesFilter<"FinanceOutflowAllocation"> | string
   vaultId?: Prisma.UuidWithAggregatesFilter<"FinanceOutflowAllocation"> | string
   grossAmount?: Prisma.DecimalWithAggregatesFilter<"FinanceOutflowAllocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodWithAggregatesFilter<"FinanceOutflowAllocation"> | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FinanceOutflowAllocation"> | Date | string
 }
 
 export type FinanceOutflowAllocationCreateInput = {
   id?: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
   document: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutAllocationsInput
   vault: Prisma.FinanceVaultCreateNestedOneWithoutOutflowAllocationsInput
@@ -308,12 +321,14 @@ export type FinanceOutflowAllocationUncheckedCreateInput = {
   documentId: string
   vaultId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
 export type FinanceOutflowAllocationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   document?: Prisma.FinanceOutflowDocumentUpdateOneRequiredWithoutAllocationsNestedInput
   vault?: Prisma.FinanceVaultUpdateOneRequiredWithoutOutflowAllocationsNestedInput
@@ -326,6 +341,7 @@ export type FinanceOutflowAllocationUncheckedUpdateInput = {
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -336,12 +352,14 @@ export type FinanceOutflowAllocationCreateManyInput = {
   documentId: string
   vaultId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
 export type FinanceOutflowAllocationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -352,6 +370,7 @@ export type FinanceOutflowAllocationUncheckedUpdateManyInput = {
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -371,9 +390,10 @@ export type FinanceOutflowAllocationIdTenantIdCompanyIdCompoundUniqueInput = {
   companyId: string
 }
 
-export type FinanceOutflowAllocationDocumentIdVaultIdCompoundUniqueInput = {
+export type FinanceOutflowAllocationDocumentIdVaultIdPaymentMethodCompoundUniqueInput = {
   documentId: string
   vaultId: string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
 }
 
 export type FinanceOutflowAllocationCountOrderByAggregateInput = {
@@ -383,6 +403,7 @@ export type FinanceOutflowAllocationCountOrderByAggregateInput = {
   documentId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -397,6 +418,7 @@ export type FinanceOutflowAllocationMaxOrderByAggregateInput = {
   documentId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -407,6 +429,7 @@ export type FinanceOutflowAllocationMinOrderByAggregateInput = {
   documentId?: Prisma.SortOrder
   vaultId?: Prisma.SortOrder
   grossAmount?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -501,6 +524,7 @@ export type FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInpu
 export type FinanceOutflowAllocationCreateWithoutVaultInput = {
   id?: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
   document: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutAllocationsInput
 }
@@ -509,6 +533,7 @@ export type FinanceOutflowAllocationUncheckedCreateWithoutVaultInput = {
   id?: string
   documentId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
@@ -548,12 +573,14 @@ export type FinanceOutflowAllocationScalarWhereInput = {
   documentId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   vaultId?: Prisma.UuidFilter<"FinanceOutflowAllocation"> | string
   grossAmount?: Prisma.DecimalFilter<"FinanceOutflowAllocation"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFilter<"FinanceOutflowAllocation"> | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFilter<"FinanceOutflowAllocation"> | Date | string
 }
 
 export type FinanceOutflowAllocationCreateWithoutDocumentInput = {
   id?: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
   vault: Prisma.FinanceVaultCreateNestedOneWithoutOutflowAllocationsInput
 }
@@ -562,6 +589,7 @@ export type FinanceOutflowAllocationUncheckedCreateWithoutDocumentInput = {
   id?: string
   vaultId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
@@ -595,12 +623,14 @@ export type FinanceOutflowAllocationCreateManyVaultInput = {
   id?: string
   documentId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
 export type FinanceOutflowAllocationUpdateWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   document?: Prisma.FinanceOutflowDocumentUpdateOneRequiredWithoutAllocationsNestedInput
 }
@@ -609,6 +639,7 @@ export type FinanceOutflowAllocationUncheckedUpdateWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -616,6 +647,7 @@ export type FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -623,12 +655,14 @@ export type FinanceOutflowAllocationCreateManyDocumentInput = {
   id?: string
   vaultId: string
   grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
   createdAt?: Date | string
 }
 
 export type FinanceOutflowAllocationUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.FinanceVaultUpdateOneRequiredWithoutOutflowAllocationsNestedInput
 }
@@ -637,6 +671,7 @@ export type FinanceOutflowAllocationUncheckedUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -644,6 +679,7 @@ export type FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   vaultId?: Prisma.StringFieldUpdateOperationsInput | string
   grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -656,6 +692,7 @@ export type FinanceOutflowAllocationSelect<ExtArgs extends runtime.Types.Extensi
   documentId?: boolean
   vaultId?: boolean
   grossAmount?: boolean
+  paymentMethod?: boolean
   createdAt?: boolean
   document?: boolean | Prisma.FinanceOutflowDocumentDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.FinanceVaultDefaultArgs<ExtArgs>
@@ -668,6 +705,7 @@ export type FinanceOutflowAllocationSelectCreateManyAndReturn<ExtArgs extends ru
   documentId?: boolean
   vaultId?: boolean
   grossAmount?: boolean
+  paymentMethod?: boolean
   createdAt?: boolean
   document?: boolean | Prisma.FinanceOutflowDocumentDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.FinanceVaultDefaultArgs<ExtArgs>
@@ -680,6 +718,7 @@ export type FinanceOutflowAllocationSelectUpdateManyAndReturn<ExtArgs extends ru
   documentId?: boolean
   vaultId?: boolean
   grossAmount?: boolean
+  paymentMethod?: boolean
   createdAt?: boolean
   document?: boolean | Prisma.FinanceOutflowDocumentDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.FinanceVaultDefaultArgs<ExtArgs>
@@ -692,10 +731,11 @@ export type FinanceOutflowAllocationSelectScalar = {
   documentId?: boolean
   vaultId?: boolean
   grossAmount?: boolean
+  paymentMethod?: boolean
   createdAt?: boolean
 }
 
-export type FinanceOutflowAllocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "documentId" | "vaultId" | "grossAmount" | "createdAt", ExtArgs["result"]["financeOutflowAllocation"]>
+export type FinanceOutflowAllocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "documentId" | "vaultId" | "grossAmount" | "paymentMethod" | "createdAt", ExtArgs["result"]["financeOutflowAllocation"]>
 export type FinanceOutflowAllocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document?: boolean | Prisma.FinanceOutflowDocumentDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.FinanceVaultDefaultArgs<ExtArgs>
@@ -722,6 +762,7 @@ export type $FinanceOutflowAllocationPayload<ExtArgs extends runtime.Types.Exten
     documentId: string
     vaultId: string
     grossAmount: runtime.Decimal
+    paymentMethod: $Enums.FinanceVaultPaymentMethod
     createdAt: Date
   }, ExtArgs["result"]["financeOutflowAllocation"]>
   composites: {}
@@ -1154,6 +1195,7 @@ export interface FinanceOutflowAllocationFieldRefs {
   readonly documentId: Prisma.FieldRef<"FinanceOutflowAllocation", 'String'>
   readonly vaultId: Prisma.FieldRef<"FinanceOutflowAllocation", 'String'>
   readonly grossAmount: Prisma.FieldRef<"FinanceOutflowAllocation", 'Decimal'>
+  readonly paymentMethod: Prisma.FieldRef<"FinanceOutflowAllocation", 'FinanceVaultPaymentMethod'>
   readonly createdAt: Prisma.FieldRef<"FinanceOutflowAllocation", 'DateTime'>
 }
     

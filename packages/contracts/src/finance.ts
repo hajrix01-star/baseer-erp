@@ -950,6 +950,7 @@ const financeOutflowStatusSchema = z.enum(["POSTED", "CANCELLED"]);
 export const financeOutflowAllocationSchema = z.object({
   vaultId: z.string().uuid(),
   grossAmount: financeAmountSchema,
+  paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional(),
 }).strict();
 
 export const createFinanceOutflowDocumentRequestSchema = z.object({
@@ -1110,9 +1111,13 @@ export const createFinanceRecurringExpensePaymentRequestSchema = z.object({
   coverageStartMonth: z.number().int().min(1).max(12),
   grossAmount: financeAmountSchema,
   isTaxable: z.boolean().default(false),
-  vaultId: z.string().uuid(),
+  // The legacy vaultId is accepted for older clients. New clients send one
+  // or more allocations and record the exact payment method on each one.
+  vaultId: z.string().uuid().optional(),
+  allocations: z.array(financeOutflowAllocationSchema).min(1).max(20).default([]),
   supplierInvoiceNumber: z.string().trim().min(1).max(160).optional(),
   supplierInvoiceMissingReason: z.string().trim().min(1).max(500).optional(),
+  supplierInvoiceDate: financeDateSchema.optional(),
   notes: z.string().trim().max(2_000).optional(),
   idempotencyKey: idempotencyKeySchema,
 }).strict();

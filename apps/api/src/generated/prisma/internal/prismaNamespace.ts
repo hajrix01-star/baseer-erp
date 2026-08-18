@@ -4050,6 +4050,7 @@ export const FinanceOutflowAllocationScalarFieldEnum = {
   documentId: 'documentId',
   vaultId: 'vaultId',
   grossAmount: 'grossAmount',
+  paymentMethod: 'paymentMethod',
   createdAt: 'createdAt'
 } as const
 

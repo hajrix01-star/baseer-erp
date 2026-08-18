@@ -835,13 +835,14 @@ model FinanceOutflowAllocation {
   documentId  String                @db.Uuid
   vaultId     String                @db.Uuid
   grossAmount Decimal               @db.Decimal(18, 4)
+  paymentMethod FinanceVaultPaymentMethod
   createdAt   DateTime              @default(now()) @db.Timestamptz(6)
 
   document FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   vault    FinanceVault           @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
-  @@unique([documentId, vaultId])
+  @@unique([documentId, vaultId, paymentMethod])
   @@index([tenantId, companyId, vaultId, createdAt])
 }
 model FinanceJournalLine {

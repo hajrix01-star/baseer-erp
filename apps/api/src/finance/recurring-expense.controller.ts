@@ -55,7 +55,7 @@ export class RecurringExpenseController {
     return financeRecurringExpensePaymentReceiptSchema.parse(await this.documents.createRecurringPayment({
       context,
       idempotencyKey: request.data.idempotencyKey,
-      request: (() => { const { idempotencyKey: _key, ...payment } = request.data; return payment; })(),
+      request: (() => { const { idempotencyKey: _key, ...payment } = request.data; return { ...payment, allocations: payment.allocations ?? [] }; })(),
     }));
   }
 
@@ -68,7 +68,7 @@ export class RecurringExpenseController {
     return financeRecurringExpensePaymentBatchReceiptSchema.parse(await this.documents.createRecurringPaymentBatch({
       context,
       idempotencyKey: request.data.idempotencyKey,
-      request: (() => { const { idempotencyKey: _key, ...batch } = request.data; return batch; })(),
+      request: (() => { const { idempotencyKey: _key, ...batch } = request.data; return { ...batch, items: batch.items.map((item) => ({ ...item, allocations: item.allocations ?? [] })) }; })(),
     }));
   }
 

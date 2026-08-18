@@ -3,6 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   FinanceAccountStatus,
   FinanceAccountType,
+  FinanceVaultPaymentMethod,
   FinanceVaultStatus,
   type Prisma,
 } from '../generated/prisma/client.js';
@@ -12,10 +13,10 @@ export class FinanceVaultService {
   async assertActiveVault(
     transaction: Prisma.TransactionClient,
     input: { tenantId: string; companyId: string; vaultId: string },
-  ): Promise<{ id: string; accountId: string }> {
+  ): Promise<{ id: string; accountId: string; paymentMethod: FinanceVaultPaymentMethod; paymentMethods: FinanceVaultPaymentMethod[] }> {
     const vault = await transaction.financeVault.findFirst({
       where: { id: input.vaultId, tenantId: input.tenantId, companyId: input.companyId, status: FinanceVaultStatus.ACTIVE, account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE } },
-      select: { id: true, accountId: true },
+      select: { id: true, accountId: true, paymentMethod: true, paymentMethods: true },
     });
     if (!vault) throw new BadRequestException("The selected vault is not active for this company.");
     return vault;
@@ -60,7 +61,7 @@ export class FinanceVaultService {
   async assertActivePaymentDestination(
     transaction: Prisma.TransactionClient,
     input: { tenantId: string; companyId: string; vaultId: string },
-  ): Promise<{ id: string; accountId: string }> {
+  ): Promise<{ id: string; accountId: string; paymentMethod: FinanceVaultPaymentMethod; paymentMethods: FinanceVaultPaymentMethod[] }> {
     const vault = await transaction.financeVault.findFirst({
       where: {
         id: input.vaultId,
@@ -70,7 +71,7 @@ export class FinanceVaultService {
         isPaymentDestination: true,
         account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE },
       },
-      select: { id: true, accountId: true },
+      select: { id: true, accountId: true, paymentMethod: true, paymentMethods: true },
     });
     if (!vault) throw new BadRequestException('The selected payment destination is not active for this company.');
     return vault;

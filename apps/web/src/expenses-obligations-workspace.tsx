@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -12,11 +12,10 @@ import type { Profile } from "./recurring-expense-workspace";
 import { formatNumber } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
-import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
 
 type Configuration = {
   profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null;
-  vaults: Array<{ id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }>;
+  vaults: Array<{ id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; paymentMethods: Array<"CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"> }>;
   categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE"; status: "ACTIVE"; isPosting?: boolean; suggestedSupplierId: string | null }>;
   suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE"; categoryId: string | null }>;
 };
@@ -26,7 +25,6 @@ type Loan = {
   firstInstallmentDueDate: string; openingBusinessDate: string; status: "ACTIVE" | "SETTLED"; notes: string | null;
 };
 type Document = { id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; status: string; businessDate: string; grossAmount: string; batchNumber: string | null; supplierNameAr: string | null; supplierNameEn: string | null; categoryNameAr: string; categoryNameEn: string };
-type ExpenseRow = { id: string; kind: "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; missingReason: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
 type LoanForm = { sourceDocumentNumber: string; originalAmount: string; openingOutstandingAmount: string; installmentAmount: string; termMonths: string; firstInstallmentDueDate: string; openingBusinessDate: string; notes: string };
 type RepaymentForm = { loanId: string; vaultId: string; amount: string; businessDate: string };
 type Workspace = { companyId: string; businessDate: string; configuration: Configuration; loans: Loan[]; recurringProfiles: Profile[]; documents: Document[] };
@@ -35,7 +33,6 @@ type Workspace = { companyId: string; businessDate: string; configuration: Confi
 const money = (value: string) => formatNumber(value);
 const RecurringExpenseWorkspace = lazy(async () => ({ default: (await import("./recurring-expense-workspace")).RecurringExpenseWorkspace }));
 const RecurringExpensePaymentBatch = lazy(async () => ({ default: (await import("./recurring-expense-workspace")).RecurringExpensePaymentBatch }));
-const newExpenseRow = (): ExpenseRow => ({ id: requestId(), kind: "EXPENSE", settlementKind: "PAID", categoryId: "", supplierId: "", invoiceNumber: "", missingReason: "", supplierInvoiceDate: "", grossAmount: "", isTaxable: true, vaultId: "", notes: "" });
 const emptyLoan = (businessDate: string): LoanForm => ({ sourceDocumentNumber: "", originalAmount: "", openingOutstandingAmount: "", installmentAmount: "", termMonths: "", firstInstallmentDueDate: businessDate, openingBusinessDate: businessDate, notes: "" });
 
 type ExpensesWorkspaceTab = "items" | "batch" | "history";
@@ -45,8 +42,6 @@ export function ExpensesObligationsWorkspace({ language, activeTab = "items", on
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [tab, setTab] = useState<ExpensesWorkspaceTab>(activeTab);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
-  const [remoteSuppliers, setRemoteSuppliers] = useState<Configuration["suppliers"]>([]);
-  const [remoteCategories, setRemoteCategories] = useState<Configuration["categories"]>([]);
   const [loadError, setLoadError] = useState("");
   const loadWorkspace = useCallback(async () => {
     const current = activeSession(); setSession(current); if (!current) return;
@@ -64,7 +59,7 @@ export function ExpensesObligationsWorkspace({ language, activeTab = "items", on
     <BaseerWorkspaceTabs ariaLabel={text.expensesObligations} idPrefix="expenses-tab" activeId={tab} tabs={[{ id: "items", label: text.itemsAndObligations }, { id: "batch", label: text.batchPayment }, { id: "history", label: text.settlementHistory }]} onChange={(id) => { const next = id as ExpensesWorkspaceTab; setTab(next); onTabChange?.(next); }} />
     <BaseerBatchPanel id={`expenses-tab-panel-${tab}`} labelledBy={`expenses-tab-${tab}`}>
       {tab === "items" ? <ItemsAndObligations language={language} workspace={workspace} reload={loadWorkspace} /> : null}
-      {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} remoteSuppliers={remoteSuppliers} setRemoteSuppliers={setRemoteSuppliers} remoteCategories={remoteCategories} setRemoteCategories={setRemoteCategories} /> : null}
+      {tab === "batch" ? <ExpenseSettlementBatch language={language} configuration={workspace.configuration} profiles={workspace.recurringProfiles} businessDate={workspace.businessDate} reload={loadWorkspace} /> : null}
       {tab === "history" ? <SettlementHistory language={language} documents={workspace.documents} loans={workspace.loans} /> : null}
     </BaseerBatchPanel>
   </section>;
@@ -112,7 +107,11 @@ function ItemsAndObligations({ language, workspace, reload }: { language: "ar" |
   </>;
 }
 
-function ExpenseSettlementBatch({ language, configuration, profiles, businessDate: serverBusinessDate, reload, remoteSuppliers, setRemoteSuppliers, remoteCategories, setRemoteCategories }: { language: "ar" | "en"; configuration: Configuration; profiles: Profile[]; businessDate: string; reload: () => Promise<void>; remoteSuppliers: Configuration["suppliers"]; setRemoteSuppliers: Dispatch<SetStateAction<Configuration["suppliers"]>>; remoteCategories: Configuration["categories"]; setRemoteCategories: Dispatch<SetStateAction<Configuration["categories"]>> }) {
+function ExpenseSettlementBatch({ language, configuration, profiles, businessDate: serverBusinessDate, reload }: { language: "ar" | "en"; configuration: Configuration; profiles: Profile[]; businessDate: string; reload: () => Promise<void> }) {
+  return <Suspense fallback={<BaseerCard><p>{financeText(language).loading}</p></BaseerCard>}><RecurringExpensePaymentBatch language={language} configuration={configuration} profiles={profiles} businessDate={serverBusinessDate} reload={reload} /></Suspense>;
+  // The generic expense-entry table remains available in Purchases. Payments
+  // are deliberately focused on saved recurring obligations.
+  /*
   const text = financeText(language);
   const [rows, setRows] = useState<ExpenseRow[]>(() => Array.from({ length: 3 }, () => newExpenseRow()));
   const [businessDate, setBusinessDate] = useState(serverBusinessDate);
@@ -175,7 +174,7 @@ function ExpenseSettlementBatch({ language, configuration, profiles, businessDat
       <footer className="baseer-batch-footer"><div className="baseer-batch-total" /><div><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="baseer-batch-add-row" onClick={() => setRows((current) => [...current, newExpenseRow()])}>+</BaseerButton><BaseerButton variant="secondary" style={{ minHeight: "2.5rem", padding: "0 .25rem", border: 0, background: "transparent", boxShadow: "none", color: "var(--brand)" }} disabled={saving}>{saving ? text.saving : text.savePaymentCount(enteredRows.length)}</BaseerButton></div></footer>
     </form></BaseerCard>
     <Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><RecurringExpensePaymentBatch language={language} configuration={configuration} profiles={profiles} businessDate={serverBusinessDate} reload={reload} /></Suspense>
-  </div>;
+  </div>; */
 }
 function SettlementHistory({ language, documents: sourceDocuments, loans }: { language: "ar" | "en"; documents: Document[]; loans: Loan[] }) {
   const text = financeText(language);

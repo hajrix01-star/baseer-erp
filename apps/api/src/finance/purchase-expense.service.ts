@@ -4,7 +4,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DocumentSerialService } from '../core-controls/document-serial.service.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, FinanceVaultPaymentMethod, Prisma } from '../generated/prisma/client.js';
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 import { FinanceVaultService } from './finance-vault.service.js';
@@ -13,11 +13,12 @@ const DOCUMENT_OPERATION = 'finance.purchase_expense.create';
 const BATCH_OPERATION = 'finance.purchase_expense.batch.create';
 const RECURRING_PAYMENT_OPERATION = 'finance.recurring_expense.payment.create';
 const RECURRING_PAYMENT_BATCH_OPERATION = 'finance.recurring_expense.payment.batch.create';
-export type PurchaseExpenseRequest = Readonly<{ kind: 'PURCHASE' | 'EXPENSE'; settlementKind: 'PAID' | 'PAYABLE'; categoryId: string; supplierId?: string; supplierInvoiceNumber?: string; supplierInvoiceMissingReason?: string; businessDate: Date; supplierInvoiceDate?: Date; grossAmount: string; isTaxable: boolean; allocations: readonly Readonly<{ vaultId: string; grossAmount: string }>[]; notes?: string }>;
+type PaymentAllocation = Readonly<{ vaultId: string; grossAmount: string; paymentMethod?: FinanceVaultPaymentMethod | undefined }>;
+export type PurchaseExpenseRequest = Readonly<{ kind: 'PURCHASE' | 'EXPENSE'; settlementKind: 'PAID' | 'PAYABLE'; categoryId: string; supplierId?: string; supplierInvoiceNumber?: string; supplierInvoiceMissingReason?: string; businessDate: Date; supplierInvoiceDate?: Date; grossAmount: string; isTaxable: boolean; allocations: readonly PaymentAllocation[]; notes?: string }>;
 export type PurchaseExpenseReceipt = Readonly<{ documentId: string; documentNumber: string; journalEntryId: string; kind: FinanceOutflowDocumentKind; settlementKind: FinanceOutflowSettlementKind; status: FinanceOutflowDocumentStatus; grossAmount: string; netAmount: string; vatAmount: string; supplierDueId: string | null }>;
 export type PurchaseExpenseBatchRequest = Readonly<{ businessDate: Date; notes?: string; items: readonly Omit<PurchaseExpenseRequest, 'businessDate'>[] }>;
 export type PurchaseExpenseBatchReceipt = Readonly<{ batchId: string; batchNumber: string; businessDate: Date; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; documents: readonly PurchaseExpenseReceipt[] }>;
-export type RecurringExpensePaymentRequest = Readonly<{ profileId: string; businessDate: Date; coverageYear: number; coverageStartMonth: number; grossAmount: string; isTaxable: boolean; vaultId: string; supplierInvoiceNumber?: string | undefined; supplierInvoiceMissingReason?: string | undefined; supplierInvoiceDate?: Date | undefined; notes?: string | undefined }>;
+export type RecurringExpensePaymentRequest = Readonly<{ profileId: string; businessDate: Date; coverageYear: number; coverageStartMonth: number; grossAmount: string; isTaxable: boolean; vaultId?: string | undefined; allocations: readonly PaymentAllocation[]; supplierInvoiceNumber?: string | undefined; supplierInvoiceMissingReason?: string | undefined; supplierInvoiceDate?: Date | undefined; notes?: string | undefined }>;
 export type RecurringExpensePaymentReceipt = PurchaseExpenseReceipt & Readonly<{ profileId: string; coverageYear: number; coverageStartMonth: number; coverageMonths: number }>;
 export type RecurringExpensePaymentBatchRequest = Readonly<{ businessDate: Date; items: readonly Omit<RecurringExpensePaymentRequest, 'businessDate'>[] }>;
 export type RecurringExpensePaymentBatchReceipt = Readonly<{ batchId: string; batchNumber: string; businessDate: Date; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; payments: readonly RecurringExpensePaymentReceipt[] }>;
@@ -147,7 +148,7 @@ export class PurchaseExpenseService {
       ...(request.supplierInvoiceNumber ? { supplierInvoiceNumber: request.supplierInvoiceNumber } : {}),
       ...(request.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: request.supplierInvoiceMissingReason } : {}), ...(request.supplierInvoiceDate ? { supplierInvoiceDate: request.supplierInvoiceDate } : {}),
       businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable,
-      allocations: [{ vaultId: request.vaultId, grossAmount: request.grossAmount }], ...(request.notes ? { notes: request.notes } : {}),
+      allocations: request.allocations, ...(request.notes ? { notes: request.notes } : {}),
     }, requestId, batchId, { profileId: profile.id, coverageYear: request.coverageYear, coverageStartMonth: month, coverageMonths: interval });
     await tx.financeRecurringExpenseCoverage.updateMany({ where: { tenantId: context.tenantId, companyId: context.companyId, profileId: profile.id, coverageYear: request.coverageYear, coverageMonth: { in: months }, documentId: null }, data: { documentId: document.documentId } });
     const nextReminderDate = new Date(Date.UTC(request.coverageYear, month - 1 + interval, 1));
@@ -236,19 +237,29 @@ export class PurchaseExpenseService {
     const debitAccountId = request.settlementKind === 'PAYABLE' && profile.accountingMode === 'management_cash' ? await this.account(tx, context, 'CASH_BASIS_PENDING_OUTFLOWS') : category.account.id;
     const lines: { accountId: string; debitAmount?: string; creditAmount?: string; description?: string }[] = [{ accountId: debitAccountId, debitAmount: net.toFixed(4), description: documentNumber }];
     if (!vat.isZero()) lines.push({ accountId: await this.account(tx, context, 'VAT_INPUT'), debitAmount: vat.toFixed(4), description: documentNumber });
-    let allocations: { vaultId: string; grossAmount: string }[] = []; let supplierDueId: string | null = null;
+    let allocations: { vaultId: string; grossAmount: string; paymentMethod: FinanceVaultPaymentMethod }[] = []; let supplierDueId: string | null = null;
     if (request.settlementKind === 'PAID') {
-      const grouped = new Map<string, Prisma.Decimal>();
-      for (const allocation of request.allocations) grouped.set(allocation.vaultId, (grouped.get(allocation.vaultId) ?? new Prisma.Decimal(0)).plus(allocation.grossAmount));
-      const total = [...grouped.values()].reduce((sum, value) => sum.plus(value), new Prisma.Decimal(0));
+      const grouped = new Map<string, { vaultId: string; paymentMethod: FinanceVaultPaymentMethod | undefined; grossAmount: Prisma.Decimal }>();
+      for (const allocation of request.allocations) {
+        const key = `${allocation.vaultId}:${allocation.paymentMethod ?? ''}`;
+        const prior = grouped.get(key);
+        grouped.set(key, { vaultId: allocation.vaultId, paymentMethod: allocation.paymentMethod, grossAmount: (prior?.grossAmount ?? new Prisma.Decimal(0)).plus(allocation.grossAmount) });
+      }
+      const total = [...grouped.values()].reduce((sum, value) => sum.plus(value.grossAmount), new Prisma.Decimal(0));
       if (!total.equals(gross)) throw new BadRequestException('Payment allocations must equal the gross amount.');
-      allocations = [...grouped.entries()].map(([vaultId, value]) => ({ vaultId, grossAmount: value.toFixed(4) }));
-      for (const allocation of allocations) { const vault = await this.vaults.assertActivePaymentDestination(tx, { ...context, vaultId: allocation.vaultId }); lines.push({ accountId: vault.accountId, creditAmount: allocation.grossAmount, description: documentNumber }); }
+      for (const allocation of grouped.values()) {
+        const vault = await this.vaults.assertActivePaymentDestination(tx, { ...context, vaultId: allocation.vaultId });
+        const paymentMethod = allocation.paymentMethod ?? vault.paymentMethod;
+        if (!vault.paymentMethods.includes(paymentMethod)) throw new BadRequestException('The selected payment method is not enabled for this vault.');
+        const grossAmount = allocation.grossAmount.toFixed(4);
+        allocations.push({ vaultId: allocation.vaultId, grossAmount, paymentMethod });
+        lines.push({ accountId: vault.accountId, creditAmount: grossAmount, description: documentNumber });
+      }
     } else { lines.push({ accountId: await this.account(tx, context, 'SUPPLIER_DUES'), creditAmount: gross.toFixed(4), description: documentNumber }); supplierDueId = randomUUID(); }
     const journal = await this.journals.postInTransaction(tx, { ...context, requestId, sourceType: 'finance_outflow_document', sourceReference: documentNumber, businessDate: request.businessDate, description: request.notes ?? documentNumber, lines });
     const documentId = randomUUID();
     await tx.financeOutflowDocument.create({ data: { id: documentId, tenantId: context.tenantId, companyId: context.companyId, ...(batchId ? { batchId } : {}), ...(recurring ? { recurringExpenseProfileId: recurring.profileId, coverageYear: recurring.coverageYear, coverageStartMonth: recurring.coverageStartMonth, coverageMonths: recurring.coverageMonths } : {}), kind: request.kind, settlementKind: request.settlementKind, documentNumber, supplierId: request.supplierId ?? null, categoryId: request.categoryId, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceNumberNormalized: request.supplierInvoiceNumber?.toLocaleUpperCase('en-US') ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate, supplierInvoiceDate: request.supplierInvoiceDate ?? null, grossAmount: gross, netAmount: net, vatAmount: vat, vatRateBasisPoints: rate, notes: request.notes ?? null, journalEntryId: journal.journalEntryId, createdByUserId: context.actorUserId } });
-    if (allocations.length) await tx.financeOutflowAllocation.createMany({ data: allocations.map((allocation) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, documentId, vaultId: allocation.vaultId, grossAmount: allocation.grossAmount })) });
+    if (allocations.length) await tx.financeOutflowAllocation.createMany({ data: allocations.map((allocation) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, documentId, vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod })) });
     if (supplierDueId) await tx.financeSupplierDue.create({ data: { id: supplierDueId, tenantId: context.tenantId, companyId: context.companyId, supplierId: request.supplierId!, categoryId: request.categoryId, sourceDocumentNumber: documentNumber, originalBusinessDate: request.businessDate, originalAmount: gross, remainingAmount: gross, status: FinanceSupplierDueStatus.OPEN, notes: request.notes ?? null, journalEntryId: journal.journalEntryId } });
     const receipt: PurchaseExpenseReceipt = { documentId, documentNumber, journalEntryId: journal.journalEntryId, kind: request.kind, settlementKind: request.settlementKind, status: FinanceOutflowDocumentStatus.POSTED, grossAmount: gross.toFixed(4), netAmount: net.toFixed(4), vatAmount: vat.toFixed(4), supplierDueId };
     await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: 'finance.purchase_expense.created', entityType: 'FinanceOutflowDocument', entityId: documentId, requestId, afterJson: receipt as unknown as Prisma.InputJsonValue } });
@@ -260,13 +271,17 @@ export class PurchaseExpenseService {
   private normaliseBatch(request: PurchaseExpenseBatchRequest): PurchaseExpenseBatchRequest { if (!request.items.length || request.items.length > 25) throw new BadRequestException('A batch must contain from 1 to 25 invoices.'); const items = request.items.map((item) => { const { businessDate: _businessDate, ...normalised } = this.normalise({ ...item, businessDate: request.businessDate }); return normalised; }); const notes = request.notes?.trim(); return { businessDate: request.businessDate, items, ...(notes ? { notes } : {}) }; }
   private storeBatchReceipt(receipt: PurchaseExpenseBatchReceipt): StoredPurchaseExpenseBatchReceipt { return { ...receipt, businessDate: receipt.businessDate.toISOString() }; }
   private restoreBatchReceipt(value: unknown): PurchaseExpenseBatchReceipt { const stored = value as StoredPurchaseExpenseBatchReceipt; return { ...stored, businessDate: new Date(stored.businessDate) }; }
-  private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount })), notes: request.notes ?? null } as const; }
+  private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount, paymentMethod: item.paymentMethod ?? null })), notes: request.notes ?? null } as const; }
   private batchPayload(request: PurchaseExpenseBatchRequest) { return { businessDate: request.businessDate.toISOString(), notes: request.notes ?? null, items: request.items.map((item) => this.payload({ ...item, businessDate: request.businessDate })) } as const; }
-  private recurringPayload(request: RecurringExpensePaymentRequest) { return { ...request, businessDate: request.businessDate.toISOString(), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }  private normaliseRecurringPayment(request: RecurringExpensePaymentRequest): RecurringExpensePaymentRequest {
+  private recurringPayload(request: RecurringExpensePaymentRequest) { return { profileId: request.profileId, businessDate: request.businessDate.toISOString(), coverageYear: request.coverageYear, coverageStartMonth: request.coverageStartMonth, grossAmount: request.grossAmount, isTaxable: request.isTaxable, vaultId: request.vaultId ?? null, allocations: request.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod ?? null })), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }
+  private normaliseRecurringPayment(request: RecurringExpensePaymentRequest): RecurringExpensePaymentRequest {
     const invoice = request.supplierInvoiceNumber?.trim(); const missingReason = request.supplierInvoiceMissingReason?.trim();
     if (!invoice && !missingReason) throw new BadRequestException('Provide the supplier invoice number or a missing reason.');
     if (invoice && missingReason) throw new BadRequestException('Provide an invoice number or a missing reason, not both.');
-    return { ...request, ...(invoice ? { supplierInvoiceNumber: invoice } : {}), ...(missingReason ? { supplierInvoiceMissingReason: missingReason } : {}), ...(request.notes?.trim() ? { notes: request.notes.trim() } : {}) };
+    if (request.supplierInvoiceDate && request.supplierInvoiceDate > request.businessDate) throw new BadRequestException('Supplier invoice date cannot be after the payment date.');
+    const allocations = request.allocations.length ? request.allocations : request.vaultId ? [{ vaultId: request.vaultId, grossAmount: request.grossAmount }] : [];
+    if (!allocations.length) throw new BadRequestException('Choose at least one payment destination.');
+    return { ...request, allocations, ...(invoice ? { supplierInvoiceNumber: invoice } : {}), ...(missingReason ? { supplierInvoiceMissingReason: missingReason } : {}), ...(request.notes?.trim() ? { notes: request.notes.trim() } : {}) };
   }
   private normaliseRecurringBatch(request: RecurringExpensePaymentBatchRequest): RecurringExpensePaymentBatchRequest {
     if (!request.items.length || request.items.length > 25) throw new BadRequestException('A recurring-payment batch must contain from 1 to 25 rows.');
