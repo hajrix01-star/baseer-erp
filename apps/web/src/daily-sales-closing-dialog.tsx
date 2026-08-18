@@ -296,8 +296,7 @@ export function DailySalesClosingDialog({
                 <BaseerDatePicker language={language} label={copy.date} max={maximumEntryDate} value={businessDate} onChange={setDate} disabled={saving} />
               </div>
               {!isDayOff && (
-                <fieldset className="daily-sales-dialog__scope-picker">
-                  <legend>{copy.scope}</legend>
+                <fieldset className="daily-sales-dialog__scope-picker" aria-label={copy.scope}>
                   {scopeOrder.map((scope) => (
                     <button
                       key={scope}
