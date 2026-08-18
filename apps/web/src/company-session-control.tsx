@@ -79,7 +79,7 @@ export function CompanySessionControl({ language }: { language: Language }) {
                 window.location.reload();
               }}
             >
-              {displayName(language, company)}
+              {company.id === session.companyId ? `✓ ${displayName(language, company)}` : displayName(language, company)}
             </button>
           ))}
         </div>

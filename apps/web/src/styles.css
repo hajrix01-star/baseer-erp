@@ -327,7 +327,6 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
   min-height: calc(100vh - var(--shell-header-height));
 }
 @media (min-width: 801px) {
-  .topbar > .brand { display: none; }
   .topbar { padding-inline-end: clamp(1.75rem, 2.5vw, 3rem); }
   .workspace { display: block; }
   .module-sidebar {
@@ -1179,10 +1178,10 @@ html[dir="ltr"] .mobile-drawer__panel {
   white-space: nowrap;
 }
 
-.company-session-control__menu button:hover,
-.company-session-control__menu button.is-active {
+.company-session-control__menu button:hover {
   background: color-mix(in srgb, var(--brand, #0d6b42) 12%, transparent);
 }
+.company-session-control__menu button.is-active { color: var(--brand); }
 .daily-sales-danger {
   min-height: 42px;
   padding: 9px 14px;
