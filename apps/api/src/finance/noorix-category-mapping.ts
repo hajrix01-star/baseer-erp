@@ -15,9 +15,9 @@ const DIRECT_CODES = new Set([
   'P2-1', 'P2-2', 'P2-3',
   'P3-1', 'P3-2', 'P3-3',
   'P4-1', 'P4-2', 'P4-3', 'P4-4',
-  'E2-1', 'E2-2', 'E2-3', 'E2-4', 'E2-5', 'E2-6', 'E2-7', 'E2-10', 'E2-11',
+  'E2-1', 'E2-2', 'E2-3', 'E2-4', 'E2-5', 'E2-6', 'E2-7',
   'E3-1', 'E3-2', 'E3-3', 'E3-4', 'E3-5',
-  'E4-1', 'E4-2',
+  'E4-1',
   'E5-1', 'E5-2', 'E5-3',
   'E6-1', 'E6-2',
   'E7-1', 'E7-2', 'E7-3', 'E7-4', 'E7-5',
@@ -25,11 +25,13 @@ const DIRECT_CODES = new Set([
 ]);
 
 const SEMANTIC_MAPPINGS: Readonly<Record<string, Omit<NoorixCategoryResolution, 'sourceCode'>>> = {
-  'E9-3': { decision: 'SEMANTIC', targetCode: 'E4-2', reasonAr: 'التأمينات الاجتماعية تُطابق بند التأمينات في بصير.' },
-  // There is no safe default for travel or medical insurance. They must be
-  // selected by the owner or mapped to an approved company-specific category.
+  'E2-10': { decision: 'SEMANTIC', targetCode: 'E2-8', reasonAr: 'رسوم منصات نوركس تُطابق بند رسوم المنصات الحكومية في بصير.' },
+  'E2-11': { decision: 'SEMANTIC', targetCode: 'E2-9', reasonAr: 'تصاريح الموظفين في نوركس تُطابق بند الشهادات والتصاريح في بصير.' },
+  'E9-3': { decision: 'SEMANTIC', targetCode: 'E2-10', reasonAr: 'التأمينات الاجتماعية تُطابق بند التأمينات في بصير.' },
+  // Travel is deliberately not seeded in Baseer, so it requires an owner
+  // decision. Medical insurance now has an explicit operating category.
   'E9-1': { decision: 'REVIEW_REQUIRED', reasonAr: 'تذاكر السفر تحتاج تعييناً صريحاً قبل الترحيل.' },
-  'E9-2': { decision: 'REVIEW_REQUIRED', reasonAr: 'التأمين الطبي يحتاج تعييناً صريحاً قبل الترحيل.' },
+  'E9-2': { decision: 'SEMANTIC', targetCode: 'E4-2', reasonAr: 'التأمين الطبي للموظفين يُطابق بند التأمين الطبي في بصير.' },
 };
 
 export function resolveNoorixCategoryCode(sourceCode: string): NoorixCategoryResolution {
