@@ -183,3 +183,13 @@ Every future committee report uses this compact structure:
 - A local migration rehearsal first attempted to denormalize protected journal history and was rejected by the database immutability guard. The rejected shape was discarded; the accepted migration creates and backfills a separate projection without changing journal rows. This is evidence that the history-protection control operated as intended.
 - Local evidence: Prisma generation, contracts check, API check/build, `npm run verify:finance-gate-b-db`, and `npm run verify:finance-period-race` PASS after the corrected projection migration. Earlier 2026-08-18 read-scale work also passed web check/build and `npm run verify:daily-sales-http`.
 - **Open condition:** no synthetic 100k/1m volume run, deployed-database `EXPLAIN ANALYZE`, or p95 evidence was executed; the owner deferred that benchmark. The Invoice Register still needs a monthly fact/rollup (or equivalent) before it can claim efficient multi-year official-report summaries. This result is therefore conditional local readiness, not an enterprise-volume or production claim.
+
+## 2026-08-18 — Central desktop-density and mobile-touch refinement
+
+**Status:** Implemented centrally; live owner visual acceptance remains required.
+
+- The shared UI tokens now use a compact professional desktop baseline: 14px body controls, 36px standard controls, restrained title scale, smaller card/page spacing, and table rows with 9px × 12px desktop padding.
+- On touch/mobile widths the same tokens restore 44px controls and larger card padding, preserving target size instead of applying desktop density blindly.
+- Shared buttons, fields, table headings, vault metrics, and action menus use calmer text weights. The change removes broad visual heaviness without reducing emphasis for important financial values.
+- Local evidence: `npm run check --workspace @baseer-erp/web`, `npm run build --workspace @baseer-erp/web`, `npm run verify:web-budget`, and `git diff --check` PASS. Generated budget: startup JS 222,148 / 250,000 B; largest route 74,253 / 85,000 B; startup CSS 56,808 / 58,000 B.
+- **Open condition:** inspect authenticated desktop and mobile routes with the owner before calling every legacy local style migrated; later visual corrections must continue to use the shared density tokens rather than reintroducing per-workspace sizes.
