@@ -1,14 +1,16 @@
+import { BaseerOutputActions } from "./baseer-output-actions";
+import { administrationText } from "./administration-copy";
 import type { AdministrationOverview } from "./administration-types";
+import type { ActiveSession } from "./daily-sales-client";
 
-export function AdministrationOverviewPanel({ overview }: { overview: AdministrationOverview }) {
+export function AdministrationOverviewPanel({ overview, session, language }: { overview: AdministrationOverview; session: ActiveSession; language: "ar" | "en" }) {
+  const text = administrationText(language);
   return <div className="administration-grid">
-    <article><span>الشركات النشطة</span><strong>{overview.companies.filter((company) => company.status === "ACTIVE").length}</strong></article>
-    <article><span>المستخدمون النشطون</span><strong>{overview.users.filter((user) => user.status === "ACTIVE").length}</strong></article>
-    <article><span>الأدوار</span><strong>{overview.roles.length}</strong></article>
-    <article><span>صلاحيات معتمدة</span><strong>{overview.permissions.length}</strong></article>
-    <section className="administration-wide">
-      <h3>قواعد الإدارة</h3>
-      <p>المستخدم يرتبط بالشركة عبر دور واضح. الصلاحيات من كتالوج النظام، وتعطيل المستخدم أو سحب عضويته يلغي جلساته فورًا.</p>
-    </section>
+    <article><span>{text.activeCompanies}</span><strong>{overview.companies.filter((company) => company.status === "ACTIVE").length}</strong></article>
+    <article><span>{text.activeUsers}</span><strong>{overview.users.filter((user) => user.status === "ACTIVE").length}</strong></article>
+    <article><span>{text.roles}</span><strong>{overview.roles.length}</strong></article>
+    <article><span>{text.approvedPermissions}</span><strong>{overview.permissions.length}</strong></article>
+    <section className="administration-wide"><h3>{text.administrationRules}</h3><p>{text.rulesDescription}</p></section>
+    <section className="administration-wide"><h3>{text.printExport}</h3><p>{text.printExportDescription}</p><BaseerOutputActions session={session} language={language} reportCode="platform.company-context" /></section>
   </div>;
 }
