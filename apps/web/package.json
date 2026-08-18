@@ -6,16 +6,19 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5190",
     "build": "tsc -b && vite build",
-    "check": "tsc -b --pretty false"
+    "check": "tsc -b --pretty false",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.2",
+    "terser": "^5.39.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.3"
   }

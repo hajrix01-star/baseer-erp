@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { uiCopy } from "./baseer-ui-copy";
+import { displayName } from "./baseer-localization";
 
 import {
   activeSession,
@@ -10,6 +12,7 @@ import {
 type Language = "ar" | "en";
 
 export function CompanySessionControl({ language }: { language: Language }) {
+  const copy = uiCopy(language);
   const [companies, setCompanies] = useState<AvailableCompany[]>([]);
   const [open, setOpen] = useState(false);
   const session = activeSession();
@@ -30,13 +33,7 @@ export function CompanySessionControl({ language }: { language: Language }) {
     };
   }, [session?.accessToken, session?.companyId]);
 
-  const label = activeCompany
-    ? language === "ar"
-      ? activeCompany.nameAr
-      : activeCompany.nameEn
-    : language === "ar"
-      ? "تسجيل الدخول واختيار الشركة"
-      : "Sign in and choose company";
+  const label = activeCompany ? displayName(language, activeCompany) : copy.signInAndChooseCompany;
 
   if (!session) {
     return (
@@ -63,7 +60,7 @@ export function CompanySessionControl({ language }: { language: Language }) {
       >
         <span className="status-dot" />
         <span>{label}</span>
-        <span aria-hidden="true">⌄</span>
+        <span aria-hidden="true">▾</span>
       </button>
       {open && (
         <div className="company-session-control__menu" role="menu">
@@ -82,7 +79,7 @@ export function CompanySessionControl({ language }: { language: Language }) {
                 window.location.reload();
               }}
             >
-              {language === "ar" ? company.nameAr : company.nameEn}
+              {displayName(language, company)}
             </button>
           ))}
         </div>
