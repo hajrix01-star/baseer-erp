@@ -9,6 +9,7 @@ export function BaseerSearchSelect({ id, label, value, options, placeholder, dis
   const rootRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const suppressNextFocusOpenRef = useRef(false);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
@@ -49,9 +50,10 @@ export function BaseerSearchSelect({ id, label, value, options, placeholder, dis
     onChange(option.id);
     setOpen(false);
     setQuery("");
+    suppressNextFocusOpenRef.current = true;
     inputRef.current?.focus();
   };
 
   const menu = open ? <div ref={menuRef} id={`${inputId}-options`} className="company-session-control__menu" style={menuStyle} role="listbox" aria-label={label}>{matches.length ? matches.map((option) => <button key={option.id} type="button" role="option" aria-selected={option.id === value} className={option.id === value ? "is-active" : undefined} onClick={() => choose(option)}>{option.label}</button>) : <p className="empty-results">{placeholder}</p>}</div> : null;
-  return <div ref={rootRef} className="company-session-control"><input ref={inputRef} id={inputId} className={className} style={{ paddingInlineEnd: "1.6rem" }} role="combobox" aria-autocomplete="list" aria-expanded={open} aria-controls={`${inputId}-options`} aria-label={label} autoComplete="off" disabled={disabled} required={required} value={open ? query : selected?.label ?? ""} placeholder={placeholder} onFocus={() => { setQuery(""); setOpen(true); }} onChange={(event) => { setQuery(event.target.value); setOpen(true); }} onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); setQuery(""); } else if (event.key === "Enter" && matches.length === 1) { event.preventDefault(); choose(matches[0]!); } else if (event.key === "ArrowDown") { setOpen(true); } else if (event.key === "Backspace" && !query && value && !required) { onChange(""); } }} /><span aria-hidden="true" style={{ pointerEvents: "none", position: "absolute", insetInlineEnd: ".45rem", insetBlockStart: "50%", transform: "translateY(-50%)", color: "var(--ink)", fontSize: ".85rem" }}>⌄</span>{typeof document === "undefined" ? null : createPortal(menu, document.body)}</div>;
+  return <div ref={rootRef} className="company-session-control"><input ref={inputRef} id={inputId} className={className} style={{ paddingInlineEnd: "1.6rem" }} role="combobox" aria-autocomplete="list" aria-expanded={open} aria-controls={`${inputId}-options`} aria-label={label} autoComplete="off" disabled={disabled} required={required} value={open ? query : selected?.label ?? ""} placeholder={placeholder} onFocus={() => { if (suppressNextFocusOpenRef.current) { suppressNextFocusOpenRef.current = false; return; } setQuery(""); setOpen(true); }} onChange={(event) => { setQuery(event.target.value); setOpen(true); }} onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); setQuery(""); } else if (event.key === "Enter" && matches.length === 1) { event.preventDefault(); choose(matches[0]!); } else if (event.key === "ArrowDown") { setOpen(true); } else if (event.key === "Backspace" && !query && value && !required) { onChange(""); } }} /><span aria-hidden="true" style={{ pointerEvents: "none", position: "absolute", insetInlineEnd: ".45rem", insetBlockStart: "50%", transform: "translateY(-50%)", color: "var(--ink)", fontSize: ".85rem" }}>⌄</span>{typeof document === "undefined" ? null : createPortal(menu, document.body)}</div>;
 }
