@@ -56,9 +56,11 @@
 ## بوابة التسليم
 
 قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق. أضف اختبار Playwright لمسار لوحة المفاتيح/الـEscape والاتجاهات عند تغير التنقل أو الحوار، ثم اختبارات authenticated/visual للمسارات ذات البيانات.
-## Release-budget rule (2026-08-16)
+## Release-budget rule (2026-08-18)
 
-The production web budget is **250 KB startup JavaScript**, **85 KB largest additional route journey**, **225 KB total cacheable lazy JavaScript**, and **62 KB CSS** (raw generated assets). A Vite manifest is required so the gate measures a real user journey: startup is measured alone, a workspace is measured with its additional imports only, and aggregate lazy code remains separately bounded. The CSS ceiling covers the shared bilingual RTL/LTR application stylesheet. Any future increase requires removal of duplicate rules or a new explicit UI-system decision; the compressed CSS target remains below 11 KB.
+The production web budget measures a real user journey from the Vite manifest: **250 KB startup JavaScript**, **85 KB largest additional workspace JavaScript**, **58 KB startup CSS**, and **16 KB largest additional workspace CSS** (raw generated assets). Cache totals are reported for observability only; they are not release gates because a user opens one workspace journey at a time, not every lazy module together.
+
+Shared shell rules remain in `styles.css`. Feature styles that are not needed at startup live beside their owning shared component or workspace and load with that feature. Any threshold increase still requires removing duplicate rules or a new explicit UI-system decision; the preferred response is route splitting or consolidation, not raising a global limit.
 
 ## Central authentication shell — 2026-08-18
 

@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
 import { BaseerButton } from "./baseer-button";
-import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerSearchSelect } from "./baseer-search-select";
 import { DataTable } from "./data-table";
 import { displayName } from "./baseer-localization";
@@ -23,7 +22,7 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({ langu
     { id: "supplier", header: text.supplier, width: "11rem", cell: (row) => { const selected = suppliers.find((supplier) => supplier.id === row.supplierId); const action = selected ? renderSupplierAction?.(selected) : null; return <div style={{ display: "grid", gridTemplateColumns: action ? "minmax(0, 1fr) 1.5rem" : "minmax(0, 1fr)", alignItems: "center", gap: ".2rem" }}><BaseerSearchSelect id={`supplier-${row.id}`} label={text.supplier} value={row.supplierId} placeholder={row.settlementKind === "PAYABLE" ? text.selectSupplier : text.optional} options={suppliers.map((supplier) => ({ id: supplier.id, label: displayName(language, supplier), isFavorite: supplier.isFavorite }))} onChange={(supplierId) => onSupplierChange(row.id, supplierId)} />{action}</div>; } },
     { id: "category", header: text.financialCategory, width: "9rem", cell: (row) => <BaseerSearchSelect id={`category-${row.id}`} label={text.financialCategory} value={row.categoryId} placeholder={text.selectCategory} options={categories.filter((category) => category.kind === row.kind).map((category) => ({ id: category.id, label: displayName(language, category) }))} onChange={(categoryId) => onChange(row.id, "categoryId" as keyof Row, categoryId as Row[keyof Row])} /> },
     { id: "invoice", header: text.invoiceNumber, width: "7.5rem", cell: (row) => <input aria-label={text.invoiceNumber} value={row.invoiceNumber} placeholder={text.supplierInvoiceNumber} onChange={(event) => onChange(row.id, "invoiceNumber" as keyof Row, event.target.value as Row[keyof Row])} /> },
-    { id: "invoiceDate", header: text.supplierInvoiceDate, width: "7.75rem", cell: (row) => <BaseerDatePicker language={language} label={text.supplierInvoiceDate} max={maxInvoiceDate} value={row.supplierInvoiceDate} onChange={(value) => onChange(row.id, "supplierInvoiceDate" as keyof Row, value as Row[keyof Row])} /> },
+    { id: "invoiceDate", header: text.supplierInvoiceDate, width: "7.75rem", cell: (row) => <input aria-label={text.supplierInvoiceDate} max={maxInvoiceDate} type="date" value={row.supplierInvoiceDate} onChange={(event) => onChange(row.id, "supplierInvoiceDate" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "notes", header: text.notes, width: "8rem", cell: (row) => <input aria-label={text.notes} value={row.notes} placeholder={text.optional} onChange={(event) => onChange(row.id, "notes" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "amount", header: text.totalAmount, width: "6.25rem", numeric: true, cell: (row) => <input aria-label={text.totalAmount} inputMode="decimal" placeholder={text.enterAmount} value={row.grossAmount} onChange={(event) => onChange(row.id, "grossAmount" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "taxAmount", header: text.vat, width: "4rem", numeric: true, cell: (row) => {
