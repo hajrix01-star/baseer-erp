@@ -16,6 +16,7 @@ export const appCopy = defineLocalizedCopy({
     loadingVaults: "جارٍ تحميل الخزائن…",
     loadingExpensesObligations: "جارٍ تحميل المصروفات والالتزامات…",
     loadingAdministration: "جارٍ تحميل الإدارة…",
+    loading: "جارٍ التحميل…",
     welcome: (section: string) => `مرحبًا بك في ${section}`,
   },
   en: {
@@ -33,6 +34,7 @@ export const appCopy = defineLocalizedCopy({
     loadingVaults: "Loading vaults…",
     loadingExpensesObligations: "Loading expenses & obligations…",
     loadingAdministration: "Loading administration…",
+    loading: "Loading…",
     welcome: (section: string) => `Welcome to ${section}`,
   },
 });

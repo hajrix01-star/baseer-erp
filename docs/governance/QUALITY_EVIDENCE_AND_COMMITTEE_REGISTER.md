@@ -22,6 +22,7 @@
 | 2026-08-17 | UI stabilization — confirmation, discoverability, bilingual shell and browser accessibility | **Pass for local foundation** | npm run check --workspace @baseer-erp/web; npm run test:e2e --workspace @baseer-erp/web (4 passed, 2 intentional cross-device skips); web build; dialog and budget gates | Route access remains server-authorized; complete feature-level bilingual content and visual regression before release acceptance. |
 | 2026-08-17 | Full bilingual interface and master-data display | **Open acceptance gate** | BAQC-10 added to the acceptance charter and UI standard | Migrate all user-visible copy and company/item/supplier/category/classification display names to centralized Arabic/English contracts; prove AR/EN + RTL/LTR in browser and output. |
 | 2026-08-18 | Company VAT default-rate control | **Implemented locally; acceptance pending** | Contract + protected `POST /finance/configuration/vat-rate`; configuration receipt returns the authoritative rate | Verify owner flow and record DB/HTTP proof. The control changes only future-document defaults; tax-code variants (zero/exempt/out-of-scope) remain a separately scoped extension. |
+| 2026-08-18 | Web delivery split and CSS consolidation | **Pass for local foundation** | Web build; budget gate: startup 219,606/250,000 B, largest route 80,926/85,000 B, lazy cache 210,795/225,000 B, CSS 60,881/62,000 B; web typecheck | Feature-level visual acceptance and financial DB/HTTP evidence remain separate. |
 
 ## Current verification ledger
 

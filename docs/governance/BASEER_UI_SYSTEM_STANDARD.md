@@ -58,7 +58,7 @@
 قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق. أضف اختبار Playwright لمسار لوحة المفاتيح/الـEscape والاتجاهات عند تغير التنقل أو الحوار، ثم اختبارات authenticated/visual للمسارات ذات البيانات.
 ## Release-budget rule (2026-08-16)
 
-The production web budget is **300 KB initial JavaScript**, **127 KB deferred route JavaScript**, and **62 KB CSS** (raw generated assets). Lazy route chunks are measured separately so a new screen cannot increase startup cost; both budgets remain enforced. The 127 KB deferred ceiling is an explicit 2026-08-18 UI-system decision for the verified lazy finance and administration workspaces; it does not weaken the startup limit. The CSS ceiling covers the shared bilingual RTL/LTR application stylesheet. Any future increase requires removal of duplicate rules or a new explicit UI-system decision; the compressed CSS target remains below 11 KB.
+The production web budget is **250 KB startup JavaScript**, **85 KB largest additional route journey**, **225 KB total cacheable lazy JavaScript**, and **62 KB CSS** (raw generated assets). A Vite manifest is required so the gate measures a real user journey: startup is measured alone, a workspace is measured with its additional imports only, and aggregate lazy code remains separately bounded. The CSS ceiling covers the shared bilingual RTL/LTR application stylesheet. Any future increase requires removal of duplicate rules or a new explicit UI-system decision; the compressed CSS target remains below 11 KB.
 
 ## Central authentication shell — 2026-08-18
 
