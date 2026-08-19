@@ -28,6 +28,9 @@
 .baseer-form-grid input[type="date"] { direction: ltr; text-align: start; }
 .baseer-form-grid input[type="checkbox"] { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; padding: 0; accent-color: var(--brand); }
 .baseer-form-grid textarea { min-block-size: 4.5rem; resize: vertical; }
+.baseer-money-input { direction: ltr; text-align: end; font-variant-numeric: tabular-nums; }
+.baseer-textarea { min-block-size: 4.5rem; resize: vertical; }
+.baseer-textarea--compact { min-block-size: var(--control-height); }
 .baseer-form-advanced { grid-column: 1 / -1; padding-top: .2rem; }
 .baseer-form-advanced summary { display: inline-flex; align-items: center; width: fit-content; color: color-mix(in srgb, var(--ink) 68%, var(--muted)); cursor: pointer; font-size: var(--font-caption); font-weight: 750; }
 .baseer-form-advanced summary::-webkit-details-marker { display: none; }
