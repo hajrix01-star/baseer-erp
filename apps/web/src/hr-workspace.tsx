@@ -36,12 +36,14 @@ const HrPayrollWorkspace = lazy(() => import("./hr-payroll-workspace").then((mod
 const HrLeaveWorkspace = lazy(() => import("./hr-leave-workspace").then((module) => ({ default: module.HrLeaveWorkspace })));
 const HrServicesWorkspace = lazy(() => import("./hr-services-workspace").then((module) => ({ default: module.HrServicesWorkspace })));
 const HrFinalSettlementWorkspace = lazy(() => import("./hr-final-settlement-workspace").then((module) => ({ default: module.HrFinalSettlementWorkspace })));
+const HrSalaryToolsWorkspace = lazy(() => import("./hr-salary-tools-workspace").then((module) => ({ default: module.HrSalaryToolsWorkspace })));
 const HrEmployeeProfileDialog = lazy(() => import("./hr-employee-profile-dialog").then((module) => ({ default: module.HrEmployeeProfileDialog })));
 const HrCompensationAgreementDialog = lazy(() => import("./hr-compensation-agreement-dialog").then((module) => ({ default: module.HrCompensationAgreementDialog })));
 const DailySalesSignIn = lazy(() => import("./daily-sales-sign-in").then((module) => ({ default: module.DailySalesSignIn })));
 
 export function HrWorkspace({ language, section }: { language: Language; section: number }) {
   if (section === 6) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل نهاية الخدمة…" : "Loading end of service…"}</BaseerCard>}><HrFinalSettlementWorkspace language={language} /></Suspense>;
+  if (section === 7) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل أدوات الراتب…" : "Loading salary tools…"}</BaseerCard>}><HrSalaryToolsWorkspace language={language} /></Suspense>;
   return <HrWorkspaceCore language={language} section={section} />;
 }
 

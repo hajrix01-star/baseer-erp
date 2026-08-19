@@ -38,6 +38,7 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     4: hrAdvanceRule,
     5: ["hr.employees.read", "hr.employees.write"],
     6: hrFinalSettlementRule,
+    7: ["hr.employees.read", "hr.employees.write", ...hrPayrollRule],
   },
   administration: {
     0: ["administration.companies.read", "administration.users.read", "administration.roles.read"],
