@@ -121,6 +121,54 @@
   gap: .3rem;
 }
 
+.hr-document-filters {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: .85rem;
+  padding: .8rem;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  background: color-mix(in srgb, var(--canvas) 58%, var(--surface));
+}
+
+.hr-document-filters__fields {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.hr-document-filters label {
+  display: grid;
+  min-inline-size: 0;
+  gap: .32rem;
+  color: var(--ink);
+  font-size: var(--font-label);
+  font-weight: 750;
+}
+
+.hr-document-filters select {
+  inline-size: 100%;
+  min-block-size: var(--control-height);
+  padding: .4rem .6rem;
+  border: 1px solid var(--field-border);
+  border-radius: var(--control-radius);
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+}
+
+.hr-document-filters select:hover {
+  border-color: color-mix(in srgb, var(--brand) 48%, var(--field-border));
+}
+
+.hr-document-filters select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand) 34%, transparent);
+  outline-offset: 1px;
+  border-color: var(--brand);
+}
+
 @media (max-width: 640px) {
   .baseer-dialog:has(.hr-employee-profile) {
     block-size: calc(100vh - 1rem);
@@ -129,5 +177,18 @@
 
   .hr-payroll-settlements table {
     min-inline-size: 48rem;
+  }
+
+  .hr-document-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hr-document-filters__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .hr-document-filters > .baseer-button {
+    inline-size: 100%;
   }
 }
