@@ -83,10 +83,15 @@
 .hr-onboarding .hr-job-title-select__custom input { min-block-size: 2.4rem; padding: .45rem .65rem; }
 .hr-onboarding .hr-job-title-select__custom-link { position: absolute; z-index: 1; inset-inline-start: .5rem; inset-block-start: .68rem; padding-inline-start: .35rem; border-inline-start: 1px solid var(--line); color: var(--brand-deep); background: var(--surface); font-size: .66rem; line-height: 1; }
 .hr-onboarding__total { min-block-size: 5.1rem; border-radius: .8rem; }
-.hr-onboarding__calculation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
-.hr-onboarding__calculation .hr-onboarding__total { min-block-size: 4.75rem; padding: .75rem; }
-.hr-onboarding__calculation .hr-onboarding__total--featured { grid-column: 1 / -1; min-block-size: 5.15rem; }
-.hr-onboarding__calculation .hr-onboarding__total:last-child strong { color: var(--brand-deep); font-size: var(--font-title-md); font-variant-numeric: tabular-nums; }
+.hr-onboarding__calculation { display: grid; overflow: hidden; border-top: 1px solid color-mix(in srgb, var(--line) 78%, transparent); }
+.hr-onboarding__calculation .hr-onboarding__total { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-block-size: 2.85rem; padding: .55rem 0; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent); border-radius: 0; background: transparent; }
+.hr-onboarding__calculation .hr-onboarding__total span { color: var(--muted); font-size: var(--font-caption); }
+.hr-onboarding__calculation .hr-onboarding__total .baseer-money,
+.hr-onboarding__calculation .hr-onboarding__total strong { color: var(--ink); font-size: var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hr-onboarding__calculation .hr-onboarding__total--featured { min-block-size: 3.45rem; padding-block: .7rem; }
+.hr-onboarding__calculation .hr-onboarding__total--featured span { color: var(--brand-deep); font-weight: 800; }
+.hr-onboarding__calculation .hr-onboarding__total--featured .baseer-money { color: var(--brand-deep); font-size: var(--font-title-md); font-weight: 850; }
+.hr-onboarding__calculation .hr-onboarding__total:last-child { border-bottom: 0; }
 .hr-onboarding__notes textarea { min-block-size: 6.5rem; }
 @media (max-width: 760px) {
   .hr-onboarding__workspace { grid-template-columns: 1fr; }
