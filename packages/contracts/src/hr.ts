@@ -691,6 +691,41 @@ export const hrFinalSettlementSchema = hrFinalSettlementPreviewSchema.extend({ i
 export const hrFinalSettlementsReceiptSchema = z.object({ companyId: companyIdSchema, settlements: z.array(hrFinalSettlementSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrFinalSettlementReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().max(80), replayed: z.boolean() }).strict();
 
+const hrOverviewPayrollRunSchema = z.object({
+  id: z.string().uuid(), runNumber: z.string().max(80), payrollMonth: businessDateSchema,
+  status: z.enum(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED"]),
+}).strict();
+const hrOverviewServiceItemSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
+  serviceType: hrEmployeeServiceTypeSchema, expiryDate: businessDateSchema,
+}).strict();
+const hrOverviewLeaveItemSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
+  leaveType: hrEmployeeLeaveTypeSchema, startDate: businessDateSchema, endDate: businessDateSchema,
+}).strict();
+const hrOverviewFinalSettlementItemSchema = z.object({
+  id: z.string().uuid(), settlementNumber: z.string().max(80), terminationDate: businessDateSchema, status: hrFinalSettlementStatusSchema,
+}).strict();
+
+/**
+ * Company-scoped HR landing projection. A null section means the caller does
+ * not hold that section's read capability; counts always come from full-scope
+ * aggregates while action lists remain deliberately bounded.
+ */
+export const hrOverviewReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  businessDate: businessDateSchema,
+  workforce: z.object({ activeEmployees: z.number().int().nonnegative(), employeesOnLeave: z.number().int().nonnegative() }).strict().nullable(),
+  financial: z.object({ openAdvances: z.number().int().nonnegative().nullable(), openAdministrativeDeductions: z.number().int().nonnegative().nullable() }).strict().nullable(),
+  payroll: z.object({
+    draftCount: z.number().int().nonnegative(), awaitingPaymentCount: z.number().int().nonnegative(),
+    recentRuns: z.array(hrOverviewPayrollRunSchema).max(4),
+  }).strict().nullable(),
+  services: z.object({ expiredCount: z.number().int().nonnegative(), expiringCount: z.number().int().nonnegative(), attentionItems: z.array(hrOverviewServiceItemSchema).max(4) }).strict().nullable(),
+  leaves: z.object({ openCount: z.number().int().nonnegative(), actionItems: z.array(hrOverviewLeaveItemSchema).max(4) }).strict().nullable(),
+  finalSettlements: z.object({ openCount: z.number().int().nonnegative(), actionItems: z.array(hrOverviewFinalSettlementItemSchema).max(4) }).strict().nullable(),
+}).strict();
+
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type OnboardHrEmployeeRequest = z.infer<typeof onboardHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
@@ -730,3 +765,4 @@ export type ApproveHrFinalSettlementRequest = z.infer<typeof approveHrFinalSettl
 export type VerifyHrFinalSettlementReasonRequest = z.infer<typeof verifyHrFinalSettlementReasonRequestSchema>;
 export type PayHrFinalSettlementRequest = z.infer<typeof payHrFinalSettlementRequestSchema>;
 export type ReverseHrFinalSettlementRequest = z.infer<typeof reverseHrFinalSettlementRequestSchema>;
+export type HrOverviewReceipt = z.infer<typeof hrOverviewReceiptSchema>;

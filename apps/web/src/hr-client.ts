@@ -64,8 +64,19 @@ export type HrFinalSettlementRecovery = { recoveryType: "ADVANCE" | "ADMINISTRAT
 export type HrFinalSettlementPreview = { employeeId: string; terminationDate: string; terminationReason: HrFinalSettlementReason; reasonEvidenceReference: string; reasonVerificationStatus: HrFinalSettlementReasonVerificationStatus; serviceDays: number; eosWage: string; fullAwardAmount: string; entitlementFactor: string; eosAmount: string; otherCreditsAmount: string; recoveryAmount: string; netPayableAmount: string; calculationPolicyVersion: "SA-EOS-V1" };
 export type HrFinalSettlement = HrFinalSettlementPreview & { id: string; settlementNumber: string; status: HrFinalSettlementStatus; paidAmount: string; createdAt: string; approvedAt: string | null; outputReportCode: "hr.final-settlement" };
 export type HrFinalSettlementsReceipt = { companyId: string; settlements: HrFinalSettlement[]; hasMore: boolean; nextCursor: string | null };
+export type HrOverviewReceipt = {
+  companyId: string;
+  businessDate: string;
+  workforce: { activeEmployees: number; employeesOnLeave: number } | null;
+  financial: { openAdvances: number | null; openAdministrativeDeductions: number | null } | null;
+  payroll: { draftCount: number; awaitingPaymentCount: number; recentRuns: Array<Pick<HrPayrollRun, "id" | "runNumber" | "payrollMonth" | "status">> } | null;
+  services: { expiredCount: number; expiringCount: number; attentionItems: Array<{ id: string; employeeId: string; employeeNameAr: string; employeeNameEn: string | null; serviceType: HrService["serviceType"]; expiryDate: string }> } | null;
+  leaves: { openCount: number; actionItems: Array<{ id: string; employeeId: string; employeeNameAr: string; employeeNameEn: string | null; leaveType: HrEmployeeLeaveType; startDate: string; endDate: string }> } | null;
+  finalSettlements: { openCount: number; actionItems: Array<Pick<HrFinalSettlement, "id" | "settlementNumber" | "terminationDate" | "status">> } | null;
+};
 
 function withQuery(path: string, query: Record<string, string | number | undefined>) { const parameters = new URLSearchParams(); for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value)); return `${path}${parameters.size ? `?${parameters}` : ""}`; }
+export function getHrOverview(session: ActiveSession) { return api<HrOverviewReceipt>(session, "/hr/overview"); }
 export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployeeStatus; search?: string; cursor?: string; pageSize?: number } = {}) { return api<HrEmployeesReceipt>(session, withQuery("/hr/employees", query)); }
 export function onboardHrEmployee(session: ActiveSession, payload: unknown) { return api<{ id: string; compensationId: string; replayed: boolean }>(session, "/hr/employees/onboard", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function updateHrEmployee(session: ActiveSession, payload: unknown) { return api(session, "/hr/employees/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

@@ -19,6 +19,11 @@ export interface CompanyContextAuthorizationInput {
   companyId: string;
   requiredCapabilities: readonly string[];
 }
+export interface CompanyContextCapabilityInspectionInput {
+  accessToken: string;
+  companyId: string;
+  requestedCapabilities: readonly string[];
+}
 export interface CompanyContextReceipt {
   principal: { tenantId: string; userId: string };
   company: { id: string };
@@ -39,11 +44,39 @@ export class CompanyContextService {
   async authorize(
     input: CompanyContextAuthorizationInput,
   ): Promise<CompanyContextReceipt> {
-    const claims = this.verifyAccessToken(input?.accessToken);
-    const companyId = this.companyId(input?.companyId);
-    const requiredCapabilities = this.requiredCapabilities(
+    return this.authorizeCapabilities(
+      input?.accessToken,
+      input?.companyId,
       input?.requiredCapabilities,
+      true,
     );
+  }
+
+  /**
+   * Authenticates one live company context and returns only the requested
+   * capabilities actually granted there. Callers must keep each projection
+   * gated by the returned subset; this method never promotes write to read.
+   */
+  async authorizeAvailable(
+    input: CompanyContextCapabilityInspectionInput,
+  ): Promise<CompanyContextReceipt> {
+    return this.authorizeCapabilities(
+      input?.accessToken,
+      input?.companyId,
+      input?.requestedCapabilities,
+      false,
+    );
+  }
+
+  private async authorizeCapabilities(
+    accessToken: unknown,
+    companyIdValue: unknown,
+    capabilityValues: unknown,
+    requireAll: boolean,
+  ): Promise<CompanyContextReceipt> {
+    const claims = this.verifyAccessToken(accessToken);
+    const companyId = this.companyId(companyIdValue);
+    const requestedCapabilities = this.requiredCapabilities(capabilityValues);
     return this.database.inTenantTransaction(
       claims.tenantId,
       async (transaction) => {
@@ -98,24 +131,24 @@ export class CompanyContextService {
           return {
             principal: { tenantId: claims.tenantId, userId: claims.userId },
             company: { id: companyId },
-            capabilities: requiredCapabilities,
+            capabilities: requestedCapabilities,
           };
         if (!membership) throw this.forbidden();
         const grants = await transaction.rolePermission.findMany({
           where: {
             tenantId: claims.tenantId,
             roleId: membership.roleId,
-            permissionCode: { in: requiredCapabilities },
+            permissionCode: { in: requestedCapabilities },
           },
           select: { permissionCode: true },
         });
         const granted = new Set(grants.map((grant) => grant.permissionCode));
-        if (requiredCapabilities.some((capability) => !granted.has(capability)))
+        if (requireAll && requestedCapabilities.some((capability) => !granted.has(capability)))
           throw this.forbidden();
         return {
           principal: { tenantId: claims.tenantId, userId: claims.userId },
           company: { id: companyId },
-          capabilities: requiredCapabilities,
+          capabilities: requestedCapabilities.filter((capability) => granted.has(capability)),
         };
       },
     );

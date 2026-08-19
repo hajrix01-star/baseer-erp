@@ -86,9 +86,11 @@ import { HrEmployeeLetterController } from './hr/hr-employee-letter.controller.j
 import { HrEmployeeLetterService } from './hr/hr-employee-letter.service.js';
 import { HrFinalSettlementController } from './hr/hr-final-settlement.controller.js';
 import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
+import { HrOverviewController } from './hr/hr-overview.controller.js';
+import { HrOverviewService } from './hr/hr-overview.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -144,6 +146,7 @@ import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
     HrEmployeeDocumentService,
     HrEmployeeLetterService,
     HrFinalSettlementService,
+    HrOverviewService,
   ],
 })
 export class AppModule {}
