@@ -83,6 +83,8 @@ export const ModelName = {
   HrEmployeeAdvance: 'HrEmployeeAdvance',
   HrEmployeeAdvancePayoutAllocation: 'HrEmployeeAdvancePayoutAllocation',
   HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
+  HrEmployeeAdvanceDeferral: 'HrEmployeeAdvanceDeferral',
+  HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -639,6 +641,7 @@ export const HrEmployeeAdvanceScalarFieldEnum = {
   settledAmount: 'settledAmount',
   remainingAmount: 'remainingAmount',
   status: 'status',
+  nextSettlementDate: 'nextSettlementDate',
   notes: 'notes',
   issueJournalEntryId: 'issueJournalEntryId',
   createdByUserId: 'createdByUserId',
@@ -676,6 +679,44 @@ export const HrEmployeeAdvanceSettlementScalarFieldEnum = {
 } as const
 
 export type HrEmployeeAdvanceSettlementScalarFieldEnum = (typeof HrEmployeeAdvanceSettlementScalarFieldEnum)[keyof typeof HrEmployeeAdvanceSettlementScalarFieldEnum]
+
+
+export const HrEmployeeAdvanceDeferralScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  advanceId: 'advanceId',
+  businessDate: 'businessDate',
+  deferredUntil: 'deferredUntil',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeAdvanceDeferralScalarFieldEnum = (typeof HrEmployeeAdvanceDeferralScalarFieldEnum)[keyof typeof HrEmployeeAdvanceDeferralScalarFieldEnum]
+
+
+export const HrEmployeeAdministrativeDeductionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  deductionNumber: 'deductionNumber',
+  businessDate: 'businessDate',
+  originalAmount: 'originalAmount',
+  appliedAmount: 'appliedAmount',
+  remainingAmount: 'remainingAmount',
+  status: 'status',
+  plannedPayrollDate: 'plannedPayrollDate',
+  description: 'description',
+  cancellationReason: 'cancellationReason',
+  cancelledAt: 'cancelledAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeAdministrativeDeductionScalarFieldEnum = (typeof HrEmployeeAdministrativeDeductionScalarFieldEnum)[keyof typeof HrEmployeeAdministrativeDeductionScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {

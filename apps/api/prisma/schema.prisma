@@ -204,6 +204,15 @@ enum HrEmployeeAdvanceSettlementSource {
   MANUAL_RECEIPT
 }
 
+/// A payroll-only deduction that never represents repayment of an advance.
+enum HrEmployeeAdministrativeDeductionStatus {
+  OPEN
+  PARTIALLY_APPLIED
+  APPLIED
+  DEFERRED
+  CANCELLED
+}
+
 enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
@@ -316,6 +325,8 @@ model Company {
   hrEmployeeAdvances           HrEmployeeAdvance[]
   hrEmployeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
   hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
+  hrEmployeeAdvanceDeferrals   HrEmployeeAdvanceDeferral[]
+  hrEmployeeAdministrativeDeductions HrEmployeeAdministrativeDeduction[]
   aiCompanyIdentities          AiCompanyIdentity[]
   aiExecutionReceipts          AiExecutionReceipt[]
   branding                     CompanyBranding?
@@ -918,6 +929,7 @@ model HrEmployee {
   services           HrEmployeeService[]
   financialMovements HrEmployeeFinancialMovement[]
   advances           HrEmployeeAdvance[]
+  administrativeDeductions HrEmployeeAdministrativeDeduction[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
@@ -995,6 +1007,7 @@ model HrEmployeeAdvance {
   settledAmount        Decimal                 @default(0) @db.Decimal(18, 4)
   remainingAmount      Decimal                 @db.Decimal(18, 4)
   status               HrEmployeeAdvanceStatus @default(ISSUED)
+  nextSettlementDate   DateTime?               @db.Date
   notes                String?                 @db.VarChar(2000)
   issueJournalEntryId  String                  @db.Uuid
   createdByUserId      String                  @db.Uuid
@@ -1006,6 +1019,7 @@ model HrEmployeeAdvance {
   issueJournalEntry FinanceJournalEntry                @relation("HrEmployeeAdvanceIssueJournal", fields: [issueJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   allocations       HrEmployeeAdvancePayoutAllocation[]
   settlements       HrEmployeeAdvanceSettlement[]
+  deferrals         HrEmployeeAdvanceDeferral[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, advanceNumber])
@@ -1054,6 +1068,57 @@ model HrEmployeeAdvanceSettlement {
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, advanceId, businessDate, id])
   @@index([tenantId, companyId, journalEntryId])
+}
+
+/// A controlled repayment-date change for an outstanding advance. It is a
+/// collection plan only and never creates a journal entry or an HR deduction.
+model HrEmployeeAdvanceDeferral {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @db.Uuid
+  companyId        String   @db.Uuid
+  advanceId        String   @db.Uuid
+  businessDate     DateTime @db.Date
+  deferredUntil    DateTime @db.Date
+  reason           String   @db.VarChar(1000)
+  createdByUserId  String   @db.Uuid
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+
+  company Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  advance HrEmployeeAdvance @relation(fields: [advanceId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, advanceId, businessDate, id])
+  @@index([tenantId, companyId, deferredUntil])
+}
+
+/// A free-text administrative deduction. It is applied only by a future,
+/// approved payroll run; creating, deferring, or cancelling it never posts.
+model HrEmployeeAdministrativeDeduction {
+  id                  String                                  @id @default(uuid()) @db.Uuid
+  tenantId            String                                  @db.Uuid
+  companyId           String                                  @db.Uuid
+  employeeId          String                                  @db.Uuid
+  deductionNumber     String                                  @db.VarChar(80)
+  businessDate        DateTime                                @db.Date
+  originalAmount      Decimal                                 @db.Decimal(18, 4)
+  appliedAmount       Decimal                                 @default(0) @db.Decimal(18, 4)
+  remainingAmount     Decimal                                 @db.Decimal(18, 4)
+  status              HrEmployeeAdministrativeDeductionStatus @default(OPEN)
+  plannedPayrollDate  DateTime?                               @db.Date
+  description         String                                  @db.VarChar(1000)
+  cancellationReason  String?                                 @db.VarChar(1000)
+  cancelledAt         DateTime?                               @db.Timestamptz(6)
+  createdByUserId     String                                  @db.Uuid
+  createdAt           DateTime                                @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                                @updatedAt @db.Timestamptz(6)
+
+  company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, deductionNumber])
+  @@index([tenantId, companyId, employeeId, status, businessDate, id])
+  @@index([tenantId, companyId, status, plannedPayrollDate])
 }
 
 model FinanceJournalLine {

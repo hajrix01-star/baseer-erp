@@ -306,6 +306,17 @@ export const HrEmployeeAdvanceSettlementSource = {
 export type HrEmployeeAdvanceSettlementSource = (typeof HrEmployeeAdvanceSettlementSource)[keyof typeof HrEmployeeAdvanceSettlementSource]
 
 
+export const HrEmployeeAdministrativeDeductionStatus = {
+  OPEN: 'OPEN',
+  PARTIALLY_APPLIED: 'PARTIALLY_APPLIED',
+  APPLIED: 'APPLIED',
+  DEFERRED: 'DEFERRED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrEmployeeAdministrativeDeductionStatus = (typeof HrEmployeeAdministrativeDeductionStatus)[keyof typeof HrEmployeeAdministrativeDeductionStatus]
+
+
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',

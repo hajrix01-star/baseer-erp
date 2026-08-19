@@ -820,6 +820,23 @@ export type EnumHrEmployeeAdvanceSettlementSourceWithAggregatesFilter<$PrismaMod
   _max?: Prisma.NestedEnumHrEmployeeAdvanceSettlementSourceFilter<$PrismaModel>
 }
 
+export type EnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeAdministrativeDeductionStatus | Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel> | $Enums.HrEmployeeAdministrativeDeductionStatus
+}
+
+export type EnumHrEmployeeAdministrativeDeductionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeAdministrativeDeductionStatus | Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeAdministrativeDeductionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel>
+}
+
 export type EnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceOperationalDayStatus | Prisma.EnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceOperationalDayStatus[] | Prisma.ListEnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
@@ -1854,6 +1871,23 @@ export type NestedEnumHrEmployeeAdvanceSettlementSourceWithAggregatesFilter<$Pri
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrEmployeeAdvanceSettlementSourceFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrEmployeeAdvanceSettlementSourceFilter<$PrismaModel>
+}
+
+export type NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeAdministrativeDeductionStatus | Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel> | $Enums.HrEmployeeAdministrativeDeductionStatus
+}
+
+export type NestedEnumHrEmployeeAdministrativeDeductionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeAdministrativeDeductionStatus | Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeAdministrativeDeductionStatus[] | Prisma.ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeAdministrativeDeductionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeAdministrativeDeductionStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {

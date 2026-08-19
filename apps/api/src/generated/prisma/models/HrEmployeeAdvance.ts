@@ -51,6 +51,7 @@ export type HrEmployeeAdvanceMinAggregateOutputType = {
   settledAmount: runtime.Decimal | null
   remainingAmount: runtime.Decimal | null
   status: $Enums.HrEmployeeAdvanceStatus | null
+  nextSettlementDate: Date | null
   notes: string | null
   issueJournalEntryId: string | null
   createdByUserId: string | null
@@ -69,6 +70,7 @@ export type HrEmployeeAdvanceMaxAggregateOutputType = {
   settledAmount: runtime.Decimal | null
   remainingAmount: runtime.Decimal | null
   status: $Enums.HrEmployeeAdvanceStatus | null
+  nextSettlementDate: Date | null
   notes: string | null
   issueJournalEntryId: string | null
   createdByUserId: string | null
@@ -87,6 +89,7 @@ export type HrEmployeeAdvanceCountAggregateOutputType = {
   settledAmount: number
   remainingAmount: number
   status: number
+  nextSettlementDate: number
   notes: number
   issueJournalEntryId: number
   createdByUserId: number
@@ -119,6 +122,7 @@ export type HrEmployeeAdvanceMinAggregateInputType = {
   settledAmount?: true
   remainingAmount?: true
   status?: true
+  nextSettlementDate?: true
   notes?: true
   issueJournalEntryId?: true
   createdByUserId?: true
@@ -137,6 +141,7 @@ export type HrEmployeeAdvanceMaxAggregateInputType = {
   settledAmount?: true
   remainingAmount?: true
   status?: true
+  nextSettlementDate?: true
   notes?: true
   issueJournalEntryId?: true
   createdByUserId?: true
@@ -155,6 +160,7 @@ export type HrEmployeeAdvanceCountAggregateInputType = {
   settledAmount?: true
   remainingAmount?: true
   status?: true
+  nextSettlementDate?: true
   notes?: true
   issueJournalEntryId?: true
   createdByUserId?: true
@@ -260,6 +266,7 @@ export type HrEmployeeAdvanceGroupByOutputType = {
   settledAmount: runtime.Decimal
   remainingAmount: runtime.Decimal
   status: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate: Date | null
   notes: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -301,6 +308,7 @@ export type HrEmployeeAdvanceWhereInput = {
   settledAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFilter<"HrEmployeeAdvance"> | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.DateTimeNullableFilter<"HrEmployeeAdvance"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeAdvance"> | string | null
   issueJournalEntryId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
@@ -311,6 +319,7 @@ export type HrEmployeeAdvanceWhereInput = {
   issueJournalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   settlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralListRelationFilter
 }
 
 export type HrEmployeeAdvanceOrderByWithRelationInput = {
@@ -324,6 +333,7 @@ export type HrEmployeeAdvanceOrderByWithRelationInput = {
   settledAmount?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  nextSettlementDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   issueJournalEntryId?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -334,6 +344,7 @@ export type HrEmployeeAdvanceOrderByWithRelationInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryOrderByWithRelationInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationOrderByRelationAggregateInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementOrderByRelationAggregateInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralOrderByRelationAggregateInput
 }
 
 export type HrEmployeeAdvanceWhereUniqueInput = Prisma.AtLeast<{
@@ -353,6 +364,7 @@ export type HrEmployeeAdvanceWhereUniqueInput = Prisma.AtLeast<{
   settledAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFilter<"HrEmployeeAdvance"> | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.DateTimeNullableFilter<"HrEmployeeAdvance"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeAdvance"> | string | null
   issueJournalEntryId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
@@ -363,6 +375,7 @@ export type HrEmployeeAdvanceWhereUniqueInput = Prisma.AtLeast<{
   issueJournalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   settlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_advanceNumber" | "issueJournalEntryId_tenantId_companyId">
 
 export type HrEmployeeAdvanceOrderByWithAggregationInput = {
@@ -376,6 +389,7 @@ export type HrEmployeeAdvanceOrderByWithAggregationInput = {
   settledAmount?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  nextSettlementDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   issueJournalEntryId?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -402,6 +416,7 @@ export type HrEmployeeAdvanceScalarWhereWithAggregatesInput = {
   settledAmount?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusWithAggregatesFilter<"HrEmployeeAdvance"> | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.DateTimeNullableWithAggregatesFilter<"HrEmployeeAdvance"> | Date | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"HrEmployeeAdvance"> | string | null
   issueJournalEntryId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeAdvance"> | string
   createdByUserId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeAdvance"> | string
@@ -417,6 +432,7 @@ export type HrEmployeeAdvanceCreateInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -426,6 +442,7 @@ export type HrEmployeeAdvanceCreateInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateInput = {
@@ -439,6 +456,7 @@ export type HrEmployeeAdvanceUncheckedCreateInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -446,6 +464,7 @@ export type HrEmployeeAdvanceUncheckedCreateInput = {
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUpdateInput = {
@@ -456,6 +475,7 @@ export type HrEmployeeAdvanceUpdateInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -465,6 +485,7 @@ export type HrEmployeeAdvanceUpdateInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateInput = {
@@ -478,6 +499,7 @@ export type HrEmployeeAdvanceUncheckedUpdateInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -485,6 +507,7 @@ export type HrEmployeeAdvanceUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateManyInput = {
@@ -498,6 +521,7 @@ export type HrEmployeeAdvanceCreateManyInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -513,6 +537,7 @@ export type HrEmployeeAdvanceUpdateManyMutationInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -530,6 +555,7 @@ export type HrEmployeeAdvanceUncheckedUpdateManyInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -580,6 +606,7 @@ export type HrEmployeeAdvanceCountOrderByAggregateInput = {
   settledAmount?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  nextSettlementDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   issueJournalEntryId?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -604,6 +631,7 @@ export type HrEmployeeAdvanceMaxOrderByAggregateInput = {
   settledAmount?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  nextSettlementDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   issueJournalEntryId?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -622,6 +650,7 @@ export type HrEmployeeAdvanceMinOrderByAggregateInput = {
   settledAmount?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  nextSettlementDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   issueJournalEntryId?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -788,6 +817,20 @@ export type HrEmployeeAdvanceUpdateOneRequiredWithoutSettlementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateToOneWithWhereWithoutSettlementsInput, Prisma.HrEmployeeAdvanceUpdateWithoutSettlementsInput>, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutSettlementsInput>
 }
 
+export type HrEmployeeAdvanceCreateNestedOneWithoutDeferralsInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdvanceCreateOrConnectWithoutDeferralsInput
+  connect?: Prisma.HrEmployeeAdvanceWhereUniqueInput
+}
+
+export type HrEmployeeAdvanceUpdateOneRequiredWithoutDeferralsNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdvanceCreateOrConnectWithoutDeferralsInput
+  upsert?: Prisma.HrEmployeeAdvanceUpsertWithoutDeferralsInput
+  connect?: Prisma.HrEmployeeAdvanceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateToOneWithWhereWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUpdateWithoutDeferralsInput>, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput>
+}
+
 export type HrEmployeeAdvanceCreateWithoutCompanyInput = {
   id?: string
   advanceNumber: string
@@ -796,6 +839,7 @@ export type HrEmployeeAdvanceCreateWithoutCompanyInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -804,6 +848,7 @@ export type HrEmployeeAdvanceCreateWithoutCompanyInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutCompanyInput = {
@@ -815,6 +860,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutCompanyInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -822,6 +868,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutCompanyInput = {
@@ -864,6 +911,7 @@ export type HrEmployeeAdvanceScalarWhereInput = {
   settledAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFilter<"HrEmployeeAdvance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFilter<"HrEmployeeAdvance"> | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.DateTimeNullableFilter<"HrEmployeeAdvance"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeAdvance"> | string | null
   issueJournalEntryId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeAdvance"> | string
@@ -879,6 +927,7 @@ export type HrEmployeeAdvanceCreateWithoutIssueJournalEntryInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -887,6 +936,7 @@ export type HrEmployeeAdvanceCreateWithoutIssueJournalEntryInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutAdvancesInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutIssueJournalEntryInput = {
@@ -898,12 +948,14 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutIssueJournalEntryInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutIssueJournalEntryInput = {
@@ -930,6 +982,7 @@ export type HrEmployeeAdvanceUpdateWithoutIssueJournalEntryInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -938,6 +991,7 @@ export type HrEmployeeAdvanceUpdateWithoutIssueJournalEntryInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdvancesNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutIssueJournalEntryInput = {
@@ -949,12 +1003,14 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutIssueJournalEntryInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateWithoutEmployeeInput = {
@@ -965,6 +1021,7 @@ export type HrEmployeeAdvanceCreateWithoutEmployeeInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -973,6 +1030,7 @@ export type HrEmployeeAdvanceCreateWithoutEmployeeInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutEmployeeInput = {
@@ -983,6 +1041,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutEmployeeInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -990,6 +1049,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutEmployeeInput = {
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutEmployeeInput = {
@@ -1026,6 +1086,7 @@ export type HrEmployeeAdvanceCreateWithoutAllocationsInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -1034,6 +1095,7 @@ export type HrEmployeeAdvanceCreateWithoutAllocationsInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutAdvancesInput
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutAllocationsInput = {
@@ -1047,12 +1109,14 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutAllocationsInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutAllocationsInput = {
@@ -1079,6 +1143,7 @@ export type HrEmployeeAdvanceUpdateWithoutAllocationsInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1087,6 +1152,7 @@ export type HrEmployeeAdvanceUpdateWithoutAllocationsInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdvancesNestedInput
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutAllocationsInput = {
@@ -1100,12 +1166,14 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutAllocationsInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateWithoutSettlementsInput = {
@@ -1116,6 +1184,7 @@ export type HrEmployeeAdvanceCreateWithoutSettlementsInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -1124,6 +1193,7 @@ export type HrEmployeeAdvanceCreateWithoutSettlementsInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutAdvancesInput
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutSettlementsInput = {
@@ -1137,12 +1207,14 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutSettlementsInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutSettlementsInput = {
@@ -1169,6 +1241,7 @@ export type HrEmployeeAdvanceUpdateWithoutSettlementsInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1177,6 +1250,7 @@ export type HrEmployeeAdvanceUpdateWithoutSettlementsInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdvancesNestedInput
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutSettlementsInput = {
@@ -1190,12 +1264,112 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutSettlementsInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+}
+
+export type HrEmployeeAdvanceCreateWithoutDeferralsInput = {
+  id?: string
+  advanceNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeAdvancesInput
+  employee: Prisma.HrEmployeeCreateNestedOneWithoutAdvancesInput
+  issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+}
+
+export type HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeId: string
+  advanceNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
+  notes?: string | null
+  issueJournalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+}
+
+export type HrEmployeeAdvanceCreateOrConnectWithoutDeferralsInput = {
+  where: Prisma.HrEmployeeAdvanceWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput>
+}
+
+export type HrEmployeeAdvanceUpsertWithoutDeferralsInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput>
+  create: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput>
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+}
+
+export type HrEmployeeAdvanceUpdateToOneWithWhereWithoutDeferralsInput = {
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput>
+}
+
+export type HrEmployeeAdvanceUpdateWithoutDeferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  advanceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeAdvancesNestedInput
+  employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdvancesNestedInput
+  issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+}
+
+export type HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  advanceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateManyCompanyInput = {
@@ -1207,6 +1381,7 @@ export type HrEmployeeAdvanceCreateManyCompanyInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -1222,6 +1397,7 @@ export type HrEmployeeAdvanceUpdateWithoutCompanyInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1230,6 +1406,7 @@ export type HrEmployeeAdvanceUpdateWithoutCompanyInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutCompanyInput = {
@@ -1241,6 +1418,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutCompanyInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1248,6 +1426,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyInput = {
@@ -1259,6 +1438,7 @@ export type HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1274,6 +1454,7 @@ export type HrEmployeeAdvanceCreateManyEmployeeInput = {
   settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
   notes?: string | null
   issueJournalEntryId: string
   createdByUserId: string
@@ -1289,6 +1470,7 @@ export type HrEmployeeAdvanceUpdateWithoutEmployeeInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1297,6 +1479,7 @@ export type HrEmployeeAdvanceUpdateWithoutEmployeeInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutEmployeeInput = {
@@ -1307,6 +1490,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutEmployeeInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1314,6 +1498,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutEmployeeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeInput = {
@@ -1324,6 +1509,7 @@ export type HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeInput = {
   settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1339,11 +1525,13 @@ export type HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeInput = {
 export type HrEmployeeAdvanceCountOutputType = {
   allocations: number
   settlements: number
+  deferrals: number
 }
 
 export type HrEmployeeAdvanceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   allocations?: boolean | HrEmployeeAdvanceCountOutputTypeCountAllocationsArgs
   settlements?: boolean | HrEmployeeAdvanceCountOutputTypeCountSettlementsArgs
+  deferrals?: boolean | HrEmployeeAdvanceCountOutputTypeCountDeferralsArgs
 }
 
 /**
@@ -1370,6 +1558,13 @@ export type HrEmployeeAdvanceCountOutputTypeCountSettlementsArgs<ExtArgs extends
   where?: Prisma.HrEmployeeAdvanceSettlementWhereInput
 }
 
+/**
+ * HrEmployeeAdvanceCountOutputType without action
+ */
+export type HrEmployeeAdvanceCountOutputTypeCountDeferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeAdvanceDeferralWhereInput
+}
+
 
 export type HrEmployeeAdvanceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1382,6 +1577,7 @@ export type HrEmployeeAdvanceSelect<ExtArgs extends runtime.Types.Extensions.Int
   settledAmount?: boolean
   remainingAmount?: boolean
   status?: boolean
+  nextSettlementDate?: boolean
   notes?: boolean
   issueJournalEntryId?: boolean
   createdByUserId?: boolean
@@ -1392,6 +1588,7 @@ export type HrEmployeeAdvanceSelect<ExtArgs extends runtime.Types.Extensions.Int
   issueJournalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>
   settlements?: boolean | Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>
+  deferrals?: boolean | Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeAdvanceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeAdvance"]>
 
@@ -1406,6 +1603,7 @@ export type HrEmployeeAdvanceSelectCreateManyAndReturn<ExtArgs extends runtime.T
   settledAmount?: boolean
   remainingAmount?: boolean
   status?: boolean
+  nextSettlementDate?: boolean
   notes?: boolean
   issueJournalEntryId?: boolean
   createdByUserId?: boolean
@@ -1427,6 +1625,7 @@ export type HrEmployeeAdvanceSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   settledAmount?: boolean
   remainingAmount?: boolean
   status?: boolean
+  nextSettlementDate?: boolean
   notes?: boolean
   issueJournalEntryId?: boolean
   createdByUserId?: boolean
@@ -1448,6 +1647,7 @@ export type HrEmployeeAdvanceSelectScalar = {
   settledAmount?: boolean
   remainingAmount?: boolean
   status?: boolean
+  nextSettlementDate?: boolean
   notes?: boolean
   issueJournalEntryId?: boolean
   createdByUserId?: boolean
@@ -1455,13 +1655,14 @@ export type HrEmployeeAdvanceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HrEmployeeAdvanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "advanceNumber" | "businessDate" | "originalAmount" | "settledAmount" | "remainingAmount" | "status" | "notes" | "issueJournalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeAdvance"]>
+export type HrEmployeeAdvanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "advanceNumber" | "businessDate" | "originalAmount" | "settledAmount" | "remainingAmount" | "status" | "nextSettlementDate" | "notes" | "issueJournalEntryId" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeAdvance"]>
 export type HrEmployeeAdvanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
   issueJournalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>
   settlements?: boolean | Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>
+  deferrals?: boolean | Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeAdvanceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HrEmployeeAdvanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1483,6 +1684,7 @@ export type $HrEmployeeAdvancePayload<ExtArgs extends runtime.Types.Extensions.I
     issueJournalEntry: Prisma.$FinanceJournalEntryPayload<ExtArgs>
     allocations: Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>[]
     settlements: Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>[]
+    deferrals: Prisma.$HrEmployeeAdvanceDeferralPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1495,6 +1697,7 @@ export type $HrEmployeeAdvancePayload<ExtArgs extends runtime.Types.Extensions.I
     settledAmount: runtime.Decimal
     remainingAmount: runtime.Decimal
     status: $Enums.HrEmployeeAdvanceStatus
+    nextSettlementDate: Date | null
     notes: string | null
     issueJournalEntryId: string
     createdByUserId: string
@@ -1899,6 +2102,7 @@ export interface Prisma__HrEmployeeAdvanceClient<T, Null = never, ExtArgs extend
   issueJournalEntry<T extends Prisma.FinanceJournalEntryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceJournalEntryClient<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   allocations<T extends Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   settlements<T extends Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deferrals<T extends Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceDeferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1938,6 +2142,7 @@ export interface HrEmployeeAdvanceFieldRefs {
   readonly settledAmount: Prisma.FieldRef<"HrEmployeeAdvance", 'Decimal'>
   readonly remainingAmount: Prisma.FieldRef<"HrEmployeeAdvance", 'Decimal'>
   readonly status: Prisma.FieldRef<"HrEmployeeAdvance", 'HrEmployeeAdvanceStatus'>
+  readonly nextSettlementDate: Prisma.FieldRef<"HrEmployeeAdvance", 'DateTime'>
   readonly notes: Prisma.FieldRef<"HrEmployeeAdvance", 'String'>
   readonly issueJournalEntryId: Prisma.FieldRef<"HrEmployeeAdvance", 'String'>
   readonly createdByUserId: Prisma.FieldRef<"HrEmployeeAdvance", 'String'>
@@ -2389,6 +2594,30 @@ export type HrEmployeeAdvance$settlementsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeAdvanceSettlementScalarFieldEnum | Prisma.HrEmployeeAdvanceSettlementScalarFieldEnum[]
+}
+
+/**
+ * HrEmployeeAdvance.deferrals
+ */
+export type HrEmployeeAdvance$deferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdvanceDeferral
+   */
+  select?: Prisma.HrEmployeeAdvanceDeferralSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeAdvanceDeferral
+   */
+  omit?: Prisma.HrEmployeeAdvanceDeferralOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeAdvanceDeferralInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeAdvanceDeferralWhereInput
+  orderBy?: Prisma.HrEmployeeAdvanceDeferralOrderByWithRelationInput | Prisma.HrEmployeeAdvanceDeferralOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeAdvanceDeferralWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeAdvanceDeferralScalarFieldEnum | Prisma.HrEmployeeAdvanceDeferralScalarFieldEnum[]
 }
 
 /**

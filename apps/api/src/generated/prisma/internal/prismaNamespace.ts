@@ -429,6 +429,8 @@ export const ModelName = {
   HrEmployeeAdvance: 'HrEmployeeAdvance',
   HrEmployeeAdvancePayoutAllocation: 'HrEmployeeAdvancePayoutAllocation',
   HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
+  HrEmployeeAdvanceDeferral: 'HrEmployeeAdvanceDeferral',
+  HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -460,7 +462,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2832,6 +2834,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HrEmployeeAdvanceDeferral: {
+      payload: Prisma.$HrEmployeeAdvanceDeferralPayload<ExtArgs>
+      fields: Prisma.HrEmployeeAdvanceDeferralFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeAdvanceDeferralFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeAdvanceDeferralFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeAdvanceDeferralFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeAdvanceDeferralFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeAdvanceDeferralFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeAdvanceDeferralCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeAdvanceDeferralCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeAdvanceDeferralCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeAdvanceDeferralDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeAdvanceDeferralUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeAdvanceDeferralDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeAdvanceDeferralUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeAdvanceDeferralUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeAdvanceDeferralUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdvanceDeferralPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeAdvanceDeferralAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeAdvanceDeferral>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeAdvanceDeferralGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeAdvanceDeferralGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeAdvanceDeferralCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeAdvanceDeferralCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrEmployeeAdministrativeDeduction: {
+      payload: Prisma.$HrEmployeeAdministrativeDeductionPayload<ExtArgs>
+      fields: Prisma.HrEmployeeAdministrativeDeductionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeAdministrativeDeductionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeAdministrativeDeductionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeAdministrativeDeductionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeAdministrativeDeductionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeAdministrativeDeductionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeAdministrativeDeductionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeAdministrativeDeductionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeAdministrativeDeductionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeAdministrativeDeductionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeAdministrativeDeductionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeAdministrativeDeductionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeAdministrativeDeductionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeAdministrativeDeductionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeAdministrativeDeductionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeAdministrativeDeductionPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeAdministrativeDeductionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeAdministrativeDeduction>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeAdministrativeDeductionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeAdministrativeDeductionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeAdministrativeDeductionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeAdministrativeDeductionCountAggregateOutputType> | number
+        }
+      }
+    }
     FinanceJournalLine: {
       payload: Prisma.$FinanceJournalLinePayload<ExtArgs>
       fields: Prisma.FinanceJournalLineFieldRefs
@@ -4577,6 +4727,7 @@ export const HrEmployeeAdvanceScalarFieldEnum = {
   settledAmount: 'settledAmount',
   remainingAmount: 'remainingAmount',
   status: 'status',
+  nextSettlementDate: 'nextSettlementDate',
   notes: 'notes',
   issueJournalEntryId: 'issueJournalEntryId',
   createdByUserId: 'createdByUserId',
@@ -4614,6 +4765,44 @@ export const HrEmployeeAdvanceSettlementScalarFieldEnum = {
 } as const
 
 export type HrEmployeeAdvanceSettlementScalarFieldEnum = (typeof HrEmployeeAdvanceSettlementScalarFieldEnum)[keyof typeof HrEmployeeAdvanceSettlementScalarFieldEnum]
+
+
+export const HrEmployeeAdvanceDeferralScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  advanceId: 'advanceId',
+  businessDate: 'businessDate',
+  deferredUntil: 'deferredUntil',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeAdvanceDeferralScalarFieldEnum = (typeof HrEmployeeAdvanceDeferralScalarFieldEnum)[keyof typeof HrEmployeeAdvanceDeferralScalarFieldEnum]
+
+
+export const HrEmployeeAdministrativeDeductionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  deductionNumber: 'deductionNumber',
+  businessDate: 'businessDate',
+  originalAmount: 'originalAmount',
+  appliedAmount: 'appliedAmount',
+  remainingAmount: 'remainingAmount',
+  status: 'status',
+  plannedPayrollDate: 'plannedPayrollDate',
+  description: 'description',
+  cancellationReason: 'cancellationReason',
+  cancelledAt: 'cancelledAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeAdministrativeDeductionScalarFieldEnum = (typeof HrEmployeeAdministrativeDeductionScalarFieldEnum)[keyof typeof HrEmployeeAdministrativeDeductionScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {
@@ -5423,6 +5612,20 @@ export type ListEnumHrEmployeeAdvanceSettlementSourceFieldRefInput<$PrismaModel>
 
 
 /**
+ * Reference to a field of type 'HrEmployeeAdministrativeDeductionStatus'
+ */
+export type EnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeAdministrativeDeductionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeAdministrativeDeductionStatus[]'
+ */
+export type ListEnumHrEmployeeAdministrativeDeductionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeAdministrativeDeductionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'FinanceOperationalDayStatus'
  */
 export type EnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceOperationalDayStatus'>
@@ -5786,6 +5989,8 @@ export type GlobalOmitConfig = {
   hrEmployeeAdvance?: Prisma.HrEmployeeAdvanceOmit
   hrEmployeeAdvancePayoutAllocation?: Prisma.HrEmployeeAdvancePayoutAllocationOmit
   hrEmployeeAdvanceSettlement?: Prisma.HrEmployeeAdvanceSettlementOmit
+  hrEmployeeAdvanceDeferral?: Prisma.HrEmployeeAdvanceDeferralOmit
+  hrEmployeeAdministrativeDeduction?: Prisma.HrEmployeeAdministrativeDeductionOmit
   financeJournalLine?: Prisma.FinanceJournalLineOmit
   financeAccountDailyBalance?: Prisma.FinanceAccountDailyBalanceOmit
   financeOperationalDay?: Prisma.FinanceOperationalDayOmit

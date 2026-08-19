@@ -27,7 +27,7 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     1: ["hr.employees.read", "hr.employees.write"],
     2: ["hr.employees.read", "hr.employees.write"],
     3: ["hr.employees.read", "hr.employees.write"],
-    4: ["hr.advances.read", "hr.advances.issue", "hr.deductions.manage"],
+    4: ["hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.deductions.manage"],
     5: ["hr.employees.read", "hr.employees.write"],
   },
   administration: {

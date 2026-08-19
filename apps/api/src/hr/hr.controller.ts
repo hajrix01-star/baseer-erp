@@ -7,10 +7,19 @@ import {
   hrEmployeeDetailQuerySchema,
   hrEmployeeDetailReceiptSchema,
   hrEmployeeAdvanceIssueReceiptSchema,
+  hrEmployeeAdvanceSettlementReceiptSchema,
+  hrEmployeeAdvanceDeferralReceiptSchema,
   hrEmployeeAdvancesReceiptSchema,
+  hrEmployeeAdministrativeDeductionsReceiptSchema,
+  hrEmployeeAdministrativeDeductionReceiptSchema,
   hrEmployeeEntityReceiptSchema,
   hrEmployeesReceiptSchema,
   issueHrEmployeeAdvanceRequestSchema,
+  settleHrEmployeeAdvanceDirectlyRequestSchema,
+  deferHrEmployeeAdvanceRequestSchema,
+  createHrEmployeeAdministrativeDeductionRequestSchema,
+  deferHrEmployeeAdministrativeDeductionRequestSchema,
+  cancelHrEmployeeAdministrativeDeductionRequestSchema,
   issueHrEmployeeServiceCostRequestSchema,
   updateHrEmployeeRequestSchema,
 } from '@baseer-erp/contracts';
@@ -19,6 +28,7 @@ import { CompanyContextService } from '../company-context/company-context.servic
 import { PurchaseExpenseService } from '../finance/purchase-expense.service.js';
 import { HrService } from './hr.service.js';
 import { HrAdvanceService } from './hr-advance.service.js';
+import { HrAdministrativeDeductionService } from './hr-administrative-deduction.service.js';
 
 const READ_CAPABILITY = 'hr.employees.read';
 const WRITE_CAPABILITY = 'hr.employees.write';
@@ -29,6 +39,7 @@ export class HrController {
     private readonly companyContext: CompanyContextService,
     private readonly hr: HrService,
     private readonly advances: HrAdvanceService,
+    private readonly deductions: HrAdministrativeDeductionService,
     private readonly documents: PurchaseExpenseService,
   ) {}
 
@@ -90,6 +101,60 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, 'hr.advances.issue');
     const { idempotencyKey, ...request } = parsed.data;
     return hrEmployeeAdvanceIssueReceiptSchema.parse(await this.advances.issue(context, request, idempotencyKey));
+  }
+
+  @Post('advances/settle-directly')
+  @HttpCode(201)
+  async settleAdvanceDirectly(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = settleHrEmployeeAdvanceDirectlyRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-advance settlement request.');
+    const context = await this.authorize(authorization, companyId, 'hr.advances.settle');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdvanceSettlementReceiptSchema.parse(await this.advances.settleDirectly(context, request, idempotencyKey));
+  }
+
+  @Post('advances/defer')
+  @HttpCode(201)
+  async deferAdvance(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = deferHrEmployeeAdvanceRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-advance deferral request.');
+    const context = await this.authorize(authorization, companyId, 'hr.advances.settle');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdvanceDeferralReceiptSchema.parse(await this.advances.defer(context, request, idempotencyKey));
+  }
+
+  @Get('deductions')
+  async listAdministrativeDeductions(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
+    return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, deductions: await this.deductions.list(context) });
+  }
+
+  @Post('deductions')
+  @HttpCode(201)
+  async createAdministrativeDeduction(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrEmployeeAdministrativeDeductionRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction request.');
+    const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdministrativeDeductionReceiptSchema.parse(await this.deductions.create(context, request, idempotencyKey));
+  }
+
+  @Post('deductions/defer')
+  async deferAdministrativeDeduction(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = deferHrEmployeeAdministrativeDeductionRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction deferral request.');
+    const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdministrativeDeductionReceiptSchema.parse(await this.deductions.defer(context, request, idempotencyKey));
+  }
+
+  @Post('deductions/cancel')
+  async cancelAdministrativeDeduction(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = cancelHrEmployeeAdministrativeDeductionRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction cancellation request.');
+    const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdministrativeDeductionReceiptSchema.parse(await this.deductions.cancel(context, request, idempotencyKey));
   }
 
   /** A service becomes financial only when its actual supplier cost is issued. */

@@ -186,6 +186,18 @@ export type HrEmployeeAdvancePayoutAllocation = Prisma.HrEmployeeAdvancePayoutAl
  */
 export type HrEmployeeAdvanceSettlement = Prisma.HrEmployeeAdvanceSettlementModel
 /**
+ * Model HrEmployeeAdvanceDeferral
+ * A controlled repayment-date change for an outstanding advance. It is a
+ * collection plan only and never creates a journal entry or an HR deduction.
+ */
+export type HrEmployeeAdvanceDeferral = Prisma.HrEmployeeAdvanceDeferralModel
+/**
+ * Model HrEmployeeAdministrativeDeduction
+ * A free-text administrative deduction. It is applied only by a future,
+ * approved payroll run; creating, deferring, or cancelling it never posts.
+ */
+export type HrEmployeeAdministrativeDeduction = Prisma.HrEmployeeAdministrativeDeductionModel
+/**
  * Model FinanceJournalLine
  * 
  */
