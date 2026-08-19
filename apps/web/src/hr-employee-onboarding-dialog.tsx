@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoney } from "./baseer-money";
-import { activeSession, api, requestId } from "./daily-sales-client";
-import { createHrEmployeeDocument, setHrEmployeeCompensation } from "./hr-client";
+import { activeSession, requestId } from "./daily-sales-client";
+import { createHrEmployeeDocument, onboardHrEmployee } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { HR_PROFILE_PHOTO_REFERENCE, hrEmployeePhotoAsBase64, isHrEmployeePhoto } from "./hr-employee-photo";
 import { calculateSalaryTool } from "./hr-salary-tools-calculations";
@@ -16,7 +16,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: "", iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "", transportAllowance: "", foodAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "", notes: "" });
 const number = (value: string) => { const parsed = Number(value || "0"); return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0; };
 
-/** Guided onboarding keeps the pleasant single form while persisting an effective-dated agreement. */
+/** Creates the employee and their first effective-dated agreement together. */
 export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, onError }: { open: boolean; language: Language; onClose: () => void; onSaved: () => Promise<void>; onError: (message: string) => void }) {
   const ar = language === "ar";
   const [draft, setDraft] = useState<Draft>(empty);
@@ -46,14 +46,13 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     if (photoFile && !isHrEmployeePhoto(photoFile)) { onError(ar ? "اختر صورة JPG أو PNG بحجم لا يتجاوز 5 ميجابايت." : "Choose a JPG or PNG image up to 5 MiB."); return; }
     setBusy(true);
     try {
-      const employee = await api<{ id: string }>(session, "/hr/employees", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, idempotencyKey: requestId() }) });
-      await setHrEmployeeCompensation(session, { employeeId: employee.id, effectiveFrom: `${draft.hireDate.slice(0, 7)}-01`, monthlyGross: calculation.monthlyGross.toFixed(4), compensationMethod: "INCLUSIVE_OVERTIME", foodAllowance: number(draft.foodAllowance).toFixed(4), housingAllowance: number(draft.housingAllowance).toFixed(4), transportAllowance: number(draft.transportAllowance).toFixed(4), otherAllowance: number(draft.otherAllowance).toFixed(4), scheduledHoursPerDay: Number(draft.scheduledHoursPerDay), scheduledWorkDays: Number(draft.scheduledWorkDays), idempotencyKey: requestId() });
+      const employee = await onboardHrEmployee(session, { nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, initialCompensation: { monthlyGross: calculation.monthlyGross.toFixed(4), compensationMethod: "INCLUSIVE_OVERTIME", foodAllowance: number(draft.foodAllowance).toFixed(4), housingAllowance: number(draft.housingAllowance).toFixed(4), transportAllowance: number(draft.transportAllowance).toFixed(4), otherAllowance: number(draft.otherAllowance).toFixed(4), scheduledHoursPerDay: Number(draft.scheduledHoursPerDay), scheduledWorkDays: Number(draft.scheduledWorkDays) }, idempotencyKey: requestId() });
       if (photoFile) await createHrEmployeeDocument(session, employee.id, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload: { fileName: photoFile.name, contentBase64: await hrEmployeePhotoAsBase64(photoFile) }, idempotencyKey: requestId() });
       await onSaved(); setDraft(empty()); setPhotoFile(null); onClose();
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "إضافة الموظف" : "Adding employee")); }
     finally { setBusy(false); }
   };
-  return <BaseerFormDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} formId="hr-employee-onboarding" submitLabel={ar ? "إضافة الموظف وحفظ الاتفاق" : "Add employee & save agreement"} onClose={close}>
+  return <BaseerFormDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} formId="hr-employee-onboarding" submitLabel={ar ? "إضافة الموظف" : "Add employee"} onClose={close}>
     <form id="hr-employee-onboarding" className="hr-onboarding" noValidate onSubmit={(event) => void submit(event)}>
       <div className="hr-onboarding__workspace">
         <div className="hr-onboarding__entry">

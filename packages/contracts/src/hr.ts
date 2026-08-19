@@ -274,15 +274,11 @@ export const cancelHrEmployeeAdministrativeDeductionRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
-/**
- * Effective-dated compensation agreement. For inclusive overtime, the agreed
- * total remains the payroll gross while the server derives the base and OT.
- */
-export const setHrEmployeeCompensationRequestSchema = z.object({
-  employeeId: hrEmployeeIdSchema,
+/** Shared agreement values. The initial employee flow derives its effective
+ * month from the hire date, while a later amendment supplies it explicitly. */
+const hrEmployeeCompensationValuesSchema = z.object({
   /** Agreement may select an approved policy revision; absent selects the company default revision. */
   policyVersionId: z.string().uuid().optional(),
-  effectiveFrom: hrDateSchema,
   monthlyGross: hrAmountSchema.refine((value) => Number(value) > 0),
   compensationMethod: hrCompensationMethodSchema.default("FIXED_MONTHLY"),
   foodAllowance: hrAmountSchema.default("0"),
@@ -292,8 +288,9 @@ export const setHrEmployeeCompensationRequestSchema = z.object({
   scheduledHoursPerDay: z.coerce.number().int().min(1).max(12).optional(),
   scheduledWorkDays: z.coerce.number().int().min(1).max(31).optional(),
   notes: z.string().trim().max(1_000).optional(),
-  idempotencyKey: idempotencyKeySchema,
-}).strict().superRefine((value, context) => {
+}).strict();
+
+function validateInclusiveOvertime(value: { compensationMethod: "FIXED_MONTHLY" | "INCLUSIVE_OVERTIME"; scheduledHoursPerDay?: number | undefined; scheduledWorkDays?: number | undefined }, context: z.RefinementCtx) {
   if (value.compensationMethod !== "INCLUSIVE_OVERTIME") return;
   if (!value.scheduledHoursPerDay || !value.scheduledWorkDays) {
     context.addIssue({ code: z.ZodIssueCode.custom, message: "Inclusive overtime requires agreed daily hours and working days." });
@@ -301,7 +298,23 @@ export const setHrEmployeeCompensationRequestSchema = z.object({
   if (value.scheduledHoursPerDay !== undefined && value.scheduledHoursPerDay <= 8) {
     context.addIssue({ code: z.ZodIssueCode.custom, path: ["scheduledHoursPerDay"], message: "Inclusive overtime requires more than eight daily hours." });
   }
-});
+}
+
+/**
+ * Effective-dated compensation agreement. For inclusive overtime, the agreed
+ * total remains the payroll gross while the server derives the base and OT.
+ */
+export const setHrEmployeeCompensationRequestSchema = hrEmployeeCompensationValuesSchema.extend({
+  employeeId: hrEmployeeIdSchema,
+  effectiveFrom: hrDateSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict().superRefine(validateInclusiveOvertime);
+
+/** Creates the employee and their first agreement as one atomic operation. */
+export const onboardHrEmployeeRequestSchema = createHrEmployeeRequestSchema.omit({ idempotencyKey: true }).extend({
+  initialCompensation: hrEmployeeCompensationValuesSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict().superRefine((value, context) => validateInclusiveOvertime(value.initialCompensation, context));
 
 /** Policy formula is selected by the server; the client supplies no legal rates or coefficients. */
 export const createHrCompensationPolicyRequestSchema = z.object({
@@ -657,6 +670,7 @@ export const hrEmployeeDocumentSchema = z.object({
 }).strict();
 export const hrEmployeeDocumentsReceiptSchema = z.object({ companyId: companyIdSchema, documents: z.array(hrEmployeeDocumentSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrEmployeeDocumentReceiptSchema = z.object({ id: z.string().uuid(), versionId: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeOnboardingReceiptSchema = z.object({ id: z.string().uuid(), compensationId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeLetterSchema = z.object({ id: z.string().uuid(), employeeId: hrEmployeeIdSchema, letterType: hrEmployeeLetterTypeSchema, status: hrEmployeeLetterStatusSchema, letterNumber: z.string().max(80), locale: z.enum(["ar", "en"]), recipient: z.string().max(240).nullable(), issuedAt: z.string().datetime(), revokedAt: z.string().datetime().nullable(), revokedReason: z.string().max(1_000).nullable(), outputReportCode: z.literal("hr.employee-letter") }).strict();
 export const hrEmployeeLettersReceiptSchema = z.object({ companyId: companyIdSchema, letters: z.array(hrEmployeeLetterSchema).max(100) }).strict();
 export const hrEmployeeLetterReceiptSchema = z.object({ id: z.string().uuid(), letterNumber: z.string().max(80), outputReportCode: z.literal("hr.employee-letter"), replayed: z.boolean() }).strict();
@@ -666,6 +680,7 @@ export const hrFinalSettlementsReceiptSchema = z.object({ companyId: companyIdSc
 export const hrFinalSettlementReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().max(80), replayed: z.boolean() }).strict();
 
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
+export type OnboardHrEmployeeRequest = z.infer<typeof onboardHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
 export type CreateHrEmployeePromotionRequest = z.infer<typeof createHrEmployeePromotionRequestSchema>;
 export type CreateHrEmployeeServiceRequest = z.infer<typeof createHrEmployeeServiceRequestSchema>;

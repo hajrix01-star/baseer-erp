@@ -11,6 +11,7 @@ import type {
   PayHrPayrollRunRequest,
   ReverseHrPayrollRunRequest,
   SetHrEmployeeCompensationRequest,
+  OnboardHrEmployeeRequest,
 } from '@baseer-erp/contracts';
 
 import { BusinessDateService } from '../business-date/business-date.service.js';
@@ -36,8 +37,10 @@ import {
 } from '../generated/prisma/client.js';
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
+import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 
 const COMPENSATION_OPERATION = 'hr.compensation.set';
+const EMPLOYEE_ONBOARDING_OPERATION = 'hr.employee.onboard';
 const POLICY_CREATE_OPERATION = 'hr.compensation_policy.create';
 const POLICY_VERSION_OPERATION = 'hr.compensation_policy.version.create';
 const POLICY_APPROVE_OPERATION = 'hr.compensation_policy.version.approve';
@@ -56,6 +59,7 @@ type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
+type EmployeeOnboardingInput = Omit<OnboardHrEmployeeRequest, 'idempotencyKey'>;
 type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
 type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
@@ -202,6 +206,59 @@ export class HrPayrollService {
       const receipt = { id, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
       await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', id, receipt);
+      return receipt;
+    });
+  }
+
+  /** The first agreement belongs to the employee creation itself. Keeping both
+   * writes in one transaction prevents an employee record without a salary
+   * agreement when a later request fails. */
+  async onboardEmployee(context: TrustedCompanyActorContext, input: EmployeeOnboardingInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.begin(tx, context, EMPLOYEE_ONBOARDING_OPERATION, key, input);
+      if (begun.kind === 'replay') return begun.response.body as { id: string; compensationId: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee onboarding request is already being processed.');
+
+      const [currentDate, employeeNumber] = await Promise.all([
+        this.dates.resolveInTransaction(tx, context, { kind: 'current' }),
+        generateHrEmployeeNumber(tx, context.companyId),
+      ]);
+      const duplicate = await tx.hrEmployee.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeNumber }, select: { id: true } });
+      if (duplicate) throw new ConflictException('Employee-number generation conflicted. Please submit the employee again.');
+
+      const effectiveFrom = firstOfMonth(input.hireDate);
+      const currentMonth = firstOfMonth(new Date(`${currentDate.businessDate}T00:00:00.000Z`));
+      if (effectiveFrom.getTime() !== currentMonth.getTime()) {
+        assertNotPast(effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Choose a hire date in the current month or create the employee without payroll onboarding.');
+      }
+
+      const employeeId = randomUUID();
+      const employee = await tx.hrEmployee.create({ data: {
+        id: employeeId, tenantId: context.tenantId, companyId: context.companyId, employeeNumber,
+        nameAr: input.nameAr.trim(), nameEn: nullable(input.nameEn), jobTitle: nullable(input.jobTitle),
+        phone: nullable(input.phone), email: nullable(input.email), iqamaNumber: nullable(input.iqamaNumber),
+        workSchedule: nullable(input.workSchedule), hireDate: input.hireDate, notes: nullable(input.notes),
+      } });
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:employee-compensation:${employeeId}`}, 0))`;
+      const policyVersion = await this.resolveCompensationPolicyVersion(tx, context, effectiveFrom, input.initialCompensation.policyVersionId);
+      const compensation = calculateCompensation({
+        monthlyGross: amount(input.initialCompensation.monthlyGross), compensationMethod: input.initialCompensation.compensationMethod,
+        foodAllowance: nonNegativeAmount(input.initialCompensation.foodAllowance), housingAllowance: nonNegativeAmount(input.initialCompensation.housingAllowance),
+        transportAllowance: nonNegativeAmount(input.initialCompensation.transportAllowance), otherAllowance: nonNegativeAmount(input.initialCompensation.otherAllowance),
+        scheduledHoursPerDay: input.initialCompensation.scheduledHoursPerDay ?? null, scheduledWorkDays: input.initialCompensation.scheduledWorkDays ?? null,
+      }, policyVersion.formulaCode);
+      const compensationId = randomUUID();
+      await tx.hrEmployeeCompensationProfile.create({ data: {
+        id: compensationId, tenantId: context.tenantId, companyId: context.companyId, employeeId, policyVersionId: policyVersion.id, effectiveFrom,
+        monthlyGross: compensation.gross, compensationMethod: compensation.method, foodAllowance: compensation.foodAllowance,
+        housingAllowance: compensation.housingAllowance, transportAllowance: compensation.transportAllowance, otherAllowance: compensation.otherAllowance,
+        scheduledHoursPerDay: compensation.scheduledHoursPerDay, scheduledWorkDays: compensation.scheduledWorkDays,
+        notes: nullable(input.initialCompensation.notes), createdByUserId: context.actorUserId,
+      } });
+      const receipt = { id: employeeId, compensationId, replayed: false };
+      await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', employeeId, { employeeNumber: employee.employeeNumber, onboarding: true });
+      await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', compensationId, receipt);
+      await this.complete(tx, context, begun.receiptId, receipt);
       return receipt;
     });
   }

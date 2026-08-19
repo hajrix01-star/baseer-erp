@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers
 import {
   companyIdSchema,
   createHrEmployeeRequestSchema,
+  onboardHrEmployeeRequestSchema,
   createHrEmployeePromotionRequestSchema,
   createHrEmployeeServiceRequestSchema,
   recordHrEmployeeServiceAndIssueCostRequestSchema,
@@ -29,6 +30,7 @@ import {
   hrEmployeeAdministrativeDeductionsReceiptSchema,
   hrEmployeeAdministrativeDeductionReceiptSchema,
   hrEmployeeEntityReceiptSchema,
+  hrEmployeeOnboardingReceiptSchema,
   hrEmployeesQuerySchema,
   hrEmployeesReceiptSchema,
   issueHrEmployeeAdvanceRequestSchema,
@@ -131,6 +133,16 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
     return hrEmployeeEntityReceiptSchema.parse(await this.hr.createEmployee(context, input, idempotencyKey));
+  }
+
+  @Post('employees/onboard')
+  @HttpCode(201)
+  async onboardEmployee(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = onboardHrEmployeeRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee onboarding request.');
+    const context = await this.authorize(authorization, companyId, [WRITE_CAPABILITY, 'hr.payroll.create']);
+    const { idempotencyKey, ...input } = parsed.data;
+    return hrEmployeeOnboardingReceiptSchema.parse(await this.payroll.onboardEmployee(context, input, idempotencyKey));
   }
 
   @Post('employees/update')
