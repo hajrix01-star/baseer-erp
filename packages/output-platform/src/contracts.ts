@@ -48,6 +48,19 @@ export interface ReportSnapshot {
   readonly columns: readonly ReportColumn[];
   readonly rows: readonly Readonly<Record<string, string | number | null>>[];
   readonly sourceLabel: string;
+  /** A centrally rendered document variant; reports remain server-snapshotted. */
+  readonly template?: 'table' | 'payroll-signature-slips';
+  readonly payrollSignatureSlips?: readonly PayrollSignatureSlip[];
+}
+
+export interface PayrollSignatureSlip {
+  readonly employeeNumber: string;
+  readonly employeeName: string;
+  readonly gross: string | number;
+  readonly advances: string | number;
+  readonly deductions: string | number;
+  readonly net: string | number;
+  readonly paid: string | number;
 }
 
 export interface OutputAuthorization {

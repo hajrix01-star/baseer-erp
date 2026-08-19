@@ -166,6 +166,10 @@ export class OutputService {
     if (reportCode === 'hr.payroll-run') {
       return this.createPayrollRunSnapshot(transaction, context, request);
     }
+    if (reportCode === 'hr.payroll-signature-slips') {
+      if (request.format !== 'preview') throw new BadRequestException('Payroll signature slips are print-only.');
+      return this.createPayrollSignatureSlipsSnapshot(transaction, context, request);
+    }
     if (reportCode === 'hr.payroll-runs') {
       return this.createPayrollRunsSnapshot(transaction, context, request);
     }
@@ -246,6 +250,42 @@ export class OutputService {
       titleAr: 'سجل مسيرات الرواتب', titleEn: 'Payroll run register', periodAr: 'كل المسيرات المعروضة', periodEn: 'Displayed payroll runs',
       rows: runs.map((run) => ({ number: run.runNumber, month: date(run.payrollMonth), status: run.status, employees: run.employeeCount, gross: run.grossAmount.toFixed(4), advances: run.advanceSettlementAmount.toFixed(4), deductions: run.administrativeDeductionAmount.toFixed(4), net: run.netPayableAmount.toFixed(4), paid: run.paidAmount.toFixed(4) })),
     });
+  }
+
+  private async createPayrollSignatureSlipsSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const payrollRunId = typeof request.filters['payrollRunId'] === 'string' ? request.filters['payrollRunId'] : null;
+    if (!payrollRunId || Object.keys(request.filters).length !== 1) throw new BadRequestException('Payroll signature slips require exactly one payrollRunId filter.');
+    const run = await transaction.hrPayrollRun.findFirst({
+      where: { id: payrollRunId, tenantId: context.tenantId, companyId: context.companyId },
+      include: { lines: { orderBy: { employeeNumberSnapshot: 'asc' } } },
+    });
+    if (!run) throw new NotFoundException('The payroll run was not found.');
+    const snapshot = await this.payrollSnapshotBase(transaction, context, request, {
+      titleAr: `كشوف توقيع مسير الرواتب ${run.runNumber}`,
+      titleEn: `Payroll signature slips ${run.runNumber}`,
+      periodAr: `${run.runNumber} · ${date(run.payrollMonth)}`,
+      periodEn: `${run.runNumber} · ${date(run.payrollMonth)}`,
+      rows: [],
+    });
+    return {
+      ...snapshot,
+      reportCode: 'hr.payroll-signature-slips',
+      templateVersion: '1',
+      template: 'payroll-signature-slips',
+      payrollSignatureSlips: run.lines.map((line) => ({
+        employeeNumber: line.employeeNumberSnapshot,
+        employeeName: request.locale === 'ar' ? line.employeeNameArSnapshot : line.employeeNameEnSnapshot ?? line.employeeNameArSnapshot,
+        gross: line.grossSalary.toFixed(2),
+        advances: line.advanceSettlementAmount.toFixed(2),
+        deductions: line.administrativeDeductionAmount.toFixed(2),
+        net: line.netPayableAmount.toFixed(2),
+        paid: line.paidAmount.toFixed(2),
+      })),
+    };
   }
 
   private async payrollSnapshotBase(
