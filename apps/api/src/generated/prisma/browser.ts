@@ -148,6 +148,44 @@ export type FinanceOutflowBatch = Prisma.FinanceOutflowBatchModel
  */
 export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
 /**
+ * Model HrEmployee
+ * Employee master data is company-scoped and intentionally separate from a
+ * sign-in user. An employee never receives platform access by being created.
+ */
+export type HrEmployee = Prisma.HrEmployeeModel
+/**
+ * Model HrEmployeeService
+ * A personnel service is operational until its associated cost is issued.
+ * The financial document is immutable and is never recreated by editing this record.
+ */
+export type HrEmployeeService = Prisma.HrEmployeeServiceModel
+/**
+ * Model HrEmployeeFinancialMovement
+ * A bounded, employee-facing index into immutable journal entries. It is a
+ * projection, not a second ledger, and permits the employee file to show only
+ * the financial events that concern that employee.
+ */
+export type HrEmployeeFinancialMovement = Prisma.HrEmployeeFinancialMovementModel
+/**
+ * Model HrEmployeeAdvance
+ * Immutable issue record for money paid to an employee before payroll. The
+ * residual is updated only by a settlement/reversal transaction and never by
+ * a generic HR deduction.
+ */
+export type HrEmployeeAdvance = Prisma.HrEmployeeAdvanceModel
+/**
+ * Model HrEmployeeAdvancePayoutAllocation
+ * Supports a split payment from multiple company vaults/methods while keeping
+ * one advance and one balanced journal entry.
+ */
+export type HrEmployeeAdvancePayoutAllocation = Prisma.HrEmployeeAdvancePayoutAllocationModel
+/**
+ * Model HrEmployeeAdvanceSettlement
+ * Reserved now for a later payroll/manual-receipt settlement flow. Each row
+ * will point to the actual posting rather than changing the issue itself.
+ */
+export type HrEmployeeAdvanceSettlement = Prisma.HrEmployeeAdvanceSettlementModel
+/**
  * Model FinanceJournalLine
  * 
  */

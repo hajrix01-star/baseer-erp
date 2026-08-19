@@ -169,6 +169,41 @@ enum FinanceInclusiveLoanPaymentStatus {
   REVERSED
 }
 
+enum HrEmployeeStatus {
+  ACTIVE
+  ON_LEAVE
+  TERMINATED
+  ARCHIVED
+}
+
+enum HrEmployeeServiceStatus {
+  DRAFT
+  ISSUED
+  CANCELLED
+}
+
+enum HrEmployeeFinancialMovementType {
+  SERVICE_COST
+  PAYROLL_ACCRUAL
+  PAYROLL_PAYMENT
+  ADVANCE_ISSUED
+  ADVANCE_SETTLEMENT
+}
+
+/// An employee advance is an asset until it is repaid or settled through an
+/// approved payroll. It is deliberately not a disciplinary deduction.
+enum HrEmployeeAdvanceStatus {
+  ISSUED
+  PARTIALLY_SETTLED
+  SETTLED
+  REVERSED
+}
+
+enum HrEmployeeAdvanceSettlementSource {
+  PAYROLL
+  MANUAL_RECEIPT
+}
+
 enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
@@ -198,14 +233,14 @@ model Tenant {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
-  users                  User[]
-  companies              Company[]
-  roles                  Role[]
-  sessions               AppSession[]
-  audits                 AuditEvent[]
-  idempotencyReceipts    IdempotencyReceipt[]
-  documentSerialCounters DocumentSerialCounter[]
-  fileMetadata           FileMetadata[]
+  users                     User[]
+  companies                 Company[]
+  roles                     Role[]
+  sessions                  AppSession[]
+  audits                    AuditEvent[]
+  idempotencyReceipts       IdempotencyReceipt[]
+  documentSerialCounters    DocumentSerialCounter[]
+  fileMetadata              FileMetadata[]
   administrationAssignments TenantAdministrationAssignment[]
 }
 
@@ -216,20 +251,20 @@ model User {
   nameAr            String     @db.VarChar(160)
   nameEn            String     @db.VarChar(160)
   preferredLanguage String     @default("ar") @db.VarChar(2)
-  avatarKind       String     @default("INITIALS") @db.VarChar(16)
+  avatarKind        String     @default("INITIALS") @db.VarChar(16)
   passwordHash      String     @db.VarChar(255)
   status            UserStatus @default(ACTIVE)
   sessionVersion    Int        @default(0)
   createdAt         DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
 
-  tenant                Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  memberships           CompanyMembership[]
-  sessions              AppSession[]
-  auditEvents           AuditEvent[]
-  idempotencyReceipts   IdempotencyReceipt[]
-  createdFileMetadata   FileMetadata[]        @relation("FileMetadataCreator")
-  createdJournalEntries FinanceJournalEntry[]
+  tenant                          Tenant                           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  memberships                     CompanyMembership[]
+  sessions                        AppSession[]
+  auditEvents                     AuditEvent[]
+  idempotencyReceipts             IdempotencyReceipt[]
+  createdFileMetadata             FileMetadata[]                   @relation("FileMetadataCreator")
+  createdJournalEntries           FinanceJournalEntry[]
   tenantAdministrationAssignments TenantAdministrationAssignment[]
 
   @@unique([tenantId, loginNormalized])
@@ -247,50 +282,56 @@ model Company {
   createdAt        DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime      @updatedAt @db.Timestamptz(6)
 
-  tenant                     Tenant                                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  memberships                CompanyMembership[]
-  audits                     AuditEvent[]
-  idempotencyReceipts        IdempotencyReceipt[]
-  documentSerialCounters     DocumentSerialCounter[]
-  fileMetadata               FileMetadata[]
-  financeProfile             CompanyFinanceProfile?
-  financeAccounts            FinanceAccount[]
-  financeCategories          FinanceCategory[]
-  financeSuppliers           FinanceSupplier[]
-  financeFiscalPeriods       FinanceFiscalPeriod[]
-  financeVaults              FinanceVault[]
-  financeSupplierDues        FinanceSupplierDue[]
-  financeSupplierDuePayments FinanceSupplierDuePayment[]
-  financeJournalEntries      FinanceJournalEntry[]
-  financeJournalLines        FinanceJournalLine[]
-  recurringExpenseProfiles   FinanceRecurringExpenseProfile[]
-  recurringExpenseCoverages  FinanceRecurringExpenseCoverage[]
-  inclusiveLoans             FinanceInclusiveLoan[]
-  inclusiveLoanPayments      FinanceInclusiveLoanPayment[]
-  inclusiveLoanInstallments  FinanceInclusiveLoanInstallmentPlan[]
-  operationalDays            FinanceOperationalDay[]
-  dailySalesClosings         FinanceDailySalesClosing[]
-  dailySalesAllocations      FinanceDailySalesAllocation[]
-  dailyFinancialSummaries    FinanceDailyFinancialSummary[]
-  dailySalesChannelSummaries FinanceDailySalesChannelSummary[]
-  outflowDocuments          FinanceOutflowDocument[]
-  outflowBatches            FinanceOutflowBatch[]
-  aiCompanyIdentities        AiCompanyIdentity[]
-  aiExecutionReceipts        AiExecutionReceipt[]
-  branding                    CompanyBranding?
+  tenant                       Tenant                                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  memberships                  CompanyMembership[]
+  audits                       AuditEvent[]
+  idempotencyReceipts          IdempotencyReceipt[]
+  documentSerialCounters       DocumentSerialCounter[]
+  fileMetadata                 FileMetadata[]
+  financeProfile               CompanyFinanceProfile?
+  financeAccounts              FinanceAccount[]
+  financeCategories            FinanceCategory[]
+  financeSuppliers             FinanceSupplier[]
+  financeFiscalPeriods         FinanceFiscalPeriod[]
+  financeVaults                FinanceVault[]
+  financeSupplierDues          FinanceSupplierDue[]
+  financeSupplierDuePayments   FinanceSupplierDuePayment[]
+  financeJournalEntries        FinanceJournalEntry[]
+  financeJournalLines          FinanceJournalLine[]
+  recurringExpenseProfiles     FinanceRecurringExpenseProfile[]
+  recurringExpenseCoverages    FinanceRecurringExpenseCoverage[]
+  inclusiveLoans               FinanceInclusiveLoan[]
+  inclusiveLoanPayments        FinanceInclusiveLoanPayment[]
+  inclusiveLoanInstallments    FinanceInclusiveLoanInstallmentPlan[]
+  operationalDays              FinanceOperationalDay[]
+  dailySalesClosings           FinanceDailySalesClosing[]
+  dailySalesAllocations        FinanceDailySalesAllocation[]
+  dailyFinancialSummaries      FinanceDailyFinancialSummary[]
+  dailySalesChannelSummaries   FinanceDailySalesChannelSummary[]
+  outflowDocuments             FinanceOutflowDocument[]
+  outflowBatches               FinanceOutflowBatch[]
+  hrEmployees                  HrEmployee[]
+  hrEmployeeServices           HrEmployeeService[]
+  hrEmployeeFinancialMovements HrEmployeeFinancialMovement[]
+  hrEmployeeAdvances           HrEmployeeAdvance[]
+  hrEmployeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
+  hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
+  aiCompanyIdentities          AiCompanyIdentity[]
+  aiExecutionReceipts          AiExecutionReceipt[]
+  branding                     CompanyBranding?
 
   @@unique([id, tenantId])
   @@index([tenantId, status])
 }
 
 model TenantAdministrationAssignment {
-  tenantId  String   @db.Uuid
-  userId    String   @db.Uuid
-  isOwner                 Boolean   @default(false)
+  tenantId                 String    @db.Uuid
+  userId                   String    @db.Uuid
+  isOwner                  Boolean   @default(false)
   ownerActivationTokenHash String?   @db.VarChar(255)
   ownerActivationExpiresAt DateTime? @db.Timestamptz(6)
-  createdAt               DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt               DateTime  @updatedAt @db.Timestamptz(6)
+  createdAt                DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt                DateTime  @updatedAt @db.Timestamptz(6)
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   user   User   @relation(fields: [userId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -311,6 +352,7 @@ model CompanyBranding {
   @@id([tenantId, companyId])
   @@unique([companyId, tenantId])
 }
+
 model Role {
   id        String   @id @default(uuid()) @db.Uuid
   tenantId  String   @db.Uuid
@@ -511,21 +553,21 @@ model FinanceAccount {
 }
 
 model FinanceCategory {
-  id        String                @id @default(uuid()) @db.Uuid
-  tenantId  String                @db.Uuid
-  companyId String                @db.Uuid
-  parentId  String?               @db.Uuid
-  accountId String?               @db.Uuid
-  suggestedSupplierId String?     @db.Uuid
-  code      String                @db.VarChar(80)
-  nameAr    String                @db.VarChar(160)
-  nameEn    String                @db.VarChar(160)
-  kind      FinanceCategoryKind
-  status    FinanceCategoryStatus @default(ACTIVE)
-  isPosting Boolean               @default(true)
-  sortOrder Int                   @default(0)
-  createdAt DateTime              @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime              @updatedAt @db.Timestamptz(6)
+  id                  String                @id @default(uuid()) @db.Uuid
+  tenantId            String                @db.Uuid
+  companyId           String                @db.Uuid
+  parentId            String?               @db.Uuid
+  accountId           String?               @db.Uuid
+  suggestedSupplierId String?               @db.Uuid
+  code                String                @db.VarChar(80)
+  nameAr              String                @db.VarChar(160)
+  nameEn              String                @db.VarChar(160)
+  kind                FinanceCategoryKind
+  status              FinanceCategoryStatus @default(ACTIVE)
+  isPosting           Boolean               @default(true)
+  sortOrder           Int                   @default(0)
+  createdAt           DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime              @updatedAt @db.Timestamptz(6)
 
   company                  Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   account                  FinanceAccount?                  @relation(fields: [accountId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -537,6 +579,7 @@ model FinanceCategory {
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
   dailySalesClosings       FinanceDailySalesClosing[]
   outflowDocuments         FinanceOutflowDocument[]
+  hrEmployeeServices       HrEmployeeService[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, code])
@@ -569,6 +612,7 @@ model FinanceSupplier {
   recurringExpenseProfiles FinanceRecurringExpenseProfile[]
   dailySalesClosings       FinanceDailySalesClosing[]
   outflowDocuments         FinanceOutflowDocument[]
+  hrEmployeeServices       HrEmployeeService[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status])
@@ -620,21 +664,21 @@ model FinanceFiscalPeriod {
 }
 
 model FinanceVault {
-  id                   String             @id @default(uuid()) @db.Uuid
-  tenantId             String             @db.Uuid
-  companyId            String             @db.Uuid
-  accountId            String             @db.Uuid
-  nameAr               String             @db.VarChar(160)
-  nameEn               String             @db.VarChar(160)
+  id                   String                      @id @default(uuid()) @db.Uuid
+  tenantId             String                      @db.Uuid
+  companyId            String                      @db.Uuid
+  accountId            String                      @db.Uuid
+  nameAr               String                      @db.VarChar(160)
+  nameEn               String                      @db.VarChar(160)
   type                 FinanceVaultType
   paymentMethod        FinanceVaultPaymentMethod
   paymentMethods       FinanceVaultPaymentMethod[] @default([])
-  status               FinanceVaultStatus @default(ACTIVE)
-  isSalesChannel       Boolean            @default(false)
-  isPaymentDestination Boolean            @default(true)
-  sortOrder            Int                @default(0)
-  createdAt            DateTime           @default(now()) @db.Timestamptz(6)
-  updatedAt            DateTime           @updatedAt @db.Timestamptz(6)
+  status               FinanceVaultStatus          @default(ACTIVE)
+  isSalesChannel       Boolean                     @default(false)
+  isPaymentDestination Boolean                     @default(true)
+  sortOrder            Int                         @default(0)
+  createdAt            DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime                    @updatedAt @db.Timestamptz(6)
 
   company                    Company                               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   account                    FinanceAccount                        @relation(fields: [accountId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -647,6 +691,7 @@ model FinanceVault {
   dailySalesChannelSummaries FinanceDailySalesChannelSummary[]
   outflowAllocations         FinanceOutflowAllocation[]
   recurringExpenseDefaults   FinanceRecurringExpenseProfile[]
+  employeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, nameAr])
@@ -692,8 +737,8 @@ model FinanceSupplierDuePayment {
   companyId              String                          @db.Uuid
   dueId                  String                          @db.Uuid
   vaultId                String                          @db.Uuid
-  amount                 Decimal                           @db.Decimal(18, 4)
-  recognizedNetAmount    Decimal                           @default(0) @db.Decimal(18, 4)
+  amount                 Decimal                         @db.Decimal(18, 4)
+  recognizedNetAmount    Decimal                         @default(0) @db.Decimal(18, 4)
   businessDate           DateTime                        @db.Date
   status                 FinanceSupplierDuePaymentStatus @default(POSTED)
   reversalOfId           String?                         @unique @db.Uuid
@@ -736,18 +781,21 @@ model FinanceJournalEntry {
   requestId         String                    @db.VarChar(120)
   postedAt          DateTime                  @default(now()) @db.Timestamptz(6)
 
-  company              Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  fiscalPeriod         FinanceFiscalPeriod          @relation(fields: [fiscalPeriodId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  reversalOfEntry      FinanceJournalEntry?         @relation("FinanceJournalEntryReversal", fields: [reversalOfEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  reversalEntry        FinanceJournalEntry?         @relation("FinanceJournalEntryReversal")
-  createdBy            User                         @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company              Company                       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  fiscalPeriod         FinanceFiscalPeriod           @relation(fields: [fiscalPeriodId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  reversalOfEntry      FinanceJournalEntry?          @relation("FinanceJournalEntryReversal", fields: [reversalOfEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  reversalEntry        FinanceJournalEntry?          @relation("FinanceJournalEntryReversal")
+  createdBy            User                          @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
   lines                FinanceJournalLine[]
-  supplierDue          FinanceSupplierDue?          @relation("FinanceSupplierDueJournal")
-  supplierDuePayment   FinanceSupplierDuePayment?   @relation("FinanceSupplierDuePaymentJournal")
-  inclusiveLoan        FinanceInclusiveLoan?        @relation("FinanceInclusiveLoanOpeningJournal")
-  inclusiveLoanPayment FinanceInclusiveLoanPayment? @relation("FinanceInclusiveLoanPaymentJournal")
-  dailySalesClosing    FinanceDailySalesClosing?    @relation("FinanceDailySalesClosingJournal")
-  outflowDocument      FinanceOutflowDocument?      @relation("FinanceOutflowDocumentJournal")
+  supplierDue          FinanceSupplierDue?           @relation("FinanceSupplierDueJournal")
+  supplierDuePayment   FinanceSupplierDuePayment?    @relation("FinanceSupplierDuePaymentJournal")
+  inclusiveLoan        FinanceInclusiveLoan?         @relation("FinanceInclusiveLoanOpeningJournal")
+  inclusiveLoanPayment FinanceInclusiveLoanPayment?  @relation("FinanceInclusiveLoanPaymentJournal")
+  dailySalesClosing    FinanceDailySalesClosing?     @relation("FinanceDailySalesClosingJournal")
+  outflowDocument      FinanceOutflowDocument?       @relation("FinanceOutflowDocumentJournal")
+  hrEmployeeMovements  HrEmployeeFinancialMovement[]
+  hrEmployeeAdvanceIssue HrEmployeeAdvance?          @relation("HrEmployeeAdvanceIssueJournal")
+  hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
 
   @@unique([id, tenantId, companyId])
   @@unique([reversalOfEntryId, tenantId, companyId])
@@ -787,14 +835,15 @@ model FinanceOutflowDocument {
   createdAt                       DateTime                     @default(now()) @db.Timestamptz(6)
   updatedAt                       DateTime                     @updatedAt @db.Timestamptz(6)
 
-  company      Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  batch        FinanceOutflowBatch?       @relation(fields: [batchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  recurringExpenseProfile FinanceRecurringExpenseProfile? @relation(fields: [recurringExpenseProfileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  supplier     FinanceSupplier?           @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  category     FinanceCategory            @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  journalEntry FinanceJournalEntry        @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  allocations  FinanceOutflowAllocation[]
-  recurringCoverage FinanceRecurringExpenseCoverage[]
+  company                 Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  batch                   FinanceOutflowBatch?              @relation(fields: [batchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  recurringExpenseProfile FinanceRecurringExpenseProfile?   @relation(fields: [recurringExpenseProfileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supplier                FinanceSupplier?                  @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category                FinanceCategory                   @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry            FinanceJournalEntry               @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  allocations             FinanceOutflowAllocation[]
+  recurringCoverage       FinanceRecurringExpenseCoverage[]
+  hrEmployeeService       HrEmployeeService?                @relation("HrEmployeeServiceOutflowDocument")
 
   @@unique([id, tenantId, companyId])
   @@unique([journalEntryId, tenantId, companyId])
@@ -829,14 +878,14 @@ model FinanceOutflowBatch {
 }
 
 model FinanceOutflowAllocation {
-  id          String                @id @default(uuid()) @db.Uuid
-  tenantId    String                @db.Uuid
-  companyId   String                @db.Uuid
-  documentId  String                @db.Uuid
-  vaultId     String                @db.Uuid
-  grossAmount Decimal               @db.Decimal(18, 4)
+  id            String                    @id @default(uuid()) @db.Uuid
+  tenantId      String                    @db.Uuid
+  companyId     String                    @db.Uuid
+  documentId    String                    @db.Uuid
+  vaultId       String                    @db.Uuid
+  grossAmount   Decimal                   @db.Decimal(18, 4)
   paymentMethod FinanceVaultPaymentMethod
-  createdAt   DateTime              @default(now()) @db.Timestamptz(6)
+  createdAt     DateTime                  @default(now()) @db.Timestamptz(6)
 
   document FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   vault    FinanceVault           @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -845,6 +894,168 @@ model FinanceOutflowAllocation {
   @@unique([documentId, vaultId, paymentMethod])
   @@index([tenantId, companyId, vaultId, createdAt])
 }
+
+/// Employee master data is company-scoped and intentionally separate from a
+/// sign-in user. An employee never receives platform access by being created.
+model HrEmployee {
+  id             String           @id @default(uuid()) @db.Uuid
+  tenantId       String           @db.Uuid
+  companyId      String           @db.Uuid
+  employeeNumber String           @db.VarChar(80)
+  nameAr         String           @db.VarChar(160)
+  nameEn         String?          @db.VarChar(160)
+  jobTitle       String?          @db.VarChar(160)
+  phone          String?          @db.VarChar(30)
+  email          String?          @db.VarChar(254)
+  hireDate       DateTime         @db.Date
+  status         HrEmployeeStatus @default(ACTIVE)
+  terminatedAt   DateTime?        @db.Date
+  notes          String?          @db.VarChar(2000)
+  createdAt      DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime         @updatedAt @db.Timestamptz(6)
+
+  company            Company                       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  services           HrEmployeeService[]
+  financialMovements HrEmployeeFinancialMovement[]
+  advances           HrEmployeeAdvance[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, employeeNumber])
+  @@index([tenantId, companyId, status, nameAr])
+}
+
+/// A personnel service is operational until its associated cost is issued.
+/// The financial document is immutable and is never recreated by editing this record.
+model HrEmployeeService {
+  id                String                  @id @default(uuid()) @db.Uuid
+  tenantId          String                  @db.Uuid
+  companyId         String                  @db.Uuid
+  employeeId        String                  @db.Uuid
+  serviceType       String                  @db.VarChar(80)
+  referenceNumber   String?                 @db.VarChar(160)
+  issueDate         DateTime?               @db.Date
+  expiryDate        DateTime?               @db.Date
+  supplierId        String?                 @db.Uuid
+  categoryId        String?                 @db.Uuid
+  outflowDocumentId String?                 @db.Uuid
+  status            HrEmployeeServiceStatus @default(DRAFT)
+  notes             String?                 @db.VarChar(2000)
+  createdAt         DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                @updatedAt @db.Timestamptz(6)
+
+  company         Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee        HrEmployee              @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supplier        FinanceSupplier?        @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category        FinanceCategory?        @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  outflowDocument FinanceOutflowDocument? @relation("HrEmployeeServiceOutflowDocument", fields: [outflowDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([outflowDocumentId, tenantId, companyId])
+  @@index([tenantId, companyId, employeeId, status, expiryDate])
+  @@index([tenantId, companyId, serviceType, status])
+}
+
+/// A bounded, employee-facing index into immutable journal entries. It is a
+/// projection, not a second ledger, and permits the employee file to show only
+/// the financial events that concern that employee.
+model HrEmployeeFinancialMovement {
+  id              String                          @id @default(uuid()) @db.Uuid
+  tenantId        String                          @db.Uuid
+  companyId       String                          @db.Uuid
+  employeeId      String                          @db.Uuid
+  journalEntryId  String                          @db.Uuid
+  movementType    HrEmployeeFinancialMovementType
+  businessDate    DateTime                        @db.Date
+  amount          Decimal                         @db.Decimal(18, 4)
+  sourceReference String                          @db.VarChar(160)
+  description     String?                         @db.VarChar(1000)
+  createdAt       DateTime                        @default(now()) @db.Timestamptz(6)
+
+  company      Company             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee     HrEmployee          @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry FinanceJournalEntry @relation(fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([employeeId, journalEntryId, movementType])
+  @@index([tenantId, companyId, employeeId, businessDate, id])
+  @@index([tenantId, companyId, journalEntryId])
+}
+
+/// Immutable issue record for money paid to an employee before payroll. The
+/// residual is updated only by a settlement/reversal transaction and never by
+/// a generic HR deduction.
+model HrEmployeeAdvance {
+  id                   String                  @id @default(uuid()) @db.Uuid
+  tenantId             String                  @db.Uuid
+  companyId            String                  @db.Uuid
+  employeeId           String                  @db.Uuid
+  advanceNumber        String                  @db.VarChar(80)
+  businessDate         DateTime                @db.Date
+  originalAmount       Decimal                 @db.Decimal(18, 4)
+  settledAmount        Decimal                 @default(0) @db.Decimal(18, 4)
+  remainingAmount      Decimal                 @db.Decimal(18, 4)
+  status               HrEmployeeAdvanceStatus @default(ISSUED)
+  notes                String?                 @db.VarChar(2000)
+  issueJournalEntryId  String                  @db.Uuid
+  createdByUserId      String                  @db.Uuid
+  createdAt            DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime                @updatedAt @db.Timestamptz(6)
+
+  company           Company                            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee          HrEmployee                         @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  issueJournalEntry FinanceJournalEntry                @relation("HrEmployeeAdvanceIssueJournal", fields: [issueJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  allocations       HrEmployeeAdvancePayoutAllocation[]
+  settlements       HrEmployeeAdvanceSettlement[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, advanceNumber])
+  @@unique([issueJournalEntryId, tenantId, companyId])
+  @@index([tenantId, companyId, employeeId, status, businessDate, id])
+}
+
+/// Supports a split payment from multiple company vaults/methods while keeping
+/// one advance and one balanced journal entry.
+model HrEmployeeAdvancePayoutAllocation {
+  id            String                    @id @default(uuid()) @db.Uuid
+  tenantId      String                    @db.Uuid
+  companyId     String                    @db.Uuid
+  advanceId     String                    @db.Uuid
+  vaultId       String                    @db.Uuid
+  amount        Decimal                   @db.Decimal(18, 4)
+  paymentMethod FinanceVaultPaymentMethod
+  createdAt     DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  advance HrEmployeeAdvance @relation(fields: [advanceId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  vault   FinanceVault      @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([advanceId, vaultId, paymentMethod])
+  @@index([tenantId, companyId, vaultId, createdAt])
+}
+
+/// Reserved now for a later payroll/manual-receipt settlement flow. Each row
+/// will point to the actual posting rather than changing the issue itself.
+model HrEmployeeAdvanceSettlement {
+  id             String                            @id @default(uuid()) @db.Uuid
+  tenantId       String                            @db.Uuid
+  companyId      String                            @db.Uuid
+  advanceId      String                            @db.Uuid
+  source         HrEmployeeAdvanceSettlementSource
+  businessDate   DateTime                          @db.Date
+  amount         Decimal                           @db.Decimal(18, 4)
+  journalEntryId String?                           @db.Uuid
+  createdAt      DateTime                          @default(now()) @db.Timestamptz(6)
+
+  company      Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  advance      HrEmployeeAdvance @relation(fields: [advanceId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry FinanceJournalEntry? @relation(fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, advanceId, businessDate, id])
+  @@index([tenantId, companyId, journalEntryId])
+}
+
 model FinanceJournalLine {
   id             String   @id @default(uuid()) @db.Uuid
   tenantId       String   @db.Uuid
@@ -871,13 +1082,13 @@ model FinanceJournalLine {
 /// Read projection only. Its values are rebuilt from posted journal lines and
 /// never replace the journal as the accounting source of truth.
 model FinanceAccountDailyBalance {
-  tenantId    String   @db.Uuid
-  companyId   String   @db.Uuid
-  accountId   String   @db.Uuid
+  tenantId     String   @db.Uuid
+  companyId    String   @db.Uuid
+  accountId    String   @db.Uuid
   businessDate DateTime @db.Date
-  debitAmount Decimal  @default(0) @db.Decimal(18, 4)
-  creditAmount Decimal @default(0) @db.Decimal(18, 4)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  debitAmount  Decimal  @default(0) @db.Decimal(18, 4)
+  creditAmount Decimal  @default(0) @db.Decimal(18, 4)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
 
   @@id([tenantId, companyId, accountId, businessDate])
   @@index([tenantId, companyId, accountId, businessDate], map: "FinanceAccountDailyBalance_tenant_company_account_date_idx")
@@ -1012,29 +1223,29 @@ model FinanceDailySalesChannelSummary {
 }
 
 model FinanceRecurringExpenseProfile {
-  id               String                        @id @default(uuid()) @db.Uuid
-  tenantId         String                        @db.Uuid
-  companyId        String                        @db.Uuid
-  supplierId       String?                       @db.Uuid
-  categoryId       String                        @db.Uuid
-  nameAr           String                        @db.VarChar(160)
-  nameEn           String                        @db.VarChar(160)
-  expectedAmount   Decimal                       @db.Decimal(18, 4)
-  intervalMonths   Int
-  nextReminderDate DateTime                      @db.Date
-  serviceNumber    String?                       @db.VarChar(160)
-  defaultVaultId   String?                       @db.Uuid
-  allowAmountOverride Boolean                    @default(true)
-  status           FinanceRecurringExpenseStatus @default(ACTIVE)
-  notes            String?                       @db.VarChar(2000)
-  createdAt        DateTime                      @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime                      @updatedAt @db.Timestamptz(6)
+  id                  String                        @id @default(uuid()) @db.Uuid
+  tenantId            String                        @db.Uuid
+  companyId           String                        @db.Uuid
+  supplierId          String?                       @db.Uuid
+  categoryId          String                        @db.Uuid
+  nameAr              String                        @db.VarChar(160)
+  nameEn              String                        @db.VarChar(160)
+  expectedAmount      Decimal                       @db.Decimal(18, 4)
+  intervalMonths      Int
+  nextReminderDate    DateTime                      @db.Date
+  serviceNumber       String?                       @db.VarChar(160)
+  defaultVaultId      String?                       @db.Uuid
+  allowAmountOverride Boolean                       @default(true)
+  status              FinanceRecurringExpenseStatus @default(ACTIVE)
+  notes               String?                       @db.VarChar(2000)
+  createdAt           DateTime                      @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                      @updatedAt @db.Timestamptz(6)
 
-  company  Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  supplier FinanceSupplier? @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  category FinanceCategory  @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  defaultVault FinanceVault? @relation(fields: [defaultVaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  documents FinanceOutflowDocument[]
+  company       Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  supplier      FinanceSupplier?                  @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category      FinanceCategory                   @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  defaultVault  FinanceVault?                     @relation(fields: [defaultVaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  documents     FinanceOutflowDocument[]
   coverageSlots FinanceRecurringExpenseCoverage[]
 
   @@unique([id, tenantId, companyId])
@@ -1042,23 +1253,24 @@ model FinanceRecurringExpenseProfile {
 }
 
 model FinanceRecurringExpenseCoverage {
-  id        String   @id @default(uuid()) @db.Uuid
-  tenantId  String   @db.Uuid
-  companyId String   @db.Uuid
-  profileId String   @db.Uuid
-  coverageYear Int
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  companyId     String   @db.Uuid
+  profileId     String   @db.Uuid
+  coverageYear  Int
   coverageMonth Int
-  documentId String? @db.Uuid
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  documentId    String?  @db.Uuid
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  profile FinanceRecurringExpenseProfile @relation(fields: [profileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  document FinanceOutflowDocument? @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company  Company                        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  profile  FinanceRecurringExpenseProfile @relation(fields: [profileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  document FinanceOutflowDocument?        @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, profileId, coverageYear, coverageMonth])
   @@index([tenantId, companyId, profileId, coverageYear])
 }
+
 model FinanceInclusiveLoan {
   id                       String                     @id @default(uuid()) @db.Uuid
   tenantId                 String                     @db.Uuid
@@ -1095,7 +1307,7 @@ model FinanceInclusiveLoanPayment {
   companyId      String                            @db.Uuid
   loanId         String                            @db.Uuid
   vaultId        String                            @db.Uuid
-  amount             Decimal                           @db.Decimal(18, 4)
+  amount         Decimal                           @db.Decimal(18, 4)
   businessDate   DateTime                          @db.Date
   status         FinanceInclusiveLoanPaymentStatus @default(POSTED)
   reversalOfId   String?                           @unique @db.Uuid
@@ -1231,7 +1443,7 @@ model AiSystemIdentity {
   createdAt          DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt          DateTime                @updatedAt @db.Timestamptz(6)
 
-  executionReceipts  AiExecutionReceipt[]
+  executionReceipts AiExecutionReceipt[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, version])

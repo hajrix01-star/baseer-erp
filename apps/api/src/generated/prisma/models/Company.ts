@@ -234,6 +234,12 @@ export type CompanyWhereInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
   outflowBatches?: Prisma.FinanceOutflowBatchListRelationFilter
+  hrEmployees?: Prisma.HrEmployeeListRelationFilter
+  hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementListRelationFilter
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceListRelationFilter
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   branding?: Prisma.XOR<Prisma.CompanyBrandingNullableScalarRelationFilter, Prisma.CompanyBrandingWhereInput> | null
@@ -276,6 +282,12 @@ export type CompanyOrderByWithRelationInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryOrderByRelationAggregateInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentOrderByRelationAggregateInput
   outflowBatches?: Prisma.FinanceOutflowBatchOrderByRelationAggregateInput
+  hrEmployees?: Prisma.HrEmployeeOrderByRelationAggregateInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceOrderByRelationAggregateInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementOrderByRelationAggregateInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceOrderByRelationAggregateInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationOrderByRelationAggregateInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementOrderByRelationAggregateInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityOrderByRelationAggregateInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
   branding?: Prisma.CompanyBrandingOrderByWithRelationInput
@@ -322,6 +334,12 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
   outflowBatches?: Prisma.FinanceOutflowBatchListRelationFilter
+  hrEmployees?: Prisma.HrEmployeeListRelationFilter
+  hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementListRelationFilter
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceListRelationFilter
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   branding?: Prisma.XOR<Prisma.CompanyBrandingNullableScalarRelationFilter, Prisma.CompanyBrandingWhereInput> | null
@@ -391,6 +409,12 @@ export type CompanyCreateInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -432,6 +456,12 @@ export type CompanyUncheckedCreateInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -473,6 +503,12 @@ export type CompanyUpdateInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -514,6 +550,12 @@ export type CompanyUncheckedUpdateInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -895,6 +937,90 @@ export type CompanyUpdateOneRequiredWithoutOutflowBatchesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutOutflowBatchesInput, Prisma.CompanyUpdateWithoutOutflowBatchesInput>, Prisma.CompanyUncheckedUpdateWithoutOutflowBatchesInput>
 }
 
+export type CompanyCreateNestedOneWithoutHrEmployeesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeesInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeesInput, Prisma.CompanyUpdateWithoutHrEmployeesInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeesInput>
+}
+
+export type CompanyCreateNestedOneWithoutHrEmployeeServicesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeServicesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeServicesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeServicesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeServicesInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeServicesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeServicesInput, Prisma.CompanyUpdateWithoutHrEmployeeServicesInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeServicesInput>
+}
+
+export type CompanyCreateNestedOneWithoutHrEmployeeFinancialMovementsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeFinancialMovementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeFinancialMovementsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeFinancialMovementsInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeFinancialMovementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUpdateWithoutHrEmployeeFinancialMovementsInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput>
+}
+
+export type CompanyCreateNestedOneWithoutHrEmployeeAdvancesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvancesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeAdvancesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvancesInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeAdvancesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvancesInput, Prisma.CompanyUpdateWithoutHrEmployeeAdvancesInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput>
+}
+
+export type CompanyCreateNestedOneWithoutHrEmployeeAdvanceAllocationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvanceAllocationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeAdvanceAllocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvanceAllocationsInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeAdvanceAllocationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput>
+}
+
+export type CompanyCreateNestedOneWithoutHrEmployeeAdvanceSettlementsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvanceSettlementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeAdvanceSettlementsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvanceSettlementsInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeAdvanceSettlementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput>
+}
+
 export type CompanyCreateNestedOneWithoutFinanceJournalLinesInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutFinanceJournalLinesInput, Prisma.CompanyUncheckedCreateWithoutFinanceJournalLinesInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutFinanceJournalLinesInput
@@ -1112,6 +1238,12 @@ export type CompanyCreateWithoutTenantInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1152,6 +1284,12 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -1233,6 +1371,12 @@ export type CompanyCreateWithoutBrandingInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
 }
@@ -1273,6 +1417,12 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
 }
@@ -1329,6 +1479,12 @@ export type CompanyUpdateWithoutBrandingInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
 }
@@ -1369,6 +1525,12 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
 }
@@ -1408,6 +1570,12 @@ export type CompanyCreateWithoutMembershipsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1448,6 +1616,12 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -1504,6 +1678,12 @@ export type CompanyUpdateWithoutMembershipsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -1544,6 +1724,12 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -1584,6 +1770,12 @@ export type CompanyCreateWithoutAuditsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1624,6 +1816,12 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -1680,6 +1878,12 @@ export type CompanyUpdateWithoutAuditsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -1720,6 +1924,12 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -1760,6 +1970,12 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1800,6 +2016,12 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -1856,6 +2078,12 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -1896,6 +2124,12 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -1936,6 +2170,12 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1976,6 +2216,12 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2032,6 +2278,12 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2072,6 +2324,12 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2112,6 +2370,12 @@ export type CompanyCreateWithoutFileMetadataInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2152,6 +2416,12 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2208,6 +2478,12 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2248,6 +2524,12 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2288,6 +2570,12 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2328,6 +2616,12 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2384,6 +2678,12 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2424,6 +2724,12 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2464,6 +2770,12 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2504,6 +2816,12 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2560,6 +2878,12 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2600,6 +2924,12 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2640,6 +2970,12 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2680,6 +3016,12 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2736,6 +3078,12 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2776,6 +3124,12 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2816,6 +3170,12 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2856,6 +3216,12 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2912,6 +3278,12 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2952,6 +3324,12 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2992,6 +3370,12 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3032,6 +3416,12 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3088,6 +3478,12 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3128,6 +3524,12 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3168,6 +3570,12 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3208,6 +3616,12 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3264,6 +3678,12 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3304,6 +3724,12 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3344,6 +3770,12 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3384,6 +3816,12 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3440,6 +3878,12 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3480,6 +3924,12 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3520,6 +3970,12 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3560,6 +4016,12 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3616,6 +4078,12 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3656,6 +4124,12 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3696,6 +4170,12 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3736,6 +4216,12 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3792,6 +4278,12 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3832,6 +4324,12 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3872,6 +4370,12 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3912,6 +4416,12 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3968,6 +4478,12 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4008,6 +4524,12 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4048,6 +4570,12 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4088,6 +4616,12 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4144,6 +4678,12 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4184,6 +4724,1212 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeesInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeesInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeesInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeeServicesInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeServicesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeServicesInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeServicesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeServicesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeServicesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeServicesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeServicesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeServicesInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeFinancialMovementsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeFinancialMovementsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeFinancialMovementsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeAdvancesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeAdvancesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvancesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeAdvanceAllocationsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeAdvanceAllocationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvanceAllocationsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeAdvanceSettlementsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeAdvanceSettlementsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeAdvanceSettlementsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4224,6 +5970,12 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4264,6 +6016,12 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4320,6 +6078,12 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4360,6 +6124,12 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4400,6 +6170,12 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4440,6 +6216,12 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4496,6 +6278,12 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4536,6 +6324,12 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4576,6 +6370,12 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4616,6 +6416,12 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4672,6 +6478,12 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4712,6 +6524,12 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4752,6 +6570,12 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4792,6 +6616,12 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4848,6 +6678,12 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4888,6 +6724,12 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4928,6 +6770,12 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4968,6 +6816,12 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5024,6 +6878,12 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5064,6 +6924,12 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5104,6 +6970,12 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5144,6 +7016,12 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5200,6 +7078,12 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5240,6 +7124,12 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5280,6 +7170,12 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5320,6 +7216,12 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5376,6 +7278,12 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5416,6 +7324,12 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5456,6 +7370,12 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5496,6 +7416,12 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5552,6 +7478,12 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5592,6 +7524,12 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5632,6 +7570,12 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5672,6 +7616,12 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5728,6 +7678,12 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5768,6 +7724,12 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5808,6 +7770,12 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5848,6 +7816,12 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5904,6 +7878,12 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5944,6 +7924,12 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5984,6 +7970,12 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -6024,6 +8016,12 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -6080,6 +8078,12 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6120,6 +8124,12 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6161,6 +8171,12 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
@@ -6201,6 +8217,12 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
 }
@@ -6257,6 +8279,12 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
 }
@@ -6297,6 +8325,12 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
@@ -6337,6 +8371,12 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
@@ -6377,6 +8417,12 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
 }
@@ -6433,6 +8479,12 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
 }
@@ -6473,6 +8525,12 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
@@ -6522,6 +8580,12 @@ export type CompanyUpdateWithoutTenantInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6562,6 +8626,12 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6609,6 +8679,12 @@ export type CompanyCountOutputType = {
   dailySalesChannelSummaries: number
   outflowDocuments: number
   outflowBatches: number
+  hrEmployees: number
+  hrEmployeeServices: number
+  hrEmployeeFinancialMovements: number
+  hrEmployeeAdvances: number
+  hrEmployeeAdvanceAllocations: number
+  hrEmployeeAdvanceSettlements: number
   aiCompanyIdentities: number
   aiExecutionReceipts: number
 }
@@ -6640,6 +8716,12 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   dailySalesChannelSummaries?: boolean | CompanyCountOutputTypeCountDailySalesChannelSummariesArgs
   outflowDocuments?: boolean | CompanyCountOutputTypeCountOutflowDocumentsArgs
   outflowBatches?: boolean | CompanyCountOutputTypeCountOutflowBatchesArgs
+  hrEmployees?: boolean | CompanyCountOutputTypeCountHrEmployeesArgs
+  hrEmployeeServices?: boolean | CompanyCountOutputTypeCountHrEmployeeServicesArgs
+  hrEmployeeFinancialMovements?: boolean | CompanyCountOutputTypeCountHrEmployeeFinancialMovementsArgs
+  hrEmployeeAdvances?: boolean | CompanyCountOutputTypeCountHrEmployeeAdvancesArgs
+  hrEmployeeAdvanceAllocations?: boolean | CompanyCountOutputTypeCountHrEmployeeAdvanceAllocationsArgs
+  hrEmployeeAdvanceSettlements?: boolean | CompanyCountOutputTypeCountHrEmployeeAdvanceSettlementsArgs
   aiCompanyIdentities?: boolean | CompanyCountOutputTypeCountAiCompanyIdentitiesArgs
   aiExecutionReceipts?: boolean | CompanyCountOutputTypeCountAiExecutionReceiptsArgs
 }
@@ -6839,6 +8921,48 @@ export type CompanyCountOutputTypeCountOutflowBatchesArgs<ExtArgs extends runtim
 /**
  * CompanyCountOutputType without action
  */
+export type CompanyCountOutputTypeCountHrEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeServiceWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeFinancialMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeFinancialMovementWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeAdvancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeAdvanceAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeAdvancePayoutAllocationWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeAdvanceSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeAdvanceSettlementWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
 export type CompanyCountOutputTypeCountAiCompanyIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AiCompanyIdentityWhereInput
 }
@@ -6888,6 +9012,12 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   dailySalesChannelSummaries?: boolean | Prisma.Company$dailySalesChannelSummariesArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.Company$outflowDocumentsArgs<ExtArgs>
   outflowBatches?: boolean | Prisma.Company$outflowBatchesArgs<ExtArgs>
+  hrEmployees?: boolean | Prisma.Company$hrEmployeesArgs<ExtArgs>
+  hrEmployeeServices?: boolean | Prisma.Company$hrEmployeeServicesArgs<ExtArgs>
+  hrEmployeeFinancialMovements?: boolean | Prisma.Company$hrEmployeeFinancialMovementsArgs<ExtArgs>
+  hrEmployeeAdvances?: boolean | Prisma.Company$hrEmployeeAdvancesArgs<ExtArgs>
+  hrEmployeeAdvanceAllocations?: boolean | Prisma.Company$hrEmployeeAdvanceAllocationsArgs<ExtArgs>
+  hrEmployeeAdvanceSettlements?: boolean | Prisma.Company$hrEmployeeAdvanceSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   branding?: boolean | Prisma.Company$brandingArgs<ExtArgs>
@@ -6959,6 +9089,12 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   dailySalesChannelSummaries?: boolean | Prisma.Company$dailySalesChannelSummariesArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.Company$outflowDocumentsArgs<ExtArgs>
   outflowBatches?: boolean | Prisma.Company$outflowBatchesArgs<ExtArgs>
+  hrEmployees?: boolean | Prisma.Company$hrEmployeesArgs<ExtArgs>
+  hrEmployeeServices?: boolean | Prisma.Company$hrEmployeeServicesArgs<ExtArgs>
+  hrEmployeeFinancialMovements?: boolean | Prisma.Company$hrEmployeeFinancialMovementsArgs<ExtArgs>
+  hrEmployeeAdvances?: boolean | Prisma.Company$hrEmployeeAdvancesArgs<ExtArgs>
+  hrEmployeeAdvanceAllocations?: boolean | Prisma.Company$hrEmployeeAdvanceAllocationsArgs<ExtArgs>
+  hrEmployeeAdvanceSettlements?: boolean | Prisma.Company$hrEmployeeAdvanceSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   branding?: boolean | Prisma.Company$brandingArgs<ExtArgs>
@@ -7002,6 +9138,12 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     dailySalesChannelSummaries: Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>[]
     outflowDocuments: Prisma.$FinanceOutflowDocumentPayload<ExtArgs>[]
     outflowBatches: Prisma.$FinanceOutflowBatchPayload<ExtArgs>[]
+    hrEmployees: Prisma.$HrEmployeePayload<ExtArgs>[]
+    hrEmployeeServices: Prisma.$HrEmployeeServicePayload<ExtArgs>[]
+    hrEmployeeFinancialMovements: Prisma.$HrEmployeeFinancialMovementPayload<ExtArgs>[]
+    hrEmployeeAdvances: Prisma.$HrEmployeeAdvancePayload<ExtArgs>[]
+    hrEmployeeAdvanceAllocations: Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>[]
+    hrEmployeeAdvanceSettlements: Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>[]
     aiCompanyIdentities: Prisma.$AiCompanyIdentityPayload<ExtArgs>[]
     aiExecutionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
     branding: Prisma.$CompanyBrandingPayload<ExtArgs> | null
@@ -7437,6 +9579,12 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   dailySalesChannelSummaries<T extends Prisma.Company$dailySalesChannelSummariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$dailySalesChannelSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesChannelSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   outflowDocuments<T extends Prisma.Company$outflowDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$outflowDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   outflowBatches<T extends Prisma.Company$outflowBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$outflowBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployees<T extends Prisma.Company$hrEmployeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeServices<T extends Prisma.Company$hrEmployeeServicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeServicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeFinancialMovements<T extends Prisma.Company$hrEmployeeFinancialMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeFinancialMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeFinancialMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeAdvances<T extends Prisma.Company$hrEmployeeAdvancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeAdvancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeAdvanceAllocations<T extends Prisma.Company$hrEmployeeAdvanceAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeAdvanceAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeAdvanceSettlements<T extends Prisma.Company$hrEmployeeAdvanceSettlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeAdvanceSettlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiCompanyIdentities<T extends Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiExecutionReceipts<T extends Prisma.Company$aiExecutionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   branding<T extends Prisma.Company$brandingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$brandingArgs<ExtArgs>>): Prisma.Prisma__CompanyBrandingClient<runtime.Types.Result.GetResult<Prisma.$CompanyBrandingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -8518,6 +10666,150 @@ export type Company$outflowBatchesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.FinanceOutflowBatchScalarFieldEnum | Prisma.FinanceOutflowBatchScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployees
+ */
+export type Company$hrEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployee
+   */
+  select?: Prisma.HrEmployeeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployee
+   */
+  omit?: Prisma.HrEmployeeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeWhereInput
+  orderBy?: Prisma.HrEmployeeOrderByWithRelationInput | Prisma.HrEmployeeOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeScalarFieldEnum | Prisma.HrEmployeeScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeServices
+ */
+export type Company$hrEmployeeServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeService
+   */
+  select?: Prisma.HrEmployeeServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeService
+   */
+  omit?: Prisma.HrEmployeeServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeServiceInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeServiceWhereInput
+  orderBy?: Prisma.HrEmployeeServiceOrderByWithRelationInput | Prisma.HrEmployeeServiceOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeServiceScalarFieldEnum | Prisma.HrEmployeeServiceScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeFinancialMovements
+ */
+export type Company$hrEmployeeFinancialMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeFinancialMovement
+   */
+  select?: Prisma.HrEmployeeFinancialMovementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeFinancialMovement
+   */
+  omit?: Prisma.HrEmployeeFinancialMovementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeFinancialMovementInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeFinancialMovementWhereInput
+  orderBy?: Prisma.HrEmployeeFinancialMovementOrderByWithRelationInput | Prisma.HrEmployeeFinancialMovementOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeFinancialMovementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeFinancialMovementScalarFieldEnum | Prisma.HrEmployeeFinancialMovementScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeAdvances
+ */
+export type Company$hrEmployeeAdvancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdvance
+   */
+  select?: Prisma.HrEmployeeAdvanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeAdvance
+   */
+  omit?: Prisma.HrEmployeeAdvanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeAdvanceInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+  orderBy?: Prisma.HrEmployeeAdvanceOrderByWithRelationInput | Prisma.HrEmployeeAdvanceOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeAdvanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeAdvanceScalarFieldEnum | Prisma.HrEmployeeAdvanceScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeAdvanceAllocations
+ */
+export type Company$hrEmployeeAdvanceAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdvancePayoutAllocation
+   */
+  select?: Prisma.HrEmployeeAdvancePayoutAllocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeAdvancePayoutAllocation
+   */
+  omit?: Prisma.HrEmployeeAdvancePayoutAllocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeAdvancePayoutAllocationInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeAdvancePayoutAllocationWhereInput
+  orderBy?: Prisma.HrEmployeeAdvancePayoutAllocationOrderByWithRelationInput | Prisma.HrEmployeeAdvancePayoutAllocationOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeAdvancePayoutAllocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeAdvancePayoutAllocationScalarFieldEnum | Prisma.HrEmployeeAdvancePayoutAllocationScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeAdvanceSettlements
+ */
+export type Company$hrEmployeeAdvanceSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdvanceSettlement
+   */
+  select?: Prisma.HrEmployeeAdvanceSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeAdvanceSettlement
+   */
+  omit?: Prisma.HrEmployeeAdvanceSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeAdvanceSettlementInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeAdvanceSettlementWhereInput
+  orderBy?: Prisma.HrEmployeeAdvanceSettlementOrderByWithRelationInput | Prisma.HrEmployeeAdvanceSettlementOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeAdvanceSettlementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeAdvanceSettlementScalarFieldEnum | Prisma.HrEmployeeAdvanceSettlementScalarFieldEnum[]
 }
 
 /**

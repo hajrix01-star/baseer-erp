@@ -432,6 +432,7 @@ export type FinanceOutflowDocumentWhereInput = {
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.FinanceOutflowAllocationListRelationFilter
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
+  hrEmployeeService?: Prisma.XOR<Prisma.HrEmployeeServiceNullableScalarRelationFilter, Prisma.HrEmployeeServiceWhereInput> | null
 }
 
 export type FinanceOutflowDocumentOrderByWithRelationInput = {
@@ -471,6 +472,7 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   journalEntry?: Prisma.FinanceJournalEntryOrderByWithRelationInput
   allocations?: Prisma.FinanceOutflowAllocationOrderByRelationAggregateInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageOrderByRelationAggregateInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceOrderByWithRelationInput
 }
 
 export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -516,6 +518,7 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   journalEntry?: Prisma.XOR<Prisma.FinanceJournalEntryScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput>
   allocations?: Prisma.FinanceOutflowAllocationListRelationFilter
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
+  hrEmployeeService?: Prisma.XOR<Prisma.HrEmployeeServiceNullableScalarRelationFilter, Prisma.HrEmployeeServiceWhereInput> | null
 }, "id" | "id_tenantId_companyId" | "journalEntryId_tenantId_companyId" | "companyId_documentNumber">
 
 export type FinanceOutflowDocumentOrderByWithAggregationInput = {
@@ -618,6 +621,7 @@ export type FinanceOutflowDocumentCreateInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateInput = {
@@ -651,6 +655,7 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUpdateInput = {
@@ -683,6 +688,7 @@ export type FinanceOutflowDocumentUpdateInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateInput = {
@@ -716,6 +722,7 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyInput = {
@@ -1180,6 +1187,22 @@ export type FinanceOutflowDocumentUpdateOneRequiredWithoutAllocationsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateToOneWithWhereWithoutAllocationsInput, Prisma.FinanceOutflowDocumentUpdateWithoutAllocationsInput>, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput>
 }
 
+export type FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutHrEmployeeServiceInput
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+}
+
+export type FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutHrEmployeeServiceInput
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithoutHrEmployeeServiceInput
+  disconnect?: Prisma.FinanceOutflowDocumentWhereInput | boolean
+  delete?: Prisma.FinanceOutflowDocumentWhereInput | boolean
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateToOneWithWhereWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput>, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput>
+}
+
 export type FinanceOutflowDocumentCreateNestedManyWithoutRecurringExpenseProfileInput = {
   create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput> | Prisma.FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput[]
   connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput[]
@@ -1267,6 +1290,7 @@ export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
@@ -1298,6 +1322,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCompanyInput = {
@@ -1389,6 +1414,7 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
@@ -1419,6 +1445,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCategoryInput = {
@@ -1476,6 +1503,7 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
@@ -1506,6 +1534,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutSupplierInput = {
@@ -1563,6 +1592,7 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
@@ -1593,6 +1623,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutJournalEntryInput = {
@@ -1640,6 +1671,7 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
@@ -1670,6 +1702,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutBatchInput = {
@@ -1701,6 +1734,7 @@ export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
@@ -1731,6 +1765,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutBatchInput = {
@@ -1788,6 +1823,7 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
@@ -1820,6 +1856,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutAllocationsInput = {
@@ -1867,6 +1904,7 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
@@ -1899,6 +1937,153 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
+  journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  notes?: string | null
+  journalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type FinanceOutflowDocumentCreateOrConnectWithoutHrEmployeeServiceInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput>
+}
+
+export type FinanceOutflowDocumentUpsertWithoutHrEmployeeServiceInput = {
+  update: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput>
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput>
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+}
+
+export type FinanceOutflowDocumentUpdateToOneWithWhereWithoutHrEmployeeServiceInput = {
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput>
+}
+
+export type FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
@@ -1930,6 +2115,7 @@ export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput = {
@@ -1960,6 +2146,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileI
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput = {
@@ -2017,6 +2204,7 @@ export type FinanceOutflowDocumentCreateWithoutRecurringCoverageInput = {
   category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
   journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
   allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput = {
@@ -2049,6 +2237,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput =
   createdAt?: Date | string
   updatedAt?: Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringCoverageInput = {
@@ -2096,6 +2285,7 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput = {
   category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput = {
@@ -2128,6 +2318,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput =
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyCompanyInput = {
@@ -2188,6 +2379,7 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
@@ -2219,6 +2411,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
@@ -2307,6 +2500,7 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
@@ -2337,6 +2531,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
@@ -2424,6 +2619,7 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
@@ -2454,6 +2650,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
@@ -2541,6 +2738,7 @@ export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
@@ -2571,6 +2769,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
@@ -2658,6 +2857,7 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput = {
   journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
   allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileInput = {
@@ -2688,6 +2888,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileI
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileInput = {
@@ -2795,6 +2996,7 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>
   recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
+  hrEmployeeService?: boolean | Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeOutflowDocument"]>
 
@@ -2913,6 +3115,7 @@ export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensio
   journalEntry?: boolean | Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>
   allocations?: boolean | Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>
   recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
+  hrEmployeeService?: boolean | Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceOutflowDocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2943,6 +3146,7 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
     journalEntry: Prisma.$FinanceJournalEntryPayload<ExtArgs>
     allocations: Prisma.$FinanceOutflowAllocationPayload<ExtArgs>[]
     recurringCoverage: Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>[]
+    hrEmployeeService: Prisma.$HrEmployeeServicePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3375,6 +3579,7 @@ export interface Prisma__FinanceOutflowDocumentClient<T, Null = never, ExtArgs e
   journalEntry<T extends Prisma.FinanceJournalEntryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntryDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceJournalEntryClient<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   allocations<T extends Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recurringCoverage<T extends Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeService<T extends Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>>): Prisma.Prisma__HrEmployeeServiceClient<runtime.Types.Result.GetResult<Prisma.$HrEmployeeServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3935,6 +4140,25 @@ export type FinanceOutflowDocument$recurringCoverageArgs<ExtArgs extends runtime
   take?: number
   skip?: number
   distinct?: Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum | Prisma.FinanceRecurringExpenseCoverageScalarFieldEnum[]
+}
+
+/**
+ * FinanceOutflowDocument.hrEmployeeService
+ */
+export type FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeService
+   */
+  select?: Prisma.HrEmployeeServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeService
+   */
+  omit?: Prisma.HrEmployeeServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeServiceInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeServiceWhereInput
 }
 
 /**

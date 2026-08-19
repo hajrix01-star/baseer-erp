@@ -22,6 +22,14 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     1: ["finance.purchase_expense.read", "finance.purchase_expense.create", "finance.supplier_dues.read"],
     2: ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"],
   },
+  hr: {
+    0: ["hr.employees.read", "hr.employees.write"],
+    1: ["hr.employees.read", "hr.employees.write"],
+    2: ["hr.employees.read", "hr.employees.write"],
+    3: ["hr.employees.read", "hr.employees.write"],
+    4: ["hr.advances.read", "hr.advances.issue", "hr.deductions.manage"],
+    5: ["hr.employees.read", "hr.employees.write"],
+  },
   administration: {
     0: ["administration.companies.read", "administration.users.read", "administration.roles.read"],
     1: ["administration.companies.read", "administration.companies.manage"],

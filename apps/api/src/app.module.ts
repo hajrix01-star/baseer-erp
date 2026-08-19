@@ -72,9 +72,12 @@ import { IdentityTokenService } from './identity/identity-token.service.js';
 import { SignInRateLimitService } from './identity/sign-in-rate-limit.service.js';
 import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
+import { HrController } from './hr/hr.controller.js';
+import { HrService } from './hr/hr.service.js';
+import { HrAdvanceService } from './hr/hr-advance.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -122,6 +125,8 @@ import { OutputService } from './output/output.service.js';
     ObservabilityService,
     RequestObservabilityInterceptor,
     OutputService,
+    HrService,
+    HrAdvanceService,
   ],
 })
 export class AppModule {}

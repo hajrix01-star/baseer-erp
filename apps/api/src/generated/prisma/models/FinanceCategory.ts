@@ -306,6 +306,7 @@ export type FinanceCategoryWhereInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
   dailySalesClosings?: Prisma.FinanceDailySalesClosingListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
+  hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
 }
 
 export type FinanceCategoryOrderByWithRelationInput = {
@@ -334,6 +335,7 @@ export type FinanceCategoryOrderByWithRelationInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileOrderByRelationAggregateInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingOrderByRelationAggregateInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentOrderByRelationAggregateInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceOrderByRelationAggregateInput
 }
 
 export type FinanceCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -367,6 +369,7 @@ export type FinanceCategoryWhereUniqueInput = Prisma.AtLeast<{
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
   dailySalesClosings?: Prisma.FinanceDailySalesClosingListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
+  hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_code">
 
 export type FinanceCategoryOrderByWithAggregationInput = {
@@ -434,6 +437,7 @@ export type FinanceCategoryCreateInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateInput = {
@@ -458,6 +462,7 @@ export type FinanceCategoryUncheckedCreateInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUpdateInput = {
@@ -481,6 +486,7 @@ export type FinanceCategoryUpdateInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateInput = {
@@ -505,6 +511,7 @@ export type FinanceCategoryUncheckedUpdateInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryCreateManyInput = {
@@ -887,6 +894,22 @@ export type FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceCategoryUpdateToOneWithWhereWithoutOutflowDocumentsInput, Prisma.FinanceCategoryUpdateWithoutOutflowDocumentsInput>, Prisma.FinanceCategoryUncheckedUpdateWithoutOutflowDocumentsInput>
 }
 
+export type FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput = {
+  create?: Prisma.XOR<Prisma.FinanceCategoryCreateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedCreateWithoutHrEmployeeServicesInput>
+  connectOrCreate?: Prisma.FinanceCategoryCreateOrConnectWithoutHrEmployeeServicesInput
+  connect?: Prisma.FinanceCategoryWhereUniqueInput
+}
+
+export type FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceCategoryCreateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedCreateWithoutHrEmployeeServicesInput>
+  connectOrCreate?: Prisma.FinanceCategoryCreateOrConnectWithoutHrEmployeeServicesInput
+  upsert?: Prisma.FinanceCategoryUpsertWithoutHrEmployeeServicesInput
+  disconnect?: Prisma.FinanceCategoryWhereInput | boolean
+  delete?: Prisma.FinanceCategoryWhereInput | boolean
+  connect?: Prisma.FinanceCategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceCategoryUpdateToOneWithWhereWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUpdateWithoutHrEmployeeServicesInput>, Prisma.FinanceCategoryUncheckedUpdateWithoutHrEmployeeServicesInput>
+}
+
 export type FinanceCategoryCreateNestedOneWithoutDailySalesClosingsInput = {
   create?: Prisma.XOR<Prisma.FinanceCategoryCreateWithoutDailySalesClosingsInput, Prisma.FinanceCategoryUncheckedCreateWithoutDailySalesClosingsInput>
   connectOrCreate?: Prisma.FinanceCategoryCreateOrConnectWithoutDailySalesClosingsInput
@@ -937,6 +960,7 @@ export type FinanceCategoryCreateWithoutCompanyInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutCompanyInput = {
@@ -959,6 +983,7 @@ export type FinanceCategoryUncheckedCreateWithoutCompanyInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutCompanyInput = {
@@ -1028,6 +1053,7 @@ export type FinanceCategoryCreateWithoutAccountInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutAccountInput = {
@@ -1049,6 +1075,7 @@ export type FinanceCategoryUncheckedCreateWithoutAccountInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutAccountInput = {
@@ -1097,6 +1124,7 @@ export type FinanceCategoryCreateWithoutChildrenInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutChildrenInput = {
@@ -1120,6 +1148,7 @@ export type FinanceCategoryUncheckedCreateWithoutChildrenInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutChildrenInput = {
@@ -1147,6 +1176,7 @@ export type FinanceCategoryCreateWithoutParentInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutParentInput = {
@@ -1168,6 +1198,7 @@ export type FinanceCategoryUncheckedCreateWithoutParentInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutParentInput = {
@@ -1211,6 +1242,7 @@ export type FinanceCategoryUpdateWithoutChildrenInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutChildrenInput = {
@@ -1234,6 +1266,7 @@ export type FinanceCategoryUncheckedUpdateWithoutChildrenInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUpsertWithWhereUniqueWithoutParentInput = {
@@ -1272,6 +1305,7 @@ export type FinanceCategoryCreateWithoutSuppliersInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutSuppliersInput = {
@@ -1295,6 +1329,7 @@ export type FinanceCategoryUncheckedCreateWithoutSuppliersInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutSuppliersInput = {
@@ -1322,6 +1357,7 @@ export type FinanceCategoryCreateWithoutSuggestedSupplierInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutSuggestedSupplierInput = {
@@ -1343,6 +1379,7 @@ export type FinanceCategoryUncheckedCreateWithoutSuggestedSupplierInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutSuggestedSupplierInput = {
@@ -1386,6 +1423,7 @@ export type FinanceCategoryUpdateWithoutSuppliersInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutSuppliersInput = {
@@ -1409,6 +1447,7 @@ export type FinanceCategoryUncheckedUpdateWithoutSuppliersInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUpsertWithWhereUniqueWithoutSuggestedSupplierInput = {
@@ -1447,6 +1486,7 @@ export type FinanceCategoryCreateWithoutDuesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutDuesInput = {
@@ -1470,6 +1510,7 @@ export type FinanceCategoryUncheckedCreateWithoutDuesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutDuesInput = {
@@ -1508,6 +1549,7 @@ export type FinanceCategoryUpdateWithoutDuesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutDuesInput = {
@@ -1531,6 +1573,7 @@ export type FinanceCategoryUncheckedUpdateWithoutDuesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryCreateWithoutOutflowDocumentsInput = {
@@ -1553,6 +1596,7 @@ export type FinanceCategoryCreateWithoutOutflowDocumentsInput = {
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCategoryInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutOutflowDocumentsInput = {
@@ -1576,6 +1620,7 @@ export type FinanceCategoryUncheckedCreateWithoutOutflowDocumentsInput = {
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCategoryInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutOutflowDocumentsInput = {
@@ -1614,6 +1659,7 @@ export type FinanceCategoryUpdateWithoutOutflowDocumentsInput = {
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutCategoryNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutOutflowDocumentsInput = {
@@ -1637,6 +1683,117 @@ export type FinanceCategoryUncheckedUpdateWithoutOutflowDocumentsInput = {
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCategoryNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
+export type FinanceCategoryCreateWithoutHrEmployeeServicesInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn: string
+  kind: $Enums.FinanceCategoryKind
+  status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceCategoriesInput
+  account?: Prisma.FinanceAccountCreateNestedOneWithoutCategoriesInput
+  parent?: Prisma.FinanceCategoryCreateNestedOneWithoutChildrenInput
+  children?: Prisma.FinanceCategoryCreateNestedManyWithoutParentInput
+  suggestedSupplier?: Prisma.FinanceSupplierCreateNestedOneWithoutSuggestedForCategoriesInput
+  suppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCategoryInput
+  dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCategoryInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+}
+
+export type FinanceCategoryUncheckedCreateWithoutHrEmployeeServicesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  parentId?: string | null
+  accountId?: string | null
+  suggestedSupplierId?: string | null
+  code: string
+  nameAr: string
+  nameEn: string
+  kind: $Enums.FinanceCategoryKind
+  status?: $Enums.FinanceCategoryStatus
+  isPosting?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutParentInput
+  suppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCategoryInput
+  dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCategoryInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+}
+
+export type FinanceCategoryCreateOrConnectWithoutHrEmployeeServicesInput = {
+  where: Prisma.FinanceCategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceCategoryCreateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedCreateWithoutHrEmployeeServicesInput>
+}
+
+export type FinanceCategoryUpsertWithoutHrEmployeeServicesInput = {
+  update: Prisma.XOR<Prisma.FinanceCategoryUpdateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedUpdateWithoutHrEmployeeServicesInput>
+  create: Prisma.XOR<Prisma.FinanceCategoryCreateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedCreateWithoutHrEmployeeServicesInput>
+  where?: Prisma.FinanceCategoryWhereInput
+}
+
+export type FinanceCategoryUpdateToOneWithWhereWithoutHrEmployeeServicesInput = {
+  where?: Prisma.FinanceCategoryWhereInput
+  data: Prisma.XOR<Prisma.FinanceCategoryUpdateWithoutHrEmployeeServicesInput, Prisma.FinanceCategoryUncheckedUpdateWithoutHrEmployeeServicesInput>
+}
+
+export type FinanceCategoryUpdateWithoutHrEmployeeServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
+  status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceCategoriesNestedInput
+  account?: Prisma.FinanceAccountUpdateOneWithoutCategoriesNestedInput
+  parent?: Prisma.FinanceCategoryUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.FinanceCategoryUpdateManyWithoutParentNestedInput
+  suggestedSupplier?: Prisma.FinanceSupplierUpdateOneWithoutSuggestedForCategoriesNestedInput
+  suppliers?: Prisma.FinanceSupplierUpdateManyWithoutCategoryNestedInput
+  dues?: Prisma.FinanceSupplierDueUpdateManyWithoutCategoryNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+}
+
+export type FinanceCategoryUncheckedUpdateWithoutHrEmployeeServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceCategoryKindFieldUpdateOperationsInput | $Enums.FinanceCategoryKind
+  status?: Prisma.EnumFinanceCategoryStatusFieldUpdateOperationsInput | $Enums.FinanceCategoryStatus
+  isPosting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutParentNestedInput
+  suppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCategoryNestedInput
+  dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCategoryNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryCreateWithoutDailySalesClosingsInput = {
@@ -1659,6 +1816,7 @@ export type FinanceCategoryCreateWithoutDailySalesClosingsInput = {
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCategoryInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutDailySalesClosingsInput = {
@@ -1682,6 +1840,7 @@ export type FinanceCategoryUncheckedCreateWithoutDailySalesClosingsInput = {
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCategoryInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutDailySalesClosingsInput = {
@@ -1720,6 +1879,7 @@ export type FinanceCategoryUpdateWithoutDailySalesClosingsInput = {
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutCategoryNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutDailySalesClosingsInput = {
@@ -1743,6 +1903,7 @@ export type FinanceCategoryUncheckedUpdateWithoutDailySalesClosingsInput = {
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCategoryNestedInput
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryCreateWithoutRecurringExpenseProfilesInput = {
@@ -1765,6 +1926,7 @@ export type FinanceCategoryCreateWithoutRecurringExpenseProfilesInput = {
   dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryUncheckedCreateWithoutRecurringExpenseProfilesInput = {
@@ -1788,6 +1950,7 @@ export type FinanceCategoryUncheckedCreateWithoutRecurringExpenseProfilesInput =
   dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCategoryInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceCategoryInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type FinanceCategoryCreateOrConnectWithoutRecurringExpenseProfilesInput = {
@@ -1826,6 +1989,7 @@ export type FinanceCategoryUpdateWithoutRecurringExpenseProfilesInput = {
   dues?: Prisma.FinanceSupplierDueUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
@@ -1849,6 +2013,7 @@ export type FinanceCategoryUncheckedUpdateWithoutRecurringExpenseProfilesInput =
   dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryCreateManyCompanyInput = {
@@ -1887,6 +2052,7 @@ export type FinanceCategoryUpdateWithoutCompanyInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutCompanyInput = {
@@ -1909,6 +2075,7 @@ export type FinanceCategoryUncheckedUpdateWithoutCompanyInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateManyWithoutCompanyInput = {
@@ -1962,6 +2129,7 @@ export type FinanceCategoryUpdateWithoutAccountInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutAccountInput = {
@@ -1983,6 +2151,7 @@ export type FinanceCategoryUncheckedUpdateWithoutAccountInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateManyWithoutAccountInput = {
@@ -2035,6 +2204,7 @@ export type FinanceCategoryUpdateWithoutParentInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutParentInput = {
@@ -2056,6 +2226,7 @@ export type FinanceCategoryUncheckedUpdateWithoutParentInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateManyWithoutParentInput = {
@@ -2108,6 +2279,7 @@ export type FinanceCategoryUpdateWithoutSuggestedSupplierInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateWithoutSuggestedSupplierInput = {
@@ -2129,6 +2301,7 @@ export type FinanceCategoryUncheckedUpdateWithoutSuggestedSupplierInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCategoryNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceCategoryNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierInput = {
@@ -2158,6 +2331,7 @@ export type FinanceCategoryCountOutputType = {
   recurringExpenseProfiles: number
   dailySalesClosings: number
   outflowDocuments: number
+  hrEmployeeServices: number
 }
 
 export type FinanceCategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2167,6 +2341,7 @@ export type FinanceCategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   recurringExpenseProfiles?: boolean | FinanceCategoryCountOutputTypeCountRecurringExpenseProfilesArgs
   dailySalesClosings?: boolean | FinanceCategoryCountOutputTypeCountDailySalesClosingsArgs
   outflowDocuments?: boolean | FinanceCategoryCountOutputTypeCountOutflowDocumentsArgs
+  hrEmployeeServices?: boolean | FinanceCategoryCountOutputTypeCountHrEmployeeServicesArgs
 }
 
 /**
@@ -2221,6 +2396,13 @@ export type FinanceCategoryCountOutputTypeCountOutflowDocumentsArgs<ExtArgs exte
   where?: Prisma.FinanceOutflowDocumentWhereInput
 }
 
+/**
+ * FinanceCategoryCountOutputType without action
+ */
+export type FinanceCategoryCountOutputTypeCountHrEmployeeServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeServiceWhereInput
+}
+
 
 export type FinanceCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2248,6 +2430,7 @@ export type FinanceCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   recurringExpenseProfiles?: boolean | Prisma.FinanceCategory$recurringExpenseProfilesArgs<ExtArgs>
   dailySalesClosings?: boolean | Prisma.FinanceCategory$dailySalesClosingsArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.FinanceCategory$outflowDocumentsArgs<ExtArgs>
+  hrEmployeeServices?: boolean | Prisma.FinanceCategory$hrEmployeeServicesArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeCategory"]>
 
@@ -2325,6 +2508,7 @@ export type FinanceCategoryInclude<ExtArgs extends runtime.Types.Extensions.Inte
   recurringExpenseProfiles?: boolean | Prisma.FinanceCategory$recurringExpenseProfilesArgs<ExtArgs>
   dailySalesClosings?: boolean | Prisma.FinanceCategory$dailySalesClosingsArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.FinanceCategory$outflowDocumentsArgs<ExtArgs>
+  hrEmployeeServices?: boolean | Prisma.FinanceCategory$hrEmployeeServicesArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceCategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2353,6 +2537,7 @@ export type $FinanceCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
     recurringExpenseProfiles: Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>[]
     dailySalesClosings: Prisma.$FinanceDailySalesClosingPayload<ExtArgs>[]
     outflowDocuments: Prisma.$FinanceOutflowDocumentPayload<ExtArgs>[]
+    hrEmployeeServices: Prisma.$HrEmployeeServicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2774,6 +2959,7 @@ export interface Prisma__FinanceCategoryClient<T, Null = never, ExtArgs extends 
   recurringExpenseProfiles<T extends Prisma.FinanceCategory$recurringExpenseProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategory$recurringExpenseProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dailySalesClosings<T extends Prisma.FinanceCategory$dailySalesClosingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategory$dailySalesClosingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesClosingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   outflowDocuments<T extends Prisma.FinanceCategory$outflowDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategory$outflowDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeServices<T extends Prisma.FinanceCategory$hrEmployeeServicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceCategory$hrEmployeeServicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3417,6 +3603,30 @@ export type FinanceCategory$outflowDocumentsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.FinanceOutflowDocumentScalarFieldEnum | Prisma.FinanceOutflowDocumentScalarFieldEnum[]
+}
+
+/**
+ * FinanceCategory.hrEmployeeServices
+ */
+export type FinanceCategory$hrEmployeeServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeService
+   */
+  select?: Prisma.HrEmployeeServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeService
+   */
+  omit?: Prisma.HrEmployeeServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeServiceInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeServiceWhereInput
+  orderBy?: Prisma.HrEmployeeServiceOrderByWithRelationInput | Prisma.HrEmployeeServiceOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeServiceScalarFieldEnum | Prisma.HrEmployeeServiceScalarFieldEnum[]
 }
 
 /**

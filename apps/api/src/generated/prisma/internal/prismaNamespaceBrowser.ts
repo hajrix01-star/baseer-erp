@@ -77,6 +77,12 @@ export const ModelName = {
   FinanceOutflowDocument: 'FinanceOutflowDocument',
   FinanceOutflowBatch: 'FinanceOutflowBatch',
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
+  HrEmployee: 'HrEmployee',
+  HrEmployeeService: 'HrEmployeeService',
+  HrEmployeeFinancialMovement: 'HrEmployeeFinancialMovement',
+  HrEmployeeAdvance: 'HrEmployeeAdvance',
+  HrEmployeeAdvancePayoutAllocation: 'HrEmployeeAdvancePayoutAllocation',
+  HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -561,6 +567,115 @@ export const FinanceOutflowAllocationScalarFieldEnum = {
 } as const
 
 export type FinanceOutflowAllocationScalarFieldEnum = (typeof FinanceOutflowAllocationScalarFieldEnum)[keyof typeof FinanceOutflowAllocationScalarFieldEnum]
+
+
+export const HrEmployeeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeNumber: 'employeeNumber',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  jobTitle: 'jobTitle',
+  phone: 'phone',
+  email: 'email',
+  hireDate: 'hireDate',
+  status: 'status',
+  terminatedAt: 'terminatedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeScalarFieldEnum = (typeof HrEmployeeScalarFieldEnum)[keyof typeof HrEmployeeScalarFieldEnum]
+
+
+export const HrEmployeeServiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  serviceType: 'serviceType',
+  referenceNumber: 'referenceNumber',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  supplierId: 'supplierId',
+  categoryId: 'categoryId',
+  outflowDocumentId: 'outflowDocumentId',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeServiceScalarFieldEnum = (typeof HrEmployeeServiceScalarFieldEnum)[keyof typeof HrEmployeeServiceScalarFieldEnum]
+
+
+export const HrEmployeeFinancialMovementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  journalEntryId: 'journalEntryId',
+  movementType: 'movementType',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  sourceReference: 'sourceReference',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeFinancialMovementScalarFieldEnum = (typeof HrEmployeeFinancialMovementScalarFieldEnum)[keyof typeof HrEmployeeFinancialMovementScalarFieldEnum]
+
+
+export const HrEmployeeAdvanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  advanceNumber: 'advanceNumber',
+  businessDate: 'businessDate',
+  originalAmount: 'originalAmount',
+  settledAmount: 'settledAmount',
+  remainingAmount: 'remainingAmount',
+  status: 'status',
+  notes: 'notes',
+  issueJournalEntryId: 'issueJournalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeAdvanceScalarFieldEnum = (typeof HrEmployeeAdvanceScalarFieldEnum)[keyof typeof HrEmployeeAdvanceScalarFieldEnum]
+
+
+export const HrEmployeeAdvancePayoutAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  advanceId: 'advanceId',
+  vaultId: 'vaultId',
+  amount: 'amount',
+  paymentMethod: 'paymentMethod',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeAdvancePayoutAllocationScalarFieldEnum = (typeof HrEmployeeAdvancePayoutAllocationScalarFieldEnum)[keyof typeof HrEmployeeAdvancePayoutAllocationScalarFieldEnum]
+
+
+export const HrEmployeeAdvanceSettlementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  advanceId: 'advanceId',
+  source: 'source',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  journalEntryId: 'journalEntryId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeAdvanceSettlementScalarFieldEnum = (typeof HrEmployeeAdvanceSettlementScalarFieldEnum)[keyof typeof HrEmployeeAdvanceSettlementScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {

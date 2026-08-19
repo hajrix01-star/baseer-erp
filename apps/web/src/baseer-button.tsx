@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type BaseerButtonVariant = "primary" | "secondary" | "danger" | "icon";
+export type BaseerButtonVariant = "primary" | "secondary" | "danger" | "icon" | "quiet";
 
 export function BaseerButton({
   children,
@@ -13,7 +13,7 @@ export function BaseerButton({
 }) {
   const buttonClassName = [
     "baseer-button",
-    `baseer-button--${variant}`,
+    `baseer-button--${variant === "quiet" ? "secondary" : variant}`,
     className,
   ]
     .filter(Boolean)

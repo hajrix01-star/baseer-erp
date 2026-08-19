@@ -10,3 +10,4 @@ export * from './finance.js';
 export * from './ai-platform.js';
 
 export * from './administration.js';
+export * from './hr.js';

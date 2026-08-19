@@ -258,6 +258,54 @@ export const FinanceInclusiveLoanPaymentStatus = {
 export type FinanceInclusiveLoanPaymentStatus = (typeof FinanceInclusiveLoanPaymentStatus)[keyof typeof FinanceInclusiveLoanPaymentStatus]
 
 
+export const HrEmployeeStatus = {
+  ACTIVE: 'ACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  TERMINATED: 'TERMINATED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type HrEmployeeStatus = (typeof HrEmployeeStatus)[keyof typeof HrEmployeeStatus]
+
+
+export const HrEmployeeServiceStatus = {
+  DRAFT: 'DRAFT',
+  ISSUED: 'ISSUED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrEmployeeServiceStatus = (typeof HrEmployeeServiceStatus)[keyof typeof HrEmployeeServiceStatus]
+
+
+export const HrEmployeeFinancialMovementType = {
+  SERVICE_COST: 'SERVICE_COST',
+  PAYROLL_ACCRUAL: 'PAYROLL_ACCRUAL',
+  PAYROLL_PAYMENT: 'PAYROLL_PAYMENT',
+  ADVANCE_ISSUED: 'ADVANCE_ISSUED',
+  ADVANCE_SETTLEMENT: 'ADVANCE_SETTLEMENT'
+} as const
+
+export type HrEmployeeFinancialMovementType = (typeof HrEmployeeFinancialMovementType)[keyof typeof HrEmployeeFinancialMovementType]
+
+
+export const HrEmployeeAdvanceStatus = {
+  ISSUED: 'ISSUED',
+  PARTIALLY_SETTLED: 'PARTIALLY_SETTLED',
+  SETTLED: 'SETTLED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type HrEmployeeAdvanceStatus = (typeof HrEmployeeAdvanceStatus)[keyof typeof HrEmployeeAdvanceStatus]
+
+
+export const HrEmployeeAdvanceSettlementSource = {
+  PAYROLL: 'PAYROLL',
+  MANUAL_RECEIPT: 'MANUAL_RECEIPT'
+} as const
+
+export type HrEmployeeAdvanceSettlementSource = (typeof HrEmployeeAdvanceSettlementSource)[keyof typeof HrEmployeeAdvanceSettlementSource]
+
+
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',
