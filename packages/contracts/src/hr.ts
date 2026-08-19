@@ -20,7 +20,7 @@ export const hrCompensationFormulaCodeSchema = z.enum(["STANDARD_MONTHLY_V1"]);
 export const hrCompensationPolicyVersionStatusSchema = z.enum(["DRAFT", "APPROVED", "SUPERSEDED"]);
 /** A fixed salary is entered as-is; an inclusive package derives the base and overtime. */
 export const hrCompensationMethodSchema = z.enum(["FIXED_MONTHLY", "INCLUSIVE_OVERTIME"]);
-export const hrPayrollLineEligibilityCodeSchema = z.enum(["FULL_MONTH_V1", "FULL_MONTH_ON_LEAVE_EXCEPTION_V1", "FULL_MONTH_NEW_HIRE_EXCEPTION_V1"]);
+export const hrPayrollLineEligibilityCodeSchema = z.enum(["FULL_MONTH_V1", "FULL_MONTH_ON_LEAVE_EXCEPTION_V1", "PRORATED_NEW_HIRE_V1"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
   "IQAMA_ISSUANCE",
   "IQAMA_RENEWAL",
@@ -252,8 +252,6 @@ export const createHrPayrollRunRequestSchema = z.object({
   includeAllEligible: z.boolean().default(true),
   /** ON_LEAVE employees are never implicit; this is the only way to include them. */
   includeOnLeaveEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
-  /** An employee hired during the operational payroll month needs an explicit full-month V1 exception. */
-  includeFullMonthNewHireEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
   /** Applications attach to an employee already selected by the server; they never select employees. */
   lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
   idempotencyKey: idempotencyKeySchema,
@@ -264,7 +262,6 @@ export const previewHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
   businessDate: hrDateSchema,
   includeOnLeaveEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
-  includeFullMonthNewHireEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
   /** Optional settlement choices are validated and summarized, never used for population selection. */
   lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
   cursor: z.string().uuid().optional(),
@@ -429,6 +426,15 @@ const hrCompensationPolicySnapshotSchema = z.object({
   policyId: z.string().uuid(), policyVersionId: z.string().uuid(), policyCode: z.string().max(80), policyNameAr: z.string().max(160), policyNameEn: z.string().max(160).nullable(),
   versionNumber: z.number().int().positive(), effectiveFrom: businessDateSchema, formulaCode: hrCompensationFormulaCodeSchema,
 }).strict();
+const hrPayrollCalculationSnapshotSchema = z.object({
+  formulaCode: z.enum(["FULL_MONTH_V1", "PRORATED_NEW_HIRE_V1"]),
+  calculationPeriodStart: businessDateSchema,
+  calculationPeriodEnd: businessDateSchema,
+  eligibleDays: z.number().int().positive(),
+  calendarDaysInMonth: z.number().int().positive(),
+  prorationRatio: hrAmountSchema,
+  monthlyGrossAmount: hrAmountSchema,
+}).strict();
 
 export const hrEmployeeLeaveSchema = z.object({
   id: z.string().uuid(),
@@ -452,6 +458,7 @@ export const hrPayrollLineSchema = z.object({
   basicSalary: hrAmountSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema, overtimeAmount: hrAmountSchema, overtimeHours: hrAmountSchema,
   scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
   compensationPolicySnapshot: hrCompensationPolicySnapshotSchema.nullable(),
+  payrollCalculationSnapshot: hrPayrollCalculationSnapshotSchema.nullable(),
   advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
   advances: z.array(hrPayrollApplicationDetailSchema).max(100), administrativeDeductions: z.array(hrPayrollApplicationDetailSchema).max(100),
 }).strict();
@@ -503,7 +510,11 @@ const hrPayrollPreviewApplicationSchema = z.object({ id: z.string().uuid(), refe
 export const hrPayrollPreviewEmployeeSchema = z.object({
   id: hrEmployeeIdSchema, employeeNumber: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable(),
   status: z.enum(["ACTIVE", "ON_LEAVE"]), included: z.boolean(),
-  reason: z.enum(["ACTIVE_WITH_VALID_COMPENSATION", "ACTIVE_MISSING_COMPENSATION", "NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION", "HIRED_AFTER_BUSINESS_DATE", "ON_LEAVE_EXPLICITLY_INCLUDED", "ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION", "ON_LEAVE_MISSING_COMPENSATION"]),
+  reason: z.enum(["ACTIVE_WITH_VALID_COMPENSATION", "ACTIVE_NEW_HIRE_PRORATED", "ACTIVE_MISSING_COMPENSATION", "COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD", "HIRED_AFTER_BUSINESS_DATE", "ON_LEAVE_EXPLICITLY_INCLUDED", "ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION", "ON_LEAVE_MISSING_COMPENSATION"]),
+  eligibilityCode: hrPayrollLineEligibilityCodeSchema.nullable(),
+  calculationPeriodStart: businessDateSchema.nullable(), calculationPeriodEnd: businessDateSchema.nullable(),
+  eligibleDays: z.number().int().positive().nullable(), calendarDaysInMonth: z.number().int().positive().nullable(),
+  prorationRatio: hrAmountSchema.nullable(), monthlyGrossAmount: hrAmountSchema.nullable(), estimatedGrossAmount: hrAmountSchema.nullable(),
   advances: z.array(hrPayrollPreviewApplicationSchema).max(100),
   administrativeDeductions: z.array(hrPayrollPreviewApplicationSchema).max(100),
 }).strict();
@@ -511,7 +522,7 @@ export const hrPayrollPreviewReceiptSchema = z.object({
   companyId: companyIdSchema,
   counts: z.object({ active: z.number().int().nonnegative(), onLeave: z.number().int().nonnegative(), included: z.number().int().nonnegative(), excluded: z.number().int().nonnegative(), exceptions: z.number().int().nonnegative() }).strict(),
   totals: z.object({ employeeCount: z.number().int().nonnegative(), grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema }).strict(),
-  exceptions: z.array(z.object({ employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), reason: z.enum(["ACTIVE_MISSING_COMPENSATION", "ON_LEAVE_MISSING_COMPENSATION", "NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION", "HIRED_AFTER_BUSINESS_DATE"]) }).strict()).max(100),
+  exceptions: z.array(z.object({ employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), reason: z.enum(["ACTIVE_MISSING_COMPENSATION", "ON_LEAVE_MISSING_COMPENSATION", "COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD", "HIRED_AFTER_BUSINESS_DATE"]) }).strict()).max(100),
   employees: z.array(hrPayrollPreviewEmployeeSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable(),
 }).strict();
 export const hrEmployeeDetailReceiptSchema = z.object({

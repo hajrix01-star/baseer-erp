@@ -266,7 +266,14 @@ enum HrCompensationMethod {
 enum HrPayrollLineEligibilityCode {
   FULL_MONTH_V1
   FULL_MONTH_ON_LEAVE_EXCEPTION_V1
-  FULL_MONTH_NEW_HIRE_EXCEPTION_V1
+  PRORATED_NEW_HIRE_V1
+}
+
+/// Server-owned payroll calculation treatment snapshot for a line. It is
+/// distinct from the company compensation-policy version referenced by it.
+enum HrPayrollCalculationFormulaCode {
+  FULL_MONTH_V1
+  PRORATED_NEW_HIRE_V1
 }
 
 /// Formula selection is server-owned. Legal-calculation catalogues are outside
@@ -1396,6 +1403,7 @@ model HrPayrollLine {
   employeeId                    String   @db.Uuid
   compensationPolicyVersionId   String?  @db.Uuid
   compensationPolicySnapshotJson Json?
+  payrollCalculationSnapshotJson Json?
   employeeNumberSnapshot         String   @db.VarChar(80)
   employeeNameArSnapshot         String   @db.VarChar(160)
   employeeNameEnSnapshot         String?  @db.VarChar(160)

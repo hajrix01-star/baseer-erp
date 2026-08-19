@@ -120,6 +120,7 @@ export type HrPayrollLineCountAggregateOutputType = {
   employeeId: number
   compensationPolicyVersionId: number
   compensationPolicySnapshotJson: number
+  payrollCalculationSnapshotJson: number
   employeeNumberSnapshot: number
   employeeNameArSnapshot: number
   employeeNameEnSnapshot: number
@@ -237,6 +238,7 @@ export type HrPayrollLineCountAggregateInputType = {
   employeeId?: true
   compensationPolicyVersionId?: true
   compensationPolicySnapshotJson?: true
+  payrollCalculationSnapshotJson?: true
   employeeNumberSnapshot?: true
   employeeNameArSnapshot?: true
   employeeNameEnSnapshot?: true
@@ -353,6 +355,7 @@ export type HrPayrollLineGroupByOutputType = {
   employeeId: string
   compensationPolicyVersionId: string | null
   compensationPolicySnapshotJson: runtime.JsonValue | null
+  payrollCalculationSnapshotJson: runtime.JsonValue | null
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot: string | null
@@ -405,6 +408,7 @@ export type HrPayrollLineWhereInput = {
   employeeId?: Prisma.UuidFilter<"HrPayrollLine"> | string
   compensationPolicyVersionId?: Prisma.UuidNullableFilter<"HrPayrollLine"> | string | null
   compensationPolicySnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
+  payrollCalculationSnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
   employeeNumberSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
@@ -440,6 +444,7 @@ export type HrPayrollLineOrderByWithRelationInput = {
   employeeId?: Prisma.SortOrder
   compensationPolicyVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   compensationPolicySnapshotJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  payrollCalculationSnapshotJson?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeNumberSnapshot?: Prisma.SortOrder
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -480,6 +485,7 @@ export type HrPayrollLineWhereUniqueInput = Prisma.AtLeast<{
   employeeId?: Prisma.UuidFilter<"HrPayrollLine"> | string
   compensationPolicyVersionId?: Prisma.UuidNullableFilter<"HrPayrollLine"> | string | null
   compensationPolicySnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
+  payrollCalculationSnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
   employeeNumberSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
@@ -515,6 +521,7 @@ export type HrPayrollLineOrderByWithAggregationInput = {
   employeeId?: Prisma.SortOrder
   compensationPolicyVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   compensationPolicySnapshotJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  payrollCalculationSnapshotJson?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeNumberSnapshot?: Prisma.SortOrder
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -552,6 +559,7 @@ export type HrPayrollLineScalarWhereWithAggregatesInput = {
   employeeId?: Prisma.UuidWithAggregatesFilter<"HrPayrollLine"> | string
   compensationPolicyVersionId?: Prisma.UuidNullableWithAggregatesFilter<"HrPayrollLine"> | string | null
   compensationPolicySnapshotJson?: Prisma.JsonNullableWithAggregatesFilter<"HrPayrollLine">
+  payrollCalculationSnapshotJson?: Prisma.JsonNullableWithAggregatesFilter<"HrPayrollLine">
   employeeNumberSnapshot?: Prisma.StringWithAggregatesFilter<"HrPayrollLine"> | string
   employeeNameArSnapshot?: Prisma.StringWithAggregatesFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableWithAggregatesFilter<"HrPayrollLine"> | string | null
@@ -576,6 +584,7 @@ export type HrPayrollLineScalarWhereWithAggregatesInput = {
 export type HrPayrollLineCreateInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -611,6 +620,7 @@ export type HrPayrollLineUncheckedCreateInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -637,6 +647,7 @@ export type HrPayrollLineUncheckedCreateInput = {
 export type HrPayrollLineUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -672,6 +683,7 @@ export type HrPayrollLineUncheckedUpdateInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -703,6 +715,7 @@ export type HrPayrollLineCreateManyInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -727,6 +740,7 @@ export type HrPayrollLineCreateManyInput = {
 export type HrPayrollLineUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -756,6 +770,7 @@ export type HrPayrollLineUncheckedUpdateManyInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -806,6 +821,7 @@ export type HrPayrollLineCountOrderByAggregateInput = {
   employeeId?: Prisma.SortOrder
   compensationPolicyVersionId?: Prisma.SortOrder
   compensationPolicySnapshotJson?: Prisma.SortOrder
+  payrollCalculationSnapshotJson?: Prisma.SortOrder
   employeeNumberSnapshot?: Prisma.SortOrder
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrder
@@ -1121,6 +1137,7 @@ export type HrPayrollLineUpdateOneRequiredWithoutDeductionApplicationsNestedInpu
 export type HrPayrollLineCreateWithoutCompanyInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1153,6 +1170,7 @@ export type HrPayrollLineUncheckedCreateWithoutCompanyInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1213,6 +1231,7 @@ export type HrPayrollLineScalarWhereInput = {
   employeeId?: Prisma.UuidFilter<"HrPayrollLine"> | string
   compensationPolicyVersionId?: Prisma.UuidNullableFilter<"HrPayrollLine"> | string | null
   compensationPolicySnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
+  payrollCalculationSnapshotJson?: Prisma.JsonNullableFilter<"HrPayrollLine">
   employeeNumberSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
@@ -1237,6 +1256,7 @@ export type HrPayrollLineScalarWhereInput = {
 export type HrPayrollLineCreateWithoutEmployeeInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1268,6 +1288,7 @@ export type HrPayrollLineUncheckedCreateWithoutEmployeeInput = {
   payrollRunId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1320,6 +1341,7 @@ export type HrPayrollLineUpdateManyWithWhereWithoutEmployeeInput = {
 export type HrPayrollLineCreateWithoutCompensationPolicyVersionInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1351,6 +1373,7 @@ export type HrPayrollLineUncheckedCreateWithoutCompensationPolicyVersionInput = 
   payrollRunId: string
   employeeId: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1403,6 +1426,7 @@ export type HrPayrollLineUpdateManyWithWhereWithoutCompensationPolicyVersionInpu
 export type HrPayrollLineCreateWithoutPayrollRunInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1434,6 +1458,7 @@ export type HrPayrollLineUncheckedCreateWithoutPayrollRunInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1486,6 +1511,7 @@ export type HrPayrollLineUpdateManyWithWhereWithoutPayrollRunInput = {
 export type HrPayrollLineCreateWithoutAdvanceApplicationsInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1520,6 +1546,7 @@ export type HrPayrollLineUncheckedCreateWithoutAdvanceApplicationsInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1561,6 +1588,7 @@ export type HrPayrollLineUpdateToOneWithWhereWithoutAdvanceApplicationsInput = {
 export type HrPayrollLineUpdateWithoutAdvanceApplicationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1595,6 +1623,7 @@ export type HrPayrollLineUncheckedUpdateWithoutAdvanceApplicationsInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1620,6 +1649,7 @@ export type HrPayrollLineUncheckedUpdateWithoutAdvanceApplicationsInput = {
 export type HrPayrollLineCreateWithoutDeductionApplicationsInput = {
   id?: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1654,6 +1684,7 @@ export type HrPayrollLineUncheckedCreateWithoutDeductionApplicationsInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1695,6 +1726,7 @@ export type HrPayrollLineUpdateToOneWithWhereWithoutDeductionApplicationsInput =
 export type HrPayrollLineUpdateWithoutDeductionApplicationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1729,6 +1761,7 @@ export type HrPayrollLineUncheckedUpdateWithoutDeductionApplicationsInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1757,6 +1790,7 @@ export type HrPayrollLineCreateManyCompanyInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1781,6 +1815,7 @@ export type HrPayrollLineCreateManyCompanyInput = {
 export type HrPayrollLineUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1813,6 +1848,7 @@ export type HrPayrollLineUncheckedUpdateWithoutCompanyInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1842,6 +1878,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompanyInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1868,6 +1905,7 @@ export type HrPayrollLineCreateManyEmployeeInput = {
   payrollRunId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -1892,6 +1930,7 @@ export type HrPayrollLineCreateManyEmployeeInput = {
 export type HrPayrollLineUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1923,6 +1962,7 @@ export type HrPayrollLineUncheckedUpdateWithoutEmployeeInput = {
   payrollRunId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1951,6 +1991,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutEmployeeInput = {
   payrollRunId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1977,6 +2018,7 @@ export type HrPayrollLineCreateManyCompensationPolicyVersionInput = {
   payrollRunId: string
   employeeId: string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -2001,6 +2043,7 @@ export type HrPayrollLineCreateManyCompensationPolicyVersionInput = {
 export type HrPayrollLineUpdateWithoutCompensationPolicyVersionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2032,6 +2075,7 @@ export type HrPayrollLineUncheckedUpdateWithoutCompensationPolicyVersionInput = 
   payrollRunId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2060,6 +2104,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompensationPolicyVersionInpu
   payrollRunId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2086,6 +2131,7 @@ export type HrPayrollLineCreateManyPayrollRunInput = {
   employeeId: string
   compensationPolicyVersionId?: string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot: string
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
@@ -2110,6 +2156,7 @@ export type HrPayrollLineCreateManyPayrollRunInput = {
 export type HrPayrollLineUpdateWithoutPayrollRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2141,6 +2188,7 @@ export type HrPayrollLineUncheckedUpdateWithoutPayrollRunInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2169,6 +2217,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutPayrollRunInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   compensationPolicyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compensationPolicySnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payrollCalculationSnapshotJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   employeeNumberSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2238,6 +2287,7 @@ export type HrPayrollLineSelect<ExtArgs extends runtime.Types.Extensions.Interna
   employeeId?: boolean
   compensationPolicyVersionId?: boolean
   compensationPolicySnapshotJson?: boolean
+  payrollCalculationSnapshotJson?: boolean
   employeeNumberSnapshot?: boolean
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
@@ -2274,6 +2324,7 @@ export type HrPayrollLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   employeeId?: boolean
   compensationPolicyVersionId?: boolean
   compensationPolicySnapshotJson?: boolean
+  payrollCalculationSnapshotJson?: boolean
   employeeNumberSnapshot?: boolean
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
@@ -2307,6 +2358,7 @@ export type HrPayrollLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   employeeId?: boolean
   compensationPolicyVersionId?: boolean
   compensationPolicySnapshotJson?: boolean
+  payrollCalculationSnapshotJson?: boolean
   employeeNumberSnapshot?: boolean
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
@@ -2340,6 +2392,7 @@ export type HrPayrollLineSelectScalar = {
   employeeId?: boolean
   compensationPolicyVersionId?: boolean
   compensationPolicySnapshotJson?: boolean
+  payrollCalculationSnapshotJson?: boolean
   employeeNumberSnapshot?: boolean
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
@@ -2361,7 +2414,7 @@ export type HrPayrollLineSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "eligibilityCode" | "compensationMethod" | "basicSalary" | "foodAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
+export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "payrollCalculationSnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "eligibilityCode" | "compensationMethod" | "basicSalary" | "foodAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
 export type HrPayrollLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   payrollRun?: boolean | Prisma.HrPayrollRunDefaultArgs<ExtArgs>
@@ -2402,6 +2455,7 @@ export type $HrPayrollLinePayload<ExtArgs extends runtime.Types.Extensions.Inter
     employeeId: string
     compensationPolicyVersionId: string | null
     compensationPolicySnapshotJson: runtime.JsonValue | null
+    payrollCalculationSnapshotJson: runtime.JsonValue | null
     employeeNumberSnapshot: string
     employeeNameArSnapshot: string
     employeeNameEnSnapshot: string | null
@@ -2857,6 +2911,7 @@ export interface HrPayrollLineFieldRefs {
   readonly employeeId: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly compensationPolicyVersionId: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly compensationPolicySnapshotJson: Prisma.FieldRef<"HrPayrollLine", 'Json'>
+  readonly payrollCalculationSnapshotJson: Prisma.FieldRef<"HrPayrollLine", 'Json'>
   readonly employeeNumberSnapshot: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly employeeNameArSnapshot: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly employeeNameEnSnapshot: Prisma.FieldRef<"HrPayrollLine", 'String'>

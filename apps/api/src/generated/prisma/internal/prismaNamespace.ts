@@ -5765,6 +5765,7 @@ export const HrPayrollLineScalarFieldEnum = {
   employeeId: 'employeeId',
   compensationPolicyVersionId: 'compensationPolicyVersionId',
   compensationPolicySnapshotJson: 'compensationPolicySnapshotJson',
+  payrollCalculationSnapshotJson: 'payrollCalculationSnapshotJson',
   employeeNumberSnapshot: 'employeeNumberSnapshot',
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',

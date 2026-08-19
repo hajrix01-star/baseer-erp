@@ -377,10 +377,18 @@ export type HrCompensationMethod = (typeof HrCompensationMethod)[keyof typeof Hr
 export const HrPayrollLineEligibilityCode = {
   FULL_MONTH_V1: 'FULL_MONTH_V1',
   FULL_MONTH_ON_LEAVE_EXCEPTION_V1: 'FULL_MONTH_ON_LEAVE_EXCEPTION_V1',
-  FULL_MONTH_NEW_HIRE_EXCEPTION_V1: 'FULL_MONTH_NEW_HIRE_EXCEPTION_V1'
+  PRORATED_NEW_HIRE_V1: 'PRORATED_NEW_HIRE_V1'
 } as const
 
 export type HrPayrollLineEligibilityCode = (typeof HrPayrollLineEligibilityCode)[keyof typeof HrPayrollLineEligibilityCode]
+
+
+export const HrPayrollCalculationFormulaCode = {
+  FULL_MONTH_V1: 'FULL_MONTH_V1',
+  PRORATED_NEW_HIRE_V1: 'PRORATED_NEW_HIRE_V1'
+} as const
+
+export type HrPayrollCalculationFormulaCode = (typeof HrPayrollCalculationFormulaCode)[keyof typeof HrPayrollCalculationFormulaCode]
 
 
 export const HrCompensationFormulaCode = {
