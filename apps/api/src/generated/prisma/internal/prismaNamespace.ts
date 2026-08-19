@@ -6167,6 +6167,7 @@ export const HrEmployeeScalarFieldEnum = {
   jobTitle: 'jobTitle',
   phone: 'phone',
   email: 'email',
+  iqamaNumber: 'iqamaNumber',
   workSchedule: 'workSchedule',
   hireDate: 'hireDate',
   status: 'status',

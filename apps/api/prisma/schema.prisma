@@ -1082,6 +1082,7 @@ model HrEmployee {
   jobTitle       String?          @db.VarChar(160)
   phone          String?          @db.VarChar(30)
   email          String?          @db.VarChar(254)
+  iqamaNumber    String?          @db.VarChar(160)
   workSchedule   String?          @db.VarChar(160)
   hireDate       DateTime         @db.Date
   status         HrEmployeeStatus @default(ACTIVE)

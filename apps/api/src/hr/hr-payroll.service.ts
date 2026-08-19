@@ -154,22 +154,27 @@ export class HrPayrollService {
       // race in separate transactions.
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:employee-compensation:${input.employeeId}`}, 0))`;
       const currentDate = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
-      assertNotPast(input.effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Create a future agreement instead.');
+      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true, hireDate: true } });
+      if (!employee) throw new NotFoundException('The employee is not available for compensation.');
+      const agreements = await tx.hrEmployeeCompensationProfile.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId },
+        orderBy: { effectiveFrom: 'asc' },
+      });
+      const isFirstAgreementForCurrentMonthHire = agreements.length === 0
+        && firstOfMonth(input.effectiveFrom).getTime() === firstOfMonth(employee.hireDate).getTime()
+        && firstOfMonth(input.effectiveFrom).getTime() === firstOfMonth(new Date(`${currentDate.businessDate}T00:00:00.000Z`)).getTime();
+      if (!isFirstAgreementForCurrentMonthHire) {
+        assertNotPast(input.effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Create a future agreement instead.');
+      }
       assertFirstDayOfMonth(input.effectiveFrom, 'A compensation agreement must start on the first day of a month.');
       const begun = await this.begin(tx, context, COMPENSATION_OPERATION, key, input);
       if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
-      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
-      if (!employee) throw new NotFoundException('The employee is not available for compensation.');
       const approvedRun = await tx.hrPayrollRun.findFirst({
         where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrPayrollRunStatus.APPROVED, HrPayrollRunStatus.PARTIALLY_PAID, HrPayrollRunStatus.PAID] }, payrollMonth: { gte: firstOfMonth(input.effectiveFrom) }, lines: { some: { employeeId: input.employeeId } } },
         select: { id: true },
       });
       if (approvedRun) throw new ConflictException('A compensation agreement cannot alter a month with an approved payroll run.');
       const policyVersion = await this.resolveCompensationPolicyVersion(tx, context, input.effectiveFrom, input.policyVersionId);
-      const agreements = await tx.hrEmployeeCompensationProfile.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId },
-        orderBy: { effectiveFrom: 'asc' },
-      });
       if (agreements.some((agreement) => agreement.effectiveFrom.getTime() >= input.effectiveFrom.getTime())) {
         throw new ConflictException('A future compensation agreement already starts on or after this date. Agreements must be added chronologically.');
       }
