@@ -31,6 +31,7 @@ CREATE TABLE "HrPayrollRun" (
   "approvedAt" timestamptz(6), "reversedAt" timestamptz(6), "reversalReason" varchar(1000),
   "createdByUserId" uuid NOT NULL, "createdAt" timestamptz(6) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" timestamptz(6) NOT NULL,
   CONSTRAINT "HrPayrollRun_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "HrPayrollRun_id_tenant_company_key" UNIQUE ("id", "tenantId", "companyId"),
   CONSTRAINT "HrPayrollRun_company_month_key" UNIQUE ("companyId", "payrollMonth"),
   CONSTRAINT "HrPayrollRun_company_run_number_key" UNIQUE ("companyId", "runNumber"),
   CONSTRAINT "HrPayrollRun_accrual_journal_tenant_company_key" UNIQUE ("accrualJournalEntryId", "tenantId", "companyId"),
@@ -45,7 +46,7 @@ CREATE TABLE "HrPayrollLine" (
   "grossSalary" decimal(18,4) NOT NULL, "advanceSettlementAmount" decimal(18,4) NOT NULL DEFAULT 0,
   "administrativeDeductionAmount" decimal(18,4) NOT NULL DEFAULT 0, "netPayableAmount" decimal(18,4) NOT NULL, "paidAmount" decimal(18,4) NOT NULL DEFAULT 0,
   "createdAt" timestamptz(6) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" timestamptz(6) NOT NULL,
-  CONSTRAINT "HrPayrollLine_pkey" PRIMARY KEY ("id"), CONSTRAINT "HrPayrollLine_run_employee_key" UNIQUE ("payrollRunId", "employeeId"),
+  CONSTRAINT "HrPayrollLine_pkey" PRIMARY KEY ("id"), CONSTRAINT "HrPayrollLine_id_tenant_company_key" UNIQUE ("id", "tenantId", "companyId"), CONSTRAINT "HrPayrollLine_run_employee_key" UNIQUE ("payrollRunId", "employeeId"),
   CONSTRAINT "HrPayrollLine_company_tenant_fkey" FOREIGN KEY ("companyId", "tenantId") REFERENCES "Company"("id", "tenantId") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "HrPayrollLine_run_tenant_company_fkey" FOREIGN KEY ("payrollRunId", "tenantId", "companyId") REFERENCES "HrPayrollRun"("id", "tenantId", "companyId") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "HrPayrollLine_employee_tenant_company_fkey" FOREIGN KEY ("employeeId", "tenantId", "companyId") REFERENCES "HrEmployee"("id", "tenantId", "companyId") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -74,7 +75,7 @@ CREATE TABLE "HrPayrollPayment" (
   "id" uuid NOT NULL, "tenantId" uuid NOT NULL, "companyId" uuid NOT NULL, "payrollRunId" uuid NOT NULL,
   "paymentNumber" varchar(80) NOT NULL, "businessDate" date NOT NULL, "amount" decimal(18,4) NOT NULL, "journalEntryId" uuid NOT NULL,
   "createdByUserId" uuid NOT NULL, "createdAt" timestamptz(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT "HrPayrollPayment_pkey" PRIMARY KEY ("id"), CONSTRAINT "HrPayrollPayment_company_number_key" UNIQUE ("companyId", "paymentNumber"), CONSTRAINT "HrPayrollPayment_journal_tenant_company_key" UNIQUE ("journalEntryId", "tenantId", "companyId"),
+  CONSTRAINT "HrPayrollPayment_pkey" PRIMARY KEY ("id"), CONSTRAINT "HrPayrollPayment_id_tenant_company_key" UNIQUE ("id", "tenantId", "companyId"), CONSTRAINT "HrPayrollPayment_company_number_key" UNIQUE ("companyId", "paymentNumber"), CONSTRAINT "HrPayrollPayment_journal_tenant_company_key" UNIQUE ("journalEntryId", "tenantId", "companyId"),
   CONSTRAINT "HrPayrollPayment_company_tenant_fkey" FOREIGN KEY ("companyId", "tenantId") REFERENCES "Company"("id", "tenantId") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "HrPayrollPayment_run_tenant_company_fkey" FOREIGN KEY ("payrollRunId", "tenantId", "companyId") REFERENCES "HrPayrollRun"("id", "tenantId", "companyId") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "HrPayrollPayment_journal_tenant_company_fkey" FOREIGN KEY ("journalEntryId", "tenantId", "companyId") REFERENCES "FinanceJournalEntry"("id", "tenantId", "companyId") ON DELETE RESTRICT ON UPDATE CASCADE
