@@ -4,6 +4,7 @@ import { aggregateDailyBalanceChanges } from '../finance/journal/journal-posting
 import { Prisma } from '../generated/prisma/client.js';
 import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
+import { hrPaymentPostingProjection, latestHrPaymentEventDate } from './hr-payment-history.util.js';
 
 const payrollKey = hrPayrollRunLockKey('tenant-a', 'company-a', 'payroll-a');
 assert.equal(payrollKey, 'tenant-a:company-a:hr-payroll-run:payroll-a');
@@ -40,4 +41,13 @@ assert.equal(latestHrBusinessDate(undefined, null), null);
 assert.equal(isSameHrBusinessMonth(new Date('2026-08-31T00:00:00.000Z'), new Date('2026-08-01T00:00:00.000Z')), true);
 assert.equal(isSameHrBusinessMonth(new Date('2026-09-01T00:00:00.000Z'), new Date('2026-08-01T00:00:00.000Z')), false);
 
-console.log('HR financial locking, chronology, and repeated-account daily-balance verification passed.');
+const postedAt = new Date('2026-08-14T09:15:00.000Z');
+assert.deepEqual(hrPaymentPostingProjection(null), { status: 'POSTED', reversedAt: null, reversalJournalEntryId: null });
+assert.deepEqual(hrPaymentPostingProjection({ id: 'reversal-journal', postedAt }), { status: 'REVERSED', reversedAt: postedAt.toISOString(), reversalJournalEntryId: 'reversal-journal' });
+assert.equal(latestHrPaymentEventDate([
+  { businessDate: new Date('2026-08-11T00:00:00.000Z'), journalEntry: { reversalEntry: { businessDate: new Date('2026-08-13T00:00:00.000Z') } } },
+  { businessDate: new Date('2026-08-12T00:00:00.000Z'), journalEntry: { reversalEntry: null } },
+])?.toISOString(), '2026-08-13T00:00:00.000Z');
+assert.equal(latestHrPaymentEventDate([]), null);
+
+console.log('HR financial locking, chronology, payment-history projection, and repeated-account daily-balance verification passed.');

@@ -13,6 +13,7 @@ import { FinanceAccountStatus, HrCompensationMethod, HrEmployeeAdministrativeDed
 import { isHrDateOnOrAfter, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey } from './hr-financial-lock.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
+import { hrPaymentPostingProjection, latestHrPaymentEventDate } from './hr-payment-history.util.js';
 
 const EOS_EXPENSE = 'EOS_EXPENSE'; const EOS_PAYABLE = 'EOS_PAYABLE'; const ADVANCES = 'EMPLOYEE_ADVANCES'; const ADMIN_DEDUCTION = 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY'; const POLICY = 'SA-EOS-V1';
 type Recovery = { recoveryType: 'ADVANCE' | 'ADMINISTRATIVE_DEDUCTION'; sourceId: string; amount: string };
@@ -103,7 +104,7 @@ export class HrFinalSettlementService {
       await this.lock(tx, context, input.settlementId);
       const settlement = await this.requireSettlement(tx, context, input.settlementId, false);
       if (!(new Set<HrFinalSettlementStatus>([HrFinalSettlementStatus.APPROVED, HrFinalSettlementStatus.PARTIALLY_PAID])).has(settlement.status)) throw new ConflictException('Only an approved final settlement can be paid.');
-      const paymentHistoryFloor = settlement.payments.reduce<Date | null>((latest, payment) => latestHrBusinessDate(latest, payment.businessDate, payment.journalEntry.reversalEntry?.businessDate), null);
+      const paymentHistoryFloor = latestHrPaymentEventDate(settlement.payments);
       const paymentFloor = latestHrBusinessDate(settlement.terminationDate, settlement.accrualJournal?.businessDate, paymentHistoryFloor);
       if (!settlement.accrualJournal || !paymentFloor) throw new ConflictException('The final-settlement accrual is missing.');
       if (!isHrDateOnOrAfter(input.businessDate, paymentFloor)) throw new BadRequestException('The final-settlement payment date cannot be before its approval or latest payment date.');
@@ -145,7 +146,7 @@ export class HrFinalSettlementService {
       if (payment.journalEntry.reversalEntry) throw new ConflictException('The final-settlement payment has already been reversed.');
       if (payment.createdByUserId === context.actorUserId) throw new ConflictException('The final-settlement payment creator cannot reverse the same payment.');
       if (payment.settlement.paidAmount.lt(payment.amount) || !(new Set<HrFinalSettlementStatus>([HrFinalSettlementStatus.PARTIALLY_PAID, HrFinalSettlementStatus.PAID])).has(payment.settlement.status)) throw new ConflictException('The final-settlement balance cannot safely accept this payment reversal.');
-      const reversalFloor = payment.settlement.payments.reduce<Date | null>((latest, row) => latestHrBusinessDate(latest, row.businessDate, row.journalEntry.reversalEntry?.businessDate), payment.businessDate);
+      const reversalFloor = latestHrPaymentEventDate(payment.settlement.payments);
       if (!isHrDateOnOrAfter(input.businessDate, reversalFloor!)) throw new BadRequestException('The final-settlement payment reversal cannot predate the latest payment event.');
       const originalMovement = await tx.hrEmployeeFinancialMovement.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: payment.settlement.employeeId, journalEntryId: payment.journalEntryId, movementType: HrEmployeeFinancialMovementType.FINAL_SETTLEMENT_PAYMENT } });
       if (!originalMovement || !originalMovement.amount.eq(payment.amount)) throw new ConflictException('The final-settlement payment movement is incomplete and cannot be reversed safely.');
@@ -212,7 +213,7 @@ export class HrFinalSettlementService {
       });
       const hasMore = rows.length > query.pageSize;
       const payments = hasMore ? rows.slice(0, query.pageSize) : rows;
-      return { settlement: map(settlement), payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: payment.amount.toFixed(4), journalEntryId: payment.journalEntryId, status: payment.journalEntry.reversalEntry ? 'REVERSED' as const : 'POSTED' as const, reversedAt: payment.journalEntry.reversalEntry?.postedAt.toISOString() ?? null, reversalJournalEntryId: payment.journalEntry.reversalEntry?.id ?? null })), hasMore, nextCursor: hasMore ? payments.at(-1)?.id ?? null : null };
+      return { settlement: map(settlement), payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: payment.amount.toFixed(4), journalEntryId: payment.journalEntryId, ...hrPaymentPostingProjection(payment.journalEntry.reversalEntry) })), hasMore, nextCursor: hasMore ? payments.at(-1)?.id ?? null : null };
     });
   }
 

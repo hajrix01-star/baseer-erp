@@ -43,6 +43,7 @@ import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
+import { hrPaymentPostingProjection, latestHrPaymentEventDate } from './hr-payment-history.util.js';
 
 const COMPENSATION_OPERATION = 'hr.compensation.set';
 const EMPLOYEE_ONBOARDING_OPERATION = 'hr.employee.onboard';
@@ -376,7 +377,7 @@ export class HrPayrollService {
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
         })),
-        payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId, status: payment.journalEntry.reversalEntry ? 'REVERSED' as const : 'POSTED' as const, reversedAt: payment.journalEntry.reversalEntry?.postedAt.toISOString() ?? null, reversalJournalEntryId: payment.journalEntry.reversalEntry?.id ?? null })),
+        payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId, ...hrPaymentPostingProjection(payment.journalEntry.reversalEntry) })),
         hasMoreLines,
         nextLineCursor: hasMoreLines ? lines.at(-1)?.id ?? null : null,
         hasMorePayments,
@@ -547,7 +548,7 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED && run.status !== HrPayrollRunStatus.PARTIALLY_PAID) throw new ConflictException('Only an approved unpaid payroll can be paid.');
-      const paymentHistoryFloor = run.payments.reduce<Date | null>((latest, payment) => latestHrBusinessDate(latest, payment.businessDate, payment.journalEntry.reversalEntry?.businessDate), null);
+      const paymentHistoryFloor = latestHrPaymentEventDate(run.payments);
       const paymentFloor = latestHrBusinessDate(run.accrualJournal?.businessDate, paymentHistoryFloor);
       if (!paymentFloor) throw new ConflictException('The payroll accrual is missing.');
       if (!isHrDateOnOrAfter(input.businessDate, paymentFloor)) throw new BadRequestException('The payroll payment date cannot be before its approval or latest payment date.');
@@ -604,7 +605,7 @@ export class HrPayrollService {
       if (payment.journalEntry.reversalEntry) throw new ConflictException('The payroll payment has already been reversed.');
       if (payment.createdByUserId === context.actorUserId) throw new ConflictException('The payroll-payment creator cannot reverse the same payment.');
       if (payment.payrollRun.paidAmount.lt(payment.amount)) throw new ConflictException('The payroll balance cannot safely accept this payment reversal.');
-      const reversalFloor = payment.payrollRun.payments.reduce<Date | null>((latest, row) => latestHrBusinessDate(latest, row.businessDate, row.journalEntry.reversalEntry?.businessDate), payment.businessDate);
+      const reversalFloor = latestHrPaymentEventDate(payment.payrollRun.payments);
       if (!isHrDateOnOrAfter(input.businessDate, reversalFloor!)) throw new BadRequestException('The payroll-payment reversal cannot predate the latest payroll payment event.');
       const originalMovements = await tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, journalEntryId: payment.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_PAYMENT }, orderBy: { id: 'asc' } });
       if (!sum(originalMovements.map((movement) => movement.amount)).eq(payment.amount)) throw new ConflictException('The payroll-payment employee allocation is incomplete and cannot be reversed safely.');
