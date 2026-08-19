@@ -1082,6 +1082,7 @@ model HrEmployee {
   jobTitle       String?          @db.VarChar(160)
   phone          String?          @db.VarChar(30)
   email          String?          @db.VarChar(254)
+  workSchedule   String?          @db.VarChar(160)
   hireDate       DateTime         @db.Date
   status         HrEmployeeStatus @default(ACTIVE)
   terminatedAt   DateTime?        @db.Date
@@ -1599,6 +1600,8 @@ model HrEmployeeCompensationProfile {
   monthlyGross  Decimal  @db.Decimal(18, 4)
   compensationMethod HrCompensationMethod @default(FIXED_MONTHLY)
   foodAllowance Decimal @default(0) @db.Decimal(18, 4)
+  housingAllowance Decimal @default(0) @db.Decimal(18, 4)
+  transportAllowance Decimal @default(0) @db.Decimal(18, 4)
   otherAllowance Decimal @default(0) @db.Decimal(18, 4)
   scheduledHoursPerDay Int?
   scheduledWorkDays Int?
@@ -1719,6 +1722,8 @@ model HrPayrollLine {
   compensationMethod             HrCompensationMethod @default(FIXED_MONTHLY)
   basicSalary                    Decimal  @default(0) @db.Decimal(18, 4)
   foodAllowance                  Decimal  @default(0) @db.Decimal(18, 4)
+  housingAllowance               Decimal  @default(0) @db.Decimal(18, 4)
+  transportAllowance             Decimal  @default(0) @db.Decimal(18, 4)
   otherAllowance                 Decimal  @default(0) @db.Decimal(18, 4)
   overtimeAmount                 Decimal  @default(0) @db.Decimal(18, 4)
   overtimeHours                  Decimal  @default(0) @db.Decimal(18, 4)

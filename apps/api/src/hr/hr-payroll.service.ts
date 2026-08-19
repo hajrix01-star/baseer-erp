@@ -181,6 +181,8 @@ export class HrPayrollService {
         monthlyGross: amount(input.monthlyGross),
         compensationMethod: input.compensationMethod,
         foodAllowance: nonNegativeAmount(input.foodAllowance),
+        housingAllowance: nonNegativeAmount(input.housingAllowance),
+        transportAllowance: nonNegativeAmount(input.transportAllowance),
         otherAllowance: nonNegativeAmount(input.otherAllowance),
         scheduledHoursPerDay: input.scheduledHoursPerDay ?? null,
         scheduledWorkDays: input.scheduledWorkDays ?? null,
@@ -189,7 +191,7 @@ export class HrPayrollService {
       await tx.hrEmployeeCompensationProfile.create({ data: {
         id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, policyVersionId: policyVersion.id, effectiveFrom: input.effectiveFrom,
         monthlyGross: compensation.gross, compensationMethod: compensation.method, foodAllowance: compensation.foodAllowance,
-        otherAllowance: compensation.otherAllowance, scheduledHoursPerDay: compensation.scheduledHoursPerDay,
+        housingAllowance: compensation.housingAllowance, transportAllowance: compensation.transportAllowance, otherAllowance: compensation.otherAllowance, scheduledHoursPerDay: compensation.scheduledHoursPerDay,
         scheduledWorkDays: compensation.scheduledWorkDays, notes: nullable(input.notes), createdByUserId: context.actorUserId,
       } });
       const receipt = { id, replayed: false };
@@ -243,7 +245,7 @@ export class HrPayrollService {
         lines: lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
           grossSalary: fixed(line.grossSalary), eligibilityCode: line.eligibilityCode, compensationMethod: line.compensationMethod,
-          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
+          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), housingAllowance: fixed(line.housingAllowance), transportAllowance: fixed(line.transportAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
           compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
           payrollCalculationSnapshot: parsePayrollCalculationSnapshot(line.payrollCalculationSnapshotJson),
@@ -264,7 +266,7 @@ export class HrPayrollService {
         lines: run.lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
           grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
-          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
+          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), housingAllowance: fixed(line.housingAllowance), transportAllowance: fixed(line.transportAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
           compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
           advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
@@ -349,7 +351,7 @@ export class HrPayrollService {
           employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
           compensationPolicyVersionId: row.policyVersion.id, compensationPolicySnapshotJson: policySnapshot(row.policyVersion) as Prisma.InputJsonValue, payrollCalculationSnapshotJson: row.calculationSnapshot as Prisma.InputJsonValue,
           grossSalary: row.gross, eligibilityCode: row.eligibilityCode, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
-          foodAllowance: row.compensation.foodAllowance, otherAllowance: row.compensation.otherAllowance,
+          foodAllowance: row.compensation.foodAllowance, housingAllowance: row.compensation.housingAllowance, transportAllowance: row.compensation.transportAllowance, otherAllowance: row.compensation.otherAllowance,
           overtimeAmount: row.compensation.overtimeAmount, overtimeHours: row.compensation.overtimeHours,
           scheduledHoursPerDay: row.compensation.scheduledHoursPerDay, scheduledWorkDays: row.compensation.scheduledWorkDays,
           advanceSettlementAmount: row.advanceAmount, administrativeDeductionAmount: row.deductionAmount, netPayableAmount: row.net,
@@ -717,6 +719,8 @@ type CompensationInputForCalculation = Readonly<{
   monthlyGross: Prisma.Decimal;
   compensationMethod: HrCompensationMethod;
   foodAllowance: Prisma.Decimal;
+  housingAllowance: Prisma.Decimal;
+  transportAllowance: Prisma.Decimal;
   otherAllowance: Prisma.Decimal;
   scheduledHoursPerDay: number | null;
   scheduledWorkDays: number | null;
@@ -730,18 +734,20 @@ type CalculatedCompensation = ReturnType<typeof calculateCompensation>;
 function calculateCompensation(input: CompensationInputForCalculation, formulaCode: HrCompensationFormulaCode) {
   if (formulaCode !== HrCompensationFormulaCode.STANDARD_MONTHLY_V1) throw new ConflictException('The selected compensation policy formula is not supported by this server.');
   if (input.compensationMethod === HrCompensationMethod.FIXED_MONTHLY) {
-    const basicSalary = input.monthlyGross.minus(input.foodAllowance).minus(input.otherAllowance);
+    const basicSalary = input.monthlyGross.minus(input.foodAllowance).minus(input.housingAllowance).minus(input.transportAllowance).minus(input.otherAllowance);
     if (basicSalary.lte(0)) throw new BadRequestException('The agreed total cannot be lower than its fixed allowances.');
     return {
       method: HrCompensationMethod.FIXED_MONTHLY,
       gross: input.monthlyGross,
       basicSalary,
       foodAllowance: input.foodAllowance,
+      housingAllowance: input.housingAllowance,
+      transportAllowance: input.transportAllowance,
       otherAllowance: input.otherAllowance,
       overtimeAmount: new Prisma.Decimal(0),
       overtimeHours: new Prisma.Decimal(0),
-      scheduledHoursPerDay: null,
-      scheduledWorkDays: null,
+      scheduledHoursPerDay: input.scheduledHoursPerDay,
+      scheduledWorkDays: input.scheduledWorkDays,
     };
   }
   const dailyHours = input.scheduledHoursPerDay;
@@ -751,7 +757,7 @@ function calculateCompensation(input: CompensationInputForCalculation, formulaCo
   const restDays = Math.max(workDays - STANDARD_MONTHLY_DAYS, 0);
   const overtimeHours = new Prisma.Decimal(dailyHours - 8).times(regularDays).plus(new Prisma.Decimal(restDays).times(dailyHours));
   const coefficient = overtimeHours.div(STANDARD_MONTHLY_HOURS);
-  const allowances = input.foodAllowance.plus(input.otherAllowance);
+  const allowances = input.foodAllowance.plus(input.housingAllowance).plus(input.transportAllowance).plus(input.otherAllowance);
   const basicSalary = input.monthlyGross.minus(allowances.times(new Prisma.Decimal(1).plus(coefficient))).div(new Prisma.Decimal(1).plus(coefficient.times(1.5))).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
   if (basicSalary.lte(0)) throw new BadRequestException('The agreed total cannot cover the selected allowances and overtime schedule.');
   const overtimeAmount = input.monthlyGross.minus(basicSalary).minus(allowances).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
@@ -759,9 +765,11 @@ function calculateCompensation(input: CompensationInputForCalculation, formulaCo
   return {
     method: HrCompensationMethod.INCLUSIVE_OVERTIME,
     gross: input.monthlyGross,
-    basicSalary,
-    foodAllowance: input.foodAllowance,
-    otherAllowance: input.otherAllowance,
+      basicSalary,
+      foodAllowance: input.foodAllowance,
+      housingAllowance: input.housingAllowance,
+      transportAllowance: input.transportAllowance,
+      otherAllowance: input.otherAllowance,
     overtimeAmount,
     overtimeHours: overtimeHours.toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP),
     scheduledHoursPerDay: dailyHours,
@@ -774,8 +782,10 @@ function prorateCompensation(compensation: CalculatedCompensation, period: Payro
   const gross = prorate(compensation.gross);
   const basicSalary = prorate(compensation.basicSalary);
   const foodAllowance = prorate(compensation.foodAllowance);
+  const housingAllowance = prorate(compensation.housingAllowance);
+  const transportAllowance = prorate(compensation.transportAllowance);
   const otherAllowance = prorate(compensation.otherAllowance);
-  return { ...compensation, gross, basicSalary, foodAllowance, otherAllowance, overtimeAmount: gross.minus(basicSalary).minus(foodAllowance).minus(otherAllowance).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP), overtimeHours: prorate(compensation.overtimeHours) };
+  return { ...compensation, gross, basicSalary, foodAllowance, housingAllowance, transportAllowance, otherAllowance, overtimeAmount: gross.minus(basicSalary).minus(foodAllowance).minus(housingAllowance).minus(transportAllowance).minus(otherAllowance).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP), overtimeHours: prorate(compensation.overtimeHours) };
 }
 function assertNotPast(value: Date, currentYmd: string, message: string) { if (ymd(value) < currentYmd) throw new BadRequestException(message); }
 function assertFirstDayOfMonth(value: Date, message: string) { if (ymd(value).slice(8, 10) !== '01') throw new BadRequestException(message); }

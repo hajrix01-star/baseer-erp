@@ -30,6 +30,8 @@ export type HrPayrollLineAvgAggregateOutputType = {
   grossSalary: runtime.Decimal | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
+  housingAllowance: runtime.Decimal | null
+  transportAllowance: runtime.Decimal | null
   otherAllowance: runtime.Decimal | null
   overtimeAmount: runtime.Decimal | null
   overtimeHours: runtime.Decimal | null
@@ -45,6 +47,8 @@ export type HrPayrollLineSumAggregateOutputType = {
   grossSalary: runtime.Decimal | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
+  housingAllowance: runtime.Decimal | null
+  transportAllowance: runtime.Decimal | null
   otherAllowance: runtime.Decimal | null
   overtimeAmount: runtime.Decimal | null
   overtimeHours: runtime.Decimal | null
@@ -71,6 +75,8 @@ export type HrPayrollLineMinAggregateOutputType = {
   compensationMethod: $Enums.HrCompensationMethod | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
+  housingAllowance: runtime.Decimal | null
+  transportAllowance: runtime.Decimal | null
   otherAllowance: runtime.Decimal | null
   overtimeAmount: runtime.Decimal | null
   overtimeHours: runtime.Decimal | null
@@ -99,6 +105,8 @@ export type HrPayrollLineMaxAggregateOutputType = {
   compensationMethod: $Enums.HrCompensationMethod | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
+  housingAllowance: runtime.Decimal | null
+  transportAllowance: runtime.Decimal | null
   otherAllowance: runtime.Decimal | null
   overtimeAmount: runtime.Decimal | null
   overtimeHours: runtime.Decimal | null
@@ -129,6 +137,8 @@ export type HrPayrollLineCountAggregateOutputType = {
   compensationMethod: number
   basicSalary: number
   foodAllowance: number
+  housingAllowance: number
+  transportAllowance: number
   otherAllowance: number
   overtimeAmount: number
   overtimeHours: number
@@ -148,6 +158,8 @@ export type HrPayrollLineAvgAggregateInputType = {
   grossSalary?: true
   basicSalary?: true
   foodAllowance?: true
+  housingAllowance?: true
+  transportAllowance?: true
   otherAllowance?: true
   overtimeAmount?: true
   overtimeHours?: true
@@ -163,6 +175,8 @@ export type HrPayrollLineSumAggregateInputType = {
   grossSalary?: true
   basicSalary?: true
   foodAllowance?: true
+  housingAllowance?: true
+  transportAllowance?: true
   otherAllowance?: true
   overtimeAmount?: true
   overtimeHours?: true
@@ -189,6 +203,8 @@ export type HrPayrollLineMinAggregateInputType = {
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
+  housingAllowance?: true
+  transportAllowance?: true
   otherAllowance?: true
   overtimeAmount?: true
   overtimeHours?: true
@@ -217,6 +233,8 @@ export type HrPayrollLineMaxAggregateInputType = {
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
+  housingAllowance?: true
+  transportAllowance?: true
   otherAllowance?: true
   overtimeAmount?: true
   overtimeHours?: true
@@ -247,6 +265,8 @@ export type HrPayrollLineCountAggregateInputType = {
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
+  housingAllowance?: true
+  transportAllowance?: true
   otherAllowance?: true
   overtimeAmount?: true
   overtimeHours?: true
@@ -364,6 +384,8 @@ export type HrPayrollLineGroupByOutputType = {
   compensationMethod: $Enums.HrCompensationMethod
   basicSalary: runtime.Decimal
   foodAllowance: runtime.Decimal
+  housingAllowance: runtime.Decimal
+  transportAllowance: runtime.Decimal
   otherAllowance: runtime.Decimal
   overtimeAmount: runtime.Decimal
   overtimeHours: runtime.Decimal
@@ -417,6 +439,8 @@ export type HrPayrollLineWhereInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -453,6 +477,8 @@ export type HrPayrollLineOrderByWithRelationInput = {
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -494,6 +520,8 @@ export type HrPayrollLineWhereUniqueInput = Prisma.AtLeast<{
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -530,6 +558,8 @@ export type HrPayrollLineOrderByWithAggregationInput = {
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -568,6 +598,8 @@ export type HrPayrollLineScalarWhereWithAggregatesInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodWithAggregatesFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -593,6 +625,8 @@ export type HrPayrollLineCreateInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -629,6 +663,8 @@ export type HrPayrollLineUncheckedCreateInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -656,6 +692,8 @@ export type HrPayrollLineUpdateInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -692,6 +730,8 @@ export type HrPayrollLineUncheckedUpdateInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -724,6 +764,8 @@ export type HrPayrollLineCreateManyInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -749,6 +791,8 @@ export type HrPayrollLineUpdateManyMutationInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -779,6 +823,8 @@ export type HrPayrollLineUncheckedUpdateManyInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -830,6 +876,8 @@ export type HrPayrollLineCountOrderByAggregateInput = {
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -847,6 +895,8 @@ export type HrPayrollLineAvgOrderByAggregateInput = {
   grossSalary?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -873,6 +923,8 @@ export type HrPayrollLineMaxOrderByAggregateInput = {
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -901,6 +953,8 @@ export type HrPayrollLineMinOrderByAggregateInput = {
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -918,6 +972,8 @@ export type HrPayrollLineSumOrderByAggregateInput = {
   grossSalary?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
+  housingAllowance?: Prisma.SortOrder
+  transportAllowance?: Prisma.SortOrder
   otherAllowance?: Prisma.SortOrder
   overtimeAmount?: Prisma.SortOrder
   overtimeHours?: Prisma.SortOrder
@@ -1146,6 +1202,8 @@ export type HrPayrollLineCreateWithoutCompanyInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1179,6 +1237,8 @@ export type HrPayrollLineUncheckedCreateWithoutCompanyInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1240,6 +1300,8 @@ export type HrPayrollLineScalarWhereInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1265,6 +1327,8 @@ export type HrPayrollLineCreateWithoutEmployeeInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1297,6 +1361,8 @@ export type HrPayrollLineUncheckedCreateWithoutEmployeeInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1350,6 +1416,8 @@ export type HrPayrollLineCreateWithoutCompensationPolicyVersionInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1382,6 +1450,8 @@ export type HrPayrollLineUncheckedCreateWithoutCompensationPolicyVersionInput = 
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1435,6 +1505,8 @@ export type HrPayrollLineCreateWithoutPayrollRunInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1467,6 +1539,8 @@ export type HrPayrollLineUncheckedCreateWithoutPayrollRunInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1520,6 +1594,8 @@ export type HrPayrollLineCreateWithoutAdvanceApplicationsInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1555,6 +1631,8 @@ export type HrPayrollLineUncheckedCreateWithoutAdvanceApplicationsInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1597,6 +1675,8 @@ export type HrPayrollLineUpdateWithoutAdvanceApplicationsInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1632,6 +1712,8 @@ export type HrPayrollLineUncheckedUpdateWithoutAdvanceApplicationsInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1658,6 +1740,8 @@ export type HrPayrollLineCreateWithoutDeductionApplicationsInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1693,6 +1777,8 @@ export type HrPayrollLineUncheckedCreateWithoutDeductionApplicationsInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1735,6 +1821,8 @@ export type HrPayrollLineUpdateWithoutDeductionApplicationsInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1770,6 +1858,8 @@ export type HrPayrollLineUncheckedUpdateWithoutDeductionApplicationsInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1799,6 +1889,8 @@ export type HrPayrollLineCreateManyCompanyInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1824,6 +1916,8 @@ export type HrPayrollLineUpdateWithoutCompanyInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1857,6 +1951,8 @@ export type HrPayrollLineUncheckedUpdateWithoutCompanyInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1887,6 +1983,8 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompanyInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1914,6 +2012,8 @@ export type HrPayrollLineCreateManyEmployeeInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1939,6 +2039,8 @@ export type HrPayrollLineUpdateWithoutEmployeeInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1971,6 +2073,8 @@ export type HrPayrollLineUncheckedUpdateWithoutEmployeeInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2000,6 +2104,8 @@ export type HrPayrollLineUncheckedUpdateManyWithoutEmployeeInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2027,6 +2133,8 @@ export type HrPayrollLineCreateManyCompensationPolicyVersionInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2052,6 +2160,8 @@ export type HrPayrollLineUpdateWithoutCompensationPolicyVersionInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2084,6 +2194,8 @@ export type HrPayrollLineUncheckedUpdateWithoutCompensationPolicyVersionInput = 
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2113,6 +2225,8 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompensationPolicyVersionInpu
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2140,6 +2254,8 @@ export type HrPayrollLineCreateManyPayrollRunInput = {
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2165,6 +2281,8 @@ export type HrPayrollLineUpdateWithoutPayrollRunInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2197,6 +2315,8 @@ export type HrPayrollLineUncheckedUpdateWithoutPayrollRunInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2226,6 +2346,8 @@ export type HrPayrollLineUncheckedUpdateManyWithoutPayrollRunInput = {
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  housingAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transportAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   overtimeHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2296,6 +2418,8 @@ export type HrPayrollLineSelect<ExtArgs extends runtime.Types.Extensions.Interna
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
+  housingAllowance?: boolean
+  transportAllowance?: boolean
   otherAllowance?: boolean
   overtimeAmount?: boolean
   overtimeHours?: boolean
@@ -2333,6 +2457,8 @@ export type HrPayrollLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
+  housingAllowance?: boolean
+  transportAllowance?: boolean
   otherAllowance?: boolean
   overtimeAmount?: boolean
   overtimeHours?: boolean
@@ -2367,6 +2493,8 @@ export type HrPayrollLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
+  housingAllowance?: boolean
+  transportAllowance?: boolean
   otherAllowance?: boolean
   overtimeAmount?: boolean
   overtimeHours?: boolean
@@ -2401,6 +2529,8 @@ export type HrPayrollLineSelectScalar = {
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
+  housingAllowance?: boolean
+  transportAllowance?: boolean
   otherAllowance?: boolean
   overtimeAmount?: boolean
   overtimeHours?: boolean
@@ -2414,7 +2544,7 @@ export type HrPayrollLineSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "payrollCalculationSnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "eligibilityCode" | "compensationMethod" | "basicSalary" | "foodAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
+export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "payrollCalculationSnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "eligibilityCode" | "compensationMethod" | "basicSalary" | "foodAllowance" | "housingAllowance" | "transportAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
 export type HrPayrollLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   payrollRun?: boolean | Prisma.HrPayrollRunDefaultArgs<ExtArgs>
@@ -2464,6 +2594,8 @@ export type $HrPayrollLinePayload<ExtArgs extends runtime.Types.Extensions.Inter
     compensationMethod: $Enums.HrCompensationMethod
     basicSalary: runtime.Decimal
     foodAllowance: runtime.Decimal
+    housingAllowance: runtime.Decimal
+    transportAllowance: runtime.Decimal
     otherAllowance: runtime.Decimal
     overtimeAmount: runtime.Decimal
     overtimeHours: runtime.Decimal
@@ -2920,6 +3052,8 @@ export interface HrPayrollLineFieldRefs {
   readonly compensationMethod: Prisma.FieldRef<"HrPayrollLine", 'HrCompensationMethod'>
   readonly basicSalary: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
   readonly foodAllowance: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
+  readonly housingAllowance: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
+  readonly transportAllowance: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
   readonly otherAllowance: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
   readonly overtimeAmount: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
   readonly overtimeHours: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
