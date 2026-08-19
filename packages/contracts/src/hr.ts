@@ -467,7 +467,7 @@ export const hrEmployeeServiceSchema = z.object({
 export const hrEmployeeFinancialMovementSchema = z.object({
   id: z.string().uuid(),
   journalEntryId: z.string().uuid(),
-  movementType: z.enum(["SERVICE_COST", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "ADVANCE_ISSUED", "ADVANCE_SETTLEMENT"]),
+  movementType: z.enum(["SERVICE_COST", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "ADVANCE_ISSUED", "ADVANCE_SETTLEMENT", "FINAL_SETTLEMENT_ACCRUAL", "FINAL_SETTLEMENT_PAYMENT"]),
   businessDate: businessDateSchema,
   amount: hrAmountSchema,
   sourceReference: z.string().max(160),
@@ -515,7 +515,7 @@ export const hrEmployeeAdministrativeDeductionSchema = z.object({
 
 export const hrEmployeeAdvanceDetailSchema = z.object({
   advance: hrEmployeeAdvanceSchema,
-  settlements: z.array(z.object({ id: z.string().uuid(), source: z.enum(["PAYROLL", "MANUAL_RECEIPT"]), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid().nullable(), sourceReference: z.string().max(160).nullable() }).strict()).max(500),
+  settlements: z.array(z.object({ id: z.string().uuid(), source: z.enum(["PAYROLL", "MANUAL_RECEIPT", "FINAL_SETTLEMENT"]), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid().nullable(), sourceReference: z.string().max(160).nullable() }).strict()).max(500),
   deferrals: z.array(z.object({ id: z.string().uuid(), businessDate: businessDateSchema, deferredUntil: businessDateSchema, reason: z.string().max(1_000) }).strict()).max(500),
 }).strict();
 
