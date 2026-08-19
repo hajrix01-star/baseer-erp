@@ -19,7 +19,7 @@ const money = (value: number) => value.toLocaleString("en-US", { minimumFraction
 const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "0", housingAllowance: "0", transportAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 
-/** Read-only salary agreement calculator. It never creates a payroll event. */
+/** Read-only salary calculator. It never creates a payroll event. */
 export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
   const ar = language === "ar";
   const [tab, setTab] = useState<Tab>("salary");
@@ -55,7 +55,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         scheduledHoursPerDay: agreement.scheduledHoursPerDay?.toString() ?? "",
         scheduledWorkDays: agreement.scheduledWorkDays?.toString() ?? "",
       } : emptyDraft());
-    }).catch((error) => setMessage(presentBaseerApiError(error, language, ar ? "تحميل اتفاق الراتب" : "Loading compensation agreement"))).finally(() => setLoadingEmployee(false));
+    }).catch((error) => setMessage(presentBaseerApiError(error, language, ar ? "تحميل الراتب" : "Loading salary"))).finally(() => setLoadingEmployee(false));
   }, [ar, language, selectedEmployeeId]);
 
   const calculation = useMemo(() => calculateSalaryTool(draft), [draft]);
@@ -63,7 +63,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
   const errorMessage = calculation.error === "ALLOWANCES_EXCEED_GROSS"
     ? (ar ? "الإجمالي المتفق عليه يجب أن يكون أكبر من البدلات الثابتة." : "The agreed total must exceed fixed allowances.")
     : calculation.error === "INCLUSIVE_SCHEDULE_REQUIRED"
-      ? (ar ? "الاتفاق الشامل للأوفر تايم يتطلب ساعات متفقاً عليها (9–12) وأيام عمل شهرية (1–31)." : "An inclusive-overtime agreement needs agreed daily hours (9–12) and monthly working days (1–31).")
+      ? (ar ? "الراتب الشامل للأوفر تايم يتطلب ساعات يومية (9–12) وأيام عمل شهرية (1–31)." : "Inclusive overtime needs daily hours (9–12) and monthly working days (1–31).")
       : calculation.error === "INCLUSIVE_TOTAL_TOO_LOW"
         ? (ar ? "الإجمالي المتفق عليه لا يغطي البدلات والجدول المختار." : "The agreed total cannot cover the selected allowances and schedule.")
         : "";
@@ -72,28 +72,28 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
     <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات أدوات الراتب" : "Salary tools tabs"} idPrefix="hr-salary-tools" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "salary", label: ar ? "حاسبة الراتب" : "Salary calculator" }, { id: "documents", label: ar ? "وثائق الراتب" : "Salary documents" }]} />
     <BaseerBatchPanel id={`hr-salary-tools-panel-${tab}`} labelledBy={`hr-salary-tools-${tab}`}>
       {tab === "salary" ? <>
-      <div className="administration-section-heading"><div><h2>{ar ? "حاسبة اتفاق الراتب" : "Salary agreement calculator"}</h2><p>{ar ? "معاينة تفسيرية لمعادلة اتفاق الراتب القياسية. لا تتصل بالحضور أو الانصراف ولا تُنشئ قيداً أو مسير رواتب." : "An explanatory preview of the standard salary-agreement formula. It has no attendance integration and never creates a journal or payroll run."}</p></div></div>
+      <div className="administration-section-heading"><div><h2>{ar ? "حاسبة الراتب" : "Salary calculator"}</h2><p>{ar ? "معاينة تفسيرية للراتب والبدلات. لا تتصل بالحضور أو الانصراف ولا تُنشئ قيداً أو مسير رواتب." : "An explanatory preview of salary and allowances. It has no attendance integration and never creates a journal or payroll run."}</p></div></div>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       <div className="administration-form">
         <label>{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
-        <label>{ar ? "طريقة الاتفاق" : "Agreement method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
-        <label>{ar ? "الإجمالي الشهري المتفق عليه" : "Agreed monthly total"}<input inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setField("monthlyGross", event.target.value)} /></label>
+        <label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
+        <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setField("monthlyGross", event.target.value)} /></label>
         <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setField("foodAllowance", event.target.value)} /></label>
         <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => setField("housingAllowance", event.target.value)} /></label>
         <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => setField("transportAllowance", event.target.value)} /></label>
         <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => setField("otherAllowance", event.target.value)} /></label>
         {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
       </div>
-      {loadingEmployee ? <BaseerCard>{ar ? "جارٍ تحميل اتفاق الموظف…" : "Loading employee agreement…"}</BaseerCard> : null}
+      {loadingEmployee ? <BaseerCard>{ar ? "جارٍ تحميل راتب الموظف…" : "Loading employee salary…"}</BaseerCard> : null}
       {errorMessage ? <BaseerCard tone="muted">{errorMessage}</BaseerCard> : null}
       {calculation.valid ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "نتيجة حاسبة الراتب" : "Salary calculator result"}>
         <BaseerSummaryMetric label={ar ? "الإجمالي الشهري" : "Monthly total"} value={money(calculation.monthlyGross)} />
         <BaseerSummaryMetric label={ar ? "الراتب الأساسي" : "Basic salary"} value={money(calculation.basicSalary)} />
         <BaseerSummaryMetric label={ar ? "البدلات الثابتة" : "Fixed allowances"} value={money(calculation.fixedAllowances)} />
         <BaseerSummaryMetric label={ar ? "مكوّن الأوفر تايم" : "Overtime component"} value={money(calculation.overtimeAmount)} />
-        {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات أوفر تايم الاتفاق" : "Agreement overtime hours"} value={calculation.overtimeHours.toLocaleString("en-US", { maximumFractionDigits: 2 })} /> : null}
-      </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "حدود هذه المعاينة" : "Preview boundary"}</strong><p>{ar ? "يُشتق الأوفر تايم من جدول الاتفاق فقط، ولا يثبت ساعات عمل فعلية أو غياباً أو إجازة. عند إنشاء المسير، يعيد الخادم حساب الاتفاق الساري ويثبت لقطة مستقلة لكل مسير." : "Overtime is derived only from the agreed schedule; it does not prove actual worked hours, absence, or leave. When a payroll run is created, the server recalculates the effective agreement and snapshots it independently."}</p></BaseerCard></> : null}
-      {selectedDetail ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setAgreementOpen(true)}>{ar ? "إدارة اتفاق الراتب المركزي" : "Manage central agreement"}</BaseerButton></div> : null}
+        {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات الأوفر تايم" : "Overtime hours"} value={calculation.overtimeHours.toLocaleString("en-US", { maximumFractionDigits: 2 })} /> : null}
+      </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "حدود هذه المعاينة" : "Preview boundary"}</strong><p>{ar ? "يُشتق الأوفر تايم من جدول الراتب فقط، ولا يثبت ساعات عمل فعلية أو غياباً أو إجازة. عند إنشاء المسير، يعيد الخادم حساب الراتب الساري ويحفظ لقطة مستقلة لكل مسير." : "Overtime is derived only from the salary schedule; it does not prove actual worked hours, absence, or leave. When a payroll run is created, the server saves an independent snapshot."}</p></BaseerCard></> : null}
+      {selectedDetail ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setAgreementOpen(true)}>{ar ? "تعديل راتب الموظف" : "Edit employee salary"}</BaseerButton></div> : null}
       </> : null}
       {tab === "documents" ? <>
         <div className="administration-section-heading"><div><h2>{ar ? "وثائق الراتب المعتمدة" : "Approved salary documents"}</h2><p>{ar ? "إصدار الخطاب وحفظه ومعاينته يتم من سجل موثق. طباعة المسير أو المخالصة تصدر من سجل العملية المعتمد، وليس من نموذج حر." : "Issue, store, and preview employee letters from their governed register. Payroll-run and final-settlement output is produced from the approved operational record, never a free-form template."}</p></div></div>

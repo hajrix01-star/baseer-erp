@@ -38,7 +38,7 @@ export function HrEmployeeLettersPanel({ employeeId, language, hasCurrentCompens
   useEffect(() => { void load(); }, [load]);
   const issue = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); const session = activeSession(); if (!session) return;
-    if (letterType === "SALARY_CERTIFICATE" && !hasCurrentCompensation) { setMessage(ar ? "أضف اتفاق راتب ساري أولاً لإصدار خطاب تعريف بالراتب. يمكنك إصدار شهادة خدمة الآن." : "Add a current compensation agreement before issuing a salary certificate. You can issue a service certificate now."); return; }
+    if (letterType === "SALARY_CERTIFICATE" && !hasCurrentCompensation) { setMessage(ar ? "حدد راتب الموظف أولاً لإصدار خطاب تعريف بالراتب. يمكنك إصدار شهادة خدمة الآن." : "Set the employee salary before issuing a salary certificate. You can issue a service certificate now."); return; }
     setBusy(true); setMessage("");
     try { await issueHrEmployeeLetter(session, employeeId, { letterType, locale, ...(recipient.trim() ? { recipient: recipient.trim() } : {}), idempotencyKey: requestId() }); setIssueOpen(false); setRecipient(""); await load(); await onChanged(); }
     catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر إصدار الخطاب." : "The letter could not be issued.")); }
