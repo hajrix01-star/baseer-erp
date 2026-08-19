@@ -17,9 +17,9 @@ type SummaryMetricProps = {
 
 /** A small, read-only metric used for workspace summaries—not detailed entity cards. */
 export function BaseerSummaryMetricGrid({ children, className, ariaLabel, role }: SummaryMetricGridProps) {
-  return <div className={["administration-role-cards", className].filter(Boolean).join(" ")} aria-label={ariaLabel} role={role}>{children}</div>;
+  return <div className={["baseer-metric-grid", className].filter(Boolean).join(" ")} aria-label={ariaLabel} role={role}>{children}</div>;
 }
 
 export function BaseerSummaryMetric({ label, value, tone, role }: SummaryMetricProps) {
-  return <BaseerCard padding="compact" tone={tone} role={role}><small>{label}</small><strong>{value}</strong></BaseerCard>;
+  return <BaseerCard padding="compact" tone={tone} role={role} className="baseer-metric"><small>{label}</small><strong>{value}</strong></BaseerCard>;
 }
