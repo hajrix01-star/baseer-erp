@@ -11,10 +11,12 @@
 }
 
 .hr-employee-directory-card {
+  position: relative;
   display: grid;
   gap: 1rem;
   min-inline-size: 0;
-  padding: 1rem;
+  margin-block-start: 2.35rem;
+  padding: 2.65rem 1rem 1rem;
   border: 1px solid var(--baseer-border, #d7e4dc);
   border-radius: 1rem;
   background: var(--baseer-surface, #fff);
@@ -38,20 +40,26 @@
 
 .hr-employee-directory-card header {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: .7rem;
+  padding-inline-start: 4.7rem;
 }
 
 .hr-employee-directory-card__avatar {
+  position: absolute;
+  inset-block-start: -2.35rem;
+  inset-inline-start: 1rem;
+  z-index: 1;
   display: grid;
-  inline-size: 3.2rem;
-  block-size: 3.2rem;
+  inline-size: 4.7rem;
+  block-size: 4.7rem;
   place-items: center;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--brand, #176b48) 30%, var(--baseer-border, #d7e4dc));
+  border: 3px solid var(--baseer-surface, #fff);
   border-radius: 50%;
   background: color-mix(in srgb, var(--brand, #176b48) 10%, #fff);
+  box-shadow: 0 .4rem 1rem rgb(18 51 40 / 16%);
   color: var(--brand-deep, #123328);
   font-weight: 800;
 }
@@ -131,4 +139,19 @@
 
 @media (max-width: 520px) {
   .hr-employee-directory-grid { grid-template-columns: 1fr; }
+
+  .hr-employee-directory-card {
+    margin-block-start: 2.1rem;
+    padding-block-start: 2.45rem;
+  }
+
+  .hr-employee-directory-card header {
+    padding-inline-start: 4.35rem;
+  }
+
+  .hr-employee-directory-card__avatar {
+    inset-block-start: -2.1rem;
+    inline-size: 4.2rem;
+    block-size: 4.2rem;
+  }
 }
