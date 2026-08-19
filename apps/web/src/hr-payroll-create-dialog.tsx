@@ -103,7 +103,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
       const item = choices[entry.id] ?? { enabled: false, amount: entry.remainingAmount };
       return <label key={entry.id} className={item.enabled ? "is-selected" : undefined}>
         <input type="checkbox" checked={item.enabled} disabled={!employee.included || busy} onChange={(event) => updateApplication(employee.id, kind, entry.id, event.target.checked, item.amount)} />
-        <span>{label} {entry.referenceNumber}</span>
+        <span><b>{label}</b><small>{entry.referenceNumber}</small></span>
         <BaseerMoneyInput aria-label={`${label} ${entry.referenceNumber}`} disabled={!employee.included || !item.enabled || busy} value={item.amount} onValueChange={(amount) => updateApplication(employee.id, kind, entry.id, item.enabled, amount)} />
       </label>;
     })}</div>;

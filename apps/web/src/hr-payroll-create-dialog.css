@@ -58,11 +58,11 @@
 .hr-payroll-create__excluded { color: #9a5d19; font-weight: 650; }
 .hr-payroll-create__leave-toggle { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink); font-size: var(--font-caption); font-weight: 700; white-space: nowrap; }
 
-.hr-payroll-create__application-list { display: grid; gap: .3rem; min-width: 11rem; text-align: start; white-space: normal; }
-.hr-payroll-create__application-list > label { display: grid; grid-template-columns: auto minmax(0, 1fr) 4.5rem; align-items: center; gap: .35rem; min-height: 2rem; padding: .2rem .3rem; border: 1px solid transparent; border-radius: .4rem; color: var(--muted); font-size: var(--font-caption); }
-.hr-payroll-create__application-list > label.is-selected { border-color: color-mix(in srgb, var(--brand) 35%, var(--line)); color: var(--ink); background: color-mix(in srgb, var(--surface) 90%, var(--brand) 10%); }
-.hr-payroll-create__application-list > label > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hr-payroll-create__application-list .baseer-money-input { width: 100%; min-width: 0; height: 1.75rem; padding-inline: .35rem; border-radius: .35rem; font-size: .75rem; text-align: end; }
+.hr-payroll-create__application-list { display: grid; gap: .3rem; min-width: 10.25rem; text-align: start; white-space: normal; }
+.hr-payroll-create__application-list > label { display: grid; grid-template-columns: auto minmax(0, 1fr) 4.5rem; align-items: center; gap: .35rem; min-height: 2.6rem; padding: .25rem .35rem; border: 1px solid transparent; border-radius: .55rem; color: var(--muted); font-size: var(--font-caption); }
+.hr-payroll-create__application-list > label.is-selected { border-color: color-mix(in srgb, var(--brand) 32%, var(--line)); color: var(--ink); background: color-mix(in srgb, var(--surface) 91%, var(--brand) 9%); }
+.hr-payroll-create__application-list > label > span { display:grid; min-width:0; overflow:hidden; } .hr-payroll-create__application-list > label > span b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.72rem; } .hr-payroll-create__application-list > label > span small { overflow:hidden; color:var(--muted); font-size:.63rem; line-height:1.25; text-overflow:ellipsis; white-space:nowrap; }
+.hr-payroll-create__application-list .baseer-money-input { width: 100%; min-width: 0; height: 1.85rem; padding-inline: .35rem; border-radius: .35rem; background:var(--surface); font-size: .75rem; font-weight:750; text-align: center; }
 .hr-payroll-create__application-list .baseer-money-input:disabled { opacity: .55; background: transparent; border-color: transparent; }
 .hr-payroll-create__no-application { color: var(--muted); }
 
