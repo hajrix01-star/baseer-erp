@@ -98,6 +98,7 @@ export class HrService {
       const prior = await tx.hrEmployee.findFirst({ where: { id: raw.employeeId, tenantId: context.tenantId, companyId: context.companyId } });
       if (!prior) throw new NotFoundException('The employee is not available for this company.');
       if (input.status === HrEmployeeStatus.TERMINATED && !input.terminatedAt) throw new BadRequestException('A termination date is required when an employee is terminated.');
+      if (input.terminatedAt && input.terminatedAt.getTime() < prior.hireDate.getTime()) throw new BadRequestException('The termination date cannot be before the hire date.');
       const updated = await tx.hrEmployee.update({ where: { id: prior.id }, data: input });
       const receipt = { id: updated.id, replayed: false };
       await this.audit(tx, context, 'hr.employee.updated', 'HrEmployee', updated.id, mapEmployee(prior), mapEmployee(updated));

@@ -35,6 +35,7 @@ export type HrEmployeeLeavesReceipt = { leaves: HrEmployeeLeave[] };
 export type HrEmployeeLeaveDetail = { leave: HrEmployeeLeave };
 
 export function listHrEmployees(session: ActiveSession) { return api<HrEmployeesReceipt>(session, "/hr/employees"); }
+export function updateHrEmployee(session: ActiveSession, payload: unknown) { return api(session, "/hr/employees/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrAdvances(session: ActiveSession) { return api<HrAdvancesReceipt>(session, "/hr/advances"); }
 export function getHrAdvance(session: ActiveSession, advanceId: string) { return api<HrAdvanceDetail>(session, `/hr/advances/${encodeURIComponent(advanceId)}`); }
 export function listHrAdministrativeDeductions(session: ActiveSession) { return api<HrAdministrativeDeductionsReceipt>(session, "/hr/deductions"); }
