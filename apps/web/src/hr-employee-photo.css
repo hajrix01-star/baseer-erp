@@ -1,0 +1,8 @@
+.hr-employee-photo { display: grid; justify-items: center; gap: .45rem; }
+.hr-employee-photo__avatar { display: grid; inline-size: 4.6rem; block-size: 4.6rem; place-items: center; padding: 0; overflow: hidden; border: 2px solid color-mix(in srgb, var(--brand) 38%, var(--line)); border-radius: 999px; background: color-mix(in srgb, var(--brand) 12%, var(--surface)); color: var(--brand-deep); font: inherit; font-weight: 850; cursor: zoom-in; }
+.hr-employee-photo__avatar:disabled { cursor: default; opacity: 1; }
+.hr-employee-photo__avatar img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.hr-employee-photo__upload { position: relative; display: inline-grid; min-block-size: 1.9rem; place-items: center; padding-inline: .55rem; border-radius: .5rem; color: var(--brand-deep); font-size: var(--font-caption); font-weight: 750; cursor: pointer; }
+.hr-employee-photo__upload:hover { background: color-mix(in srgb, var(--brand) 9%, transparent); }
+.hr-employee-photo__upload input { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; opacity: 0; }
+.hr-employee-photo__preview { display: block; inline-size: min(28rem, calc(100vw - 5rem)); max-block-size: min(36rem, calc(100vh - 12rem)); margin: auto; border-radius: .8rem; object-fit: contain; }
