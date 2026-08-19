@@ -11,9 +11,11 @@ import { getHrEmployee, listHrEmployees, type HrCompensationMethod, type HrDetai
 import { calculateSalaryTool, type SalaryToolInput } from "./hr-salary-tools-calculations";
 
 type Language = "ar" | "en";
-type Tab = "salary";
+type Tab = "salary" | "final-settlement" | "documents";
 
 const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import("./hr-compensation-agreement-dialog")).HrCompensationAgreementDialog }));
+const HrFinalSettlementWorkspace = lazy(async () => ({ default: (await import("./hr-final-settlement-workspace")).HrFinalSettlementWorkspace }));
+const HrEmployeeLettersPanel = lazy(async () => ({ default: (await import("./hr-employee-letters-panel")).HrEmployeeLettersPanel }));
 const money = (value: number) => value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
@@ -66,8 +68,9 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         : "";
 
   return <section className="administration-workspace">
-    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات أدوات الراتب" : "Salary tools tabs"} idPrefix="hr-salary-tools" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "salary", label: ar ? "حاسبة الراتب" : "Salary calculator" }]} />
-    <BaseerBatchPanel id="hr-salary-tools-panel-salary" labelledBy="hr-salary-tools-salary">
+    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات أدوات الراتب" : "Salary tools tabs"} idPrefix="hr-salary-tools" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "salary", label: ar ? "حاسبة الراتب" : "Salary calculator" }, { id: "final-settlement", label: ar ? "نهاية الخدمة" : "End of service" }, { id: "documents", label: ar ? "وثائق الراتب" : "Salary documents" }]} />
+    <BaseerBatchPanel id={`hr-salary-tools-panel-${tab}`} labelledBy={`hr-salary-tools-${tab}`}>
+      {tab === "salary" ? <>
       <div className="administration-section-heading"><div><h2>{ar ? "حاسبة اتفاق الراتب" : "Salary agreement calculator"}</h2><p>{ar ? "معاينة تفسيرية لمعادلة اتفاق الراتب القياسية. لا تتصل بالحضور أو الانصراف ولا تُنشئ قيداً أو مسير رواتب." : "An explanatory preview of the standard salary-agreement formula. It has no attendance integration and never creates a journal or payroll run."}</p></div></div>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       <div className="administration-form">
@@ -88,6 +91,14 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات أوفر تايم الاتفاق" : "Agreement overtime hours"} value={calculation.overtimeHours.toLocaleString("en-US", { maximumFractionDigits: 2 })} /> : null}
       </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "حدود هذه المعاينة" : "Preview boundary"}</strong><p>{ar ? "يُشتق الأوفر تايم من جدول الاتفاق فقط، ولا يثبت ساعات عمل فعلية أو غياباً أو إجازة. عند إنشاء المسير، يعيد الخادم حساب الاتفاق الساري ويثبت لقطة مستقلة لكل مسير." : "Overtime is derived only from the agreed schedule; it does not prove actual worked hours, absence, or leave. When a payroll run is created, the server recalculates the effective agreement and snapshots it independently."}</p></BaseerCard></> : null}
       {selectedDetail ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setAgreementOpen(true)}>{ar ? "إدارة اتفاق الراتب المركزي" : "Manage central agreement"}</BaseerButton></div> : null}
+      </> : null}
+      {tab === "final-settlement" ? <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل حاسبة نهاية الخدمة…" : "Loading end-of-service calculator…"}</BaseerCard>}><div className="baseer-salary-tools-nested-workspace"><HrFinalSettlementWorkspace language={language} /></div></Suspense> : null}
+      {tab === "documents" ? <>
+        <div className="administration-section-heading"><div><h2>{ar ? "وثائق الراتب المعتمدة" : "Approved salary documents"}</h2><p>{ar ? "إصدار الخطاب وحفظه ومعاينته يتم من سجل موثق. طباعة المسير أو المخالصة تصدر من سجل العملية المعتمد، وليس من نموذج حر." : "Issue, store, and preview employee letters from their governed register. Payroll-run and final-settlement output is produced from the approved operational record, never a free-form template."}</p></div></div>
+        <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "اختر الموظف لإصدار خطاب" : "Select an employee to issue a letter"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
+        {selectedEmployeeId ? <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل سجل الخطابات…" : "Loading letter register…"}</BaseerCard>}><HrEmployeeLettersPanel employeeId={selectedEmployeeId} language={language} onError={setMessage} onChanged={loadEmployees} /></Suspense> : <BaseerCard tone="muted">{ar ? "اختر موظفاً لإصدار خطاب تعريف بالراتب أو شهادة خدمة، ثم معاينته وطباعته من سجل الإصدار." : "Select an employee to issue a salary certificate or service certificate, then preview and print it from its issue register."}</BaseerCard>}
+        <BaseerCard tone="muted"><strong>{ar ? "مسار الطباعة الصحيح" : "Correct printing path"}</strong><p>{ar ? "المسير: افتح مسير الرواتب ثم استخدم «معاينة وطباعة A4». المخالصة: افتح سجل نهاية الخدمة ثم استخدم الإجراء نفسه بعد الاعتماد. هكذا تبقى كل وثيقة مرتبطة باللقطة المحاسبية والتشغيلية الصحيحة." : "Payroll: open the payroll run and choose “Preview & print A4”. Final settlement: open the end-of-service register and use the same action after approval. This keeps every document tied to the correct accounting and operational snapshot."}</p></BaseerCard>
+      </> : null}
     </BaseerBatchPanel>
     {agreementOpen ? <Suspense fallback={null}><HrCompensationAgreementDialog open={agreementOpen} language={language} employees={employees} fixedEmployeeId={selectedDetail?.employee.id} profile={selectedDetail?.compensation} onClose={() => setAgreementOpen(false)} onSaved={async () => { await loadEmployees(); if (selectedEmployeeId) { const session = activeSession(); if (session) setSelectedDetail(await getHrEmployee(session, selectedEmployeeId)); } }} onError={setMessage} /></Suspense> : null}
   </section>;
