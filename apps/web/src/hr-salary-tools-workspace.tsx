@@ -5,13 +5,12 @@ import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerMoneyInput } from "./baseer-form-fields";
-import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { BaseerSearchSelect } from "./baseer-search-select";
-import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { activeSession } from "./daily-sales-client";
 import { getHrEmployee, listHrEmployees, type HrCompensationMethod, type HrDetail, type HrEmployee } from "./hr-client";
 import { calculateSalaryTool, type SalaryToolInput } from "./hr-salary-tools-calculations";
 import { formatNumber } from "./number-format";
+import "./hr-salary-tools-workspace.css";
 
 type Language = "ar" | "en";
 type Tab = "salary" | "documents";
@@ -77,25 +76,21 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
       {tab === "salary" ? <>
       <div className="administration-section-heading"><div><h2>{ar ? "حاسبة الراتب" : "Salary calculator"}</h2><p>{ar ? "معاينة تفسيرية للراتب والبدلات. لا تتصل بالحضور أو الانصراف ولا تُنشئ قيداً أو مسير رواتب." : "An explanatory preview of salary and allowances. It has no attendance integration and never creates a journal or payroll run."}</p></div></div>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
-      <section className="baseer-form"><BaseerFormSection title={ar ? "مدخلات الحاسبة" : "Calculator inputs"} description={ar ? "هذه معاينة فقط؛ لا تحفظ ولا تنشئ أي حركة." : "This is a preview only; it does not save or create a transaction."}><BaseerFormGrid>
-        <label className="baseer-form-field--full">{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
-        <label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
-        <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<BaseerMoneyInput value={draft.monthlyGross} onValueChange={(monthlyGross) => setField("monthlyGross", monthlyGross)} /></label>
-        <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<BaseerMoneyInput value={draft.foodAllowance} onValueChange={(foodAllowance) => setField("foodAllowance", foodAllowance)} /></label>
-        <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<BaseerMoneyInput value={draft.housingAllowance} onValueChange={(housingAllowance) => setField("housingAllowance", housingAllowance)} /></label>
-        <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<BaseerMoneyInput value={draft.transportAllowance} onValueChange={(transportAllowance) => setField("transportAllowance", transportAllowance)} /></label>
-        <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<BaseerMoneyInput value={draft.otherAllowance} onValueChange={(otherAllowance) => setField("otherAllowance", otherAllowance)} /></label>
-        {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
-      </BaseerFormGrid></BaseerFormSection></section>
+      <section className="hr-salary-tools__calculator">
+        <section className="hr-salary-tools__inputs" aria-labelledby="salary-tool-inputs-title"><header><h3 id="salary-tool-inputs-title">{ar ? "مدخلات الحاسبة" : "Calculator inputs"}</h3><p>{ar ? "هذه معاينة فقط؛ لا تحفظ ولا تنشئ أي حركة." : "This is a preview only; it does not save or create a transaction."}</p></header><div className="hr-salary-tools__input-grid">
+          <label className="hr-salary-tools__field--full">{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
+          <label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
+          <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<BaseerMoneyInput value={draft.monthlyGross} onValueChange={(monthlyGross) => setField("monthlyGross", monthlyGross)} /></label>
+          <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<BaseerMoneyInput value={draft.foodAllowance} onValueChange={(foodAllowance) => setField("foodAllowance", foodAllowance)} /></label>
+          <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<BaseerMoneyInput value={draft.housingAllowance} onValueChange={(housingAllowance) => setField("housingAllowance", housingAllowance)} /></label>
+          <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<BaseerMoneyInput value={draft.transportAllowance} onValueChange={(transportAllowance) => setField("transportAllowance", transportAllowance)} /></label>
+          <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<BaseerMoneyInput value={draft.otherAllowance} onValueChange={(otherAllowance) => setField("otherAllowance", otherAllowance)} /></label>
+          {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
+        </div></section>
+        <aside className="hr-salary-tools__result" aria-live="polite"><header><h3>{ar ? "نتيجة المعاينة" : "Preview result"}</h3><p>{ar ? "تُحدّث مباشرة أثناء الإدخال." : "Updates as you enter values."}</p></header>{calculation.valid ? <><div className="hr-salary-tools__result-total"><span>{ar ? "الإجمالي الشهري" : "Monthly total"}</span><strong dir="ltr">{money(calculation.monthlyGross)} <small>SAR</small></strong></div><dl><div><dt>{ar ? "الراتب الأساسي" : "Basic salary"}</dt><dd dir="ltr">{money(calculation.basicSalary)} SAR</dd></div><div><dt>{ar ? "البدلات الثابتة" : "Fixed allowances"}</dt><dd dir="ltr">{money(calculation.fixedAllowances)} SAR</dd></div><div><dt>{ar ? "مكوّن الأوفر تايم" : "Overtime component"}</dt><dd dir="ltr">{money(calculation.overtimeAmount)} SAR</dd></div><div><dt>{ar ? "ساعات الأوفر تايم" : "Overtime hours"}</dt><dd dir="ltr">{formatNumber(calculation.overtimeHours)}</dd></div></dl></> : <p className="hr-salary-tools__result-empty">{ar ? "أدخل إجمالي الراتب لعرض النتيجة." : "Enter the monthly salary to view the result."}</p>}<p className="hr-salary-tools__boundary">{ar ? "الأوفر تايم هنا تقديري وفق جدول الراتب فقط، وليس سجل حضور فعلي." : "Overtime here is a salary-schedule estimate, not actual attendance."}</p></aside>
+      </section>
       {loadingEmployee ? <BaseerCard>{ar ? "جارٍ تحميل راتب الموظف…" : "Loading employee salary…"}</BaseerCard> : null}
       {errorMessage ? <BaseerCard tone="muted">{errorMessage}</BaseerCard> : null}
-      {calculation.valid ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "نتيجة حاسبة الراتب" : "Salary calculator result"}>
-        <BaseerSummaryMetric label={ar ? "الإجمالي الشهري" : "Monthly total"} value={money(calculation.monthlyGross)} />
-        <BaseerSummaryMetric label={ar ? "الراتب الأساسي" : "Basic salary"} value={money(calculation.basicSalary)} />
-        <BaseerSummaryMetric label={ar ? "البدلات الثابتة" : "Fixed allowances"} value={money(calculation.fixedAllowances)} />
-        <BaseerSummaryMetric label={ar ? "مكوّن الأوفر تايم" : "Overtime component"} value={money(calculation.overtimeAmount)} />
-        {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات الأوفر تايم" : "Overtime hours"} value={formatNumber(calculation.overtimeHours)} /> : null}
-      </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "حدود هذه المعاينة" : "Preview boundary"}</strong><p>{ar ? "يُشتق الأوفر تايم من جدول الراتب فقط، ولا يثبت ساعات عمل فعلية أو غياباً أو إجازة. عند إنشاء المسير، يعيد الخادم حساب الراتب الساري ويحفظ لقطة مستقلة لكل مسير." : "Overtime is derived only from the salary schedule; it does not prove actual worked hours, absence, or leave. When a payroll run is created, the server saves an independent snapshot."}</p></BaseerCard></> : null}
       {selectedDetail ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setAgreementOpen(true)}>{ar ? "تعديل راتب الموظف" : "Edit employee salary"}</BaseerButton></div> : null}
       </> : null}
       {tab === "documents" ? <>
