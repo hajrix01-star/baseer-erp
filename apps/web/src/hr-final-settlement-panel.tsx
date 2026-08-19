@@ -32,11 +32,11 @@ const today = () => new Date().toISOString().slice(0, 10);
 const emptyDraft = (): Draft => ({ employeeId: "", terminationDate: today(), terminationReason: "EMPLOYER_TERMINATION", reasonEvidenceReference: "", reasonEvidenceNote: "" });
 const money = (value: string) => Number(value || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-export function HrFinalSettlementWorkspace({ language }: { language: Language }) {
+export function HrFinalSettlementWorkspace({ language, employee }: { language: Language; employee?: HrEmployee }) {
   const ar = language === "ar";
   const [tab, setTab] = useState<Tab>("calculator");
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
-  const [draft, setDraft] = useState<Draft>(emptyDraft());
+  const [draft, setDraft] = useState<Draft>(() => ({ ...emptyDraft(), employeeId: employee?.id ?? "" }));
   const [advances, setAdvances] = useState<HrAdvance[]>([]);
   const [deductions, setDeductions] = useState<HrAdministrativeDeduction[]>([]);
   const [recoveries, setRecoveries] = useState<Record<string, string>>({});
@@ -48,7 +48,7 @@ export function HrFinalSettlementWorkspace({ language }: { language: Language })
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
-  const [employeeFilter, setEmployeeFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState(employee?.id ?? "");
   const [statusFilter, setStatusFilter] = useState<"" | HrFinalSettlementStatus>("");
   const [selected, setSelected] = useState<HrFinalSettlement | null>(null);
   const [approveOpen, setApproveOpen] = useState(false);
@@ -113,6 +113,12 @@ export function HrFinalSettlementWorkspace({ language }: { language: Language })
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
+    if (!employee) return;
+    setDraft((value) => ({ ...value, employeeId: employee.id }));
+    setEmployeeFilter(employee.id);
+    setPreview(null);
+  }, [employee]);
+  useEffect(() => {
     const current = activeSession();
     if (!current || !draft.employeeId) { setAdvances([]); setDeductions([]); setRecoveries({}); return; }
     void Promise.all([
@@ -146,7 +152,7 @@ export function HrFinalSettlementWorkspace({ language }: { language: Language })
     setBusy(true);
     try {
       await createHrFinalSettlement(current, { ...previewPayload(), idempotencyKey: requestId() });
-      setDraft(emptyDraft()); setPreview(null); setRecoveries({}); setTab("register");
+      setDraft({ ...emptyDraft(), employeeId: employee?.id ?? "" }); setPreview(null); setRecoveries({}); setTab("register");
       await load();
     } catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر إنشاء مسودة المخالصة." : "Final-settlement draft could not be created.")); }
     finally { setBusy(false); }
@@ -197,12 +203,12 @@ export function HrFinalSettlementWorkspace({ language }: { language: Language })
   const reasonRequiresVerification = selected?.terminationReason === "ARTICLE_80" || selected?.terminationReason === "ARTICLE_81" || selected?.terminationReason === "FORCE_MAJEURE" || selected?.terminationReason === "MATERNITY" || selected?.terminationReason === "OTHER_LEGAL_REVIEW";
 
   return <section className="administration-workspace">
-    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات مكافأة نهاية الخدمة" : "End-of-service award tabs"} idPrefix="hr-final-settlement" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "calculator", label: ar ? "مكافأة نهاية الخدمة" : "End-of-service award" }, { id: "register", label: ar ? "سجل المكافآت" : "Award register" }]} />
+    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات مكافأة نهاية الخدمة" : "End-of-service award tabs"} idPrefix="hr-final-settlement" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "calculator", label: ar ? "مكافأة نهاية الخدمة" : "End-of-service award" }, { id: "register", label: ar ? "سجل المخالصات" : "Settlement register" }]} />
     <BaseerBatchPanel id={`hr-final-settlement-panel-${tab}`} labelledBy={`hr-final-settlement-${tab}`}>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       {tab === "calculator" ? <>
         <form className="administration-form" onSubmit={(event) => { event.preventDefault(); void preparePreview(); }}>
-          <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={[]} remoteSearch={searchEmployees} onChange={(employeeId) => { setDraft((value) => ({ ...value, employeeId })); setPreview(null); }} /></label>
+          {employee ? <label>{ar ? "الموظف" : "Employee"}<input readOnly value={labelEmployee(employee)} /></label> : <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={[]} remoteSearch={searchEmployees} onChange={(employeeId) => { setDraft((value) => ({ ...value, employeeId })); setPreview(null); }} /></label>}
           <BaseerDatePicker language={language} label={ar ? "تاريخ الإنهاء" : "Termination date"} value={draft.terminationDate} onChange={(terminationDate) => { setDraft((value) => ({ ...value, terminationDate })); setPreview(null); }} />
           <label>{ar ? "سبب الإنهاء" : "Termination reason"}<select value={draft.terminationReason} onChange={(event) => { setDraft((value) => ({ ...value, terminationReason: event.target.value as HrFinalSettlementReason })); setPreview(null); }}>{(["EMPLOYER_TERMINATION", "RESIGNATION", "ARTICLE_80", "ARTICLE_81", "FORCE_MAJEURE", "MATERNITY", "OTHER_LEGAL_REVIEW"] as const).map((reason) => <option key={reason} value={reason}>{labelReason(reason)}</option>)}</select></label>
           <label>{ar ? "مرجع دليل الإنهاء" : "Termination evidence reference"}<input required maxLength={240} value={draft.reasonEvidenceReference} placeholder={ar ? "رقم خطاب أو قرار أو مرجع موثّق" : "Letter, decision, or documented reference"} onChange={(event) => { setDraft((value) => ({ ...value, reasonEvidenceReference: event.target.value })); setPreview(null); }} /></label>
@@ -227,7 +233,7 @@ export function HrFinalSettlementWorkspace({ language }: { language: Language })
         </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "قرار الحساب" : "Calculation decision"}</strong><p>{ar ? `سياسة الخادم: ${preview.calculationPolicyVersion}. لا توجد صيغة أو أجر مدخل يدوياً.` : `Server policy: ${preview.calculationPolicyVersion}. No local formula or manually entered wage is used.`}</p><BaseerButton type="button" disabled={busy} onClick={() => void create()}>{ar ? "إنشاء مسودة المخالصة" : "Create settlement draft"}</BaseerButton></BaseerCard></> : null}
       </> : null}
       {tab === "register" ? <>
-        <BaseerFilterBar language={language} search={search} searchLabel={ar ? "بحث المخالصات" : "Search settlements"} searchPlaceholder={ar ? "رقم المخالصة أو الحالة" : "Number or status"} onSearchChange={setSearch} controls={<><label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={[]} remoteSearch={searchEmployees} onChange={setEmployeeFilter} /></label><label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "" | HrFinalSettlementStatus)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option>{(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED", "CANCELLED"] as const).map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}</select></label></>} />
+        <BaseerFilterBar language={language} search={search} searchLabel={ar ? "بحث المخالصات" : "Search settlements"} searchPlaceholder={ar ? "رقم المخالصة أو الحالة" : "Number or status"} onSearchChange={setSearch} controls={<>{employee ? null : <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={[]} remoteSearch={searchEmployees} onChange={setEmployeeFilter} /></label>}<label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "" | HrFinalSettlementStatus)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option>{(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED", "CANCELLED"] as const).map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}</select></label></>} />
         {loading ? <BaseerCard>{ar ? "جارٍ تحميل سجل المكافآت…" : "Loading award register…"}</BaseerCard> : rows.length ? <DataTable ariaLabel={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} caption={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} rows={rows} rowKey={(row) => row.id} columns={[
           { id: "number", header: ar ? "المخالصة" : "Settlement", cell: (row: HrFinalSettlement) => <BaseerButton type="button" variant="quiet" onClick={() => setSelected(row)}>{row.settlementNumber}</BaseerButton> },
           { id: "date", header: ar ? "تاريخ الإنهاء" : "Termination", cell: (row: HrFinalSettlement) => row.terminationDate },
