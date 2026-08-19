@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
@@ -18,11 +18,13 @@ import { activeSession, api, requestId, type ActiveSession } from "./daily-sales
 import { formatNumber, formatPercent } from "./number-format";
 import {
   approveHrFinalSettlement, createHrFinalSettlement, listHrAdministrativeDeductions,
-  listHrAdvances, listHrEmployees, listHrFinalSettlements, payHrFinalSettlement,
-  previewHrFinalSettlement, reverseHrFinalSettlement, verifyHrFinalSettlementReason, type HrAdministrativeDeduction,
+  getHrFinalSettlement, listHrAdvances, listHrEmployees, listHrFinalSettlements, payHrFinalSettlement,
+  previewHrFinalSettlement, reverseHrFinalSettlement, reverseHrFinalSettlementPayment, verifyHrFinalSettlementReason, type HrAdministrativeDeduction,
   type HrAdvance, type HrEmployee, type HrFinalSettlement, type HrFinalSettlementReason,
-  type HrFinalSettlementRecovery, type HrFinalSettlementStatus,
+  type HrFinalSettlementRecovery, type HrFinalSettlementStatus, type HrPayment,
 } from "./hr-client";
+import { reportTopmostDialogError } from "./use-dialog-focus-trap";
+import { hasActivePermission } from "./module-access";
 
 type Language = "ar" | "en";
 type Tab = "calculator" | "register";
@@ -52,9 +54,13 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
+  const [serverSearch, setServerSearch] = useState("");
   const [employeeFilter, setEmployeeFilter] = useState(employee?.id ?? "");
   const [statusFilter, setStatusFilter] = useState<"" | HrFinalSettlementStatus>("");
   const [selected, setSelected] = useState<HrFinalSettlement | null>(null);
+  const [payments, setPayments] = useState<HrPayment[]>([]);
+  const [nextPaymentCursor, setNextPaymentCursor] = useState<string | null>(null);
+  const [paymentToReverse, setPaymentToReverse] = useState<HrPayment | null>(null);
   const [approveOpen, setApproveOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
   const [payOpen, setPayOpen] = useState(false);
@@ -64,6 +70,9 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   const [verificationNote, setVerificationNote] = useState("");
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [allocations, setAllocations] = useState<Allocation[]>([]);
+  const showError = (value: string) => { if (!reportTopmostDialogError(value)) setMessage(value); };
+  const loadRequestRef = useRef(0);
+  useEffect(() => { const timeout = window.setTimeout(() => setServerSearch(search.trim()), 250); return () => window.clearTimeout(timeout); }, [search]);
 
   const labelEmployee = useCallback((employee: HrEmployee) => `${employee.employeeNumber} · ${ar ? employee.nameAr : employee.nameEn ?? employee.nameAr}`, [ar]);
   const labelReason = (value: HrFinalSettlementReason) => ({
@@ -105,15 +114,17 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     const current = activeSession();
     setSession(current);
     if (!current) { setLoading(false); return; }
+    const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
-      const receipt = await listHrFinalSettlements(current, { cursor, pageSize: 25, employeeId: employeeFilter || undefined, status: statusFilter || undefined });
+      const receipt = await listHrFinalSettlements(current, { cursor, pageSize: 25, employeeId: employeeFilter || undefined, status: statusFilter || undefined, search: serverSearch || undefined });
+      if (requestNumber !== loadRequestRef.current) return;
       setSettlements((rows) => append ? [...rows, ...receipt.settlements] : receipt.settlements);
       setNextCursor(receipt.nextCursor);
     } catch (error) {
-      setMessage(presentBaseerApiError(error, language, ar ? "تعذر تحميل سجل المخالصات." : "Final-settlement register could not be loaded."));
-    } finally { setLoading(false); }
-  }, [ar, employeeFilter, language, statusFilter]);
+      showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل سجل المخالصات." : "Final-settlement register could not be loaded."));
+    } finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
+  }, [ar, employeeFilter, language, serverSearch, statusFilter]);
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
@@ -132,7 +143,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       setAdvances(advanceReceipt.advances);
       setDeductions(deductionReceipt.deductions);
       setRecoveries({});
-    }).catch((error) => setMessage(presentBaseerApiError(error, language, ar ? "تعذر تحميل الأرصدة القابلة للاسترداد." : "Recoverable balances could not be loaded.")));
+    }).catch((error) => showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل الأرصدة القابلة للاسترداد." : "Recoverable balances could not be loaded.")));
   }, [ar, draft.employeeId, language]);
 
   const searchEmployees = useCallback(async (query: string) => {
@@ -147,7 +158,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     if (!current || !draft.employeeId || !draft.terminationDate) return;
     setPreviewLoading(true); setMessage("");
     try { setPreview(await previewHrFinalSettlement(current, previewPayload())); }
-    catch (error) { setPreview(null); setMessage(presentBaseerApiError(error, language, ar ? "تعذرت معاينة المخالصة." : "Final-settlement preview could not be prepared.")); }
+    catch (error) { setPreview(null); showError(presentBaseerApiError(error, language, ar ? "تعذرت معاينة المخالصة." : "Final-settlement preview could not be prepared.")); }
     finally { setPreviewLoading(false); }
   };
   const create = async () => {
@@ -158,7 +169,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       await createHrFinalSettlement(current, { ...previewPayload(), idempotencyKey: requestId() });
       setDraft({ ...emptyDraft(), employeeId: employee?.id ?? "" }); setPreview(null); setRecoveries({}); setTab("register");
       await load();
-    } catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر إنشاء مسودة المخالصة." : "Final-settlement draft could not be created.")); }
+    } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر إنشاء مسودة المخالصة." : "Final-settlement draft could not be created.")); }
     finally { setBusy(false); }
   };
   const loadVaults = async () => {
@@ -171,40 +182,61 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   };
   const openPayDialog = async () => {
     try { await loadVaults(); setPayOpen(true); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر تحميل الخزائن." : "Vaults could not be loaded.")); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل الخزائن." : "Vaults could not be loaded.")); }
   };
   const approve = async () => {
     const current = activeSession(); if (!current || !selected) return;
     setBusy(true);
     try { await approveHrFinalSettlement(current, { settlementId: selected.id, businessDate, idempotencyKey: requestId() }); setApproveOpen(false); setSelected(null); await load(); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر اعتماد المخالصة." : "The final settlement could not be approved.")); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر اعتماد المخالصة." : "The final settlement could not be approved.")); }
     finally { setBusy(false); }
   };
   const verifyReason = async () => {
     const current = activeSession(); if (!current || !selected || !verificationNote.trim()) return;
     setBusy(true);
     try { await verifyHrFinalSettlementReason(current, { settlementId: selected.id, verificationNote: verificationNote.trim(), idempotencyKey: requestId() }); setVerifyOpen(false); setSelected(null); await load(); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر التحقق من سبب الإنهاء." : "The termination reason could not be verified.")); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر التحقق من سبب الإنهاء." : "The termination reason could not be verified.")); }
     finally { setBusy(false); }
   };
   const pay = async () => {
     const current = activeSession(); if (!current || !selected) return;
     setBusy(true);
     try { await payHrFinalSettlement(current, { settlementId: selected.id, businessDate, allocations, idempotencyKey: requestId() }); setPayOpen(false); setSelected(null); await load(); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر صرف المخالصة." : "The final settlement could not be paid.")); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر صرف المخالصة." : "The final settlement could not be paid.")); }
     finally { setBusy(false); }
   };
   const reverse = async () => {
     const current = activeSession(); if (!current || !selected) return;
     setBusy(true);
     try { await reverseHrFinalSettlement(current, { settlementId: selected.id, businessDate, reason: reverseReason, idempotencyKey: requestId() }); setReverseOpen(false); setSelected(null); await load(); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تعذر عكس المخالصة." : "The final settlement could not be reversed.")); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر عكس المخالصة." : "The final settlement could not be reversed.")); }
+    finally { setBusy(false); }
+  };
+  const openSettlementDetail = async (settlement: HrFinalSettlement) => {
+    const current = activeSession(); if (!current) return;
+    setSelected(settlement); setPayments([]); setNextPaymentCursor(null);
+    try { const receipt = await getHrFinalSettlement(current, settlement.id, { pageSize: 100 }); setSelected(receipt.settlement); setPayments(receipt.payments); setNextPaymentCursor(receipt.nextPaymentCursor); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل تفاصيل المخالصة." : "Final-settlement details could not be loaded.")); }
+  };
+  const reversePayment = async (event: React.FormEvent) => {
+    event.preventDefault(); const current = activeSession(); if (!current || !paymentToReverse || !selected || busy || !reverseReason.trim()) return;
+    setBusy(true);
+    try { await reverseHrFinalSettlementPayment(current, { finalSettlementPaymentId: paymentToReverse.id, businessDate, reason: reverseReason.trim(), idempotencyKey: requestId() }); const receipt = await getHrFinalSettlement(current, selected.id, { pageSize: 100 }); setSelected(receipt.settlement); setPayments(receipt.payments); setNextPaymentCursor(receipt.nextPaymentCursor); setPaymentToReverse(null); setReverseReason(""); await load(); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر عكس دفعة المخالصة." : "The final-settlement payment could not be reversed.")); }
+    finally { setBusy(false); }
+  };
+  const loadMorePayments = async () => {
+    const current = activeSession(); if (!current || !selected || !nextPaymentCursor || busy) return;
+    setBusy(true);
+    try { const receipt = await getHrFinalSettlement(current, selected.id, { paymentCursor: nextPaymentCursor, pageSize: 100 }); setPayments((rows) => [...new Map([...rows, ...receipt.payments].map((payment) => [payment.id, payment])).values()]); setNextPaymentCursor(receipt.nextPaymentCursor); }
+    catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل بقية دفعات المخالصة." : "More final-settlement payments could not be loaded.")); }
     finally { setBusy(false); }
   };
 
-  const rows = settlements.filter((item) => !search.trim() || [item.settlementNumber, item.terminationDate, item.status].join(" ").toLowerCase().includes(search.trim().toLowerCase()));
+  const rows = settlements;
   const canOutput = selected?.status === "APPROVED" || selected?.status === "PARTIALLY_PAID" || selected?.status === "PAID";
   const reasonRequiresVerification = selected?.terminationReason === "ARTICLE_80" || selected?.terminationReason === "ARTICLE_81" || selected?.terminationReason === "FORCE_MAJEURE" || selected?.terminationReason === "MATERNITY" || selected?.terminationReason === "OTHER_LEGAL_REVIEW";
+  const paymentColumns = [{ id: "number", header: ar ? "رقم الدفعة" : "Payment no.", cell: (payment: HrPayment) => payment.paymentNumber }, { id: "date", header: ar ? "التاريخ" : "Date", cell: (payment: HrPayment) => payment.businessDate }, { id: "amount", header: ar ? "المبلغ" : "Amount", cell: (payment: HrPayment) => money(payment.amount) }, { id: "status", header: ar ? "الحالة" : "Status", cell: (payment: HrPayment) => payment.status === "POSTED" ? (ar ? "مرحلة" : "Posted") : (ar ? "معكوسة" : "Reversed") }, { id: "action", header: ar ? "الإجراء" : "Action", cell: (payment: HrPayment) => hasActivePermission("hr.final_settlements.reverse") && payment.status === "POSTED" ? <BaseerButton type="button" variant="danger" onClick={() => { setBusinessDate(today()); setReverseReason(""); setPaymentToReverse(payment); }}>{ar ? "عكس الدفعة" : "Reverse payment"}</BaseerButton> : "—" }];
 
   return <section className="administration-workspace">
     <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات مكافأة نهاية الخدمة" : "End-of-service award tabs"} idPrefix="hr-final-settlement" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "calculator", label: ar ? "مكافأة نهاية الخدمة" : "End-of-service award" }, { id: "register", label: ar ? "سجل المخالصات" : "Settlement register" }]} />
@@ -239,7 +271,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       {tab === "register" ? <>
         <BaseerFilterBar language={language} search={search} searchLabel={ar ? "بحث المخالصات" : "Search settlements"} searchPlaceholder={ar ? "رقم المخالصة أو الحالة" : "Number or status"} onSearchChange={setSearch} controls={<>{employee ? null : <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={[]} remoteSearch={searchEmployees} onChange={setEmployeeFilter} /></label>}<label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "" | HrFinalSettlementStatus)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option>{(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED", "CANCELLED"] as const).map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}</select></label></>} />
         {loading ? <BaseerCard>{ar ? "جارٍ تحميل سجل المكافآت…" : "Loading award register…"}</BaseerCard> : rows.length ? <DataTable ariaLabel={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} caption={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} rows={rows} rowKey={(row) => row.id} columns={[
-          { id: "number", header: ar ? "المخالصة" : "Settlement", cell: (row: HrFinalSettlement) => <BaseerButton type="button" variant="quiet" onClick={() => setSelected(row)}>{row.settlementNumber}</BaseerButton> },
+          { id: "number", header: ar ? "المخالصة" : "Settlement", cell: (row: HrFinalSettlement) => <BaseerButton type="button" variant="quiet" onClick={() => void openSettlementDetail(row)}>{row.settlementNumber}</BaseerButton> },
           { id: "date", header: ar ? "تاريخ الإنهاء" : "Termination", cell: (row: HrFinalSettlement) => row.terminationDate },
           { id: "reason", header: ar ? "السبب" : "Reason", cell: (row: HrFinalSettlement) => labelReason(row.terminationReason) },
           { id: "net", header: ar ? "الصافي" : "Net", cell: (row: HrFinalSettlement) => money(row.netPayableAmount) },
@@ -257,7 +289,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       {selected.status === "DRAFT" ? <BaseerButton type="button" disabled={busy || Boolean(reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED")} onClick={() => { setBusinessDate(today()); setApproveOpen(true); }}>{ar ? "اعتماد" : "Approve"}</BaseerButton> : null}
       {selected.status === "APPROVED" || selected.status === "PARTIALLY_PAID" ? <BaseerButton type="button" disabled={busy} onClick={() => void openPayDialog()}>{ar ? "صرف" : "Pay"}</BaseerButton> : null}
       {selected.status !== "DRAFT" && selected.status !== "REVERSED" && selected.status !== "CANCELLED" ? <BaseerButton type="button" variant="danger" disabled={busy} onClick={() => { setBusinessDate(today()); setReverseReason(""); setReverseOpen(true); }}>{ar ? "عكس" : "Reverse"}</BaseerButton> : null}
-    </> : undefined}>{selected ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص المخالصة" : "Settlement summary"}><BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS"} value={money(selected.eosAmount)} /><BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(selected.recoveryAmount)} /><BaseerSummaryMetric label={ar ? "الصافي" : "Net"} value={money(selected.netPayableAmount)} /><BaseerSummaryMetric label={ar ? "المدفوع" : "Paid"} value={money(selected.paidAmount)} /></BaseerSummaryMetricGrid>{reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerCard>{ar ? "يتطلب هذا السبب تحققاً موثقاً قبل الاعتماد." : "This reason requires documented verification before approval."}</BaseerCard> : null}<dl className="administration-details"><div><dt>{ar ? "السبب" : "Reason"}</dt><dd>{labelReason(selected.terminationReason)}</dd></div><div><dt>{ar ? "مرجع الدليل" : "Evidence reference"}</dt><dd>{selected.reasonEvidenceReference}</dd></div><div><dt>{ar ? "تحقق السبب" : "Reason verification"}</dt><dd>{labelVerification(selected.reasonVerificationStatus)}</dd></div><div><dt>{ar ? "تاريخ الإنهاء" : "Termination date"}</dt><dd>{selected.terminationDate}</dd></div><div><dt>{ar ? "الحالة" : "Status"}</dt><dd>{labelStatus(selected.status)}</dd></div><div><dt>{ar ? "سياسة الحساب" : "Calculation policy"}</dt><dd>{selected.calculationPolicyVersion}</dd></div></dl></> : null}</BaseerDialog>
+    </> : undefined}>{selected ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص المخالصة" : "Settlement summary"}><BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS"} value={money(selected.eosAmount)} /><BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(selected.recoveryAmount)} /><BaseerSummaryMetric label={ar ? "الصافي" : "Net"} value={money(selected.netPayableAmount)} /><BaseerSummaryMetric label={ar ? "المدفوع" : "Paid"} value={money(selected.paidAmount)} /></BaseerSummaryMetricGrid>{reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerCard>{ar ? "يتطلب هذا السبب تحققاً موثقاً قبل الاعتماد." : "This reason requires documented verification before approval."}</BaseerCard> : null}<dl className="administration-details"><div><dt>{ar ? "السبب" : "Reason"}</dt><dd>{labelReason(selected.terminationReason)}</dd></div><div><dt>{ar ? "مرجع الدليل" : "Evidence reference"}</dt><dd>{selected.reasonEvidenceReference}</dd></div><div><dt>{ar ? "تحقق السبب" : "Reason verification"}</dt><dd>{labelVerification(selected.reasonVerificationStatus)}</dd></div><div><dt>{ar ? "تاريخ الإنهاء" : "Termination date"}</dt><dd>{selected.terminationDate}</dd></div><div><dt>{ar ? "الحالة" : "Status"}</dt><dd>{labelStatus(selected.status)}</dd></div><div><dt>{ar ? "سياسة الحساب" : "Calculation policy"}</dt><dd>{selected.calculationPolicyVersion}</dd></div></dl>{payments.length ? <DataTable ariaLabel={ar ? "دفعات المخالصة" : "Final-settlement payments"} caption={ar ? "دفعات المخالصة" : "Final-settlement payments"} rows={payments} rowKey={(payment) => payment.id} columns={paymentColumns} /> : null}{nextPaymentCursor ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void loadMorePayments()}>{ar ? "تحميل دفعات إضافية" : "Load more payments"}</BaseerButton> : null}</> : null}</BaseerDialog>
 
     <BaseerFormDialog open={approveOpen} title={ar ? "اعتماد المخالصة" : "Approve final settlement"} language={language} busy={busy} size="compact" formId="hr-settlement-approve" submitLabel={ar ? "اعتماد" : "Approve"} onClose={() => setApproveOpen(false)}>
       <form id="hr-settlement-approve" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void approve(); }}><BaseerFormSection title={ar ? "تاريخ الاعتماد" : "Approval date"}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ الاعتماد" : "Approval date"} value={businessDate} onChange={setBusinessDate} /></BaseerFormGrid></BaseerFormSection></form>
@@ -280,5 +312,6 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     <BaseerFormDialog open={reverseOpen} title={ar ? "عكس المخالصة" : "Reverse final settlement"} language={language} busy={busy} size="compact" formId="hr-settlement-reverse" submitLabel={ar ? "عكس" : "Reverse"} submitDisabled={!reverseReason.trim()} onClose={() => setReverseOpen(false)}>
       <form id="hr-settlement-reverse" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void reverse(); }}><BaseerFormSection title={ar ? "قرار العكس" : "Reversal decision"}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ العكس" : "Reversal date"} value={businessDate} onChange={setBusinessDate} /><label>{ar ? "السبب" : "Reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} /></label></BaseerFormGrid></BaseerFormSection></form>
     </BaseerFormDialog>
+    <BaseerFormDialog open={Boolean(paymentToReverse)} title={ar ? "عكس دفعة المخالصة" : "Reverse final-settlement payment"} language={language} busy={busy} size="compact" formId="hr-settlement-payment-reverse" submitLabel={ar ? "تأكيد العكس" : "Confirm reversal"} submitDisabled={!reverseReason.trim()} onClose={() => setPaymentToReverse(null)}><form id="hr-settlement-payment-reverse" className="baseer-form" onSubmit={(event) => void reversePayment(event)}><BaseerFormSection title={paymentToReverse?.paymentNumber ?? ""}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ العكس" : "Reversal date"} max={today()} value={businessDate} onChange={setBusinessDate} /><label>{ar ? "سبب العكس" : "Reversal reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} /></label></BaseerFormGrid></BaseerFormSection></form></BaseerFormDialog>
   </section>;
 }

@@ -18,6 +18,7 @@ export type HrService = {
   supplier: { id: string; nameAr: string; nameEn: string | null } | null;
   category: { id: string; nameAr: string; nameEn: string } | null;
   outflowDocumentId: string | null;
+  costStatus: "NOT_ISSUED" | "POSTED" | "REVERSED";
   status: "DRAFT" | "ISSUED" | "CANCELLED";
   notes: string | null;
 };
@@ -31,7 +32,7 @@ export type HrEmployeeServiceRecord = HrService & {
 };
 
 type HrEmployeesReceipt = { employees: HrEmployee[]; hasMore: boolean; nextCursor: string | null };
-type HrEmployeeServicesReceipt = { services: HrEmployeeServiceRecord[]; hasMore: boolean; nextCursor: string | null };
+type HrEmployeeServicesReceipt = { services: HrEmployeeServiceRecord[]; hasMore: boolean; nextCursor: string | null; summary: { count: number; expired: number; due30: number; due90: number } };
 type HrEmployeeServiceDetail = { service: HrEmployeeServiceRecord };
 
 export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployee["status"]; search?: string; cursor?: string; pageSize?: number } = {}) {
@@ -42,7 +43,8 @@ export function listHrEmployees(session: ActiveSession, query: { status?: HrEmpl
 export function createHrEmployeeService(session: ActiveSession, payload: unknown) { return api(session, "/hr/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function recordHrEmployeeServiceAndIssueCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/record-and-issue", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function issueHrEmployeeServiceCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/issue-cost", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
-export function listHrEmployeeServices(session: ActiveSession, query: { employeeId?: string; serviceType?: HrService["serviceType"]; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: string; expiryAfter?: string; cursor?: string; pageSize?: number } = {}) {
+export function reverseHrEmployeeServiceCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/reverse-cost", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function listHrEmployeeServices(session: ActiveSession, query: { employeeId?: string; serviceType?: HrService["serviceType"]; complianceStatus?: HrEmployeeServiceComplianceStatus; search?: string; expiryBefore?: string; expiryAfter?: string; cursor?: string; pageSize?: number } = {}) {
   const parameters = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value));
   return api<HrEmployeeServicesReceipt>(session, `/hr/services${parameters.size ? `?${parameters}` : ""}`);

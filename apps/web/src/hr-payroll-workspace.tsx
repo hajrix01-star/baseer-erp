@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -9,6 +9,8 @@ import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { DataTable, type DataTableColumn } from "./data-table";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
+import { reportTopmostDialogError } from "./use-dialog-focus-trap";
+import { consumeHrRouteStage } from "./hr-route-stage";
 import { listHrPayrollRuns, type HrPayrollRun } from "./hr-client";
 import { formatNumber } from "./number-format";
 
@@ -22,30 +24,38 @@ const today = () => new Date().toISOString().slice(0, 10);
 const month = () => `${today().slice(0, 7)}-01`;
 const money = (value: string) => formatNumber(value);
 
-export function HrPayrollWorkspace({ language }: { language: Language }) {
+export function HrPayrollWorkspace({ language, stage }: { language: Language; stage?: string | null }) {
   const ar = language === "ar";
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
   const [runs, setRuns] = useState<HrPayrollRun[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [serverSearch, setServerSearch] = useState("");
+  const [summary, setSummary] = useState({ count: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
   const [message, setMessage] = useState("");
+  const showError = (message: string) => { if (!reportTopmostDialogError(message)) setMessage(message); };
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [policiesOpen, setPoliciesOpen] = useState(false);
+  useEffect(() => { if (stage !== "create-payroll") return; setCreateOpen(true); consumeHrRouteStage(3); }, [stage]);
   const [createOpen, setCreateOpen] = useState(false);
+  const loadRequestRef = useRef(0);
+  useEffect(() => { const timeout = window.setTimeout(() => setServerSearch(search.trim()), 250); return () => window.clearTimeout(timeout); }, [search]);
 
   const load = useCallback(async (cursor?: string, append = false) => {
     const current = activeSession(); setSession(current); if (!current) { setLoading(false); return; }
+    const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
-      const payroll = await listHrPayrollRuns(current, { cursor, pageSize: 50 });
+      const payroll = await listHrPayrollRuns(current, { search: serverSearch || undefined, cursor, pageSize: 50 });
+      if (requestNumber !== loadRequestRef.current) return;
       setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
-    } catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
-    finally { setLoading(false); }
-  }, [ar, language]);
+      setSummary(payroll.summary);
+    } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
+    finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
+  }, [ar, language, serverSearch]);
   useEffect(() => { void load(); }, [load]);
-  const visibleRuns = useMemo(() => { const needle = search.trim().toLowerCase(); return needle ? runs.filter((run) => [run.runNumber, run.status, run.payrollMonth].join(" ").toLowerCase().includes(needle)) : runs; }, [runs, search]);
   const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "معكوس" : "Reversed" })[status];
   const openDetail = (run: HrPayrollRun) => setDetailId(run.id);
 
@@ -59,19 +69,18 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
     { id: "net", header: ar ? "الصافي" : "Net", cell: (row) => money(row.netPayableAmount), sort: (row) => row.netPayableAmount, width: "10rem" },
     { id: "status", header: ar ? "الحالة" : "Status", cell: (row) => runStatus(row.status), sort: (row) => row.status, width: "10rem" },
   ];
-  const totals = visibleRuns.reduce((result, run) => ({ gross: result.gross + Number(run.grossAmount), advances: result.advances + Number(run.advanceSettlementAmount), deductions: result.deductions + Number(run.administrativeDeductionAmount), net: result.net + Number(run.netPayableAmount) }), { gross: 0, advances: 0, deductions: 0, net: 0 });
   if (!session) return null;
   return <section className="administration-panel">
-    <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2><p>{ar ? "مسودة، اعتماد، سداد، وعكس موثق من السجل المحاسبي." : "Draft, approve, pay, and reverse from the accounting record."}</p></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
-    <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(String(totals.gross))} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(String(totals.advances))} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(String(totals.deductions))} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(String(totals.net))} /></BaseerSummaryMetricGrid>
+    <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
+    <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /></BaseerSummaryMetricGrid>
     <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} />
-    {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : visibleRuns.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={visibleRuns} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
+    {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
     {message ? <p className="daily-sales-message error">{message}</p> : null}
 
-    {policiesOpen ? <Suspense fallback={null}><HrCompensationPoliciesDialog open={policiesOpen} language={language} onClose={() => setPoliciesOpen(false)} onChanged={load} onError={setMessage} /></Suspense> : null}
-    {createOpen ? <Suspense fallback={null}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} onError={setMessage} /></Suspense> : null}
-    {detailId ? <Suspense fallback={null}><HrPayrollDetailDialog runId={detailId} language={language} onClose={() => setDetailId(null)} onChanged={load} onError={setMessage} /></Suspense> : null}
+    {policiesOpen ? <Suspense fallback={null}><HrCompensationPoliciesDialog open={policiesOpen} language={language} onClose={() => setPoliciesOpen(false)} onChanged={load} onError={showError} /></Suspense> : null}
+    {createOpen ? <Suspense fallback={null}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} onError={showError} /></Suspense> : null}
+    {detailId ? <Suspense fallback={null}><HrPayrollDetailDialog runId={detailId} language={language} onClose={() => setDetailId(null)} onChanged={load} onError={showError} /></Suspense> : null}
   </section>;
 }

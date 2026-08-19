@@ -92,7 +92,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
         transportAllowance: (isFullEdit ? transportAllowance : profile!.transportAllowance) || "0",
         otherAllowance: (isFullEdit ? otherAllowance : profile!.otherAllowance) || "0",
         ...(method === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: Number(isFullEdit ? scheduledHoursPerDay : profile!.scheduledHoursPerDay), scheduledWorkDays: Number(isFullEdit ? scheduledWorkDays : profile!.scheduledWorkDays) } : {}),
-        notes: `${operationLabel(language, operation)}${!isFullEdit ? `: ${delta.toFixed(4)}` : ""}${reason.trim() ? ` — ${reason.trim()}` : ""}`,
+        notes: `${operationLabel(language, operation)}${reason.trim() ? ` — ${reason.trim()}` : ""}`,
         idempotencyKey: submissionKey.current,
       });
       onClose();
@@ -104,7 +104,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
 
   return <BaseerFormDialog open={open} title={profile ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")} language={language} busy={busy} size="standard" formId="hr-salary-management" submitLabel={ar ? "حفظ الراتب" : "Save salary"} onClose={onClose}>
     <form id="hr-salary-management" className="baseer-form" onSubmit={(event) => void submit(event)}>
-      <BaseerFormSection title={employee.nameAr} description={ar ? "اختر نوع العملية؛ يحفظ النظام سجلاً مؤرخاً ولا يغير أي مسير سابق." : "Choose the operation. The system saves a dated record and never changes past payroll."}>
+      <BaseerFormSection title={employee.nameAr}>
         {profile ? <div className="baseer-inline-actions" role="group" aria-label={ar ? "نوع تعديل الراتب" : "Salary change type"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} disabled={busy} onClick={() => setOperation(value)}>{operationLabel(language, value)}</BaseerButton>)}</div> : null}
         <BaseerFormGrid>
           <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<input required type="month" min={minimumMonth} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>

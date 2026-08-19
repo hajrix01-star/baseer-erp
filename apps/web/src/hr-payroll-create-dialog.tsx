@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerMoneyInput } from "./baseer-form-fields";
+import { BaseerMoneyInput, formatBaseerEditableAmount } from "./baseer-form-fields";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, requestId } from "./daily-sales-client";
 import { createHrPayrollRun, previewHrPayrollRun, type HrPayrollPreviewEmployee, type HrPayrollPreviewReceipt } from "./hr-client";
@@ -44,6 +44,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
     const administrativeDeductions = Object.entries(choices.deductions).filter(([, item]) => item.enabled && Number(item.amount) > 0).map(([id, item]) => ({ id, amount: item.amount }));
     return advances.length || administrativeDeductions.length ? [{ employeeId, advances, administrativeDeductions }] : [];
   }), [applications, previewRows]);
+  const hasIncompleteApplications = previewRows.some((employee) => employee.hasMoreAdvances || employee.hasMoreAdministrativeDeductions);
   const includeOnLeaveIdsRef = useRef(includeOnLeaveIds);
   const applicationLinesRef = useRef(applicationLines);
   includeOnLeaveIdsRef.current = includeOnLeaveIds;
@@ -109,19 +110,21 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
 
   const applicationChoices = (employee: HrPayrollPreviewEmployee, kind: "advances" | "deductions") => {
     const rows = kind === "advances" ? employee.advances : employee.administrativeDeductions;
+    const count = kind === "advances" ? employee.advanceCount : employee.administrativeDeductionCount;
+    const hasMore = kind === "advances" ? employee.hasMoreAdvances : employee.hasMoreAdministrativeDeductions;
     const label = kind === "advances" ? (ar ? "سلفة" : "Advance") : (ar ? "خصم" : "Deduction");
     const choices = applications[employee.id]?.[kind] ?? {};
-    if (!rows.length) return <span className="hr-payroll-create__no-application">—</span>;
+    if (!rows.length && !hasMore) return <span className="hr-payroll-create__no-application">—</span>;
     return <div className="hr-payroll-create__application-list">{rows.map((entry) => {
-      const item = choices[entry.id] ?? { enabled: false, amount: entry.remainingAmount };
+      const item = choices[entry.id] ?? { enabled: false, amount: formatBaseerEditableAmount(entry.remainingAmount) };
       return <label key={entry.id} className={item.enabled ? "is-selected" : undefined}>
         <input type="checkbox" checked={item.enabled} disabled={!employee.included || busy} onChange={(event) => updateApplication(employee.id, kind, entry.id, event.target.checked, item.amount)} />
         <span>{label} · {entry.referenceNumber}</span>
         <BaseerMoneyInput aria-label={`${label} ${entry.referenceNumber}`} disabled={!employee.included || !item.enabled || busy} value={item.amount} onValueChange={(amount) => updateApplication(employee.id, kind, entry.id, item.enabled, amount)} />
       </label>;
-    })}</div>;
+    })}{hasMore ? <small role="alert">{ar ? `تظهر ${rows.length} من ${count}. توجد تطبيقات إضافية غير ظاهرة.` : `Showing ${rows.length} of ${count}. More applications are not shown.`}</small> : null}</div>;
   };
-  const canSubmit = !busy && !previewLoading && preview !== null && preview.counts.included > 0 && preview.counts.exceptions === 0;
+  const canSubmit = !busy && !previewLoading && preview !== null && preview.counts.included > 0 && preview.counts.exceptions === 0 && !hasIncompleteApplications;
 
   return <BaseerDialog open={open} title={ar ? "إنشاء مسير راتب" : "Create payroll run"} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose} footer={<><div className="hr-payroll-create__total"><span>{ar ? "صافي المستحق" : "Net payable"}</span>{preview ? <BaseerMoney value={preview.totals.netPayableAmount} language={language} /> : "—"}</div><div className="hr-payroll-create__actions"><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{ar ? "إلغاء" : "Cancel"}</BaseerButton><BaseerButton type="submit" form="hr-payroll-create-form" disabled={!canSubmit}>{ar ? "إنشاء المسودة" : "Create draft"}</BaseerButton></div></>}>
     <form id="hr-payroll-create-form" className="hr-payroll-create" onSubmit={(event) => void submit(event)}>
@@ -129,6 +132,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
       <div className="hr-payroll-create__table-heading"><strong>{ar ? `قائمة الموظفين (${preview?.totals.employeeCount ?? 0})` : `Employees (${preview?.totals.employeeCount ?? 0})`}</strong><BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview()}>{ar ? "تحديث" : "Refresh"}</BaseerButton></div>
       {previewLoading && !preview ? <p className="hr-payroll-create__loading">{ar ? "جارٍ إعداد المسير…" : "Preparing payroll…"}</p> : null}
       {preview?.exceptions.length ? <p className="hr-payroll-create__notice" role="alert">{ar ? `يلزم معالجة ${preview.counts.exceptions} استثناء قبل إنشاء المسير.` : `${preview.counts.exceptions} exception(s) must be resolved before creating the payroll.`}</p> : null}
+      {hasIncompleteApplications ? <p className="hr-payroll-create__notice" role="alert">{ar ? "توجد سلف أو خصومات إضافية غير ظاهرة في المعاينة. لا يمكن إنشاء المسير حتى تكتمل قائمة التطبيقات." : "Some advance or deduction applications are not shown. The payroll cannot be created until the application list is complete."}</p> : null}
       {previewRows.length ? <div className="hr-payroll-create__table-wrap"><table><thead><tr><th>{ar ? "الموظف" : "Employee"}</th><th>{ar ? "إجمالي الراتب" : "Gross salary"}</th><th>{ar ? "السلف" : "Advances"}</th><th>{ar ? "الخصومات الإدارية" : "Administrative deductions"}</th><th>{ar ? "الصافي التقديري" : "Estimated net"}</th><th>{ar ? "الحالة" : "Status"}</th></tr></thead><tbody>{previewRows.map((employee) => {
         const selectedTotal = selectedApplicationsTotal(applications[employee.id]);
         const estimatedNet = Math.max(0, Number(employee.estimatedGrossAmount ?? 0) - selectedTotal);

@@ -104,7 +104,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
         transportAllowance: (fullEdit ? draft.transportAllowance : existingSalary!.transportAllowance) || "0",
         otherAllowance: (fullEdit ? draft.otherAllowance : existingSalary!.otherAllowance) || "0",
         ...(method === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: Number(fullEdit ? draft.scheduledHoursPerDay : existingSalary!.scheduledHoursPerDay), scheduledWorkDays: Number(fullEdit ? draft.scheduledWorkDays : existingSalary!.scheduledWorkDays) } : {}),
-        notes: `${operationCopy(language, operation).label}${!fullEdit ? `: ${delta.toFixed(4)}` : ""}${draft.notes.trim() ? ` — ${draft.notes.trim()}` : ""}`,
+        notes: `${operationCopy(language, operation).label}${draft.notes.trim() ? ` — ${draft.notes.trim()}` : ""}`,
         idempotencyKey: submissionKey.current,
       });
       onClose();
@@ -117,7 +117,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
   const title = existingSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary");
   return <BaseerFormDialog open={open} title={title} language={language} busy={busy} size="standard" className="hr-salary-manager-dialog" formId="hr-salary-editor" submitLabel={ar ? "حفظ الراتب" : "Save salary"} onClose={onClose}>
     <form id="hr-salary-editor" className="baseer-form hr-salary-manager" onSubmit={(event) => void submit(event)}>
-      <BaseerFormSection title={selectedEmployee ? (ar ? `راتب ${selectedEmployee.nameAr}` : `${selectedEmployee.nameEn ?? selectedEmployee.nameAr} salary`) : (ar ? "بيانات الراتب" : "Salary details")} description={ar ? "سيُنشئ النظام سجلاً مؤرخاً جديداً؛ المسيرات السابقة لا تتغير." : "The system creates a new dated record; past payroll does not change."}>
+      <BaseerFormSection title={selectedEmployee ? (ar ? `راتب ${selectedEmployee.nameAr}` : `${selectedEmployee.nameEn ?? selectedEmployee.nameAr} salary`) : (ar ? "بيانات الراتب" : "Salary details")}>
         {existingSalary ? <div className="hr-salary-manager__operations" role="group" aria-label={ar ? "نوع عملية الراتب" : "Salary operation"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} className="hr-salary-manager__operation" disabled={busy} onClick={() => setOperation(value)}><span>{operationCopy(language, value).label}</span><small>{operationCopy(language, value).description}</small></BaseerButton>)}</div> : null}
         {existingSalary ? <div className="hr-salary-manager__summary"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "بعد العملية" : "After change"}</span><strong><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div></div> : null}
         <BaseerFormGrid className="hr-salary-manager__fields">

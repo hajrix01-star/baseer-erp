@@ -7,7 +7,49 @@
 .hr-employee-view-switch {
   display: flex;
   justify-content: flex-end;
-  gap: .45rem;
+  gap: .05rem;
+}
+
+.hr-employee-view-switch__button {
+  position: relative;
+  inline-size: 2.2rem;
+  min-block-size: 3rem;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted, #66766e);
+}
+
+.hr-employee-view-switch__button.baseer-button--primary,
+.hr-employee-view-switch__button.baseer-button--secondary {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hr-employee-view-switch__button[aria-pressed="true"] {
+  color: var(--brand, #176b48);
+}
+
+.hr-employee-view-switch__button[aria-pressed="true"]::after {
+  position: absolute;
+  inset-inline: .72rem;
+  inset-block-end: .28rem;
+  block-size: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+}
+
+.hr-employee-view-switch__button svg {
+  inline-size: 1.55rem;
+  block-size: 1.55rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .hr-employee-directory-card {
