@@ -1,0 +1,67 @@
+.hr-onboarding-dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  inline-size: min(76rem, calc(100vw - 3rem));
+  max-block-size: min(54rem, calc(100vh - 2rem));
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 74%, var(--brand));
+  border-radius: 1.15rem;
+  box-shadow: 0 1.5rem 4.5rem rgb(12 37 24 / 28%);
+}
+.hr-onboarding-dialog .daily-sales-dialog__header {
+  align-items: center;
+  justify-content: space-between;
+  min-block-size: 4.75rem;
+  padding: 1rem 1.35rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(100deg, color-mix(in srgb, var(--brand) 7%, var(--surface)), var(--surface) 48%);
+}
+.hr-onboarding-dialog .daily-sales-dialog__header h3 { font-size: clamp(1.1rem, 1.6vw, 1.35rem); letter-spacing: -.01em; }
+.hr-onboarding-dialog .daily-sales-dialog__body { min-block-size: 0; padding: 1.25rem 1.35rem 1.45rem; overflow: auto; background: color-mix(in srgb, var(--canvas) 44%, var(--surface)); }
+.hr-onboarding-dialog .daily-sales-dialog__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .65rem;
+  min-block-size: 4.75rem;
+  margin: 0;
+  padding: .9rem 1.35rem;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+.hr-onboarding { gap: 1rem; }
+.hr-onboarding .baseer-notice { margin: 0; border-radius: .85rem; }
+.hr-onboarding__section { gap: 1rem; padding: 1.1rem 1.2rem 1.2rem; border-color: color-mix(in srgb, var(--line) 82%, var(--brand)); border-radius: .95rem; background: var(--surface); box-shadow: 0 1px 0 rgb(10 36 22 / 3%); }
+.hr-onboarding__section > header { align-items: center; padding-bottom: .85rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent); }
+.hr-onboarding__section > header > span { inline-size: 2rem; block-size: 2rem; background: color-mix(in srgb, var(--brand) 13%, var(--surface)); }
+.hr-onboarding__section h3 { font-size: 1rem; }
+.hr-onboarding__grid { gap: 1rem 1.15rem; }
+.hr-onboarding label { gap: .45rem; }
+.hr-onboarding input,
+.hr-onboarding textarea {
+  min-block-size: 2.8rem;
+  padding: .65rem .8rem;
+  border: 1px solid color-mix(in srgb, var(--line) 88%, var(--ink));
+  border-radius: .7rem;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%);
+}
+.hr-onboarding input:hover,
+.hr-onboarding textarea:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+.hr-onboarding input:focus-visible,
+.hr-onboarding textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 19%, transparent); outline-offset: 1px; border-color: var(--brand); }
+.hr-onboarding input[type="date"],
+.hr-onboarding input[type="month"] { direction: ltr; text-align: start; }
+.hr-onboarding__total { min-block-size: 5.1rem; border-radius: .8rem; }
+.hr-onboarding__notes textarea { min-block-size: 6.5rem; }
+@media (max-width: 640px) {
+  .hr-onboarding-dialog { inline-size: calc(100vw - 1rem); max-block-size: calc(100vh - 1rem); border-radius: 1rem; }
+  .hr-onboarding-dialog .daily-sales-dialog__header { min-block-size: 4.25rem; padding-inline: 1rem; }
+  .hr-onboarding-dialog .daily-sales-dialog__body { padding: 1rem; }
+  .hr-onboarding-dialog .daily-sales-dialog__actions { min-block-size: 4.25rem; padding: .75rem 1rem; }
+  .hr-onboarding-dialog .daily-sales-dialog__actions .baseer-button { flex: 1; }
+  .hr-onboarding__section { padding: .9rem; }
+}

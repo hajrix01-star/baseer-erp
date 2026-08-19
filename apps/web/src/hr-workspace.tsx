@@ -13,7 +13,7 @@ import { DataTable, type DataTableColumn } from "./data-table";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { hrText } from "./hr-copy";
-import { HrJobTitleSuggestions } from "./hr-job-titles";
+import { HrJobTitleSelect } from "./hr-job-titles";
 import { cancelHrEmployeeAdministrativeDeduction, createHrEmployeeAdministrativeDeduction, deferHrEmployeeAdministrativeDeduction, deferHrEmployeeAdvance, getHrAdministrativeDeduction, getHrAdvance, getHrEmployee, issueHrEmployeeAdvance, listHrAdministrativeDeductions, listHrAdvances, listHrEmployees, settleHrEmployeeAdvanceDirectly, updateHrEmployee, type HrAdministrativeDeduction, type HrAdministrativeDeductionDetail, type HrAdvance, type HrAdvanceDetail, type HrDetail, type HrEmployee, type HrEmployeeStatus } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -221,7 +221,7 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
         <label>{text.employeeName}<input required value={employeeForm.nameAr} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameAr: event.target.value }))} /></label>
         <label>{text.englishName}<input value={employeeForm.nameEn} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameEn: event.target.value }))} /></label>
         <label>{text.hireDate}<input required readOnly={Boolean(editingEmployeeId)} type="date" value={employeeForm.hireDate} max={today()} onChange={(event) => setEmployeeForm((value) => ({ ...value, hireDate: event.target.value }))} /></label>
-        <label>{text.jobTitle}<input list="hr-edit-job-titles" value={employeeForm.jobTitle} placeholder={language === "ar" ? "اختر من القائمة أو اكتب مسمى آخر" : "Choose a title or enter another"} onChange={(event) => setEmployeeForm((value) => ({ ...value, jobTitle: event.target.value }))} /><HrJobTitleSuggestions id="hr-edit-job-titles" language={language} /></label>
+        <label>{text.jobTitle}<HrJobTitleSelect id="hr-edit-job-titles" language={language} value={employeeForm.jobTitle} onChange={(jobTitle) => setEmployeeForm((value) => ({ ...value, jobTitle }))} /></label>
         <label>{text.phone}<input value={employeeForm.phone} onChange={(event) => setEmployeeForm((value) => ({ ...value, phone: event.target.value }))} /></label>
         <label>{text.email}<input type="email" value={employeeForm.email} onChange={(event) => setEmployeeForm((value) => ({ ...value, email: event.target.value }))} /></label>
         <label>{language === "ar" ? "نظام العمل" : "Work schedule"}<input value={employeeForm.workSchedule} onChange={(event) => setEmployeeForm((value) => ({ ...value, workSchedule: event.target.value }))} /></label>
