@@ -1,0 +1,276 @@
+import assert from "node:assert/strict";
+import { randomUUID } from "node:crypto";
+
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+import { NestFactory } from "@nestjs/core";
+import { FastifyAdapter } from "@nestjs/platform-fastify";
+import pg from "pg";
+
+dotenv.config({ path: "apps/api/.env.baseer-test" });
+
+const { Pool } = pg;
+const pool = new Pool({ connectionString: requiredEnvironment("DATABASE_URL") });
+const suffix = randomUUID().replaceAll("-", "").slice(0, 12);
+const fixture = {
+  tenantId: randomUUID(),
+  companyId: randomUUID(),
+  foreignCompanyId: randomUUID(),
+  managerUserId: randomUUID(),
+  readerUserId: randomUUID(),
+  activeEmployeeId: randomUUID(),
+  terminatedEmployeeId: randomUUID(),
+  tenantCode: `hr-http-${suffix}`,
+};
+let app;
+
+try {
+  await seedFixture();
+  process.env.BASEER_SYSTEM_TENANT_CODE = fixture.tenantCode;
+  const [{ AppModule }, { AuthService }, { ApiExceptionFilter }] = await Promise.all([
+    import("../apps/api/dist/app.module.js"),
+    import("../apps/api/dist/identity/auth.service.js"),
+    import("../apps/api/dist/common/api-exception.filter.js"),
+  ]);
+  app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }), { logger: false });
+  app.setGlobalPrefix("v1");
+  app.useGlobalFilters(new ApiExceptionFilter());
+  await app.init();
+
+  const auth = app.get(AuthService);
+  const managerSession = await auth.signIn({
+    login: `hr-manager-${suffix}@baseer.test`,
+    password: `Manager-${suffix}`,
+    requestId: randomUUID(),
+  });
+  const readerSession = await auth.signIn({
+    login: `hr-reader-${suffix}@baseer.test`,
+    password: `Reader-${suffix}`,
+    requestId: randomUUID(),
+  });
+  const server = app.getHttpAdapter().getInstance();
+  const managerHeaders = {
+    authorization: `Bearer ${managerSession.accessToken}`,
+    "x-baseer-company-id": fixture.companyId,
+  };
+  const readerHeaders = {
+    authorization: `Bearer ${readerSession.accessToken}`,
+    "x-baseer-company-id": fixture.companyId,
+  };
+
+  await expectError(
+    server.inject({ method: "GET", url: "/v1/hr/employees" }),
+    401,
+    "AUTHENTICATION_FAILED",
+    "The HR register must require authentication.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: "/v1/hr/employees", headers: { authorization: managerHeaders.authorization } }),
+    403,
+    "AUTHORIZATION_DENIED",
+    "A missing company context must be denied.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: "/v1/hr/employees", headers: { ...managerHeaders, "x-baseer-company-id": fixture.foreignCompanyId } }),
+    403,
+    "AUTHORIZATION_DENIED",
+    "A company without membership must be denied.",
+  );
+
+  const managerRegister = await server.inject({ method: "GET", url: "/v1/hr/employees?pageSize=10", headers: managerHeaders });
+  assert.equal(managerRegister.statusCode, 200, managerRegister.body);
+  assert.equal(
+    managerRegister.json().employees.find((employee) => employee.id === fixture.activeEmployeeId)?.currentMonthlyGross,
+    "7000.0000",
+    "A payroll reader may receive current compensation in the HR register.",
+  );
+  const readerRegister = await server.inject({ method: "GET", url: "/v1/hr/employees?pageSize=10", headers: readerHeaders });
+  assert.equal(readerRegister.statusCode, 200, readerRegister.body);
+  assert.equal(
+    readerRegister.json().employees.find((employee) => employee.id === fixture.activeEmployeeId)?.currentMonthlyGross,
+    null,
+    "hr.employees.read alone must not disclose compensation.",
+  );
+  const readerDetail = await server.inject({ method: "GET", url: `/v1/hr/employees/${fixture.activeEmployeeId}`, headers: readerHeaders });
+  assert.equal(readerDetail.statusCode, 200, readerDetail.body);
+  assert.equal(readerDetail.json().employee.currentMonthlyGross, null);
+  assert.equal(readerDetail.json().compensation, null);
+  assert.deepEqual(readerDetail.json().compensationHistory, []);
+
+  const readerOverview = await server.inject({ method: "GET", url: "/v1/hr/overview", headers: readerHeaders });
+  assert.equal(readerOverview.statusCode, 200, readerOverview.body);
+  assert.equal(readerOverview.json().companyId, fixture.companyId);
+  assert.ok(readerOverview.json().workforce);
+  assert.ok(readerOverview.json().services);
+  assert.equal(readerOverview.json().payroll, null, "Overview must not disclose payroll without hr.payroll.read.");
+  assert.equal(readerOverview.json().financial, null);
+  assert.equal(readerOverview.json().finalSettlements, null);
+
+  const firstActivePage = await server.inject({ method: "GET", url: "/v1/hr/employees?pageSize=1", headers: managerHeaders });
+  assert.equal(firstActivePage.statusCode, 200, firstActivePage.body);
+  assert.equal(firstActivePage.json().hasMore, true);
+  assert.ok(firstActivePage.json().nextCursor);
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/employees?status=TERMINATED&pageSize=1&cursor=${firstActivePage.json().nextCursor}`, headers: managerHeaders }),
+    400,
+    "VALIDATION_FAILED",
+    "A cursor from another employee filter scope must be rejected as a client error.",
+  );
+
+  const createKey = randomUUID();
+  const employeeRequest = {
+    nameAr: "موظف فحص HTTP",
+    nameEn: "HTTP verification employee",
+    hireDate: "2026-01-01",
+    idempotencyKey: createKey,
+  };
+  const created = await server.inject({ method: "POST", url: "/v1/hr/employees", headers: managerHeaders, payload: employeeRequest });
+  assert.equal(created.statusCode, 201, created.body);
+  assert.equal(created.json().replayed, false);
+  const replay = await server.inject({ method: "POST", url: "/v1/hr/employees", headers: managerHeaders, payload: employeeRequest });
+  assert.equal(replay.statusCode, 201, replay.body);
+  assert.equal(replay.json().id, created.json().id);
+  assert.equal(replay.json().replayed, true);
+  await expectError(
+    server.inject({ method: "POST", url: "/v1/hr/employees", headers: managerHeaders, payload: { ...employeeRequest, nameEn: "Changed payload" } }),
+    409,
+    "CONFLICT",
+    "A reused HR idempotency key with a different payload must conflict.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: "/v1/hr/employees/not-a-uuid", headers: managerHeaders }),
+    400,
+    "VALIDATION_FAILED",
+    "Malformed HR path identifiers must return 400 rather than 500.",
+  );
+
+  const reversalRequests = [
+    ["/v1/hr/advances/reverse", "advanceId"],
+    ["/v1/hr/services/reverse-cost", "serviceId"],
+    ["/v1/hr/payroll-payments/reverse", "payrollPaymentId"],
+    ["/v1/hr/final-settlement-payments/reverse", "finalSettlementPaymentId"],
+  ];
+  for (const [url, identifier] of reversalRequests) {
+    const payload = { [identifier]: randomUUID(), businessDate: "2026-08-19", reason: "HTTP authorization verification", idempotencyKey: randomUUID() };
+    await expectError(server.inject({ method: "POST", url, payload }), 401, "AUTHENTICATION_FAILED", `${url} must require authentication.`);
+    await expectError(server.inject({ method: "POST", url, headers: readerHeaders, payload }), 403, "AUTHORIZATION_DENIED", `${url} must enforce its reversal capability.`);
+    await expectError(
+      server.inject({ method: "POST", url, headers: managerHeaders, payload: { ...payload, [identifier]: "not-a-uuid" } }),
+      400,
+      "VALIDATION_FAILED",
+      `${url} must reject malformed identifiers before service execution.`,
+    );
+  }
+
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/final-settlements/${randomUUID()}` }),
+    401,
+    "AUTHENTICATION_FAILED",
+    "Final-settlement payment detail must require authentication.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/final-settlements/${randomUUID()}`, headers: readerHeaders }),
+    403,
+    "AUTHORIZATION_DENIED",
+    "Final-settlement payment detail must require hr.final_settlements.read.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: "/v1/hr/final-settlements/not-a-uuid", headers: managerHeaders }),
+    400,
+    "VALIDATION_FAILED",
+    "Final-settlement detail identifiers must be validated.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/employees/${fixture.activeEmployeeId}/documents` }),
+    401,
+    "AUTHENTICATION_FAILED",
+    "Employee documents must use the common authentication error contract.",
+  );
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/employees/${fixture.activeEmployeeId}/letters` }),
+    401,
+    "AUTHENTICATION_FAILED",
+    "Employee letters must use the common authentication error contract.",
+  );
+
+  console.log("HR HTTP verification passed: authentication, company isolation, salary redaction, capability-aware overview, cursor/filter binding, idempotent writes, reversal-route authorization, UUID validation, and canonical error receipts.");
+} finally {
+  if (app) await app.close();
+  await pool.end();
+}
+
+async function expectError(responsePromise, expectedStatus, expectedCode, message) {
+  const response = await responsePromise;
+  assert.equal(response.statusCode, expectedStatus, `${message} ${response.body}`);
+  const receipt = response.json();
+  assert.equal(receipt.error?.code, expectedCode, `${message} ${response.body}`);
+  assert.equal(receipt.error?.retry?.kind, "do-not-retry", message);
+  assert.match(receipt.error?.correlationId ?? "", /^[0-9a-f-]{36}$/i, message);
+}
+
+async function seedFixture() {
+  const managerRoleId = randomUUID();
+  const readerRoleId = randomUUID();
+  const managerPasswordHash = await bcrypt.hash(`Manager-${suffix}`, 12);
+  const readerPasswordHash = await bcrypt.hash(`Reader-${suffix}`, 12);
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.tenantId]);
+    await client.query('INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)', [fixture.tenantId, fixture.tenantCode, "HR HTTP verification"]);
+    await client.query(
+      'INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6), ($7::uuid, $2::uuid, $8, $9, $10, $11)',
+      [fixture.managerUserId, fixture.tenantId, `hr-manager-${suffix}@baseer.test`, "مدير موارد بشرية", "HR manager", managerPasswordHash, fixture.readerUserId, `hr-reader-${suffix}@baseer.test`, "قارئ موارد بشرية", "HR reader", readerPasswordHash],
+    );
+    await client.query(
+      'INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4), ($5::uuid, $2::uuid, $6, $7)',
+      [fixture.companyId, fixture.tenantId, "شركة فحص الموارد البشرية", "HR verification company", fixture.foreignCompanyId, "شركة خارج النطاق", "Out-of-scope company"],
+    );
+    await client.query(
+      'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)',
+      [managerRoleId, fixture.tenantId, `HR_MANAGER_${suffix}`, "مدير الموارد البشرية", "HR manager", readerRoleId, `HR_READER_${suffix}`, "قارئ الموارد البشرية", "HR reader"],
+    );
+    const managerCapabilities = [
+      "hr.employees.read",
+      "hr.employees.write",
+      "hr.payroll.read",
+      "hr.advances.reverse",
+      "hr.payroll.reverse",
+      "hr.final_settlements.reverse",
+      "finance.purchase_expense.cancel",
+      "hr.employee_documents.read",
+      "hr.employee_letters.read",
+    ];
+    for (const capability of managerCapabilities) {
+      await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, managerRoleId, capability]);
+    }
+    await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, readerRoleId, "hr.employees.read"]);
+    await client.query(
+      'INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid), ($1::uuid, $5::uuid, $3::uuid, $6::uuid)',
+      [fixture.tenantId, fixture.managerUserId, fixture.companyId, managerRoleId, fixture.readerUserId, readerRoleId],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "nameEn", "hireDate", "status", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-001', 'موظف نشط', 'Active employee', DATE '2026-01-01', 'ACTIVE', CURRENT_TIMESTAMP),
+              ($4::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-002', 'موظف منتهي', 'Terminated employee', DATE '2025-01-01', 'TERMINATED', CURRENT_TIMESTAMP)`,
+      [fixture.activeEmployeeId, fixture.tenantId, fixture.companyId, fixture.terminatedEmployeeId],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployeeCompensationProfile" ("id", "tenantId", "companyId", "employeeId", "effectiveFrom", "monthlyGross", "createdByUserId", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, DATE '2026-01-01', 7000.0000, $5::uuid, CURRENT_TIMESTAMP)`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId],
+    );
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+function requiredEnvironment(name) {
+  const value = process.env[name];
+  if (!value) throw new Error(`${name} is required.`);
+  return value;
+}

@@ -49,7 +49,9 @@ export const approveHrFinalSettlementRequestSchema = z.object({ settlementId: z.
 export const verifyHrFinalSettlementReasonRequestSchema = z.object({ settlementId: z.string().uuid(), verificationNote: z.string().trim().min(1).max(2_000), idempotencyKey: idempotencyKeySchema }).strict();
 export const payHrFinalSettlementRequestSchema = z.object({ settlementId: z.string().uuid(), businessDate: hrDateSchema, allocations: z.array(hrFinalSettlementAllocationSchema).min(1).max(20), idempotencyKey: idempotencyKeySchema }).strict();
 export const reverseHrFinalSettlementRequestSchema = z.object({ settlementId: z.string().uuid(), businessDate: hrDateSchema, reason: z.string().trim().min(1).max(1_000), idempotencyKey: idempotencyKeySchema }).strict();
+export const reverseHrFinalSettlementPaymentRequestSchema = z.object({ finalSettlementPaymentId: z.string().uuid(), businessDate: hrDateSchema, reason: z.string().trim().min(1).max(1_000), idempotencyKey: idempotencyKeySchema }).strict();
 export const hrFinalSettlementsQuerySchema = z.object({ cursor: z.string().uuid().optional(), pageSize: z.coerce.number().int().min(1).max(100).optional().default(50), employeeId: hrEmployeeIdSchema.optional(), status: hrFinalSettlementStatusSchema.optional() }).strict();
+export const hrFinalSettlementDetailQuerySchema = z.object({ paymentCursor: z.string().uuid().optional(), pageSize: z.coerce.number().int().min(1).max(100).optional().default(50) }).strict();
 
 const hrDocumentUploadSchema = z.object({
   fileName: z.string().trim().min(1).max(240),
@@ -183,6 +185,13 @@ export const issueHrEmployeeServiceCostRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+export const reverseHrEmployeeServiceCostRequestSchema = z.object({
+  serviceId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 /** Records an employee service and posts its paid supplier invoice as one operation. */
 export const recordHrEmployeeServiceAndIssueCostRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
@@ -223,6 +232,13 @@ export const issueHrEmployeeAdvanceRequestSchema = z.object({
     paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional(),
   }).strict()).min(1).max(25),
   notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const reverseHrEmployeeAdvanceIssueRequestSchema = z.object({
+  advanceId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
@@ -394,6 +410,13 @@ export const payHrPayrollRunRequestSchema = z.object({
 
 export const reverseHrPayrollRunRequestSchema = z.object({
   payrollRunId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const reverseHrPayrollPaymentRequestSchema = z.object({
+  payrollPaymentId: z.string().uuid(),
   businessDate: hrDateSchema,
   reason: z.string().trim().min(1).max(1_000),
   idempotencyKey: idempotencyKeySchema,
@@ -574,6 +597,11 @@ export const hrEmployeeLeaveSchema = z.object({
 }).strict();
 
 const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema, referenceNumber: z.string().max(80) }).strict();
+export const hrPaymentPostingStatusSchema = z.enum(["POSTED", "REVERSED"]);
+export const hrPayrollPaymentSchema = z.object({
+  id: z.string().uuid(), paymentNumber: z.string().max(80), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid(),
+  status: hrPaymentPostingStatusSchema, reversedAt: z.string().datetime().nullable(), reversalJournalEntryId: z.string().uuid().nullable(),
+}).strict();
 export const hrPayrollLineSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
   grossSalary: hrAmountSchema, compensationMethod: hrCompensationMethodSchema,
@@ -596,7 +624,7 @@ export const hrPayrollRunSchema = z.object({
   grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
   notes: z.string().max(2_000).nullable(), accrualJournalEntryId: z.string().uuid().nullable(),
 }).strict();
-export const hrPayrollRunDetailSchema = z.object({ payrollRun: hrPayrollRunSchema, lines: z.array(hrPayrollLineSchema).max(1_000), payments: z.array(z.object({ id: z.string().uuid(), paymentNumber: z.string().max(80), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid() }).strict()).max(500) }).strict();
+export const hrPayrollRunDetailSchema = z.object({ payrollRun: hrPayrollRunSchema, lines: z.array(hrPayrollLineSchema).max(1_000), payments: z.array(hrPayrollPaymentSchema).max(500) }).strict();
 
 export const hrEmployeeDetailQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
@@ -642,6 +670,7 @@ export const hrPayrollRunDetailReceiptSchema = z.object({
 }).strict();
 export const hrEmployeePayrollHistoryReceiptSchema = z.object({ companyId: companyIdSchema, lines: z.array(hrEmployeePayrollHistoryLineSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrPayrollRunReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), replayed: z.boolean() }).strict();
+export const hrPayrollPaymentReversalReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), paymentId: z.string().uuid(), reversalJournalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
 const hrPayrollPreviewApplicationSchema = z.object({ id: z.string().uuid(), referenceNumber: z.string().max(80), remainingAmount: hrAmountSchema }).strict();
 export const hrPayrollPreviewEmployeeSchema = z.object({
   id: hrEmployeeIdSchema, employeeNumber: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable(),
@@ -674,6 +703,7 @@ export const hrEmployeeDetailReceiptSchema = z.object({
 }).strict();
 export const hrEmployeeEntityReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceIssueReceiptSchema = z.object({ id: z.string().uuid(), advanceNumber: z.string().min(1).max(80), journalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeAdvanceReversalReceiptSchema = z.object({ id: z.string().uuid(), advanceNumber: z.string().min(1).max(80), reversalJournalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceSettlementReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().min(1).max(80), advanceId: z.string().uuid(), journalEntryId: z.string().uuid(), remainingAmount: hrAmountSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceDeferralReceiptSchema = z.object({ id: z.string().uuid(), advanceId: z.string().uuid(), deferredUntil: businessDateSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdministrativeDeductionReceiptSchema = z.object({ id: z.string().uuid(), deductionNumber: z.string().min(1).max(80), replayed: z.boolean() }).strict();
@@ -685,6 +715,7 @@ export const hrCompensationPolicyReceiptSchema = z.object({ id: z.string().uuid(
 export const hrEmployeeServicesReceiptSchema = z.object({ companyId: companyIdSchema, services: z.array(hrEmployeeServiceSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrEmployeeServiceDetailReceiptSchema = z.object({ companyId: companyIdSchema, service: hrEmployeeServiceSchema }).strict();
 export const hrEmployeeServiceReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeServiceCostReversalReceiptSchema = z.object({ serviceId: z.string().uuid(), documentId: z.string().uuid(), documentNumber: z.string().max(80), reversalJournalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeDocumentSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, documentType: hrEmployeeDocumentTypeSchema, status: hrEmployeeDocumentStatusSchema,
   title: z.string().max(240), referenceNumber: z.string().max(160).nullable(), issueDate: businessDateSchema.nullable(), expiryDate: businessDateSchema.nullable(),
@@ -701,8 +732,14 @@ export const hrEmployeeLettersReceiptSchema = z.object({ companyId: companyIdSch
 export const hrEmployeeLetterReceiptSchema = z.object({ id: z.string().uuid(), letterNumber: z.string().max(80), outputReportCode: z.literal("hr.employee-letter"), replayed: z.boolean() }).strict();
 export const hrFinalSettlementPreviewSchema = z.object({ employeeId: hrEmployeeIdSchema, terminationDate: businessDateSchema, terminationReason: hrFinalSettlementReasonSchema, reasonEvidenceReference: z.string().min(1).max(240), reasonVerificationStatus: hrFinalSettlementReasonVerificationStatusSchema, serviceDays: z.number().int().nonnegative(), eosWage: hrAmountSchema, fullAwardAmount: hrAmountSchema, entitlementFactor: hrAmountSchema, eosAmount: hrAmountSchema, otherCreditsAmount: hrAmountSchema, recoveryAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, calculationPolicyVersion: z.literal("SA-EOS-V1") }).strict();
 export const hrFinalSettlementSchema = hrFinalSettlementPreviewSchema.extend({ id: z.string().uuid(), settlementNumber: z.string().max(80), status: hrFinalSettlementStatusSchema, paidAmount: hrAmountSchema, createdAt: z.string().datetime(), approvedAt: z.string().datetime().nullable(), approvedByUserId: z.string().uuid().nullable(), reversedByUserId: z.string().uuid().nullable(), outputReportCode: z.literal("hr.final-settlement") }).strict();
+export const hrFinalSettlementPaymentSchema = z.object({
+  id: z.string().uuid(), paymentNumber: z.string().max(80), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid(),
+  status: hrPaymentPostingStatusSchema, reversedAt: z.string().datetime().nullable(), reversalJournalEntryId: z.string().uuid().nullable(),
+}).strict();
 export const hrFinalSettlementsReceiptSchema = z.object({ companyId: companyIdSchema, settlements: z.array(hrFinalSettlementSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
+export const hrFinalSettlementDetailReceiptSchema = z.object({ companyId: companyIdSchema, settlement: hrFinalSettlementSchema, payments: z.array(hrFinalSettlementPaymentSchema).max(100), hasMorePayments: z.boolean(), nextPaymentCursor: z.string().uuid().nullable() }).strict();
 export const hrFinalSettlementReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().max(80), replayed: z.boolean() }).strict();
+export const hrFinalSettlementPaymentReversalReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().max(80), paymentId: z.string().uuid(), reversalJournalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
 
 const hrOverviewPayrollRunSchema = z.object({
   id: z.string().uuid(), runNumber: z.string().max(80), payrollMonth: businessDateSchema,
@@ -749,7 +786,9 @@ export type CancelHrEmployeeServiceRequest = z.infer<typeof cancelHrEmployeeServ
 export type RenewHrEmployeeServiceRequest = z.infer<typeof renewHrEmployeeServiceRequestSchema>;
 export type IssueHrEmployeeServiceCostRequest = z.infer<typeof issueHrEmployeeServiceCostRequestSchema>;
 export type RecordHrEmployeeServiceAndIssueCostRequest = z.infer<typeof recordHrEmployeeServiceAndIssueCostRequestSchema>;
+export type ReverseHrEmployeeServiceCostRequest = z.infer<typeof reverseHrEmployeeServiceCostRequestSchema>;
 export type IssueHrEmployeeAdvanceRequest = z.infer<typeof issueHrEmployeeAdvanceRequestSchema>;
+export type ReverseHrEmployeeAdvanceIssueRequest = z.infer<typeof reverseHrEmployeeAdvanceIssueRequestSchema>;
 export type SettleHrEmployeeAdvanceDirectlyRequest = z.infer<typeof settleHrEmployeeAdvanceDirectlyRequestSchema>;
 export type DeferHrEmployeeAdvanceRequest = z.infer<typeof deferHrEmployeeAdvanceRequestSchema>;
 export type CreateHrEmployeeAdministrativeDeductionRequest = z.infer<typeof createHrEmployeeAdministrativeDeductionRequestSchema>;
@@ -765,6 +804,7 @@ export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunReque
 export type DiscardHrPayrollRunRequest = z.infer<typeof discardHrPayrollRunRequestSchema>;
 export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;
 export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;
+export type ReverseHrPayrollPaymentRequest = z.infer<typeof reverseHrPayrollPaymentRequestSchema>;
 export type CreateHrEmployeeLeaveRequest = z.infer<typeof createHrEmployeeLeaveRequestSchema>;
 export type ReturnHrEmployeeLeaveRequest = z.infer<typeof returnHrEmployeeLeaveRequestSchema>;
 export type CreateHrEmployeeDocumentRequest = z.infer<typeof createHrEmployeeDocumentRequestSchema>;
@@ -778,4 +818,10 @@ export type ApproveHrFinalSettlementRequest = z.infer<typeof approveHrFinalSettl
 export type VerifyHrFinalSettlementReasonRequest = z.infer<typeof verifyHrFinalSettlementReasonRequestSchema>;
 export type PayHrFinalSettlementRequest = z.infer<typeof payHrFinalSettlementRequestSchema>;
 export type ReverseHrFinalSettlementRequest = z.infer<typeof reverseHrFinalSettlementRequestSchema>;
+export type ReverseHrFinalSettlementPaymentRequest = z.infer<typeof reverseHrFinalSettlementPaymentRequestSchema>;
+export type HrFinalSettlementDetailQuery = z.infer<typeof hrFinalSettlementDetailQuerySchema>;
+export type HrPaymentPostingStatus = z.infer<typeof hrPaymentPostingStatusSchema>;
+export type HrPayrollPayment = z.infer<typeof hrPayrollPaymentSchema>;
+export type HrFinalSettlementPayment = z.infer<typeof hrFinalSettlementPaymentSchema>;
+export type HrFinalSettlementDetailReceipt = z.infer<typeof hrFinalSettlementDetailReceiptSchema>;
 export type HrOverviewReceipt = z.infer<typeof hrOverviewReceiptSchema>;

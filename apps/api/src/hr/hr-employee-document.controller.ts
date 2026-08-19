@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, Res, UnauthorizedException } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
 import { RouteConfig } from '@nestjs/platform-fastify';
 import { companyIdSchema, createHrEmployeeDocumentRequestSchema, hrEmployeeDocumentReceiptSchema, hrEmployeeDocumentsQuerySchema, hrEmployeeDocumentsReceiptSchema, replaceHrEmployeeDocumentRequestSchema, revokeHrEmployeeDocumentRequestSchema } from '@baseer-erp/contracts';
@@ -49,8 +49,8 @@ export class HrEmployeeDocumentController {
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string) {
-    if (!authorization?.startsWith('Bearer ')) throw new BadRequestException('A bearer access token is required.');
-    const parsedCompanyId = companyIdSchema.safeParse(companyId); if (!parsedCompanyId.success) throw new BadRequestException('A valid company context is required.');
-    const context = await this.companyContext.authorize({ accessToken: authorization.slice(7), companyId: parsedCompanyId.data, requiredCapabilities: [capability] }); return { tenantId: context.principal.tenantId, companyId: context.company.id, actorUserId: context.principal.userId };
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1]; if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
+    const parsedCompanyId = companyIdSchema.safeParse(companyId); if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
+    const context = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [capability] }); return { tenantId: context.principal.tenantId, companyId: context.company.id, actorUserId: context.principal.userId };
   }
 }

@@ -7,6 +7,8 @@ import {
   createHrEmployeeServiceRequestSchema,
   recordHrEmployeeServiceAndIssueCostRequestSchema,
   recordHrEmployeeServiceAndIssueCostReceiptSchema,
+  reverseHrEmployeeServiceCostRequestSchema,
+  hrEmployeeServiceCostReversalReceiptSchema,
   updateHrEmployeeServiceRequestSchema,
   cancelHrEmployeeServiceRequestSchema,
   renewHrEmployeeServiceRequestSchema,
@@ -20,6 +22,7 @@ import {
   hrEmployeePayrollHistoryQuerySchema,
   hrEmployeePayrollHistoryReceiptSchema,
   hrEmployeeAdvanceIssueReceiptSchema,
+  hrEmployeeAdvanceReversalReceiptSchema,
   hrEmployeeAdvanceSettlementReceiptSchema,
   hrEmployeeAdvanceDeferralReceiptSchema,
   hrEmployeeAdvancesQuerySchema,
@@ -34,6 +37,7 @@ import {
   hrEmployeesQuerySchema,
   hrEmployeesReceiptSchema,
   issueHrEmployeeAdvanceRequestSchema,
+  reverseHrEmployeeAdvanceIssueRequestSchema,
   settleHrEmployeeAdvanceDirectlyRequestSchema,
   deferHrEmployeeAdvanceRequestSchema,
   createHrEmployeeAdministrativeDeductionRequestSchema,
@@ -49,6 +53,10 @@ import {
   discardHrPayrollRunRequestSchema,
   payHrPayrollRunRequestSchema,
   reverseHrPayrollRunRequestSchema,
+  reverseHrPayrollPaymentRequestSchema,
+  hrPayrollPaymentReversalReceiptSchema,
+  reverseHrFinalSettlementPaymentRequestSchema,
+  hrFinalSettlementPaymentReversalReceiptSchema,
   createHrEmployeeLeaveRequestSchema,
   returnHrEmployeeLeaveRequestSchema,
   hrEmployeeCompensationProfileReceiptSchema,
@@ -78,6 +86,7 @@ import { HrAdvanceService } from './hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr-administrative-deduction.service.js';
 import { HrPayrollService } from './hr-payroll.service.js';
 import { HrLeaveService } from './hr-leave.service.js';
+import { HrFinalSettlementService } from './hr-final-settlement.service.js';
 
 const READ_CAPABILITY = 'hr.employees.read';
 const WRITE_CAPABILITY = 'hr.employees.write';
@@ -92,6 +101,7 @@ export class HrController {
     private readonly payroll: HrPayrollService,
     private readonly leaves: HrLeaveService,
     private readonly documents: PurchaseExpenseService,
+    private readonly finalSettlements: HrFinalSettlementService,
   ) {}
 
   @Get('employees')
@@ -276,6 +286,16 @@ export class HrController {
     return hrEmployeeAdvanceSettlementReceiptSchema.parse(await this.advances.settleDirectly(context, request, idempotencyKey));
   }
 
+  @Post('advances/reverse')
+  @HttpCode(200)
+  async reverseAdvanceIssue(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = reverseHrEmployeeAdvanceIssueRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-advance reversal request.');
+    const context = await this.authorize(authorization, companyId, 'hr.advances.reverse');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeAdvanceReversalReceiptSchema.parse(await this.advances.reverseIssue(context, request, idempotencyKey));
+  }
+
   @Post('advances/defer')
   @HttpCode(201)
   async deferAdvance(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
@@ -456,6 +476,26 @@ export class HrController {
     return hrPayrollRunReceiptSchema.parse(await this.payroll.reverse(context, request, idempotencyKey));
   }
 
+  @Post('payroll-payments/reverse')
+  @HttpCode(200)
+  async reversePayrollPayment(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = reverseHrPayrollPaymentRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll-payment reversal request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.reverse');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollPaymentReversalReceiptSchema.parse(await this.payroll.reversePayment(context, request, idempotencyKey));
+  }
+
+  @Post('final-settlement-payments/reverse')
+  @HttpCode(200)
+  async reverseFinalSettlementPayment(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = reverseHrFinalSettlementPaymentRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid final-settlement payment reversal request.');
+    const context = await this.authorize(authorization, companyId, 'hr.final_settlements.reverse');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrFinalSettlementPaymentReversalReceiptSchema.parse(await this.finalSettlements.reversePayment(context, request, idempotencyKey));
+  }
+
   @Get('leaves')
   async listLeaves(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeeLeavesQuerySchema.safeParse(query);
@@ -499,6 +539,16 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, [WRITE_CAPABILITY, 'finance.purchase_expense.create']);
     const { idempotencyKey, ...request } = parsed.data;
     return financeOutflowDocumentReceiptSchema.parse(await this.documents.issueEmployeeServiceCost({ context, idempotencyKey, request }));
+  }
+
+  @Post('services/reverse-cost')
+  @HttpCode(200)
+  async reverseServiceCost(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = reverseHrEmployeeServiceCostRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee service-cost reversal request.');
+    const context = await this.authorize(authorization, companyId, [WRITE_CAPABILITY, 'finance.purchase_expense.cancel']);
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeServiceCostReversalReceiptSchema.parse(await this.documents.reverseEmployeeServiceCost({ context, idempotencyKey, request }));
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string | readonly string[]) {

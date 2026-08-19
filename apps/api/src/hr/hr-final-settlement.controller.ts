@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Post, Query } from '@nestjs/common';
-import { approveHrFinalSettlementRequestSchema, companyIdSchema, createHrFinalSettlementRequestSchema, hrFinalSettlementPreviewSchema, hrFinalSettlementReceiptSchema, hrFinalSettlementsQuerySchema, hrFinalSettlementsReceiptSchema, payHrFinalSettlementRequestSchema, previewHrFinalSettlementRequestSchema, reverseHrFinalSettlementRequestSchema, verifyHrFinalSettlementReasonRequestSchema } from '@baseer-erp/contracts';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, UnauthorizedException } from '@nestjs/common';
+import { approveHrFinalSettlementRequestSchema, companyIdSchema, createHrFinalSettlementRequestSchema, hrFinalSettlementDetailQuerySchema, hrFinalSettlementDetailReceiptSchema, hrFinalSettlementPreviewSchema, hrFinalSettlementReceiptSchema, hrFinalSettlementsQuerySchema, hrFinalSettlementsReceiptSchema, payHrFinalSettlementRequestSchema, previewHrFinalSettlementRequestSchema, reverseHrFinalSettlementRequestSchema, verifyHrFinalSettlementReasonRequestSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { HrFinalSettlementService } from './hr-final-settlement.service.js';
@@ -13,6 +13,29 @@ export class HrFinalSettlementController {
     const parsed = hrFinalSettlementsQuerySchema.safeParse(query); if (!parsed.success) throw new BadRequestException('Invalid final-settlement query.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.read');
     return hrFinalSettlementsReceiptSchema.parse({ companyId: context.companyId, ...(await this.settlements.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}) })) });
+  }
+
+  @Get(':settlementId')
+  async detail(
+    @Param('settlementId', ParseUUIDPipe) settlementId: string,
+    @Query() query: unknown,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-baseer-company-id') companyId?: string,
+  ) {
+    const parsed = hrFinalSettlementDetailQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid final-settlement detail query.');
+    const context = await this.authorize(authorization, companyId, 'hr.final_settlements.read');
+    const result = await this.settlements.detail(context, settlementId, {
+      pageSize: parsed.data.pageSize,
+      ...(parsed.data.paymentCursor ? { paymentCursor: parsed.data.paymentCursor } : {}),
+    });
+    return hrFinalSettlementDetailReceiptSchema.parse({
+      companyId: context.companyId,
+      settlement: result.settlement,
+      payments: result.payments,
+      hasMorePayments: result.hasMore,
+      nextPaymentCursor: result.nextCursor,
+    });
   }
 
   @Post('preview')
@@ -63,8 +86,8 @@ export class HrFinalSettlementController {
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string) {
-    const token = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1]; if (!token) throw new BadRequestException('A bearer access token is required.');
-    const parsedCompanyId = companyIdSchema.safeParse(companyId); if (!parsedCompanyId.success) throw new BadRequestException('A valid company context is required.');
+    const token = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1]; if (!token) throw new UnauthorizedException('Invalid authentication credentials.');
+    const parsedCompanyId = companyIdSchema.safeParse(companyId); if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
     const authorized = await this.companies.authorize({ accessToken: token, companyId: parsedCompanyId.data, requiredCapabilities: [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
   }
