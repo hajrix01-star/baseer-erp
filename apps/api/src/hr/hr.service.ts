@@ -64,6 +64,11 @@ export class HrService {
 
   async employeeDetail(context: TrustedCompanyActorContext, employeeId: string, query: EmployeeDetailQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      // Salary applicability follows the company's governed business date,
+      // never the server clock. This keeps the employee file aligned with
+      // the register and payroll preview on month boundaries.
+      const businessDate = await this.businessDates.resolveInTransaction(tx, context, { kind: 'current' });
+      const currentDate = new Date(`${businessDate.businessDate}T00:00:00.000Z`);
       const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId } });
       if (!employee) throw new NotFoundException('The employee is not available for this company.');
       const cursor = query.cursor ? await tx.hrEmployeeFinancialMovement.findFirst({
@@ -88,7 +93,7 @@ export class HrService {
           take: query.pageSize + 1,
         }),
         tx.hrEmployeeCompensationProfile.findFirst({
-          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, effectiveFrom: { lte: new Date() }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: new Date() } }] },
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] },
           orderBy: { effectiveFrom: 'desc' },
         }),
         tx.hrEmployeeCompensationProfile.findMany({
