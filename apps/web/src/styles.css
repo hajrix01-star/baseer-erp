@@ -131,7 +131,13 @@ button {
   place-items: center;
   font-size: var(--font-title-sm);
 }
-.app-modules-button { color: var(--brand); border-color: var(--brand); background: var(--canvas); font-size: 2rem; line-height: 1; }
+.app-modules-button { position: relative; width: 36px; min-height: 36px; overflow: hidden; isolation: isolate; border: 0; border-radius: var(--radius-sm); color: var(--brand); background: transparent; font-size: 2rem; line-height: 1; }
+.app-modules-button::before { position: absolute; inset: 50% auto auto 50%; width: 12px; aspect-ratio: 1; border-radius: 999px; content: ""; opacity: 0; background: color-mix(in srgb, var(--brand) 28%, transparent); transform: translate(-50%, -50%) scale(0); pointer-events: none; }
+.app-modules-button.is-rippling::before { animation: app-modules-ripple 460ms ease-out; }
+.app-modules-button:hover,
+.app-modules-button:focus-visible { background: color-mix(in srgb, var(--brand) 10%, transparent); }
+@keyframes app-modules-ripple { 0% { opacity: .8; transform: translate(-50%, -50%) scale(0); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(4.8); } }
+@media (prefers-reduced-motion: reduce) { .app-modules-button.is-rippling::before { animation: none; } }
 .company-selector,
 .theme-button {
   display: inline-flex;
@@ -151,7 +157,7 @@ button {
   background: #20ae70;
   box-shadow: none;
 }
-.theme-button { position: relative; inline-size: 28px; justify-content: center; padding: 0; }.theme-button summary { display: grid; place-items: center; list-style: none; cursor: pointer; }.theme-button summary::-webkit-details-marker { display: none; }
+.theme-button { position: relative; inline-size: 28px; justify-content: center; padding: 0; }.theme-button summary { display: grid; width: 100%; min-height: inherit; place-items: center; border-radius: inherit; list-style: none; cursor: pointer; touch-action: manipulation; }.theme-button summary::-webkit-details-marker { display: none; }
 .is-blue { --brand: #1268a7; --brand-deep: #0a385f; --canvas: #f3f7fb; } .is-blue .module-sidebar, .is-blue .mobile-drawer__panel { background: #102b43; } .is-blue .hero-panel { background: linear-gradient(135deg, #0b3b62, #1877b8); }
 .is-plum { --brand: #7650a7; --brand-deep: #372052; --canvas: #f8f5fb; } .is-plum .module-sidebar, .is-plum .mobile-drawer__panel { background: #30213f; } .is-plum .hero-panel { background: linear-gradient(135deg, #3c2854, #7b58a7); }
 .text-button {

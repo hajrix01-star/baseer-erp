@@ -40,6 +40,11 @@ function ThemePicker({ language, theme, onTheme, background, onBackground }: { l
   const backgrounds: ReadonlyArray<{ id: LauncherBackground; ar: string; en: string }> = [{ id: 'emerald-light', ar: 'أخضر هادئ', en: 'Calm green' }, { id: 'emerald-dark', ar: 'أخضر داكن', en: 'Executive dark' }, { id: 'architectural-light', ar: 'معماري مضيء', en: 'Architectural light' }, { id: 'desert-night', ar: 'ليل تنفيذي', en: 'Executive night' }, { id: 'saudi-heritage', ar: 'تراث سعودي', en: 'Saudi heritage' }, { id: 'emerald-glass', ar: 'زجاج زمردي', en: 'Emerald glass' }];
   return <details className="theme-button"><summary aria-label={text.themePicker}><span className="theme-dot" style={{ width: "14px", height: "14px", background: colors[theme] }} /></summary><div className="theme-picker-menu"><div className="theme-color-grid">{(["green", "blue", "plum", "classic"] as const).map((item) => <button key={item} type="button" aria-label={item} onClick={(event) => { onTheme(item); event.currentTarget.closest("details")?.removeAttribute("open"); }} style={{ background: colors[item] }} className={theme === item ? 'is-selected' : ''} />)}</div>{background && onBackground ? <section className="launcher-background-picker"><p>{language === 'ar' ? 'خلفية شاشة التطبيقات' : 'App screen background'}</p>{backgrounds.map((item) => <button key={item.id} type="button" onClick={(event) => { onBackground(item.id); event.currentTarget.closest('details')?.removeAttribute('open'); }} className={background === item.id ? 'is-selected' : ''}><span className={`launcher-background-swatch launcher-background-swatch--${item.id}`} /><span>{language === 'ar' ? item.ar : item.en}</span><b>✓</b></button>)}</section> : null}</div></details>;
 }
+
+function playModulesRipple(button: HTMLButtonElement) {
+  button.classList.remove('is-rippling');
+  window.requestAnimationFrame(() => button.classList.add('is-rippling'));
+}
 function readLanguagePreference(): Language {
   try {
     const stored = localStorage.getItem(languageStorageKey);
@@ -103,7 +108,7 @@ function SignOutIcon() {
 function AppHeader({ language, theme, background, onLanguage, onTheme, onBackground, onModules, onSignOut }: { language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onSignOut: () => void }) {
   const text = appText(language);
   return <header className="topbar">
-    <button className="icon-button app-modules-button" onClick={onModules} type="button" aria-label={text.allModules}>{"\u283f"}</button>
+    <button className="icon-button app-modules-button" onClick={onModules} onPointerDown={(event) => playModulesRipple(event.currentTarget)} onAnimationEnd={(event) => { if (event.animationName === 'app-modules-ripple') event.currentTarget.classList.remove('is-rippling'); }} type="button" aria-label={text.allModules}>{"\u283f"}</button>
     <div className="topbar-spacer" />
     <CompanySessionControl language={language} />
     <button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? text.switchToEnglish : text.switchToArabic}</button>
