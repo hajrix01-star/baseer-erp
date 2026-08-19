@@ -15,12 +15,13 @@ import { cancelHrEmployeeService, createHrEmployeeService, getHrEmployeeService,
 type Language = "ar" | "en";
 type ServiceForm = { employeeId: string; serviceType: HrService["serviceType"]; referenceNumber: string; issueDate: string; expiryDate: string; supplierId: string; categoryId: string; visaDurationMonths: string; notes: string };
 type CostForm = { serviceId: string; businessDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; supplierInvoiceNumber: string; supplierInvoiceMissingReason: string; supplierInvoiceDate: string; notes: string };
-type FinanceConfiguration = { suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE" | "ARCHIVED" }>; categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; status: "ACTIVE" | "ARCHIVED"; isPosting: boolean }>; vaults: Array<{ id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }> };
+type FinanceConfiguration = { suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE" | "ARCHIVED" }>; categories: Array<{ id: string; code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; status: "ACTIVE" | "ARCHIVED"; suggestedSupplierId: string | null; isPosting: boolean }>; vaults: Array<{ id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }> };
 
 const today = () => new Date().toISOString().slice(0, 10);
 const inDays = (days: number) => { const date = new Date(); date.setDate(date.getDate() + days); return date.toISOString().slice(0, 10); };
 const emptyService = (employeeId = ""): ServiceForm => ({ employeeId, serviceType: "IQAMA_RENEWAL", referenceNumber: "", issueDate: today(), expiryDate: "", supplierId: "", categoryId: "", visaDurationMonths: "", notes: "" });
 const emptyCost = (serviceId = "", vaultId = ""): CostForm => ({ serviceId, businessDate: today(), grossAmount: "", isTaxable: true, vaultId, supplierInvoiceNumber: "", supplierInvoiceMissingReason: "", supplierInvoiceDate: today(), notes: "" });
+const defaultCategoryCode = (serviceType: HrService["serviceType"]): string | undefined => ({ IQAMA_ISSUANCE: "E2-4", IQAMA_RENEWAL: "E2-4", EXIT_REENTRY_VISA: "E2-4", SPONSORSHIP_TRANSFER: "E2-8", MEDICAL_INSURANCE: "E4-2", HEALTH_CERTIFICATE: "E2-9" } as Partial<Record<HrService["serviceType"], string>>)[serviceType];
 
 function employeeLabel(language: Language, employee: Pick<HrEmployee, "employeeNumber" | "nameAr" | "nameEn">) { return `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`; }
 
@@ -80,6 +81,11 @@ export function HrServicesWorkspace({ language }: { language: Language }) {
   const expiryLabel = (value: ReturnType<typeof expiryState>) => ({ EXPIRED: ar ? "منتهية" : "Expired", DUE_30: ar ? "تنتهي خلال 30 يوماً" : "Due within 30 days", DUE_60: ar ? "تنتهي خلال 60 يوماً" : "Due within 60 days", DUE_90: ar ? "تنتهي خلال 90 يوماً" : "Due within 90 days", NO_EXPIRY: ar ? "بلا تاريخ انتهاء" : "No expiry", VALID: ar ? "صالحة" : "Valid" })[value];
   const statusLabel = (value: HrService["status"]) => value === "DRAFT" ? (ar ? "مسودة" : "Draft") : value === "ISSUED" ? (ar ? "مصدرة" : "Issued") : (ar ? "ملغاة" : "Cancelled");
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
+  useEffect(() => {
+    const category = configuration?.categories.find((item) => item.code === defaultCategoryCode(serviceForm.serviceType) && item.status === "ACTIVE" && item.kind === "EXPENSE" && item.isPosting);
+    if (!category) return;
+    setServiceForm((value) => value.categoryId === category.id ? value : { ...value, categoryId: category.id, supplierId: category.suggestedSupplierId ?? value.supplierId });
+  }, [configuration, serviceForm.serviceType]);
   const activeSuppliers = configuration?.suppliers.filter((supplier) => supplier.status === "ACTIVE") ?? [];
   const activeCategories = configuration?.categories.filter((category) => category.status === "ACTIVE" && category.kind === "EXPENSE" && category.isPosting) ?? [];
   const activeVaults = configuration?.vaults.filter((vault) => vault.status === "ACTIVE" && vault.isPaymentDestination) ?? [];

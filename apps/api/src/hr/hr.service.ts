@@ -142,11 +142,12 @@ export class HrService {
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service request is already being processed.');
       const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
       if (!employee) throw new BadRequestException('Choose an active employee from this company.');
-      this.assertServiceTiming(input.issueDate, input.expiryDate);
-      this.assertServiceTypeRequirements(input.serviceType, input.referenceNumber, input.expiryDate, input.visaDurationMonths);
-      await this.assertServiceReferences(tx, context, input.supplierId, input.categoryId);
-      const id = randomUUID();
-      await tx.hrEmployeeService.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, status: HrEmployeeServiceStatus.DRAFT } });
+        this.assertServiceTiming(input.issueDate, input.expiryDate);
+        this.assertServiceTypeRequirements(input.serviceType, input.referenceNumber, input.expiryDate, input.visaDurationMonths);
+        const references = await this.resolveServiceReferences(tx, context, input.serviceType, input.supplierId, input.categoryId);
+        await this.assertServiceReferences(tx, context, references.supplierId, references.categoryId);
+        const id = randomUUID();
+        await tx.hrEmployeeService.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, ...references, status: HrEmployeeServiceStatus.DRAFT } });
       const receipt = { id, replayed: false };
       await this.audit(tx, context, 'hr.employee_service.created', 'HrEmployeeService', id, null, input);
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
@@ -321,6 +322,19 @@ export class HrService {
     }
   }
 
+  /** A service type proposes the company's own category and its suggested supplier.
+   * An explicit supplier or category always wins, exactly as the Noorix workflow does. */
+  private async resolveServiceReferences(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, serviceType: string, supplierId: string | null, categoryId: string | null) {
+    if (supplierId && categoryId) return { supplierId, categoryId };
+    const code = defaultCategoryCodeForService(serviceType);
+    if (!code) return { supplierId, categoryId };
+    const category = await tx.financeCategory.findFirst({
+      where: { tenantId: context.tenantId, companyId: context.companyId, code, kind: 'EXPENSE', status: FinanceCategoryStatus.ACTIVE, isPosting: true },
+      select: { id: true, suggestedSupplierId: true },
+    });
+    return { supplierId: supplierId ?? category?.suggestedSupplierId ?? null, categoryId: categoryId ?? category?.id ?? null };
+  }
+
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, before: unknown, after: unknown) {
     await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, beforeJson: before === null ? Prisma.JsonNull : before as Prisma.InputJsonValue, afterJson: after as Prisma.InputJsonValue } });
   }
@@ -361,6 +375,17 @@ function serviceRenewInput(value: EmployeeServiceRenewInput) {
   };
 }
 function nullable(value: string | null | undefined) { const text = value?.trim(); return text || null; }
+function defaultCategoryCodeForService(serviceType: string) {
+  switch (serviceType) {
+    case 'IQAMA_ISSUANCE':
+    case 'IQAMA_RENEWAL':
+    case 'EXIT_REENTRY_VISA': return 'E2-4';
+    case 'SPONSORSHIP_TRANSFER': return 'E2-8';
+    case 'MEDICAL_INSURANCE': return 'E4-2';
+    case 'HEALTH_CERTIFICATE': return 'E2-9';
+    default: return null;
+  }
+}
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
 function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, hireDate: day(value.hireDate)!, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
 function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) }; }
