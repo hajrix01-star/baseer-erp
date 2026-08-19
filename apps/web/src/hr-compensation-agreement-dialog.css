@@ -1,0 +1,76 @@
+.hr-salary-manager {
+  gap: .8rem;
+}
+
+.hr-salary-manager__operations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+
+.hr-salary-manager__operation {
+  display: grid;
+  justify-items: start;
+  min-inline-size: 0;
+  min-block-size: 4.25rem;
+  padding: .65rem .75rem;
+  text-align: start;
+}
+
+.hr-salary-manager__operation > span {
+  font-size: var(--font-label);
+  font-weight: 800;
+}
+
+.hr-salary-manager__operation > small {
+  margin-top: .15rem;
+  color: inherit;
+  font-size: var(--font-caption);
+  font-weight: 550;
+  opacity: .72;
+}
+
+.hr-salary-manager__summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
+  padding: .7rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 24%, var(--line));
+  border-radius: .8rem;
+  background: color-mix(in srgb, var(--brand) 5%, var(--surface));
+}
+
+.hr-salary-manager__summary > div {
+  display: grid;
+  gap: .15rem;
+}
+
+.hr-salary-manager__summary span {
+  color: var(--muted);
+  font-size: var(--font-caption);
+  font-weight: 700;
+}
+
+.hr-salary-manager__summary strong {
+  color: var(--brand-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.hr-salary-manager .baseer-form-advanced {
+  margin-top: -.1rem;
+}
+
+.hr-salary-manager .baseer-form-field textarea {
+  min-block-size: 3.4rem;
+}
+
+@media (max-width: 640px) {
+  .hr-salary-manager__operations,
+  .hr-salary-manager__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .hr-salary-manager__operation {
+    min-block-size: 3.5rem;
+  }
+}

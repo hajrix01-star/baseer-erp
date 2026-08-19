@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
+import "./hr-compensation-agreement-dialog.css";
+
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -11,7 +13,20 @@ import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensati
 
 type Language = "ar" | "en";
 type SalaryOperation = "FULL" | "INCREASE" | "DECREASE";
-type Draft = { employeeId: string; policyVersionId: string; effectiveFrom: string; monthlyGross: string; compensationMethod: HrCompensationMethod; foodAllowance: string; housingAllowance: string; transportAllowance: string; otherAllowance: string; scheduledHoursPerDay: string; scheduledWorkDays: string; notes: string };
+type Draft = {
+  employeeId: string;
+  policyVersionId: string;
+  effectiveFrom: string;
+  monthlyGross: string;
+  compensationMethod: HrCompensationMethod;
+  foodAllowance: string;
+  housingAllowance: string;
+  transportAllowance: string;
+  otherAllowance: string;
+  scheduledHoursPerDay: string;
+  scheduledWorkDays: string;
+  notes: string;
+};
 
 const month = (offset = 0) => {
   const value = new Date();
@@ -21,18 +36,41 @@ const month = (offset = 0) => {
 };
 const amount = (value: string) => Number(value || 0);
 const employeeLabel = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
-const operationLabel = (language: Language, operation: SalaryOperation) => ({ FULL: language === "ar" ? "تعديل شامل" : "Full edit", INCREASE: language === "ar" ? "زيادة راتب" : "Increase salary", DECREASE: language === "ar" ? "تخفيض راتب" : "Decrease salary" })[operation];
-const empty = (employeeId = "", profile?: HrCompensationProfile | null): Draft => ({ employeeId, policyVersionId: profile?.policyVersionId ?? "", effectiveFrom: `${month(profile ? 1 : 0)}-01`, monthlyGross: profile?.monthlyGross ?? "", compensationMethod: profile?.compensationMethod ?? "FIXED_MONTHLY", foodAllowance: profile?.foodAllowance ?? "", housingAllowance: profile?.housingAllowance ?? "", transportAllowance: profile?.transportAllowance ?? "", otherAllowance: profile?.otherAllowance ?? "", scheduledHoursPerDay: profile?.scheduledHoursPerDay?.toString() ?? "", scheduledWorkDays: profile?.scheduledWorkDays?.toString() ?? "", notes: "" });
+const operationCopy = (language: Language, operation: SalaryOperation) => ({
+  FULL: language === "ar" ? { label: "تعديل شامل", description: "الراتب والبدلات" } : { label: "Full edit", description: "Salary and allowances" },
+  INCREASE: language === "ar" ? { label: "زيادة راتب", description: "أدخل مبلغ الزيادة" } : { label: "Increase", description: "Enter the increase amount" },
+  DECREASE: language === "ar" ? { label: "تخفيض راتب", description: "أدخل مبلغ التخفيض" } : { label: "Decrease", description: "Enter the decrease amount" },
+})[operation];
+const empty = (employeeId = "", profile?: HrCompensationProfile | null): Draft => ({
+  employeeId,
+  policyVersionId: profile?.policyVersionId ?? "",
+  effectiveFrom: `${month(profile ? 1 : 0)}-01`,
+  monthlyGross: profile?.monthlyGross ?? "",
+  compensationMethod: profile?.compensationMethod ?? "FIXED_MONTHLY",
+  foodAllowance: profile?.foodAllowance ?? "",
+  housingAllowance: profile?.housingAllowance ?? "",
+  transportAllowance: profile?.transportAllowance ?? "",
+  otherAllowance: profile?.otherAllowance ?? "",
+  scheduledHoursPerDay: profile?.scheduledHoursPerDay?.toString() ?? "",
+  scheduledWorkDays: profile?.scheduledWorkDays?.toString() ?? "",
+  notes: "",
+});
 
-/** Salary changes have one workflow. The selected mode affects only input
- * presentation; every save is still an effective-dated, auditable record. */
+/** One compact workflow for salary-only changes. Promotions remain part of the
+ * employment path so salary history and promotion history retain their roles. */
 export function HrCompensationAgreementDialog({ open, language, employees, fixedEmployeeId, profile, onClose, onSaved, onError }: { open: boolean; language: Language; employees: readonly HrEmployee[]; fixedEmployeeId?: string; profile?: HrCompensationProfile | null; onClose: () => void; onSaved: () => Promise<void>; onError: (message: string) => void }) {
   const ar = language === "ar";
   const [busy, setBusy] = useState(false);
   const [operation, setOperation] = useState<SalaryOperation>("FULL");
   const [draft, setDraft] = useState<Draft>(() => empty(fixedEmployeeId, profile));
   const [changeAmount, setChangeAmount] = useState("");
-  useEffect(() => { if (open) { setOperation("FULL"); setDraft(empty(fixedEmployeeId, profile)); setChangeAmount(""); } }, [fixedEmployeeId, open, profile]);
+
+  useEffect(() => {
+    if (!open) return;
+    setOperation("FULL");
+    setDraft(empty(fixedEmployeeId, profile));
+    setChangeAmount("");
+  }, [fixedEmployeeId, open, profile]);
 
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
   const existingSalary = profile ?? null;
@@ -41,6 +79,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
   const nextSalary = operation === "FULL" ? amount(draft.monthlyGross) : current + (operation === "INCREASE" ? delta : -delta);
   const fullEdit = operation === "FULL";
   const requiresOvertimeSchedule = fullEdit && draft.compensationMethod === "INCLUSIVE_OVERTIME";
+  const selectedEmployee = activeEmployees.find((employee) => employee.id === draft.employeeId);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -63,7 +102,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
         transportAllowance: (fullEdit ? draft.transportAllowance : existingSalary!.transportAllowance) || "0",
         otherAllowance: (fullEdit ? draft.otherAllowance : existingSalary!.otherAllowance) || "0",
         ...(method === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: Number(fullEdit ? draft.scheduledHoursPerDay : existingSalary!.scheduledHoursPerDay), scheduledWorkDays: Number(fullEdit ? draft.scheduledWorkDays : existingSalary!.scheduledWorkDays) } : {}),
-        notes: `${operationLabel(language, operation)}${!fullEdit ? `: ${delta.toFixed(4)}` : ""}${draft.notes.trim() ? ` — ${draft.notes.trim()}` : ""}`,
+        notes: `${operationCopy(language, operation).label}${!fullEdit ? `: ${delta.toFixed(4)}` : ""}${draft.notes.trim() ? ` — ${draft.notes.trim()}` : ""}`,
         idempotencyKey: requestId(),
       });
       await onSaved();
@@ -72,26 +111,17 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
     finally { setBusy(false); }
   };
 
-  return <BaseerFormDialog open={open} title={existingSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")} language={language} busy={busy} size="standard" formId="hr-salary-editor" submitLabel={ar ? "حفظ الراتب" : "Save salary"} onClose={onClose}>
-    <form id="hr-salary-editor" className="baseer-form" onSubmit={(event) => void submit(event)}>
-      <BaseerFormSection title={ar ? "الراتب" : "Salary"} description={ar ? "اختر نوع العملية؛ يحفظ النظام سجلاً مؤرخاً ولا يغير أي مسير سابق." : "Choose the operation. The system saves a dated record and never changes past payroll."}>
-        {existingSalary ? <div className="baseer-inline-actions" role="group" aria-label={ar ? "نوع تعديل الراتب" : "Salary change type"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} disabled={busy} onClick={() => setOperation(value)}>{operationLabel(language, value)}</BaseerButton>)}</div> : null}
+  const title = existingSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary");
+  return <BaseerFormDialog open={open} title={title} language={language} busy={busy} size="standard" className="hr-salary-manager-dialog" formId="hr-salary-editor" submitLabel={ar ? "حفظ الراتب" : "Save salary"} onClose={onClose}>
+    <form id="hr-salary-editor" className="baseer-form hr-salary-manager" onSubmit={(event) => void submit(event)}>
+      <BaseerFormSection title={selectedEmployee ? (ar ? `راتب ${selectedEmployee.nameAr}` : `${selectedEmployee.nameEn ?? selectedEmployee.nameAr} salary`) : (ar ? "بيانات الراتب" : "Salary details")} description={ar ? "سيُنشئ النظام سجلاً مؤرخاً جديداً؛ المسيرات السابقة لا تتغير." : "The system creates a new dated record; past payroll does not change."}>
+        {existingSalary ? <div className="hr-salary-manager__operations" role="group" aria-label={ar ? "نوع عملية الراتب" : "Salary operation"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} className="hr-salary-manager__operation" disabled={busy} onClick={() => setOperation(value)}><span>{operationCopy(language, value).label}</span><small>{operationCopy(language, value).description}</small></BaseerButton>)}</div> : null}
+        {existingSalary ? <div className="hr-salary-manager__summary"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "بعد العملية" : "After change"}</span><strong><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div></div> : null}
         <BaseerFormGrid>
           {!fixedEmployeeId ? <label className="baseer-form-field baseer-form-field--full">{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: employeeLabel(language, employee) }))} onChange={(employeeId) => setDraft((value) => ({ ...value, employeeId }))} /></label> : null}
           <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<input required type="month" min={month(existingSalary ? 1 : 0)} value={draft.effectiveFrom.slice(0, 7)} onChange={(event) => setDraft((value) => ({ ...value, effectiveFrom: `${event.target.value}-01` }))} /></label>
-          {existingSalary ? <div className="baseer-form-field"><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong className="baseer-form-static"><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div> : null}
-          {fullEdit ? <>
-            <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input required autoFocus inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setDraft((value) => ({ ...value, monthlyGross: event.target.value }))} /></label>
-            <label className="baseer-form-field">{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setDraft((value) => ({ ...value, compensationMethod: event.target.value as HrCompensationMethod }))}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></select></label>
-            <label className="baseer-form-field">{ar ? "بدل الأكل" : "Food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setDraft((value) => ({ ...value, foodAllowance: event.target.value }))} /></label>
-            <label className="baseer-form-field">{ar ? "بدل السكن" : "Housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => setDraft((value) => ({ ...value, housingAllowance: event.target.value }))} /></label>
-            <label className="baseer-form-field">{ar ? "بدل المواصلات" : "Transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => setDraft((value) => ({ ...value, transportAllowance: event.target.value }))} /></label>
-            <label className="baseer-form-field">{ar ? "بدلات أخرى" : "Other allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => setDraft((value) => ({ ...value, otherAllowance: event.target.value }))} /></label>
-            {requiresOvertimeSchedule ? <><label className="baseer-form-field">{ar ? "ساعات الدوام اليومية" : "Daily hours"}<input required type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setDraft((value) => ({ ...value, scheduledHoursPerDay: event.target.value }))} /></label><label className="baseer-form-field">{ar ? "أيام العمل الشهرية" : "Monthly working days"}<input required type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setDraft((value) => ({ ...value, scheduledWorkDays: event.target.value }))} /></label></> : null}
-          </> : <>
-            <label className="baseer-form-field baseer-form-field--full">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} /></label>
-            <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div>
-          </>}
+          {fullEdit ? <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input required autoFocus inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setDraft((value) => ({ ...value, monthlyGross: event.target.value }))} /></label> : <label className="baseer-form-field">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} /></label>}
+          {fullEdit ? <details className="baseer-form-advanced" open={requiresOvertimeSchedule}><summary>{ar ? "البدلات وطريقة الاحتساب" : "Allowances & calculation"}</summary><div><label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setDraft((value) => ({ ...value, compensationMethod: event.target.value as HrCompensationMethod }))}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></select></label><label>{ar ? "بدل الأكل" : "Food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setDraft((value) => ({ ...value, foodAllowance: event.target.value }))} /></label><label>{ar ? "بدل السكن" : "Housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => setDraft((value) => ({ ...value, housingAllowance: event.target.value }))} /></label><label>{ar ? "بدل المواصلات" : "Transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => setDraft((value) => ({ ...value, transportAllowance: event.target.value }))} /></label><label>{ar ? "بدلات أخرى" : "Other allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => setDraft((value) => ({ ...value, otherAllowance: event.target.value }))} /></label>{requiresOvertimeSchedule ? <><label>{ar ? "ساعات الدوام اليومية" : "Daily hours"}<input required type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setDraft((value) => ({ ...value, scheduledHoursPerDay: event.target.value }))} /></label><label>{ar ? "أيام العمل الشهرية" : "Monthly working days"}<input required type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setDraft((value) => ({ ...value, scheduledWorkDays: event.target.value }))} /></label></> : null}</div></details> : null}
           <label className="baseer-form-field baseer-form-field--full">{ar ? "السبب أو الملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={draft.notes} onChange={(event) => setDraft((value) => ({ ...value, notes: event.target.value }))} /></label>
         </BaseerFormGrid>
       </BaseerFormSection>
