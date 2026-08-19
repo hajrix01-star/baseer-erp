@@ -30,10 +30,10 @@ export const HR_JOB_TITLE_SEED: readonly HrJobTitleSeed[] = [
   { id: "barista", groupAr: "الضيافة والمطبخ", groupEn: "Hospitality & kitchen", nameAr: "باريستا", nameEn: "Barista", sortOrder: 110 },
 ];
 
-export function HrJobTitleSelect({ id, language, value, required, disabled, onChange }: { id: string; language: Language; value: string; required?: boolean; disabled?: boolean; onChange: (value: string) => void }) {
+export function HrJobTitleSelect({ id, language, value, required, disabled, allowCustom = true, onChange }: { id: string; language: Language; value: string; required?: boolean; disabled?: boolean; allowCustom?: boolean; onChange: (value: string) => void }) {
   const ar = language === "ar";
   const selectedTitle = useMemo(() => HR_JOB_TITLE_SEED.find((title) => title.nameAr === value || title.nameEn === value), [value]);
-  const [custom, setCustom] = useState(() => Boolean(value && !selectedTitle));
+  const [custom, setCustom] = useState(() => Boolean(allowCustom && value && !selectedTitle));
   useEffect(() => { if (selectedTitle) setCustom(false); }, [selectedTitle]);
   const options = useMemo(() => HR_JOB_TITLE_SEED.map((title) => ({ id: title.id, label: ar ? title.nameAr : title.nameEn, description: ar ? title.groupAr : title.groupEn })), [ar]);
   const choose = (titleId: string) => {
@@ -43,6 +43,6 @@ export function HrJobTitleSelect({ id, language, value, required, disabled, onCh
     onChange(ar ? title.nameAr : title.nameEn);
   };
   return <div className="hr-job-title-select">
-    {custom ? <div className="hr-job-title-select__custom"><input id={id} required={required} disabled={disabled} value={value} placeholder={ar ? "اكتب المسمى الوظيفي" : "Enter job title"} onChange={(event) => onChange(event.target.value)} /><BaseerButton type="button" variant="quiet" disabled={disabled} onClick={() => { setCustom(false); onChange(""); }}>{ar ? "اختيار مسمى معتمد" : "Choose an approved title"}</BaseerButton></div> : <><BaseerSearchSelect id={id} label={ar ? "المسمى الوظيفي" : "Job title"} value={selectedTitle?.id ?? ""} options={options} placeholder={ar ? "اختر مسمى وظيفياً" : "Select a job title"} required={required} disabled={disabled} className="hr-job-title-select__input" menuClassName="hr-job-title-select__menu" onChange={choose} /><button className="hr-job-title-select__custom-link" type="button" disabled={disabled} onClick={() => { setCustom(true); onChange(""); }}>{ar ? "إدخال مسمى مخصص" : "Enter a custom title"}</button></>}
+    {custom && allowCustom ? <div className="hr-job-title-select__custom"><input id={id} required={required} disabled={disabled} value={value} placeholder={ar ? "اكتب المسمى الوظيفي" : "Enter job title"} onChange={(event) => onChange(event.target.value)} /><BaseerButton type="button" variant="quiet" disabled={disabled} onClick={() => { setCustom(false); onChange(""); }}>{ar ? "اختيار مسمى معتمد" : "Choose an approved title"}</BaseerButton></div> : <><BaseerSearchSelect id={id} label={ar ? "المسمى الوظيفي" : "Job title"} value={selectedTitle?.id ?? ""} options={options} placeholder={ar ? "اختر مسمى وظيفياً" : "Select a job title"} required={required} disabled={disabled} className="hr-job-title-select__input" menuClassName="hr-job-title-select__menu" onChange={choose} />{allowCustom ? <button className="hr-job-title-select__custom-link" type="button" disabled={disabled} onClick={() => { setCustom(true); onChange(""); }}>{ar ? "إدخال مسمى مخصص" : "Enter a custom title"}</button> : null}</>}
   </div>;
 }

@@ -59,7 +59,7 @@
 .hr-onboarding__result-heading { display: grid; gap: .2rem; }
 .hr-onboarding__result-heading > span { color: var(--brand-deep); font-size: var(--font-label); font-weight: 850; }
 .hr-onboarding label { position: relative; gap: .25rem; }
-.hr-onboarding label > em { position: absolute; inset-block-start: 0; inset-inline-start: 0; color: var(--danger); font-style: normal; line-height: 1; }
+.hr-onboarding label > em { position: absolute; inset-block-start: 0; inset-inline-end: 0; color: var(--danger); font-style: normal; line-height: 1; }
 .hr-onboarding input,
 .hr-onboarding textarea {
   min-block-size: 2.4rem;
