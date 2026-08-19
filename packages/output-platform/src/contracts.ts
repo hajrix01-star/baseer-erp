@@ -49,7 +49,7 @@ export interface ReportSnapshot {
   readonly rows: readonly Readonly<Record<string, string | number | null>>[];
   readonly sourceLabel: string;
   /** A centrally rendered document variant; reports remain server-snapshotted. */
-  readonly template?: 'table' | 'payroll-signature-slips';
+  readonly template?: 'table' | 'payroll-run' | 'payroll-signature-slips';
   readonly payrollSignatureSlips?: readonly PayrollSignatureSlip[];
 }
 

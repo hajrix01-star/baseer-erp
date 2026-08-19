@@ -61,3 +61,17 @@ test('renders a content-only branded print document with company identity and pe
   assert.match(html, /مستند مُنشأ من بيانات خادمية موثقة/);
   assert.doesNotMatch(html, /daily-sales-workspace|sidebar|launcher/);
 });
+
+test('renders a dedicated A4 payroll document with totals and approval lines', () => {
+  const html = renderPrintPreviewDocument({
+    snapshotId: 'payroll-snapshot-1', reportCode: 'hr.payroll-run', templateVersion: '1', template: 'payroll-run', title: 'كشف مسير الرواتب PR-001', direction: 'rtl', locale: 'ar', generatedAtRiyadh: '2026-08-19T12:00:00+03:00',
+    companies: [{ id: 'company-1', name: 'شركة بصير' }], periodLabel: 'PR-001 · 2026-08-01', taxPresentation: 'gross', sourceLabel: 'مسيرات الرواتب المعتمدة في بصير',
+    columns: [{ key: 'employeeNumber', label: 'رقم الموظف', kind: 'text' }, { key: 'employee', label: 'الموظف', kind: 'text' }, { key: 'gross', label: 'إجمالي الراتب', kind: 'amount' }, { key: 'advances', label: 'تسوية السلف', kind: 'amount' }, { key: 'deductions', label: 'الخصم الإداري', kind: 'amount' }, { key: 'net', label: 'صافي المستحق', kind: 'amount' }, { key: 'paid', label: 'المدفوع', kind: 'amount' }],
+    rows: [{ employeeNumber: 'EMP-001', employee: 'محمد', gross: '2500', advances: '100', deductions: '50', net: '2350', paid: '0' }],
+  });
+  assert.match(html, /@page \{ size: A4 landscape/);
+  assert.match(html, /إجمالي الراتب/);
+  assert.match(html, /2,500/);
+  assert.match(html, /اعتماد الإدارة/);
+  assert.doesNotMatch(html, /daily-sales-workspace|sidebar|launcher/);
+});

@@ -380,7 +380,7 @@ export class OutputService {
     return {
       snapshotId: randomUUID(), reportCode: request.filters['payrollRunId'] ? 'hr.payroll-run' : 'hr.payroll-runs', templateVersion: '1', title: arabic ? input.titleAr : input.titleEn, direction: arabic ? 'rtl' : 'ltr', locale: request.locale, generatedAtRiyadh: dateResolution.generatedAt,
       companies: [{ id: company.id, name: arabic ? company.nameAr : company.nameEn }], companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null), periodLabel: arabic ? input.periodAr : input.periodEn, taxPresentation: 'gross',
-      columns: isDetail ? [
+      template: isDetail ? 'payroll-run' : 'table', columns: isDetail ? [
         { key: 'employeeNumber', label: arabic ? 'رقم الموظف' : 'Employee no.', kind: 'text', width: 12 }, { key: 'employee', label: arabic ? 'الموظف' : 'Employee', kind: 'text', width: 26 },
         { key: 'gross', label: arabic ? 'إجمالي الراتب' : 'Gross', kind: 'amount' }, { key: 'advances', label: arabic ? 'تسوية السلف' : 'Advances', kind: 'amount' }, { key: 'deductions', label: arabic ? 'الخصم الإداري' : 'Administrative deduction', kind: 'amount' }, { key: 'net', label: arabic ? 'صافي المستحق' : 'Net payable', kind: 'amount' }, { key: 'paid', label: arabic ? 'المدفوع' : 'Paid', kind: 'amount' },
       ] : [
