@@ -103,7 +103,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
       const item = choices[entry.id] ?? { enabled: false, amount: entry.remainingAmount };
       return <label key={entry.id} className={item.enabled ? "is-selected" : undefined}>
         <input type="checkbox" checked={item.enabled} disabled={!employee.included || busy} onChange={(event) => updateApplication(employee.id, kind, entry.id, event.target.checked, item.amount)} />
-        <span><b>{label}</b><small>{entry.referenceNumber}</small></span>
+        <span>{label} · {entry.referenceNumber}</span>
         <BaseerMoneyInput aria-label={`${label} ${entry.referenceNumber}`} disabled={!employee.included || !item.enabled || busy} value={item.amount} onValueChange={(amount) => updateApplication(employee.id, kind, entry.id, item.enabled, amount)} />
       </label>;
     })}</div>;
@@ -119,7 +119,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
       {previewRows.length ? <div className="hr-payroll-create__table-wrap"><table><thead><tr><th>{ar ? "الموظف" : "Employee"}</th><th>{ar ? "إجمالي الراتب" : "Gross salary"}</th><th>{ar ? "السلف" : "Advances"}</th><th>{ar ? "الخصومات الإدارية" : "Administrative deductions"}</th><th>{ar ? "الصافي التقديري" : "Estimated net"}</th><th>{ar ? "الحالة" : "Status"}</th></tr></thead><tbody>{previewRows.map((employee) => {
         const selectedTotal = selectedApplicationsTotal(applications[employee.id]);
         const estimatedNet = Math.max(0, Number(employee.estimatedGrossAmount ?? 0) - selectedTotal);
-        return <tr key={employee.id}><td><strong>{employeeLabel(language, employee)}</strong>{employee.calculationPeriodStart && employee.calculationPeriodEnd ? <small dir="ltr">{employee.calculationPeriodStart} — {employee.calculationPeriodEnd}</small> : null}</td><td>{employee.estimatedGrossAmount ? <BaseerMoney value={employee.estimatedGrossAmount} language={language} /> : "—"}</td><td>{applicationChoices(employee, "advances")}</td><td>{applicationChoices(employee, "deductions")}</td><td>{employee.included && employee.estimatedGrossAmount ? <BaseerMoney value={estimatedNet} language={language} /> : "—"}</td><td>{inclusionControl(employee)}</td></tr>;
+        return <tr key={employee.id}><td><strong>{employeeLabel(language, employee)}</strong></td><td>{employee.estimatedGrossAmount ? <BaseerMoney value={employee.estimatedGrossAmount} language={language} /> : "—"}</td><td>{applicationChoices(employee, "advances")}</td><td>{applicationChoices(employee, "deductions")}</td><td>{employee.included && employee.estimatedGrossAmount ? <BaseerMoney value={estimatedNet} language={language} /> : "—"}</td><td>{inclusionControl(employee)}</td></tr>;
       })}</tbody></table></div> : null}
       {previewCursor ? <BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview(previewCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     </form>
