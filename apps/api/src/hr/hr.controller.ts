@@ -27,10 +27,15 @@ import {
   approveHrPayrollRunRequestSchema,
   payHrPayrollRunRequestSchema,
   reverseHrPayrollRunRequestSchema,
+  createHrEmployeeLeaveRequestSchema,
+  returnHrEmployeeLeaveRequestSchema,
   hrEmployeeCompensationProfileReceiptSchema,
   hrPayrollRunsReceiptSchema,
   hrPayrollRunDetailReceiptSchema,
   hrPayrollRunReceiptSchema,
+  hrEmployeeLeavesReceiptSchema,
+  hrEmployeeLeaveDetailReceiptSchema,
+  hrEmployeeLeaveReceiptSchema,
   issueHrEmployeeServiceCostRequestSchema,
   updateHrEmployeeRequestSchema,
 } from '@baseer-erp/contracts';
@@ -41,6 +46,7 @@ import { HrService } from './hr.service.js';
 import { HrAdvanceService } from './hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr-administrative-deduction.service.js';
 import { HrPayrollService } from './hr-payroll.service.js';
+import { HrLeaveService } from './hr-leave.service.js';
 
 const READ_CAPABILITY = 'hr.employees.read';
 const WRITE_CAPABILITY = 'hr.employees.write';
@@ -53,6 +59,7 @@ export class HrController {
     private readonly advances: HrAdvanceService,
     private readonly deductions: HrAdministrativeDeductionService,
     private readonly payroll: HrPayrollService,
+    private readonly leaves: HrLeaveService,
     private readonly documents: PurchaseExpenseService,
   ) {}
 
@@ -239,6 +246,37 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, 'hr.payroll.reverse');
     const { idempotencyKey, ...request } = parsed.data;
     return hrPayrollRunReceiptSchema.parse(await this.payroll.reverse(context, request, idempotencyKey));
+  }
+
+  @Get('leaves')
+  async listLeaves(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
+    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, leaves: await this.leaves.list(context) });
+  }
+
+  @Post('leaves')
+  @HttpCode(201)
+  async createLeave(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrEmployeeLeaveRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee leave request.');
+    const context = await this.authorize(authorization, companyId, 'hr.leaves.manage');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeLeaveReceiptSchema.parse(await this.leaves.create(context, request, idempotencyKey));
+  }
+
+  @Post('leaves/return')
+  async returnFromLeave(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = returnHrEmployeeLeaveRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee return request.');
+    const context = await this.authorize(authorization, companyId, 'hr.leaves.manage');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeLeaveReceiptSchema.parse(await this.leaves.returnEmployee(context, request, idempotencyKey));
+  }
+
+  @Get('leaves/:leaveId')
+  async leaveDetail(@Param('leaveId') leaveId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
+    return hrEmployeeLeaveDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.detail(context, leaveId)) });
   }
 
   /** A service becomes financial only when its actual supplier cost is issued. */

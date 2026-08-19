@@ -29,7 +29,7 @@ export const baseerUiCopy = defineLocalizedCopy({
     loading: "جارٍ التحميل…",
     arabic: "العربية",
     english: "English",
-    signInAndChooseCompany: "تسجيل الدخول واختيار الشركة", filters: "الفلاتر", activeFilters: "الفلاتر المطبقة", removeFilter: "إزالة الفلتر", clearFilters: "مسح الكل", previous: "السابق", next: "التالي",
+    signInAndChooseCompany: "تسجيل الدخول واختيار الشركة", filters: "الفلاتر", activeFilters: "الفلاتر المطبقة", removeFilter: "إزالة الفلتر", clearFilters: "مسح الكل", previous: "السابق", next: "التالي", leaveApproved: "معتمدة", leaveReturned: "عاد للعمل",
   },
   en: {
     close: "Close",
@@ -39,7 +39,7 @@ export const baseerUiCopy = defineLocalizedCopy({
     loading: "Loading…",
     arabic: "Arabic",
     english: "English",
-    signInAndChooseCompany: "Sign in and choose company", filters: "Filters", activeFilters: "Applied filters", removeFilter: "Remove filter", clearFilters: "Clear all", previous: "Previous", next: "Next",
+    signInAndChooseCompany: "Sign in and choose company", filters: "Filters", activeFilters: "Applied filters", removeFilter: "Remove filter", clearFilters: "Clear all", previous: "Previous", next: "Next", leaveApproved: "Approved", leaveReturned: "Returned",
   },
 });
 

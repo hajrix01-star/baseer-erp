@@ -16,6 +16,23 @@ export type HrPayrollStatus = "DRAFT" | "APPROVED" | "PARTIALLY_PAID" | "PAID" |
 export type HrPayrollRun = { id: string; runNumber: string; payrollMonth: string; businessDate: string; status: HrPayrollStatus; employeeCount: number; grossAmount: string; advanceSettlementAmount: string; administrativeDeductionAmount: string; netPayableAmount: string; paidAmount: string; notes: string | null; accrualJournalEntryId: string | null };
 export type HrPayrollDetail = { payrollRun: HrPayrollRun; lines: Array<{ id: string; employeeId: string; employeeNumber: string; employeeNameAr: string; employeeNameEn: string | null; grossSalary: string; advanceSettlementAmount: string; administrativeDeductionAmount: string; netPayableAmount: string; paidAmount: string; advances: Array<{ id: string; amount: string; referenceNumber: string }>; administrativeDeductions: Array<{ id: string; amount: string; referenceNumber: string }> }>; payments: Array<{ id: string; paymentNumber: string; businessDate: string; amount: string; journalEntryId: string }> };
 export type HrPayrollRunsReceipt = { payrollRuns: HrPayrollRun[] };
+export type HrEmployeeLeaveType = "ANNUAL" | "SICK" | "UNPAID" | "OTHER";
+export type HrEmployeeLeaveStatus = "APPROVED" | "RETURNED";
+export type HrEmployeeLeave = {
+  id: string;
+  employeeId: string;
+  employeeNumber: string;
+  employeeNameAr: string;
+  employeeNameEn: string | null;
+  leaveType: HrEmployeeLeaveType;
+  status: HrEmployeeLeaveStatus;
+  startDate: string;
+  endDate: string;
+  actualReturnDate: string | null;
+  notes: string | null;
+};
+export type HrEmployeeLeavesReceipt = { leaves: HrEmployeeLeave[] };
+export type HrEmployeeLeaveDetail = { leave: HrEmployeeLeave };
 
 export function listHrEmployees(session: ActiveSession) { return api<HrEmployeesReceipt>(session, "/hr/employees"); }
 export function listHrAdvances(session: ActiveSession) { return api<HrAdvancesReceipt>(session, "/hr/advances"); }
@@ -29,6 +46,10 @@ export function createHrEmployeeAdministrativeDeduction(session: ActiveSession, 
 export function deferHrEmployeeAdministrativeDeduction(session: ActiveSession, payload: unknown) { return api(session, "/hr/deductions/defer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function cancelHrEmployeeAdministrativeDeduction(session: ActiveSession, payload: unknown) { return api(session, "/hr/deductions/cancel", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function getHrEmployee(session: ActiveSession, employeeId: string, cursor?: string) { return api<HrDetail>(session, `/hr/employees/${encodeURIComponent(employeeId)}${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`); }
+export function listHrEmployeeLeaves(session: ActiveSession) { return api<HrEmployeeLeavesReceipt>(session, "/hr/leaves"); }
+export function getHrEmployeeLeave(session: ActiveSession, leaveId: string) { return api<HrEmployeeLeaveDetail>(session, `/hr/leaves/${encodeURIComponent(leaveId)}`); }
+export function createHrEmployeeLeave(session: ActiveSession, payload: unknown) { return api(session, "/hr/leaves", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function recordHrEmployeeReturn(session: ActiveSession, payload: unknown) { return api(session, "/hr/leaves/return", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrPayrollRuns(session: ActiveSession) { return api<HrPayrollRunsReceipt>(session, "/hr/payroll-runs"); }
 export function getHrPayrollRun(session: ActiveSession, payrollRunId: string) { return api<HrPayrollDetail>(session, `/hr/payroll-runs/${encodeURIComponent(payrollRunId)}`); }
 export function setHrEmployeeCompensation(session: ActiveSession, payload: unknown) { return api(session, "/hr/compensation", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

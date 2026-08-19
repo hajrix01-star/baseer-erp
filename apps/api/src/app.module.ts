@@ -77,6 +77,7 @@ import { HrService } from './hr/hr.service.js';
 import { HrAdvanceService } from './hr/hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr/hr-administrative-deduction.service.js';
 import { HrPayrollService } from './hr/hr-payroll.service.js';
+import { HrLeaveService } from './hr/hr-leave.service.js';
 
 @Module({
   controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController],
@@ -131,6 +132,7 @@ import { HrPayrollService } from './hr/hr-payroll.service.js';
     HrAdvanceService,
     HrAdministrativeDeductionService,
     HrPayrollService,
+    HrLeaveService,
   ],
 })
 export class AppModule {}

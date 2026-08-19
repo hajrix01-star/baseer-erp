@@ -268,6 +268,24 @@ export const HrEmployeeStatus = {
 export type HrEmployeeStatus = (typeof HrEmployeeStatus)[keyof typeof HrEmployeeStatus]
 
 
+export const HrEmployeeLeaveType = {
+  ANNUAL: 'ANNUAL',
+  SICK: 'SICK',
+  UNPAID: 'UNPAID',
+  OTHER: 'OTHER'
+} as const
+
+export type HrEmployeeLeaveType = (typeof HrEmployeeLeaveType)[keyof typeof HrEmployeeLeaveType]
+
+
+export const HrEmployeeLeaveStatus = {
+  APPROVED: 'APPROVED',
+  RETURNED: 'RETURNED'
+} as const
+
+export type HrEmployeeLeaveStatus = (typeof HrEmployeeLeaveStatus)[keyof typeof HrEmployeeLeaveStatus]
+
+
 export const HrEmployeeServiceStatus = {
   DRAFT: 'DRAFT',
   ISSUED: 'ISSUED',

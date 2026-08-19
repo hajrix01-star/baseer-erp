@@ -752,6 +752,40 @@ export type EnumHrEmployeeStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumHrEmployeeStatusFilter<$PrismaModel>
 }
 
+export type EnumHrEmployeeLeaveTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveType | Prisma.EnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel> | $Enums.HrEmployeeLeaveType
+}
+
+export type EnumHrEmployeeLeaveStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveStatus | Prisma.EnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel> | $Enums.HrEmployeeLeaveStatus
+}
+
+export type EnumHrEmployeeLeaveTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveType | Prisma.EnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveTypeWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeLeaveType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel>
+}
+
+export type EnumHrEmployeeLeaveStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveStatus | Prisma.EnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeLeaveStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel>
+}
+
 export type EnumHrEmployeeServiceStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.HrEmployeeServiceStatus | Prisma.EnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrEmployeeServiceStatus[] | Prisma.ListEnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
@@ -1837,6 +1871,40 @@ export type NestedEnumHrEmployeeStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrEmployeeStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrEmployeeStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveType | Prisma.EnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel> | $Enums.HrEmployeeLeaveType
+}
+
+export type NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveStatus | Prisma.EnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel> | $Enums.HrEmployeeLeaveStatus
+}
+
+export type NestedEnumHrEmployeeLeaveTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveType | Prisma.EnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveType[] | Prisma.ListEnumHrEmployeeLeaveTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveTypeWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeLeaveType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeLeaveTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumHrEmployeeLeaveStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeLeaveStatus | Prisma.EnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeLeaveStatus[] | Prisma.ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeLeaveStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeLeaveStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeLeaveStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel = never> = {

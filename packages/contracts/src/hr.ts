@@ -12,6 +12,8 @@ export const hrEmployeeStatusSchema = z.enum(["ACTIVE", "ON_LEAVE", "TERMINATED"
 export const hrEmployeeServiceStatusSchema = z.enum(["DRAFT", "ISSUED", "CANCELLED"]);
 export const hrEmployeeAdvanceStatusSchema = z.enum(["ISSUED", "PARTIALLY_SETTLED", "SETTLED", "REVERSED"]);
 export const hrEmployeeAdministrativeDeductionStatusSchema = z.enum(["OPEN", "PARTIALLY_APPLIED", "APPLIED", "DEFERRED", "CANCELLED"]);
+export const hrEmployeeLeaveTypeSchema = z.enum(["ANNUAL", "SICK", "UNPAID", "OTHER"]);
+export const hrEmployeeLeaveStatusSchema = z.enum(["APPROVED", "RETURNED"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
   "IQAMA_RENEWAL",
   "SPONSORSHIP_TRANSFER",
@@ -184,6 +186,24 @@ export const reverseHrPayrollRunRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Leave is approved at creation and remains operational; it never posts a financial entry. */
+export const createHrEmployeeLeaveRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  leaveType: hrEmployeeLeaveTypeSchema,
+  startDate: hrDateSchema,
+  endDate: hrDateSchema,
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+/** returnDate is the employee's actual first working day back. */
+export const returnHrEmployeeLeaveRequestSchema = z.object({
+  leaveId: z.string().uuid(),
+  returnDate: hrDateSchema,
+  notes: z.string().trim().max(2_000).nullable().optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 export const hrEmployeeSchema = z.object({
   id: hrEmployeeIdSchema,
   employeeNumber: z.string().min(1).max(80),
@@ -277,6 +297,20 @@ export const hrEmployeeCompensationProfileSchema = z.object({
   effectiveTo: businessDateSchema.nullable(), monthlyGross: hrAmountSchema, notes: z.string().max(1_000).nullable(),
 }).strict();
 
+export const hrEmployeeLeaveSchema = z.object({
+  id: z.string().uuid(),
+  employeeId: hrEmployeeIdSchema,
+  employeeNumber: z.string().max(80),
+  employeeNameAr: z.string().max(160),
+  employeeNameEn: z.string().max(160).nullable(),
+  leaveType: hrEmployeeLeaveTypeSchema,
+  status: hrEmployeeLeaveStatusSchema,
+  startDate: businessDateSchema,
+  endDate: businessDateSchema,
+  actualReturnDate: businessDateSchema.nullable(),
+  notes: z.string().max(2_000).nullable(),
+}).strict();
+
 const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema, referenceNumber: z.string().max(80) }).strict();
 export const hrPayrollLineSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
@@ -299,6 +333,8 @@ export const hrEmployeeDetailQuerySchema = z.object({
 export const hrEmployeesReceiptSchema = z.object({ companyId: companyIdSchema, employees: z.array(hrEmployeeSchema).max(500) }).strict();
 export const hrEmployeeAdvancesReceiptSchema = z.object({ companyId: companyIdSchema, advances: z.array(hrEmployeeAdvanceSchema).max(500) }).strict();
 export const hrEmployeeAdministrativeDeductionsReceiptSchema = z.object({ companyId: companyIdSchema, deductions: z.array(hrEmployeeAdministrativeDeductionSchema).max(500) }).strict();
+export const hrEmployeeLeavesReceiptSchema = z.object({ companyId: companyIdSchema, leaves: z.array(hrEmployeeLeaveSchema).max(500) }).strict();
+export const hrEmployeeLeaveDetailReceiptSchema = z.object({ companyId: companyIdSchema, leave: hrEmployeeLeaveSchema }).strict();
 export const hrEmployeeAdvanceDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdvanceDetailSchema.shape }).strict();
 export const hrEmployeeAdministrativeDeductionDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdministrativeDeductionDetailSchema.shape }).strict();
 export const hrEmployeeCompensationProfileReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
@@ -318,6 +354,7 @@ export const hrEmployeeAdvanceIssueReceiptSchema = z.object({ id: z.string().uui
 export const hrEmployeeAdvanceSettlementReceiptSchema = z.object({ id: z.string().uuid(), settlementNumber: z.string().min(1).max(80), advanceId: z.string().uuid(), journalEntryId: z.string().uuid(), remainingAmount: hrAmountSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceDeferralReceiptSchema = z.object({ id: z.string().uuid(), advanceId: z.string().uuid(), deferredUntil: businessDateSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdministrativeDeductionReceiptSchema = z.object({ id: z.string().uuid(), deductionNumber: z.string().min(1).max(80), replayed: z.boolean() }).strict();
+export const hrEmployeeLeaveReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
@@ -334,3 +371,5 @@ export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequest
 export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
 export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;
 export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;
+export type CreateHrEmployeeLeaveRequest = z.infer<typeof createHrEmployeeLeaveRequestSchema>;
+export type ReturnHrEmployeeLeaveRequest = z.infer<typeof returnHrEmployeeLeaveRequestSchema>;

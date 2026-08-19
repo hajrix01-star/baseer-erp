@@ -38,6 +38,7 @@ const emptyDeduction = (): DeductionForm => ({ employeeId: "", businessDate: tod
 const emptyDeductionDeferral = (deductionId = ""): DeductionDeferralForm => ({ deductionId, businessDate: today(), deferredUntil: futureDate(30), reason: "" });
 const emptyDeductionCancellation = (deductionId = ""): DeductionCancellationForm => ({ deductionId, businessDate: today(), reason: "" });
 const HrPayrollWorkspace = lazy(() => import("./hr-payroll-workspace").then((module) => ({ default: module.HrPayrollWorkspace })));
+const HrLeaveWorkspace = lazy(() => import("./hr-leave-workspace").then((module) => ({ default: module.HrLeaveWorkspace })));
 
 export function HrWorkspace({ language, section }: { language: Language; section: number }) {
   const text = hrText(language);
@@ -146,7 +147,7 @@ export function HrWorkspace({ language, section }: { language: Language; section
 
   if (!session) return <DailySalesSignIn language={language} />;
   if (section === 3) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل مسير الرواتب…" : "Loading payroll…"}</BaseerCard>}><HrPayrollWorkspace language={language} /></Suspense>;
-  if (section === 2) return <BaseerCard><h3>{sectionTitle}</h3><p>{text.payrollPending}</p></BaseerCard>;
+  if (section === 2) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل الإجازات والعودة…" : "Loading leave & return…"}</BaseerCard>}><HrLeaveWorkspace language={language} /></Suspense>;
   return <section className="daily-sales-workspace" aria-label={text.title}>
     <header className="administration-section-heading"><h3>{sectionTitle}</h3>{section === 1 ? <BaseerButton type="button" variant="primary" onClick={() => setEmployeeOpen(true)}>{text.addEmployee}</BaseerButton> : isAdvance ? <><BaseerButton type="button" variant="primary" onClick={() => void openAdvance()}>{text.addAdvance}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => { setDeductionForm(emptyDeduction()); setDeductionOpen(true); }}>{text.addAdministrativeDeduction}</BaseerButton></> : isServices ? <BaseerButton type="button" variant="primary" onClick={() => void openService("")}>{text.addService}</BaseerButton> : null}</header>
     {message ? <p className="daily-sales-message success">{message}</p> : null}

@@ -178,6 +178,13 @@ export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
  */
 export type HrEmployee = Prisma.HrEmployeeModel
 /**
+ * Model HrEmployeeLeave
+ * An approved absence window. Future records intentionally do not set the
+ * employee to ON_LEAVE; the service derives that status only for a leave
+ * active on the company's current business date.
+ */
+export type HrEmployeeLeave = Prisma.HrEmployeeLeaveModel
+/**
  * Model HrEmployeeService
  * A personnel service is operational until its associated cost is issued.
  * The financial document is immutable and is never recreated by editing this record.

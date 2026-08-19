@@ -176,6 +176,21 @@ enum HrEmployeeStatus {
   ARCHIVED
 }
 
+/// Leave is an operational HR record. It never posts a financial entry or
+/// changes compensation; a return only records the employee's actual first
+/// working day back.
+enum HrEmployeeLeaveType {
+  ANNUAL
+  SICK
+  UNPAID
+  OTHER
+}
+
+enum HrEmployeeLeaveStatus {
+  APPROVED
+  RETURNED
+}
+
 enum HrEmployeeServiceStatus {
   DRAFT
   ISSUED
@@ -347,6 +362,7 @@ model Company {
   hrEmployeeAdministrativeDeductions HrEmployeeAdministrativeDeduction[]
   hrEmployeeAdministrativeDeductionActions HrEmployeeAdministrativeDeductionAction[]
   hrEmployeeCompensationProfiles HrEmployeeCompensationProfile[]
+  hrEmployeeLeaves             HrEmployeeLeave[]
   hrPayrollRuns                 HrPayrollRun[]
   hrPayrollLines                HrPayrollLine[]
   hrPayrollAdvanceApplications  HrPayrollAdvanceApplication[]
@@ -960,11 +976,41 @@ model HrEmployee {
   advances           HrEmployeeAdvance[]
   administrativeDeductions HrEmployeeAdministrativeDeduction[]
   compensationProfiles     HrEmployeeCompensationProfile[]
+  leaves                   HrEmployeeLeave[]
   payrollLines             HrPayrollLine[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
   @@index([tenantId, companyId, status, nameAr])
+}
+
+/// An approved absence window. Future records intentionally do not set the
+/// employee to ON_LEAVE; the service derives that status only for a leave
+/// active on the company's current business date.
+model HrEmployeeLeave {
+  id               String                @id @default(uuid()) @db.Uuid
+  tenantId         String                @db.Uuid
+  companyId        String                @db.Uuid
+  employeeId       String                @db.Uuid
+  leaveType        HrEmployeeLeaveType
+  status           HrEmployeeLeaveStatus @default(APPROVED)
+  startDate        DateTime              @db.Date
+  endDate          DateTime              @db.Date
+  actualReturnDate DateTime?             @db.Date
+  notes            String?               @db.VarChar(2000)
+  approvedByUserId String                @db.Uuid
+  approvedAt       DateTime              @default(now()) @db.Timestamptz(6)
+  returnedByUserId String?               @db.Uuid
+  returnedAt       DateTime?             @db.Timestamptz(6)
+  createdAt        DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime              @updatedAt @db.Timestamptz(6)
+
+  company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, employeeId, startDate, endDate])
+  @@index([tenantId, companyId, status, startDate, endDate])
 }
 
 /// A personnel service is operational until its associated cost is issued.
