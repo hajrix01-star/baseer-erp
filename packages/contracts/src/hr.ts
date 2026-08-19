@@ -205,7 +205,9 @@ export const createHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
   businessDate: hrDateSchema,
   notes: z.string().trim().max(2_000).optional(),
-  lines: z.array(payrollLineRequestSchema).min(1).max(1_000),
+  /** The standard monthly run always starts from every eligible employee on the server. */
+  includeAllEligible: z.boolean().default(true),
+  lines: z.array(payrollLineRequestSchema).max(1_000).default([]),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 

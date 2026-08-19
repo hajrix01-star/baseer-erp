@@ -125,10 +125,22 @@ export class HrPayrollService {
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
       const existing = await tx.hrPayrollRun.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth }, select: { id: true } });
       if (existing) throw new ConflictException('A payroll run already exists for this month.');
-      const uniqueEmployeeIds = [...new Set(input.lines.map((line) => line.employeeId))];
-      if (uniqueEmployeeIds.length !== input.lines.length) throw new BadRequestException('An employee can appear once in a payroll run.');
-      const employees = await tx.hrEmployee.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, id: { in: uniqueEmployeeIds }, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } });
-      if (employees.length !== uniqueEmployeeIds.length) throw new BadRequestException('Every payroll employee must be active or on leave in this company.');
+      const requestedEmployeeIds = [...new Set(input.lines.map((line) => line.employeeId))];
+      if (requestedEmployeeIds.length !== input.lines.length) throw new BadRequestException('An employee can appear once in a payroll run.');
+      const employees = await tx.hrEmployee.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] },
+          ...(!input.includeAllEligible ? { id: { in: requestedEmployeeIds } } : {}),
+        },
+        select: { id: true, employeeNumber: true, nameAr: true, nameEn: true },
+      });
+      if (!employees.length) throw new BadRequestException('No active or on-leave employees are available for this payroll run.');
+      if (!input.includeAllEligible && employees.length !== requestedEmployeeIds.length) throw new BadRequestException('Every payroll employee must be active or on leave in this company.');
+      const requestedLines = new Map(input.lines.map((line) => [line.employeeId, line]));
+      const lines = employees.map((employee) => requestedLines.get(employee.id) ?? { employeeId: employee.id, advances: [], administrativeDeductions: [] });
+      const uniqueEmployeeIds = employees.map((employee) => employee.id);
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
       const profileRows = await tx.hrEmployeeCompensationProfile.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: uniqueEmployeeIds }, effectiveFrom: { lte: payrollMonth }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: payrollMonth } }] }, orderBy: { effectiveFrom: 'desc' } });
       const profileByEmployee = new Map<string, typeof profileRows[number]>();
@@ -137,7 +149,7 @@ export class HrPayrollService {
       const runId = randomUUID();
       const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(input.businessDate) });
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
-      const rows = await Promise.all(input.lines.map(async (line) => {
+      const rows = await Promise.all(lines.map(async (line) => {
         const employee = employeeById.get(line.employeeId)!;
         const gross = profileByEmployee.get(line.employeeId)!.monthlyGross;
         const advances = await this.resolveAdvanceApplications(tx, context, line.employeeId, line.advances);
