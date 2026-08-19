@@ -68,7 +68,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
         return;
       }
       setDraft(empty()); setPhotoFile(null); onClose();
-    } catch (error) { onError(presentBaseerApiError(error, language, ar ? "إضافة الموظف" : "Adding employee")); }
+    } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر إضافة الموظف وحفظ الراتب." : "The employee and salary could not be saved.")); }
     finally { setBusy(false); }
   };
   return <BaseerFormDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} formId="hr-employee-onboarding" submitLabel={ar ? "إضافة الموظف وحفظ الراتب" : "Add employee & save salary"} onClose={close}>

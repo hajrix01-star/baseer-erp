@@ -775,7 +775,7 @@ export class HrPayrollService {
   }
 
   private async begin(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, operation: string, key: string, request: object) {
-    try { return await this.idempotency.beginInTransaction(tx, context, { operation, key, request: request as never, expiresAt: tomorrow() }); }
+    try { return await this.idempotency.beginInTransaction(tx, context, { operation, key, request: jsonPayload(request), expiresAt: tomorrow() }); }
     catch (error) { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different payroll request.'); throw error; }
   }
   private async complete(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, receiptId: string, body: object) { await this.idempotency.completeInTransaction(tx, context, { receiptId, response: { status: 201, headers: null, body: body as never } }); }
@@ -784,6 +784,7 @@ export class HrPayrollService {
 
 function amount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lte(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A payroll amount must be a positive decimal with at most four places.'); return parsed; }
 function nonNegativeAmount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lt(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A compensation allowance must be a non-negative decimal with at most four places.'); return parsed; }
+function jsonPayload(value: unknown): never { return JSON.parse(JSON.stringify(value)) as never; }
 function sum(values: readonly Prisma.Decimal[]) { return values.reduce((total, value) => total.plus(value), new Prisma.Decimal(0)); }
 function fixed(value: Prisma.Decimal) { return value.toFixed(4); }
 function nullable(value: string | undefined) { const text = value?.trim(); return text || null; }

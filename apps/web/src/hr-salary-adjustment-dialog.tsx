@@ -10,17 +10,22 @@ import { setHrEmployeeCompensation, type HrCompensationProfile, type HrEmployee 
 type Language = "ar" | "en";
 export type SalaryAdjustmentMode = "INCREASE" | "DECREASE";
 
-const month = () => new Date().toISOString().slice(0, 7);
+const month = (offset = 0) => {
+  const value = new Date();
+  value.setDate(1);
+  value.setMonth(value.getMonth() + offset);
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
+};
 const amount = (value: string) => Number(value || 0);
 
 /** A narrow action dialog: it derives a new effective-dated salary record without touching payroll history. */
 export function HrSalaryAdjustmentDialog({ open, language, employee, profile, mode, onClose, onSaved, onError }: { open: boolean; language: Language; employee: HrEmployee; profile: HrCompensationProfile; mode: SalaryAdjustmentMode; onClose: () => void; onSaved: () => Promise<void>; onError: (message: string) => void }) {
   const ar = language === "ar";
-  const [effectiveMonth, setEffectiveMonth] = useState(month());
+  const [effectiveMonth, setEffectiveMonth] = useState(month(1));
   const [changeAmount, setChangeAmount] = useState("");
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
-  useEffect(() => { if (open) { setEffectiveMonth(month()); setChangeAmount(""); setReason(""); } }, [open]);
+  useEffect(() => { if (open) { setEffectiveMonth(month(1)); setChangeAmount(""); setReason(""); } }, [open]);
 
   const current = amount(profile.monthlyGross);
   const delta = amount(changeAmount);
@@ -60,7 +65,7 @@ export function HrSalaryAdjustmentDialog({ open, language, employee, profile, mo
     <form id="hr-salary-adjustment" className="baseer-form" onSubmit={(event) => void submit(event)}>
       <BaseerFormSection title={employee.nameAr} description={ar ? "يُنشأ سجل راتب جديد من بداية الشهر المحدد؛ المسيرات السابقة لا تتغير." : "A new salary record starts in the selected month; past payroll never changes."}>
         <BaseerFormGrid>
-          <label className="baseer-form-field">{ar ? "بداية التطبيق" : "Effective month"}<input required type="month" min={month()} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>
+          <label className="baseer-form-field">{ar ? "بداية التطبيق" : "Effective month"}<input required type="month" min={month(1)} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>
           <div className="baseer-form-field"><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong className="baseer-form-static"><BaseerMoney value={profile.monthlyGross} language={language} /></strong></div>
           <label className="baseer-form-field baseer-form-field--full">{mode === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} /></label>
           <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={Number.isFinite(next) && next >= 0 ? next.toFixed(4) : "0"} language={language} /></strong></div>

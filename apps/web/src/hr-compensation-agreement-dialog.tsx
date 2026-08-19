@@ -9,10 +9,14 @@ import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensati
 
 type Language = "ar" | "en";
 type Draft = { employeeId: string; policyVersionId: string; effectiveFrom: string; monthlyGross: string; compensationMethod: HrCompensationMethod; foodAllowance: string; housingAllowance: string; transportAllowance: string; otherAllowance: string; scheduledHoursPerDay: string; scheduledWorkDays: string; notes: string };
-const today = () => new Date().toISOString().slice(0, 10);
-const month = () => today().slice(0, 7);
+const month = (offset = 0) => {
+  const value = new Date();
+  value.setDate(1);
+  value.setMonth(value.getMonth() + offset);
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
+};
 const employeeLabel = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
-const empty = (employeeId = "", profile?: HrCompensationProfile | null): Draft => ({ employeeId, policyVersionId: profile?.policyVersionId ?? "", effectiveFrom: `${month()}-01`, monthlyGross: profile?.monthlyGross ?? "", compensationMethod: profile?.compensationMethod ?? "FIXED_MONTHLY", foodAllowance: profile?.foodAllowance ?? "", housingAllowance: profile?.housingAllowance ?? "", transportAllowance: profile?.transportAllowance ?? "", otherAllowance: profile?.otherAllowance ?? "", scheduledHoursPerDay: profile?.scheduledHoursPerDay?.toString() ?? "", scheduledWorkDays: profile?.scheduledWorkDays?.toString() ?? "", notes: "" });
+const empty = (employeeId = "", profile?: HrCompensationProfile | null): Draft => ({ employeeId, policyVersionId: profile?.policyVersionId ?? "", effectiveFrom: `${month(profile ? 1 : 0)}-01`, monthlyGross: profile?.monthlyGross ?? "", compensationMethod: profile?.compensationMethod ?? "FIXED_MONTHLY", foodAllowance: profile?.foodAllowance ?? "", housingAllowance: profile?.housingAllowance ?? "", transportAllowance: profile?.transportAllowance ?? "", otherAllowance: profile?.otherAllowance ?? "", scheduledHoursPerDay: profile?.scheduledHoursPerDay?.toString() ?? "", scheduledWorkDays: profile?.scheduledWorkDays?.toString() ?? "", notes: "" });
 
 /** A simple salary editor. Its dated payroll snapshot remains internal, so past payroll is never changed. */
 export function HrCompensationAgreementDialog({ open, language, employees, fixedEmployeeId, profile, onClose, onSaved, onError }: { open: boolean; language: Language; employees: readonly HrEmployee[]; fixedEmployeeId?: string; profile?: HrCompensationProfile | null; onClose: () => void; onSaved: () => Promise<void>; onError: (message: string) => void }) {
@@ -49,7 +53,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
       <BaseerFormSection title={ar ? "الراتب" : "Salary"} description={ar ? "أدخل الراتب والبدلات. سبب التعديل اختياري، والسجل الداخلي يحمي المسيرات السابقة." : "Enter salary and allowances. A reason is optional; the internal record protects past payroll."}>
         <BaseerFormGrid>
           {!fixedEmployeeId ? <label className="baseer-form-field baseer-form-field--full">{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: employeeLabel(language, employee) }))} onChange={(employeeId) => setDraft((value) => ({ ...value, employeeId }))} /></label> : null}
-          <label className="baseer-form-field">{ar ? "شهر تطبيق التعديل" : "Change month"}<input required type="month" value={draft.effectiveFrom.slice(0, 7)} onChange={(event) => setDraft((value) => ({ ...value, effectiveFrom: `${event.target.value}-01` }))} /></label>
+          <label className="baseer-form-field">{ar ? "شهر تطبيق التعديل" : "Change month"}<input required type="month" min={month(profile ? 1 : 0)} value={draft.effectiveFrom.slice(0, 7)} onChange={(event) => setDraft((value) => ({ ...value, effectiveFrom: `${event.target.value}-01` }))} /></label>
           <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input required inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setDraft((value) => ({ ...value, monthlyGross: event.target.value }))} /></label>
           <label className="baseer-form-field">{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setDraft((value) => ({ ...value, compensationMethod: event.target.value as HrCompensationMethod }))}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></select></label>
           <label className="baseer-form-field">{ar ? "بدل الأكل" : "Food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setDraft((value) => ({ ...value, foodAllowance: event.target.value }))} /></label>
