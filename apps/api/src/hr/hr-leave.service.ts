@@ -11,7 +11,7 @@ import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type CreateInput = Omit<CreateHrEmployeeLeaveRequest, 'idempotencyKey'>;
 type ReturnInput = Omit<ReturnHrEmployeeLeaveRequest, 'idempotencyKey'>;
-type LeaveListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeLeaveStatus; leaveType?: HrEmployeeLeaveType; periodFrom?: Date; periodTo?: Date; cursor?: string; pageSize: number }>;
+type LeaveListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeLeaveStatus; leaveType?: HrEmployeeLeaveType; periodFrom?: Date; periodTo?: Date; search?: string; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrLeaveService {
@@ -23,6 +23,8 @@ export class HrLeaveService {
 
   async list(context: TrustedCompanyActorContext, query: LeaveListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const dateResolution = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      const businessDate = new Date(`${dateResolution.businessDate}T00:00:00.000Z`);
       const leaveScope: Prisma.HrEmployeeLeaveWhereInput = {
         tenantId: context.tenantId,
         companyId: context.companyId,
@@ -30,21 +32,29 @@ export class HrLeaveService {
         ...(query.status ? { status: query.status } : {}),
         ...(query.leaveType ? { leaveType: query.leaveType } : {}),
         ...(query.periodFrom || query.periodTo ? { AND: [{ ...(query.periodTo ? { startDate: { lte: query.periodTo } } : {}) }, { ...(query.periodFrom ? { endDate: { gte: query.periodFrom } } : {}) }] } : {}),
+        ...(query.search ? { OR: [
+          { employee: { employeeNumber: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameAr: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameEn: { contains: query.search, mode: 'insensitive' } } },
+        ] } : {}),
       };
       const cursor = query.cursor ? await tx.hrEmployeeLeave.findFirst({ where: { id: query.cursor, ...leaveScope }, select: { id: true, startDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-leave cursor is invalid.');
-      const rows = await tx.hrEmployeeLeave.findMany({
-        where: {
-          ...leaveScope,
-          ...(cursor ? { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] } : {}),
-        },
-        orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
-        take: query.pageSize + 1,
-        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } } },
-      });
+      const [rows, count, onLeaveNow, upcoming, returned] = await Promise.all([
+        tx.hrEmployeeLeave.findMany({
+          where: cursor ? { AND: [leaveScope, { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] }] } : leaveScope,
+          orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
+          take: query.pageSize + 1,
+          include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } } },
+        }),
+        tx.hrEmployeeLeave.count({ where: leaveScope }),
+        tx.hrEmployeeLeave.count({ where: { AND: [leaveScope, { status: HrEmployeeLeaveStatus.APPROVED, startDate: { lte: businessDate }, endDate: { gte: businessDate } }] } }),
+        tx.hrEmployeeLeave.count({ where: { AND: [leaveScope, { status: HrEmployeeLeaveStatus.APPROVED, startDate: { gt: businessDate } }] } }),
+        tx.hrEmployeeLeave.count({ where: { AND: [leaveScope, { status: HrEmployeeLeaveStatus.RETURNED }] } }),
+      ]);
       const hasMore = rows.length > query.pageSize;
       const leaves = hasMore ? rows.slice(0, query.pageSize) : rows;
-      return { leaves: leaves.map(mapLeave), hasMore, nextCursor: hasMore ? leaves.at(-1)?.id ?? null : null };
+      return { leaves: leaves.map(mapLeave), hasMore, nextCursor: hasMore ? leaves.at(-1)?.id ?? null : null, summary: { count, onLeaveNow, upcoming, returned } };
     });
   }
 

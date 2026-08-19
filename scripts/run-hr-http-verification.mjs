@@ -97,6 +97,12 @@ try {
   assert.equal(readerDetail.json().compensation, null);
   assert.deepEqual(readerDetail.json().compensationHistory, []);
 
+  const managerDetail = await server.inject({ method: "GET", url: `/v1/hr/employees/${fixture.activeEmployeeId}`, headers: managerHeaders });
+  assert.equal(managerDetail.statusCode, 200, managerDetail.body);
+  assert.equal(managerDetail.json().services.length, 500, "The employee detail projection must remain bounded.");
+  assert.equal(managerDetail.json().serviceCount, 501, "Employee detail must expose the exact service count beyond its bounded projection.");
+  assert.equal(managerDetail.json().servicesHasMore, true, "Employee detail must disclose that more services are available from the paginated service register.");
+
   const readerOverview = await server.inject({ method: "GET", url: "/v1/hr/overview", headers: readerHeaders });
   assert.equal(readerOverview.statusCode, 200, readerOverview.body);
   assert.equal(readerOverview.json().companyId, fixture.companyId);
@@ -105,6 +111,65 @@ try {
   assert.equal(readerOverview.json().payroll, null, "Overview must not disclose payroll without hr.payroll.read.");
   assert.equal(readerOverview.json().financial, null);
   assert.equal(readerOverview.json().finalSettlements, null);
+
+  const employeeJobSearch = await server.inject({ method: "GET", url: "/v1/hr/employees?search=HTTP%20Analyst&pageSize=1", headers: managerHeaders });
+  assert.equal(employeeJobSearch.statusCode, 200, employeeJobSearch.body);
+  assert.deepEqual(employeeJobSearch.json().employees.map((employee) => employee.id), [fixture.activeEmployeeId], "Employee search must include job title.");
+
+  const payrollPage = await server.inject({ method: "GET", url: "/v1/hr/payroll-runs?pageSize=1", headers: managerHeaders });
+  assert.equal(payrollPage.statusCode, 200, payrollPage.body);
+  assert.equal(payrollPage.json().payrollRuns.length, 1);
+  assert.equal(payrollPage.json().hasMore, true);
+  assert.deepEqual(payrollPage.json().summary, { count: 2, grossAmount: "3000.0000", advanceSettlementAmount: "300.0000", administrativeDeductionAmount: "150.0000", netPayableAmount: "2550.0000" }, "Payroll summary must cover the full filtered scope, not one page.");
+  const payrollSearch = await server.inject({ method: "GET", url: "/v1/hr/payroll-runs?search=TARGET&pageSize=1", headers: managerHeaders });
+  assert.equal(payrollSearch.statusCode, 200, payrollSearch.body);
+  assert.equal(payrollSearch.json().summary.count, 1);
+  assert.equal(payrollSearch.json().summary.netPayableAmount, "850.0000");
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/payroll-runs?search=TARGET&pageSize=1&cursor=${payrollPage.json().nextCursor}`, headers: managerHeaders }),
+    400,
+    "VALIDATION_FAILED",
+    "A payroll cursor must remain bound to its original search scope.",
+  );
+
+  const leavePage = await server.inject({ method: "GET", url: "/v1/hr/leaves?pageSize=1", headers: managerHeaders });
+  assert.equal(leavePage.statusCode, 200, leavePage.body);
+  assert.equal(leavePage.json().leaves.length, 1);
+  assert.deepEqual(leavePage.json().summary, { count: 3, onLeaveNow: 1, upcoming: 1, returned: 1 }, "Leave KPIs must use the company business date and full filter scope.");
+  const leaveSearch = await server.inject({ method: "GET", url: "/v1/hr/leaves?search=EMP-HTTP-001&pageSize=1", headers: managerHeaders });
+  assert.equal(leaveSearch.statusCode, 200, leaveSearch.body);
+  assert.deepEqual(leaveSearch.json().summary, { count: 2, onLeaveNow: 1, upcoming: 1, returned: 0 });
+
+  const servicePage = await server.inject({ method: "GET", url: "/v1/hr/services?pageSize=1", headers: managerHeaders });
+  assert.equal(servicePage.statusCode, 200, servicePage.body);
+  assert.equal(servicePage.json().services.length, 1);
+  assert.deepEqual(servicePage.json().summary, { count: 501, expired: 1, due30: 1, due90: 1 }, "Service expiry KPIs must cover the full filtered scope.");
+  const serviceSearch = await server.inject({ method: "GET", url: "/v1/hr/services?search=SVC-TARGET&pageSize=1", headers: managerHeaders });
+  assert.equal(serviceSearch.statusCode, 200, serviceSearch.body);
+  assert.deepEqual(serviceSearch.json().summary, { count: 1, expired: 0, due30: 0, due90: 1 });
+
+  const deductionSearch = await server.inject({ method: "GET", url: "/v1/hr/deductions?search=TARGET-DEDUCTION&pageSize=1", headers: managerHeaders });
+  assert.equal(deductionSearch.statusCode, 200, deductionSearch.body);
+  assert.equal(deductionSearch.json().deductions.length, 1, "Deduction search must execute against the server register.");
+  const emptyAdvanceSearch = await server.inject({ method: "GET", url: "/v1/hr/advances?search=missing&pageSize=1", headers: managerHeaders });
+  assert.equal(emptyAdvanceSearch.statusCode, 200, emptyAdvanceSearch.body);
+  assert.deepEqual(emptyAdvanceSearch.json().advances, []);
+
+  const firstSettlementPage = await server.inject({ method: "GET", url: "/v1/hr/final-settlements?pageSize=1", headers: managerHeaders });
+  assert.equal(firstSettlementPage.statusCode, 200, firstSettlementPage.body);
+  assert.equal(firstSettlementPage.json().hasMore, true);
+  const settlementNumberSearch = await server.inject({ method: "GET", url: "/v1/hr/final-settlements?search=TARGET-SETTLEMENT&pageSize=1", headers: managerHeaders });
+  assert.equal(settlementNumberSearch.statusCode, 200, settlementNumberSearch.body);
+  assert.deepEqual(settlementNumberSearch.json().settlements.map((settlement) => settlement.settlementNumber), ["FST-TARGET-SETTLEMENT"], "Final-settlement search must find records outside the first unfiltered page.");
+  const settlementEmployeeSearch = await server.inject({ method: "GET", url: "/v1/hr/final-settlements?search=EMP-HTTP-002&pageSize=1", headers: managerHeaders });
+  assert.equal(settlementEmployeeSearch.statusCode, 200, settlementEmployeeSearch.body);
+  assert.deepEqual(settlementEmployeeSearch.json().settlements.map((settlement) => settlement.settlementNumber), ["FST-TARGET-SETTLEMENT"], "Final-settlement search must match employee number.");
+  await expectError(
+    server.inject({ method: "GET", url: `/v1/hr/final-settlements?search=TARGET-SETTLEMENT&pageSize=1&cursor=${firstSettlementPage.json().nextCursor}`, headers: managerHeaders }),
+    400,
+    "VALIDATION_FAILED",
+    "A final-settlement cursor must remain bound to its search scope.",
+  );
 
   const firstActivePage = await server.inject({ method: "GET", url: "/v1/hr/employees?pageSize=1", headers: managerHeaders });
   assert.equal(firstActivePage.statusCode, 200, firstActivePage.body);
@@ -234,6 +299,10 @@ async function seedFixture() {
       "hr.employees.read",
       "hr.employees.write",
       "hr.payroll.read",
+      "hr.final_settlements.read",
+      "hr.leaves.read",
+      "hr.advances.read",
+      "hr.deductions.manage",
       "hr.advances.reverse",
       "hr.payroll.reverse",
       "hr.final_settlements.reverse",
@@ -250,15 +319,54 @@ async function seedFixture() {
       [fixture.tenantId, fixture.managerUserId, fixture.companyId, managerRoleId, fixture.readerUserId, readerRoleId],
     );
     await client.query(
-      `INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "nameEn", "hireDate", "status", "updatedAt")
-       VALUES ($1::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-001', 'موظف نشط', 'Active employee', DATE '2026-01-01', 'ACTIVE', CURRENT_TIMESTAMP),
-              ($4::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-002', 'موظف منتهي', 'Terminated employee', DATE '2025-01-01', 'TERMINATED', CURRENT_TIMESTAMP)`,
+      `INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "nameEn", "jobTitle", "hireDate", "status", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-001', 'موظف نشط', 'Active employee', 'HTTP Analyst', DATE '2026-01-01', 'ACTIVE', CURRENT_TIMESTAMP),
+              ($4::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-002', 'موظف منتهي', 'Terminated employee', 'Former role', DATE '2025-01-01', 'TERMINATED', CURRENT_TIMESTAMP)`,
       [fixture.activeEmployeeId, fixture.tenantId, fixture.companyId, fixture.terminatedEmployeeId],
     );
     await client.query(
       `INSERT INTO "HrEmployeeCompensationProfile" ("id", "tenantId", "companyId", "employeeId", "effectiveFrom", "monthlyGross", "createdByUserId", "updatedAt")
        VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, DATE '2026-01-01', 7000.0000, $5::uuid, CURRENT_TIMESTAMP)`,
       [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId],
+    );
+    await client.query(
+      `INSERT INTO "HrPayrollRun" ("id", "tenantId", "companyId", "runNumber", "payrollMonth", "businessDate", "status", "employeeCount", "grossAmount", "advanceSettlementAmount", "administrativeDeductionAmount", "netPayableAmount", "createdByUserId", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-CURRENT', DATE '2026-08-01', DATE '2026-08-20', 'DRAFT', 1, 2000.0000, 200.0000, 100.0000, 1700.0000, $4::uuid, CURRENT_TIMESTAMP),
+              ($5::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-TARGET', DATE '2026-07-01', DATE '2026-07-31', 'APPROVED', 1, 1000.0000, 100.0000, 50.0000, 850.0000, $4::uuid, CURRENT_TIMESTAMP)`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.managerUserId, randomUUID()],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployeeLeave" ("id", "tenantId", "companyId", "employeeId", "leaveType", "status", "startDate", "endDate", "actualReturnDate", "approvedByUserId", "returnedByUserId", "returnedAt", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'ANNUAL', 'APPROVED', DATE '2026-08-19', DATE '2026-08-21', NULL, $5::uuid, NULL, NULL, CURRENT_TIMESTAMP),
+              ($6::uuid, $2::uuid, $3::uuid, $4::uuid, 'OTHER', 'APPROVED', DATE '2026-09-01', DATE '2026-09-03', NULL, $5::uuid, NULL, NULL, CURRENT_TIMESTAMP),
+              ($7::uuid, $2::uuid, $3::uuid, $8::uuid, 'SICK', 'RETURNED', DATE '2026-07-01', DATE '2026-07-02', DATE '2026-07-02', $5::uuid, $5::uuid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId, randomUUID(), randomUUID(), fixture.terminatedEmployeeId],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployeeService" ("id", "tenantId", "companyId", "employeeId", "serviceType", "referenceNumber", "expiryDate", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'OTHER', 'SVC-EXPIRED', DATE '2026-08-19', CURRENT_TIMESTAMP),
+              ($5::uuid, $2::uuid, $3::uuid, $4::uuid, 'OTHER', 'SVC-DUE30', DATE '2026-09-01', CURRENT_TIMESTAMP),
+              ($6::uuid, $2::uuid, $3::uuid, $4::uuid, 'OTHER', 'SVC-TARGET', DATE '2026-10-15', CURRENT_TIMESTAMP),
+              ($7::uuid, $2::uuid, $3::uuid, $4::uuid, 'OTHER', 'SVC-NONE', NULL, CURRENT_TIMESTAMP)`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, randomUUID(), randomUUID(), randomUUID()],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployeeService" ("id", "tenantId", "companyId", "employeeId", "serviceType", "referenceNumber", "updatedAt")
+       SELECT gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, 'OTHER', 'SVC-BULK-' || series::text, CURRENT_TIMESTAMP
+       FROM generate_series(1, 497) AS series`,
+      [fixture.tenantId, fixture.companyId, fixture.activeEmployeeId],
+    );
+    await client.query(
+      `INSERT INTO "HrFinalSettlement" ("id", "tenantId", "companyId", "employeeId", "settlementNumber", "status", "terminationDate", "terminationReason", "reasonEvidenceReference", "reasonVerificationStatus", "calculationPolicyVersion", "serviceDays", "eosWage", "fullAwardAmount", "entitlementFactor", "eosAmount", "otherCreditsAmount", "recoveryAmount", "netPayableAmount", "paidAmount", "snapshotJson", "snapshotSha256", "createdByUserId", "createdAt", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'FST-CURRENT', 'DRAFT', DATE '2026-08-20', 'RESIGNATION', 'HTTP current settlement', 'PENDING', 'SA-EOS-V1', 365, 1000.0000, 500.0000, 1.00000000, 500.0000, 0.0000, 0.0000, 500.0000, 0.0000, '{}'::jsonb, repeat('0', 64), $5::uuid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+              ($6::uuid, $2::uuid, $3::uuid, $7::uuid, 'FST-TARGET-SETTLEMENT', 'DRAFT', DATE '2026-08-19', 'RESIGNATION', 'HTTP target settlement', 'PENDING', 'SA-EOS-V1', 365, 1000.0000, 500.0000, 1.00000000, 500.0000, 0.0000, 0.0000, 500.0000, 0.0000, '{}'::jsonb, repeat('1', 64), $5::uuid, CURRENT_TIMESTAMP - INTERVAL '1 day', CURRENT_TIMESTAMP - INTERVAL '1 day')`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId, randomUUID(), fixture.terminatedEmployeeId],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployeeAdministrativeDeduction" ("id", "tenantId", "companyId", "employeeId", "deductionNumber", "businessDate", "originalAmount", "remainingAmount", "description", "createdByUserId", "updatedAt")
+       VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'DED-HTTP-001', DATE '2026-08-18', 10.0000, 10.0000, 'TARGET-DEDUCTION', $5::uuid, CURRENT_TIMESTAMP),
+              ($6::uuid, $2::uuid, $3::uuid, $7::uuid, 'DED-HTTP-002', DATE '2026-08-17', 20.0000, 20.0000, 'Other deduction', $5::uuid, CURRENT_TIMESTAMP)`,
+      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId, randomUUID(), fixture.terminatedEmployeeId],
     );
     await client.query("COMMIT");
   } catch (error) {

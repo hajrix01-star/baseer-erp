@@ -12,7 +12,7 @@ export class HrFinalSettlementController {
   async list(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrFinalSettlementsQuerySchema.safeParse(query); if (!parsed.success) throw new BadRequestException('Invalid final-settlement query.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.read');
-    return hrFinalSettlementsReceiptSchema.parse({ companyId: context.companyId, ...(await this.settlements.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}) })) });
+    return hrFinalSettlementsReceiptSchema.parse({ companyId: context.companyId, ...(await this.settlements.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}) })) });
   }
 
   @Get(':settlementId')

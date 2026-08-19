@@ -25,7 +25,7 @@ type AdvanceSettlementInput = Omit<SettleHrEmployeeAdvanceDirectlyRequest, 'idem
 type AdvanceDeferralInput = Omit<DeferHrEmployeeAdvanceRequest, 'idempotencyKey'>;
 export type AdvanceIssueReversalInput = Readonly<{ advanceId: string; businessDate: Date; reason: string }>;
 type AdvanceAllocationInput = { allocations: Array<{ vaultId: string; amount: Prisma.Decimal; paymentMethod?: FinanceVaultPaymentMethod }> };
-type AdvanceListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdvanceStatus; cursor?: string; pageSize: number }>;
+type AdvanceListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdvanceStatus; search?: string; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrAdvanceService {
@@ -40,18 +40,29 @@ export class HrAdvanceService {
 
   async list(context: TrustedCompanyActorContext, query: AdvanceListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const advanceScope: Prisma.HrEmployeeAdvanceWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.employeeId ? { employeeId: query.employeeId } : {}), ...(query.status ? { status: query.status } : {}) };
+      const matchingStatuses = query.search ? enumMatches(HrEmployeeAdvanceStatus, query.search) : [];
+      const advanceScope: Prisma.HrEmployeeAdvanceWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [
+          { advanceNumber: { contains: query.search, mode: 'insensitive' } },
+          { notes: { contains: query.search, mode: 'insensitive' } },
+          { employee: { employeeNumber: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameAr: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameEn: { contains: query.search, mode: 'insensitive' } } },
+          ...(matchingStatuses.length > 0 ? [{ status: { in: matchingStatuses } }] : []),
+        ] } : {}),
+      };
       const cursor = query.cursor ? await tx.hrEmployeeAdvance.findFirst({ where: { id: query.cursor, ...advanceScope }, select: { id: true, businessDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-advance cursor is invalid.');
       const rows = await tx.hrEmployeeAdvance.findMany({
-        where: {
-          ...advanceScope,
-          ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
-        },
+        where: cursor ? { AND: [advanceScope, { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] }] } : advanceScope,
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
         take: query.pageSize + 1,
         include: {
-          employee: { select: { id: true, nameAr: true, nameEn: true } },
+          employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } },
           allocations: { include: { vault: { select: { id: true, nameAr: true, nameEn: true } } }, orderBy: { createdAt: 'asc' } },
         },
       });
@@ -344,5 +355,6 @@ function normalizeDeferral(value: AdvanceDeferralInput) { return { advanceId: va
 function decimal(value: string, message: string) { try { const amount = new Prisma.Decimal(value); if (!amount.isFinite() || amount.decimalPlaces()! > 4) throw new Error(); return amount; } catch { throw new BadRequestException(message); } }
 function day(value: Date) { return value.toISOString().slice(0, 10) as `${number}-${number}-${number}`; }
 function tomorrow() { return new Date(Date.now() + 86_400_000); }
+function enumMatches<T extends string>(values: Record<string, T>, search: string): T[] { const needle = search.trim().toUpperCase().replaceAll(' ', '_'); return Object.values(values).filter((value) => value.includes(needle)); }
 function jsonPayload(value: unknown): never { return JSON.parse(JSON.stringify(value)) as never; }
 function rethrowIdempotency(error: unknown): never { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different advance data.'); throw error; }

@@ -187,12 +187,23 @@ export class HrFinalSettlementService {
     });
   }
 
-  async list(context: TrustedCompanyActorContext, query: { cursor?: string; pageSize: number; employeeId?: string; status?: HrFinalSettlementStatus }) {
+  async list(context: TrustedCompanyActorContext, query: { cursor?: string; pageSize: number; employeeId?: string; status?: HrFinalSettlementStatus; search?: string }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const scope = { tenantId: context.tenantId, companyId: context.companyId, ...(query.employeeId ? { employeeId: query.employeeId } : {}), ...(query.status ? { status: query.status } : {}) };
+      const scope: Prisma.HrFinalSettlementWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [
+          { settlementNumber: { contains: query.search, mode: 'insensitive' } },
+          { employee: { employeeNumber: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameAr: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameEn: { contains: query.search, mode: 'insensitive' } } },
+        ] } : {}),
+      };
       const cursor = query.cursor ? await tx.hrFinalSettlement.findFirst({ where: { id: query.cursor, ...scope }, select: { id: true, createdAt: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The final-settlement cursor is invalid for this company and filter.');
-      const rows = await tx.hrFinalSettlement.findMany({ where: { ...scope, ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}) }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: query.pageSize + 1 });
+      const rows = await tx.hrFinalSettlement.findMany({ where: cursor ? { AND: [scope, { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] }] } : scope, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: query.pageSize + 1 });
       const hasMore = rows.length > query.pageSize; const settlements = hasMore ? rows.slice(0, query.pageSize) : rows;
       return { settlements: settlements.map(map), hasMore, nextCursor: hasMore ? settlements.at(-1)?.id ?? null : null };
     });

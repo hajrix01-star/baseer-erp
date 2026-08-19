@@ -209,6 +209,7 @@ export class HrController {
       ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}),
       ...(parsed.data.serviceType ? { serviceType: parsed.data.serviceType } : {}),
       ...(parsed.data.complianceStatus ? { complianceStatus: parsed.data.complianceStatus } : {}),
+      ...(parsed.data.search ? { search: parsed.data.search } : {}),
       ...(parsed.data.expiryBefore ? { expiryBefore: parsed.data.expiryBefore } : {}),
       ...(parsed.data.expiryAfter ? { expiryAfter: parsed.data.expiryAfter } : {}),
       ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
@@ -257,7 +258,7 @@ export class HrController {
     const parsed = hrEmployeeAdvancesQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-advance query.');
     const context = await this.authorize(authorization, companyId, 'hr.advances.read');
-    return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('advances/:advanceId')
@@ -311,7 +312,7 @@ export class HrController {
     const parsed = hrEmployeeAdministrativeDeductionsQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction query.');
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
-    return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('deductions/:deductionId')
@@ -401,7 +402,7 @@ export class HrController {
     const parsed = hrPayrollRunsQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid payroll-run query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
-    return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('payroll-runs/:payrollRunId')
@@ -501,7 +502,7 @@ export class HrController {
     const parsed = hrEmployeeLeavesQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-leave query.');
     const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
-    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.leaveType ? { leaveType: parsed.data.leaveType } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.leaveType ? { leaveType: parsed.data.leaveType } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Post('leaves')

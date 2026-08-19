@@ -73,7 +73,7 @@ type EmployeeOnboardingInput = Omit<OnboardHrEmployeeRequest, 'idempotencyKey'>;
 type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
 type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
-type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; cursor?: string; pageSize: number }>;
+type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; search?: string; cursor?: string; pageSize: number }>;
 type PayrollRunDetailQuery = Readonly<{ lineCursor?: string; linePageSize: number; paymentCursor?: string; paymentPageSize: number }>;
 type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type PayrollCalculationPeriod = Readonly<{ calculationPeriodStart: Date; calculationPeriodEnd: Date; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: Prisma.Decimal; eligibilityCode: HrPayrollLineEligibilityCode; formulaCode: HrPayrollCalculationFormulaCode }>;
@@ -278,20 +278,44 @@ export class HrPayrollService {
 
   async list(context: TrustedCompanyActorContext, query: PayrollRunListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const runScope: Prisma.HrPayrollRunWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.status ? { status: query.status } : {}) };
+      const matchingStatuses = query.search ? enumMatches(HrPayrollRunStatus, query.search) : [];
+      const runScope: Prisma.HrPayrollRunWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [
+          { runNumber: { contains: query.search, mode: 'insensitive' } },
+          ...(matchingStatuses.length > 0 ? [{ status: { in: matchingStatuses } }] : []),
+        ] } : {}),
+      };
       const cursor = query.cursor ? await tx.hrPayrollRun.findFirst({ where: { id: query.cursor, ...runScope }, select: { id: true, payrollMonth: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The payroll-run cursor is invalid.');
-      const rows = await tx.hrPayrollRun.findMany({
-        where: {
-          ...runScope,
-          ...(cursor ? { OR: [{ payrollMonth: { lt: cursor.payrollMonth } }, { payrollMonth: cursor.payrollMonth, id: { lt: cursor.id } }] } : {}),
-        },
-        orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }],
-        take: query.pageSize + 1,
-      });
+      const [rows, aggregate] = await Promise.all([
+        tx.hrPayrollRun.findMany({
+          where: cursor ? { AND: [runScope, { OR: [{ payrollMonth: { lt: cursor.payrollMonth } }, { payrollMonth: cursor.payrollMonth, id: { lt: cursor.id } }] }] } : runScope,
+          orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }],
+          take: query.pageSize + 1,
+        }),
+        tx.hrPayrollRun.aggregate({
+          where: runScope,
+          _count: true,
+          _sum: { grossAmount: true, advanceSettlementAmount: true, administrativeDeductionAmount: true, netPayableAmount: true },
+        }),
+      ]);
       const hasMore = rows.length > query.pageSize;
       const runs = hasMore ? rows.slice(0, query.pageSize) : rows;
-      return { payrollRuns: runs.map(mapRun), hasMore, nextCursor: hasMore ? runs.at(-1)?.id ?? null : null };
+      return {
+        payrollRuns: runs.map(mapRun),
+        hasMore,
+        nextCursor: hasMore ? runs.at(-1)?.id ?? null : null,
+        summary: {
+          count: aggregate._count,
+          grossAmount: aggregate._sum.grossAmount?.toFixed(4) ?? '0.0000',
+          advanceSettlementAmount: aggregate._sum.advanceSettlementAmount?.toFixed(4) ?? '0.0000',
+          administrativeDeductionAmount: aggregate._sum.administrativeDeductionAmount?.toFixed(4) ?? '0.0000',
+          netPayableAmount: aggregate._sum.netPayableAmount?.toFixed(4) ?? '0.0000',
+        },
+      };
     });
   }
 
@@ -1064,4 +1088,5 @@ function minPeriodStart(periods: ReadonlyMap<string, PayrollCalculationPeriod>, 
 function maxPeriodEnd(periods: ReadonlyMap<string, PayrollCalculationPeriod>, employeeIds: readonly string[]) { return employeeIds.map((id) => periods.get(id)!.calculationPeriodEnd).reduce((maximum, value) => value > maximum ? value : maximum); }
 function previousDay(value: Date) { return new Date(value.getTime() - 24 * 60 * 60 * 1_000); }
 function tomorrow() { return new Date(Date.now() + 24 * 60 * 60 * 1_000); }
+function enumMatches<T extends string>(values: Record<string, T>, search: string): T[] { const needle = search.trim().toUpperCase().replaceAll(' ', '_'); return Object.values(values).filter((value) => value.includes(needle)); }
 function mapRun(run: { id: string; runNumber: string; payrollMonth: Date; businessDate: Date; status: HrPayrollRunStatus; employeeCount: number; grossAmount: Prisma.Decimal; advanceSettlementAmount: Prisma.Decimal; administrativeDeductionAmount: Prisma.Decimal; netPayableAmount: Prisma.Decimal; paidAmount: Prisma.Decimal; notes: string | null; accrualJournalEntryId: string | null }) { return { id: run.id, runNumber: run.runNumber, payrollMonth: ymd(run.payrollMonth), businessDate: ymd(run.businessDate), status: run.status, employeeCount: run.employeeCount, grossAmount: fixed(run.grossAmount), advanceSettlementAmount: fixed(run.advanceSettlementAmount), administrativeDeductionAmount: fixed(run.administrativeDeductionAmount), netPayableAmount: fixed(run.netPayableAmount), paidAmount: fixed(run.paidAmount), notes: run.notes, accrualJournalEntryId: run.accrualJournalEntryId }; }

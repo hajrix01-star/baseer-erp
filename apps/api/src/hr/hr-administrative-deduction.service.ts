@@ -14,7 +14,7 @@ import { hrReplayReceipt } from './hr-idempotency.util.js';
 type CreateInput = Omit<CreateHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type DeferInput = Omit<DeferHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type CancelInput = Omit<CancelHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
-type DeductionListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdministrativeDeductionStatus; cursor?: string; pageSize: number }>;
+type DeductionListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdministrativeDeductionStatus; search?: string; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrAdministrativeDeductionService {
@@ -27,17 +27,28 @@ export class HrAdministrativeDeductionService {
 
   async list(context: TrustedCompanyActorContext, query: DeductionListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const deductionScope: Prisma.HrEmployeeAdministrativeDeductionWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.employeeId ? { employeeId: query.employeeId } : {}), ...(query.status ? { status: query.status } : {}) };
+      const matchingStatuses = query.search ? enumMatches(HrEmployeeAdministrativeDeductionStatus, query.search) : [];
+      const deductionScope: Prisma.HrEmployeeAdministrativeDeductionWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [
+          { deductionNumber: { contains: query.search, mode: 'insensitive' } },
+          { description: { contains: query.search, mode: 'insensitive' } },
+          { employee: { employeeNumber: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameAr: { contains: query.search, mode: 'insensitive' } } },
+          { employee: { nameEn: { contains: query.search, mode: 'insensitive' } } },
+          ...(matchingStatuses.length > 0 ? [{ status: { in: matchingStatuses } }] : []),
+        ] } : {}),
+      };
       const cursor = query.cursor ? await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: query.cursor, ...deductionScope }, select: { id: true, businessDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The administrative-deduction cursor is invalid.');
       const rows = await tx.hrEmployeeAdministrativeDeduction.findMany({
-        where: {
-          ...deductionScope,
-          ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
-        },
+        where: cursor ? { AND: [deductionScope, { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] }] } : deductionScope,
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
         take: query.pageSize + 1,
-        include: { employee: { select: { id: true, nameAr: true, nameEn: true } } },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } } },
       });
       const hasMore = rows.length > query.pageSize;
       const deductions = hasMore ? rows.slice(0, query.pageSize) : rows;
@@ -155,6 +166,7 @@ function normalizeCancel(value: CancelInput) { return { deductionId: value.deduc
 function decimal(value: string) { try { const amount = new Prisma.Decimal(value); if (!amount.isFinite() || amount.lte(0) || amount.decimalPlaces()! > 4) throw new Error(); return amount; } catch { throw new BadRequestException('The administrative-deduction amount is invalid.'); } }
 function day(value: Date) { return value.toISOString().slice(0, 10) as `${number}-${number}-${number}`; }
 function tomorrow() { return new Date(Date.now() + 86_400_000); }
+function enumMatches<T extends string>(values: Record<string, T>, search: string): T[] { const needle = search.trim().toUpperCase().replaceAll(' ', '_'); return Object.values(values).filter((value) => value.includes(needle)); }
 function jsonPayload(value: unknown): never { return JSON.parse(JSON.stringify(value)) as never; }
 function rethrowIdempotency(error: unknown): never { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different administrative-deduction data.'); throw error; }
 function mapDeduction(value: { id: string; employeeId: string; employeeNameAr?: string; employeeNameEn?: string | null; deductionNumber: string; businessDate: Date; originalAmount: Prisma.Decimal; appliedAmount: Prisma.Decimal; remainingAmount: Prisma.Decimal; status: HrEmployeeAdministrativeDeductionStatus; plannedPayrollDate: Date | null; description: string; cancellationReason: string | null }) { return { id: value.id, employeeId: value.employeeId, employeeNameAr: value.employeeNameAr ?? '', employeeNameEn: value.employeeNameEn ?? null, deductionNumber: value.deductionNumber, businessDate: day(value.businessDate), originalAmount: value.originalAmount.toFixed(4), appliedAmount: value.appliedAmount.toFixed(4), remainingAmount: value.remainingAmount.toFixed(4), status: value.status, plannedPayrollDate: value.plannedPayrollDate ? day(value.plannedPayrollDate) : null, description: value.description, cancellationReason: value.cancellationReason }; }

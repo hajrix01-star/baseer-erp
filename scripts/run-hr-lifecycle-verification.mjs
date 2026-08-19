@@ -186,6 +186,10 @@ try {
   assert.match(String(advanceReversalResults[1 - successfulAdvanceReversal].reason?.message), /already been reversed/);
   const advanceReversalActor = successfulAdvanceReversal === 0 ? approver : payer;
   assert.equal((await advances.reverseIssue(advanceReversalActor, { advanceId: reversibleAdvance.id, businessDate: monthStart, reason: 'Concurrent advance issue reversal' }, advanceReversalKeys[successfulAdvanceReversal])).replayed, true, 'Advance issue reversal replay must be explicit.');
+  const advanceNoteSearch = await advances.list(creator, { search: 'issue reversal verification', pageSize: 1 });
+  assert.deepEqual(advanceNoteSearch.advances.map((item) => item.id), [reversibleAdvance.id], 'Advance search must run against notes in the full register.');
+  const reversedAdvanceSearch = await advances.list(creator, { search: 'reversed', pageSize: 10 });
+  assert.ok(reversedAdvanceSearch.advances.some((item) => item.id === reversibleAdvance.id), 'Advance search must match status text.');
 
   const uncostedService = await hr.createService(creator, {
     employeeId: payrollEmployee.id,
@@ -249,6 +253,8 @@ try {
   const deferredDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: monthStart, amount: '15.0000', description: 'Deferred payroll deduction' }, randomUUID());
   await deductions.defer(creator, { deductionId: deferredDeduction.id, businessDate: monthStart, deferredUntil: today, reason: 'Collect no earlier than the current business date' }, randomUUID());
   const laterDatedDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: today, amount: '10.0000', description: 'Later-dated payroll deduction' }, randomUUID());
+  const deductionDescriptionSearch = await deductions.list(creator, { search: 'Later-dated payroll deduction', pageSize: 1 });
+  assert.deepEqual(deductionDescriptionSearch.deductions.map((item) => item.id), [laterDatedDeduction.id], 'Administrative-deduction search must run against descriptions in the full register.');
   const unavailablePayrollLine = { employeeId: payrollEmployee.id, advances: [{ id: deferredAdvance.id, amount: '10.0000' }], administrativeDeductions: [{ id: deferredDeduction.id, amount: '5.0000' }, { id: laterDatedDeduction.id, amount: '5.0000' }] };
   await assert.rejects(
     () => payroll.preview(creator, { payrollMonth: monthStart, businessDate: monthStart, includeOnLeaveEmployeeIds: [], lines: [unavailablePayrollLine], pageSize: 50 }),
