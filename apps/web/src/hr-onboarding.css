@@ -37,7 +37,8 @@
 .hr-onboarding__section > header > span { inline-size: 2rem; block-size: 2rem; background: color-mix(in srgb, var(--brand) 13%, var(--surface)); }
 .hr-onboarding__section h3 { font-size: 1rem; }
 .hr-onboarding__grid { gap: 1rem 1.15rem; }
-.hr-onboarding__compensation-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(10rem, .75fr); gap: 1rem; align-items: start; }
+.hr-onboarding-dialog .hr-onboarding__compensation-layout { display: grid !important; grid-template-columns: minmax(0, 1.25fr) minmax(10rem, .75fr) !important; gap: 1rem; align-items: start; }
+.hr-onboarding__compensation-layout > * { min-inline-size: 0; }
 .hr-onboarding__compensation-layout .hr-onboarding__grid { display: grid; grid-template-columns: 1fr; }
 .hr-onboarding__result { position: sticky; top: .25rem; display: grid; gap: .85rem; padding: 1rem; border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line)); border-radius: .85rem; background: linear-gradient(145deg, color-mix(in srgb, var(--brand) 8%, var(--surface)), var(--surface)); }
 .hr-onboarding__result > header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding-bottom: .75rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent); }
@@ -75,10 +76,5 @@
   .hr-onboarding-dialog .daily-sales-dialog__actions { min-block-size: 4.25rem; padding: .75rem 1rem; }
   .hr-onboarding-dialog .daily-sales-dialog__actions .baseer-button { flex: 1; }
   .hr-onboarding__section { padding: .9rem; }
-  .hr-onboarding__compensation-layout { grid-template-columns: 1fr; }
   .hr-onboarding__result { position: static; }
-}
-@media (min-width: 481px) and (max-width: 640px) {
-  .hr-onboarding__compensation-layout { grid-template-columns: minmax(0, 1.25fr) minmax(10rem, .75fr); }
-  .hr-onboarding__result { position: sticky; }
 }
