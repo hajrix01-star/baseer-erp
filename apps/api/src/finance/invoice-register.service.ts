@@ -46,6 +46,68 @@ export class InvoiceRegisterService {
       };
     });
   }
+
+  /**
+   * Loads one movement only when the user opens its file. The register page
+   * deliberately stays small; journal lines, allocations and batch context do
+   * not belong in every row of a potentially large history.
+   */
+  async detail(context: TrustedCompanyActorContext, journalEntryId: string) {
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const entry = await tx.financeJournalEntry.findFirst({
+      where: {
+        id: journalEntryId,
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        sourceType: { not: "vault_transfer" },
+      },
+        select: detailEntrySelect,
+      });
+      if (!entry) throw new BadRequestException("The financial movement is not available for this company.");
+      const outflow = entry.outflowDocument;
+      const sourceDetail = {
+        supplierInvoiceNumber: outflow?.supplierInvoiceNumber ?? null,
+        supplierInvoiceMissingReason: outflow?.supplierInvoiceMissingReason ?? null,
+        coverageLabel: outflow?.recurringExpenseProfileId && outflow.coverageYear && outflow.coverageStartMonth
+          ? `${outflow.coverageYear}-${String(outflow.coverageStartMonth).padStart(2, "0")}${outflow.coverageMonths && outflow.coverageMonths > 1 ? ` +${outflow.coverageMonths - 1}` : ""}`
+          : null,
+      };
+      return {
+        movement: mapEntry(entry),
+        journal: {
+          id: entry.id,
+          sourceType: entry.sourceType,
+          sourceReference: entry.sourceReference,
+          businessDate: dateValue(entry.businessDate),
+          description: entry.description,
+          status: entry.status,
+          postedAt: entry.postedAt,
+          reversalOfEntryId: entry.reversalOfEntryId,
+          reversalEntryId: entry.reversalEntry?.id ?? null,
+          lines: entry.lines.map((line) => ({
+            id: line.id,
+            lineNumber: line.lineNumber,
+            accountCode: line.account.code,
+            accountNameAr: line.account.nameAr,
+            accountNameEn: line.account.nameEn,
+            debitAmount: line.debitAmount.toFixed(4),
+            creditAmount: line.creditAmount.toFixed(4),
+            description: line.description,
+          })),
+        },
+        allocations: detailAllocations(entry),
+        batch: outflow?.batch ? {
+          batchNumber: outflow.batch.batchNumber,
+          documentCount: outflow.batch.documentCount,
+          grossAmount: outflow.batch.grossAmount.toFixed(4),
+          netAmount: outflow.batch.netAmount.toFixed(4),
+          vatAmount: outflow.batch.vatAmount.toFixed(4),
+          notes: outflow.batch.notes,
+        } : null,
+        sourceDetail,
+      };
+    });
+  }
 }
 
 const entrySelect = {
@@ -56,6 +118,23 @@ const entrySelect = {
   supplierDuePayment: { select: { id: true, amount: true, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
   inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
   inclusiveLoanPayment: { select: { id: true, amount: true, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
+} satisfies Prisma.FinanceJournalEntrySelect;
+
+const detailEntrySelect = {
+  id: true, sourceType: true, sourceReference: true, businessDate: true, description: true, status: true, postedAt: true, reversalOfEntryId: true,
+  reversalEntry: { select: { id: true } },
+  lines: { orderBy: { lineNumber: "asc" }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
+  outflowDocument: { select: {
+    id: true, documentNumber: true, kind: true, settlementKind: true, status: true, supplierInvoiceDate: true, supplierInvoiceNumber: true, supplierInvoiceMissingReason: true,
+    grossAmount: true, netAmount: true, vatAmount: true, notes: true, recurringExpenseProfileId: true, coverageYear: true, coverageStartMonth: true, coverageMonths: true,
+    batch: { select: { batchNumber: true, documentCount: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true } },
+    supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } },
+    allocations: { select: { vaultId: true, grossAmount: true, paymentMethod: true, vault: { select: { nameAr: true, nameEn: true } } } },
+  } },
+  dailySalesClosing: { select: { id: true, documentNumber: true, status: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true, allocations: { select: { vaultId: true, grossAmount: true, vault: { select: { nameAr: true, nameEn: true } } } } } },
+  supplierDuePayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
+  inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
+  inclusiveLoanPayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 
 function registerPredicate(context: TrustedCompanyActorContext, query: Query, cursor: CursorRow | null) {
@@ -97,3 +176,11 @@ function mapEntry(entry: any) {
 }
 function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null) { return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: entry.sourceReference, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, settlementKind: null, status: "POSTED" as const, supplier: null, category: null, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
+
+function detailAllocations(entry: any) {
+  if (entry.outflowDocument?.allocations?.length) return entry.outflowDocument.allocations.map((allocation: any) => ({ vaultId: allocation.vaultId, vaultNameAr: allocation.vault.nameAr, vaultNameEn: allocation.vault.nameEn, paymentMethod: allocation.paymentMethod, grossAmount: allocation.grossAmount.toFixed(4) }));
+  if (entry.dailySalesClosing?.allocations?.length) return entry.dailySalesClosing.allocations.map((allocation: any) => ({ vaultId: allocation.vaultId, vaultNameAr: allocation.vault.nameAr, vaultNameEn: allocation.vault.nameEn, paymentMethod: "SALES_COLLECTION", grossAmount: allocation.grossAmount.toFixed(4) }));
+  if (entry.supplierDuePayment) return [{ vaultId: entry.supplierDuePayment.vaultId, vaultNameAr: entry.supplierDuePayment.vault.nameAr, vaultNameEn: entry.supplierDuePayment.vault.nameEn, paymentMethod: "PAYABLE_PAYMENT", grossAmount: entry.supplierDuePayment.amount.toFixed(4) }];
+  if (entry.inclusiveLoanPayment) return [{ vaultId: entry.inclusiveLoanPayment.vaultId, vaultNameAr: entry.inclusiveLoanPayment.vault.nameAr, vaultNameEn: entry.inclusiveLoanPayment.vault.nameEn, paymentMethod: "LOAN_REPAYMENT", grossAmount: entry.inclusiveLoanPayment.amount.toFixed(4) }];
+  return [];
+}

@@ -1,5 +1,5 @@
-import { BadRequestException, Controller, ForbiddenException, Get, Headers, Query, UnauthorizedException } from "@nestjs/common";
-import { companyIdSchema, financeInvoiceRegisterQuerySchema, financeInvoiceRegisterReceiptSchema } from "@baseer-erp/contracts";
+import { BadRequestException, Controller, ForbiddenException, Get, Headers, Param, Query, UnauthorizedException } from "@nestjs/common";
+import { companyIdSchema, financeInvoiceRegisterDetailSchema, financeInvoiceRegisterQuerySchema, financeInvoiceRegisterReceiptSchema } from "@baseer-erp/contracts";
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { InvoiceRegisterService } from "./invoice-register.service.js";
 
@@ -17,6 +17,13 @@ export class InvoiceRegisterController {
     const categoryIds = parsed.data.categoryIds?.split(",") ?? [];
     const statuses = parsed.data.statuses?.split(",") as ("POSTED" | "CANCELLED")[] | undefined;
     return financeInvoiceRegisterReceiptSchema.parse(await this.register.workspace(context, { ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}), ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}), businessMonths: months, kinds: kinds ?? [], supplierIds, categoryIds, statuses: statuses ?? [], ...(parsed.data.q ? { q: parsed.data.q } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), pageSize: parsed.data.pageSize }));
+  }
+
+  @Get(":journalEntryId")
+  async detail(@Query() _query: unknown, @Headers("authorization") authorization: string | undefined, @Headers("x-baseer-company-id") companyId: string | undefined, @Param("journalEntryId") journalEntryId: string) {
+    if (!companyIdSchema.safeParse(journalEntryId).success) throw new BadRequestException("Invalid financial movement.");
+    const context = await this.authorize(authorization, companyId);
+    return financeInvoiceRegisterDetailSchema.parse(await this.register.detail(context, journalEntryId));
   }
   private async authorize(authorization: string | undefined, companyId: string | undefined) {
     const token = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1]; if (!token) throw new UnauthorizedException("Invalid authentication credentials.");
