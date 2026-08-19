@@ -37,6 +37,12 @@
 .hr-onboarding__section { gap: .65rem; padding: .8rem .85rem .85rem; border-color: color-mix(in srgb, var(--line) 82%, var(--brand)); border-radius: .85rem; background: var(--surface); box-shadow: 0 1px 0 rgb(10 36 22 / 3%); }
 .hr-onboarding__section > header { align-items: center; padding-bottom: .6rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent); }
 .hr-onboarding__section > header > span { inline-size: 2rem; block-size: 2rem; background: color-mix(in srgb, var(--brand) 13%, var(--surface)); }
+.hr-onboarding__avatar-picker { position: relative; display: grid; flex: 0 0 auto; inline-size: 3rem; block-size: 3rem; margin-inline-start: auto; place-items: center; overflow: visible; border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--line)); border-radius: 999px; background: color-mix(in srgb, var(--brand) 8%, var(--surface)); cursor: pointer; }
+.hr-onboarding__avatar-picker input { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; pointer-events: none; }
+.hr-onboarding__avatar-picker > img { inline-size: 100%; block-size: 100%; border-radius: inherit; object-fit: cover; }
+.hr-onboarding__avatar-picker > span::before { content: ""; display: block; inline-size: .75rem; block-size: .75rem; margin: 0 auto .18rem; border-radius: 999px; background: color-mix(in srgb, var(--brand-deep) 68%, transparent); }
+.hr-onboarding__avatar-picker > span::after { content: ""; display: block; inline-size: 1.35rem; block-size: .72rem; border-radius: .8rem .8rem .45rem .45rem; background: color-mix(in srgb, var(--brand-deep) 68%, transparent); }
+.hr-onboarding__avatar-picker > b { position: absolute; inset-inline-end: -.15rem; inset-block-end: -.1rem; display: grid; inline-size: 1.15rem; block-size: 1.15rem; place-items: center; border: 2px solid var(--surface); border-radius: 999px; color: #fff; background: var(--brand); font-size: .85rem; line-height: 1; }
 .hr-onboarding__section h3 { font-size: 1rem; }
 .hr-onboarding__grid { gap: .55rem .65rem; }
 .hr-onboarding__result { position: sticky; top: .25rem; display: grid; gap: .6rem; padding: .75rem; border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line)); border-radius: .85rem; background: linear-gradient(145deg, color-mix(in srgb, var(--brand) 9%, var(--surface)), var(--surface)); box-shadow: 0 .65rem 1.5rem rgb(12 37 24 / 6%); }
@@ -52,7 +58,8 @@
 .hr-onboarding__summary-divider { block-size: 1px; background: color-mix(in srgb, var(--line) 80%, transparent); }
 .hr-onboarding__result-heading { display: grid; gap: .2rem; }
 .hr-onboarding__result-heading > span { color: var(--brand-deep); font-size: var(--font-label); font-weight: 850; }
-.hr-onboarding label { gap: .25rem; }
+.hr-onboarding label { position: relative; gap: .25rem; }
+.hr-onboarding label > em { position: absolute; inset-block-start: 0; inset-inline-start: 0; color: var(--danger); font-style: normal; line-height: 1; }
 .hr-onboarding input,
 .hr-onboarding textarea {
   min-block-size: 2.4rem;
@@ -70,13 +77,10 @@
 .hr-onboarding textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 19%, transparent); outline-offset: 1px; border-color: var(--brand); }
 .hr-onboarding input[type="date"],
 .hr-onboarding input[type="month"] { direction: ltr; text-align: start; }
-.hr-onboarding .hr-job-title-select { gap: .2rem; }
+.hr-onboarding .hr-job-title-select { position: relative; gap: 0; }
 .hr-onboarding .hr-job-title-select__input,
 .hr-onboarding .hr-job-title-select__custom input { min-block-size: 2.4rem; padding: .45rem .65rem; }
-.hr-onboarding .hr-job-title-select__custom-link { font-size: .68rem; line-height: 1.1; }
-.hr-onboarding__photo-field input[type="file"] { max-inline-size: 100%; min-block-size: 2.4rem; padding: .2rem .3rem; cursor: pointer; font-size: .72rem; }
-.hr-onboarding__photo-field input[type="file"]::file-selector-button { margin-inline-end: .4rem; padding: .25rem .45rem; border: 1px solid var(--line); border-radius: .4rem; color: var(--ink); background: var(--canvas); font: inherit; }
-.hr-onboarding__photo-field small { color: var(--muted); font-size: .68rem; font-weight: 600; }
+.hr-onboarding .hr-job-title-select__custom-link { position: absolute; z-index: 1; inset-inline-start: .5rem; inset-block-start: .68rem; padding-inline-start: .35rem; border-inline-start: 1px solid var(--line); color: var(--brand-deep); background: var(--surface); font-size: .66rem; line-height: 1; }
 .hr-onboarding__total { min-block-size: 5.1rem; border-radius: .8rem; }
 .hr-onboarding__calculation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .hr-onboarding__calculation .hr-onboarding__total { min-block-size: 4.75rem; padding: .75rem; }
