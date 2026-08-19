@@ -18,6 +18,7 @@ type Tab = "salary" | "documents";
 const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import("./hr-compensation-agreement-dialog")).HrCompensationAgreementDialog }));
 const HrEmployeeLettersPanel = lazy(async () => ({ default: (await import("./hr-employee-letters-panel")).HrEmployeeLettersPanel }));
 const money = (value: number) => formatNumber(value);
+const STANDARD_MONTHLY_HOURS = 208;
 const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "", housingAllowance: "", transportAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 
@@ -51,6 +52,12 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
   }, [ar, language, selectedEmployeeId]);
 
   const calculation = useMemo(() => calculateSalaryTool(draft), [draft]);
+  const hourlyRates = useMemo(() => {
+    if (!calculation.valid) return null;
+    const actual = (calculation.basicSalary + calculation.fixedAllowances) / STANDARD_MONTHLY_HOURS;
+    const basic = calculation.basicSalary / STANDARD_MONTHLY_HOURS;
+    return { actual, basic, overtime: actual + basic * 0.5 };
+  }, [calculation]);
   const setField = <Key extends keyof SalaryToolInput>(key: Key, value: SalaryToolInput[Key]) => setDraft((current) => ({ ...current, [key]: value }));
   const errorMessage = calculation.error === "ALLOWANCES_EXCEED_GROSS"
     ? (ar ? "الإجمالي المتفق عليه يجب أن يكون أكبر من البدلات الثابتة." : "The agreed total must exceed fixed allowances.")
@@ -76,7 +83,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
           <label className="hr-salary-tools__allowance">{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<BaseerMoneyInput value={draft.otherAllowance} onValueChange={(otherAllowance) => setField("otherAllowance", otherAllowance)} /></label>
           {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
         </div></section>
-        <aside className="hr-salary-tools__result" aria-live="polite"><header><h3>{ar ? "تفصيل الراتب" : "Salary breakdown"}</h3><p>{ar ? "معاينة حسابية فورية" : "Live calculation preview"}</p></header>{calculation.valid ? <><dl><div><dt>{ar ? "الراتب الأساسي" : "Basic salary"}</dt><dd dir="ltr">{money(calculation.basicSalary)} SAR</dd></div><div><dt>{ar ? "البدلات الثابتة" : "Fixed allowances"}</dt><dd dir="ltr">{money(calculation.fixedAllowances)} SAR</dd></div><div><dt>{ar ? "مكوّن الأوفر تايم" : "Overtime component"}</dt><dd dir="ltr">{money(calculation.overtimeAmount)} SAR</dd></div><div><dt>{ar ? "ساعات الأوفر تايم" : "Overtime hours"}</dt><dd dir="ltr">{formatNumber(calculation.overtimeHours)}</dd></div><div className="hr-salary-tools__result-total"><dt>{ar ? "الإجمالي الشهري" : "Monthly total"}</dt><dd dir="ltr">{money(calculation.monthlyGross)} <small>SAR</small></dd></div></dl></> : <p className="hr-salary-tools__result-empty">{ar ? "أدخل إجمالي الراتب لعرض التفصيل." : "Enter the monthly salary to view the breakdown."}</p>}<p className="hr-salary-tools__boundary">{ar ? "الأوفر تايم هنا تقديري وفق جدول الراتب فقط، وليس سجل حضور فعلي." : "Overtime here is a salary-schedule estimate, not actual attendance."}</p></aside>
+        <aside className="hr-salary-tools__result" aria-live="polite"><header><h3>{ar ? "تفصيل الراتب" : "Salary breakdown"}</h3><p>{ar ? "معاينة حسابية فورية" : "Live calculation preview"}</p></header>{calculation.valid ? <><dl><div><dt>{ar ? "الراتب الأساسي" : "Basic salary"}</dt><dd dir="ltr">{money(calculation.basicSalary)} SAR</dd></div><div><dt>{ar ? "البدلات الثابتة" : "Fixed allowances"}</dt><dd dir="ltr">{money(calculation.fixedAllowances)} SAR</dd></div><div><dt>{ar ? "مكوّن الأوفر تايم" : "Overtime component"}</dt><dd dir="ltr">{money(calculation.overtimeAmount)} SAR</dd></div><div><dt>{ar ? "ساعات الأوفر تايم" : "Overtime hours"}</dt><dd dir="ltr">{formatNumber(calculation.overtimeHours)}</dd></div><div className="hr-salary-tools__result-total"><dt>{ar ? "الإجمالي الشهري" : "Monthly total"}</dt><dd dir="ltr">{money(calculation.monthlyGross)} <small>SAR</small></dd></div></dl><section className="hr-salary-tools__hourly-rates"><h4>{ar ? "أجر الساعة (م107)" : "Hourly wage"}</h4><dl><div><dt>{ar ? "أجر الساعة الفعلي (أساسي + بدلات) ÷ 208" : "Actual hourly rate (base + allowances) ÷ 208"}</dt><dd dir="ltr">{money(hourlyRates!.actual)} SAR</dd></div><div><dt>{ar ? "أجر الساعة الأساسي (الأساسي ÷ 208)" : "Basic hourly rate (base ÷ 208)"}</dt><dd dir="ltr">{money(hourlyRates!.basic)} SAR</dd></div><div><dt>{ar ? "أجر ساعة الأوفر تايم (فعلي + 50% أساسي)" : "Overtime hourly rate (actual + 50% base)"}</dt><dd dir="ltr">{money(hourlyRates!.overtime)} SAR</dd></div></dl></section></> : <p className="hr-salary-tools__result-empty">{ar ? "أدخل إجمالي الراتب لعرض التفصيل." : "Enter the monthly salary to view the breakdown."}</p>}<p className="hr-salary-tools__boundary">{ar ? "الأوفر تايم هنا تقديري وفق جدول الراتب فقط، وليس سجل حضور فعلي." : "Overtime here is a salary-schedule estimate, not actual attendance."}</p></aside>
       </section>
       {loadingEmployee ? <BaseerCard>{ar ? "جارٍ تحميل راتب الموظف…" : "Loading employee salary…"}</BaseerCard> : null}
       {errorMessage ? <BaseerCard tone="muted">{errorMessage}</BaseerCard> : null}
