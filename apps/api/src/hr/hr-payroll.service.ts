@@ -45,6 +45,7 @@ type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
 type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; cursor?: string; pageSize: number }>;
+type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrPayrollService {
@@ -111,6 +112,41 @@ export class HrPayrollService {
       const hasMore = rows.length > query.pageSize;
       const runs = hasMore ? rows.slice(0, query.pageSize) : rows;
       return { payrollRuns: runs.map(mapRun), hasMore, nextCursor: hasMore ? runs.at(-1)?.id ?? null : null };
+    });
+  }
+
+  async listForEmployee(context: TrustedCompanyActorContext, employeeId: string, query: EmployeePayrollHistoryQuery) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true } });
+      if (!employee) throw new NotFoundException('The employee is not available for this company.');
+      const cursor = query.cursor ? await tx.hrPayrollLine.findFirst({
+        where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId, employeeId },
+        select: { id: true, payrollRun: { select: { payrollMonth: true } } },
+      }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-payroll cursor is invalid.');
+      const rows = await tx.hrPayrollLine.findMany({
+        where: {
+          tenantId: context.tenantId, companyId: context.companyId, employeeId,
+          ...(cursor ? { OR: [{ payrollRun: { payrollMonth: { lt: cursor.payrollRun.payrollMonth } } }, { payrollRun: { payrollMonth: cursor.payrollRun.payrollMonth }, id: { lt: cursor.id } }] } : {}),
+        },
+        orderBy: [{ payrollRun: { payrollMonth: 'desc' } }, { id: 'desc' }],
+        take: query.pageSize + 1,
+        include: { payrollRun: { select: { id: true, runNumber: true, payrollMonth: true, businessDate: true, status: true } } },
+      });
+      const hasMore = rows.length > query.pageSize;
+      const lines = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return {
+        lines: lines.map((line) => ({
+          id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
+          grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
+          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
+          scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
+          advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount), advances: [], administrativeDeductions: [],
+          payrollRunId: line.payrollRun.id, runNumber: line.payrollRun.runNumber, payrollMonth: ymd(line.payrollRun.payrollMonth), businessDate: ymd(line.payrollRun.businessDate), payrollStatus: line.payrollRun.status,
+        })),
+        hasMore,
+        nextCursor: hasMore ? lines.at(-1)?.id ?? null : null,
+      };
     });
   }
 

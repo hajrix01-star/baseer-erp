@@ -3,17 +3,17 @@ import { BaseerButton } from "./baseer-button";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 import { uiCopy, type BaseerLanguage } from "./baseer-ui-copy";
 
-type Props = { open: boolean; title: string; children: ReactNode; language: BaseerLanguage; busy?: boolean; onClose: () => void; footer?: ReactNode };
+type Props = { open: boolean; title: string; children: ReactNode; language: BaseerLanguage; busy?: boolean; onClose: () => void; footer?: ReactNode; size?: "default" | "wide" };
 
 /** Central modal shell for forms and read-only details. Uses the shared focus trap and close convention. */
-export function BaseerDialog({ open, title, children, language, busy = false, onClose, footer }: Props) {
+export function BaseerDialog({ open, title, children, language, busy = false, onClose, footer, size = "default" }: Props) {
   const copy = uiCopy(language);
   const dialogRef = useDialogFocusTrap({ open, saving: busy, onClose });
   if (!open) return null;
   // Dialog forms share a compact desktop rhythm. The controls keep their normal
   // touch size on small screens through the existing global media rule.
   const dialogStyle = {
-    width: "min(34rem, calc(100vw - 2rem))",
+    width: size === "wide" ? "min(68rem, calc(100vw - 2rem))" : "min(34rem, calc(100vw - 2rem))",
     maxHeight: "calc(100vh - 2rem)",
     padding: "1rem",
     borderRadius: "8px",

@@ -10,6 +10,8 @@ import {
   financeOutflowDocumentReceiptSchema,
   hrEmployeeDetailQuerySchema,
   hrEmployeeDetailReceiptSchema,
+  hrEmployeePayrollHistoryQuerySchema,
+  hrEmployeePayrollHistoryReceiptSchema,
   hrEmployeeAdvanceIssueReceiptSchema,
   hrEmployeeAdvanceSettlementReceiptSchema,
   hrEmployeeAdvanceDeferralReceiptSchema,
@@ -90,6 +92,14 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
     const result = await this.hr.employeeDetail(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) });
     return hrEmployeeDetailReceiptSchema.parse({ companyId: context.companyId, ...result });
+  }
+
+  @Get('employees/:employeeId/payroll')
+  async employeePayrollHistory(@Param('employeeId') employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeePayrollHistoryQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-payroll query.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrEmployeePayrollHistoryReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.listForEmployee(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Post('employees')
