@@ -2035,6 +2035,19 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 }
 /* Workspace contract: operational modules must share rhythm, hierarchy, and responsive behaviour. */
 .baseer-workspace { display: grid; gap: clamp(1rem, 1.6vw, 1.5rem); min-width: 0; padding-block: .25rem 1.25rem; }
+.module-page--hr .baseer-section-header__copy > p,
+.module-page--hr .administration-section-heading > div > p,
+.module-page--hr .baseer-form-section > header > p,
+.module-page--hr .hr-onboarding__section > header p,
+.module-page--hr .hr-overview__quick-actions > div > p,
+.module-page--hr .hr-overview__activity-card > header > div > p,
+.module-page--hr .hr-employment-compensation__section > header > div > p,
+.module-page--hr .hr-payroll-settlements > header > div > p,
+.module-page--hr .hr-salary-tools__inputs > header > p,
+.module-page--hr .hr-salary-tools__result > header > p,
+.module-page--hr .hr-salary-tools__boundary { display: none; }
+.module-page--hr .administration-panel > .baseer-filter-bar { margin-top: .85rem; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .85rem; background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
+.module-page--hr .administration-panel > .baseer-filter-bar .baseer-filter-bar__search { margin-inline-start: auto; }
 .hr-overview { gap: 1rem; }
 .hr-overview__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .hr-overview__metrics > button { display: grid; min-height: 7rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; color: var(--ink); background: var(--surface); box-shadow: 0 8px 24px rgb(11 36 26 / 5%); text-align: start; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
