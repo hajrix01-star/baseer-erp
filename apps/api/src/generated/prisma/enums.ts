@@ -374,6 +374,15 @@ export const HrCompensationMethod = {
 export type HrCompensationMethod = (typeof HrCompensationMethod)[keyof typeof HrCompensationMethod]
 
 
+export const HrPayrollLineEligibilityCode = {
+  FULL_MONTH_V1: 'FULL_MONTH_V1',
+  FULL_MONTH_ON_LEAVE_EXCEPTION_V1: 'FULL_MONTH_ON_LEAVE_EXCEPTION_V1',
+  FULL_MONTH_NEW_HIRE_EXCEPTION_V1: 'FULL_MONTH_NEW_HIRE_EXCEPTION_V1'
+} as const
+
+export type HrPayrollLineEligibilityCode = (typeof HrPayrollLineEligibilityCode)[keyof typeof HrPayrollLineEligibilityCode]
+
+
 export const HrCompensationFormulaCode = {
   STANDARD_MONTHLY_V1: 'STANDARD_MONTHLY_V1'
 } as const

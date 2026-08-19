@@ -9,16 +9,12 @@ import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { DataTable, type DataTableColumn } from "./data-table";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
-import {
-  listHrAdministrativeDeductions, listHrAdvances, listHrEmployees, listHrPayrollRuns,
-  type HrAdministrativeDeduction, type HrAdvance, type HrEmployee, type HrPayrollRun,
-} from "./hr-client";
+import { listHrPayrollRuns, type HrPayrollRun } from "./hr-client";
 
 type Language = "ar" | "en";
 
 const HrPayrollCreateDialog = lazy(async () => ({ default: (await import("./hr-payroll-create-dialog")).HrPayrollCreateDialog }));
 const HrPayrollDetailDialog = lazy(async () => ({ default: (await import("./hr-payroll-detail-dialog")).HrPayrollDetailDialog }));
-const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import("./hr-compensation-agreement-dialog")).HrCompensationAgreementDialog }));
 const HrCompensationPoliciesDialog = lazy(async () => ({ default: (await import("./hr-compensation-policies-dialog")).HrCompensationPoliciesDialog }));
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -30,15 +26,11 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
   const [runs, setRuns] = useState<HrPayrollRun[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [employees, setEmployees] = useState<HrEmployee[]>([]);
-  const [advances, setAdvances] = useState<HrAdvance[]>([]);
-  const [deductions, setDeductions] = useState<HrAdministrativeDeduction[]>([]);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
-  const [salaryOpen, setSalaryOpen] = useState(false);
   const [policiesOpen, setPoliciesOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
 
@@ -46,13 +38,8 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
     const current = activeSession(); setSession(current); if (!current) { setLoading(false); return; }
     if (!append) setLoading(true);
     try {
-      const [payroll, employeeReceipt, advanceReceipt, deductionReceipt] = await Promise.all([
-        listHrPayrollRuns(current, { cursor, pageSize: 50 }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 }), append ? Promise.resolve(null) : listHrAdvances(current, { pageSize: 100 }), append ? Promise.resolve(null) : listHrAdministrativeDeductions(current, { pageSize: 100 }),
-      ]);
+      const payroll = await listHrPayrollRuns(current, { cursor, pageSize: 50 });
       setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
-      if (employeeReceipt) setEmployees(employeeReceipt.employees);
-      if (advanceReceipt) setAdvances(advanceReceipt.advances);
-      if (deductionReceipt) setDeductions(deductionReceipt.deductions);
     } catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
     finally { setLoading(false); }
   }, [ar, language]);
@@ -74,7 +61,7 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
   const totals = visibleRuns.reduce((result, run) => ({ gross: result.gross + Number(run.grossAmount), advances: result.advances + Number(run.advanceSettlementAmount), deductions: result.deductions + Number(run.administrativeDeductionAmount), net: result.net + Number(run.netPayableAmount) }), { gross: 0, advances: 0, deductions: 0, net: 0 });
   if (!session) return null;
   return <section className="administration-panel">
-    <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2><p>{ar ? "مسودة، اعتماد، سداد، وعكس موثق من السجل المحاسبي." : "Draft, approve, pay, and reverse from the accounting record."}</p></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => setSalaryOpen(true)}>{ar ? "اتفاق راتب" : "Compensation agreement"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
+    <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2><p>{ar ? "مسودة، اعتماد، سداد، وعكس موثق من السجل المحاسبي." : "Draft, approve, pay, and reverse from the accounting record."}</p></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
     <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(String(totals.gross))} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(String(totals.advances))} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(String(totals.deductions))} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(String(totals.net))} /></BaseerSummaryMetricGrid>
     <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} />
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : visibleRuns.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={visibleRuns} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
@@ -82,9 +69,8 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
     <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
     {message ? <p className="daily-sales-message error">{message}</p> : null}
 
-    {salaryOpen ? <Suspense fallback={null}><HrCompensationAgreementDialog open={salaryOpen} language={language} employees={employees} onClose={() => setSalaryOpen(false)} onSaved={async () => { setMessage(ar ? "تم حفظ اتفاق الراتب؛ سيظهر في المسير من تاريخ سريانه." : "Compensation agreement saved; it will appear in payroll from its effective date."); await load(); }} onError={setMessage} /></Suspense> : null}
     {policiesOpen ? <Suspense fallback={null}><HrCompensationPoliciesDialog open={policiesOpen} language={language} onClose={() => setPoliciesOpen(false)} onChanged={load} onError={setMessage} /></Suspense> : null}
-    {createOpen ? <Suspense fallback={null}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} employees={employees} advances={advances} deductions={deductions} onError={setMessage} /></Suspense> : null}
+    {createOpen ? <Suspense fallback={null}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} onError={setMessage} /></Suspense> : null}
     {detailId ? <Suspense fallback={null}><HrPayrollDetailDialog runId={detailId} language={language} onClose={() => setDetailId(null)} onChanged={load} onError={setMessage} /></Suspense> : null}
   </section>;
 }

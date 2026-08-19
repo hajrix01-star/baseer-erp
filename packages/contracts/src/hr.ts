@@ -20,6 +20,7 @@ export const hrCompensationFormulaCodeSchema = z.enum(["STANDARD_MONTHLY_V1"]);
 export const hrCompensationPolicyVersionStatusSchema = z.enum(["DRAFT", "APPROVED", "SUPERSEDED"]);
 /** A fixed salary is entered as-is; an inclusive package derives the base and overtime. */
 export const hrCompensationMethodSchema = z.enum(["FIXED_MONTHLY", "INCLUSIVE_OVERTIME"]);
+export const hrPayrollLineEligibilityCodeSchema = z.enum(["FULL_MONTH_V1", "FULL_MONTH_ON_LEAVE_EXCEPTION_V1", "FULL_MONTH_NEW_HIRE_EXCEPTION_V1"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
   "IQAMA_ISSUANCE",
   "IQAMA_RENEWAL",
@@ -247,10 +248,27 @@ export const createHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
   businessDate: hrDateSchema,
   notes: z.string().trim().max(2_000).optional(),
-  /** The standard monthly run always starts from every eligible employee on the server. */
+  /** @deprecated: ACTIVE employees are always server-selected. Retained for request compatibility. */
   includeAllEligible: z.boolean().default(true),
-  lines: z.array(payrollLineRequestSchema).max(1_000).default([]),
+  /** ON_LEAVE employees are never implicit; this is the only way to include them. */
+  includeOnLeaveEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
+  /** An employee hired during the operational payroll month needs an explicit full-month V1 exception. */
+  includeFullMonthNewHireEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
+  /** Applications attach to an employee already selected by the server; they never select employees. */
+  lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
   idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+/** Read-only, server-authored payroll population. Cursor pages are by employee id. */
+export const previewHrPayrollRunRequestSchema = z.object({
+  payrollMonth: hrDateSchema,
+  businessDate: hrDateSchema,
+  includeOnLeaveEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
+  includeFullMonthNewHireEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
+  /** Optional settlement choices are validated and summarized, never used for population selection. */
+  lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
 
 export const approveHrPayrollRunRequestSchema = z.object({
@@ -430,6 +448,7 @@ const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amoun
 export const hrPayrollLineSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
   grossSalary: hrAmountSchema, compensationMethod: hrCompensationMethodSchema,
+  eligibilityCode: hrPayrollLineEligibilityCodeSchema,
   basicSalary: hrAmountSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema, overtimeAmount: hrAmountSchema, overtimeHours: hrAmountSchema,
   scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
   compensationPolicySnapshot: hrCompensationPolicySnapshotSchema.nullable(),
@@ -480,6 +499,21 @@ export const hrPayrollRunsReceiptSchema = z.object({ companyId: companyIdSchema,
 export const hrPayrollRunDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrPayrollRunDetailSchema.shape }).strict();
 export const hrEmployeePayrollHistoryReceiptSchema = z.object({ companyId: companyIdSchema, lines: z.array(hrEmployeePayrollHistoryLineSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrPayrollRunReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), replayed: z.boolean() }).strict();
+const hrPayrollPreviewApplicationSchema = z.object({ id: z.string().uuid(), referenceNumber: z.string().max(80), remainingAmount: hrAmountSchema }).strict();
+export const hrPayrollPreviewEmployeeSchema = z.object({
+  id: hrEmployeeIdSchema, employeeNumber: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable(),
+  status: z.enum(["ACTIVE", "ON_LEAVE"]), included: z.boolean(),
+  reason: z.enum(["ACTIVE_WITH_VALID_COMPENSATION", "ACTIVE_MISSING_COMPENSATION", "NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION", "HIRED_AFTER_BUSINESS_DATE", "ON_LEAVE_EXPLICITLY_INCLUDED", "ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION", "ON_LEAVE_MISSING_COMPENSATION"]),
+  advances: z.array(hrPayrollPreviewApplicationSchema).max(100),
+  administrativeDeductions: z.array(hrPayrollPreviewApplicationSchema).max(100),
+}).strict();
+export const hrPayrollPreviewReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  counts: z.object({ active: z.number().int().nonnegative(), onLeave: z.number().int().nonnegative(), included: z.number().int().nonnegative(), excluded: z.number().int().nonnegative(), exceptions: z.number().int().nonnegative() }).strict(),
+  totals: z.object({ employeeCount: z.number().int().nonnegative(), grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema }).strict(),
+  exceptions: z.array(z.object({ employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), reason: z.enum(["ACTIVE_MISSING_COMPENSATION", "ON_LEAVE_MISSING_COMPENSATION", "NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION", "HIRED_AFTER_BUSINESS_DATE"]) }).strict()).max(100),
+  employees: z.array(hrPayrollPreviewEmployeeSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable(),
+}).strict();
 export const hrEmployeeDetailReceiptSchema = z.object({
   companyId: companyIdSchema,
   employee: hrEmployeeSchema,
@@ -519,6 +553,7 @@ export type CreateHrCompensationPolicyRequest = z.infer<typeof createHrCompensat
 export type CreateHrCompensationPolicyVersionRequest = z.infer<typeof createHrCompensationPolicyVersionRequestSchema>;
 export type ApproveHrCompensationPolicyVersionRequest = z.infer<typeof approveHrCompensationPolicyVersionRequestSchema>;
 export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequestSchema>;
+export type PreviewHrPayrollRunRequest = z.infer<typeof previewHrPayrollRunRequestSchema>;
 export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
 export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;
 export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;

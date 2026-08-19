@@ -1000,6 +1000,23 @@ export type EnumHrPayrollRunStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumHrPayrollRunStatusFilter<$PrismaModel>
 }
 
+export type EnumHrPayrollLineEligibilityCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrPayrollLineEligibilityCode | Prisma.EnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel> | $Enums.HrPayrollLineEligibilityCode
+}
+
+export type EnumHrPayrollLineEligibilityCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrPayrollLineEligibilityCode | Prisma.EnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrPayrollLineEligibilityCodeWithAggregatesFilter<$PrismaModel> | $Enums.HrPayrollLineEligibilityCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel>
+}
+
 export type EnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceOperationalDayStatus | Prisma.EnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceOperationalDayStatus[] | Prisma.ListEnumFinanceOperationalDayStatusFieldRefInput<$PrismaModel>
@@ -2187,6 +2204,23 @@ export type NestedEnumHrPayrollRunStatusWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrPayrollRunStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrPayrollRunStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrPayrollLineEligibilityCode | Prisma.EnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel> | $Enums.HrPayrollLineEligibilityCode
+}
+
+export type NestedEnumHrPayrollLineEligibilityCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrPayrollLineEligibilityCode | Prisma.EnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrPayrollLineEligibilityCode[] | Prisma.ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrPayrollLineEligibilityCodeWithAggregatesFilter<$PrismaModel> | $Enums.HrPayrollLineEligibilityCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrPayrollLineEligibilityCodeFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceOperationalDayStatusFilter<$PrismaModel = never> = {

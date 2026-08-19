@@ -7,6 +7,7 @@ import type {
   CreateHrCompensationPolicyRequest,
   CreateHrCompensationPolicyVersionRequest,
   CreateHrPayrollRunRequest,
+  PreviewHrPayrollRunRequest,
   PayHrPayrollRunRequest,
   ReverseHrPayrollRunRequest,
   SetHrEmployeeCompensationRequest,
@@ -28,6 +29,7 @@ import {
   HrCompensationMethod,
   HrCompensationFormulaCode,
   HrCompensationPolicyVersionStatus,
+  HrPayrollLineEligibilityCode,
   HrPayrollRunStatus,
   Prisma,
 } from '../generated/prisma/client.js';
@@ -48,6 +50,7 @@ const EMPLOYEE_ADVANCES = 'EMPLOYEE_ADVANCES';
 const ADMIN_DEDUCTION_RECOVERY = 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY';
 
 type CreateInput = Omit<CreateHrPayrollRunRequest, 'idempotencyKey'>;
+type PreviewInput = PreviewHrPayrollRunRequest;
 type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
@@ -237,7 +240,7 @@ export class HrPayrollService {
       return {
         lines: lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
-          grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
+          grossSalary: fixed(line.grossSalary), eligibilityCode: line.eligibilityCode, compensationMethod: line.compensationMethod,
           basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
           compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
@@ -270,77 +273,93 @@ export class HrPayrollService {
     });
   }
 
+  /**
+   * Preview is deliberately read-only: it shows the server's population and
+   * currently available settlements, but create recalculates both inside its
+   * own transaction.  Browser input never determines the ACTIVE population.
+   */
+  async preview(context: TrustedCompanyActorContext, input: PreviewInput) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      const payrollMonth = firstOfMonth(input.payrollMonth);
+      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('Payroll preview is available only for the current operational business month.');
+      return this.previewPopulation(tx, context, payrollMonth, input, input.businessDate);
+    });
+  }
+
   async create(context: TrustedCompanyActorContext, input: CreateInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, CREATE_OPERATION, key, input);
       if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
       const payrollMonth = firstOfMonth(input.payrollMonth);
-      if (ymd(payrollMonth) > currentDate.businessDate) throw new BadRequestException('A payroll run cannot be created for a future month.');
+      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll run can be created only for the current operational business month.');
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
       const existing = await tx.hrPayrollRun.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth }, select: { id: true } });
       if (existing) throw new ConflictException('A payroll run already exists for this month.');
+      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, input.businessDate, input.includeOnLeaveEmployeeIds, input.includeFullMonthNewHireEmployeeIds);
+      const employees = population.employees;
+      if (population.hiredAfterBusinessDate.length) throw new BadRequestException(`Employees hired after the payroll business date cannot be included: ${population.hiredAfterBusinessDate.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.newHireRequiresException.length) throw new BadRequestException(`Employees hired during this month require an explicit FULL_MONTH_V1 exception: ${population.newHireRequiresException.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.activeMissingProfile.length) throw new BadRequestException(`Active employees without a valid monthly compensation agreement: ${population.activeMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.onLeaveMissingProfile.length) throw new BadRequestException(`Included employees on leave without a valid monthly compensation agreement: ${population.onLeaveMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (!employees.length) throw new BadRequestException('No active employees with a valid compensation agreement are available for this payroll run.');
       const requestedEmployeeIds = [...new Set(input.lines.map((line) => line.employeeId))];
-      if (requestedEmployeeIds.length !== input.lines.length) throw new BadRequestException('An employee can appear once in a payroll run.');
-      const employees = await tx.hrEmployee.findMany({
-        where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] },
-          ...(!input.includeAllEligible ? { id: { in: requestedEmployeeIds } } : {}),
-        },
-        select: { id: true, employeeNumber: true, nameAr: true, nameEn: true },
-      });
-      if (!employees.length) throw new BadRequestException('No active or on-leave employees are available for this payroll run.');
-      if (!input.includeAllEligible && employees.length !== requestedEmployeeIds.length) throw new BadRequestException('Every payroll employee must be active or on leave in this company.');
+      if (requestedEmployeeIds.length !== input.lines.length) throw new BadRequestException('An employee can appear once in payroll settlement applications.');
       const requestedLines = new Map(input.lines.map((line) => [line.employeeId, line]));
+      const eligibleIds = new Set(employees.map((employee) => employee.id));
+      if (requestedEmployeeIds.some((employeeId) => !eligibleIds.has(employeeId))) throw new BadRequestException('Settlement applications can only target an employee included by the server in this payroll run.');
       const lines = employees.map((employee) => requestedLines.get(employee.id) ?? { employeeId: employee.id, advances: [], administrativeDeductions: [] });
       const uniqueEmployeeIds = employees.map((employee) => employee.id);
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
-      const profileRows = await tx.hrEmployeeCompensationProfile.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: uniqueEmployeeIds }, effectiveFrom: { lte: payrollMonth }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: payrollMonth } }] }, orderBy: { effectiveFrom: 'desc' }, include: { policyVersion: { include: { policy: true } } } });
-      const profileByEmployee = new Map<string, typeof profileRows[number]>();
-      for (const profile of profileRows) if (!profileByEmployee.has(profile.employeeId)) profileByEmployee.set(profile.employeeId, profile);
-      if (profileByEmployee.size !== uniqueEmployeeIds.length) throw new BadRequestException('Every payroll employee must have an active monthly compensation profile.');
+      const profileByEmployee = population.profileByEmployee;
+      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines);
       const runId = randomUUID();
       const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(input.businessDate) });
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
       const defaultPolicyVersion = await this.ensureDefaultCompensationPolicyVersion(tx, context);
-      const rows = await Promise.all(lines.map(async (line) => {
+      const rows = lines.map((line) => {
         const employee = employeeById.get(line.employeeId)!;
         const profile = profileByEmployee.get(line.employeeId)!;
         const policyVersion = profile.policyVersion ?? defaultPolicyVersion;
         if (policyVersion.status !== HrCompensationPolicyVersionStatus.APPROVED && policyVersion.status !== HrCompensationPolicyVersionStatus.SUPERSEDED) throw new ConflictException('A payroll compensation agreement must reference an approved policy version.');
         const compensation = calculateCompensation(profile, policyVersion.formulaCode);
         const gross = compensation.gross;
-        const advances = await this.resolveAdvanceApplications(tx, context, line.employeeId, line.advances);
-        const deductions = await this.resolveDeductionApplications(tx, context, line.employeeId, line.administrativeDeductions);
+        const applications = applicationsByEmployee.get(line.employeeId)!;
+        const advances = applications.advances;
+        const deductions = applications.deductions;
         const advanceAmount = sum(advances.map((item) => item.amount));
         const deductionAmount = sum(deductions.map((item) => item.amount));
         if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
-        return { id: randomUUID(), employee, compensation, policyVersion, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
-      }));
+        const eligibilityCode = employee.status === HrEmployeeStatus.ON_LEAVE
+          ? HrPayrollLineEligibilityCode.FULL_MONTH_ON_LEAVE_EXCEPTION_V1
+          : employee.hireDate > payrollMonth
+            ? HrPayrollLineEligibilityCode.FULL_MONTH_NEW_HIRE_EXCEPTION_V1
+            : HrPayrollLineEligibilityCode.FULL_MONTH_V1;
+        return { id: randomUUID(), employee, compensation, policyVersion, eligibilityCode, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
+      });
       const grossAmount = sum(rows.map((row) => row.gross));
       const advanceSettlementAmount = sum(rows.map((row) => row.advanceAmount));
       const administrativeDeductionAmount = sum(rows.map((row) => row.deductionAmount));
       const netPayableAmount = grossAmount.minus(advanceSettlementAmount).minus(administrativeDeductionAmount);
       await tx.hrPayrollRun.create({ data: { id: runId, tenantId: context.tenantId, companyId: context.companyId, runNumber, payrollMonth, businessDate: input.businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes), createdByUserId: context.actorUserId } });
-      for (const row of rows) {
-        await tx.hrPayrollLine.create({ data: {
+      for (const rowChunk of chunks(rows, 500)) await tx.hrPayrollLine.createMany({ data: rowChunk.map((row) => ({
           id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: runId, employeeId: row.employee.id,
           employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
           compensationPolicyVersionId: row.policyVersion.id, compensationPolicySnapshotJson: policySnapshot(row.policyVersion) as Prisma.InputJsonValue,
-          grossSalary: row.gross, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
+          grossSalary: row.gross, eligibilityCode: row.eligibilityCode, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
           foodAllowance: row.compensation.foodAllowance, otherAllowance: row.compensation.otherAllowance,
           overtimeAmount: row.compensation.overtimeAmount, overtimeHours: row.compensation.overtimeHours,
           scheduledHoursPerDay: row.compensation.scheduledHoursPerDay, scheduledWorkDays: row.compensation.scheduledWorkDays,
           advanceSettlementAmount: row.advanceAmount, administrativeDeductionAmount: row.deductionAmount, netPayableAmount: row.net,
-        } });
-        if (row.advances.length) await tx.hrPayrollAdvanceApplication.createMany({ data: row.advances.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, advanceId: app.id, amount: app.amount })) });
-        if (row.deductions.length) await tx.hrPayrollAdministrativeDeductionApplication.createMany({ data: row.deductions.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, deductionId: app.id, amount: app.amount })) });
-      }
+      })) });
+      const advanceApplications = rows.flatMap((row) => row.advances.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, advanceId: app.id, amount: app.amount })));
+      const deductionApplications = rows.flatMap((row) => row.deductions.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, deductionId: app.id, amount: app.amount })));
+      for (const applicationChunk of chunks(advanceApplications, 500)) await tx.hrPayrollAdvanceApplication.createMany({ data: applicationChunk });
+      for (const applicationChunk of chunks(deductionApplications, 500)) await tx.hrPayrollAdministrativeDeductionApplication.createMany({ data: applicationChunk });
       const receipt = { id: runId, runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
-      await this.audit(tx, context, 'hr.payroll.created', 'HrPayrollRun', runId, receipt);
+      await this.audit(tx, context, 'hr.payroll.created', 'HrPayrollRun', runId, { ...receipt, includedEmployeeCount: rows.length, includeOnLeaveEmployeeIds: input.includeOnLeaveEmployeeIds, includeFullMonthNewHireEmployeeIds: input.includeFullMonthNewHireEmployeeIds });
       return receipt;
     });
   }
@@ -428,6 +447,132 @@ export class HrPayrollService {
       await this.audit(tx, context, 'hr.payroll.reversed', 'HrPayrollRun', run.id, receipt);
       return receipt;
     });
+  }
+
+  private async loadPayrollPopulation(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollMonth: Date, businessDate: Date, requestedOnLeaveEmployeeIds: readonly string[], requestedFullMonthNewHireEmployeeIds: readonly string[]) {
+    const onLeaveEmployeeIds = uniqueIds(requestedOnLeaveEmployeeIds, 'An employee on leave can be included once.');
+    const fullMonthNewHireEmployeeIds = uniqueIds(requestedFullMonthNewHireEmployeeIds, 'A new-hire full-month exception can be included once.');
+    const explicitOnLeave = onLeaveEmployeeIds.length ? await tx.hrEmployee.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, id: { in: onLeaveEmployeeIds } },
+      select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, status: true, hireDate: true },
+    }) : [];
+    if (explicitOnLeave.length !== onLeaveEmployeeIds.length || explicitOnLeave.some((employee) => employee.status !== HrEmployeeStatus.ON_LEAVE)) {
+      throw new BadRequestException('includeOnLeaveEmployeeIds may contain only current ON_LEAVE employees in this company.');
+    }
+    const active = await this.listEmployeesByStatus(tx, context, HrEmployeeStatus.ACTIVE);
+    const candidateById = new Map([...active, ...explicitOnLeave].map((employee) => [employee.id, employee]));
+    const fullMonthExceptions = fullMonthNewHireEmployeeIds.map((id) => candidateById.get(id));
+    if (fullMonthExceptions.some((employee) => !employee)) throw new BadRequestException('A full-month new-hire exception must target an ACTIVE employee or an explicitly included ON_LEAVE employee.');
+    const monthStart = firstOfMonth(payrollMonth);
+    if (fullMonthExceptions.some((employee) => employee!.hireDate <= monthStart || employee!.hireDate > businessDate)) {
+      throw new BadRequestException('A full-month new-hire exception is allowed only for an employee hired after the payroll month starts and on or before the business date.');
+    }
+    const candidates = [...candidateById.values()];
+    const hiredAfterBusinessDate = candidates.filter((employee) => employee.hireDate > businessDate);
+    const newHireRequiresException = candidates.filter((employee) => employee.hireDate > monthStart && employee.hireDate <= businessDate && !fullMonthNewHireEmployeeIds.includes(employee.id));
+    const employees = candidates.filter((employee) => employee.hireDate <= monthStart || (employee.hireDate <= businessDate && fullMonthNewHireEmployeeIds.includes(employee.id))).sort((left, right) => left.id.localeCompare(right.id));
+    const profileByEmployee = await this.findProfilesForEmployees(tx, context, employees.map((employee) => employee.id), payrollMonth);
+    const activeMissingProfile = active.filter((employee) => !profileByEmployee.has(employee.id));
+    const onLeaveMissingProfile = explicitOnLeave.filter((employee) => !profileByEmployee.has(employee.id));
+    return { employees, profileByEmployee, activeEmployees: active, activeMissingProfile: activeMissingProfile.filter((employee) => employees.some((included) => included.id === employee.id)), onLeaveMissingProfile: onLeaveMissingProfile.filter((employee) => employees.some((included) => included.id === employee.id)), newHireRequiresException, hiredAfterBusinessDate };
+  }
+
+  private async previewPopulation(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollMonth: Date, input: PreviewInput, businessDate: Date) {
+    const population = await this.loadPayrollPopulation(tx, context, payrollMonth, businessDate, input.includeOnLeaveEmployeeIds, input.includeFullMonthNewHireEmployeeIds);
+    const onLeaveEmployeeIds = uniqueIds(input.includeOnLeaveEmployeeIds, 'An employee on leave can be included once.');
+    const base = { tenantId: context.tenantId, companyId: context.companyId };
+    const onLeave = await tx.hrEmployee.count({ where: { ...base, status: HrEmployeeStatus.ON_LEAVE } });
+    const missingExamples = population.activeMissingProfile.slice(0, 100);
+    const active = population.activeEmployees.length;
+    const activeWithProfile = population.employees.filter((employee) => employee.status === HrEmployeeStatus.ACTIVE && population.profileByEmployee.has(employee.id)).length;
+    const includedOnLeaveWithProfile = population.employees.filter((employee) => employee.status === HrEmployeeStatus.ON_LEAVE && population.profileByEmployee.has(employee.id)).length;
+    const page = await tx.hrEmployee.findMany({
+      where: { ...base, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+      orderBy: { id: 'asc' }, take: input.pageSize + 1,
+      ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
+      select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, status: true, hireDate: true },
+    });
+    const hasMore = page.length > input.pageSize;
+    const employeesPage = hasMore ? page.slice(0, input.pageSize) : page;
+    const profileByEmployee = population.profileByEmployee;
+    const employeeIds = employeesPage.map((employee) => employee.id);
+    const [advances, deductions] = await Promise.all([
+      employeeIds.length ? tx.hrEmployeeAdvance.findMany({ where: { ...base, employeeId: { in: employeeIds }, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, advanceNumber: true, remainingAmount: true } }) : [],
+      employeeIds.length ? tx.hrEmployeeAdministrativeDeduction.findMany({ where: { ...base, employeeId: { in: employeeIds }, status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, deductionNumber: true, remainingAmount: true } }) : [],
+    ]);
+    const advancesByEmployee = groupByEmployee(advances, (row) => ({ id: row.id, referenceNumber: row.advanceNumber, remainingAmount: fixed(row.remainingAmount) }));
+    const deductionsByEmployee = groupByEmployee(deductions, (row) => ({ id: row.id, referenceNumber: row.deductionNumber, remainingAmount: fixed(row.remainingAmount) }));
+    const included = activeWithProfile + includedOnLeaveWithProfile;
+    const requestedEmployeeIds = uniqueIds(input.lines.map((line) => line.employeeId), 'An employee can appear once in payroll settlement applications.');
+    const eligibleIds = new Set(population.employees.filter((employee) => population.profileByEmployee.has(employee.id)).map((employee) => employee.id));
+    if (requestedEmployeeIds.some((employeeId) => !eligibleIds.has(employeeId))) throw new BadRequestException('Settlement applications can only target an employee included by the server in this payroll preview.');
+    const selectedApplications = await this.resolvePayrollApplications(tx, context, input.lines);
+    const selectedAdvanceAmount = sum([...selectedApplications.values()].flatMap((selection) => selection.advances.map((application) => application.amount)));
+    const selectedDeductionAmount = sum([...selectedApplications.values()].flatMap((selection) => selection.deductions.map((application) => application.amount)));
+    for (const [employeeId, selection] of selectedApplications) {
+      const gross = population.profileByEmployee.get(employeeId)?.monthlyGross;
+      if (gross && sum(selection.advances.map((application) => application.amount)).plus(sum(selection.deductions.map((application) => application.amount))).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
+    }
+    const grossAmount = sum([...population.profileByEmployee.values()].map((profile) => profile.monthlyGross));
+    return {
+      counts: { active, onLeave, included, excluded: active + onLeave - included, exceptions: population.activeMissingProfile.length + population.onLeaveMissingProfile.length + population.newHireRequiresException.length + population.hiredAfterBusinessDate.length },
+      totals: { employeeCount: included, grossAmount: fixed(grossAmount), advanceSettlementAmount: fixed(selectedAdvanceAmount), administrativeDeductionAmount: fixed(selectedDeductionAmount), netPayableAmount: fixed(grossAmount.minus(selectedAdvanceAmount).minus(selectedDeductionAmount)) },
+      exceptions: [...missingExamples.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ACTIVE_MISSING_COMPENSATION' as const })), ...population.onLeaveMissingProfile.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ON_LEAVE_MISSING_COMPENSATION' as const })), ...population.newHireRequiresException.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION' as const })), ...population.hiredAfterBusinessDate.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'HIRED_AFTER_BUSINESS_DATE' as const }))].slice(0, 100),
+      employees: employeesPage.map((employee) => {
+        const hasProfile = profileByEmployee.has(employee.id);
+        const onLeave = employee.status === HrEmployeeStatus.ON_LEAVE;
+        const explicitlyIncluded = onLeaveEmployeeIds.includes(employee.id);
+        const afterBusinessDate = employee.hireDate > businessDate;
+        const newHireWithoutException = employee.hireDate > payrollMonth && employee.hireDate <= businessDate && !input.includeFullMonthNewHireEmployeeIds.includes(employee.id);
+        const reason = afterBusinessDate ? 'HIRED_AFTER_BUSINESS_DATE'
+          : newHireWithoutException ? 'NEW_HIRE_REQUIRES_FULL_MONTH_EXCEPTION'
+          : employee.status === HrEmployeeStatus.ACTIVE ? (hasProfile ? 'ACTIVE_WITH_VALID_COMPENSATION' : 'ACTIVE_MISSING_COMPENSATION')
+          : (!explicitlyIncluded ? 'ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION' : (hasProfile ? 'ON_LEAVE_EXPLICITLY_INCLUDED' : 'ON_LEAVE_MISSING_COMPENSATION'));
+        return { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: employee.status, included: hasProfile && !afterBusinessDate && !newHireWithoutException && (!onLeave || explicitlyIncluded), reason, advances: (advancesByEmployee.get(employee.id) ?? []).slice(0, 100), administrativeDeductions: (deductionsByEmployee.get(employee.id) ?? []).slice(0, 100) };
+      }),
+      hasMore, nextCursor: hasMore ? employeesPage.at(-1)!.id : null,
+    };
+  }
+
+  private async listEmployeesByStatus(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, status: HrEmployeeStatus) {
+    const employees: Array<{ id: string; employeeNumber: string; nameAr: string; nameEn: string | null; status: HrEmployeeStatus; hireDate: Date }> = [];
+    let cursor: string | undefined;
+    do {
+      const page = await tx.hrEmployee.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status }, orderBy: { id: 'asc' }, take: 500, ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}), select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, status: true, hireDate: true } });
+      employees.push(...page); cursor = page.length === 500 ? page.at(-1)?.id : undefined;
+    } while (cursor);
+    return employees;
+  }
+
+  private async findProfilesForEmployees(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, employeeIds: readonly string[], payrollMonth: Date) {
+    const profileByEmployee = new Map<string, Prisma.HrEmployeeCompensationProfileGetPayload<{ include: { policyVersion: { include: { policy: true } } } }>>();
+    for (const employeeChunk of chunks(employeeIds, 500)) {
+      const profiles = await tx.hrEmployeeCompensationProfile.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: employeeChunk }, effectiveFrom: { lte: payrollMonth }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: payrollMonth } }] }, orderBy: [{ employeeId: 'asc' }, { effectiveFrom: 'desc' }], include: { policyVersion: { include: { policy: true } } } });
+      for (const profile of profiles) {
+        if (profileByEmployee.has(profile.employeeId)) throw new ConflictException('Employee compensation agreements overlap for the payroll month.');
+        profileByEmployee.set(profile.employeeId, profile);
+      }
+    }
+    return profileByEmployee;
+  }
+
+  private async resolvePayrollApplications(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, lines: readonly { employeeId: string; advances: readonly { id: string; amount: string }[]; administrativeDeductions: readonly { id: string; amount: string }[] }[]) {
+    const advanceRequests = lines.flatMap((line) => line.advances.map((application) => ({ ...application, employeeId: line.employeeId })));
+    const deductionRequests = lines.flatMap((line) => line.administrativeDeductions.map((application) => ({ ...application, employeeId: line.employeeId })));
+    const advanceIds = uniqueIds(advanceRequests.map((application) => application.id), 'An advance can be selected once per payroll run.');
+    const deductionIds = uniqueIds(deductionRequests.map((application) => application.id), 'An administrative deduction can be selected once per payroll run.');
+    const advances = [] as Array<{ id: string; employeeId: string; remainingAmount: Prisma.Decimal }>;
+    const deductions = [] as Array<{ id: string; employeeId: string; remainingAmount: Prisma.Decimal }>;
+    for (const ids of chunks(advanceIds, 500)) advances.push(...await tx.hrEmployeeAdvance.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
+    for (const ids of chunks(deductionIds, 500)) deductions.push(...await tx.hrEmployeeAdministrativeDeduction.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
+    if (advances.length !== advanceIds.length || deductions.length !== deductionIds.length) throw new BadRequestException('A selected advance or administrative deduction is unavailable.');
+    const advanceById = new Map(advances.map((advance) => [advance.id, advance]));
+    const deductionById = new Map(deductions.map((deduction) => [deduction.id, deduction]));
+    const result = new Map<string, { advances: Array<{ id: string; amount: Prisma.Decimal }>; deductions: Array<{ id: string; amount: Prisma.Decimal }> }>();
+    for (const line of lines) result.set(line.employeeId, { advances: [], deductions: [] });
+    for (const application of advanceRequests) { const advance = advanceById.get(application.id)!; const value = amount(application.amount); if (advance.employeeId !== application.employeeId || value.gt(advance.remainingAmount)) throw new BadRequestException('Advance settlement is unavailable for the selected employee or exceeds its balance.'); result.get(application.employeeId)!.advances.push({ id: application.id, amount: value }); }
+    for (const application of deductionRequests) { const deduction = deductionById.get(application.id)!; const value = amount(application.amount); if (deduction.employeeId !== application.employeeId || value.gt(deduction.remainingAmount)) throw new BadRequestException('Administrative deduction is unavailable for the selected employee or exceeds its balance.'); result.get(application.employeeId)!.deductions.push({ id: application.id, amount: value }); }
+    return result;
   }
 
   private async findRun(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, id: string, _detail = true) {
@@ -549,6 +694,9 @@ function nonNegativeAmount(value: string) { const parsed = new Prisma.Decimal(va
 function sum(values: readonly Prisma.Decimal[]) { return values.reduce((total, value) => total.plus(value), new Prisma.Decimal(0)); }
 function fixed(value: Prisma.Decimal) { return value.toFixed(4); }
 function nullable(value: string | undefined) { const text = value?.trim(); return text || null; }
+function uniqueIds(values: readonly string[], message: string) { const unique = [...new Set(values)]; if (unique.length !== values.length) throw new BadRequestException(message); return unique; }
+function chunks<T>(values: readonly T[], size: number) { const result: T[][] = []; for (let index = 0; index < values.length; index += size) result.push([...values.slice(index, index + size)]); return result; }
+function groupByEmployee<T extends { employeeId: string }, V>(values: readonly T[], map: (value: T) => V) { const grouped = new Map<string, V[]>(); for (const value of values) { const current = grouped.get(value.employeeId) ?? []; if (current.length < 100) current.push(map(value)); grouped.set(value.employeeId, current); } return grouped; }
 const STANDARD_MONTHLY_HOURS = new Prisma.Decimal(208);
 const STANDARD_MONTHLY_DAYS = 26;
 

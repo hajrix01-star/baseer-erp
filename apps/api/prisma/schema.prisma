@@ -261,6 +261,14 @@ enum HrCompensationMethod {
   INCLUSIVE_OVERTIME
 }
 
+/// V1 pays a full monthly agreement only. New hires in the payroll month need
+/// an explicit operator inclusion and are recorded as such on the line.
+enum HrPayrollLineEligibilityCode {
+  FULL_MONTH_V1
+  FULL_MONTH_ON_LEAVE_EXCEPTION_V1
+  FULL_MONTH_NEW_HIRE_EXCEPTION_V1
+}
+
 /// Formula selection is server-owned. Legal-calculation catalogues are outside
 /// V1; a policy version only authorises a stable internal formula revision.
 enum HrCompensationFormulaCode {
@@ -1392,6 +1400,7 @@ model HrPayrollLine {
   employeeNameArSnapshot         String   @db.VarChar(160)
   employeeNameEnSnapshot         String?  @db.VarChar(160)
   grossSalary                    Decimal  @db.Decimal(18, 4)
+  eligibilityCode                HrPayrollLineEligibilityCode @default(FULL_MONTH_V1)
   compensationMethod             HrCompensationMethod @default(FIXED_MONTHLY)
   basicSalary                    Decimal  @default(0) @db.Decimal(18, 4)
   foodAllowance                  Decimal  @default(0) @db.Decimal(18, 4)

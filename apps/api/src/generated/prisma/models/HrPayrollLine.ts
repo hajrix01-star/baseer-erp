@@ -67,6 +67,7 @@ export type HrPayrollLineMinAggregateOutputType = {
   employeeNameArSnapshot: string | null
   employeeNameEnSnapshot: string | null
   grossSalary: runtime.Decimal | null
+  eligibilityCode: $Enums.HrPayrollLineEligibilityCode | null
   compensationMethod: $Enums.HrCompensationMethod | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
@@ -94,6 +95,7 @@ export type HrPayrollLineMaxAggregateOutputType = {
   employeeNameArSnapshot: string | null
   employeeNameEnSnapshot: string | null
   grossSalary: runtime.Decimal | null
+  eligibilityCode: $Enums.HrPayrollLineEligibilityCode | null
   compensationMethod: $Enums.HrCompensationMethod | null
   basicSalary: runtime.Decimal | null
   foodAllowance: runtime.Decimal | null
@@ -122,6 +124,7 @@ export type HrPayrollLineCountAggregateOutputType = {
   employeeNameArSnapshot: number
   employeeNameEnSnapshot: number
   grossSalary: number
+  eligibilityCode: number
   compensationMethod: number
   basicSalary: number
   foodAllowance: number
@@ -181,6 +184,7 @@ export type HrPayrollLineMinAggregateInputType = {
   employeeNameArSnapshot?: true
   employeeNameEnSnapshot?: true
   grossSalary?: true
+  eligibilityCode?: true
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
@@ -208,6 +212,7 @@ export type HrPayrollLineMaxAggregateInputType = {
   employeeNameArSnapshot?: true
   employeeNameEnSnapshot?: true
   grossSalary?: true
+  eligibilityCode?: true
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
@@ -236,6 +241,7 @@ export type HrPayrollLineCountAggregateInputType = {
   employeeNameArSnapshot?: true
   employeeNameEnSnapshot?: true
   grossSalary?: true
+  eligibilityCode?: true
   compensationMethod?: true
   basicSalary?: true
   foodAllowance?: true
@@ -351,6 +357,7 @@ export type HrPayrollLineGroupByOutputType = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot: string | null
   grossSalary: runtime.Decimal
+  eligibilityCode: $Enums.HrPayrollLineEligibilityCode
   compensationMethod: $Enums.HrCompensationMethod
   basicSalary: runtime.Decimal
   foodAllowance: runtime.Decimal
@@ -402,6 +409,7 @@ export type HrPayrollLineWhereInput = {
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
   grossSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFilter<"HrPayrollLine"> | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -436,6 +444,7 @@ export type HrPayrollLineOrderByWithRelationInput = {
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  eligibilityCode?: Prisma.SortOrder
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
@@ -475,6 +484,7 @@ export type HrPayrollLineWhereUniqueInput = Prisma.AtLeast<{
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
   grossSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFilter<"HrPayrollLine"> | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -509,6 +519,7 @@ export type HrPayrollLineOrderByWithAggregationInput = {
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  eligibilityCode?: Prisma.SortOrder
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
@@ -545,6 +556,7 @@ export type HrPayrollLineScalarWhereWithAggregatesInput = {
   employeeNameArSnapshot?: Prisma.StringWithAggregatesFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableWithAggregatesFilter<"HrPayrollLine"> | string | null
   grossSalary?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeWithAggregatesFilter<"HrPayrollLine"> | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodWithAggregatesFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalWithAggregatesFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -568,6 +580,7 @@ export type HrPayrollLineCreateInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -602,6 +615,7 @@ export type HrPayrollLineUncheckedCreateInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -627,6 +641,7 @@ export type HrPayrollLineUpdateInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -661,6 +676,7 @@ export type HrPayrollLineUncheckedUpdateInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -691,6 +707,7 @@ export type HrPayrollLineCreateManyInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -714,6 +731,7 @@ export type HrPayrollLineUpdateManyMutationInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -742,6 +760,7 @@ export type HrPayrollLineUncheckedUpdateManyInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -791,6 +810,7 @@ export type HrPayrollLineCountOrderByAggregateInput = {
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  eligibilityCode?: Prisma.SortOrder
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
@@ -833,6 +853,7 @@ export type HrPayrollLineMaxOrderByAggregateInput = {
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  eligibilityCode?: Prisma.SortOrder
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
@@ -860,6 +881,7 @@ export type HrPayrollLineMinOrderByAggregateInput = {
   employeeNameArSnapshot?: Prisma.SortOrder
   employeeNameEnSnapshot?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  eligibilityCode?: Prisma.SortOrder
   compensationMethod?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   foodAllowance?: Prisma.SortOrder
@@ -1064,6 +1086,10 @@ export type HrPayrollLineUncheckedUpdateManyWithoutPayrollRunNestedInput = {
   deleteMany?: Prisma.HrPayrollLineScalarWhereInput | Prisma.HrPayrollLineScalarWhereInput[]
 }
 
+export type EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput = {
+  set?: $Enums.HrPayrollLineEligibilityCode
+}
+
 export type HrPayrollLineCreateNestedOneWithoutAdvanceApplicationsInput = {
   create?: Prisma.XOR<Prisma.HrPayrollLineCreateWithoutAdvanceApplicationsInput, Prisma.HrPayrollLineUncheckedCreateWithoutAdvanceApplicationsInput>
   connectOrCreate?: Prisma.HrPayrollLineCreateOrConnectWithoutAdvanceApplicationsInput
@@ -1099,6 +1125,7 @@ export type HrPayrollLineCreateWithoutCompanyInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1130,6 +1157,7 @@ export type HrPayrollLineUncheckedCreateWithoutCompanyInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1189,6 +1217,7 @@ export type HrPayrollLineScalarWhereInput = {
   employeeNameArSnapshot?: Prisma.StringFilter<"HrPayrollLine"> | string
   employeeNameEnSnapshot?: Prisma.StringNullableFilter<"HrPayrollLine"> | string | null
   grossSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFilter<"HrPayrollLine"> | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrPayrollLine"> | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFilter<"HrPayrollLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1212,6 +1241,7 @@ export type HrPayrollLineCreateWithoutEmployeeInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1242,6 +1272,7 @@ export type HrPayrollLineUncheckedCreateWithoutEmployeeInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1293,6 +1324,7 @@ export type HrPayrollLineCreateWithoutCompensationPolicyVersionInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1323,6 +1355,7 @@ export type HrPayrollLineUncheckedCreateWithoutCompensationPolicyVersionInput = 
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1374,6 +1407,7 @@ export type HrPayrollLineCreateWithoutPayrollRunInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1404,6 +1438,7 @@ export type HrPayrollLineUncheckedCreateWithoutPayrollRunInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1455,6 +1490,7 @@ export type HrPayrollLineCreateWithoutAdvanceApplicationsInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1488,6 +1524,7 @@ export type HrPayrollLineUncheckedCreateWithoutAdvanceApplicationsInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1528,6 +1565,7 @@ export type HrPayrollLineUpdateWithoutAdvanceApplicationsInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1561,6 +1599,7 @@ export type HrPayrollLineUncheckedUpdateWithoutAdvanceApplicationsInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1585,6 +1624,7 @@ export type HrPayrollLineCreateWithoutDeductionApplicationsInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1618,6 +1658,7 @@ export type HrPayrollLineUncheckedCreateWithoutDeductionApplicationsInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1658,6 +1699,7 @@ export type HrPayrollLineUpdateWithoutDeductionApplicationsInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1691,6 +1733,7 @@ export type HrPayrollLineUncheckedUpdateWithoutDeductionApplicationsInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1718,6 +1761,7 @@ export type HrPayrollLineCreateManyCompanyInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1741,6 +1785,7 @@ export type HrPayrollLineUpdateWithoutCompanyInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1772,6 +1817,7 @@ export type HrPayrollLineUncheckedUpdateWithoutCompanyInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1800,6 +1846,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompanyInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1825,6 +1872,7 @@ export type HrPayrollLineCreateManyEmployeeInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1848,6 +1896,7 @@ export type HrPayrollLineUpdateWithoutEmployeeInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1878,6 +1927,7 @@ export type HrPayrollLineUncheckedUpdateWithoutEmployeeInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1905,6 +1955,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutEmployeeInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1930,6 +1981,7 @@ export type HrPayrollLineCreateManyCompensationPolicyVersionInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1953,6 +2005,7 @@ export type HrPayrollLineUpdateWithoutCompensationPolicyVersionInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1983,6 +2036,7 @@ export type HrPayrollLineUncheckedUpdateWithoutCompensationPolicyVersionInput = 
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2010,6 +2064,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutCompensationPolicyVersionInpu
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2035,6 +2090,7 @@ export type HrPayrollLineCreateManyPayrollRunInput = {
   employeeNameArSnapshot: string
   employeeNameEnSnapshot?: string | null
   grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: $Enums.HrCompensationMethod
   basicSalary?: runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2058,6 +2114,7 @@ export type HrPayrollLineUpdateWithoutPayrollRunInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2088,6 +2145,7 @@ export type HrPayrollLineUncheckedUpdateWithoutPayrollRunInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2115,6 +2173,7 @@ export type HrPayrollLineUncheckedUpdateManyWithoutPayrollRunInput = {
   employeeNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eligibilityCode?: Prisma.EnumHrPayrollLineEligibilityCodeFieldUpdateOperationsInput | $Enums.HrPayrollLineEligibilityCode
   compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2183,6 +2242,7 @@ export type HrPayrollLineSelect<ExtArgs extends runtime.Types.Extensions.Interna
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
   grossSalary?: boolean
+  eligibilityCode?: boolean
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
@@ -2218,6 +2278,7 @@ export type HrPayrollLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
   grossSalary?: boolean
+  eligibilityCode?: boolean
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
@@ -2250,6 +2311,7 @@ export type HrPayrollLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
   grossSalary?: boolean
+  eligibilityCode?: boolean
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
@@ -2282,6 +2344,7 @@ export type HrPayrollLineSelectScalar = {
   employeeNameArSnapshot?: boolean
   employeeNameEnSnapshot?: boolean
   grossSalary?: boolean
+  eligibilityCode?: boolean
   compensationMethod?: boolean
   basicSalary?: boolean
   foodAllowance?: boolean
@@ -2298,7 +2361,7 @@ export type HrPayrollLineSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "compensationMethod" | "basicSalary" | "foodAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
+export type HrPayrollLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "payrollRunId" | "employeeId" | "compensationPolicyVersionId" | "compensationPolicySnapshotJson" | "employeeNumberSnapshot" | "employeeNameArSnapshot" | "employeeNameEnSnapshot" | "grossSalary" | "eligibilityCode" | "compensationMethod" | "basicSalary" | "foodAllowance" | "otherAllowance" | "overtimeAmount" | "overtimeHours" | "scheduledHoursPerDay" | "scheduledWorkDays" | "advanceSettlementAmount" | "administrativeDeductionAmount" | "netPayableAmount" | "paidAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["hrPayrollLine"]>
 export type HrPayrollLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   payrollRun?: boolean | Prisma.HrPayrollRunDefaultArgs<ExtArgs>
@@ -2343,6 +2406,7 @@ export type $HrPayrollLinePayload<ExtArgs extends runtime.Types.Extensions.Inter
     employeeNameArSnapshot: string
     employeeNameEnSnapshot: string | null
     grossSalary: runtime.Decimal
+    eligibilityCode: $Enums.HrPayrollLineEligibilityCode
     compensationMethod: $Enums.HrCompensationMethod
     basicSalary: runtime.Decimal
     foodAllowance: runtime.Decimal
@@ -2797,6 +2861,7 @@ export interface HrPayrollLineFieldRefs {
   readonly employeeNameArSnapshot: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly employeeNameEnSnapshot: Prisma.FieldRef<"HrPayrollLine", 'String'>
   readonly grossSalary: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
+  readonly eligibilityCode: Prisma.FieldRef<"HrPayrollLine", 'HrPayrollLineEligibilityCode'>
   readonly compensationMethod: Prisma.FieldRef<"HrPayrollLine", 'HrCompensationMethod'>
   readonly basicSalary: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>
   readonly foodAllowance: Prisma.FieldRef<"HrPayrollLine", 'Decimal'>

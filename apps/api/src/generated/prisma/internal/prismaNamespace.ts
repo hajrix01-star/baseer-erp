@@ -5769,6 +5769,7 @@ export const HrPayrollLineScalarFieldEnum = {
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',
   grossSalary: 'grossSalary',
+  eligibilityCode: 'eligibilityCode',
   compensationMethod: 'compensationMethod',
   basicSalary: 'basicSalary',
   foodAllowance: 'foodAllowance',
@@ -6773,6 +6774,20 @@ export type EnumHrPayrollRunStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'HrPayrollRunStatus[]'
  */
 export type ListEnumHrPayrollRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrPayrollRunStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrPayrollLineEligibilityCode'
+ */
+export type EnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrPayrollLineEligibilityCode'>
+    
+
+
+/**
+ * Reference to a field of type 'HrPayrollLineEligibilityCode[]'
+ */
+export type ListEnumHrPayrollLineEligibilityCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrPayrollLineEligibilityCode[]'>
     
 
 

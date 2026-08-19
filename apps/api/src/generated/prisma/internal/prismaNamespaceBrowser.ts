@@ -869,6 +869,7 @@ export const HrPayrollLineScalarFieldEnum = {
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',
   grossSalary: 'grossSalary',
+  eligibilityCode: 'eligibilityCode',
   compensationMethod: 'compensationMethod',
   basicSalary: 'basicSalary',
   foodAllowance: 'foodAllowance',
