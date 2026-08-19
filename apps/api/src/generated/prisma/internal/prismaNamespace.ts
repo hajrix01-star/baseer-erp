@@ -5530,6 +5530,11 @@ export const HrEmployeeCompensationProfileScalarFieldEnum = {
   effectiveFrom: 'effectiveFrom',
   effectiveTo: 'effectiveTo',
   monthlyGross: 'monthlyGross',
+  compensationMethod: 'compensationMethod',
+  foodAllowance: 'foodAllowance',
+  otherAllowance: 'otherAllowance',
+  scheduledHoursPerDay: 'scheduledHoursPerDay',
+  scheduledWorkDays: 'scheduledWorkDays',
   notes: 'notes',
   createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
@@ -5576,6 +5581,14 @@ export const HrPayrollLineScalarFieldEnum = {
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',
   grossSalary: 'grossSalary',
+  compensationMethod: 'compensationMethod',
+  basicSalary: 'basicSalary',
+  foodAllowance: 'foodAllowance',
+  otherAllowance: 'otherAllowance',
+  overtimeAmount: 'overtimeAmount',
+  overtimeHours: 'overtimeHours',
+  scheduledHoursPerDay: 'scheduledHoursPerDay',
+  scheduledWorkDays: 'scheduledWorkDays',
   advanceSettlementAmount: 'advanceSettlementAmount',
   administrativeDeductionAmount: 'administrativeDeductionAmount',
   netPayableAmount: 'netPayableAmount',
@@ -6516,6 +6529,20 @@ export type EnumHrEmployeeAdministrativeDeductionActionTypeFieldRefInput<$Prisma
  * Reference to a field of type 'HrEmployeeAdministrativeDeductionActionType[]'
  */
 export type ListEnumHrEmployeeAdministrativeDeductionActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeAdministrativeDeductionActionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrCompensationMethod'
+ */
+export type EnumHrCompensationMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'HrCompensationMethod[]'
+ */
+export type ListEnumHrCompensationMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationMethod[]'>
     
 
 

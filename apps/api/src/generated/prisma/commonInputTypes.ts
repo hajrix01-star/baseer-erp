@@ -932,6 +932,23 @@ export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
 }
 
+export type EnumHrCompensationMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationMethod | Prisma.EnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel> | $Enums.HrCompensationMethod
+}
+
+export type EnumHrCompensationMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationMethod | Prisma.EnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationMethodWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
+}
+
 export type EnumHrPayrollRunStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.HrPayrollRunStatus | Prisma.EnumHrPayrollRunStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrPayrollRunStatus[] | Prisma.ListEnumHrPayrollRunStatusFieldRefInput<$PrismaModel>
@@ -2068,6 +2085,23 @@ export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumHrCompensationMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationMethod | Prisma.EnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel> | $Enums.HrCompensationMethod
+}
+
+export type NestedEnumHrCompensationMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationMethod | Prisma.EnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationMethod[] | Prisma.ListEnumHrCompensationMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationMethodWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
 }
 
 export type NestedEnumHrPayrollRunStatusFilter<$PrismaModel = never> = {

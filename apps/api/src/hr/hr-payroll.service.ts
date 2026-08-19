@@ -22,6 +22,7 @@ import {
   HrEmployeeAdvanceStatus,
   HrEmployeeFinancialMovementType,
   HrEmployeeStatus,
+  HrCompensationMethod,
   HrPayrollRunStatus,
   Prisma,
 } from '../generated/prisma/client.js';
@@ -71,8 +72,21 @@ export class HrPayrollService {
         throw new ConflictException('The effective compensation date must be later than the current profile.');
       }
       if (current) await tx.hrEmployeeCompensationProfile.update({ where: { id: current.id }, data: { effectiveTo: previousDay(input.effectiveFrom) } });
+      const compensation = calculateCompensation({
+        monthlyGross: amount(input.monthlyGross),
+        compensationMethod: input.compensationMethod,
+        foodAllowance: nonNegativeAmount(input.foodAllowance),
+        otherAllowance: nonNegativeAmount(input.otherAllowance),
+        scheduledHoursPerDay: input.scheduledHoursPerDay ?? null,
+        scheduledWorkDays: input.scheduledWorkDays ?? null,
+      });
       const id = randomUUID();
-      await tx.hrEmployeeCompensationProfile.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveFrom: input.effectiveFrom, monthlyGross: amount(input.monthlyGross), notes: nullable(input.notes), createdByUserId: context.actorUserId } });
+      await tx.hrEmployeeCompensationProfile.create({ data: {
+        id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveFrom: input.effectiveFrom,
+        monthlyGross: compensation.gross, compensationMethod: compensation.method, foodAllowance: compensation.foodAllowance,
+        otherAllowance: compensation.otherAllowance, scheduledHoursPerDay: compensation.scheduledHoursPerDay,
+        scheduledWorkDays: compensation.scheduledWorkDays, notes: nullable(input.notes), createdByUserId: context.actorUserId,
+      } });
       const receipt = { id, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
       await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', id, receipt);
@@ -107,7 +121,10 @@ export class HrPayrollService {
         payrollRun: mapRun(run),
         lines: run.lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
-          grossSalary: fixed(line.grossSalary), advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
+          grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
+          basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
+          scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
+          advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
         })),
@@ -151,13 +168,14 @@ export class HrPayrollService {
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
       const rows = await Promise.all(lines.map(async (line) => {
         const employee = employeeById.get(line.employeeId)!;
-        const gross = profileByEmployee.get(line.employeeId)!.monthlyGross;
+        const compensation = calculateCompensation(profileByEmployee.get(line.employeeId)!);
+        const gross = compensation.gross;
         const advances = await this.resolveAdvanceApplications(tx, context, line.employeeId, line.advances);
         const deductions = await this.resolveDeductionApplications(tx, context, line.employeeId, line.administrativeDeductions);
         const advanceAmount = sum(advances.map((item) => item.amount));
         const deductionAmount = sum(deductions.map((item) => item.amount));
         if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
-        return { id: randomUUID(), employee, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
+        return { id: randomUUID(), employee, compensation, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
       }));
       const grossAmount = sum(rows.map((row) => row.gross));
       const advanceSettlementAmount = sum(rows.map((row) => row.advanceAmount));
@@ -165,7 +183,15 @@ export class HrPayrollService {
       const netPayableAmount = grossAmount.minus(advanceSettlementAmount).minus(administrativeDeductionAmount);
       await tx.hrPayrollRun.create({ data: { id: runId, tenantId: context.tenantId, companyId: context.companyId, runNumber, payrollMonth, businessDate: input.businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes), createdByUserId: context.actorUserId } });
       for (const row of rows) {
-        await tx.hrPayrollLine.create({ data: { id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: runId, employeeId: row.employee.id, employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn, grossSalary: row.gross, advanceSettlementAmount: row.advanceAmount, administrativeDeductionAmount: row.deductionAmount, netPayableAmount: row.net } });
+        await tx.hrPayrollLine.create({ data: {
+          id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: runId, employeeId: row.employee.id,
+          employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
+          grossSalary: row.gross, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
+          foodAllowance: row.compensation.foodAllowance, otherAllowance: row.compensation.otherAllowance,
+          overtimeAmount: row.compensation.overtimeAmount, overtimeHours: row.compensation.overtimeHours,
+          scheduledHoursPerDay: row.compensation.scheduledHoursPerDay, scheduledWorkDays: row.compensation.scheduledWorkDays,
+          advanceSettlementAmount: row.advanceAmount, administrativeDeductionAmount: row.deductionAmount, netPayableAmount: row.net,
+        } });
         if (row.advances.length) await tx.hrPayrollAdvanceApplication.createMany({ data: row.advances.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, advanceId: app.id, amount: app.amount })) });
         if (row.deductions.length) await tx.hrPayrollAdministrativeDeductionApplication.createMany({ data: row.deductions.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, deductionId: app.id, amount: app.amount })) });
       }
@@ -344,9 +370,64 @@ export class HrPayrollService {
 }
 
 function amount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lte(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A payroll amount must be a positive decimal with at most four places.'); return parsed; }
+function nonNegativeAmount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lt(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A compensation allowance must be a non-negative decimal with at most four places.'); return parsed; }
 function sum(values: readonly Prisma.Decimal[]) { return values.reduce((total, value) => total.plus(value), new Prisma.Decimal(0)); }
 function fixed(value: Prisma.Decimal) { return value.toFixed(4); }
 function nullable(value: string | undefined) { const text = value?.trim(); return text || null; }
+const STANDARD_MONTHLY_HOURS = new Prisma.Decimal(208);
+const STANDARD_MONTHLY_DAYS = 26;
+
+type CompensationInputForCalculation = Readonly<{
+  monthlyGross: Prisma.Decimal;
+  compensationMethod: HrCompensationMethod;
+  foodAllowance: Prisma.Decimal;
+  otherAllowance: Prisma.Decimal;
+  scheduledHoursPerDay: number | null;
+  scheduledWorkDays: number | null;
+}>;
+
+/**
+ * Mirrors the agreed Noorix inverse package calculation. This is a payroll
+ * calculation only: it neither approves a schedule nor determines legality.
+ */
+function calculateCompensation(input: CompensationInputForCalculation) {
+  if (input.compensationMethod === HrCompensationMethod.FIXED_MONTHLY) {
+    return {
+      method: HrCompensationMethod.FIXED_MONTHLY,
+      gross: input.monthlyGross,
+      basicSalary: input.monthlyGross,
+      foodAllowance: new Prisma.Decimal(0),
+      otherAllowance: new Prisma.Decimal(0),
+      overtimeAmount: new Prisma.Decimal(0),
+      overtimeHours: new Prisma.Decimal(0),
+      scheduledHoursPerDay: null,
+      scheduledWorkDays: null,
+    };
+  }
+  const dailyHours = input.scheduledHoursPerDay;
+  const workDays = input.scheduledWorkDays;
+  if (!dailyHours || !workDays || dailyHours <= 8) throw new BadRequestException('An inclusive overtime agreement needs daily hours above eight and agreed monthly work days.');
+  const regularDays = Math.min(workDays, STANDARD_MONTHLY_DAYS);
+  const restDays = Math.max(workDays - STANDARD_MONTHLY_DAYS, 0);
+  const overtimeHours = new Prisma.Decimal(dailyHours - 8).times(regularDays).plus(new Prisma.Decimal(restDays).times(dailyHours));
+  const coefficient = overtimeHours.div(STANDARD_MONTHLY_HOURS);
+  const allowances = input.foodAllowance.plus(input.otherAllowance);
+  const basicSalary = input.monthlyGross.minus(allowances.times(new Prisma.Decimal(1).plus(coefficient))).div(new Prisma.Decimal(1).plus(coefficient.times(1.5))).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+  if (basicSalary.lte(0)) throw new BadRequestException('The agreed total cannot cover the selected allowances and overtime schedule.');
+  const overtimeAmount = input.monthlyGross.minus(basicSalary).minus(allowances).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+  if (overtimeAmount.lt(0)) throw new BadRequestException('The agreed total cannot produce a non-negative overtime amount.');
+  return {
+    method: HrCompensationMethod.INCLUSIVE_OVERTIME,
+    gross: input.monthlyGross,
+    basicSalary,
+    foodAllowance: input.foodAllowance,
+    otherAllowance: input.otherAllowance,
+    overtimeAmount,
+    overtimeHours: overtimeHours.toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP),
+    scheduledHoursPerDay: dailyHours,
+    scheduledWorkDays: workDays,
+  };
+}
 function ymd(value: Date): `${number}-${number}-${number}` { return value.toISOString().slice(0, 10) as `${number}-${number}-${number}`; }
 function firstOfMonth(value: Date) { return new Date(`${ymd(value).slice(0, 7)}-01T00:00:00.000Z`); }
 function previousDay(value: Date) { return new Date(value.getTime() - 24 * 60 * 60 * 1_000); }

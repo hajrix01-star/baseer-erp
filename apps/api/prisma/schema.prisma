@@ -255,6 +255,12 @@ enum HrPayrollRunStatus {
   REVERSED
 }
 
+/// Fixed monthly salary, or an agreement whose single total includes overtime.
+enum HrCompensationMethod {
+  FIXED_MONTHLY
+  INCLUSIVE_OVERTIME
+}
+
 enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
@@ -1254,6 +1260,11 @@ model HrEmployeeCompensationProfile {
   effectiveFrom DateTime @db.Date
   effectiveTo   DateTime? @db.Date
   monthlyGross  Decimal  @db.Decimal(18, 4)
+  compensationMethod HrCompensationMethod @default(FIXED_MONTHLY)
+  foodAllowance Decimal @default(0) @db.Decimal(18, 4)
+  otherAllowance Decimal @default(0) @db.Decimal(18, 4)
+  scheduledHoursPerDay Int?
+  scheduledWorkDays Int?
   notes         String?  @db.VarChar(1000)
   createdByUserId String @db.Uuid
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
@@ -1313,6 +1324,14 @@ model HrPayrollLine {
   employeeNameArSnapshot         String   @db.VarChar(160)
   employeeNameEnSnapshot         String?  @db.VarChar(160)
   grossSalary                    Decimal  @db.Decimal(18, 4)
+  compensationMethod             HrCompensationMethod @default(FIXED_MONTHLY)
+  basicSalary                    Decimal  @default(0) @db.Decimal(18, 4)
+  foodAllowance                  Decimal  @default(0) @db.Decimal(18, 4)
+  otherAllowance                 Decimal  @default(0) @db.Decimal(18, 4)
+  overtimeAmount                 Decimal  @default(0) @db.Decimal(18, 4)
+  overtimeHours                  Decimal  @default(0) @db.Decimal(18, 4)
+  scheduledHoursPerDay           Int?
+  scheduledWorkDays              Int?
   advanceSettlementAmount        Decimal  @default(0) @db.Decimal(18, 4)
   administrativeDeductionAmount  Decimal  @default(0) @db.Decimal(18, 4)
   netPayableAmount               Decimal  @db.Decimal(18, 4)

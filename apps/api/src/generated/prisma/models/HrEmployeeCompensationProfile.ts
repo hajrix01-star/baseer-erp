@@ -30,10 +30,18 @@ export type AggregateHrEmployeeCompensationProfile = {
 
 export type HrEmployeeCompensationProfileAvgAggregateOutputType = {
   monthlyGross: runtime.Decimal | null
+  foodAllowance: runtime.Decimal | null
+  otherAllowance: runtime.Decimal | null
+  scheduledHoursPerDay: number | null
+  scheduledWorkDays: number | null
 }
 
 export type HrEmployeeCompensationProfileSumAggregateOutputType = {
   monthlyGross: runtime.Decimal | null
+  foodAllowance: runtime.Decimal | null
+  otherAllowance: runtime.Decimal | null
+  scheduledHoursPerDay: number | null
+  scheduledWorkDays: number | null
 }
 
 export type HrEmployeeCompensationProfileMinAggregateOutputType = {
@@ -44,6 +52,11 @@ export type HrEmployeeCompensationProfileMinAggregateOutputType = {
   effectiveFrom: Date | null
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal | null
+  compensationMethod: $Enums.HrCompensationMethod | null
+  foodAllowance: runtime.Decimal | null
+  otherAllowance: runtime.Decimal | null
+  scheduledHoursPerDay: number | null
+  scheduledWorkDays: number | null
   notes: string | null
   createdByUserId: string | null
   createdAt: Date | null
@@ -58,6 +71,11 @@ export type HrEmployeeCompensationProfileMaxAggregateOutputType = {
   effectiveFrom: Date | null
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal | null
+  compensationMethod: $Enums.HrCompensationMethod | null
+  foodAllowance: runtime.Decimal | null
+  otherAllowance: runtime.Decimal | null
+  scheduledHoursPerDay: number | null
+  scheduledWorkDays: number | null
   notes: string | null
   createdByUserId: string | null
   createdAt: Date | null
@@ -72,6 +90,11 @@ export type HrEmployeeCompensationProfileCountAggregateOutputType = {
   effectiveFrom: number
   effectiveTo: number
   monthlyGross: number
+  compensationMethod: number
+  foodAllowance: number
+  otherAllowance: number
+  scheduledHoursPerDay: number
+  scheduledWorkDays: number
   notes: number
   createdByUserId: number
   createdAt: number
@@ -82,10 +105,18 @@ export type HrEmployeeCompensationProfileCountAggregateOutputType = {
 
 export type HrEmployeeCompensationProfileAvgAggregateInputType = {
   monthlyGross?: true
+  foodAllowance?: true
+  otherAllowance?: true
+  scheduledHoursPerDay?: true
+  scheduledWorkDays?: true
 }
 
 export type HrEmployeeCompensationProfileSumAggregateInputType = {
   monthlyGross?: true
+  foodAllowance?: true
+  otherAllowance?: true
+  scheduledHoursPerDay?: true
+  scheduledWorkDays?: true
 }
 
 export type HrEmployeeCompensationProfileMinAggregateInputType = {
@@ -96,6 +127,11 @@ export type HrEmployeeCompensationProfileMinAggregateInputType = {
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
+  compensationMethod?: true
+  foodAllowance?: true
+  otherAllowance?: true
+  scheduledHoursPerDay?: true
+  scheduledWorkDays?: true
   notes?: true
   createdByUserId?: true
   createdAt?: true
@@ -110,6 +146,11 @@ export type HrEmployeeCompensationProfileMaxAggregateInputType = {
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
+  compensationMethod?: true
+  foodAllowance?: true
+  otherAllowance?: true
+  scheduledHoursPerDay?: true
+  scheduledWorkDays?: true
   notes?: true
   createdByUserId?: true
   createdAt?: true
@@ -124,6 +165,11 @@ export type HrEmployeeCompensationProfileCountAggregateInputType = {
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
+  compensationMethod?: true
+  foodAllowance?: true
+  otherAllowance?: true
+  scheduledHoursPerDay?: true
+  scheduledWorkDays?: true
   notes?: true
   createdByUserId?: true
   createdAt?: true
@@ -225,6 +271,11 @@ export type HrEmployeeCompensationProfileGroupByOutputType = {
   effectiveFrom: Date
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal
+  compensationMethod: $Enums.HrCompensationMethod
+  foodAllowance: runtime.Decimal
+  otherAllowance: runtime.Decimal
+  scheduledHoursPerDay: number | null
+  scheduledWorkDays: number | null
   notes: string | null
   createdByUserId: string
   createdAt: Date
@@ -262,6 +313,11 @@ export type HrEmployeeCompensationProfileWhereInput = {
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrEmployeeCompensationProfile"> | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
+  scheduledWorkDays?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
@@ -278,6 +334,11 @@ export type HrEmployeeCompensationProfileOrderByWithRelationInput = {
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
+  compensationMethod?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -299,6 +360,11 @@ export type HrEmployeeCompensationProfileWhereUniqueInput = Prisma.AtLeast<{
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrEmployeeCompensationProfile"> | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
+  scheduledWorkDays?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
@@ -315,6 +381,11 @@ export type HrEmployeeCompensationProfileOrderByWithAggregationInput = {
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
+  compensationMethod?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -337,6 +408,11 @@ export type HrEmployeeCompensationProfileScalarWhereWithAggregatesInput = {
   effectiveFrom?: Prisma.DateTimeWithAggregatesFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodWithAggregatesFilter<"HrEmployeeCompensationProfile"> | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.IntNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | number | null
+  scheduledWorkDays?: Prisma.IntNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | number | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string | null
   createdByUserId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HrEmployeeCompensationProfile"> | Date | string
@@ -348,6 +424,11 @@ export type HrEmployeeCompensationProfileCreateInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -364,6 +445,11 @@ export type HrEmployeeCompensationProfileUncheckedCreateInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -375,6 +461,11 @@ export type HrEmployeeCompensationProfileUpdateInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,6 +482,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -405,6 +501,11 @@ export type HrEmployeeCompensationProfileCreateManyInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -416,6 +517,11 @@ export type HrEmployeeCompensationProfileUpdateManyMutationInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +536,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -466,6 +577,11 @@ export type HrEmployeeCompensationProfileCountOrderByAggregateInput = {
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
+  compensationMethod?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -474,6 +590,10 @@ export type HrEmployeeCompensationProfileCountOrderByAggregateInput = {
 
 export type HrEmployeeCompensationProfileAvgOrderByAggregateInput = {
   monthlyGross?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrder
 }
 
 export type HrEmployeeCompensationProfileMaxOrderByAggregateInput = {
@@ -484,6 +604,11 @@ export type HrEmployeeCompensationProfileMaxOrderByAggregateInput = {
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
+  compensationMethod?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -498,6 +623,11 @@ export type HrEmployeeCompensationProfileMinOrderByAggregateInput = {
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
+  compensationMethod?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -506,6 +636,10 @@ export type HrEmployeeCompensationProfileMinOrderByAggregateInput = {
 
 export type HrEmployeeCompensationProfileSumOrderByAggregateInput = {
   monthlyGross?: Prisma.SortOrder
+  foodAllowance?: Prisma.SortOrder
+  otherAllowance?: Prisma.SortOrder
+  scheduledHoursPerDay?: Prisma.SortOrder
+  scheduledWorkDays?: Prisma.SortOrder
 }
 
 export type HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput = {
@@ -592,11 +726,20 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNeste
   deleteMany?: Prisma.HrEmployeeCompensationProfileScalarWhereInput | Prisma.HrEmployeeCompensationProfileScalarWhereInput[]
 }
 
+export type EnumHrCompensationMethodFieldUpdateOperationsInput = {
+  set?: $Enums.HrCompensationMethod
+}
+
 export type HrEmployeeCompensationProfileCreateWithoutCompanyInput = {
   id?: string
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -610,6 +753,11 @@ export type HrEmployeeCompensationProfileUncheckedCreateWithoutCompanyInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -653,6 +801,11 @@ export type HrEmployeeCompensationProfileScalarWhereInput = {
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFilter<"HrEmployeeCompensationProfile"> | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
+  scheduledWorkDays?: Prisma.IntNullableFilter<"HrEmployeeCompensationProfile"> | number | null
   notes?: Prisma.StringNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   createdByUserId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
@@ -664,6 +817,11 @@ export type HrEmployeeCompensationProfileCreateWithoutEmployeeInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -676,6 +834,11 @@ export type HrEmployeeCompensationProfileUncheckedCreateWithoutEmployeeInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -714,6 +877,11 @@ export type HrEmployeeCompensationProfileCreateManyCompanyInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -725,6 +893,11 @@ export type HrEmployeeCompensationProfileUpdateWithoutCompanyInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -738,6 +911,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateWithoutCompanyInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -750,6 +928,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyInput 
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -761,6 +944,11 @@ export type HrEmployeeCompensationProfileCreateManyEmployeeInput = {
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
   notes?: string | null
   createdByUserId: string
   createdAt?: Date | string
@@ -772,6 +960,11 @@ export type HrEmployeeCompensationProfileUpdateWithoutEmployeeInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -784,6 +977,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateWithoutEmployeeInput = {
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -795,6 +993,11 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeInput
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -811,6 +1014,11 @@ export type HrEmployeeCompensationProfileSelect<ExtArgs extends runtime.Types.Ex
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
+  compensationMethod?: boolean
+  foodAllowance?: boolean
+  otherAllowance?: boolean
+  scheduledHoursPerDay?: boolean
+  scheduledWorkDays?: boolean
   notes?: boolean
   createdByUserId?: boolean
   createdAt?: boolean
@@ -827,6 +1035,11 @@ export type HrEmployeeCompensationProfileSelectCreateManyAndReturn<ExtArgs exten
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
+  compensationMethod?: boolean
+  foodAllowance?: boolean
+  otherAllowance?: boolean
+  scheduledHoursPerDay?: boolean
+  scheduledWorkDays?: boolean
   notes?: boolean
   createdByUserId?: boolean
   createdAt?: boolean
@@ -843,6 +1056,11 @@ export type HrEmployeeCompensationProfileSelectUpdateManyAndReturn<ExtArgs exten
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
+  compensationMethod?: boolean
+  foodAllowance?: boolean
+  otherAllowance?: boolean
+  scheduledHoursPerDay?: boolean
+  scheduledWorkDays?: boolean
   notes?: boolean
   createdByUserId?: boolean
   createdAt?: boolean
@@ -859,13 +1077,18 @@ export type HrEmployeeCompensationProfileSelectScalar = {
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
+  compensationMethod?: boolean
+  foodAllowance?: boolean
+  otherAllowance?: boolean
+  scheduledHoursPerDay?: boolean
+  scheduledWorkDays?: boolean
   notes?: boolean
   createdByUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type HrEmployeeCompensationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "effectiveFrom" | "effectiveTo" | "monthlyGross" | "notes" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeCompensationProfile"]>
+export type HrEmployeeCompensationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "effectiveFrom" | "effectiveTo" | "monthlyGross" | "compensationMethod" | "foodAllowance" | "otherAllowance" | "scheduledHoursPerDay" | "scheduledWorkDays" | "notes" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeCompensationProfile"]>
 export type HrEmployeeCompensationProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
@@ -893,6 +1116,11 @@ export type $HrEmployeeCompensationProfilePayload<ExtArgs extends runtime.Types.
     effectiveFrom: Date
     effectiveTo: Date | null
     monthlyGross: runtime.Decimal
+    compensationMethod: $Enums.HrCompensationMethod
+    foodAllowance: runtime.Decimal
+    otherAllowance: runtime.Decimal
+    scheduledHoursPerDay: number | null
+    scheduledWorkDays: number | null
     notes: string | null
     createdByUserId: string
     createdAt: Date
@@ -1329,6 +1557,11 @@ export interface HrEmployeeCompensationProfileFieldRefs {
   readonly effectiveFrom: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'DateTime'>
   readonly effectiveTo: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'DateTime'>
   readonly monthlyGross: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Decimal'>
+  readonly compensationMethod: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'HrCompensationMethod'>
+  readonly foodAllowance: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Decimal'>
+  readonly otherAllowance: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Decimal'>
+  readonly scheduledHoursPerDay: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Int'>
+  readonly scheduledWorkDays: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Int'>
   readonly notes: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
   readonly createdByUserId: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'DateTime'>

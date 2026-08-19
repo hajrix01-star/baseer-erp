@@ -366,6 +366,14 @@ export const HrPayrollRunStatus = {
 export type HrPayrollRunStatus = (typeof HrPayrollRunStatus)[keyof typeof HrPayrollRunStatus]
 
 
+export const HrCompensationMethod = {
+  FIXED_MONTHLY: 'FIXED_MONTHLY',
+  INCLUSIVE_OVERTIME: 'INCLUSIVE_OVERTIME'
+} as const
+
+export type HrCompensationMethod = (typeof HrCompensationMethod)[keyof typeof HrCompensationMethod]
+
+
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',

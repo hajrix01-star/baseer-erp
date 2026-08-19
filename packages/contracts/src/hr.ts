@@ -16,6 +16,8 @@ export const hrEmployeeAdvanceStatusSchema = z.enum(["ISSUED", "PARTIALLY_SETTLE
 export const hrEmployeeAdministrativeDeductionStatusSchema = z.enum(["OPEN", "PARTIALLY_APPLIED", "APPLIED", "DEFERRED", "CANCELLED"]);
 export const hrEmployeeLeaveTypeSchema = z.enum(["ANNUAL", "SICK", "UNPAID", "OTHER"]);
 export const hrEmployeeLeaveStatusSchema = z.enum(["APPROVED", "RETURNED"]);
+/** A fixed salary is entered as-is; an inclusive package derives the base and overtime. */
+export const hrCompensationMethodSchema = z.enum(["FIXED_MONTHLY", "INCLUSIVE_OVERTIME"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
   "IQAMA_ISSUANCE",
   "IQAMA_RENEWAL",
@@ -184,14 +186,30 @@ export const cancelHrEmployeeAdministrativeDeductionRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
-/** Effective-dated monthly gross compensation. Payroll only reads this server record. */
+/**
+ * Effective-dated compensation agreement. For inclusive overtime, the agreed
+ * total remains the payroll gross while the server derives the base and OT.
+ */
 export const setHrEmployeeCompensationRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
   effectiveFrom: hrDateSchema,
   monthlyGross: hrAmountSchema.refine((value) => Number(value) > 0),
+  compensationMethod: hrCompensationMethodSchema.default("FIXED_MONTHLY"),
+  foodAllowance: hrAmountSchema.default("0"),
+  otherAllowance: hrAmountSchema.default("0"),
+  scheduledHoursPerDay: z.coerce.number().int().min(1).max(12).optional(),
+  scheduledWorkDays: z.coerce.number().int().min(1).max(31).optional(),
   notes: z.string().trim().max(1_000).optional(),
   idempotencyKey: idempotencyKeySchema,
-}).strict();
+}).strict().superRefine((value, context) => {
+  if (value.compensationMethod !== "INCLUSIVE_OVERTIME") return;
+  if (!value.scheduledHoursPerDay || !value.scheduledWorkDays) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Inclusive overtime requires agreed daily hours and working days." });
+  }
+  if (value.scheduledHoursPerDay !== undefined && value.scheduledHoursPerDay <= 8) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["scheduledHoursPerDay"], message: "Inclusive overtime requires more than eight daily hours." });
+  }
+});
 
 const payrollApplicationSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema.refine((value) => Number(value) > 0) }).strict();
 const payrollLineRequestSchema = z.object({
@@ -347,7 +365,10 @@ export const hrEmployeeAdministrativeDeductionDetailSchema = z.object({
 
 export const hrEmployeeCompensationProfileSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, effectiveFrom: businessDateSchema,
-  effectiveTo: businessDateSchema.nullable(), monthlyGross: hrAmountSchema, notes: z.string().max(1_000).nullable(),
+  effectiveTo: businessDateSchema.nullable(), monthlyGross: hrAmountSchema,
+  compensationMethod: hrCompensationMethodSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema,
+  scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
+  notes: z.string().max(1_000).nullable(),
 }).strict();
 
 export const hrEmployeeLeaveSchema = z.object({
@@ -367,7 +388,10 @@ export const hrEmployeeLeaveSchema = z.object({
 const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema, referenceNumber: z.string().max(80) }).strict();
 export const hrPayrollLineSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
-  grossSalary: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
+  grossSalary: hrAmountSchema, compensationMethod: hrCompensationMethodSchema,
+  basicSalary: hrAmountSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema, overtimeAmount: hrAmountSchema, overtimeHours: hrAmountSchema,
+  scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
+  advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
   advances: z.array(hrPayrollApplicationDetailSchema).max(100), administrativeDeductions: z.array(hrPayrollApplicationDetailSchema).max(100),
 }).strict();
 export const hrPayrollRunSchema = z.object({
