@@ -305,6 +305,7 @@ export type FinanceVaultWhereInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationListRelationFilter
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationListRelationFilter
 }
 
 export type FinanceVaultOrderByWithRelationInput = {
@@ -336,6 +337,7 @@ export type FinanceVaultOrderByWithRelationInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileOrderByRelationAggregateInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationOrderByRelationAggregateInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationOrderByRelationAggregateInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationOrderByRelationAggregateInput
 }
 
 export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
@@ -373,6 +375,7 @@ export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileListRelationFilter
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationListRelationFilter
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_nameAr" | "companyId_accountId">
 
 export type FinanceVaultOrderByWithAggregationInput = {
@@ -445,6 +448,7 @@ export type FinanceVaultCreateInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateInput = {
@@ -474,6 +478,7 @@ export type FinanceVaultUncheckedCreateInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUpdateInput = {
@@ -502,6 +507,7 @@ export type FinanceVaultUpdateInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateInput = {
@@ -531,6 +537,7 @@ export type FinanceVaultUncheckedUpdateInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateManyInput = {
@@ -821,6 +828,20 @@ export type FinanceVaultUpdateOneRequiredWithoutOutflowAllocationsNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutOutflowAllocationsInput, Prisma.FinanceVaultUpdateWithoutOutflowAllocationsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput>
 }
 
+export type FinanceVaultCreateNestedOneWithoutFinalSettlementPaymentAllocationsInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutFinalSettlementPaymentAllocationsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+}
+
+export type FinanceVaultUpdateOneRequiredWithoutFinalSettlementPaymentAllocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutFinalSettlementPaymentAllocationsInput
+  upsert?: Prisma.FinanceVaultUpsertWithoutFinalSettlementPaymentAllocationsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUpdateWithoutFinalSettlementPaymentAllocationsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutFinalSettlementPaymentAllocationsInput>
+}
+
 export type FinanceVaultCreateNestedOneWithoutEmployeeAdvanceAllocationsInput = {
   create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutEmployeeAdvanceAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutEmployeeAdvanceAllocationsInput>
   connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutEmployeeAdvanceAllocationsInput
@@ -980,6 +1001,7 @@ export type FinanceVaultCreateWithoutCompanyInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
@@ -1007,6 +1029,7 @@ export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutCompanyInput = {
@@ -1081,6 +1104,7 @@ export type FinanceVaultCreateWithoutAccountInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutAccountInput = {
@@ -1107,6 +1131,7 @@ export type FinanceVaultUncheckedCreateWithoutAccountInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutAccountInput = {
@@ -1160,6 +1185,7 @@ export type FinanceVaultCreateWithoutSupplierDuePaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
@@ -1188,6 +1214,7 @@ export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutSupplierDuePaymentsInput = {
@@ -1231,6 +1258,7 @@ export type FinanceVaultUpdateWithoutSupplierDuePaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
@@ -1259,6 +1287,7 @@ export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
@@ -1286,6 +1315,7 @@ export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
@@ -1314,6 +1344,7 @@ export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutOutflowAllocationsInput = {
@@ -1357,6 +1388,7 @@ export type FinanceVaultUpdateWithoutOutflowAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
@@ -1382,6 +1414,137 @@ export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
   dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
   dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
+  account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  accountId: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultCreateOrConnectWithoutFinalSettlementPaymentAllocationsInput = {
+  where: Prisma.FinanceVaultWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsInput>
+}
+
+export type FinanceVaultUpsertWithoutFinalSettlementPaymentAllocationsInput = {
+  update: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedUpdateWithoutFinalSettlementPaymentAllocationsInput>
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsInput>
+  where?: Prisma.FinanceVaultWhereInput
+}
+
+export type FinanceVaultUpdateToOneWithWhereWithoutFinalSettlementPaymentAllocationsInput = {
+  where?: Prisma.FinanceVaultWhereInput
+  data: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutFinalSettlementPaymentAllocationsInput, Prisma.FinanceVaultUncheckedUpdateWithoutFinalSettlementPaymentAllocationsInput>
+}
+
+export type FinanceVaultUpdateWithoutFinalSettlementPaymentAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
+  account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultUncheckedUpdateWithoutFinalSettlementPaymentAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1412,6 +1575,7 @@ export type FinanceVaultCreateWithoutEmployeeAdvanceAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutEmployeeAdvanceAllocationsInput = {
@@ -1440,6 +1604,7 @@ export type FinanceVaultUncheckedCreateWithoutEmployeeAdvanceAllocationsInput = 
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutEmployeeAdvanceAllocationsInput = {
@@ -1483,6 +1648,7 @@ export type FinanceVaultUpdateWithoutEmployeeAdvanceAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutEmployeeAdvanceAllocationsInput = {
@@ -1511,6 +1677,7 @@ export type FinanceVaultUncheckedUpdateWithoutEmployeeAdvanceAllocationsInput = 
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutPayrollPaymentAllocationsInput = {
@@ -1538,6 +1705,7 @@ export type FinanceVaultCreateWithoutPayrollPaymentAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutPayrollPaymentAllocationsInput = {
@@ -1566,6 +1734,7 @@ export type FinanceVaultUncheckedCreateWithoutPayrollPaymentAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutPayrollPaymentAllocationsInput = {
@@ -1609,6 +1778,7 @@ export type FinanceVaultUpdateWithoutPayrollPaymentAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutPayrollPaymentAllocationsInput = {
@@ -1637,6 +1807,7 @@ export type FinanceVaultUncheckedUpdateWithoutPayrollPaymentAllocationsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
@@ -1664,6 +1835,7 @@ export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
@@ -1692,6 +1864,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashObservationsInput = {
@@ -1724,6 +1897,7 @@ export type FinanceVaultCreateWithoutDailyCashHandoversInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
@@ -1752,6 +1926,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailyCashHandoversInput = {
@@ -1795,6 +1970,7 @@ export type FinanceVaultUpdateWithoutDailyCashObservationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
@@ -1823,6 +1999,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUpsertWithoutDailyCashHandoversInput = {
@@ -1861,6 +2038,7 @@ export type FinanceVaultUpdateWithoutDailyCashHandoversInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
@@ -1889,6 +2067,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
@@ -1916,6 +2095,7 @@ export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
@@ -1944,6 +2124,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesAllocationsInput = {
@@ -1987,6 +2168,7 @@ export type FinanceVaultUpdateWithoutDailySalesAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
@@ -2015,6 +2197,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
@@ -2042,6 +2225,7 @@ export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = {
@@ -2070,6 +2254,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = 
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutDailySalesChannelSummariesInput = {
@@ -2113,6 +2298,7 @@ export type FinanceVaultUpdateWithoutDailySalesChannelSummariesInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
@@ -2141,6 +2327,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = 
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutRecurringExpenseDefaultsInput = {
@@ -2168,6 +2355,7 @@ export type FinanceVaultCreateWithoutRecurringExpenseDefaultsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput = {
@@ -2196,6 +2384,7 @@ export type FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutRecurringExpenseDefaultsInput = {
@@ -2239,6 +2428,7 @@ export type FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput = {
@@ -2267,6 +2457,7 @@ export type FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput = {
   outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
@@ -2294,6 +2485,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
@@ -2322,6 +2514,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanPaymentsInput = {
@@ -2365,6 +2558,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanPaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
@@ -2393,6 +2587,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -2420,6 +2615,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
@@ -2448,6 +2644,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
 }
 
 export type FinanceVaultCreateOrConnectWithoutInclusiveLoanInstallmentsInput = {
@@ -2491,6 +2688,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanInstallmentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
@@ -2519,6 +2717,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultCreateManyCompanyInput = {
@@ -2562,6 +2761,7 @@ export type FinanceVaultUpdateWithoutCompanyInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
@@ -2589,6 +2789,7 @@ export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutCompanyInput = {
@@ -2647,6 +2848,7 @@ export type FinanceVaultUpdateWithoutAccountInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
@@ -2673,6 +2875,7 @@ export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
   recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
   employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
   payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
 }
 
 export type FinanceVaultUncheckedUpdateManyWithoutAccountInput = {
@@ -2707,6 +2910,7 @@ export type FinanceVaultCountOutputType = {
   recurringExpenseDefaults: number
   employeeAdvanceAllocations: number
   payrollPaymentAllocations: number
+  finalSettlementPaymentAllocations: number
 }
 
 export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2721,6 +2925,7 @@ export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   recurringExpenseDefaults?: boolean | FinanceVaultCountOutputTypeCountRecurringExpenseDefaultsArgs
   employeeAdvanceAllocations?: boolean | FinanceVaultCountOutputTypeCountEmployeeAdvanceAllocationsArgs
   payrollPaymentAllocations?: boolean | FinanceVaultCountOutputTypeCountPayrollPaymentAllocationsArgs
+  finalSettlementPaymentAllocations?: boolean | FinanceVaultCountOutputTypeCountFinalSettlementPaymentAllocationsArgs
 }
 
 /**
@@ -2810,6 +3015,13 @@ export type FinanceVaultCountOutputTypeCountPayrollPaymentAllocationsArgs<ExtArg
   where?: Prisma.HrPayrollPaymentAllocationWhereInput
 }
 
+/**
+ * FinanceVaultCountOutputType without action
+ */
+export type FinanceVaultCountOutputTypeCountFinalSettlementPaymentAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrFinalSettlementPaymentAllocationWhereInput
+}
+
 
 export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2840,6 +3052,7 @@ export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.Internal
   recurringExpenseDefaults?: boolean | Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>
   employeeAdvanceAllocations?: boolean | Prisma.FinanceVault$employeeAdvanceAllocationsArgs<ExtArgs>
   payrollPaymentAllocations?: boolean | Prisma.FinanceVault$payrollPaymentAllocationsArgs<ExtArgs>
+  finalSettlementPaymentAllocations?: boolean | Prisma.FinanceVault$finalSettlementPaymentAllocationsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeVault"]>
 
@@ -2916,6 +3129,7 @@ export type FinanceVaultInclude<ExtArgs extends runtime.Types.Extensions.Interna
   recurringExpenseDefaults?: boolean | Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>
   employeeAdvanceAllocations?: boolean | Prisma.FinanceVault$employeeAdvanceAllocationsArgs<ExtArgs>
   payrollPaymentAllocations?: boolean | Prisma.FinanceVault$payrollPaymentAllocationsArgs<ExtArgs>
+  finalSettlementPaymentAllocations?: boolean | Prisma.FinanceVault$finalSettlementPaymentAllocationsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceVaultCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceVaultIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2943,6 +3157,7 @@ export type $FinanceVaultPayload<ExtArgs extends runtime.Types.Extensions.Intern
     recurringExpenseDefaults: Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>[]
     employeeAdvanceAllocations: Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>[]
     payrollPaymentAllocations: Prisma.$HrPayrollPaymentAllocationPayload<ExtArgs>[]
+    finalSettlementPaymentAllocations: Prisma.$HrFinalSettlementPaymentAllocationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3367,6 +3582,7 @@ export interface Prisma__FinanceVaultClient<T, Null = never, ExtArgs extends run
   recurringExpenseDefaults<T extends Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$recurringExpenseDefaultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employeeAdvanceAllocations<T extends Prisma.FinanceVault$employeeAdvanceAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$employeeAdvanceAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payrollPaymentAllocations<T extends Prisma.FinanceVault$payrollPaymentAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$payrollPaymentAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrPayrollPaymentAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  finalSettlementPaymentAllocations<T extends Prisma.FinanceVault$finalSettlementPaymentAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$finalSettlementPaymentAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPaymentAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4073,6 +4289,30 @@ export type FinanceVault$payrollPaymentAllocationsArgs<ExtArgs extends runtime.T
   take?: number
   skip?: number
   distinct?: Prisma.HrPayrollPaymentAllocationScalarFieldEnum | Prisma.HrPayrollPaymentAllocationScalarFieldEnum[]
+}
+
+/**
+ * FinanceVault.finalSettlementPaymentAllocations
+ */
+export type FinanceVault$finalSettlementPaymentAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrFinalSettlementPaymentAllocation
+   */
+  select?: Prisma.HrFinalSettlementPaymentAllocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrFinalSettlementPaymentAllocation
+   */
+  omit?: Prisma.HrFinalSettlementPaymentAllocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrFinalSettlementPaymentAllocationInclude<ExtArgs> | null
+  where?: Prisma.HrFinalSettlementPaymentAllocationWhereInput
+  orderBy?: Prisma.HrFinalSettlementPaymentAllocationOrderByWithRelationInput | Prisma.HrFinalSettlementPaymentAllocationOrderByWithRelationInput[]
+  cursor?: Prisma.HrFinalSettlementPaymentAllocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrFinalSettlementPaymentAllocationScalarFieldEnum | Prisma.HrFinalSettlementPaymentAllocationScalarFieldEnum[]
 }
 
 /**

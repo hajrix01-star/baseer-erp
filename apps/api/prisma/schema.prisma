@@ -212,6 +212,38 @@ enum HrEmployeeFinancialMovementType {
   PAYROLL_PAYMENT
   ADVANCE_ISSUED
   ADVANCE_SETTLEMENT
+  FINAL_SETTLEMENT_ACCRUAL
+  FINAL_SETTLEMENT_PAYMENT
+}
+
+enum HrFinalSettlementStatus {
+  DRAFT
+  APPROVED
+  PARTIALLY_PAID
+  PAID
+  REVERSED
+  CANCELLED
+}
+
+enum HrFinalSettlementReason {
+  EMPLOYER_TERMINATION
+  RESIGNATION
+  ARTICLE_80
+  ARTICLE_81
+  FORCE_MAJEURE
+  MATERNITY
+  OTHER_LEGAL_REVIEW
+}
+
+enum HrFinalSettlementReasonVerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum HrFinalSettlementRecoveryType {
+  ADVANCE
+  ADMINISTRATIVE_DEDUCTION
 }
 
 /// An employee advance is an asset until it is repaid or settled through an
@@ -225,6 +257,7 @@ enum HrEmployeeAdvanceStatus {
 
 enum HrEmployeeAdvanceSettlementSource {
   PAYROLL
+  FINAL_SETTLEMENT
   MANUAL_RECEIPT
 }
 
@@ -449,6 +482,7 @@ model Company {
   hrEmployeeDocumentBlobs       HrEmployeeDocumentBlob[]
   hrEmployeeDocuments           HrEmployeeDocument[]
   hrEmployeeLetters             HrEmployeeLetter[]
+  hrFinalSettlements            HrFinalSettlement[]
   aiCompanyIdentities          AiCompanyIdentity[]
   aiExecutionReceipts          AiExecutionReceipt[]
   branding                     CompanyBranding?
@@ -827,6 +861,7 @@ model FinanceVault {
   recurringExpenseDefaults   FinanceRecurringExpenseProfile[]
   employeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
   payrollPaymentAllocations  HrPayrollPaymentAllocation[]
+  finalSettlementPaymentAllocations HrFinalSettlementPaymentAllocation[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, nameAr])
@@ -933,6 +968,8 @@ model FinanceJournalEntry {
   hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
   hrPayrollAccrual      HrPayrollRun?                @relation("HrPayrollAccrualJournal")
   hrPayrollPayment      HrPayrollPayment?            @relation("HrPayrollPaymentJournal")
+  hrFinalSettlementAccrual HrFinalSettlement? @relation("HrFinalSettlementAccrualJournal")
+  hrFinalSettlementPayment HrFinalSettlementPayment? @relation("HrFinalSettlementPaymentJournal")
 
   @@unique([id, tenantId, companyId])
   @@unique([reversalOfEntryId, tenantId, companyId])
@@ -1059,6 +1096,7 @@ model HrEmployee {
   compensationProfiles     HrEmployeeCompensationProfile[]
   leaves                   HrEmployeeLeave[]
   payrollLines             HrPayrollLine[]
+  finalSettlements         HrFinalSettlement[]
   documents                HrEmployeeDocument[]
   letters                  HrEmployeeLetter[]
 
@@ -1270,6 +1308,100 @@ model HrEmployeeFinancialMovement {
   @@unique([employeeId, journalEntryId, movementType])
   @@index([tenantId, companyId, employeeId, businessDate, id])
   @@index([tenantId, companyId, journalEntryId])
+}
+
+model HrFinalSettlement {
+  id String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  companyId String @db.Uuid
+  employeeId String @db.Uuid
+  settlementNumber String @db.VarChar(80)
+  status HrFinalSettlementStatus @default(DRAFT)
+  terminationDate DateTime @db.Date
+  terminationReason HrFinalSettlementReason
+  reasonEvidenceReference String @db.VarChar(240)
+  reasonEvidenceNote String? @db.VarChar(2000)
+  reasonVerificationStatus HrFinalSettlementReasonVerificationStatus @default(PENDING)
+  reasonVerifiedAt DateTime? @db.Timestamptz(6)
+  reasonVerifiedByUserId String? @db.Uuid
+  reasonVerificationNote String? @db.VarChar(2000)
+  calculationPolicyVersion String @db.VarChar(40)
+  serviceDays Int
+  eosWage Decimal @db.Decimal(18,4)
+  fullAwardAmount Decimal @db.Decimal(18,4)
+  entitlementFactor Decimal @db.Decimal(10,8)
+  eosAmount Decimal @db.Decimal(18,4)
+  otherCreditsAmount Decimal @default(0) @db.Decimal(18,4)
+  recoveryAmount Decimal @default(0) @db.Decimal(18,4)
+  netPayableAmount Decimal @db.Decimal(18,4)
+  paidAmount Decimal @default(0) @db.Decimal(18,4)
+  snapshotJson Json
+  snapshotSha256 String @db.Char(64)
+  accrualJournalEntryId String? @db.Uuid
+  approvedAt DateTime? @db.Timestamptz(6)
+  /// Immutable approver of the posted EOS accrual. Kept separately from the
+  /// journal actor so segregation-of-duties checks survive later reads.
+  approvedByUserId String? @db.Uuid
+  reversedAt DateTime? @db.Timestamptz(6)
+  /// Immutable actor who reversed the unpaid approved settlement.
+  reversedByUserId String? @db.Uuid
+  reversalReason String? @db.VarChar(1000)
+  createdByUserId String @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  company Company @relation(fields:[companyId,tenantId],references:[id,tenantId],onDelete:Restrict)
+  employee HrEmployee @relation(fields:[employeeId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  accrualJournal FinanceJournalEntry? @relation("HrFinalSettlementAccrualJournal",fields:[accrualJournalEntryId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  recoveries HrFinalSettlementRecovery[]
+  payments HrFinalSettlementPayment[]
+  @@unique([id,tenantId,companyId])
+  @@unique([companyId,settlementNumber])
+  @@unique([accrualJournalEntryId,tenantId,companyId])
+  @@index([tenantId,companyId,employeeId,status,terminationDate])
+  @@index([tenantId,companyId,createdAt,id])
+}
+model HrFinalSettlementRecovery {
+  id String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  companyId String @db.Uuid
+  settlementId String @db.Uuid
+  recoveryType HrFinalSettlementRecoveryType
+  sourceId String @db.Uuid
+  amount Decimal @db.Decimal(18,4)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  settlement HrFinalSettlement @relation(fields:[settlementId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  @@unique([settlementId,recoveryType,sourceId])
+  @@index([tenantId,companyId,recoveryType,sourceId])
+}
+model HrFinalSettlementPayment {
+  id String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  companyId String @db.Uuid
+  settlementId String @db.Uuid
+  paymentNumber String @db.VarChar(80)
+  businessDate DateTime @db.Date
+  amount Decimal @db.Decimal(18,4)
+  journalEntryId String @db.Uuid
+  createdByUserId String @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  settlement HrFinalSettlement @relation(fields:[settlementId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  journalEntry FinanceJournalEntry @relation("HrFinalSettlementPaymentJournal",fields:[journalEntryId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  allocations HrFinalSettlementPaymentAllocation[]
+  @@unique([id,tenantId,companyId])
+  @@unique([companyId,paymentNumber])
+  @@unique([journalEntryId,tenantId,companyId])
+}
+model HrFinalSettlementPaymentAllocation {
+  id String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  companyId String @db.Uuid
+  paymentId String @db.Uuid
+  vaultId String @db.Uuid
+  paymentMethod FinanceVaultPaymentMethod
+  amount Decimal @db.Decimal(18,4)
+  payment HrFinalSettlementPayment @relation(fields:[paymentId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  vault FinanceVault @relation(fields:[vaultId,tenantId,companyId],references:[id,tenantId,companyId],onDelete:Restrict)
+  @@unique([paymentId,vaultId,paymentMethod])
 }
 
 /// Immutable issue record for money paid to an employee before payroll. The

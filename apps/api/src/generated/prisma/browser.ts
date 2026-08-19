@@ -196,6 +196,26 @@ export type HrEmployeeService = Prisma.HrEmployeeServiceModel
  */
 export type HrEmployeeFinancialMovement = Prisma.HrEmployeeFinancialMovementModel
 /**
+ * Model HrFinalSettlement
+ * 
+ */
+export type HrFinalSettlement = Prisma.HrFinalSettlementModel
+/**
+ * Model HrFinalSettlementRecovery
+ * 
+ */
+export type HrFinalSettlementRecovery = Prisma.HrFinalSettlementRecoveryModel
+/**
+ * Model HrFinalSettlementPayment
+ * 
+ */
+export type HrFinalSettlementPayment = Prisma.HrFinalSettlementPaymentModel
+/**
+ * Model HrFinalSettlementPaymentAllocation
+ * 
+ */
+export type HrFinalSettlementPaymentAllocation = Prisma.HrFinalSettlementPaymentAllocationModel
+/**
  * Model HrEmployeeAdvance
  * Immutable issue record for money paid to an employee before payroll. The
  * residual is updated only by a settlement/reversal transaction and never by

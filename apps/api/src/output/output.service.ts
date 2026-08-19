@@ -22,7 +22,7 @@ import {
 
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { CompanyContextService } from '../company-context/company-context.service.js';
-import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
+import { canonicalJson, IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { DatabaseService } from '../database/database.service.js';
 import { RequestContext } from '../observability/request-context.js';
@@ -49,7 +49,7 @@ export class OutputService {
     const capability = input.request.format === 'preview'
       ? 'platform.output.preview'
       : 'platform.output.export';
-    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : null;
+    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : input.reportCode === 'hr.final-settlement' ? 'hr.final_settlements.read' : null;
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
@@ -177,6 +177,9 @@ export class OutputService {
     if (reportCode === 'hr.employee-letter') {
       return this.createEmployeeLetterSnapshot(transaction, context, request);
     }
+    if (reportCode === 'hr.final-settlement') {
+      return this.createFinalSettlementSnapshot(transaction, context, request);
+    }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
     }
@@ -216,6 +219,43 @@ export class OutputService {
       }],
       sourceLabel: arabic ? 'سجل شركات بصير' : 'Baseer company registry',
     };
+  }
+
+  private async createFinalSettlementSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    if (request.format !== 'preview') throw new BadRequestException('Final-settlement output is A4 preview only in V1.');
+    const settlementId = typeof request.filters['settlementId'] === 'string' ? request.filters['settlementId'] : null;
+    if (!settlementId || Object.keys(request.filters).length !== 1) throw new BadRequestException('A final-settlement output requires exactly one settlementId filter.');
+    const settlement = await transaction.hrFinalSettlement.findFirst({ where: { id: settlementId, tenantId: context.tenantId, companyId: context.companyId } });
+    if (!settlement) throw new NotFoundException('The final settlement was not found.');
+    if (!['APPROVED', 'PARTIALLY_PAID', 'PAID'].includes(settlement.status)) throw new NotFoundException('The final settlement is not available for output.');
+    const canonical = canonicalJson(settlement.snapshotJson);
+    if (createHash('sha256').update(canonical).digest('hex') !== settlement.snapshotSha256) throw new ConflictException('The immutable final-settlement snapshot failed verification.');
+    const source = settlement.snapshotJson as Record<string, unknown>;
+    const employee = source['employee'] as Record<string, unknown> | undefined;
+    const company = source['company'] as Record<string, unknown> | undefined;
+    if (!employee || !company || typeof source['settlementNumber'] !== 'string') throw new ConflictException('The immutable final-settlement snapshot is invalid.');
+    const arabic = request.locale === 'ar';
+    const employeeName = arabic ? employee['nameAr'] : (employee['nameEn'] || employee['nameAr']);
+    const companyName = arabic ? company['nameAr'] : (company['nameEn'] || company['nameAr']);
+    const branding = await transaction.companyBranding.findFirst({ where: { companyId: context.companyId, tenantId: context.tenantId }, select: { logoFileMetadataId: true } });
+    const dateResolution = await this.businessDate.resolveInTransaction(transaction, context);
+    const fields: Array<Record<string, string | number | null>> = [
+      { field: arabic ? 'رقم التسوية' : 'Settlement number', value: String(source['settlementNumber']) },
+      { field: arabic ? 'الموظف' : 'Employee', value: String(employeeName ?? '') },
+      { field: arabic ? 'رقم الموظف' : 'Employee no.', value: String(employee['employeeNumber'] ?? '') },
+      { field: arabic ? 'تاريخ الانتهاء' : 'Termination date', value: String(source['terminationDate'] ?? '') },
+      { field: arabic ? 'سبب الانتهاء' : 'Termination reason', value: String(source['terminationReason'] ?? '') },
+      { field: arabic ? 'أيام الخدمة' : 'Service days', value: String(source['serviceDays'] ?? '') },
+      { field: arabic ? 'الأجر المحتسب' : 'Eligible wage', value: String(source['eosWage'] ?? '') },
+      { field: arabic ? 'استحقاق نهاية الخدمة' : 'End-of-service entitlement', value: String(source['eosAmount'] ?? '') },
+      { field: arabic ? 'استردادات مرتبطة' : 'Referenced recoveries', value: String(source['recoveryAmount'] ?? '') },
+      { field: arabic ? 'صافي المستحق' : 'Net payable', value: String(source['netPayableAmount'] ?? '') },
+    ];
+    return { snapshotId: randomUUID(), reportCode: 'hr.final-settlement', templateVersion: '1', title: arabic ? 'تسوية نهاية الخدمة' : 'Final settlement', direction: arabic ? 'rtl' : 'ltr', locale: request.locale, generatedAtRiyadh: dateResolution.generatedAt, companies: [{ id: context.companyId, name: String(companyName ?? '') }], companyLogoDataUri: await this.readPrintLogo(transaction, context, branding?.logoFileMetadataId ?? null), periodLabel: `${source['settlementNumber']} · ${source['terminationDate']}`, taxPresentation: 'gross', columns: [{ key: 'field', label: arabic ? 'البيان' : 'Field', kind: 'text', width: 42 }, { key: 'value', label: arabic ? 'القيمة' : 'Value', kind: 'text', width: 58 }], rows: fields, sourceLabel: arabic ? 'تسوية نهاية خدمة معتمدة من بصير' : 'Approved Baseer final settlement' };
   }
 
   private async createEmployeeLetterSnapshot(
@@ -427,14 +467,6 @@ export class OutputService {
     });
   }
 }
-
-function canonicalJson(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
-  const record = value as Record<string, unknown>;
-  return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(',')}}`;
-}
-
 
 function contentHash(value: string): string {
   return createHash('sha256').update(value, 'utf8').digest('hex');

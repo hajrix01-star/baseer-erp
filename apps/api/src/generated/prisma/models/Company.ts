@@ -256,6 +256,7 @@ export type CompanyWhereInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobListRelationFilter
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
   hrEmployeeLetters?: Prisma.HrEmployeeLetterListRelationFilter
+  hrFinalSettlements?: Prisma.HrFinalSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   branding?: Prisma.XOR<Prisma.CompanyBrandingNullableScalarRelationFilter, Prisma.CompanyBrandingWhereInput> | null
@@ -320,6 +321,7 @@ export type CompanyOrderByWithRelationInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobOrderByRelationAggregateInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentOrderByRelationAggregateInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterOrderByRelationAggregateInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementOrderByRelationAggregateInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityOrderByRelationAggregateInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
   branding?: Prisma.CompanyBrandingOrderByWithRelationInput
@@ -388,6 +390,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobListRelationFilter
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
   hrEmployeeLetters?: Prisma.HrEmployeeLetterListRelationFilter
+  hrFinalSettlements?: Prisma.HrFinalSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   branding?: Prisma.XOR<Prisma.CompanyBrandingNullableScalarRelationFilter, Prisma.CompanyBrandingWhereInput> | null
@@ -479,6 +482,7 @@ export type CompanyCreateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -542,6 +546,7 @@ export type CompanyUncheckedCreateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -605,6 +610,7 @@ export type CompanyUpdateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -668,6 +674,7 @@ export type CompanyUncheckedUpdateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -1147,6 +1154,20 @@ export type CompanyUpdateOneRequiredWithoutHrEmployeeFinancialMovementsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeFinancialMovementsInput, Prisma.CompanyUpdateWithoutHrEmployeeFinancialMovementsInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput>
 }
 
+export type CompanyCreateNestedOneWithoutHrFinalSettlementsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrFinalSettlementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrFinalSettlementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrFinalSettlementsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrFinalSettlementsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrFinalSettlementsInput
+  upsert?: Prisma.CompanyUpsertWithoutHrFinalSettlementsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrFinalSettlementsInput, Prisma.CompanyUpdateWithoutHrFinalSettlementsInput>, Prisma.CompanyUncheckedUpdateWithoutHrFinalSettlementsInput>
+}
+
 export type CompanyCreateNestedOneWithoutHrEmployeeAdvancesInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeAdvancesInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeAdvancesInput
@@ -1596,6 +1617,7 @@ export type CompanyCreateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -1658,6 +1680,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -1761,6 +1784,7 @@ export type CompanyCreateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
 }
@@ -1823,6 +1847,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
 }
@@ -1901,6 +1926,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
 }
@@ -1963,6 +1989,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
 }
@@ -2024,6 +2051,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2086,6 +2114,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2164,6 +2193,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2226,6 +2256,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2288,6 +2319,7 @@ export type CompanyCreateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2350,6 +2382,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2428,6 +2461,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2490,6 +2524,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2552,6 +2587,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2614,6 +2650,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2692,6 +2729,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -2754,6 +2792,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -2816,6 +2855,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -2878,6 +2918,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -2956,6 +2997,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3018,6 +3060,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3080,6 +3123,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3142,6 +3186,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3220,6 +3265,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3282,6 +3328,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3344,6 +3391,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3406,6 +3454,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3484,6 +3533,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3546,6 +3596,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3608,6 +3659,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3670,6 +3722,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -3748,6 +3801,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -3810,6 +3864,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -3872,6 +3927,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -3934,6 +3990,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4012,6 +4069,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4074,6 +4132,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4136,6 +4195,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4198,6 +4258,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4276,6 +4337,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4338,6 +4400,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4400,6 +4463,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4462,6 +4526,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4540,6 +4605,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4602,6 +4668,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4664,6 +4731,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4726,6 +4794,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -4804,6 +4873,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -4866,6 +4936,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4928,6 +4999,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -4990,6 +5062,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5068,6 +5141,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5130,6 +5204,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5192,6 +5267,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5254,6 +5330,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5332,6 +5409,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5394,6 +5472,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5456,6 +5535,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5518,6 +5598,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5596,6 +5677,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5658,6 +5740,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5720,6 +5803,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -5782,6 +5866,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -5860,6 +5945,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -5922,6 +6008,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5984,6 +6071,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -6046,6 +6134,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -6124,6 +6213,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6186,6 +6276,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6248,6 +6339,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -6310,6 +6402,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -6388,6 +6481,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6450,6 +6544,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6512,6 +6607,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -6574,6 +6670,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -6652,6 +6749,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6714,6 +6812,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6776,6 +6875,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -6838,6 +6938,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -6916,6 +7017,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -6978,6 +7080,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7040,6 +7143,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -7102,6 +7206,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -7180,6 +7285,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -7242,6 +7348,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7304,6 +7411,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -7366,6 +7474,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -7444,6 +7553,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -7506,6 +7616,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7568,6 +7679,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -7630,6 +7742,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -7708,6 +7821,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -7770,6 +7884,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7832,6 +7947,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -7894,6 +8010,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -7972,6 +8089,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -8015,6 +8133,275 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrFinalSettlementsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrFinalSettlementsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrFinalSettlementsInput>
+}
+
+export type CompanyUpsertWithoutHrFinalSettlementsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedUpdateWithoutHrFinalSettlementsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedCreateWithoutHrFinalSettlementsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrFinalSettlementsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrFinalSettlementsInput, Prisma.CompanyUncheckedUpdateWithoutHrFinalSettlementsInput>
+}
+
+export type CompanyUpdateWithoutHrFinalSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8096,6 +8483,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -8158,6 +8546,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -8236,6 +8625,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -8298,6 +8688,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -8360,6 +8751,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -8422,6 +8814,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -8500,6 +8893,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -8562,6 +8956,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -8624,6 +9019,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -8686,6 +9082,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -8764,6 +9161,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -8826,6 +9224,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -8888,6 +9287,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -8950,6 +9350,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -9028,6 +9429,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -9090,6 +9492,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9152,6 +9555,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -9214,6 +9618,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -9292,6 +9697,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -9354,6 +9760,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9416,6 +9823,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -9478,6 +9886,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -9556,6 +9965,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -9618,6 +10028,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9680,6 +10091,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -9742,6 +10154,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -9820,6 +10233,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -9882,6 +10296,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9944,6 +10359,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -10006,6 +10422,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -10084,6 +10501,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -10146,6 +10564,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -10208,6 +10627,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -10270,6 +10690,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -10348,6 +10769,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -10410,6 +10832,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -10472,6 +10895,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -10534,6 +10958,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -10612,6 +11037,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -10674,6 +11100,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -10736,6 +11163,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -10798,6 +11226,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -10876,6 +11305,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -10938,6 +11368,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11000,6 +11431,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -11062,6 +11494,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -11140,6 +11573,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -11202,6 +11636,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11264,6 +11699,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -11326,6 +11762,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -11404,6 +11841,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -11466,6 +11904,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11528,6 +11967,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -11590,6 +12030,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -11668,6 +12109,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -11730,6 +12172,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11792,6 +12235,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -11854,6 +12298,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -11932,6 +12377,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -11994,6 +12440,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -12056,6 +12503,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -12118,6 +12566,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -12196,6 +12645,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -12258,6 +12708,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -12320,6 +12771,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -12382,6 +12834,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -12460,6 +12913,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -12522,6 +12976,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -12584,6 +13039,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -12646,6 +13102,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -12724,6 +13181,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -12786,6 +13244,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -12848,6 +13307,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -12910,6 +13370,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -12988,6 +13449,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -13050,6 +13512,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13112,6 +13575,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -13174,6 +13638,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -13252,6 +13717,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -13314,6 +13780,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13376,6 +13843,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -13438,6 +13906,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -13516,6 +13985,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -13578,6 +14048,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13640,6 +14111,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -13702,6 +14174,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -13780,6 +14253,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -13842,6 +14316,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13904,6 +14379,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -13966,6 +14442,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -14044,6 +14521,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -14106,6 +14584,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -14168,6 +14647,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -14230,6 +14710,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -14308,6 +14789,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -14370,6 +14852,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -14432,6 +14915,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -14494,6 +14978,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -14572,6 +15057,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -14634,6 +15120,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -14696,6 +15183,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
@@ -14758,6 +15246,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
@@ -14836,6 +15325,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -14898,6 +15388,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -14961,6 +15452,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
@@ -15023,6 +15515,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
 }
@@ -15101,6 +15594,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
 }
@@ -15163,6 +15657,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
@@ -15225,6 +15720,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
@@ -15287,6 +15783,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
 }
@@ -15365,6 +15862,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
 }
@@ -15427,6 +15925,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
@@ -15498,6 +15997,7 @@ export type CompanyUpdateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
@@ -15560,6 +16060,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
@@ -15629,6 +16130,7 @@ export type CompanyCountOutputType = {
   hrEmployeeDocumentBlobs: number
   hrEmployeeDocuments: number
   hrEmployeeLetters: number
+  hrFinalSettlements: number
   aiCompanyIdentities: number
   aiExecutionReceipts: number
 }
@@ -15682,6 +16184,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   hrEmployeeDocumentBlobs?: boolean | CompanyCountOutputTypeCountHrEmployeeDocumentBlobsArgs
   hrEmployeeDocuments?: boolean | CompanyCountOutputTypeCountHrEmployeeDocumentsArgs
   hrEmployeeLetters?: boolean | CompanyCountOutputTypeCountHrEmployeeLettersArgs
+  hrFinalSettlements?: boolean | CompanyCountOutputTypeCountHrFinalSettlementsArgs
   aiCompanyIdentities?: boolean | CompanyCountOutputTypeCountAiCompanyIdentitiesArgs
   aiExecutionReceipts?: boolean | CompanyCountOutputTypeCountAiExecutionReceiptsArgs
 }
@@ -16035,6 +16538,13 @@ export type CompanyCountOutputTypeCountHrEmployeeLettersArgs<ExtArgs extends run
 /**
  * CompanyCountOutputType without action
  */
+export type CompanyCountOutputTypeCountHrFinalSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrFinalSettlementWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
 export type CompanyCountOutputTypeCountAiCompanyIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AiCompanyIdentityWhereInput
 }
@@ -16106,6 +16616,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   hrEmployeeDocumentBlobs?: boolean | Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>
   hrEmployeeDocuments?: boolean | Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>
   hrEmployeeLetters?: boolean | Prisma.Company$hrEmployeeLettersArgs<ExtArgs>
+  hrFinalSettlements?: boolean | Prisma.Company$hrFinalSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   branding?: boolean | Prisma.Company$brandingArgs<ExtArgs>
@@ -16199,6 +16710,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   hrEmployeeDocumentBlobs?: boolean | Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>
   hrEmployeeDocuments?: boolean | Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>
   hrEmployeeLetters?: boolean | Prisma.Company$hrEmployeeLettersArgs<ExtArgs>
+  hrFinalSettlements?: boolean | Prisma.Company$hrFinalSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   branding?: boolean | Prisma.Company$brandingArgs<ExtArgs>
@@ -16264,6 +16776,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     hrEmployeeDocumentBlobs: Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>[]
     hrEmployeeDocuments: Prisma.$HrEmployeeDocumentPayload<ExtArgs>[]
     hrEmployeeLetters: Prisma.$HrEmployeeLetterPayload<ExtArgs>[]
+    hrFinalSettlements: Prisma.$HrFinalSettlementPayload<ExtArgs>[]
     aiCompanyIdentities: Prisma.$AiCompanyIdentityPayload<ExtArgs>[]
     aiExecutionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
     branding: Prisma.$CompanyBrandingPayload<ExtArgs> | null
@@ -16721,6 +17234,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   hrEmployeeDocumentBlobs<T extends Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeDocuments<T extends Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeLetters<T extends Prisma.Company$hrEmployeeLettersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeLettersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeLetterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrFinalSettlements<T extends Prisma.Company$hrFinalSettlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrFinalSettlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiCompanyIdentities<T extends Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiExecutionReceipts<T extends Prisma.Company$aiExecutionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   branding<T extends Prisma.Company$brandingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$brandingArgs<ExtArgs>>): Prisma.Prisma__CompanyBrandingClient<runtime.Types.Result.GetResult<Prisma.$CompanyBrandingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -18330,6 +18844,30 @@ export type Company$hrEmployeeLettersArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeLetterScalarFieldEnum | Prisma.HrEmployeeLetterScalarFieldEnum[]
+}
+
+/**
+ * Company.hrFinalSettlements
+ */
+export type Company$hrFinalSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrFinalSettlement
+   */
+  select?: Prisma.HrFinalSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrFinalSettlement
+   */
+  omit?: Prisma.HrFinalSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrFinalSettlementInclude<ExtArgs> | null
+  where?: Prisma.HrFinalSettlementWhereInput
+  orderBy?: Prisma.HrFinalSettlementOrderByWithRelationInput | Prisma.HrFinalSettlementOrderByWithRelationInput[]
+  cursor?: Prisma.HrFinalSettlementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrFinalSettlementScalarFieldEnum | Prisma.HrFinalSettlementScalarFieldEnum[]
 }
 
 /**

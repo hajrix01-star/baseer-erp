@@ -82,9 +82,11 @@ import { HrEmployeeDocumentController } from './hr/hr-employee-document.controll
 import { HrEmployeeDocumentService } from './hr/hr-employee-document.service.js';
 import { HrEmployeeLetterController } from './hr/hr-employee-letter.controller.js';
 import { HrEmployeeLetterService } from './hr/hr-employee-letter.service.js';
+import { HrFinalSettlementController } from './hr/hr-final-settlement.controller.js';
+import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -139,6 +141,7 @@ import { HrEmployeeLetterService } from './hr/hr-employee-letter.service.js';
     HrLeaveService,
     HrEmployeeDocumentService,
     HrEmployeeLetterService,
+    HrFinalSettlementService,
   ],
 })
 export class AppModule {}

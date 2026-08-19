@@ -19,7 +19,7 @@ import {
 } from './finance-foundation-seeds.js';
 
 // v7 adds the utility parent/leaves and supplier suggestions for recurring costs.
-const BASE_SEED_VERSION = 7;
+const BASE_SEED_VERSION = 8;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;

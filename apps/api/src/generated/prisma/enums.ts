@@ -309,10 +309,54 @@ export const HrEmployeeFinancialMovementType = {
   PAYROLL_ACCRUAL: 'PAYROLL_ACCRUAL',
   PAYROLL_PAYMENT: 'PAYROLL_PAYMENT',
   ADVANCE_ISSUED: 'ADVANCE_ISSUED',
-  ADVANCE_SETTLEMENT: 'ADVANCE_SETTLEMENT'
+  ADVANCE_SETTLEMENT: 'ADVANCE_SETTLEMENT',
+  FINAL_SETTLEMENT_ACCRUAL: 'FINAL_SETTLEMENT_ACCRUAL',
+  FINAL_SETTLEMENT_PAYMENT: 'FINAL_SETTLEMENT_PAYMENT'
 } as const
 
 export type HrEmployeeFinancialMovementType = (typeof HrEmployeeFinancialMovementType)[keyof typeof HrEmployeeFinancialMovementType]
+
+
+export const HrFinalSettlementStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  REVERSED: 'REVERSED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrFinalSettlementStatus = (typeof HrFinalSettlementStatus)[keyof typeof HrFinalSettlementStatus]
+
+
+export const HrFinalSettlementReason = {
+  EMPLOYER_TERMINATION: 'EMPLOYER_TERMINATION',
+  RESIGNATION: 'RESIGNATION',
+  ARTICLE_80: 'ARTICLE_80',
+  ARTICLE_81: 'ARTICLE_81',
+  FORCE_MAJEURE: 'FORCE_MAJEURE',
+  MATERNITY: 'MATERNITY',
+  OTHER_LEGAL_REVIEW: 'OTHER_LEGAL_REVIEW'
+} as const
+
+export type HrFinalSettlementReason = (typeof HrFinalSettlementReason)[keyof typeof HrFinalSettlementReason]
+
+
+export const HrFinalSettlementReasonVerificationStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type HrFinalSettlementReasonVerificationStatus = (typeof HrFinalSettlementReasonVerificationStatus)[keyof typeof HrFinalSettlementReasonVerificationStatus]
+
+
+export const HrFinalSettlementRecoveryType = {
+  ADVANCE: 'ADVANCE',
+  ADMINISTRATIVE_DEDUCTION: 'ADMINISTRATIVE_DEDUCTION'
+} as const
+
+export type HrFinalSettlementRecoveryType = (typeof HrFinalSettlementRecoveryType)[keyof typeof HrFinalSettlementRecoveryType]
 
 
 export const HrEmployeeAdvanceStatus = {
@@ -327,6 +371,7 @@ export type HrEmployeeAdvanceStatus = (typeof HrEmployeeAdvanceStatus)[keyof typ
 
 export const HrEmployeeAdvanceSettlementSource = {
   PAYROLL: 'PAYROLL',
+  FINAL_SETTLEMENT: 'FINAL_SETTLEMENT',
   MANUAL_RECEIPT: 'MANUAL_RECEIPT'
 } as const
 

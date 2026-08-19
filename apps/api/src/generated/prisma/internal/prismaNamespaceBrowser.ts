@@ -85,6 +85,10 @@ export const ModelName = {
   HrEmployeeLetter: 'HrEmployeeLetter',
   HrEmployeeService: 'HrEmployeeService',
   HrEmployeeFinancialMovement: 'HrEmployeeFinancialMovement',
+  HrFinalSettlement: 'HrFinalSettlement',
+  HrFinalSettlementRecovery: 'HrFinalSettlementRecovery',
+  HrFinalSettlementPayment: 'HrFinalSettlementPayment',
+  HrFinalSettlementPaymentAllocation: 'HrFinalSettlementPaymentAllocation',
   HrEmployeeAdvance: 'HrEmployeeAdvance',
   HrEmployeeAdvancePayoutAllocation: 'HrEmployeeAdvancePayoutAllocation',
   HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
@@ -752,6 +756,90 @@ export const HrEmployeeFinancialMovementScalarFieldEnum = {
 } as const
 
 export type HrEmployeeFinancialMovementScalarFieldEnum = (typeof HrEmployeeFinancialMovementScalarFieldEnum)[keyof typeof HrEmployeeFinancialMovementScalarFieldEnum]
+
+
+export const HrFinalSettlementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  settlementNumber: 'settlementNumber',
+  status: 'status',
+  terminationDate: 'terminationDate',
+  terminationReason: 'terminationReason',
+  reasonEvidenceReference: 'reasonEvidenceReference',
+  reasonEvidenceNote: 'reasonEvidenceNote',
+  reasonVerificationStatus: 'reasonVerificationStatus',
+  reasonVerifiedAt: 'reasonVerifiedAt',
+  reasonVerifiedByUserId: 'reasonVerifiedByUserId',
+  reasonVerificationNote: 'reasonVerificationNote',
+  calculationPolicyVersion: 'calculationPolicyVersion',
+  serviceDays: 'serviceDays',
+  eosWage: 'eosWage',
+  fullAwardAmount: 'fullAwardAmount',
+  entitlementFactor: 'entitlementFactor',
+  eosAmount: 'eosAmount',
+  otherCreditsAmount: 'otherCreditsAmount',
+  recoveryAmount: 'recoveryAmount',
+  netPayableAmount: 'netPayableAmount',
+  paidAmount: 'paidAmount',
+  snapshotJson: 'snapshotJson',
+  snapshotSha256: 'snapshotSha256',
+  accrualJournalEntryId: 'accrualJournalEntryId',
+  approvedAt: 'approvedAt',
+  approvedByUserId: 'approvedByUserId',
+  reversedAt: 'reversedAt',
+  reversedByUserId: 'reversedByUserId',
+  reversalReason: 'reversalReason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrFinalSettlementScalarFieldEnum = (typeof HrFinalSettlementScalarFieldEnum)[keyof typeof HrFinalSettlementScalarFieldEnum]
+
+
+export const HrFinalSettlementRecoveryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  settlementId: 'settlementId',
+  recoveryType: 'recoveryType',
+  sourceId: 'sourceId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type HrFinalSettlementRecoveryScalarFieldEnum = (typeof HrFinalSettlementRecoveryScalarFieldEnum)[keyof typeof HrFinalSettlementRecoveryScalarFieldEnum]
+
+
+export const HrFinalSettlementPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  settlementId: 'settlementId',
+  paymentNumber: 'paymentNumber',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  journalEntryId: 'journalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrFinalSettlementPaymentScalarFieldEnum = (typeof HrFinalSettlementPaymentScalarFieldEnum)[keyof typeof HrFinalSettlementPaymentScalarFieldEnum]
+
+
+export const HrFinalSettlementPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  paymentId: 'paymentId',
+  vaultId: 'vaultId',
+  paymentMethod: 'paymentMethod',
+  amount: 'amount'
+} as const
+
+export type HrFinalSettlementPaymentAllocationScalarFieldEnum = (typeof HrFinalSettlementPaymentAllocationScalarFieldEnum)[keyof typeof HrFinalSettlementPaymentAllocationScalarFieldEnum]
 
 
 export const HrEmployeeAdvanceScalarFieldEnum = {

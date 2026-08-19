@@ -431,6 +431,10 @@ export const ModelName = {
   HrEmployeeLetter: 'HrEmployeeLetter',
   HrEmployeeService: 'HrEmployeeService',
   HrEmployeeFinancialMovement: 'HrEmployeeFinancialMovement',
+  HrFinalSettlement: 'HrFinalSettlement',
+  HrFinalSettlementRecovery: 'HrFinalSettlementRecovery',
+  HrFinalSettlementPayment: 'HrFinalSettlementPayment',
+  HrFinalSettlementPaymentAllocation: 'HrFinalSettlementPaymentAllocation',
   HrEmployeeAdvance: 'HrEmployeeAdvance',
   HrEmployeeAdvancePayoutAllocation: 'HrEmployeeAdvancePayoutAllocation',
   HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
@@ -477,7 +481,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2994,6 +2998,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.HrEmployeeFinancialMovementCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.HrEmployeeFinancialMovementCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrFinalSettlement: {
+      payload: Prisma.$HrFinalSettlementPayload<ExtArgs>
+      fields: Prisma.HrFinalSettlementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrFinalSettlementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrFinalSettlementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        findFirst: {
+          args: Prisma.HrFinalSettlementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrFinalSettlementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        findMany: {
+          args: Prisma.HrFinalSettlementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>[]
+        }
+        create: {
+          args: Prisma.HrFinalSettlementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        createMany: {
+          args: Prisma.HrFinalSettlementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrFinalSettlementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>[]
+        }
+        delete: {
+          args: Prisma.HrFinalSettlementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        update: {
+          args: Prisma.HrFinalSettlementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrFinalSettlementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrFinalSettlementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrFinalSettlementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrFinalSettlementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPayload>
+        }
+        aggregate: {
+          args: Prisma.HrFinalSettlementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrFinalSettlement>
+        }
+        groupBy: {
+          args: Prisma.HrFinalSettlementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrFinalSettlementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrFinalSettlementRecovery: {
+      payload: Prisma.$HrFinalSettlementRecoveryPayload<ExtArgs>
+      fields: Prisma.HrFinalSettlementRecoveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrFinalSettlementRecoveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrFinalSettlementRecoveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        findFirst: {
+          args: Prisma.HrFinalSettlementRecoveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrFinalSettlementRecoveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        findMany: {
+          args: Prisma.HrFinalSettlementRecoveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>[]
+        }
+        create: {
+          args: Prisma.HrFinalSettlementRecoveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        createMany: {
+          args: Prisma.HrFinalSettlementRecoveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrFinalSettlementRecoveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>[]
+        }
+        delete: {
+          args: Prisma.HrFinalSettlementRecoveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        update: {
+          args: Prisma.HrFinalSettlementRecoveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrFinalSettlementRecoveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrFinalSettlementRecoveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrFinalSettlementRecoveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrFinalSettlementRecoveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementRecoveryPayload>
+        }
+        aggregate: {
+          args: Prisma.HrFinalSettlementRecoveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrFinalSettlementRecovery>
+        }
+        groupBy: {
+          args: Prisma.HrFinalSettlementRecoveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementRecoveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrFinalSettlementRecoveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementRecoveryCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrFinalSettlementPayment: {
+      payload: Prisma.$HrFinalSettlementPaymentPayload<ExtArgs>
+      fields: Prisma.HrFinalSettlementPaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrFinalSettlementPaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrFinalSettlementPaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.HrFinalSettlementPaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrFinalSettlementPaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        findMany: {
+          args: Prisma.HrFinalSettlementPaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>[]
+        }
+        create: {
+          args: Prisma.HrFinalSettlementPaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        createMany: {
+          args: Prisma.HrFinalSettlementPaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrFinalSettlementPaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.HrFinalSettlementPaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        update: {
+          args: Prisma.HrFinalSettlementPaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrFinalSettlementPaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrFinalSettlementPaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrFinalSettlementPaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrFinalSettlementPaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.HrFinalSettlementPaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrFinalSettlementPayment>
+        }
+        groupBy: {
+          args: Prisma.HrFinalSettlementPaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementPaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrFinalSettlementPaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementPaymentCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrFinalSettlementPaymentAllocation: {
+      payload: Prisma.$HrFinalSettlementPaymentAllocationPayload<ExtArgs>
+      fields: Prisma.HrFinalSettlementPaymentAllocationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrFinalSettlementPaymentAllocationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrFinalSettlementPaymentAllocationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        findFirst: {
+          args: Prisma.HrFinalSettlementPaymentAllocationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrFinalSettlementPaymentAllocationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        findMany: {
+          args: Prisma.HrFinalSettlementPaymentAllocationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>[]
+        }
+        create: {
+          args: Prisma.HrFinalSettlementPaymentAllocationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        createMany: {
+          args: Prisma.HrFinalSettlementPaymentAllocationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrFinalSettlementPaymentAllocationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>[]
+        }
+        delete: {
+          args: Prisma.HrFinalSettlementPaymentAllocationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        update: {
+          args: Prisma.HrFinalSettlementPaymentAllocationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrFinalSettlementPaymentAllocationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrFinalSettlementPaymentAllocationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrFinalSettlementPaymentAllocationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrFinalSettlementPaymentAllocationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrFinalSettlementPaymentAllocationPayload>
+        }
+        aggregate: {
+          args: Prisma.HrFinalSettlementPaymentAllocationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrFinalSettlementPaymentAllocation>
+        }
+        groupBy: {
+          args: Prisma.HrFinalSettlementPaymentAllocationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementPaymentAllocationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrFinalSettlementPaymentAllocationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrFinalSettlementPaymentAllocationCountAggregateOutputType> | number
         }
       }
     }
@@ -5950,6 +6250,90 @@ export const HrEmployeeFinancialMovementScalarFieldEnum = {
 export type HrEmployeeFinancialMovementScalarFieldEnum = (typeof HrEmployeeFinancialMovementScalarFieldEnum)[keyof typeof HrEmployeeFinancialMovementScalarFieldEnum]
 
 
+export const HrFinalSettlementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  settlementNumber: 'settlementNumber',
+  status: 'status',
+  terminationDate: 'terminationDate',
+  terminationReason: 'terminationReason',
+  reasonEvidenceReference: 'reasonEvidenceReference',
+  reasonEvidenceNote: 'reasonEvidenceNote',
+  reasonVerificationStatus: 'reasonVerificationStatus',
+  reasonVerifiedAt: 'reasonVerifiedAt',
+  reasonVerifiedByUserId: 'reasonVerifiedByUserId',
+  reasonVerificationNote: 'reasonVerificationNote',
+  calculationPolicyVersion: 'calculationPolicyVersion',
+  serviceDays: 'serviceDays',
+  eosWage: 'eosWage',
+  fullAwardAmount: 'fullAwardAmount',
+  entitlementFactor: 'entitlementFactor',
+  eosAmount: 'eosAmount',
+  otherCreditsAmount: 'otherCreditsAmount',
+  recoveryAmount: 'recoveryAmount',
+  netPayableAmount: 'netPayableAmount',
+  paidAmount: 'paidAmount',
+  snapshotJson: 'snapshotJson',
+  snapshotSha256: 'snapshotSha256',
+  accrualJournalEntryId: 'accrualJournalEntryId',
+  approvedAt: 'approvedAt',
+  approvedByUserId: 'approvedByUserId',
+  reversedAt: 'reversedAt',
+  reversedByUserId: 'reversedByUserId',
+  reversalReason: 'reversalReason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrFinalSettlementScalarFieldEnum = (typeof HrFinalSettlementScalarFieldEnum)[keyof typeof HrFinalSettlementScalarFieldEnum]
+
+
+export const HrFinalSettlementRecoveryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  settlementId: 'settlementId',
+  recoveryType: 'recoveryType',
+  sourceId: 'sourceId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type HrFinalSettlementRecoveryScalarFieldEnum = (typeof HrFinalSettlementRecoveryScalarFieldEnum)[keyof typeof HrFinalSettlementRecoveryScalarFieldEnum]
+
+
+export const HrFinalSettlementPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  settlementId: 'settlementId',
+  paymentNumber: 'paymentNumber',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  journalEntryId: 'journalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrFinalSettlementPaymentScalarFieldEnum = (typeof HrFinalSettlementPaymentScalarFieldEnum)[keyof typeof HrFinalSettlementPaymentScalarFieldEnum]
+
+
+export const HrFinalSettlementPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  paymentId: 'paymentId',
+  vaultId: 'vaultId',
+  paymentMethod: 'paymentMethod',
+  amount: 'amount'
+} as const
+
+export type HrFinalSettlementPaymentAllocationScalarFieldEnum = (typeof HrFinalSettlementPaymentAllocationScalarFieldEnum)[keyof typeof HrFinalSettlementPaymentAllocationScalarFieldEnum]
+
+
 export const HrEmployeeAdvanceScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -7128,6 +7512,62 @@ export type ListEnumHrEmployeeFinancialMovementTypeFieldRefInput<$PrismaModel> =
 
 
 /**
+ * Reference to a field of type 'HrFinalSettlementStatus'
+ */
+export type EnumHrFinalSettlementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementStatus[]'
+ */
+export type ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementReason'
+ */
+export type EnumHrFinalSettlementReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementReason'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementReason[]'
+ */
+export type ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementReason[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementReasonVerificationStatus'
+ */
+export type EnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementReasonVerificationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementReasonVerificationStatus[]'
+ */
+export type ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementReasonVerificationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementRecoveryType'
+ */
+export type EnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementRecoveryType'>
+    
+
+
+/**
+ * Reference to a field of type 'HrFinalSettlementRecoveryType[]'
+ */
+export type ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrFinalSettlementRecoveryType[]'>
+    
+
+
+/**
  * Reference to a field of type 'HrEmployeeAdvanceStatus'
  */
 export type EnumHrEmployeeAdvanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeAdvanceStatus'>
@@ -7619,6 +8059,10 @@ export type GlobalOmitConfig = {
   hrEmployeeLetter?: Prisma.HrEmployeeLetterOmit
   hrEmployeeService?: Prisma.HrEmployeeServiceOmit
   hrEmployeeFinancialMovement?: Prisma.HrEmployeeFinancialMovementOmit
+  hrFinalSettlement?: Prisma.HrFinalSettlementOmit
+  hrFinalSettlementRecovery?: Prisma.HrFinalSettlementRecoveryOmit
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentOmit
+  hrFinalSettlementPaymentAllocation?: Prisma.HrFinalSettlementPaymentAllocationOmit
   hrEmployeeAdvance?: Prisma.HrEmployeeAdvanceOmit
   hrEmployeeAdvancePayoutAllocation?: Prisma.HrEmployeeAdvancePayoutAllocationOmit
   hrEmployeeAdvanceSettlement?: Prisma.HrEmployeeAdvanceSettlementOmit

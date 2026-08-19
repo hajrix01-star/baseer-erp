@@ -973,6 +973,74 @@ export type EnumHrEmployeeFinancialMovementTypeWithAggregatesFilter<$PrismaModel
   _max?: Prisma.NestedEnumHrEmployeeFinancialMovementTypeFilter<$PrismaModel>
 }
 
+export type EnumHrFinalSettlementStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementStatus | Prisma.EnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel> | $Enums.HrFinalSettlementStatus
+}
+
+export type EnumHrFinalSettlementReasonFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReason | Prisma.EnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel> | $Enums.HrFinalSettlementReason
+}
+
+export type EnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReasonVerificationStatus | Prisma.EnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel> | $Enums.HrFinalSettlementReasonVerificationStatus
+}
+
+export type EnumHrFinalSettlementStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementStatus | Prisma.EnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel>
+}
+
+export type EnumHrFinalSettlementReasonWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReason | Prisma.EnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementReason
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel>
+}
+
+export type EnumHrFinalSettlementReasonVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReasonVerificationStatus | Prisma.EnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementReasonVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel>
+}
+
+export type EnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementRecoveryType | Prisma.EnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel> | $Enums.HrFinalSettlementRecoveryType
+}
+
+export type EnumHrFinalSettlementRecoveryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementRecoveryType | Prisma.EnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementRecoveryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel>
+}
+
 export type EnumHrEmployeeAdvanceStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.HrEmployeeAdvanceStatus | Prisma.EnumHrEmployeeAdvanceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrEmployeeAdvanceStatus[] | Prisma.ListEnumHrEmployeeAdvanceStatusFieldRefInput<$PrismaModel>
@@ -2286,6 +2354,74 @@ export type NestedEnumHrEmployeeFinancialMovementTypeWithAggregatesFilter<$Prism
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrEmployeeFinancialMovementTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrEmployeeFinancialMovementTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumHrFinalSettlementStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementStatus | Prisma.EnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel> | $Enums.HrFinalSettlementStatus
+}
+
+export type NestedEnumHrFinalSettlementReasonFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReason | Prisma.EnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel> | $Enums.HrFinalSettlementReason
+}
+
+export type NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReasonVerificationStatus | Prisma.EnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel> | $Enums.HrFinalSettlementReasonVerificationStatus
+}
+
+export type NestedEnumHrFinalSettlementStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementStatus | Prisma.EnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementStatus[] | Prisma.ListEnumHrFinalSettlementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrFinalSettlementReasonWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReason | Prisma.EnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReason[] | Prisma.ListEnumHrFinalSettlementReasonFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementReason
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementReasonFilter<$PrismaModel>
+}
+
+export type NestedEnumHrFinalSettlementReasonVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementReasonVerificationStatus | Prisma.EnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementReasonVerificationStatus[] | Prisma.ListEnumHrFinalSettlementReasonVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementReasonVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementReasonVerificationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementRecoveryType | Prisma.EnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel> | $Enums.HrFinalSettlementRecoveryType
+}
+
+export type NestedEnumHrFinalSettlementRecoveryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrFinalSettlementRecoveryType | Prisma.EnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrFinalSettlementRecoveryType[] | Prisma.ListEnumHrFinalSettlementRecoveryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeWithAggregatesFilter<$PrismaModel> | $Enums.HrFinalSettlementRecoveryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrFinalSettlementRecoveryTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumHrEmployeeAdvanceStatusFilter<$PrismaModel = never> = {

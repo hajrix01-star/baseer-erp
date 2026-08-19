@@ -287,6 +287,8 @@ export type FinanceJournalEntryWhereInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   hrPayrollAccrual?: Prisma.XOR<Prisma.HrPayrollRunNullableScalarRelationFilter, Prisma.HrPayrollRunWhereInput> | null
   hrPayrollPayment?: Prisma.XOR<Prisma.HrPayrollPaymentNullableScalarRelationFilter, Prisma.HrPayrollPaymentWhereInput> | null
+  hrFinalSettlementAccrual?: Prisma.XOR<Prisma.HrFinalSettlementNullableScalarRelationFilter, Prisma.HrFinalSettlementWhereInput> | null
+  hrFinalSettlementPayment?: Prisma.XOR<Prisma.HrFinalSettlementPaymentNullableScalarRelationFilter, Prisma.HrFinalSettlementPaymentWhereInput> | null
 }
 
 export type FinanceJournalEntryOrderByWithRelationInput = {
@@ -323,6 +325,8 @@ export type FinanceJournalEntryOrderByWithRelationInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementOrderByRelationAggregateInput
   hrPayrollAccrual?: Prisma.HrPayrollRunOrderByWithRelationInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentOrderByWithRelationInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementOrderByWithRelationInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentOrderByWithRelationInput
 }
 
 export type FinanceJournalEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -365,6 +369,8 @@ export type FinanceJournalEntryWhereUniqueInput = Prisma.AtLeast<{
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   hrPayrollAccrual?: Prisma.XOR<Prisma.HrPayrollRunNullableScalarRelationFilter, Prisma.HrPayrollRunWhereInput> | null
   hrPayrollPayment?: Prisma.XOR<Prisma.HrPayrollPaymentNullableScalarRelationFilter, Prisma.HrPayrollPaymentWhereInput> | null
+  hrFinalSettlementAccrual?: Prisma.XOR<Prisma.HrFinalSettlementNullableScalarRelationFilter, Prisma.HrFinalSettlementWhereInput> | null
+  hrFinalSettlementPayment?: Prisma.XOR<Prisma.HrFinalSettlementPaymentNullableScalarRelationFilter, Prisma.HrFinalSettlementPaymentWhereInput> | null
 }, "id" | "reversalOfEntryId" | "id_tenantId_companyId" | "reversalOfEntryId_tenantId_companyId" | "companyId_sourceType_sourceReference">
 
 export type FinanceJournalEntryOrderByWithAggregationInput = {
@@ -440,6 +446,8 @@ export type FinanceJournalEntryCreateInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateInput = {
@@ -472,6 +480,8 @@ export type FinanceJournalEntryUncheckedCreateInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUpdateInput = {
@@ -503,6 +513,8 @@ export type FinanceJournalEntryUpdateInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateInput = {
@@ -535,6 +547,8 @@ export type FinanceJournalEntryUncheckedUpdateInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateManyInput = {
@@ -922,6 +936,36 @@ export type FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeMovementsNested
   update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceJournalEntryUpdateToOneWithWhereWithoutHrEmployeeMovementsInput, Prisma.FinanceJournalEntryUpdateWithoutHrEmployeeMovementsInput>, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput>
 }
 
+export type FinanceJournalEntryCreateNestedOneWithoutHrFinalSettlementAccrualInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementAccrualInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+}
+
+export type FinanceJournalEntryUpdateOneWithoutHrFinalSettlementAccrualNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementAccrualInput
+  upsert?: Prisma.FinanceJournalEntryUpsertWithoutHrFinalSettlementAccrualInput
+  disconnect?: Prisma.FinanceJournalEntryWhereInput | boolean
+  delete?: Prisma.FinanceJournalEntryWhereInput | boolean
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceJournalEntryUpdateToOneWithWhereWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput>, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInput>
+}
+
+export type FinanceJournalEntryCreateNestedOneWithoutHrFinalSettlementPaymentInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementPaymentInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+}
+
+export type FinanceJournalEntryUpdateOneRequiredWithoutHrFinalSettlementPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementPaymentInput
+  upsert?: Prisma.FinanceJournalEntryUpsertWithoutHrFinalSettlementPaymentInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceJournalEntryUpdateToOneWithWhereWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput>, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInput>
+}
+
 export type FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput = {
   create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput>
   connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutHrEmployeeAdvanceIssueInput
@@ -1070,6 +1114,8 @@ export type FinanceJournalEntryCreateWithoutCreatedByInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutCreatedByInput = {
@@ -1100,6 +1146,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutCreatedByInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutCreatedByInput = {
@@ -1178,6 +1226,8 @@ export type FinanceJournalEntryCreateWithoutCompanyInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutCompanyInput = {
@@ -1208,6 +1258,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutCompanyInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutCompanyInput = {
@@ -1264,6 +1316,8 @@ export type FinanceJournalEntryCreateWithoutFiscalPeriodInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutFiscalPeriodInput = {
@@ -1293,6 +1347,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutFiscalPeriodInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutFiscalPeriodInput = {
@@ -1349,6 +1405,8 @@ export type FinanceJournalEntryCreateWithoutSupplierDueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutSupplierDueInput = {
@@ -1380,6 +1438,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutSupplierDueInput = {
@@ -1426,6 +1486,8 @@ export type FinanceJournalEntryUpdateWithoutSupplierDueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDueInput = {
@@ -1457,6 +1519,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutSupplierDuePaymentInput = {
@@ -1487,6 +1551,8 @@ export type FinanceJournalEntryCreateWithoutSupplierDuePaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutSupplierDuePaymentInput = {
@@ -1518,6 +1584,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDuePaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutSupplierDuePaymentInput = {
@@ -1564,6 +1632,8 @@ export type FinanceJournalEntryUpdateWithoutSupplierDuePaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDuePaymentInput = {
@@ -1595,6 +1665,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDuePaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutReversalEntryInput = {
@@ -1625,6 +1697,8 @@ export type FinanceJournalEntryCreateWithoutReversalEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutReversalEntryInput = {
@@ -1656,6 +1730,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutReversalEntryInput = {
@@ -1691,6 +1767,8 @@ export type FinanceJournalEntryCreateWithoutReversalOfEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutReversalOfEntryInput = {
@@ -1720,6 +1798,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalOfEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutReversalOfEntryInput = {
@@ -1766,6 +1846,8 @@ export type FinanceJournalEntryUpdateWithoutReversalEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutReversalEntryInput = {
@@ -1797,6 +1879,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUpsertWithoutReversalOfEntryInput = {
@@ -1838,6 +1922,8 @@ export type FinanceJournalEntryUpdateWithoutReversalOfEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutReversalOfEntryInput = {
@@ -1867,6 +1953,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalOfEntryInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutOutflowDocumentInput = {
@@ -1897,6 +1985,8 @@ export type FinanceJournalEntryCreateWithoutOutflowDocumentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutOutflowDocumentInput = {
@@ -1928,6 +2018,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutOutflowDocumentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutOutflowDocumentInput = {
@@ -1974,6 +2066,8 @@ export type FinanceJournalEntryUpdateWithoutOutflowDocumentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutOutflowDocumentInput = {
@@ -2005,6 +2099,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutOutflowDocumentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeMovementsInput = {
@@ -2035,6 +2131,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeMovementsInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeMovementsInput = {
@@ -2066,6 +2164,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeMovementsInput = 
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeMovementsInput = {
@@ -2112,6 +2212,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeMovementsInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput = {
@@ -2143,6 +2245,300 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput = 
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput = {
+  id?: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  reversalReason?: string | null
+  requestId: string
+  postedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceJournalEntriesInput
+  fiscalPeriod: Prisma.FinanceFiscalPeriodCreateNestedOneWithoutJournalEntriesInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalEntryInput
+  reversalEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalOfEntryInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedJournalEntriesInput
+  lines?: Prisma.FinanceJournalLineCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+}
+
+export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  fiscalPeriodId: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  reversalOfEntryId?: string | null
+  reversalReason?: string | null
+  createdByUserId: string
+  requestId: string
+  postedAt?: Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedCreateNestedOneWithoutReversalOfEntryInput
+  lines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+}
+
+export type FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementAccrualInput = {
+  where: Prisma.FinanceJournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput>
+}
+
+export type FinanceJournalEntryUpsertWithoutHrFinalSettlementAccrualInput = {
+  update: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInput>
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput>
+  where?: Prisma.FinanceJournalEntryWhereInput
+}
+
+export type FinanceJournalEntryUpdateToOneWithWhereWithoutHrFinalSettlementAccrualInput = {
+  where?: Prisma.FinanceJournalEntryWhereInput
+  data: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInput>
+}
+
+export type FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceJournalEntriesNestedInput
+  fiscalPeriod?: Prisma.FinanceFiscalPeriodUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalEntryNestedInput
+  reversalEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalOfEntryNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedJournalEntriesNestedInput
+  lines?: Prisma.FinanceJournalLineUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscalPeriodId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedUpdateOneWithoutReversalOfEntryNestedInput
+  lines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput = {
+  id?: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  reversalReason?: string | null
+  requestId: string
+  postedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceJournalEntriesInput
+  fiscalPeriod: Prisma.FinanceFiscalPeriodCreateNestedOneWithoutJournalEntriesInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalEntryInput
+  reversalEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalOfEntryInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedJournalEntriesInput
+  lines?: Prisma.FinanceJournalLineCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+}
+
+export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  fiscalPeriodId: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  reversalOfEntryId?: string | null
+  reversalReason?: string | null
+  createdByUserId: string
+  requestId: string
+  postedAt?: Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedCreateNestedOneWithoutReversalOfEntryInput
+  lines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+}
+
+export type FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementPaymentInput = {
+  where: Prisma.FinanceJournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput>
+}
+
+export type FinanceJournalEntryUpsertWithoutHrFinalSettlementPaymentInput = {
+  update: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInput>
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput>
+  where?: Prisma.FinanceJournalEntryWhereInput
+}
+
+export type FinanceJournalEntryUpdateToOneWithWhereWithoutHrFinalSettlementPaymentInput = {
+  where?: Prisma.FinanceJournalEntryWhereInput
+  data: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInput>
+}
+
+export type FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceJournalEntriesNestedInput
+  fiscalPeriod?: Prisma.FinanceFiscalPeriodUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalEntryNestedInput
+  reversalEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalOfEntryNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedJournalEntriesNestedInput
+  lines?: Prisma.FinanceJournalLineUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+}
+
+export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscalPeriodId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedUpdateOneWithoutReversalOfEntryNestedInput
+  lines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2173,6 +2569,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2204,6 +2602,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeAdvanceIssueInput = {
@@ -2250,6 +2650,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceIssueInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2281,6 +2683,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceIssueInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2311,6 +2715,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceSettlementsInput = 
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2342,6 +2748,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceSettlement
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2388,6 +2796,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceSettlementsInput = 
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2419,6 +2829,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceSettlement
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrPayrollAccrualInput = {
@@ -2449,6 +2861,8 @@ export type FinanceJournalEntryCreateWithoutHrPayrollAccrualInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollAccrualInput = {
@@ -2480,6 +2894,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollAccrualInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrPayrollAccrualInput = {
@@ -2526,6 +2942,8 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollAccrualInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollAccrualInput = {
@@ -2557,6 +2975,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollAccrualInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrPayrollPaymentInput = {
@@ -2587,6 +3007,8 @@ export type FinanceJournalEntryCreateWithoutHrPayrollPaymentInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollPaymentInput = {
@@ -2618,6 +3040,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollPaymentInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrPayrollPaymentInput = {
@@ -2664,6 +3088,8 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollPaymentInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollPaymentInput = {
@@ -2695,6 +3121,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollPaymentInput = {
   hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutLinesInput = {
@@ -2725,6 +3153,8 @@ export type FinanceJournalEntryCreateWithoutLinesInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutLinesInput = {
@@ -2756,6 +3186,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutLinesInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutLinesInput = {
@@ -2802,6 +3234,8 @@ export type FinanceJournalEntryUpdateWithoutLinesInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutLinesInput = {
@@ -2833,6 +3267,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutLinesInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutDailySalesClosingInput = {
@@ -2863,6 +3299,8 @@ export type FinanceJournalEntryCreateWithoutDailySalesClosingInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutDailySalesClosingInput = {
@@ -2894,6 +3332,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutDailySalesClosingInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutDailySalesClosingInput = {
@@ -2940,6 +3380,8 @@ export type FinanceJournalEntryUpdateWithoutDailySalesClosingInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutDailySalesClosingInput = {
@@ -2971,6 +3413,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutDailySalesClosingInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutInclusiveLoanInput = {
@@ -3001,6 +3445,8 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanInput = {
@@ -3032,6 +3478,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutInclusiveLoanInput = {
@@ -3078,6 +3526,8 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanInput = {
@@ -3109,6 +3559,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutInclusiveLoanPaymentInput = {
@@ -3139,6 +3591,8 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanPaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanPaymentInput = {
@@ -3170,6 +3624,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanPaymentInput =
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutInclusiveLoanPaymentInput = {
@@ -3216,6 +3672,8 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanPaymentInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanPaymentInput = {
@@ -3247,6 +3705,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanPaymentInput =
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateManyCreatedByInput = {
@@ -3294,6 +3754,8 @@ export type FinanceJournalEntryUpdateWithoutCreatedByInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutCreatedByInput = {
@@ -3324,6 +3786,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCreatedByInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByInput = {
@@ -3388,6 +3852,8 @@ export type FinanceJournalEntryUpdateWithoutCompanyInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutCompanyInput = {
@@ -3418,6 +3884,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCompanyInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutCompanyInput = {
@@ -3481,6 +3949,8 @@ export type FinanceJournalEntryUpdateWithoutFiscalPeriodInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutFiscalPeriodInput = {
@@ -3510,6 +3980,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutFiscalPeriodInput = {
   hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutFiscalPeriodInput = {
@@ -3611,6 +4083,8 @@ export type FinanceJournalEntrySelect<ExtArgs extends runtime.Types.Extensions.I
   hrEmployeeAdvanceSettlements?: boolean | Prisma.FinanceJournalEntry$hrEmployeeAdvanceSettlementsArgs<ExtArgs>
   hrPayrollAccrual?: boolean | Prisma.FinanceJournalEntry$hrPayrollAccrualArgs<ExtArgs>
   hrPayrollPayment?: boolean | Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>
+  hrFinalSettlementAccrual?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>
+  hrFinalSettlementPayment?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceJournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeJournalEntry"]>
 
@@ -3698,6 +4172,8 @@ export type FinanceJournalEntryInclude<ExtArgs extends runtime.Types.Extensions.
   hrEmployeeAdvanceSettlements?: boolean | Prisma.FinanceJournalEntry$hrEmployeeAdvanceSettlementsArgs<ExtArgs>
   hrPayrollAccrual?: boolean | Prisma.FinanceJournalEntry$hrPayrollAccrualArgs<ExtArgs>
   hrPayrollPayment?: boolean | Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>
+  hrFinalSettlementAccrual?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>
+  hrFinalSettlementPayment?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceJournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceJournalEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3733,6 +4209,8 @@ export type $FinanceJournalEntryPayload<ExtArgs extends runtime.Types.Extensions
     hrEmployeeAdvanceSettlements: Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>[]
     hrPayrollAccrual: Prisma.$HrPayrollRunPayload<ExtArgs> | null
     hrPayrollPayment: Prisma.$HrPayrollPaymentPayload<ExtArgs> | null
+    hrFinalSettlementAccrual: Prisma.$HrFinalSettlementPayload<ExtArgs> | null
+    hrFinalSettlementPayment: Prisma.$HrFinalSettlementPaymentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4162,6 +4640,8 @@ export interface Prisma__FinanceJournalEntryClient<T, Null = never, ExtArgs exte
   hrEmployeeAdvanceSettlements<T extends Prisma.FinanceJournalEntry$hrEmployeeAdvanceSettlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrEmployeeAdvanceSettlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrPayrollAccrual<T extends Prisma.FinanceJournalEntry$hrPayrollAccrualArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrPayrollAccrualArgs<ExtArgs>>): Prisma.Prisma__HrPayrollRunClient<runtime.Types.Result.GetResult<Prisma.$HrPayrollRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   hrPayrollPayment<T extends Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>>): Prisma.Prisma__HrPayrollPaymentClient<runtime.Types.Result.GetResult<Prisma.$HrPayrollPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  hrFinalSettlementAccrual<T extends Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>>): Prisma.Prisma__HrFinalSettlementClient<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  hrFinalSettlementPayment<T extends Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>>): Prisma.Prisma__HrFinalSettlementPaymentClient<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4886,6 +5366,44 @@ export type FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs extends runtime.Typ
    */
   include?: Prisma.HrPayrollPaymentInclude<ExtArgs> | null
   where?: Prisma.HrPayrollPaymentWhereInput
+}
+
+/**
+ * FinanceJournalEntry.hrFinalSettlementAccrual
+ */
+export type FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrFinalSettlement
+   */
+  select?: Prisma.HrFinalSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrFinalSettlement
+   */
+  omit?: Prisma.HrFinalSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrFinalSettlementInclude<ExtArgs> | null
+  where?: Prisma.HrFinalSettlementWhereInput
+}
+
+/**
+ * FinanceJournalEntry.hrFinalSettlementPayment
+ */
+export type FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrFinalSettlementPayment
+   */
+  select?: Prisma.HrFinalSettlementPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrFinalSettlementPayment
+   */
+  omit?: Prisma.HrFinalSettlementPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrFinalSettlementPaymentInclude<ExtArgs> | null
+  where?: Prisma.HrFinalSettlementPaymentWhereInput
 }
 
 /**
