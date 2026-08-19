@@ -421,6 +421,7 @@ export const hrEmployeeSchema = z.object({
   iqamaNumber: z.string().max(160).nullable(),
   workSchedule: z.string().max(160).nullable(),
   hireDate: businessDateSchema,
+  currentMonthlyGross: hrAmountSchema.nullable(),
   status: hrEmployeeStatusSchema,
   terminatedAt: businessDateSchema.nullable(),
   notes: z.string().max(2_000).nullable(),

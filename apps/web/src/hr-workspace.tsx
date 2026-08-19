@@ -159,9 +159,10 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
   const sectionTitle = [text.overview, text.employees, language === "ar" ? "الإجازات والعودة" : "Leave & return", language === "ar" ? "الرواتب" : "Payroll", language === "ar" ? "السلف والخصومات" : "Advances & deductions", text.services][section] ?? text.title;
   const employeeColumns: readonly DataTableColumn<HrEmployee>[] = [
     { id: "number", header: text.employeeNumber, cell: (row) => row.employeeNumber, width: "9rem", sort: (row) => row.employeeNumber },
-    { id: "name", header: text.employeeName, cell: (row) => <button type="button" className="baseer-button baseer-button--secondary" onClick={() => void showDetail(row)}>{language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr}</button>, sort: (row) => language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr },
+    { id: "name", header: text.employeeName, cell: (row) => <button type="button" className="baseer-link-button" onClick={() => void showDetail(row)}>{language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr}</button>, sort: (row) => language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr },
     { id: "job", header: text.jobTitle, cell: (row) => row.jobTitle ?? "—", sort: (row) => row.jobTitle },
     { id: "hire", header: text.hireDate, cell: (row) => row.hireDate, width: "9rem", sort: (row) => row.hireDate },
+    { id: "salary", header: text.monthlySalary, cell: (row) => row.currentMonthlyGross ? <BaseerMoney value={row.currentMonthlyGross} language={language} /> : "—", align: "end", numeric: true, width: "10rem", sort: (row) => row.currentMonthlyGross ?? "" },
     { id: "status", header: text.status, cell: (row) => <BaseerStatusBadge tone={row.status === "ACTIVE" ? "success" : row.status === "ON_LEAVE" ? "warning" : "neutral"}>{statusLabel(row.status)}</BaseerStatusBadge>, width: "8rem", sort: (row) => row.status },
   ];
   const advanceColumns: readonly DataTableColumn<HrAdvance>[] = [
