@@ -1,0 +1,77 @@
+.baseer-dialog.hr-payroll-create-dialog {
+  display: flex;
+  width: min(82rem, calc(100vw - 2rem));
+  max-height: min(92vh, 56rem);
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.hr-payroll-create-dialog .daily-sales-dialog__header {
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+
+.hr-payroll-create-dialog .daily-sales-dialog__body {
+  min-height: 0;
+  padding: 0 1.25rem;
+  overflow: auto;
+}
+
+.hr-payroll-create-dialog .daily-sales-dialog__actions {
+  display: flex;
+  min-height: 4.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding: .75rem 1.25rem;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 92%, var(--brand) 8%);
+}
+
+.hr-payroll-create__actions { display: flex; gap: .5rem; }
+.hr-payroll-create__total { display: flex; align-items: baseline; gap: .55rem; font-size: var(--font-body); font-weight: 750; }
+.hr-payroll-create__total > span { color: var(--muted); font-size: var(--font-caption); }
+.hr-payroll-create__total .baseer-money { font-size: 1.1rem; font-weight: 850; }
+
+.hr-payroll-create { display: grid; gap: 1rem; padding: 1rem 0 1.25rem; }
+.hr-payroll-create__controls { display: grid; grid-template-columns: minmax(11rem, .8fr) minmax(0, 1.2fr); gap: 1rem; }
+.hr-payroll-create__controls label { display: grid; gap: .35rem; color: var(--ink); font-size: var(--font-label); font-weight: 700; }
+.hr-payroll-create__controls input { width: 100%; min-height: var(--control-height); padding: .45rem .65rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--ink); background: var(--surface); font: inherit; }
+.hr-payroll-create__controls input:focus-visible { outline: 2px solid color-mix(in srgb, var(--brand) 55%, transparent); outline-offset: 1px; border-color: var(--brand); }
+
+.hr-payroll-create__table-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .25rem; border-top: 1px solid var(--line); }
+.hr-payroll-create__loading, .hr-payroll-create__notice { margin: 0; padding: .65rem .75rem; border-radius: .55rem; font-size: var(--font-caption); }
+.hr-payroll-create__loading { color: var(--muted); background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
+.hr-payroll-create__notice { border: 1px solid #e5bd71; color: #754b13; background: #fff9ec; font-weight: 650; }
+
+.hr-payroll-create__table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: .65rem; }
+.hr-payroll-create__table-wrap table { width: 100%; min-width: 48rem; border-collapse: separate; border-spacing: 0; }
+.hr-payroll-create__table-wrap th { position: sticky; top: 0; z-index: 1; padding: .6rem .75rem; color: var(--muted); background: #f5f7f5; border-bottom: 1px solid var(--line); font-size: var(--font-caption); font-weight: 750; text-align: start; white-space: nowrap; }
+.hr-payroll-create__table-wrap td { padding: .55rem .75rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent); color: var(--ink); font-size: var(--font-body); vertical-align: middle; }
+.hr-payroll-create__table-wrap tbody tr:last-child td { border-bottom: 0; }
+.hr-payroll-create__table-wrap tbody tr:hover td { background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
+.hr-payroll-create__table-wrap td:not(:first-child) { text-align: center; white-space: nowrap; }
+.hr-payroll-create__table-wrap td:first-child strong { display: block; }
+.hr-payroll-create__table-wrap td:first-child small { display: block; margin-top: .15rem; color: var(--muted); font-size: .72rem; }
+.hr-payroll-create__included { color: #247b4b; font-weight: 700; }
+.hr-payroll-create__excluded { color: #9a5d19; font-weight: 650; }
+.hr-payroll-create__leave-toggle { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink); font-size: var(--font-caption); font-weight: 700; white-space: nowrap; }
+
+.hr-payroll-create__applications { display: grid; gap: .65rem; padding-top: .8rem; border-top: 1px solid var(--line); }
+.hr-payroll-create__applications > header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.hr-payroll-create__applications > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem .75rem; }
+.hr-payroll-create__applications label { display: grid; grid-template-columns: auto minmax(0, 1fr) 6.5rem; align-items: center; gap: .45rem; min-height: var(--control-height); }
+.hr-payroll-create__applications label > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-caption); }
+.hr-payroll-create__applications input[type="text"], .hr-payroll-create__applications input:not([type]) { min-width: 0; }
+.hr-payroll-create__applications label > input:last-child { width: 100%; min-height: 2.2rem; padding-inline: .5rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); text-align: end; }
+.hr-payroll-create__applications p { margin: 0; color: var(--muted); font-size: var(--font-caption); }
+
+@media (max-width: 640px) {
+  .baseer-dialog.hr-payroll-create-dialog { width: calc(100vw - 1rem); max-height: calc(100vh - 1rem); }
+  .hr-payroll-create-dialog .daily-sales-dialog__header, .hr-payroll-create-dialog .daily-sales-dialog__body, .hr-payroll-create-dialog .daily-sales-dialog__actions { padding-inline: .8rem; }
+  .hr-payroll-create__controls, .hr-payroll-create__applications > div { grid-template-columns: 1fr; }
+  .hr-payroll-create-dialog .daily-sales-dialog__actions { align-items: flex-end; flex-direction: column; }
+  .hr-payroll-create__actions { width: 100%; }
+  .hr-payroll-create__actions > .baseer-button { flex: 1; }
+}
