@@ -16,6 +16,7 @@ type Props = {
   onClose: () => void;
   children: ReactNode;
   busy?: boolean;
+  error?: string | null;
   submitDisabled?: boolean;
   cancelLabel?: string;
   size?: BaseerFormDialogSize;
@@ -23,7 +24,7 @@ type Props = {
 };
 
 /** Shared form shell: predictable width, footer actions, focus handling and RTL-safe spacing. */
-export function BaseerFormDialog({ open, title, language, formId, submitLabel, onClose, children, busy = false, submitDisabled = false, cancelLabel, size = "standard", className }: Props) {
+export function BaseerFormDialog({ open, title, language, formId, submitLabel, onClose, children, busy = false, error, submitDisabled = false, cancelLabel, size = "standard", className }: Props) {
   const resolvedCancel = cancelLabel ?? (language === "ar" ? "إلغاء" : "Cancel");
-  return <BaseerDialog open={open} title={title} language={language} busy={busy} size={size === "wide" ? "wide" : "default"} className={["baseer-form-dialog", `baseer-form-dialog--${size}`, className].filter(Boolean).join(" ")} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{resolvedCancel}</BaseerButton><BaseerButton type="submit" form={formId} disabled={busy || submitDisabled}>{submitLabel}</BaseerButton></>}>{children}</BaseerDialog>;
+  return <BaseerDialog open={open} title={title} language={language} busy={busy} error={error} size={size === "wide" ? "wide" : "default"} className={["baseer-form-dialog", `baseer-form-dialog--${size}`, className].filter(Boolean).join(" ")} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{resolvedCancel}</BaseerButton><BaseerButton type="submit" form={formId} disabled={busy || submitDisabled}>{submitLabel}</BaseerButton></>}>{children}</BaseerDialog>;
 }

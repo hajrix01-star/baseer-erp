@@ -3,6 +3,10 @@
 export type ModuleRoute = { moduleId: ModuleId; section: number };
 
 type Rule = readonly string[];
+let activePermissionCodes = new Set<string>();
+
+export function setActivePermissionCodes(codes: readonly string[]) { activePermissionCodes = new Set(codes); }
+export function hasActivePermission(code: string) { return activePermissionCodes.has(code); }
 
 const hrPayrollRule = ["hr.payroll.read", "hr.payroll.create", "hr.payroll.approve", "hr.payroll.pay", "hr.payroll.reverse"] as const;
 const hrAdvanceRule = ["hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.advances.reverse", "hr.deductions.manage"] as const;
@@ -39,8 +43,7 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     3: hrPayrollRule,
     4: hrAdvanceRule,
     5: ["hr.employees.read", "hr.employees.write"],
-    6: hrFinalSettlementRule,
-    7: ["hr.employees.read", "hr.employees.write", ...hrPayrollRule],
+    6: ["hr.employees.read", "hr.payroll.read", "hr.employee_letters.read", "hr.employee_letters.issue"],
   },
   administration: {
     0: ["administration.companies.read", "administration.users.read", "administration.roles.read"],

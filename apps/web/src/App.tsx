@@ -18,7 +18,7 @@ const HrOverviewWorkspace = lazy(async () => ({ default: (await import('./hr-ove
 const HrWorkspace = lazy(async () => ({ default: (await import('./hr-workspace-router')).HrWorkspaceRouter }));
 import { getModule, modules, type ModuleId } from './modules';
 import { activeSession, clearActiveSession, listAvailableCompanies, signOutActiveSession } from './daily-sales-client';
-import { canOpenRoute, firstAllowedRoute, visibleModules, visibleSections } from './module-access';
+import { canOpenRoute, firstAllowedRoute, setActivePermissionCodes, visibleModules, visibleSections } from './module-access';
 import { appText } from './app-copy';
 
 type Language = 'ar' | 'en';
@@ -203,12 +203,13 @@ export function App() {
   }, []);
   useEffect(() => {
     const session = activeSession();
-    if (!session) { setPermissionCodes(null); return; }
+    if (!session) { setPermissionCodes(null); setActivePermissionCodes([]); return; }
+    setActivePermissionCodes([]);
     let cancelled = false;
     void listAvailableCompanies(session).then((companies) => {
       const active = companies.find((company) => company.id === session.companyId);
-      if (!cancelled) setPermissionCodes(active?.permissionCodes ?? []);
-    }).catch(() => { if (!cancelled) setPermissionCodes([]); });
+      if (!cancelled) { const codes = active?.permissionCodes ?? []; setPermissionCodes(codes); setActivePermissionCodes(codes); }
+    }).catch(() => { if (!cancelled) { setPermissionCodes([]); setActivePermissionCodes([]); } });
     return () => { cancelled = true; };
   }, [route?.moduleId, route?.section]);
 

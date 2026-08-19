@@ -6,6 +6,8 @@
 .baseer-form-dialog .daily-sales-dialog__header { align-items: center; padding-bottom: .8rem; }
 .baseer-form-dialog .daily-sales-dialog__body { padding-top: .15rem; }
 .baseer-form-dialog .daily-sales-dialog__actions { margin-top: .85rem; padding-top: .8rem; border-top: 1px solid var(--line); }
+.baseer-dialog__error-slot { display: flex; min-block-size: 3rem; margin-bottom: .75rem; align-items: center; padding: .55rem .7rem; border: 1px solid transparent; border-radius: .7rem; color: transparent; background: transparent; font-size: var(--font-label); line-height: 1.45; }
+.baseer-dialog__error-slot.is-visible { border-color: #efc5c1; color: #8f251d; background: #fdecec; }
 
 .baseer-form { display: grid; gap: .95rem; }
 .baseer-form-section { display: grid; gap: .7rem; padding: .1rem; background: transparent; }

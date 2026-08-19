@@ -23,6 +23,13 @@ export function normalizeBaseerAmount(value: string) {
     .replace(/(\..*)\./g, "$1");
 }
 
+/** Formats API money for an editable field without interfering with partial input such as `1.`. */
+export function formatBaseerEditableAmount(value: string | number) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "";
+  return Number.isInteger(amount) ? String(amount) : amount.toFixed(1);
+}
+
 /** Shared monetary input: plain, compact and consistently English-numeric. */
 export function BaseerMoneyInput({ value, onValueChange, className, ...props }: MoneyInputProps) {
   return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={value} inputMode="decimal" dir="ltr" onChange={(event) => onValueChange(normalizeBaseerAmount(event.target.value))} />;
