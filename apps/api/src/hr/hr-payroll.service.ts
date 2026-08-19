@@ -37,6 +37,7 @@ import {
   Prisma,
 } from '../generated/prisma/client.js';
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
+import { FinanceFoundationService } from '../finance/finance-foundation.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 
@@ -79,6 +80,7 @@ export class HrPayrollService {
     private readonly idempotency: IdempotencyService,
     private readonly vaults: FinanceVaultService,
     private readonly journals: JournalPostingService,
+    private readonly foundation: FinanceFoundationService,
   ) {}
 
   async listCompensationPolicies(context: TrustedCompanyActorContext) {
@@ -440,6 +442,10 @@ export class HrPayrollService {
       if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be approved.');
+      // Older or newly created companies may not yet have all payroll accounts.
+      // Initialising here is idempotent and runs in this same transaction before
+      // the first payroll accrual; it never changes an existing journal entry.
+      await this.foundation.initializeInTransaction(tx, context);
       const accounts = await this.systemAccounts(tx, context, [PAYROLL_EXPENSE, PAYROLL_PAYABLE, EMPLOYEE_ADVANCES, ADMIN_DEDUCTION_RECOVERY]);
       const journal = await this.journals.postInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-accrual:${run.id}`, sourceType: 'hr_payroll_accrual', sourceReference: run.id, businessDate: input.businessDate, description: `Payroll accrual ${run.runNumber}`, lines: [
         { accountId: accounts.get(PAYROLL_EXPENSE)!, debitAmount: fixed(run.grossAmount), description: run.runNumber },
@@ -488,6 +494,7 @@ export class HrPayrollService {
       if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED && run.status !== HrPayrollRunStatus.PARTIALLY_PAID) throw new ConflictException('Only an approved unpaid payroll can be paid.');
+      await this.foundation.initializeInTransaction(tx, context);
       const allocations = await this.validateAllocations(tx, context, input.allocations);
       const paymentAmount = sum(allocations.map((allocation) => allocation.amount));
       const remaining = run.netPayableAmount.minus(run.paidAmount);
