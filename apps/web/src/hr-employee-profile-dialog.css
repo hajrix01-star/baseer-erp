@@ -1,0 +1,133 @@
+/* Employee 360 keeps one stable viewport while its record tabs change. */
+.baseer-dialog:has(.hr-employee-profile) {
+  display: flex;
+  flex-direction: column;
+  block-size: min(46rem, calc(100vh - 2rem));
+  max-block-size: calc(100vh - 2rem);
+  overflow: hidden;
+}
+
+.baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+.hr-employee-profile {
+  min-block-size: 100%;
+  align-content: start;
+}
+
+.hr-payroll-settlements {
+  display: grid;
+  gap: .8rem;
+}
+
+.hr-payroll-settlements > header h3,
+.hr-payroll-settlements > header p {
+  margin: 0;
+}
+
+.hr-payroll-settlements > header h3 {
+  color: var(--ink);
+  font-size: var(--font-body);
+}
+
+.hr-payroll-settlements > header p {
+  margin-top: .2rem;
+  color: var(--muted);
+  font-size: var(--font-caption);
+}
+
+.hr-payroll-settlements__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  background: var(--surface);
+}
+
+.hr-payroll-settlements table {
+  inline-size: 100%;
+  min-inline-size: 58rem;
+  border-collapse: collapse;
+}
+
+.hr-payroll-settlements th,
+.hr-payroll-settlements td {
+  padding: .65rem .75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.hr-payroll-settlements thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--canvas) 84%, var(--surface));
+  font-size: var(--font-caption);
+  font-weight: 800;
+}
+
+.hr-payroll-settlements tbody tr:not(.hr-payroll-settlements__section):not(.hr-payroll-settlements__empty):hover {
+  background: color-mix(in srgb, var(--brand) 4%, var(--surface));
+}
+
+.hr-payroll-settlements__section th {
+  padding-block: .55rem;
+  color: var(--brand-deep);
+  background: color-mix(in srgb, var(--brand) 8%, var(--surface));
+  font-size: var(--font-label);
+}
+
+.hr-payroll-settlements__section span {
+  font-weight: 850;
+}
+
+.hr-payroll-settlements__section small {
+  margin-inline-start: .5rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hr-payroll-settlements__empty td {
+  padding-block: .85rem;
+  color: var(--muted);
+  font-size: var(--font-label);
+}
+
+.hr-payroll-settlements__amount {
+  text-align: end !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hr-payroll-settlements__balance {
+  color: var(--brand-deep);
+  font-weight: 800;
+}
+
+.hr-payroll-settlements__adjustments {
+  display: grid;
+  gap: .15rem;
+  color: var(--muted);
+  font-size: var(--font-caption);
+}
+
+.hr-payroll-settlements__adjustments > span {
+  display: flex;
+  justify-content: flex-end;
+  gap: .3rem;
+}
+
+@media (max-width: 640px) {
+  .baseer-dialog:has(.hr-employee-profile) {
+    block-size: calc(100vh - 1rem);
+    max-block-size: calc(100vh - 1rem);
+  }
+
+  .hr-payroll-settlements table {
+    min-inline-size: 48rem;
+  }
+}
