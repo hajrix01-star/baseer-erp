@@ -6,7 +6,7 @@ import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceCategoryStatus, FinanceSupplierStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceCategoryStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
@@ -42,7 +42,10 @@ export class HrService {
           ...(query.status ? { status: query.status } : {}),
           ...(conditions.length ? { AND: conditions } : {}),
         },
-        include: { compensationProfiles: { where: { effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] }, orderBy: { effectiveFrom: 'desc' }, take: 1, select: { monthlyGross: true } } },
+        include: {
+          compensationProfiles: { where: { effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] }, orderBy: { effectiveFrom: 'desc' }, take: 1, select: { monthlyGross: true } },
+          documents: { where: { referenceNumber: 'HR_PROFILE_PHOTO_V1', status: HrEmployeeDocumentStatus.ACTIVE }, orderBy: { createdAt: 'desc' }, take: 1, select: { currentVersion: { select: { id: true, blob: { select: { status: true, mimeType: true } } } } } },
+        },
         orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }],
         take: query.pageSize + 1,
         }),
@@ -54,7 +57,11 @@ export class HrService {
       const hasMore = rows.length > query.pageSize;
       const employees = hasMore ? rows.slice(0, query.pageSize) : rows;
       return {
-        employees: employees.map((employee) => mapEmployee(employee, employee.compensationProfiles[0]?.monthlyGross ?? null)),
+        employees: employees.map((employee) => {
+          const version = employee.documents[0]?.currentVersion;
+          const profilePhotoVersionId = version?.blob.status === HrDocumentBlobStatus.READY && version.blob.mimeType.startsWith('image/') ? version.id : null;
+          return mapEmployee(employee, employee.compensationProfiles[0]?.monthlyGross ?? null, profilePhotoVersionId);
+        }),
         hasMore,
         nextCursor: hasMore ? employees.at(-1)?.id ?? null : null,
         summary: { activeEmployees, employeesOnLeave, openAdvances, openAdministrativeDeductions },
@@ -484,7 +491,7 @@ function defaultCategoryCodeForService(serviceType: string) {
   }
 }
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
-function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
+function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null, profilePhotoVersionId: string | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, profilePhotoVersionId, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
 function mapPromotion(value: { id: string; employeeId: string; effectiveDate: Date; previousJobTitle: string | null; newJobTitle: string; decisionReference: string; reason: string | null; createdAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveDate: day(value.effectiveDate)!, previousJobTitle: value.previousJobTitle, newJobTitle: value.newJobTitle, decisionReference: value.decisionReference, reason: value.reason, createdAt: value.createdAt.toISOString() }; }
 function mapCompensation(value: { id: string; employeeId: string; policyVersionId: string | null; effectiveFrom: Date; effectiveTo: Date | null; monthlyGross: Prisma.Decimal; compensationMethod: string; foodAllowance: Prisma.Decimal; housingAllowance: Prisma.Decimal; transportAllowance: Prisma.Decimal; otherAllowance: Prisma.Decimal; scheduledHoursPerDay: number | null; scheduledWorkDays: number | null; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, policyVersionId: value.policyVersionId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), monthlyGross: value.monthlyGross.toFixed(4), compensationMethod: value.compensationMethod as 'FIXED_MONTHLY' | 'INCLUSIVE_OVERTIME', foodAllowance: value.foodAllowance.toFixed(4), housingAllowance: value.housingAllowance.toFixed(4), transportAllowance: value.transportAllowance.toFixed(4), otherAllowance: value.otherAllowance.toFixed(4), scheduledHoursPerDay: value.scheduledHoursPerDay, scheduledWorkDays: value.scheduledWorkDays, notes: value.notes }; }
 function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) }; }

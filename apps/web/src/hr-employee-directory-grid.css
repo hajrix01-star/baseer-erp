@@ -1,0 +1,134 @@
+.hr-employee-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: .9rem;
+}
+
+.hr-employee-view-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: .45rem;
+}
+
+.hr-employee-directory-card {
+  display: grid;
+  gap: 1rem;
+  min-inline-size: 0;
+  padding: 1rem;
+  border: 1px solid var(--baseer-border, #d7e4dc);
+  border-radius: 1rem;
+  background: var(--baseer-surface, #fff);
+  color: inherit;
+  text-align: start;
+  box-shadow: 0 1px 2px rgb(18 51 40 / 3%);
+  cursor: pointer;
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.hr-employee-directory-card:hover {
+  border-color: color-mix(in srgb, var(--brand, #176b48) 45%, var(--baseer-border, #d7e4dc));
+  box-shadow: 0 .6rem 1.5rem rgb(18 51 40 / 9%);
+  transform: translateY(-1px);
+}
+
+.hr-employee-directory-card:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--brand, #176b48) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.hr-employee-directory-card header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .7rem;
+}
+
+.hr-employee-directory-card__avatar {
+  display: grid;
+  inline-size: 3.2rem;
+  block-size: 3.2rem;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brand, #176b48) 30%, var(--baseer-border, #d7e4dc));
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--brand, #176b48) 10%, #fff);
+  color: var(--brand-deep, #123328);
+  font-weight: 800;
+}
+
+.hr-employee-directory-card__avatar img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.hr-employee-directory-card__identity {
+  display: grid;
+  min-inline-size: 0;
+  gap: .15rem;
+}
+
+.hr-employee-directory-card__identity strong {
+  overflow: hidden;
+  color: var(--baseer-ink, #123328);
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hr-employee-directory-card__identity bdi {
+  color: var(--baseer-muted, #60756b);
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.hr-employee-directory-card dl {
+  display: grid;
+  gap: .55rem;
+  margin: 0;
+}
+
+.hr-employee-directory-card dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--baseer-border, #d7e4dc) 72%, transparent);
+}
+
+.hr-employee-directory-card dt {
+  flex: 0 0 auto;
+  color: var(--baseer-muted, #60756b);
+  font-size: .78rem;
+}
+
+.hr-employee-directory-card dd {
+  min-inline-size: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--baseer-ink, #123328);
+  font-size: .86rem;
+  font-weight: 700;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hr-employee-directory-card footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--brand-deep, #123328);
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.hr-employee-directory-card footer span {
+  color: var(--brand, #176b48);
+  font-size: 1rem;
+}
+
+@media (max-width: 520px) {
+  .hr-employee-directory-grid { grid-template-columns: 1fr; }
+}

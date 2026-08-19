@@ -16,6 +16,7 @@ import { activeSession, api, requestId, type ActiveSession } from "./daily-sales
 import { presentBaseerApiError } from "./baseer-api-error";
 import { hrText } from "./hr-copy";
 import { HrJobTitleSelect } from "./hr-job-titles";
+import { HrEmployeeDirectoryGrid } from "./hr-employee-directory-grid";
 import { cancelHrEmployeeAdministrativeDeduction, createHrEmployeeAdministrativeDeduction, deferHrEmployeeAdministrativeDeduction, deferHrEmployeeAdvance, getHrAdministrativeDeduction, getHrAdvance, getHrEmployee, issueHrEmployeeAdvance, listHrAdministrativeDeductions, listHrAdvances, listHrEmployees, settleHrEmployeeAdvanceDirectly, updateHrEmployee, type HrAdministrativeDeduction, type HrAdministrativeDeductionDetail, type HrAdvance, type HrAdvanceDetail, type HrDetail, type HrEmployee, type HrEmployeeStatus } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -66,6 +67,7 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
   const [configuration, setConfiguration] = useState<FinanceConfiguration | null>(null);
   const [search, setSearch] = useState("");
   const [employeeFilter, setEmployeeFilter] = useState("");
+  const [employeeView, setEmployeeView] = useState<"cards" | "table">("cards");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: "success" | "danger"; text: string } | null>(null);
@@ -221,7 +223,7 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
             {visibleAdvances.length ? <DataTable ariaLabel={text.advances} caption={text.advances} columns={advanceColumns} rows={visibleAdvances} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد سلف مسجلة" : "No advances recorded"} />}
             {visibleDeductions.length ? <DataTable ariaLabel={text.administrativeDeductions} caption={text.administrativeDeductions} columns={deductionColumns} rows={visibleDeductions} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد خصومات إدارية" : "No administrative deductions"} />}
           </>
-        ) : visibleEmployees.length ? <DataTable ariaLabel={sectionTitle} caption={sectionTitle} columns={employeeColumns} rows={visibleEmployees} rowKey={(row) => row.id} /> : <BaseerEmptyState title={text.noEmployees} action={createEmployeeAction} />}
+        ) : visibleEmployees.length ? <><div className="hr-employee-view-switch" role="group" aria-label={language === "ar" ? "طريقة عرض الموظفين" : "Employee display mode"}><BaseerButton type="button" variant={employeeView === "cards" ? "primary" : "secondary"} onClick={() => setEmployeeView("cards")}>{language === "ar" ? "بطاقات" : "Cards"}</BaseerButton><BaseerButton type="button" variant={employeeView === "table" ? "primary" : "secondary"} onClick={() => setEmployeeView("table")}>{language === "ar" ? "جدول" : "Table"}</BaseerButton></div>{employeeView === "cards" ? <HrEmployeeDirectoryGrid employees={visibleEmployees} language={language} onOpen={(employee) => void showDetail(employee)} /> : <DataTable ariaLabel={sectionTitle} caption={sectionTitle} columns={employeeColumns} rows={visibleEmployees} rowKey={(row) => row.id} />}</> : <BaseerEmptyState title={text.noEmployees} action={createEmployeeAction} />}
       </>
     )}
     {!loading && section === 1 && nextEmployeeCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreRegister("employees")}>{text.loadMore}</BaseerButton> : null}

@@ -422,6 +422,8 @@ export const hrEmployeeSchema = z.object({
   workSchedule: z.string().max(160).nullable(),
   hireDate: businessDateSchema,
   currentMonthlyGross: hrAmountSchema.nullable(),
+  /** An authenticated document-version reference; never a storage URL. */
+  profilePhotoVersionId: z.string().uuid().nullable(),
   status: hrEmployeeStatusSchema,
   terminatedAt: businessDateSchema.nullable(),
   notes: z.string().max(2_000).nullable(),
