@@ -72,6 +72,9 @@
   font: inherit;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%);
 }
+.hr-onboarding input::placeholder { color: transparent; opacity: 0; }
+.hr-onboarding input[type="date"]::-webkit-datetime-edit { color: transparent; }
+.hr-onboarding input[type="date"]:valid::-webkit-datetime-edit { color: var(--ink); }
 .hr-onboarding input:hover,
 .hr-onboarding textarea:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
 .hr-onboarding input:focus-visible,
