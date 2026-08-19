@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./hr-employee-directory-grid.css";
 
 import { BaseerMoney } from "./baseer-money";
 import { BaseerStatusBadge } from "./baseer-status-badge";
 import { activeSession } from "./daily-sales-client";
-import { downloadHrEmployeeDocumentVersion, type HrEmployee } from "./hr-client";
+import { type HrEmployee } from "./hr-client";
+import { getCachedHrEmployeePhotoBlob } from "./hr-employee-photo-cache";
 
 type Language = "ar" | "en";
 
@@ -19,25 +20,42 @@ const statusLabel = (language: Language, status: HrEmployee["status"]) => ({
 const statusTone = (status: HrEmployee["status"]) => status === "ACTIVE" ? "success" as const : status === "ON_LEAVE" ? "warning" as const : "neutral" as const;
 
 function HrEmployeeDirectoryAvatar({ employee, name }: { employee: HrEmployee; name: string }) {
+  const avatarRef = useRef<HTMLSpanElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!employee.profilePhotoVersionId) { setPhotoUrl(null); return; }
+    setShouldLoad(false);
+    if (!employee.profilePhotoVersionId) return;
+    const element = avatarRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") { setShouldLoad(true); return; }
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      setShouldLoad(true);
+      observer.disconnect();
+    }, { rootMargin: "160px 0px" });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [employee.id, employee.profilePhotoVersionId]);
+
+  useEffect(() => {
+    setPhotoUrl((current) => { if (current) URL.revokeObjectURL(current); return null; });
+    if (!shouldLoad || !employee.profilePhotoVersionId) return;
     const session = activeSession();
     if (!session) return;
     let active = true;
     let url: string | null = null;
-    void downloadHrEmployeeDocumentVersion(session, employee.profilePhotoVersionId)
-      .then(({ blob }) => {
+    void getCachedHrEmployeePhotoBlob(session, employee.profilePhotoVersionId)
+      .then((blob) => {
         if (!active) return;
         url = URL.createObjectURL(blob);
         setPhotoUrl(url);
       })
       .catch(() => { if (active) setPhotoUrl(null); });
     return () => { active = false; if (url) URL.revokeObjectURL(url); };
-  }, [employee.profilePhotoVersionId]);
+  }, [employee.profilePhotoVersionId, shouldLoad]);
 
-  return <span className="hr-employee-directory-card__avatar" aria-hidden="true">{photoUrl ? <img src={photoUrl} alt="" /> : initials(name)}</span>;
+  return <span ref={avatarRef} className="hr-employee-directory-card__avatar" aria-hidden="true">{photoUrl ? <img src={photoUrl} alt="" /> : initials(name)}</span>;
 }
 
 /** A compact directory view that deliberately exposes the same fields as the employee table. */

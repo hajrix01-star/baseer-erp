@@ -1,38 +1,48 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerDialog } from "./baseer-dialog";
 import { activeSession, requestId } from "./daily-sales-client";
-import { createHrEmployeeDocument, downloadHrEmployeeDocumentVersion, listHrEmployeeDocuments, replaceHrEmployeeDocument, type HrEmployeeDocument } from "./hr-client";
+import { createHrEmployeeDocument, replaceHrEmployeeDocument } from "./hr-client";
 import { hrText } from "./hr-copy";
+import { getCachedHrEmployeePhotoBlob, getCachedHrEmployeePhotoDocument, invalidateHrEmployeePhotoDocuments, primeHrEmployeePhotoBlob } from "./hr-employee-photo-cache";
+import { HR_PROFILE_PHOTO_REFERENCE } from "./hr-employee-photo-reference";
 import "./hr-employee-photo.css";
 
 type Language = "ar" | "en";
-export const HR_PROFILE_PHOTO_REFERENCE = "HR_PROFILE_PHOTO_V1";
+export { HR_PROFILE_PHOTO_REFERENCE } from "./hr-employee-photo-reference";
 const maxPhotoBytes = 5 * 1024 * 1024;
 
 export function isHrEmployeePhoto(file: File) { return ["image/jpeg", "image/png"].includes(file.type) && file.size > 0 && file.size <= maxPhotoBytes; }
 export function hrEmployeePhotoAsBase64(file: File): Promise<string> { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onerror = () => reject(new Error("Photo could not be read.")); reader.onload = () => resolve(String(reader.result).split(",")[1] ?? ""); reader.readAsDataURL(file); }); }
 const initials = (value: string) => value.trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "—";
 
-export function HrEmployeePhoto({ employeeId, name, language, onError, onChanged }: { employeeId: string; name: string; language: Language; onError: (message: string) => void; onChanged: () => Promise<void> }) {
+export function HrEmployeePhoto({ employeeId, photoVersionId, name, language, onError, onChanged }: { employeeId: string; photoVersionId: string | null; name: string; language: Language; onError: (message: string) => void; onChanged: () => Promise<void> }) {
   const ar = language === "ar";
   const text = hrText(language);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-  const [photoDocument, setPhotoDocument] = useState<HrEmployeeDocument | null>(null);
+  const [photoDocumentId, setPhotoDocumentId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const loadSequence = useRef(0);
   const release = useCallback(() => setPhotoUrl((current) => { if (current) URL.revokeObjectURL(current); return null; }), []);
   const load = useCallback(async () => {
+    const sequence = ++loadSequence.current;
+    release();
     const session = activeSession(); if (!session) return;
-    const receipt = await listHrEmployeeDocuments(session, employeeId, { status: "ACTIVE", pageSize: 100 });
-    const document = receipt.documents.find((item) => item.referenceNumber === HR_PROFILE_PHOTO_REFERENCE && item.currentVersion?.blobStatus === "READY" && item.currentVersion.mimeType.startsWith("image/")) ?? null;
-    release(); setPhotoDocument(document);
-    if (!document?.currentVersion) return;
-    const { blob } = await downloadHrEmployeeDocumentVersion(session, document.currentVersion.id);
-    setPhotoUrl(URL.createObjectURL(blob));
-  }, [employeeId, release]);
-  useEffect(() => { void load().catch((error) => onError(presentBaseerApiError(error, language, text.employeePhotoLoadFailed))); return release; }, [language, load, onError, release, text.employeePhotoLoadFailed]);
+    if (!photoVersionId) return;
+    try {
+      const blob = await getCachedHrEmployeePhotoBlob(session, photoVersionId);
+      if (sequence === loadSequence.current) setPhotoUrl(URL.createObjectURL(blob));
+    } catch (error) {
+      if (sequence === loadSequence.current) throw error;
+    }
+  }, [photoVersionId, release]);
+  useEffect(() => {
+    void load().catch((error) => onError(presentBaseerApiError(error, language, text.employeePhotoLoadFailed)));
+    return () => { loadSequence.current += 1; release(); };
+  }, [language, load, onError, release, text.employeePhotoLoadFailed]);
+  useEffect(() => { setPhotoDocumentId(null); }, [employeeId]);
   const choose = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; event.target.value = "";
     if (!file) return;
@@ -41,9 +51,15 @@ export function HrEmployeePhoto({ employeeId, name, language, onError, onChanged
     setBusy(true);
     try {
       const upload = { fileName: file.name, contentBase64: await hrEmployeePhotoAsBase64(file) };
-      if (photoDocument) await replaceHrEmployeeDocument(session, photoDocument.id, { upload, idempotencyKey: requestId() });
-      else await createHrEmployeeDocument(session, employeeId, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload, idempotencyKey: requestId() });
-      await load(); await onChanged();
+      const documentId = photoDocumentId ?? (photoVersionId ? (await getCachedHrEmployeePhotoDocument(session, employeeId))?.id ?? null : null);
+      const result = documentId
+        ? await replaceHrEmployeeDocument(session, documentId, { upload, idempotencyKey: requestId() })
+        : await createHrEmployeeDocument(session, employeeId, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload, idempotencyKey: requestId() });
+      invalidateHrEmployeePhotoDocuments(session, employeeId);
+      primeHrEmployeePhotoBlob(session, result.versionId, file);
+      loadSequence.current += 1;
+      release(); setPhotoUrl(URL.createObjectURL(file)); setPhotoDocumentId(result.id);
+      await onChanged();
     } catch (error) { onError(presentBaseerApiError(error, language, text.employeePhotoSaveFailed)); }
     finally { setBusy(false); }
   };
