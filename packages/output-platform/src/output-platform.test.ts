@@ -83,3 +83,18 @@ test('renders a centered A4 portrait payroll document with totals and approval l
   assert.match(html, /اعتماد الإدارة/);
   assert.doesNotMatch(html, /daily-sales-workspace|sidebar|launcher/);
 });
+
+test('renders bilingual A4 payroll signature slips with a clear acknowledgment and signatures', () => {
+  const html = renderPrintPreviewDocument({
+    snapshotId: 'signature-snapshot-1', reportCode: 'hr.payroll-signature-slips', templateVersion: '1', template: 'payroll-signature-slips', title: 'كشوف توقيع مسير الرواتب', direction: 'rtl', locale: 'ar', generatedAtRiyadh: '2026-08-19T12:00:00+03:00',
+    companies: [{ id: 'company-1', name: 'شركة بصير' }], periodLabel: 'PAY-202608-0001 · 2026-08-01', taxPresentation: 'gross', sourceLabel: 'مسيرات الرواتب المعتمدة في بصير', columns: [], rows: [],
+    payrollSignatureSlips: [{ employeeNumber: 'EMP-001', employeeName: 'محمد أحمد', gross: '2500', advances: '100', deductions: '50', net: '2350', paid: '0' }],
+  });
+  assert.match(html, /A4 portrait/);
+  assert.match(html, /Payroll Signature Slip/);
+  assert.match(html, /إقرار الاستلام/);
+  assert.match(html, /Receipt Acknowledgment/);
+  assert.match(html, /توقيع الموظف/);
+  assert.match(html, /Employee signature/);
+  assert.match(html, /2,350 <small>SAR<\/small>/);
+});
