@@ -17,7 +17,7 @@ const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import
 const HrFinalSettlementWorkspace = lazy(async () => ({ default: (await import("./hr-final-settlement-workspace")).HrFinalSettlementWorkspace }));
 const HrEmployeeLettersPanel = lazy(async () => ({ default: (await import("./hr-employee-letters-panel")).HrEmployeeLettersPanel }));
 const money = (value: number) => value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "", scheduledWorkDays: "" });
+const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "0", housingAllowance: "0", transportAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 
 /** Read-only salary agreement calculator. It never creates a payroll event. */
@@ -50,6 +50,8 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         monthlyGross: agreement.monthlyGross,
         compensationMethod: agreement.compensationMethod,
         foodAllowance: agreement.foodAllowance,
+        housingAllowance: agreement.housingAllowance,
+        transportAllowance: agreement.transportAllowance,
         otherAllowance: agreement.otherAllowance,
         scheduledHoursPerDay: agreement.scheduledHoursPerDay?.toString() ?? "",
         scheduledWorkDays: agreement.scheduledWorkDays?.toString() ?? "",
@@ -78,6 +80,8 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         <label>{ar ? "طريقة الاتفاق" : "Agreement method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
         <label>{ar ? "الإجمالي الشهري المتفق عليه" : "Agreed monthly total"}<input inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setField("monthlyGross", event.target.value)} /></label>
         <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setField("foodAllowance", event.target.value)} /></label>
+        <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => setField("housingAllowance", event.target.value)} /></label>
+        <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => setField("transportAllowance", event.target.value)} /></label>
         <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => setField("otherAllowance", event.target.value)} /></label>
         {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
       </div>

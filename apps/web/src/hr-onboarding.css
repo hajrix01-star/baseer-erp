@@ -56,6 +56,9 @@
 .hr-onboarding input[type="date"],
 .hr-onboarding input[type="month"] { direction: ltr; text-align: start; }
 .hr-onboarding__total { min-block-size: 5.1rem; border-radius: .8rem; }
+.hr-onboarding__calculation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; padding-top: 1rem; }
+.hr-onboarding__calculation .hr-onboarding__total { min-block-size: 5.45rem; }
+.hr-onboarding__calculation .hr-onboarding__total:last-child strong { color: var(--brand-deep); font-size: var(--font-title-md); font-variant-numeric: tabular-nums; }
 .hr-onboarding__notes textarea { min-block-size: 6.5rem; }
 @media (max-width: 640px) {
   .hr-onboarding-dialog { inline-size: calc(100vw - 1rem); max-block-size: calc(100vh - 1rem); border-radius: 1rem; }
@@ -64,4 +67,5 @@
   .hr-onboarding-dialog .daily-sales-dialog__actions { min-block-size: 4.25rem; padding: .75rem 1rem; }
   .hr-onboarding-dialog .daily-sales-dialog__actions .baseer-button { flex: 1; }
   .hr-onboarding__section { padding: .9rem; }
+  .hr-onboarding__calculation { grid-template-columns: 1fr; }
 }

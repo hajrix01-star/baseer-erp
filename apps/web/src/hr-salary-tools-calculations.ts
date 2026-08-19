@@ -4,6 +4,8 @@ export type SalaryToolInput = {
   monthlyGross: string;
   compensationMethod: HrCompensationMethod;
   foodAllowance: string;
+  housingAllowance: string;
+  transportAllowance: string;
   otherAllowance: string;
   scheduledHoursPerDay: string;
   scheduledWorkDays: string;
@@ -42,8 +44,10 @@ const round4 = (value: number) => Math.round((value + Number.EPSILON) * 10_000) 
 export function calculateSalaryTool(input: SalaryToolInput): SalaryToolCalculation {
   const monthlyGross = amount(input.monthlyGross);
   const foodAllowance = amount(input.foodAllowance);
+  const housingAllowance = amount(input.housingAllowance);
+  const transportAllowance = amount(input.transportAllowance);
   const otherAllowance = amount(input.otherAllowance);
-  const fixedAllowances = round4(foodAllowance + otherAllowance);
+  const fixedAllowances = round4(foodAllowance + housingAllowance + transportAllowance + otherAllowance);
 
   if (input.compensationMethod === "FIXED_MONTHLY") {
     const basicSalary = round4(monthlyGross - fixedAllowances);
