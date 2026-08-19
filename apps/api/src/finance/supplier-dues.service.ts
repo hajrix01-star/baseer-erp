@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
+import { DocumentSerialService, type SqlDate } from '../core-controls/document-serial.service.js';
 import {
   IdempotencyPayloadMismatchError,
   IdempotencyService,
@@ -126,6 +127,7 @@ export class SupplierDuesService {
   constructor(
     private readonly database: DatabaseService,
     private readonly idempotency: IdempotencyService,
+    private readonly serials: DocumentSerialService,
     private readonly journals: JournalPostingService,
     private readonly vaults: FinanceVaultService,
     private readonly businessDates: BusinessDateService,
@@ -407,15 +409,21 @@ export class SupplierDuesService {
       }
     }
     const paymentId = randomUUID();
+    const paymentBusinessDate = this.dateValue(businessDate, 'A payment business date is required.');
+    const paymentSerial = await this.serials.reserveInTransaction(transaction, context, {
+      series: 'SUPPLIER_DUE_PAYMENT',
+      businessDate: paymentBusinessDate as SqlDate,
+    });
+    const paymentNumber = `PAY-${paymentBusinessDate.replaceAll('-', '')}-${paymentSerial.toString().padStart(4, '0')}`;
     const journal = await this.journals.postInTransaction(transaction, {
       tenantId: context.tenantId,
       companyId: context.companyId,
       actorUserId: context.actorUserId,
       requestId,
       sourceType: 'supplier_due_payment',
-      sourceReference: `${paymentId}:v1`,
+      sourceReference: paymentNumber,
       businessDate,
-      description: `Supplier due payment ${paymentId}`,
+      description: `Supplier due payment ${paymentNumber}`,
       lines,
     });
     const remainingAmount = due.remainingAmount.minus(amount);

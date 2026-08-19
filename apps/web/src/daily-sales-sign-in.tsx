@@ -4,7 +4,6 @@ import {
   activateGeneralOwner,
   listAuthenticatedCompanies,
   signInForDailySales,
-  type AuthenticatedCompany,
 } from "./daily-sales-auth-client";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 
@@ -22,17 +21,9 @@ export function DailySalesSignIn({
   const [activationCode, setActivationCode] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPasswords, setShowPasswords] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [companies, setCompanies] = useState<AuthenticatedCompany[]>([]);
   const [activationMode, setActivationMode] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const choose = (companyId: string) => {
-    if (!accessToken) return;
-    sessionStorage.setItem(tokenStorageKey, accessToken);
-    sessionStorage.setItem(companyStorageKey, companyId);
-    window.location.reload();
-  };
   const completeSignIn = async (
     identifier: string,
     selectedPassword: string,
@@ -42,14 +33,11 @@ export function DailySalesSignIn({
       password: selectedPassword,
     });
     const available = await listAuthenticatedCompanies(session.accessToken);
-    if (available.length === 1) {
-      sessionStorage.setItem(tokenStorageKey, session.accessToken);
-      sessionStorage.setItem(companyStorageKey, available[0].id);
-      window.location.reload();
-      return;
-    }
-    setAccessToken(session.accessToken);
-    setCompanies(available);
+    const company = available[0];
+    if (!company) throw new Error("No company is available for this user.");
+    sessionStorage.setItem(tokenStorageKey, session.accessToken);
+    sessionStorage.setItem(companyStorageKey, company.id);
+    window.location.reload();
   };
   const signIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -101,21 +89,7 @@ export function DailySalesSignIn({
       <p className="eyebrow">{copy.eyebrow}</p>
       <h2>{copy.noSession}</h2>
       <p>{copy.noSessionDetail}</p>
-      {accessToken ? (
-        <div className="daily-sales-company-picker">
-          <h3>{copy.chooseCompany}</h3>
-          {companies.map((company) => (
-            <button
-              key={company.id}
-              className="daily-sales-primary"
-              type="button"
-              onClick={() => choose(company.id)}
-            >
-              {language === "ar" ? company.nameAr : company.nameEn}
-            </button>
-          ))}
-        </div>
-      ) : activationMode ? (
+      {activationMode ? (
         <form className="daily-sales-sign-in" onSubmit={activate}>
           <p>
             {language === "ar"

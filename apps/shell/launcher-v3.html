@@ -14,7 +14,7 @@
         <a class="brand" href="#" id="brand-home"><span class="brand-mark">ب</span><span>Baseer ERP</span></a>
         <div class="topbar-spacer"></div>
         <button id="language" class="text-button" type="button">EN</button>
-        <button id="theme" class="theme-button" type="button"><span class="theme-dot"></span><span data-ar="الثيم الأخضر" data-en="Green theme">الثيم الأخضر</span></button>
+        <div class="theme-control"><button id="theme" class="theme-button" type="button" aria-haspopup="menu" aria-expanded="false"><span class="theme-dot"></span><span data-background-label>أخضر هادئ</span></button><div class="background-menu" data-background-menu role="menu" aria-label="اختيار خلفية شاشة التطبيقات"><p data-ar="خلفية شاشة التطبيقات" data-en="App screen background">خلفية شاشة التطبيقات</p><button type="button" data-background-option="emerald-light" role="menuitem"><span class="background-swatch emerald-light"></span><span data-ar="أخضر هادئ" data-en="Calm green">أخضر هادئ</span><b>✓</b></button><button type="button" data-background-option="emerald-dark" role="menuitem"><span class="background-swatch emerald-dark"></span><span data-ar="أخضر داكن" data-en="Executive dark">أخضر داكن</span><b>✓</b></button><button type="button" data-background-option="architectural-light" role="menuitem"><span class="background-swatch architectural-light"></span><span data-ar="معماري مضيء" data-en="Architectural light">معماري مضيء</span><b>✓</b></button></div></div>
         <button class="avatar" type="button" aria-label="حساب المستخدم">م</button>
       </header>
       <main class="launcher-page__content">
@@ -43,7 +43,7 @@
         <button class="company-selector" type="button"><span class="status-dot"></span><span data-ar="شركة نوركس الافتراضية" data-en="Noorix Default Company">شركة نوركس الافتراضية</span><span>⌄</span></button>
         <button class="icon-button" type="button" aria-label="إدخال سريع">＋</button>
         <button id="app-language" class="text-button" type="button">EN</button>
-        <button id="app-theme" class="theme-button" type="button"><span class="theme-dot"></span><span data-ar="الثيم الأخضر" data-en="Green theme">الثيم الأخضر</span></button>
+        <div class="theme-control"><button id="app-theme" class="theme-button" type="button" aria-haspopup="menu" aria-expanded="false"><span class="theme-dot"></span><span data-background-label>أخضر هادئ</span></button><div class="background-menu" data-background-menu role="menu" aria-label="اختيار خلفية شاشة التطبيقات"><p data-ar="خلفية شاشة التطبيقات" data-en="App screen background">خلفية شاشة التطبيقات</p><button type="button" data-background-option="emerald-light" role="menuitem"><span class="background-swatch emerald-light"></span><span data-ar="أخضر هادئ" data-en="Calm green">أخضر هادئ</span><b>✓</b></button><button type="button" data-background-option="emerald-dark" role="menuitem"><span class="background-swatch emerald-dark"></span><span data-ar="أخضر داكن" data-en="Executive dark">أخضر داكن</span><b>✓</b></button><button type="button" data-background-option="architectural-light" role="menuitem"><span class="background-swatch architectural-light"></span><span data-ar="معماري مضيء" data-en="Architectural light">معماري مضيء</span><b>✓</b></button></div></div>
         <button class="avatar" type="button" aria-label="حساب المستخدم">م</button>
       </header>
       <main class="workspace">
@@ -53,6 +53,8 @@
     </div>
 
     <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true"><div class="mobile-drawer__backdrop" id="drawer-backdrop"></div><aside class="mobile-drawer__panel" aria-label="أقسام الموديول"><header><div><p class="overline">الأقسام</p><h2 id="drawer-title"></h2></div><button id="close-drawer" class="close-button" type="button" aria-label="إغلاق">×</button></header><nav id="drawer-nav" class="module-navigation"></nav></aside></div>
+    <script src="./section-icons.js"></script>
+    <script src="./launcher-backgrounds.js"></script>
     <script src="./launcher-v3.js"></script>
   </body>
 </html>

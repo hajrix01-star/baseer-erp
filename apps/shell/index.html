@@ -16,7 +16,7 @@
         <button class="company-selector" type="button" aria-label="الشركة الحالية"><span class="status-dot" aria-hidden="true"></span><span data-ar="شركة نوركس الافتراضية" data-en="Noorix Default Company">شركة نوركس الافتراضية</span><span aria-hidden="true">⌄</span></button>
         <button class="icon-button" id="quick-entry" type="button" aria-label="إدخال سريع" title="إدخال سريع">＋</button>
         <button class="text-button" id="language-toggle" type="button" aria-label="Change language">EN</button>
-        <button class="theme-button" id="theme-toggle" type="button" aria-pressed="false"><span class="theme-dot" aria-hidden="true"></span><span data-ar="الثيم الأخضر" data-en="Green theme">الثيم الأخضر</span></button>
+        <div class="theme-control"><button class="theme-button" id="theme-toggle" type="button" aria-haspopup="menu" aria-expanded="false"><span class="theme-dot" aria-hidden="true"></span><span data-background-label>أخضر هادئ</span></button><div class="background-menu" data-background-menu role="menu" aria-label="اختيار خلفية شاشة التطبيقات"><p data-ar="خلفية شاشة التطبيقات" data-en="App screen background">خلفية شاشة التطبيقات</p><button type="button" data-background-option="emerald-light" role="menuitem"><span class="background-swatch emerald-light"></span><span data-ar="أخضر هادئ" data-en="Calm green">أخضر هادئ</span><b>✓</b></button><button type="button" data-background-option="emerald-dark" role="menuitem"><span class="background-swatch emerald-dark"></span><span data-ar="أخضر داكن" data-en="Executive dark">أخضر داكن</span><b>✓</b></button><button type="button" data-background-option="architectural-light" role="menuitem"><span class="background-swatch architectural-light"></span><span data-ar="معماري مضيء" data-en="Architectural light">معماري مضيء</span><b>✓</b></button></div></div>
         <button class="avatar" type="button" aria-label="حساب المستخدم">م</button>
       </header>
 
@@ -50,6 +50,8 @@
     </div>
 
     <dialog class="quick-entry-dialog" id="quick-entry-dialog" aria-labelledby="quick-entry-title"><form method="dialog"><button class="close-button dialog-close" value="cancel" aria-label="إغلاق">×</button><span class="launcher-kicker" data-ar="إدخال سريع" data-en="Quick entry">إدخال سريع</span><h2 id="quick-entry-title" data-ar="اختر العملية" data-en="Choose an action">اختر العملية</h2><p data-ar="هذه واجهة مبدئية فقط؛ التنفيذ لاحقًا سيكون من أوامر HR الخادمية المصرح بها." data-en="This is a visual foundation only; execution will later use authorized HR server commands.">هذه واجهة مبدئية فقط؛ التنفيذ لاحقًا سيكون من أوامر HR الخادمية المصرح بها.</p><div class="quick-actions"><button value="advance" type="submit"><span>＋</span><strong data-ar="سلفة موظف" data-en="Employee advance">سلفة موظف</strong></button><button value="deduction" type="submit"><span>−</span><strong data-ar="خصم موظف" data-en="Employee deduction">خصم موظف</strong></button></div></form></dialog>
+    <script src="./section-icons.js"></script>
+    <script src="./launcher-backgrounds.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

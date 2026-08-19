@@ -81,7 +81,7 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const kindOptions = (["SALE", "PURCHASE", "EXPENSE", "OBLIGATION", "OTHER"] as const).map((id) => ({ id, label: kindLabel(id) }));
   const statusOptions = (["POSTED", "CANCELLED"] as const).map((id) => ({ id, label: statusLabel(id) }));
   const columns: DataTableColumn<Movement>[] = useMemo(() => [
-    { id: "number", header: text.invoiceNumber, cell: (item) => <button className="baseer-link-button" type="button" onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
+    { id: "number", header: language === "ar" ? "رقم المستند / الحركة" : "Document / movement no.", cell: (item) => <button className="baseer-link-button invoice-register__number" type="button" dir="ltr" title={item.documentNumber} onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
     { id: "date", header: text.documentDate, cell: (item) => item.businessDate },
     { id: "source", header: text.documentSource, cell: (item) => <span className="daily-sales-badge">{sourceLabel(item)}{item.recurring ? ` · ${text.recurring}` : ""}</span> },
     { id: "supplier", header: text.supplier, cell: (item) => optionName(item.supplier) },

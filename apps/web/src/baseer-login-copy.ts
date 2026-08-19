@@ -3,6 +3,7 @@ import { defineLocalizedCopy } from "./baseer-ui-copy";
 export const baseerLoginCopy = defineLocalizedCopy({
   ar: {
     welcome: "مرحباً بك في بصير",
+    secureAccess: "دخول آمن ومباشر إلى مساحة عملك",
     login: "البريد الإلكتروني أو اسم المستخدم",
     password: "كلمة المرور",
     show: "إظهار",
@@ -17,6 +18,7 @@ export const baseerLoginCopy = defineLocalizedCopy({
   },
   en: {
     welcome: "Welcome to Baseer",
+    secureAccess: "Secure, direct access to your workspace",
     login: "Email or username",
     password: "Password",
     show: "Show",

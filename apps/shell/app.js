@@ -23,7 +23,7 @@ function renderModules(query='') {
     card.type = 'button';
     card.className = `module-card${state.current === module.id ? ' current' : ''}`;
     card.style.setProperty('--module', module.color);
-    card.innerHTML = `<span class="module-icon" aria-hidden="true">${module.icon}</span><span class="module-copy"><strong>${localized(module)}</strong><span>${localized(module,'Description')}</span></span><span class="module-arrow" aria-hidden="true">←</span>`;
+    card.innerHTML = `<span class="module-icon" aria-hidden="true">${BaseerSectionIcons.renderModule(module.id)}</span><span class="module-copy"><strong>${localized(module)}</strong><span>${localized(module,'Description')}</span></span><span class="module-arrow" aria-hidden="true">←</span>`;
     card.addEventListener('click', () => selectModule(module.id));
     return card;
   }));
@@ -34,7 +34,7 @@ function renderSidebar(module) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `nav-item${index === 0 ? ' active' : ''}`;
-    button.innerHTML = `<span class="nav-dot" aria-hidden="true"></span><span>${item}</span>`;
+    button.innerHTML = `${BaseerSectionIcons.render(module.id,index)}<span>${item}</span>`;
     return button;
   }));
 }
@@ -54,13 +54,14 @@ function render() {
 }
 function openModules() { overlay.classList.remove('is-hidden'); overlay.setAttribute('aria-hidden','false'); window.setTimeout(() => searchInput.focus(),50); }
 function selectModule(id) { state.current = id; overlay.classList.add('is-hidden'); overlay.setAttribute('aria-hidden','true'); searchInput.value = ''; render(); }
-function toggleTheme() { state.theme = state.theme === 'green' ? 'classic' : 'green'; document.body.classList.toggle('is-classic',state.theme === 'classic'); document.querySelector('#theme-toggle').setAttribute('aria-pressed',String(state.theme === 'classic')); }
+function toggleTheme() { BaseerLauncherBackgrounds.toggleMenu(document.querySelector('#theme-toggle')); }
 function updateLanguage() {
   document.documentElement.lang = state.language;
   document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr';
   document.querySelector('#language-toggle').textContent = state.language === 'ar' ? 'EN' : 'ع';
   document.querySelectorAll('[data-ar]').forEach((element) => { element.textContent = element.dataset[state.language]; });
   searchInput.placeholder = state.language === 'ar' ? 'ابحث عن موديول…' : 'Search a module…';
+  BaseerLauncherBackgrounds.refresh();
   render();
 }
 document.querySelector('#open-modules').addEventListener('click',openModules);
@@ -69,7 +70,7 @@ document.querySelector('#back-to-modules').addEventListener('click',openModules)
 document.querySelector('#close-modules').addEventListener('click',() => { overlay.classList.add('is-hidden'); overlay.setAttribute('aria-hidden','true'); });
 document.querySelector('#language-toggle').addEventListener('click',() => { state.language = state.language === 'ar' ? 'en' : 'ar'; updateLanguage(); });
 document.querySelector('#theme-toggle').addEventListener('click',toggleTheme);
-document.querySelector('#launcher-theme-toggle').addEventListener('click',toggleTheme);
+document.querySelector('#launcher-theme-toggle').addEventListener('click',() => BaseerLauncherBackgrounds.toggleMenu());
 document.querySelector('#quick-entry').addEventListener('click',() => quickEntryDialog.showModal());
 searchInput.addEventListener('input',(event) => renderModules(event.target.value));
 overlay.addEventListener('click',(event) => { if (event.target === overlay) { overlay.classList.add('is-hidden'); overlay.setAttribute('aria-hidden','true'); } });
