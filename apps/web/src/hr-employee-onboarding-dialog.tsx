@@ -15,7 +15,7 @@ import "./hr-onboarding.css";
 type Language = "ar" | "en";
 type Draft = { nameAr: string; nameEn: string; jobTitle: string; hireDate: string; iqamaNumber: string; phone: string; email: string; monthlyGross: string; housingAllowance: string; transportAllowance: string; foodAllowance: string; otherAllowance: string; scheduledHoursPerDay: string; scheduledWorkDays: string; notes: string };
 const today = () => new Date().toISOString().slice(0, 10);
-const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: today(), iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "0", transportAllowance: "0", foodAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "12", scheduledWorkDays: "26", notes: "" });
+const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: today(), iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "", transportAllowance: "", foodAllowance: "", otherAllowance: "", scheduledHoursPerDay: "12", scheduledWorkDays: "26", notes: "" });
 const number = (value: string) => { const parsed = Number(value || "0"); return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0; };
 
 /** Guided onboarding keeps the pleasant single form while persisting an effective-dated agreement. */
