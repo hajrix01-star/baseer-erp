@@ -1,0 +1,27 @@
+.baseer-dialog.baseer-form-dialog--compact { width: min(30rem, calc(100vw - 2rem)); }
+.baseer-dialog.baseer-form-dialog--standard { width: min(38rem, calc(100vw - 2rem)); }
+.baseer-dialog.baseer-form-dialog--wide { width: min(58rem, calc(100vw - 2rem)); }
+
+.baseer-form { display: grid; gap: .8rem; }
+.baseer-form-section { display: grid; gap: .7rem; padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, var(--surface) 94%, var(--canvas)); }
+.baseer-form-section > header { padding-bottom: .55rem; border-bottom: 1px solid var(--line); }
+.baseer-form-section h3, .baseer-form-section p { margin: 0; }
+.baseer-form-section h3 { color: var(--ink); font-size: var(--font-body); }
+.baseer-form-section p { margin-top: .2rem; color: var(--muted); font-size: var(--font-caption); line-height: 1.45; }
+.baseer-form-grid { display: grid; gap: .7rem .8rem; }
+.baseer-form-grid--one { grid-template-columns: 1fr; }
+.baseer-form-grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.baseer-form-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.baseer-form-grid > label { display: grid; min-width: 0; gap: .35rem; color: var(--ink); font-size: var(--font-label); font-weight: 700; }
+.baseer-form-field--full { grid-column: 1 / -1; }
+.baseer-form-grid :is(input, select, textarea) { min-inline-size: 0; }
+.baseer-form-grid textarea { min-block-size: 4.5rem; resize: vertical; }
+.baseer-form-advanced { grid-column: 1 / -1; padding-top: .1rem; }
+.baseer-form-advanced summary { width: fit-content; color: var(--muted); cursor: pointer; font-size: var(--font-caption); font-weight: 700; }
+.baseer-form-advanced > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem .8rem; margin-top: .7rem; }
+.baseer-form-checkbox { display: inline-flex !important; align-items: center; align-self: end; min-height: var(--control-height); gap: .5rem; }
+
+@media (max-width: 640px) {
+  .baseer-dialog.baseer-form-dialog--compact, .baseer-dialog.baseer-form-dialog--standard, .baseer-dialog.baseer-form-dialog--wide { width: calc(100vw - 1rem); }
+  .baseer-form-grid--two, .baseer-form-grid--three, .baseer-form-advanced > div { grid-template-columns: 1fr; }
+}

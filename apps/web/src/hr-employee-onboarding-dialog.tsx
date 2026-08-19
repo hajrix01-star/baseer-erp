@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
-import { BaseerButton } from "./baseer-button";
-import { BaseerDialog } from "./baseer-dialog";
+import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, api, requestId } from "./daily-sales-client";
 import { createHrEmployeeDocument, setHrEmployeeCompensation } from "./hr-client";
@@ -54,7 +53,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "إضافة الموظف" : "Adding employee")); }
     finally { setBusy(false); }
   };
-  return <BaseerDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} onClose={close} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={close}>{ar ? "إلغاء" : "Cancel"}</BaseerButton><BaseerButton type="submit" form="hr-employee-onboarding" disabled={busy}>{ar ? "إضافة الموظف وحفظ الاتفاق" : "Add employee & save agreement"}</BaseerButton></>}>
+  return <BaseerFormDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} formId="hr-employee-onboarding" submitLabel={ar ? "إضافة الموظف وحفظ الاتفاق" : "Add employee & save agreement"} onClose={close}>
     <form id="hr-employee-onboarding" className="hr-onboarding" noValidate onSubmit={(event) => void submit(event)}>
       <div className="hr-onboarding__workspace">
         <div className="hr-onboarding__entry">
@@ -71,5 +70,5 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
         </aside>
       </div>
     </form>
-  </BaseerDialog>;
+  </BaseerFormDialog>;
 }
