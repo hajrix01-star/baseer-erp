@@ -16,10 +16,19 @@ const TEMPLATE_VERSION = 'employee-letter-v1';
 export class HrEmployeeLetterService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly serials: DocumentSerialService, private readonly businessDate: BusinessDateService) {}
 
-  async list(context: TrustedCompanyActorContext, employeeId: string) {
+  async list(context: TrustedCompanyActorContext, employeeId: string, query: Readonly<{ cursor?: string; pageSize: number }>) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const rows = await tx.hrEmployeeLetter.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId }, orderBy: [{ issuedAt: 'desc' }, { id: 'desc' }], take: 100 });
-      return { letters: rows.map(mapLetter) };
+      const scope: Prisma.HrEmployeeLetterWhereInput = { tenantId: context.tenantId, companyId: context.companyId, employeeId };
+      const cursor = query.cursor ? await tx.hrEmployeeLetter.findFirst({ where: { id: query.cursor, ...scope }, select: { id: true, issuedAt: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-letter cursor is invalid.');
+      const rows = await tx.hrEmployeeLetter.findMany({
+        where: cursor ? { AND: [scope, { OR: [{ issuedAt: { lt: cursor.issuedAt } }, { issuedAt: cursor.issuedAt, id: { lt: cursor.id } }] }] } : scope,
+        orderBy: [{ issuedAt: 'desc' }, { id: 'desc' }],
+        take: query.pageSize + 1,
+      });
+      const hasMore = rows.length > query.pageSize;
+      const letters = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { letters: letters.map(mapLetter), hasMore, nextCursor: hasMore ? letters.at(-1)?.id ?? null : null };
     });
   }
 

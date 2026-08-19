@@ -15,6 +15,7 @@ type CreateInput = Omit<CreateHrEmployeeAdministrativeDeductionRequest, 'idempot
 type DeferInput = Omit<DeferHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type CancelInput = Omit<CancelHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type DeductionListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdministrativeDeductionStatus; search?: string; cursor?: string; pageSize: number }>;
+type DeductionDetailQuery = Readonly<{ actionCursor?: string; actionPageSize: number }>;
 
 @Injectable()
 export class HrAdministrativeDeductionService {
@@ -71,16 +72,27 @@ export class HrAdministrativeDeductionService {
     });
   }
 
-  async detail(context: TrustedCompanyActorContext, deductionId: string) {
+  async detail(context: TrustedCompanyActorContext, deductionId: string, query: DeductionDetailQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({
         where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId },
-        include: { employee: { select: { id: true, nameAr: true, nameEn: true } }, actions: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500 } },
+        include: { employee: { select: { id: true, nameAr: true, nameEn: true } } },
       });
       if (!deduction) throw new NotFoundException('The administrative deduction was not found.');
+      const actionScope = { tenantId: context.tenantId, companyId: context.companyId, deductionId } as const;
+      const cursor = query.actionCursor ? await tx.hrEmployeeAdministrativeDeductionAction.findFirst({ where: { id: query.actionCursor, ...actionScope }, select: { id: true, businessDate: true } }) : null;
+      if (query.actionCursor && !cursor) throw new BadRequestException('The administrative-deduction action cursor is invalid.');
+      const rows = await tx.hrEmployeeAdministrativeDeductionAction.findMany({
+        where: cursor ? { AND: [actionScope, { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] }] } : actionScope,
+        orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: query.actionPageSize + 1,
+      });
+      const hasMoreActions = rows.length > query.actionPageSize;
+      const actions = hasMoreActions ? rows.slice(0, query.actionPageSize) : rows;
       return {
         deduction: mapDeduction({ ...deduction, employeeNameAr: deduction.employee.nameAr, employeeNameEn: deduction.employee.nameEn }),
-        actions: deduction.actions.map((action) => ({ id: action.id, actionType: action.actionType, businessDate: day(action.businessDate), amount: action.amount?.toFixed(4) ?? null, plannedPayrollDate: action.plannedPayrollDate ? day(action.plannedPayrollDate) : null, reason: action.reason })),
+        actions: actions.map((action) => ({ id: action.id, actionType: action.actionType, businessDate: day(action.businessDate), amount: action.amount?.toFixed(4) ?? null, plannedPayrollDate: action.plannedPayrollDate ? day(action.plannedPayrollDate) : null, reason: action.reason })),
+        hasMoreActions,
+        nextActionCursor: hasMoreActions ? actions.at(-1)?.id ?? null : null,
       };
     });
   }

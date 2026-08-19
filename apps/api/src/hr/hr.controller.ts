@@ -27,7 +27,9 @@ import {
   hrEmployeeAdvanceDeferralReceiptSchema,
   hrEmployeeAdvancesQuerySchema,
   hrEmployeeAdvancesReceiptSchema,
+  hrEmployeeAdvanceDetailQuerySchema,
   hrEmployeeAdvanceDetailReceiptSchema,
+  hrEmployeeAdministrativeDeductionDetailQuerySchema,
   hrEmployeeAdministrativeDeductionDetailReceiptSchema,
   hrEmployeeAdministrativeDeductionsQuerySchema,
   hrEmployeeAdministrativeDeductionsReceiptSchema,
@@ -60,6 +62,8 @@ import {
   createHrEmployeeLeaveRequestSchema,
   returnHrEmployeeLeaveRequestSchema,
   hrEmployeeCompensationProfileReceiptSchema,
+  hrEmployeeCompensationHistoryQuerySchema,
+  hrEmployeeCompensationHistoryReceiptSchema,
   hrCompensationPoliciesReceiptSchema,
   hrCompensationPolicyReceiptSchema,
   hrPayrollRunsReceiptSchema,
@@ -127,6 +131,14 @@ export class HrController {
     if (!parsed.success) throw new BadRequestException('Invalid employee-payroll query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
     return hrEmployeePayrollHistoryReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.listForEmployee(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+  }
+
+  @Get('employees/:employeeId/compensation-history')
+  async employeeCompensationHistory(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeCompensationHistoryQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-compensation-history query.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrEmployeeCompensationHistoryReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.compensationHistory(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('employees/:employeeId/promotions')
@@ -262,9 +274,11 @@ export class HrController {
   }
 
   @Get('advances/:advanceId')
-  async advanceDetail(@Param('advanceId', ParseUUIDPipe) advanceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async advanceDetail(@Param('advanceId', ParseUUIDPipe) advanceId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeAdvanceDetailQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-advance detail query.');
     const context = await this.authorize(authorization, companyId, 'hr.advances.read');
-    return hrEmployeeAdvanceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.detail(context, advanceId)) });
+    return hrEmployeeAdvanceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.detail(context, advanceId, { settlementPageSize: parsed.data.settlementPageSize, deferralPageSize: parsed.data.deferralPageSize, ...(parsed.data.settlementCursor ? { settlementCursor: parsed.data.settlementCursor } : {}), ...(parsed.data.deferralCursor ? { deferralCursor: parsed.data.deferralCursor } : {}) })) });
   }
 
   @Post('advances')
@@ -316,9 +330,11 @@ export class HrController {
   }
 
   @Get('deductions/:deductionId')
-  async administrativeDeductionDetail(@Param('deductionId', ParseUUIDPipe) deductionId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async administrativeDeductionDetail(@Param('deductionId', ParseUUIDPipe) deductionId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeAdministrativeDeductionDetailQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction detail query.');
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
-    return hrEmployeeAdministrativeDeductionDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.detail(context, deductionId)) });
+    return hrEmployeeAdministrativeDeductionDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.detail(context, deductionId, { actionPageSize: parsed.data.actionPageSize, ...(parsed.data.actionCursor ? { actionCursor: parsed.data.actionCursor } : {}) })) });
   }
 
   @Post('deductions')

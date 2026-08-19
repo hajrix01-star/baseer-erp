@@ -764,12 +764,14 @@ export class HrPayrollService {
         const period = population.periodByEmployee.get(employee.id);
         const coverageIssue = population.compensationCoverageIssue.some((candidate) => candidate.id === employee.id);
         const compensation = calculatedByEmployee.get(employee.id);
+        const employeeAdvances = advancesByEmployee.get(employee.id) ?? [];
+        const employeeDeductions = deductionsByEmployee.get(employee.id) ?? [];
         const reason = afterBusinessDate ? 'HIRED_AFTER_BUSINESS_DATE'
           : coverageIssue ? 'COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD'
           : period?.eligibilityCode === HrPayrollLineEligibilityCode.PRORATED_NEW_HIRE_V1 && hasProfile ? 'ACTIVE_NEW_HIRE_PRORATED'
           : employee.status === HrEmployeeStatus.ACTIVE ? (hasProfile ? 'ACTIVE_WITH_VALID_COMPENSATION' : 'ACTIVE_MISSING_COMPENSATION')
           : (!explicitlyIncluded ? 'ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION' : (hasProfile ? 'ON_LEAVE_EXPLICITLY_INCLUDED' : 'ON_LEAVE_MISSING_COMPENSATION'));
-        return { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: employee.status, included: Boolean(compensation) && !afterBusinessDate && !coverageIssue && (!onLeave || explicitlyIncluded), reason, eligibilityCode: period?.eligibilityCode ?? null, calculationPeriodStart: period ? ymd(period.calculationPeriodStart) : null, calculationPeriodEnd: period ? ymd(period.calculationPeriodEnd) : null, eligibleDays: period?.eligibleDays ?? null, calendarDaysInMonth: period?.calendarDaysInMonth ?? null, prorationRatio: period ? fixed(period.prorationRatio) : null, monthlyGrossAmount: profileByEmployee.get(employee.id) ? fixed(profileByEmployee.get(employee.id)!.monthlyGross) : null, estimatedGrossAmount: compensation ? fixed(compensation.gross) : null, advances: (advancesByEmployee.get(employee.id) ?? []).slice(0, 100), administrativeDeductions: (deductionsByEmployee.get(employee.id) ?? []).slice(0, 100) };
+        return { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: employee.status, included: Boolean(compensation) && !afterBusinessDate && !coverageIssue && (!onLeave || explicitlyIncluded), reason, eligibilityCode: period?.eligibilityCode ?? null, calculationPeriodStart: period ? ymd(period.calculationPeriodStart) : null, calculationPeriodEnd: period ? ymd(period.calculationPeriodEnd) : null, eligibleDays: period?.eligibleDays ?? null, calendarDaysInMonth: period?.calendarDaysInMonth ?? null, prorationRatio: period ? fixed(period.prorationRatio) : null, monthlyGrossAmount: profileByEmployee.get(employee.id) ? fixed(profileByEmployee.get(employee.id)!.monthlyGross) : null, estimatedGrossAmount: compensation ? fixed(compensation.gross) : null, advances: employeeAdvances.slice(0, 100), advanceCount: employeeAdvances.length, hasMoreAdvances: employeeAdvances.length > 100, administrativeDeductions: employeeDeductions.slice(0, 100), administrativeDeductionCount: employeeDeductions.length, hasMoreAdministrativeDeductions: employeeDeductions.length > 100 };
       }),
       hasMore, nextCursor: hasMore ? employeesPage.at(-1)!.id : null,
     };
@@ -986,7 +988,7 @@ function fixed(value: Prisma.Decimal) { return value.toFixed(4); }
 function nullable(value: string | undefined) { const text = value?.trim(); return text || null; }
 function uniqueIds(values: readonly string[], message: string) { const unique = [...new Set(values)]; if (unique.length !== values.length) throw new BadRequestException(message); return unique; }
 function chunks<T>(values: readonly T[], size: number) { const result: T[][] = []; for (let index = 0; index < values.length; index += size) result.push([...values.slice(index, index + size)]); return result; }
-function groupByEmployee<T extends { employeeId: string }, V>(values: readonly T[], map: (value: T) => V) { const grouped = new Map<string, V[]>(); for (const value of values) { const current = grouped.get(value.employeeId) ?? []; if (current.length < 100) current.push(map(value)); grouped.set(value.employeeId, current); } return grouped; }
+function groupByEmployee<T extends { employeeId: string }, V>(values: readonly T[], map: (value: T) => V) { const grouped = new Map<string, V[]>(); for (const value of values) { const current = grouped.get(value.employeeId) ?? []; current.push(map(value)); grouped.set(value.employeeId, current); } return grouped; }
 const STANDARD_MONTHLY_HOURS = new Prisma.Decimal(208);
 const STANDARD_MONTHLY_DAYS = 26;
 

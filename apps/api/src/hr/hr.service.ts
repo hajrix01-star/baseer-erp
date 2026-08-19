@@ -90,7 +90,7 @@ export class HrService {
         select: { id: true, businessDate: true },
       }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-ledger cursor is invalid.');
-      const [services, serviceCount, movementRows, compensation, compensationHistory] = await Promise.all([
+      const [services, serviceCount, movementRows, movementCount, compensation, compensationHistory, compensationHistoryCount] = await Promise.all([
         tx.hrEmployeeService.findMany({
           where: serviceScope,
           orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }, { id: 'desc' }],
@@ -106,6 +106,7 @@ export class HrService {
           orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
           take: query.pageSize + 1,
         }),
+        tx.hrEmployeeFinancialMovement.count({ where: movementScope }),
         projection.includePayroll ? tx.hrEmployeeCompensationProfile.findFirst({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] },
           orderBy: { effectiveFrom: 'desc' },
@@ -115,6 +116,9 @@ export class HrService {
           orderBy: [{ effectiveFrom: 'desc' }, { createdAt: 'desc' }],
           take: 100,
         }) : [],
+        projection.includePayroll ? tx.hrEmployeeCompensationProfile.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        }) : 0,
       ]);
       const hasMoreMovements = movementRows.length > query.pageSize;
       const movements = hasMoreMovements ? movementRows.slice(0, query.pageSize) : movementRows;
@@ -122,13 +126,32 @@ export class HrService {
         employee: mapEmployee(employee, projection.includePayroll ? compensation?.monthlyGross ?? null : null),
         compensation: compensation ? mapCompensation(compensation) : null,
         compensationHistory: compensationHistory.map(mapCompensation),
+        compensationHistoryCount,
         services: services.map(mapService),
         serviceCount,
         servicesHasMore: serviceCount > services.length,
         movements: movements.map(mapMovement),
+        movementCount,
         hasMoreMovements,
         nextMovementCursor: hasMoreMovements ? movements.at(-1)?.id ?? null : null,
       };
+    });
+  }
+
+  async compensationHistory(context: TrustedCompanyActorContext, employeeId: string, query: Readonly<{ cursor?: string; pageSize: number }>) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true } });
+      if (!employee) throw new NotFoundException('The employee is not available for this company.');
+      const scope: Prisma.HrEmployeeCompensationProfileWhereInput = { employeeId, tenantId: context.tenantId, companyId: context.companyId };
+      const cursor = query.cursor ? await tx.hrEmployeeCompensationProfile.findFirst({ where: { id: query.cursor, ...scope }, select: { id: true, effectiveFrom: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The compensation-history cursor is invalid.');
+      const rows = await tx.hrEmployeeCompensationProfile.findMany({
+        where: cursor ? { AND: [scope, { OR: [{ effectiveFrom: { lt: cursor.effectiveFrom } }, { effectiveFrom: cursor.effectiveFrom, id: { lt: cursor.id } }] }] } : scope,
+        orderBy: [{ effectiveFrom: 'desc' }, { id: 'desc' }], take: query.pageSize + 1,
+      });
+      const hasMore = rows.length > query.pageSize;
+      const compensationHistory = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { compensationHistory: compensationHistory.map(mapCompensation), hasMore, nextCursor: hasMore ? compensationHistory.at(-1)?.id ?? null : null };
     });
   }
 

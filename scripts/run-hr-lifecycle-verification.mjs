@@ -250,9 +250,31 @@ try {
     notes: 'Deferred payroll collection guard',
   }, randomUUID());
   await advances.defer(creator, { advanceId: deferredAdvance.id, businessDate: monthStart, deferredUntil: today, reason: 'Collect no earlier than the current business date' }, randomUUID());
+  await advances.defer(creator, { advanceId: deferredAdvance.id, businessDate: monthStart, deferredUntil: today, reason: 'Second collection-plan history entry' }, randomUUID());
+  const firstDeferralPage = await advances.detail(creator, deferredAdvance.id, { settlementPageSize: 1, deferralPageSize: 1 });
+  assert.equal(firstDeferralPage.deferrals.length, 1);
+  assert.equal(firstDeferralPage.hasMoreDeferrals, true, 'Advance detail must disclose additional deferral history.');
+  const secondDeferralPage = await advances.detail(creator, deferredAdvance.id, { settlementPageSize: 1, deferralPageSize: 1, deferralCursor: firstDeferralPage.nextDeferralCursor });
+  assert.equal(secondDeferralPage.deferrals.length, 1);
+  assert.equal(secondDeferralPage.hasMoreDeferrals, false);
+  await assert.rejects(
+    () => advances.detail(creator, reversibleAdvance.id, { settlementPageSize: 1, deferralPageSize: 1, deferralCursor: firstDeferralPage.nextDeferralCursor }),
+    /cursor is invalid/,
+    'An advance-deferral cursor must remain bound to its advance.',
+  );
   const deferredDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: monthStart, amount: '15.0000', description: 'Deferred payroll deduction' }, randomUUID());
   await deductions.defer(creator, { deductionId: deferredDeduction.id, businessDate: monthStart, deferredUntil: today, reason: 'Collect no earlier than the current business date' }, randomUUID());
+  const firstDeductionActionPage = await deductions.detail(creator, deferredDeduction.id, { actionPageSize: 1 });
+  assert.equal(firstDeductionActionPage.actions.length, 1);
+  assert.equal(firstDeductionActionPage.hasMoreActions, true, 'Deduction detail must disclose additional action history.');
+  const secondDeductionActionPage = await deductions.detail(creator, deferredDeduction.id, { actionPageSize: 1, actionCursor: firstDeductionActionPage.nextActionCursor });
+  assert.equal(secondDeductionActionPage.actions.length, 1);
   const laterDatedDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: today, amount: '10.0000', description: 'Later-dated payroll deduction' }, randomUUID());
+  await assert.rejects(
+    () => deductions.detail(creator, laterDatedDeduction.id, { actionPageSize: 1, actionCursor: firstDeductionActionPage.nextActionCursor }),
+    /cursor is invalid/,
+    'A deduction-action cursor must remain bound to its deduction.',
+  );
   const deductionDescriptionSearch = await deductions.list(creator, { search: 'Later-dated payroll deduction', pageSize: 1 });
   assert.deepEqual(deductionDescriptionSearch.deductions.map((item) => item.id), [laterDatedDeduction.id], 'Administrative-deduction search must run against descriptions in the full register.');
   const unavailablePayrollLine = { employeeId: payrollEmployee.id, advances: [{ id: deferredAdvance.id, amount: '10.0000' }], administrativeDeductions: [{ id: deferredDeduction.id, amount: '5.0000' }, { id: laterDatedDeduction.id, amount: '5.0000' }] };
@@ -280,6 +302,11 @@ try {
   const preview = await payroll.preview(creator, payrollPreviewInput);
   assert.equal(preview.totals.employeeCount, employeeDefinitions.length);
   assert.equal(preview.totals.advanceSettlementAmount, '100.0000');
+  const payrollEmployeePreviewWithCollections = preview.employees.find((employee) => employee.id === payrollEmployee.id);
+  assert.equal(payrollEmployeePreviewWithCollections.advanceCount, payrollEmployeePreviewWithCollections.advances.length);
+  assert.equal(payrollEmployeePreviewWithCollections.hasMoreAdvances, false);
+  assert.equal(payrollEmployeePreviewWithCollections.administrativeDeductionCount, payrollEmployeePreviewWithCollections.administrativeDeductions.length);
+  assert.equal(payrollEmployeePreviewWithCollections.hasMoreAdministrativeDeductions, false);
 
   const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [payrollLine], notes: 'HR lifecycle payroll' };
   const payrollCreateKey = randomUUID();
@@ -296,6 +323,16 @@ try {
   const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey);
   assert.equal(approvedRun.replayed, false);
   assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');
+  const firstSettlementPage = await advances.detail(creator, advance.id, { settlementPageSize: 1, deferralPageSize: 1 });
+  assert.equal(firstSettlementPage.settlements.length, 1);
+  assert.equal(firstSettlementPage.hasMoreSettlements, true, 'Advance detail must disclose additional settlement history.');
+  const secondSettlementPage = await advances.detail(creator, advance.id, { settlementPageSize: 1, deferralPageSize: 1, settlementCursor: firstSettlementPage.nextSettlementCursor });
+  assert.equal(secondSettlementPage.settlements.length, 1);
+  await assert.rejects(
+    () => advances.detail(creator, reversibleAdvance.id, { settlementPageSize: 1, deferralPageSize: 1, settlementCursor: firstSettlementPage.nextSettlementCursor }),
+    /cursor is invalid/,
+    'An advance-settlement cursor must remain bound to its advance.',
+  );
 
   const payrollDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
   assert.equal(payrollDetail.payrollRun.businessDate, day(monthStart), 'Approval must not rewrite the payroll header date.');

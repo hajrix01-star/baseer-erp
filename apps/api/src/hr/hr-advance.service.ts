@@ -26,6 +26,7 @@ type AdvanceDeferralInput = Omit<DeferHrEmployeeAdvanceRequest, 'idempotencyKey'
 export type AdvanceIssueReversalInput = Readonly<{ advanceId: string; businessDate: Date; reason: string }>;
 type AdvanceAllocationInput = { allocations: Array<{ vaultId: string; amount: Prisma.Decimal; paymentMethod?: FinanceVaultPaymentMethod }> };
 type AdvanceListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdvanceStatus; search?: string; cursor?: string; pageSize: number }>;
+type AdvanceDetailQuery = Readonly<{ settlementCursor?: string; settlementPageSize: number; deferralCursor?: string; deferralPageSize: number }>;
 
 @Injectable()
 export class HrAdvanceService {
@@ -94,18 +95,38 @@ export class HrAdvanceService {
     });
   }
 
-  async detail(context: TrustedCompanyActorContext, advanceId: string) {
+  async detail(context: TrustedCompanyActorContext, advanceId: string, query: AdvanceDetailQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const advance = await tx.hrEmployeeAdvance.findFirst({
         where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId },
         include: {
           employee: { select: { id: true, nameAr: true, nameEn: true } },
           allocations: { include: { vault: { select: { id: true, nameAr: true, nameEn: true } } }, orderBy: { createdAt: 'asc' } },
-          settlements: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500, include: { journalEntry: { select: { id: true, sourceReference: true } } } },
-          deferrals: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500 },
         },
       });
       if (!advance) throw new NotFoundException('The employee advance was not found.');
+      const childScope = { tenantId: context.tenantId, companyId: context.companyId, advanceId } as const;
+      const [settlementCursor, deferralCursor] = await Promise.all([
+        query.settlementCursor ? tx.hrEmployeeAdvanceSettlement.findFirst({ where: { id: query.settlementCursor, ...childScope }, select: { id: true, businessDate: true } }) : null,
+        query.deferralCursor ? tx.hrEmployeeAdvanceDeferral.findFirst({ where: { id: query.deferralCursor, ...childScope }, select: { id: true, businessDate: true } }) : null,
+      ]);
+      if (query.settlementCursor && !settlementCursor) throw new BadRequestException('The advance-settlement cursor is invalid.');
+      if (query.deferralCursor && !deferralCursor) throw new BadRequestException('The advance-deferral cursor is invalid.');
+      const [settlementRows, deferralRows] = await Promise.all([
+        tx.hrEmployeeAdvanceSettlement.findMany({
+          where: settlementCursor ? { AND: [childScope, { OR: [{ businessDate: { lt: settlementCursor.businessDate } }, { businessDate: settlementCursor.businessDate, id: { lt: settlementCursor.id } }] }] } : childScope,
+          orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: query.settlementPageSize + 1,
+          include: { journalEntry: { select: { id: true, sourceReference: true } } },
+        }),
+        tx.hrEmployeeAdvanceDeferral.findMany({
+          where: deferralCursor ? { AND: [childScope, { OR: [{ businessDate: { lt: deferralCursor.businessDate } }, { businessDate: deferralCursor.businessDate, id: { lt: deferralCursor.id } }] }] } : childScope,
+          orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: query.deferralPageSize + 1,
+        }),
+      ]);
+      const hasMoreSettlements = settlementRows.length > query.settlementPageSize;
+      const settlements = hasMoreSettlements ? settlementRows.slice(0, query.settlementPageSize) : settlementRows;
+      const hasMoreDeferrals = deferralRows.length > query.deferralPageSize;
+      const deferrals = hasMoreDeferrals ? deferralRows.slice(0, query.deferralPageSize) : deferralRows;
       return {
         advance: {
           id: advance.id, employeeId: advance.employeeId, employeeNameAr: advance.employee.nameAr, employeeNameEn: advance.employee.nameEn,
@@ -113,8 +134,12 @@ export class HrAdvanceService {
           nextSettlementDate: advance.nextSettlementDate ? day(advance.nextSettlementDate) : null, notes: advance.notes, journalEntryId: advance.issueJournalEntryId,
           allocations: advance.allocations.map((allocation) => ({ vaultId: allocation.vaultId, vaultNameAr: allocation.vault.nameAr, vaultNameEn: allocation.vault.nameEn, paymentMethod: allocation.paymentMethod, amount: allocation.amount.toFixed(4) })),
         },
-        settlements: advance.settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null })),
-        deferrals: advance.deferrals.map((deferral) => ({ id: deferral.id, businessDate: day(deferral.businessDate), deferredUntil: day(deferral.deferredUntil), reason: deferral.reason })),
+        settlements: settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null })),
+        hasMoreSettlements,
+        nextSettlementCursor: hasMoreSettlements ? settlements.at(-1)?.id ?? null : null,
+        deferrals: deferrals.map((deferral) => ({ id: deferral.id, businessDate: day(deferral.businessDate), deferredUntil: day(deferral.deferredUntil), reason: deferral.reason })),
+        hasMoreDeferrals,
+        nextDeferralCursor: hasMoreDeferrals ? deferrals.at(-1)?.id ?? null : null,
       };
     });
   }
