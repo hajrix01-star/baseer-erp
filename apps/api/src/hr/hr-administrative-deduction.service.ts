@@ -8,6 +8,8 @@ import { DocumentSerialService } from '../core-controls/document-serial.service.
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { HrEmployeeAdministrativeDeductionActionType, HrEmployeeAdministrativeDeductionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { hrAdministrativeDeductionLockKey } from './hr-financial-lock.util.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type CreateInput = Omit<CreateHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type DeferInput = Omit<DeferHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
@@ -78,7 +80,7 @@ export class HrAdministrativeDeductionService {
     const input = normalizeCreate(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: 'hr.administrative_deduction.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; deductionNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; deductionNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The administrative deduction is already being processed.');
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       if (input.plannedPayrollDate && input.plannedPayrollDate.getTime() < input.businessDate.getTime()) throw new BadRequestException('The planned payroll date cannot be before the deduction date.');
@@ -101,10 +103,11 @@ export class HrAdministrativeDeductionService {
     const input = normalizeDefer(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: 'hr.administrative_deduction.defer', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; deductionNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; deductionNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The administrative-deduction deferral is already being processed.');
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       if (input.deferredUntil.getTime() <= input.businessDate.getTime()) throw new BadRequestException('The deferred payroll date must be after the deferral date.');
+      await this.lockDeduction(tx, context, input.deductionId);
       const prior = await this.openDeduction(tx, context, input.deductionId);
       const updated = await tx.hrEmployeeAdministrativeDeduction.update({ where: { id: prior.id }, data: { status: HrEmployeeAdministrativeDeductionStatus.DEFERRED, plannedPayrollDate: input.deferredUntil } });
       await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId: prior.id, actionType: HrEmployeeAdministrativeDeductionActionType.DEFERRED, businessDate: input.businessDate, plannedPayrollDate: input.deferredUntil, reason: input.reason, createdByUserId: context.actorUserId } });
@@ -119,9 +122,10 @@ export class HrAdministrativeDeductionService {
     const input = normalizeCancel(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: 'hr.administrative_deduction.cancel', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; deductionNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; deductionNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The administrative-deduction cancellation is already being processed.');
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      await this.lockDeduction(tx, context, input.deductionId);
       const prior = await this.openDeduction(tx, context, input.deductionId);
       const updated = await tx.hrEmployeeAdministrativeDeduction.update({ where: { id: prior.id }, data: { status: HrEmployeeAdministrativeDeductionStatus.CANCELLED, remainingAmount: new Prisma.Decimal(0), plannedPayrollDate: null, cancellationReason: input.reason, cancelledAt: new Date() } });
       await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId: prior.id, actionType: HrEmployeeAdministrativeDeductionActionType.CANCELLED, businessDate: input.businessDate, amount: prior.remainingAmount, reason: input.reason, createdByUserId: context.actorUserId } });
@@ -136,6 +140,10 @@ export class HrAdministrativeDeductionService {
     const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] }, remainingAmount: { gt: 0 } } });
     if (!deduction) throw new NotFoundException('An open administrative deduction was not found.');
     return deduction;
+  }
+
+  private async lockDeduction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, deductionId: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrAdministrativeDeductionLockKey(context.tenantId, context.companyId, deductionId)}, 0))`;
   }
 
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityId: string, before: unknown, after: unknown) {

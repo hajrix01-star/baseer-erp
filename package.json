@@ -23,6 +23,7 @@
                     "verify:ai-gate-b-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-ai-gate-b-http-verification.mjs",
                     "verify:daily-sales-db":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-daily-sales-gate-b-verification.mjs",
                     "verify:daily-sales-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-daily-sales-http-verification.mjs",
-                    "verify:hr-onboarding":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-onboarding-verification.mjs"
+                    "verify:hr-onboarding":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-onboarding-verification.mjs",
+                    "verify:hr-financial-integrity":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node apps/api/dist/hr/hr-financial-concurrency.verification.js"
                 }
 }

@@ -8,6 +8,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { HrEmployeeLetterStatus, Prisma } from '../generated/prisma/client.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const TEMPLATE_VERSION = 'employee-letter-v1';
 
@@ -25,7 +26,7 @@ export class HrEmployeeLetterService {
   async issue(context: TrustedCompanyActorContext, employeeId: string, input: IssueHrEmployeeLetterRequest) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.begin(tx, context, 'hr.employee_letter.issue', input.idempotencyKey, { employeeId, letterType: input.letterType, locale: input.locale, recipient: input.recipient ?? null });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; letterNumber: string; outputReportCode: 'hr.employee-letter'; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; letterNumber: string; outputReportCode: 'hr.employee-letter'; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The letter request is already being processed.');
       const dateResolution = await this.businessDate.resolveInTransaction(tx, context);
       const businessDateValue = new Date(`${dateResolution.businessDate}T00:00:00.000Z`);
@@ -50,7 +51,7 @@ export class HrEmployeeLetterService {
   async revoke(context: TrustedCompanyActorContext, letterId: string, input: RevokeHrEmployeeLetterRequest) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.begin(tx, context, 'hr.employee_letter.revoke', input.idempotencyKey, { letterId, reason: input.reason.trim() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; letterNumber: string; outputReportCode: 'hr.employee-letter'; replayed: boolean }; if (begun.kind === 'in-progress') throw new ConflictException('The letter request is already being processed.');
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; letterNumber: string; outputReportCode: 'hr.employee-letter'; replayed: boolean }>(begun.response.body); if (begun.kind === 'in-progress') throw new ConflictException('The letter request is already being processed.');
       const letter = await tx.hrEmployeeLetter.findFirst({ where: { id: letterId, tenantId: context.tenantId, companyId: context.companyId } }); if (!letter || letter.status !== HrEmployeeLetterStatus.ISSUED) throw new NotFoundException('The issued employee letter is not available.');
       await tx.hrEmployeeLetter.update({ where: { id: letter.id }, data: { status: HrEmployeeLetterStatus.REVOKED, revokedAt: new Date(), revokedReason: input.reason.trim() } });
       const receipt = { id: letter.id, letterNumber: letter.letterNumber, outputReportCode: 'hr.employee-letter' as const, replayed: false }; await this.audit(tx, context, 'hr.employee_letter.revoked', letter.id, { letterNumber: letter.letterNumber, reason: input.reason.trim() }); await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } }); return receipt;

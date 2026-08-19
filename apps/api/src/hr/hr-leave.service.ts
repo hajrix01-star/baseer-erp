@@ -7,6 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { HrEmployeeLeaveStatus, HrEmployeeLeaveType, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type CreateInput = Omit<CreateHrEmployeeLeaveRequest, 'idempotencyKey'>;
 type ReturnInput = Omit<ReturnHrEmployeeLeaveRequest, 'idempotencyKey'>;
@@ -61,7 +62,7 @@ export class HrLeaveService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.leave.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee leave is already being processed.');
       if (input.endDate.getTime() < input.startDate.getTime()) throw new BadRequestException('The leave end date cannot be before the start date.');
 
@@ -114,7 +115,7 @@ export class HrLeaveService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.leave.return', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee return is already being processed.');
       const current = await this.dates.assertNotFutureInTransaction(tx, context, input.returnDate, 'The actual return date cannot be in the future.');
       const prior = await tx.hrEmployeeLeave.findFirst({

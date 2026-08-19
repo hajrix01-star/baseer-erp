@@ -9,6 +9,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { HrDocumentBlobStatus, HrEmployeeDocumentStatus, Prisma } from '../generated/prisma/client.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const STORAGE_NAMESPACE = 'employee-documents';
@@ -47,7 +48,7 @@ export class HrEmployeeDocumentService {
     try {
       const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
         const begun = await this.begin(tx, context, 'hr.employee_document.create', idempotencyKey, { employeeId, ...input, sha256: prepared?.sha256 ?? null });
-        if (begun.kind === 'replay') return begun.response.body as { id: string; versionId: string; replayed: boolean };
+        if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; versionId: string; replayed: boolean }>(begun.response.body);
         if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
         await this.requireEmployee(tx, context, employeeId); await this.requireService(tx, context, employeeId, input.linkedServiceId);
         const scan = prepared ? await this.scan(prepared.bytes) : null;
@@ -70,7 +71,7 @@ export class HrEmployeeDocumentService {
     const prepared = this.prepare(raw.upload); const encrypted = this.encrypt(prepared.bytes); const blobId = randomUUID(), versionId = randomUUID(), metadataId = randomUUID(); const storageReference = `${STORAGE_NAMESPACE}/${context.tenantId}/${context.companyId}/${blobId}.bin`; const stored = await this.writeStorage(storageReference, encrypted.bytes);
     try { const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.begin(tx, context, 'hr.employee_document.replace', raw.idempotencyKey, { documentId, sha256: prepared.sha256 });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; versionId: string; replayed: boolean }; if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; versionId: string; replayed: boolean }>(begun.response.body); if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
       const document = await tx.hrEmployeeDocument.findFirst({ where: { id: documentId, tenantId: context.tenantId, companyId: context.companyId } }); if (!document || document.status !== HrEmployeeDocumentStatus.ACTIVE) throw new NotFoundException('The active employee document is not available.');
       const latest = await tx.hrEmployeeDocumentVersion.aggregate({ where: { documentId, tenantId: context.tenantId, companyId: context.companyId }, _max: { version: true } }); const scan = await this.scan(prepared.bytes);
       await tx.fileMetadata.create({ data: { id: metadataId, tenantId: context.tenantId, companyId: context.companyId, sourceType: 'hr.employee_document_blob', sourceId: blobId, purpose: 'attachment', version: (latest._max.version ?? 0) + 1, displayName: prepared.fileName, declaredMimeType: prepared.mimeType, declaredByteSize: BigInt(prepared.bytes.length), declaredSha256: prepared.sha256, storageReference, createdByUserId: context.actorUserId } });
@@ -83,7 +84,7 @@ export class HrEmployeeDocumentService {
 
   async revoke(context: TrustedCompanyActorContext, documentId: string, raw: RevokeHrEmployeeDocumentRequest) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const begun = await this.begin(tx, context, 'hr.employee_document.revoke', raw.idempotencyKey, { documentId, reason: raw.reason }); if (begun.kind === 'replay') return begun.response.body as { id: string; versionId: string; replayed: boolean }; if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
+      const begun = await this.begin(tx, context, 'hr.employee_document.revoke', raw.idempotencyKey, { documentId, reason: raw.reason }); if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; versionId: string; replayed: boolean }>(begun.response.body); if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
       const document = await tx.hrEmployeeDocument.findFirst({ where: { id: documentId, tenantId: context.tenantId, companyId: context.companyId }, include: { currentVersion: true } }); if (!document || document.status !== HrEmployeeDocumentStatus.ACTIVE) throw new NotFoundException('The active employee document is not available.');
       await tx.hrEmployeeDocument.update({ where: { id: documentId }, data: { status: HrEmployeeDocumentStatus.REVOKED, revokedAt: new Date(), revokedReason: raw.reason.trim() } }); if (document.currentVersion) await tx.hrEmployeeDocumentBlob.update({ where: { id: document.currentVersion.blobId }, data: { status: HrDocumentBlobStatus.REVOKED, revokedAt: new Date() } });
       const receipt = { id: documentId, versionId: document.currentVersionId ?? documentId, replayed: false }; await this.audit(tx, context, 'hr.employee_document.revoked', 'HrEmployeeDocument', documentId, { status: document.status }, { status: 'REVOKED', reason: raw.reason.trim() }); await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } }); return receipt;

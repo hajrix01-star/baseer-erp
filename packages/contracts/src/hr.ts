@@ -7,6 +7,7 @@ const idempotencyKeySchema = z.string().trim().min(1).max(255);
 const hrDateSchema = businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`));
 export const hrEmployeeIdSchema = z.string().uuid();
 const hrAmountSchema = z.string().trim().regex(/^\d+(?:\.\d{1,4})?$/).max(32);
+const hrSignedAmountSchema = z.string().trim().regex(/^-?\d+(?:\.\d{1,4})?$/).max(33);
 
 export const hrEmployeeStatusSchema = z.enum(["ACTIVE", "ON_LEAVE", "TERMINATED", "ARCHIVED"]);
 export const hrEmployeeServiceStatusSchema = z.enum(["DRAFT", "ISSUED", "CANCELLED"]);
@@ -469,7 +470,7 @@ export const hrEmployeeFinancialMovementSchema = z.object({
   journalEntryId: z.string().uuid(),
   movementType: z.enum(["SERVICE_COST", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "ADVANCE_ISSUED", "ADVANCE_SETTLEMENT", "FINAL_SETTLEMENT_ACCRUAL", "FINAL_SETTLEMENT_PAYMENT"]),
   businessDate: businessDateSchema,
-  amount: hrAmountSchema,
+  amount: hrSignedAmountSchema,
   sourceReference: z.string().max(160),
   description: z.string().max(1_000).nullable(),
 }).strict();

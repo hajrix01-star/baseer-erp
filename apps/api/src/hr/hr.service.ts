@@ -8,6 +8,7 @@ import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-con
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceCategoryStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
@@ -129,7 +130,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee request is already being processed.');
       const employeeNumber = await generateHrEmployeeNumber(tx, context.companyId);
       const duplicate = await tx.hrEmployee.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeNumber }, select: { id: true } });
@@ -149,7 +150,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee.update', key: idempotencyKey, request: jsonPayload({ employeeId: raw.employeeId, ...input }), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee update is already being processed.');
       const prior = await tx.hrEmployee.findFirst({ where: { id: raw.employeeId, tenantId: context.tenantId, companyId: context.companyId } });
       if (!prior) throw new NotFoundException('The employee is not available for this company.');
@@ -185,7 +186,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee.promotion.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee-promotion request is already being processed.');
       const [employee, businessDate] = await Promise.all([
         tx.hrEmployee.findFirst({ where: { id: raw.employeeId, tenantId: context.tenantId, companyId: context.companyId } }),
@@ -213,7 +214,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee_service.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service request is already being processed.');
       const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
       if (!employee) throw new BadRequestException('Choose an active employee from this company.');
@@ -299,7 +300,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee_service.update', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service update is already being processed.');
       const prior = await this.serviceForOperationalChange(tx, context, input.serviceId);
       const candidate = {
@@ -339,7 +340,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee_service.cancel', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service cancellation is already being processed.');
       const prior = await this.serviceForOperationalChange(tx, context, input.serviceId);
       await tx.hrEmployeeService.update({ where: { id: prior.id }, data: { status: HrEmployeeServiceStatus.CANCELLED, complianceStatus: HrEmployeeServiceComplianceStatus.CANCELLED } });
@@ -356,7 +357,7 @@ export class HrService {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee_service.renew', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service renewal is already being processed.');
       const prior = await tx.hrEmployeeService.findFirst({
         where: { id: input.serviceId, tenantId: context.tenantId, companyId: context.companyId, complianceStatus: HrEmployeeServiceComplianceStatus.ACTIVE, status: { not: HrEmployeeServiceStatus.CANCELLED } },

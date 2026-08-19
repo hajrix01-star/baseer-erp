@@ -10,6 +10,8 @@ import { DatabaseService } from '../database/database.service.js';
 import { FinanceAccountStatus, FinanceAccountType, FinanceVaultPaymentMethod, HrEmployeeAdvanceSettlementSource, HrEmployeeAdvanceStatus, HrEmployeeFinancialMovementType, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
+import { hrEmployeeAdvanceLockKey } from './hr-financial-lock.util.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const ADVANCE_ASSET_SYSTEM_KEY = 'EMPLOYEE_ADVANCES';
 const ISSUE_OPERATION = 'hr.employee_advance.issue';
@@ -114,7 +116,7 @@ export class HrAdvanceService {
         request: jsonPayload(input),
         expiresAt: tomorrow(),
       });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; advanceNumber: string; journalEntryId: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; advanceNumber: string; journalEntryId: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee advance is already being processed.');
 
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
@@ -198,10 +200,11 @@ export class HrAdvanceService {
     const input = normalizeSettlement(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: DIRECT_SETTLEMENT_OPERATION, key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; settlementNumber: string; advanceId: string; journalEntryId: string; remainingAmount: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; settlementNumber: string; advanceId: string; journalEntryId: string; remainingAmount: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee advance settlement is already being processed.');
 
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      await this.lockAdvance(tx, context, input.advanceId);
       const advance = await tx.hrEmployeeAdvance.findFirst({
         where: { id: input.advanceId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } },
         include: { employee: { select: { id: true, nameAr: true } } },
@@ -245,10 +248,11 @@ export class HrAdvanceService {
     const input = normalizeDeferral(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, { operation: DEFERRAL_OPERATION, key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
-      if (begun.kind === 'replay') return begun.response.body as { id: string; advanceId: string; deferredUntil: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; advanceId: string; deferredUntil: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee advance deferral is already being processed.');
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       if (input.deferredUntil.getTime() <= input.businessDate.getTime()) throw new BadRequestException('The deferred collection date must be after the deferral date.');
+      await this.lockAdvance(tx, context, input.advanceId);
       const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: input.advanceId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] }, remainingAmount: { gt: 0 } }, select: { id: true, remainingAmount: true } });
       if (!advance) throw new NotFoundException('An open employee advance was not found.');
       const deferralId = randomUUID();
@@ -276,6 +280,10 @@ export class HrAdvanceService {
       resolved.push({ vaultId: vault.id, accountId: vault.accountId, paymentMethod, amount: allocation.amount });
     }
     return resolved;
+  }
+
+  private async lockAdvance(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, advanceId: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrEmployeeAdvanceLockKey(context.tenantId, context.companyId, advanceId)}, 0))`;
   }
 }
 

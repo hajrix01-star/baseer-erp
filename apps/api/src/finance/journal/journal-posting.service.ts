@@ -304,13 +304,7 @@ export class JournalPostingService {
     lines: readonly Readonly<{ accountId: string; debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>[],
     multiplier = 1,
   ) {
-    const byAccount = new Map<string, { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>();
-    for (const line of lines) {
-      const current = byAccount.get(line.accountId) ?? { debitAmount: new Prisma.Decimal(0), creditAmount: new Prisma.Decimal(0) };
-      current.debitAmount = current.debitAmount.plus(line.debitAmount).mul(multiplier);
-      current.creditAmount = current.creditAmount.plus(line.creditAmount).mul(multiplier);
-      byAccount.set(line.accountId, current);
-    }
+    const byAccount = aggregateDailyBalanceChanges(lines, multiplier);
     await Promise.all([...byAccount.entries()].map(([accountId, amount]) => transaction.financeAccountDailyBalance.upsert({
       where: { tenantId_companyId_accountId_businessDate: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate } },
       create: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate, debitAmount: amount.debitAmount, creditAmount: amount.creditAmount },
@@ -344,4 +338,19 @@ export class JournalPostingService {
     if (text.length > maximumLength) throw new BadRequestException('Journal text exceeds the permitted length.');
     return text;
   }
+}
+
+export function aggregateDailyBalanceChanges(
+  lines: readonly Readonly<{ accountId: string; debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>[],
+  multiplier = 1,
+) {
+  const byAccount = new Map<string, { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>();
+  const factor = new Prisma.Decimal(multiplier);
+  for (const line of lines) {
+    const current = byAccount.get(line.accountId) ?? { debitAmount: new Prisma.Decimal(0), creditAmount: new Prisma.Decimal(0) };
+    current.debitAmount = current.debitAmount.plus(line.debitAmount.mul(factor));
+    current.creditAmount = current.creditAmount.plus(line.creditAmount.mul(factor));
+    byAccount.set(line.accountId, current);
+  }
+  return byAccount;
 }

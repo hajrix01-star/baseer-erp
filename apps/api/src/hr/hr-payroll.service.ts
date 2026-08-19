@@ -40,6 +40,8 @@ import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { FinanceFoundationService } from '../finance/finance-foundation.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
+import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
+import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const COMPENSATION_OPERATION = 'hr.compensation.set';
 const EMPLOYEE_ONBOARDING_OPERATION = 'hr.employee.onboard';
@@ -100,7 +102,7 @@ export class HrPayrollService {
       assertNotPast(input.effectiveFrom, current.businessDate, 'A compensation policy cannot start in the past.');
       assertFirstDayOfMonth(input.effectiveFrom, 'A compensation policy must start on the first day of a month.');
       const begun = await this.begin(tx, context, POLICY_CREATE_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; policyVersionId: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy request is already being processed.');
       const duplicate = await tx.hrCompensationPolicy.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, code: input.code }, select: { id: true } });
       if (duplicate) throw new ConflictException('The compensation policy code already exists for this company.');
@@ -121,7 +123,7 @@ export class HrPayrollService {
       assertNotPast(input.effectiveFrom, current.businessDate, 'A compensation policy version cannot start in the past.');
       assertFirstDayOfMonth(input.effectiveFrom, 'A compensation policy version must start on the first day of a month.');
       const begun = await this.begin(tx, context, POLICY_VERSION_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; policyVersionId: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy version request is already being processed.');
       const policy = await tx.hrCompensationPolicy.findFirst({ where: { id: input.policyId, tenantId: context.tenantId, companyId: context.companyId }, include: { versions: { select: { versionNumber: true, effectiveFrom: true } } } });
       if (!policy) throw new NotFoundException('The compensation policy is not available for this company.');
@@ -139,7 +141,7 @@ export class HrPayrollService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const current = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
       const begun = await this.begin(tx, context, POLICY_APPROVE_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; policyVersionId: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy approval is already being processed.');
       const target = await tx.hrCompensationPolicyVersion.findFirst({ where: { id: input.policyVersionId, tenantId: context.tenantId, companyId: context.companyId, status: HrCompensationPolicyVersionStatus.DRAFT }, select: { id: true, policyId: true, effectiveFrom: true } });
       if (!target) throw new NotFoundException('A draft compensation policy version was not found.');
@@ -177,7 +179,8 @@ export class HrPayrollService {
       }
       assertFirstDayOfMonth(input.effectiveFrom, 'A compensation agreement must start on the first day of a month.');
       const begun = await this.begin(tx, context, COMPENSATION_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The compensation request is already being processed.');
       const approvedRun = await tx.hrPayrollRun.findFirst({
         where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrPayrollRunStatus.APPROVED, HrPayrollRunStatus.PARTIALLY_PAID, HrPayrollRunStatus.PAID] }, payrollMonth: { gte: firstOfMonth(input.effectiveFrom) }, lines: { some: { employeeId: input.employeeId } } },
         select: { id: true },
@@ -221,7 +224,7 @@ export class HrPayrollService {
   async onboardEmployee(context: TrustedCompanyActorContext, input: EmployeeOnboardingInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.begin(tx, context, EMPLOYEE_ONBOARDING_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; compensationId: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; compensationId: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The employee onboarding request is already being processed.');
 
       const [currentDate, employeeNumber] = await Promise.all([
@@ -364,7 +367,8 @@ export class HrPayrollService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, CREATE_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll creation request is already being processed.');
       const payrollMonth = firstOfMonth(input.payrollMonth);
       if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll run can be created only for the current operational business month.');
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
@@ -439,7 +443,9 @@ export class HrPayrollService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, APPROVE_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll approval is already being processed.');
+      await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be approved.');
       // Older or newly created companies may not yet have all payroll accounts.
@@ -470,7 +476,9 @@ export class HrPayrollService {
   async discard(context: TrustedCompanyActorContext, input: DiscardInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.begin(tx, context, DISCARD_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll discard is already being processed.');
+      await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, false);
       if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be discarded.');
       const lineIds = run.lines.map((line) => line.id);
@@ -491,7 +499,11 @@ export class HrPayrollService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, PAY_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll payment is already being processed.');
+      // Lifecycle commands share one lock so payments cannot calculate their
+      // remaining payable from the same snapshot or race an accrual reversal.
+      await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED && run.status !== HrPayrollRunStatus.PARTIALLY_PAID) throw new ConflictException('Only an approved unpaid payroll can be paid.');
       await this.foundation.initializeInTransaction(tx, context);
@@ -529,7 +541,9 @@ export class HrPayrollService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, REVERSE_OPERATION, key, input);
-      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll reversal is already being processed.');
+      await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED) throw new ConflictException('A payroll must be unpaid before its accrual can be reversed.');
       if (!run.accrualJournalEntryId) throw new ConflictException('The payroll accrual is missing.');
@@ -710,6 +724,7 @@ export class HrPayrollService {
   }
 
   private async applyAdvance(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, advanceId: string, applied: Prisma.Decimal, businessDate: Date, journalEntryId: string, reference: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrEmployeeAdvanceLockKey(context.tenantId, context.companyId, advanceId)}, 0))`;
     const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!advance || advance.remainingAmount.lt(applied)) throw new ConflictException('An advance changed before payroll approval.');
     const remaining = advance.remainingAmount.minus(applied);
@@ -718,6 +733,7 @@ export class HrPayrollService {
   }
 
   private async applyDeduction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, deductionId: string, applied: Prisma.Decimal, businessDate: Date, reference: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrAdministrativeDeductionLockKey(context.tenantId, context.companyId, deductionId)}, 0))`;
     const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!deduction || deduction.remainingAmount.lt(applied)) throw new ConflictException('An administrative deduction changed before payroll approval.');
     const remaining = deduction.remainingAmount.minus(applied);
@@ -726,6 +742,7 @@ export class HrPayrollService {
   }
 
   private async reverseAdvance(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, advanceId: string, applied: Prisma.Decimal, businessDate: Date, reference: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrEmployeeAdvanceLockKey(context.tenantId, context.companyId, advanceId)}, 0))`;
     const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!advance || advance.settledAmount.lt(applied)) throw new ConflictException('Advance settlement cannot be reversed safely.');
     const remaining = advance.remainingAmount.plus(applied);
@@ -733,6 +750,7 @@ export class HrPayrollService {
   }
 
   private async reverseDeduction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, deductionId: string, applied: Prisma.Decimal, businessDate: Date, reference: string, reason: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrAdministrativeDeductionLockKey(context.tenantId, context.companyId, deductionId)}, 0))`;
     const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!deduction || deduction.appliedAmount.lt(applied)) throw new ConflictException('Administrative deduction cannot be reversed safely.');
     const remaining = deduction.remainingAmount.plus(applied);
@@ -813,6 +831,9 @@ export class HrPayrollService {
   }
   private async complete(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, receiptId: string, body: object) { await this.idempotency.completeInTransaction(tx, context, { receiptId, response: { status: 201, headers: null, body: body as never } }); }
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, afterJson: object) { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, afterJson: afterJson as Prisma.InputJsonValue } }); }
+  private async lockPayrollRun(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollRunId: string) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrPayrollRunLockKey(context.tenantId, context.companyId, payrollRunId)}, 0))`;
+  }
 }
 
 function amount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lte(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A payroll amount must be a positive decimal with at most four places.'); return parsed; }
