@@ -18,6 +18,35 @@
   align-content: start;
 }
 
+/* Salary actions live in the salary tab. Keeping one entry point avoids a
+ * competing set of increase/decrease/edit actions in the profile header. */
+.hr-employee-profile__actions > .baseer-button:nth-child(1),
+.hr-employee-profile__actions > .baseer-button:nth-child(2),
+.hr-employee-profile__actions > .baseer-button:nth-child(3) {
+  display: none;
+}
+
+.hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:first-child:not(:last-child),
+.hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:nth-child(2):not(:last-child) {
+  display: none;
+}
+
+.hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:last-child {
+  font-size: 0;
+}
+
+.hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:last-child::after {
+  font-size: var(--font-label);
+}
+
+[dir="rtl"] .hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:last-child::after {
+  content: "إدارة الراتب";
+}
+
+[dir="ltr"] .hr-employee-profile__stack > .baseer-card:first-child .baseer-card__header .baseer-inline-actions > .baseer-button:last-child::after {
+  content: "Manage salary";
+}
+
 .hr-payroll-settlements {
   display: grid;
   gap: .8rem;
