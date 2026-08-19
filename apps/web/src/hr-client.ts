@@ -1,4 +1,5 @@
-import { api, type ActiveSession } from "./daily-sales-client";
+import { api, baseerApiBaseUrl, type ActiveSession } from "./daily-sales-client";
+import { parseBaseerApiResponse } from "./baseer-api-error";
 
 export type HrEmployeeStatus = "ACTIVE" | "ON_LEAVE" | "TERMINATED" | "ARCHIVED";
 export type HrEmployee = { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; hireDate: string; status: HrEmployeeStatus; terminatedAt: string | null; notes: string | null };
@@ -44,6 +45,16 @@ export type HrEmployeeLeave = {
 };
 export type HrEmployeeLeavesReceipt = { leaves: HrEmployeeLeave[]; hasMore: boolean; nextCursor: string | null };
 export type HrEmployeeLeaveDetail = { leave: HrEmployeeLeave };
+export type HrEmployeeDocumentType = "NATIONAL_ID" | "IQAMA" | "PASSPORT" | "EMPLOYMENT_CONTRACT" | "MEDICAL_INSURANCE" | "HEALTH_CERTIFICATE" | "QUALIFICATION" | "OTHER";
+export type HrEmployeeDocumentStatus = "ACTIVE" | "REVOKED";
+export type HrEmployeeDocumentBlobStatus = "STAGED" | "READY" | "QUARANTINED" | "REVOKED";
+export type HrEmployeeDocumentComplianceStatus = "NOT_APPLICABLE" | "VALID" | "EXPIRING" | "EXPIRED";
+export type HrEmployeeDocument = { id: string; employeeId: string; documentType: HrEmployeeDocumentType; status: HrEmployeeDocumentStatus; title: string; referenceNumber: string | null; issueDate: string | null; expiryDate: string | null; notes: string | null; linkedServiceId: string | null; retentionUntil: string | null; legalHold: boolean; complianceStatus: HrEmployeeDocumentComplianceStatus; currentVersion: { id: string; version: number; blobStatus: HrEmployeeDocumentBlobStatus; mimeType: string; byteSize: string; sha256: string; createdAt: string } | null; createdAt: string; updatedAt: string; revokedAt: string | null; revokedReason: string | null };
+export type HrEmployeeDocumentsReceipt = { companyId: string; documents: HrEmployeeDocument[]; hasMore: boolean; nextCursor: string | null };
+export type HrEmployeeLetterType = "SALARY_CERTIFICATE" | "SERVICE_CERTIFICATE";
+export type HrEmployeeLetterStatus = "ISSUED" | "REVOKED";
+export type HrEmployeeLetter = { id: string; employeeId: string; letterType: HrEmployeeLetterType; status: HrEmployeeLetterStatus; letterNumber: string; locale: "ar" | "en"; recipient: string | null; issuedAt: string; revokedAt: string | null; revokedReason: string | null; outputReportCode: "hr.employee-letter" };
+export type HrEmployeeLettersReceipt = { companyId: string; letters: HrEmployeeLetter[] };
 
 function withQuery(path: string, query: Record<string, string | number | undefined>) { const parameters = new URLSearchParams(); for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value)); return `${path}${parameters.size ? `?${parameters}` : ""}`; }
 export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployeeStatus; search?: string; cursor?: string; pageSize?: number } = {}) { return api<HrEmployeesReceipt>(session, withQuery("/hr/employees", query)); }
@@ -66,6 +77,21 @@ export function listHrEmployeeLeaves(session: ActiveSession, query: { employeeId
 export function getHrEmployeeLeave(session: ActiveSession, leaveId: string) { return api<HrEmployeeLeaveDetail>(session, `/hr/leaves/${encodeURIComponent(leaveId)}`); }
 export function createHrEmployeeLeave(session: ActiveSession, payload: unknown) { return api(session, "/hr/leaves", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function recordHrEmployeeReturn(session: ActiveSession, payload: unknown) { return api(session, "/hr/leaves/return", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function listHrEmployeeDocuments(session: ActiveSession, employeeId: string, query: { cursor?: string; pageSize?: number; documentType?: HrEmployeeDocumentType; status?: HrEmployeeDocumentStatus; expiry?: "VALID" | "EXPIRING" | "EXPIRED" | "NONE" } = {}) { return api<HrEmployeeDocumentsReceipt>(session, withQuery(`/hr/employees/${encodeURIComponent(employeeId)}/documents`, query)); }
+export function createHrEmployeeDocument(session: ActiveSession, employeeId: string, payload: unknown) { return api<{ id: string; versionId: string; replayed: boolean }>(session, `/hr/employees/${encodeURIComponent(employeeId)}/documents`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function replaceHrEmployeeDocument(session: ActiveSession, documentId: string, payload: unknown) { return api<{ id: string; versionId: string; replayed: boolean }>(session, `/hr/employee-documents/${encodeURIComponent(documentId)}/versions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function revokeHrEmployeeDocument(session: ActiveSession, documentId: string, payload: unknown) { return api<{ id: string; replayed: boolean }>(session, `/hr/employee-documents/${encodeURIComponent(documentId)}/revoke`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+/** Download is authenticated and produces an in-memory Blob; document storage URLs never reach the browser. */
+export async function downloadHrEmployeeDocumentVersion(session: ActiveSession, versionId: string) {
+  const response = await fetch(`${baseerApiBaseUrl}/hr/employee-document-versions/${encodeURIComponent(versionId)}/download`, { cache: "no-store", headers: { Accept: "application/pdf,image/jpeg,image/png", Authorization: `Bearer ${session.accessToken}`, "X-Baseer-Company-Id": session.companyId } });
+  if (!response.ok) await parseBaseerApiResponse<never>(response);
+  const disposition = response.headers.get("content-disposition") ?? "";
+  const fileName = /filename="?([^";]+)"?/i.exec(disposition)?.[1] ?? "employee-document";
+  return { blob: await response.blob(), fileName };
+}
+export function listHrEmployeeLetters(session: ActiveSession, employeeId: string) { return api<HrEmployeeLettersReceipt>(session, `/hr/employees/${encodeURIComponent(employeeId)}/letters`); }
+export function issueHrEmployeeLetter(session: ActiveSession, employeeId: string, payload: unknown) { return api<{ id: string; letterNumber: string; outputReportCode: "hr.employee-letter"; replayed: boolean }>(session, `/hr/employees/${encodeURIComponent(employeeId)}/letters/issue`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function revokeHrEmployeeLetter(session: ActiveSession, letterId: string, payload: unknown) { return api<{ id: string; replayed: boolean }>(session, `/hr/employee-letters/${encodeURIComponent(letterId)}/revoke`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrPayrollRuns(session: ActiveSession, query: { status?: HrPayrollStatus; cursor?: string; pageSize?: number } = {}) { return api<HrPayrollRunsReceipt>(session, withQuery("/hr/payroll-runs", query)); }
 export function getHrPayrollRun(session: ActiveSession, payrollRunId: string) { return api<HrPayrollDetail>(session, `/hr/payroll-runs/${encodeURIComponent(payrollRunId)}`); }
 export function setHrEmployeeCompensation(session: ActiveSession, payload: unknown) { return api(session, "/hr/compensation", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

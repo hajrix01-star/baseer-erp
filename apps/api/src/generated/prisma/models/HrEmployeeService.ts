@@ -14,8 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model HrEmployeeService
- * A personnel service is operational until its associated cost is issued.
- * The financial document is immutable and is never recreated by editing this record.
+ * 
  */
 export type HrEmployeeServiceModel = runtime.Types.Result.DefaultSelection<Prisma.$HrEmployeeServicePayload>
 
@@ -326,6 +325,7 @@ export type HrEmployeeServiceWhereInput = {
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryNullableScalarRelationFilter, Prisma.FinanceCategoryWhereInput> | null
   outflowDocument?: Prisma.XOR<Prisma.FinanceOutflowDocumentNullableScalarRelationFilter, Prisma.FinanceOutflowDocumentWhereInput> | null
+  documents?: Prisma.HrEmployeeDocumentListRelationFilter
 }
 
 export type HrEmployeeServiceOrderByWithRelationInput = {
@@ -352,6 +352,7 @@ export type HrEmployeeServiceOrderByWithRelationInput = {
   supplier?: Prisma.FinanceSupplierOrderByWithRelationInput
   category?: Prisma.FinanceCategoryOrderByWithRelationInput
   outflowDocument?: Prisma.FinanceOutflowDocumentOrderByWithRelationInput
+  documents?: Prisma.HrEmployeeDocumentOrderByRelationAggregateInput
 }
 
 export type HrEmployeeServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -383,6 +384,7 @@ export type HrEmployeeServiceWhereUniqueInput = Prisma.AtLeast<{
   supplier?: Prisma.XOR<Prisma.FinanceSupplierNullableScalarRelationFilter, Prisma.FinanceSupplierWhereInput> | null
   category?: Prisma.XOR<Prisma.FinanceCategoryNullableScalarRelationFilter, Prisma.FinanceCategoryWhereInput> | null
   outflowDocument?: Prisma.XOR<Prisma.FinanceOutflowDocumentNullableScalarRelationFilter, Prisma.FinanceOutflowDocumentWhereInput> | null
+  documents?: Prisma.HrEmployeeDocumentListRelationFilter
 }, "id" | "id_tenantId_companyId" | "outflowDocumentId_tenantId_companyId">
 
 export type HrEmployeeServiceOrderByWithAggregationInput = {
@@ -453,6 +455,7 @@ export type HrEmployeeServiceCreateInput = {
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
   outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateInput = {
@@ -474,6 +477,7 @@ export type HrEmployeeServiceUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUpdateInput = {
@@ -494,6 +498,7 @@ export type HrEmployeeServiceUpdateInput = {
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
   outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateInput = {
@@ -515,6 +520,7 @@ export type HrEmployeeServiceUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceCreateManyInput = {
@@ -872,6 +878,22 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput = {
   deleteMany?: Prisma.HrEmployeeServiceScalarWhereInput | Prisma.HrEmployeeServiceScalarWhereInput[]
 }
 
+export type HrEmployeeServiceCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeServiceCreateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.HrEmployeeServiceCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.HrEmployeeServiceWhereUniqueInput
+}
+
+export type HrEmployeeServiceUpdateOneWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeServiceCreateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.HrEmployeeServiceCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.HrEmployeeServiceUpsertWithoutDocumentsInput
+  disconnect?: Prisma.HrEmployeeServiceWhereInput | boolean
+  delete?: Prisma.HrEmployeeServiceWhereInput | boolean
+  connect?: Prisma.HrEmployeeServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeServiceUpdateToOneWithWhereWithoutDocumentsInput, Prisma.HrEmployeeServiceUpdateWithoutDocumentsInput>, Prisma.HrEmployeeServiceUncheckedUpdateWithoutDocumentsInput>
+}
+
 export type EnumHrEmployeeServiceStatusFieldUpdateOperationsInput = {
   set?: $Enums.HrEmployeeServiceStatus
 }
@@ -897,6 +919,7 @@ export type HrEmployeeServiceCreateWithoutCompanyInput = {
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
   outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateWithoutCompanyInput = {
@@ -916,6 +939,7 @@ export type HrEmployeeServiceUncheckedCreateWithoutCompanyInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceCreateOrConnectWithoutCompanyInput = {
@@ -985,6 +1009,7 @@ export type HrEmployeeServiceCreateWithoutCategoryInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutServicesInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
   outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateWithoutCategoryInput = {
@@ -1003,6 +1028,7 @@ export type HrEmployeeServiceUncheckedCreateWithoutCategoryInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceCreateOrConnectWithoutCategoryInput = {
@@ -1048,6 +1074,7 @@ export type HrEmployeeServiceCreateWithoutSupplierInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutServicesInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
   outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateWithoutSupplierInput = {
@@ -1066,6 +1093,7 @@ export type HrEmployeeServiceUncheckedCreateWithoutSupplierInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceCreateOrConnectWithoutSupplierInput = {
@@ -1111,6 +1139,7 @@ export type HrEmployeeServiceCreateWithoutOutflowDocumentInput = {
   employee: Prisma.HrEmployeeCreateNestedOneWithoutServicesInput
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateWithoutOutflowDocumentInput = {
@@ -1129,6 +1158,7 @@ export type HrEmployeeServiceUncheckedCreateWithoutOutflowDocumentInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceCreateOrConnectWithoutOutflowDocumentInput = {
@@ -1164,6 +1194,7 @@ export type HrEmployeeServiceUpdateWithoutOutflowDocumentInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutServicesNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateWithoutOutflowDocumentInput = {
@@ -1182,6 +1213,7 @@ export type HrEmployeeServiceUncheckedUpdateWithoutOutflowDocumentInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceCreateWithoutEmployeeInput = {
@@ -1201,6 +1233,7 @@ export type HrEmployeeServiceCreateWithoutEmployeeInput = {
   supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
   category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
   outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+  documents?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceUncheckedCreateWithoutEmployeeInput = {
@@ -1219,6 +1252,7 @@ export type HrEmployeeServiceUncheckedCreateWithoutEmployeeInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutLinkedServiceInput
 }
 
 export type HrEmployeeServiceCreateOrConnectWithoutEmployeeInput = {
@@ -1245,6 +1279,104 @@ export type HrEmployeeServiceUpdateWithWhereUniqueWithoutEmployeeInput = {
 export type HrEmployeeServiceUpdateManyWithWhereWithoutEmployeeInput = {
   where: Prisma.HrEmployeeServiceScalarWhereInput
   data: Prisma.XOR<Prisma.HrEmployeeServiceUpdateManyMutationInput, Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeInput>
+}
+
+export type HrEmployeeServiceCreateWithoutDocumentsInput = {
+  id?: string
+  serviceType: string
+  referenceNumber?: string | null
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
+  status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeServicesInput
+  employee: Prisma.HrEmployeeCreateNestedOneWithoutServicesInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutHrEmployeeServicesInput
+  category?: Prisma.FinanceCategoryCreateNestedOneWithoutHrEmployeeServicesInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutHrEmployeeServiceInput
+}
+
+export type HrEmployeeServiceUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeId: string
+  serviceType: string
+  referenceNumber?: string | null
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
+  supplierId?: string | null
+  categoryId?: string | null
+  outflowDocumentId?: string | null
+  status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type HrEmployeeServiceCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.HrEmployeeServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeServiceCreateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedCreateWithoutDocumentsInput>
+}
+
+export type HrEmployeeServiceUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeServiceUpdateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.HrEmployeeServiceCreateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.HrEmployeeServiceWhereInput
+}
+
+export type HrEmployeeServiceUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.HrEmployeeServiceWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeServiceUpdateWithoutDocumentsInput, Prisma.HrEmployeeServiceUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type HrEmployeeServiceUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeServicesNestedInput
+  employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutServicesNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+}
+
+export type HrEmployeeServiceUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HrEmployeeServiceCreateManyCompanyInput = {
@@ -1283,6 +1415,7 @@ export type HrEmployeeServiceUpdateWithoutCompanyInput = {
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
   outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateWithoutCompanyInput = {
@@ -1302,6 +1435,7 @@ export type HrEmployeeServiceUncheckedUpdateWithoutCompanyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateManyWithoutCompanyInput = {
@@ -1358,6 +1492,7 @@ export type HrEmployeeServiceUpdateWithoutCategoryInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutServicesNestedInput
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
   outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateWithoutCategoryInput = {
@@ -1376,6 +1511,7 @@ export type HrEmployeeServiceUncheckedUpdateWithoutCategoryInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateManyWithoutCategoryInput = {
@@ -1431,6 +1567,7 @@ export type HrEmployeeServiceUpdateWithoutSupplierInput = {
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutServicesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
   outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateWithoutSupplierInput = {
@@ -1449,6 +1586,7 @@ export type HrEmployeeServiceUncheckedUpdateWithoutSupplierInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateManyWithoutSupplierInput = {
@@ -1504,6 +1642,7 @@ export type HrEmployeeServiceUpdateWithoutEmployeeInput = {
   supplier?: Prisma.FinanceSupplierUpdateOneWithoutHrEmployeeServicesNestedInput
   category?: Prisma.FinanceCategoryUpdateOneWithoutHrEmployeeServicesNestedInput
   outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutHrEmployeeServiceNestedInput
+  documents?: Prisma.HrEmployeeDocumentUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateWithoutEmployeeInput = {
@@ -1522,6 +1661,7 @@ export type HrEmployeeServiceUncheckedUpdateWithoutEmployeeInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutLinkedServiceNestedInput
 }
 
 export type HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeInput = {
@@ -1542,6 +1682,35 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type HrEmployeeServiceCountOutputType
+ */
+
+export type HrEmployeeServiceCountOutputType = {
+  documents: number
+}
+
+export type HrEmployeeServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  documents?: boolean | HrEmployeeServiceCountOutputTypeCountDocumentsArgs
+}
+
+/**
+ * HrEmployeeServiceCountOutputType without action
+ */
+export type HrEmployeeServiceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeServiceCountOutputType
+   */
+  select?: Prisma.HrEmployeeServiceCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * HrEmployeeServiceCountOutputType without action
+ */
+export type HrEmployeeServiceCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeDocumentWhereInput
+}
 
 
 export type HrEmployeeServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1568,6 +1737,8 @@ export type HrEmployeeServiceSelect<ExtArgs extends runtime.Types.Extensions.Int
   supplier?: boolean | Prisma.HrEmployeeService$supplierArgs<ExtArgs>
   category?: boolean | Prisma.HrEmployeeService$categoryArgs<ExtArgs>
   outflowDocument?: boolean | Prisma.HrEmployeeService$outflowDocumentArgs<ExtArgs>
+  documents?: boolean | Prisma.HrEmployeeService$documentsArgs<ExtArgs>
+  _count?: boolean | Prisma.HrEmployeeServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeService"]>
 
 export type HrEmployeeServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1650,6 +1821,8 @@ export type HrEmployeeServiceInclude<ExtArgs extends runtime.Types.Extensions.In
   supplier?: boolean | Prisma.HrEmployeeService$supplierArgs<ExtArgs>
   category?: boolean | Prisma.HrEmployeeService$categoryArgs<ExtArgs>
   outflowDocument?: boolean | Prisma.HrEmployeeService$outflowDocumentArgs<ExtArgs>
+  documents?: boolean | Prisma.HrEmployeeService$documentsArgs<ExtArgs>
+  _count?: boolean | Prisma.HrEmployeeServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HrEmployeeServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1674,6 +1847,7 @@ export type $HrEmployeeServicePayload<ExtArgs extends runtime.Types.Extensions.I
     supplier: Prisma.$FinanceSupplierPayload<ExtArgs> | null
     category: Prisma.$FinanceCategoryPayload<ExtArgs> | null
     outflowDocument: Prisma.$FinanceOutflowDocumentPayload<ExtArgs> | null
+    documents: Prisma.$HrEmployeeDocumentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2097,6 +2271,7 @@ export interface Prisma__HrEmployeeServiceClient<T, Null = never, ExtArgs extend
   supplier<T extends Prisma.HrEmployeeService$supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeService$supplierArgs<ExtArgs>>): Prisma.Prisma__FinanceSupplierClient<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.HrEmployeeService$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeService$categoryArgs<ExtArgs>>): Prisma.Prisma__FinanceCategoryClient<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   outflowDocument<T extends Prisma.HrEmployeeService$outflowDocumentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeService$outflowDocumentArgs<ExtArgs>>): Prisma.Prisma__FinanceOutflowDocumentClient<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  documents<T extends Prisma.HrEmployeeService$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2599,6 +2774,30 @@ export type HrEmployeeService$outflowDocumentArgs<ExtArgs extends runtime.Types.
    */
   include?: Prisma.FinanceOutflowDocumentInclude<ExtArgs> | null
   where?: Prisma.FinanceOutflowDocumentWhereInput
+}
+
+/**
+ * HrEmployeeService.documents
+ */
+export type HrEmployeeService$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeDocument
+   */
+  select?: Prisma.HrEmployeeDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeDocument
+   */
+  omit?: Prisma.HrEmployeeDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeDocumentInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeDocumentWhereInput
+  orderBy?: Prisma.HrEmployeeDocumentOrderByWithRelationInput | Prisma.HrEmployeeDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeDocumentScalarFieldEnum | Prisma.HrEmployeeDocumentScalarFieldEnum[]
 }
 
 /**

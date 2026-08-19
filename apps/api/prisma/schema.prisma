@@ -276,6 +276,39 @@ enum HrPayrollCalculationFormulaCode {
   PRORATED_NEW_HIRE_V1
 }
 
+enum HrDocumentBlobStatus {
+  STAGED
+  READY
+  QUARANTINED
+  REVOKED
+}
+
+enum HrEmployeeDocumentType {
+  NATIONAL_ID
+  IQAMA
+  PASSPORT
+  EMPLOYMENT_CONTRACT
+  MEDICAL_INSURANCE
+  HEALTH_CERTIFICATE
+  QUALIFICATION
+  OTHER
+}
+
+enum HrEmployeeDocumentStatus {
+  ACTIVE
+  REVOKED
+}
+
+enum HrEmployeeLetterType {
+  SALARY_CERTIFICATE
+  SERVICE_CERTIFICATE
+}
+
+enum HrEmployeeLetterStatus {
+  ISSUED
+  REVOKED
+}
+
 /// Formula selection is server-owned. Legal-calculation catalogues are outside
 /// V1; a policy version only authorises a stable internal formula revision.
 enum HrCompensationFormulaCode {
@@ -413,6 +446,9 @@ model Company {
   hrPayrollDeductionApplications HrPayrollAdministrativeDeductionApplication[]
   hrPayrollPayments             HrPayrollPayment[]
   hrPayrollPaymentAllocations   HrPayrollPaymentAllocation[]
+  hrEmployeeDocumentBlobs       HrEmployeeDocumentBlob[]
+  hrEmployeeDocuments           HrEmployeeDocument[]
+  hrEmployeeLetters             HrEmployeeLetter[]
   aiCompanyIdentities          AiCompanyIdentity[]
   aiExecutionReceipts          AiExecutionReceipt[]
   branding                     CompanyBranding?
@@ -598,6 +634,7 @@ model FileMetadata {
   createdBy    User           @relation("FileMetadataCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
   replaces     FileMetadata?  @relation("FileMetadataVersionLineage", fields: [replacesFileMetadataId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   supersededBy FileMetadata[] @relation("FileMetadataVersionLineage")
+  employeeDocumentBlob HrEmployeeDocumentBlob?
 
   @@unique([id, tenantId, companyId])
   @@unique([tenantId, companyId, sourceType, sourceId, purpose, version])
@@ -1022,6 +1059,8 @@ model HrEmployee {
   compensationProfiles     HrEmployeeCompensationProfile[]
   leaves                   HrEmployeeLeave[]
   payrollLines             HrPayrollLine[]
+  documents                HrEmployeeDocument[]
+  letters                  HrEmployeeLetter[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
@@ -1061,6 +1100,115 @@ model HrEmployeeLeave {
 
 /// A personnel service is operational until its associated cost is issued.
 /// The financial document is immutable and is never recreated by editing this record.
+/// Blob lifecycle is independent of FileMetadata's reservation workflow. The
+/// local storage reference is never returned to clients.
+model HrEmployeeDocumentBlob {
+  id                String               @id @db.Uuid
+  tenantId          String               @db.Uuid
+  companyId         String               @db.Uuid
+  fileMetadataId    String               @unique @db.Uuid
+  status            HrDocumentBlobStatus @default(STAGED)
+  storageReference  String               @unique @db.VarChar(255)
+  encryptionIv      String               @db.Char(24)
+  mimeType          String               @db.VarChar(127)
+  byteSize          BigInt
+  sha256            String               @db.Char(64)
+  scannerName       String?              @db.VarChar(80)
+  scannerResult     String?              @db.VarChar(160)
+  scannedAt         DateTime?            @db.Timestamptz(6)
+  revokedAt         DateTime?            @db.Timestamptz(6)
+  createdByUserId   String               @db.Uuid
+  createdAt         DateTime             @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  fileMetadata FileMetadata @relation(fields: [fileMetadataId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  versions HrEmployeeDocumentVersion[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([fileMetadataId, tenantId, companyId])
+  @@index([tenantId, companyId, status, createdAt])
+}
+
+model HrEmployeeDocument {
+  id              String                   @id @db.Uuid
+  tenantId        String                   @db.Uuid
+  companyId       String                   @db.Uuid
+  employeeId      String                   @db.Uuid
+  documentType    HrEmployeeDocumentType
+  status          HrEmployeeDocumentStatus @default(ACTIVE)
+  title           String                   @db.VarChar(240)
+  referenceNumber String?                  @db.VarChar(160)
+  issueDate       DateTime?                @db.Date
+  expiryDate      DateTime?                @db.Date
+  notes           String?                  @db.VarChar(2000)
+  linkedServiceId String?                  @db.Uuid
+  retentionUntil  DateTime?                @db.Date
+  legalHold       Boolean                  @default(false)
+  currentVersionId String?                 @unique @db.Uuid
+  revokedAt       DateTime?                @db.Timestamptz(6)
+  revokedReason   String?                  @db.VarChar(1000)
+  createdByUserId String                   @db.Uuid
+  createdAt       DateTime                 @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                 @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  linkedService HrEmployeeService? @relation(fields: [linkedServiceId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  versions HrEmployeeDocumentVersion[] @relation("HrEmployeeDocumentVersions")
+  currentVersion HrEmployeeDocumentVersion? @relation("HrEmployeeDocumentCurrentVersion", fields: [currentVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([currentVersionId, tenantId, companyId])
+  @@index([tenantId, companyId, employeeId, documentType, status])
+  @@index([tenantId, companyId, expiryDate])
+  @@index([tenantId, companyId, linkedServiceId])
+}
+
+model HrEmployeeDocumentVersion {
+  id          String             @id @db.Uuid
+  tenantId    String             @db.Uuid
+  companyId   String             @db.Uuid
+  documentId  String             @db.Uuid
+  blobId      String             @db.Uuid
+  version     Int
+  createdByUserId String         @db.Uuid
+  createdAt   DateTime           @default(now()) @db.Timestamptz(6)
+
+  document HrEmployeeDocument @relation("HrEmployeeDocumentVersions", fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  currentFor HrEmployeeDocument? @relation("HrEmployeeDocumentCurrentVersion")
+  blob HrEmployeeDocumentBlob @relation(fields: [blobId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([documentId, version])
+  @@index([tenantId, companyId, blobId])
+}
+
+model HrEmployeeLetter {
+  id              String                 @id @db.Uuid
+  tenantId        String                 @db.Uuid
+  companyId       String                 @db.Uuid
+  employeeId      String                 @db.Uuid
+  letterType      HrEmployeeLetterType
+  status          HrEmployeeLetterStatus @default(ISSUED)
+  letterNumber    String                 @db.VarChar(80)
+  templateVersion String                 @db.VarChar(40)
+  locale          String                 @db.VarChar(2)
+  recipient       String?                @db.VarChar(240)
+  snapshotJson    Json
+  snapshotSha256  String                 @db.Char(64)
+  revokedAt       DateTime?              @db.Timestamptz(6)
+  revokedReason   String?                @db.VarChar(1000)
+  issuedByUserId  String                 @db.Uuid
+  issuedAt        DateTime               @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, letterNumber])
+  @@index([tenantId, companyId, employeeId, issuedAt])
+}
+
 model HrEmployeeService {
   id               String                            @id @default(uuid()) @db.Uuid
   tenantId         String                            @db.Uuid
@@ -1088,6 +1236,7 @@ model HrEmployeeService {
   supplier        FinanceSupplier?        @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   category        FinanceCategory?        @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   outflowDocument FinanceOutflowDocument? @relation("HrEmployeeServiceOutflowDocument", fields: [outflowDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  documents       HrEmployeeDocument[]
 
   @@unique([id, tenantId, companyId])
   @@unique([outflowDocumentId, tenantId, companyId])

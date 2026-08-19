@@ -31,6 +31,32 @@ export const hrEmployeeServiceTypeSchema = z.enum([
   "HEALTH_CERTIFICATE",
   "OTHER",
 ]);
+export const hrEmployeeDocumentTypeSchema = z.enum(["NATIONAL_ID", "IQAMA", "PASSPORT", "EMPLOYMENT_CONTRACT", "MEDICAL_INSURANCE", "HEALTH_CERTIFICATE", "QUALIFICATION", "OTHER"]);
+export const hrEmployeeDocumentStatusSchema = z.enum(["ACTIVE", "REVOKED"]);
+export const hrEmployeeDocumentBlobStatusSchema = z.enum(["STAGED", "READY", "QUARANTINED", "REVOKED"]);
+export const hrEmployeeDocumentComplianceStatusSchema = z.enum(["NOT_APPLICABLE", "VALID", "EXPIRING", "EXPIRED"]);
+export const hrEmployeeLetterTypeSchema = z.enum(["SALARY_CERTIFICATE", "SERVICE_CERTIFICATE"]);
+export const hrEmployeeLetterStatusSchema = z.enum(["ISSUED", "REVOKED"]);
+
+const hrDocumentUploadSchema = z.object({
+  fileName: z.string().trim().min(1).max(240),
+  // 5 MiB binary payload has a <= 6.99 MiB base64 representation.
+  contentBase64: z.string().trim().min(1).max(7_000_000).regex(/^[A-Za-z0-9+/]+={0,2}$/),
+}).strict();
+export const createHrEmployeeDocumentRequestSchema = z.object({
+  documentType: hrEmployeeDocumentTypeSchema, title: z.string().trim().min(1).max(240),
+  referenceNumber: z.string().trim().max(160).optional(), issueDate: hrDateSchema.optional(), expiryDate: hrDateSchema.optional(),
+  notes: z.string().trim().max(2_000).optional(), linkedServiceId: z.string().uuid().optional(), retentionUntil: hrDateSchema.optional(), legalHold: z.boolean().optional(),
+  upload: hrDocumentUploadSchema.optional(), idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const replaceHrEmployeeDocumentRequestSchema = z.object({ upload: hrDocumentUploadSchema, idempotencyKey: idempotencyKeySchema }).strict();
+export const revokeHrEmployeeDocumentRequestSchema = z.object({ reason: z.string().trim().min(1).max(1_000), idempotencyKey: idempotencyKeySchema }).strict();
+export const hrEmployeeDocumentsQuerySchema = z.object({
+  cursor: z.string().uuid().optional(), pageSize: z.coerce.number().int().min(1).max(100).optional().default(50), documentType: hrEmployeeDocumentTypeSchema.optional(), status: hrEmployeeDocumentStatusSchema.optional(),
+  expiry: z.enum(["VALID", "EXPIRING", "EXPIRED", "NONE"]).optional(),
+}).strict();
+export const issueHrEmployeeLetterRequestSchema = z.object({ letterType: hrEmployeeLetterTypeSchema, locale: z.enum(["ar", "en"]), recipient: z.string().trim().max(240).optional(), idempotencyKey: idempotencyKeySchema }).strict();
+export const revokeHrEmployeeLetterRequestSchema = z.object({ reason: z.string().trim().min(1).max(1_000), idempotencyKey: idempotencyKeySchema }).strict();
 
 export const createHrEmployeeRequestSchema = z.object({
   employeeNumber: z.string().trim().min(1).max(80),
@@ -545,6 +571,19 @@ export const hrCompensationPolicyReceiptSchema = z.object({ id: z.string().uuid(
 export const hrEmployeeServicesReceiptSchema = z.object({ companyId: companyIdSchema, services: z.array(hrEmployeeServiceSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrEmployeeServiceDetailReceiptSchema = z.object({ companyId: companyIdSchema, service: hrEmployeeServiceSchema }).strict();
 export const hrEmployeeServiceReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeDocumentSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, documentType: hrEmployeeDocumentTypeSchema, status: hrEmployeeDocumentStatusSchema,
+  title: z.string().max(240), referenceNumber: z.string().max(160).nullable(), issueDate: businessDateSchema.nullable(), expiryDate: businessDateSchema.nullable(),
+  notes: z.string().max(2_000).nullable(), linkedServiceId: z.string().uuid().nullable(), retentionUntil: businessDateSchema.nullable(), legalHold: z.boolean(),
+  complianceStatus: hrEmployeeDocumentComplianceStatusSchema,
+  currentVersion: z.object({ id: z.string().uuid(), version: z.number().int().positive(), blobStatus: hrEmployeeDocumentBlobStatusSchema, mimeType: z.string().max(127), byteSize: z.string().regex(/^\d+$/), sha256: z.string().length(64), createdAt: z.string().datetime() }).nullable(),
+  createdAt: z.string().datetime(), updatedAt: z.string().datetime(), revokedAt: z.string().datetime().nullable(), revokedReason: z.string().max(1_000).nullable(),
+}).strict();
+export const hrEmployeeDocumentsReceiptSchema = z.object({ companyId: companyIdSchema, documents: z.array(hrEmployeeDocumentSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
+export const hrEmployeeDocumentReceiptSchema = z.object({ id: z.string().uuid(), versionId: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeLetterSchema = z.object({ id: z.string().uuid(), employeeId: hrEmployeeIdSchema, letterType: hrEmployeeLetterTypeSchema, status: hrEmployeeLetterStatusSchema, letterNumber: z.string().max(80), locale: z.enum(["ar", "en"]), recipient: z.string().max(240).nullable(), issuedAt: z.string().datetime(), revokedAt: z.string().datetime().nullable(), revokedReason: z.string().max(1_000).nullable(), outputReportCode: z.literal("hr.employee-letter") }).strict();
+export const hrEmployeeLettersReceiptSchema = z.object({ companyId: companyIdSchema, letters: z.array(hrEmployeeLetterSchema).max(100) }).strict();
+export const hrEmployeeLetterReceiptSchema = z.object({ id: z.string().uuid(), letterNumber: z.string().max(80), outputReportCode: z.literal("hr.employee-letter"), replayed: z.boolean() }).strict();
 
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
@@ -570,3 +609,8 @@ export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema
 export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;
 export type CreateHrEmployeeLeaveRequest = z.infer<typeof createHrEmployeeLeaveRequestSchema>;
 export type ReturnHrEmployeeLeaveRequest = z.infer<typeof returnHrEmployeeLeaveRequestSchema>;
+export type CreateHrEmployeeDocumentRequest = z.infer<typeof createHrEmployeeDocumentRequestSchema>;
+export type ReplaceHrEmployeeDocumentRequest = z.infer<typeof replaceHrEmployeeDocumentRequestSchema>;
+export type RevokeHrEmployeeDocumentRequest = z.infer<typeof revokeHrEmployeeDocumentRequestSchema>;
+export type IssueHrEmployeeLetterRequest = z.infer<typeof issueHrEmployeeLetterRequestSchema>;
+export type RevokeHrEmployeeLetterRequest = z.infer<typeof revokeHrEmployeeLetterRequestSchema>;

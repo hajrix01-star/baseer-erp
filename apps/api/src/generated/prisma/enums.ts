@@ -391,6 +391,54 @@ export const HrPayrollCalculationFormulaCode = {
 export type HrPayrollCalculationFormulaCode = (typeof HrPayrollCalculationFormulaCode)[keyof typeof HrPayrollCalculationFormulaCode]
 
 
+export const HrDocumentBlobStatus = {
+  STAGED: 'STAGED',
+  READY: 'READY',
+  QUARANTINED: 'QUARANTINED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type HrDocumentBlobStatus = (typeof HrDocumentBlobStatus)[keyof typeof HrDocumentBlobStatus]
+
+
+export const HrEmployeeDocumentType = {
+  NATIONAL_ID: 'NATIONAL_ID',
+  IQAMA: 'IQAMA',
+  PASSPORT: 'PASSPORT',
+  EMPLOYMENT_CONTRACT: 'EMPLOYMENT_CONTRACT',
+  MEDICAL_INSURANCE: 'MEDICAL_INSURANCE',
+  HEALTH_CERTIFICATE: 'HEALTH_CERTIFICATE',
+  QUALIFICATION: 'QUALIFICATION',
+  OTHER: 'OTHER'
+} as const
+
+export type HrEmployeeDocumentType = (typeof HrEmployeeDocumentType)[keyof typeof HrEmployeeDocumentType]
+
+
+export const HrEmployeeDocumentStatus = {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED'
+} as const
+
+export type HrEmployeeDocumentStatus = (typeof HrEmployeeDocumentStatus)[keyof typeof HrEmployeeDocumentStatus]
+
+
+export const HrEmployeeLetterType = {
+  SALARY_CERTIFICATE: 'SALARY_CERTIFICATE',
+  SERVICE_CERTIFICATE: 'SERVICE_CERTIFICATE'
+} as const
+
+export type HrEmployeeLetterType = (typeof HrEmployeeLetterType)[keyof typeof HrEmployeeLetterType]
+
+
+export const HrEmployeeLetterStatus = {
+  ISSUED: 'ISSUED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type HrEmployeeLetterStatus = (typeof HrEmployeeLetterStatus)[keyof typeof HrEmployeeLetterStatus]
+
+
 export const HrCompensationFormulaCode = {
   STANDARD_MONTHLY_V1: 'STANDARD_MONTHLY_V1'
 } as const

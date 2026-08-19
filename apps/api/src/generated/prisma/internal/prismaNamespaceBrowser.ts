@@ -79,6 +79,10 @@ export const ModelName = {
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   HrEmployee: 'HrEmployee',
   HrEmployeeLeave: 'HrEmployeeLeave',
+  HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
+  HrEmployeeDocument: 'HrEmployeeDocument',
+  HrEmployeeDocumentVersion: 'HrEmployeeDocumentVersion',
+  HrEmployeeLetter: 'HrEmployeeLetter',
   HrEmployeeService: 'HrEmployeeService',
   HrEmployeeFinancialMovement: 'HrEmployeeFinancialMovement',
   HrEmployeeAdvance: 'HrEmployeeAdvance',
@@ -623,6 +627,90 @@ export const HrEmployeeLeaveScalarFieldEnum = {
 } as const
 
 export type HrEmployeeLeaveScalarFieldEnum = (typeof HrEmployeeLeaveScalarFieldEnum)[keyof typeof HrEmployeeLeaveScalarFieldEnum]
+
+
+export const HrEmployeeDocumentBlobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  fileMetadataId: 'fileMetadataId',
+  status: 'status',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  sha256: 'sha256',
+  scannerName: 'scannerName',
+  scannerResult: 'scannerResult',
+  scannedAt: 'scannedAt',
+  revokedAt: 'revokedAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeDocumentBlobScalarFieldEnum = (typeof HrEmployeeDocumentBlobScalarFieldEnum)[keyof typeof HrEmployeeDocumentBlobScalarFieldEnum]
+
+
+export const HrEmployeeDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  documentType: 'documentType',
+  status: 'status',
+  title: 'title',
+  referenceNumber: 'referenceNumber',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  notes: 'notes',
+  linkedServiceId: 'linkedServiceId',
+  retentionUntil: 'retentionUntil',
+  legalHold: 'legalHold',
+  currentVersionId: 'currentVersionId',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeDocumentScalarFieldEnum = (typeof HrEmployeeDocumentScalarFieldEnum)[keyof typeof HrEmployeeDocumentScalarFieldEnum]
+
+
+export const HrEmployeeDocumentVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  documentId: 'documentId',
+  blobId: 'blobId',
+  version: 'version',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeDocumentVersionScalarFieldEnum = (typeof HrEmployeeDocumentVersionScalarFieldEnum)[keyof typeof HrEmployeeDocumentVersionScalarFieldEnum]
+
+
+export const HrEmployeeLetterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  letterType: 'letterType',
+  status: 'status',
+  letterNumber: 'letterNumber',
+  templateVersion: 'templateVersion',
+  locale: 'locale',
+  recipient: 'recipient',
+  snapshotJson: 'snapshotJson',
+  snapshotSha256: 'snapshotSha256',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason',
+  issuedByUserId: 'issuedByUserId',
+  issuedAt: 'issuedAt'
+} as const
+
+export type HrEmployeeLetterScalarFieldEnum = (typeof HrEmployeeLetterScalarFieldEnum)[keyof typeof HrEmployeeLetterScalarFieldEnum]
 
 
 export const HrEmployeeServiceScalarFieldEnum = {
@@ -1264,6 +1352,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

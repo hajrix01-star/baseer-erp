@@ -425,6 +425,10 @@ export const ModelName = {
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   HrEmployee: 'HrEmployee',
   HrEmployeeLeave: 'HrEmployeeLeave',
+  HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
+  HrEmployeeDocument: 'HrEmployeeDocument',
+  HrEmployeeDocumentVersion: 'HrEmployeeDocumentVersion',
+  HrEmployeeLetter: 'HrEmployeeLetter',
   HrEmployeeService: 'HrEmployeeService',
   HrEmployeeFinancialMovement: 'HrEmployeeFinancialMovement',
   HrEmployeeAdvance: 'HrEmployeeAdvance',
@@ -473,7 +477,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2546,6 +2550,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.HrEmployeeLeaveCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.HrEmployeeLeaveCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrEmployeeDocumentBlob: {
+      payload: Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>
+      fields: Prisma.HrEmployeeDocumentBlobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeDocumentBlobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeDocumentBlobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeDocumentBlobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeDocumentBlobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeDocumentBlobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeDocumentBlobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeDocumentBlobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentBlobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeDocumentBlobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeDocumentBlobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeDocumentBlobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeDocumentBlobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentBlobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeDocumentBlobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentBlobPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeDocumentBlobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeDocumentBlob>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeDocumentBlobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentBlobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeDocumentBlobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentBlobCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrEmployeeDocument: {
+      payload: Prisma.$HrEmployeeDocumentPayload<ExtArgs>
+      fields: Prisma.HrEmployeeDocumentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeDocumentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeDocumentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeDocumentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeDocumentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeDocumentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeDocumentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeDocumentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeDocumentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeDocumentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeDocumentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeDocumentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeDocumentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeDocumentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeDocument>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeDocumentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeDocumentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrEmployeeDocumentVersion: {
+      payload: Prisma.$HrEmployeeDocumentVersionPayload<ExtArgs>
+      fields: Prisma.HrEmployeeDocumentVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeDocumentVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeDocumentVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeDocumentVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeDocumentVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeDocumentVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeDocumentVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeDocumentVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeDocumentVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeDocumentVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeDocumentVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeDocumentVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeDocumentVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeDocumentVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeDocumentVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeDocumentVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeDocumentVersion>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeDocumentVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeDocumentVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeDocumentVersionCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrEmployeeLetter: {
+      payload: Prisma.$HrEmployeeLetterPayload<ExtArgs>
+      fields: Prisma.HrEmployeeLetterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeLetterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeLetterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeLetterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeLetterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeLetterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeLetterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeLetterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeLetterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeLetterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeLetterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeLetterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeLetterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeLetterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeLetterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeLetterPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeLetterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeLetter>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeLetterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeLetterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeLetterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeLetterCountAggregateOutputType> | number
         }
       }
     }
@@ -5525,6 +5825,90 @@ export const HrEmployeeLeaveScalarFieldEnum = {
 export type HrEmployeeLeaveScalarFieldEnum = (typeof HrEmployeeLeaveScalarFieldEnum)[keyof typeof HrEmployeeLeaveScalarFieldEnum]
 
 
+export const HrEmployeeDocumentBlobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  fileMetadataId: 'fileMetadataId',
+  status: 'status',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  sha256: 'sha256',
+  scannerName: 'scannerName',
+  scannerResult: 'scannerResult',
+  scannedAt: 'scannedAt',
+  revokedAt: 'revokedAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeDocumentBlobScalarFieldEnum = (typeof HrEmployeeDocumentBlobScalarFieldEnum)[keyof typeof HrEmployeeDocumentBlobScalarFieldEnum]
+
+
+export const HrEmployeeDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  documentType: 'documentType',
+  status: 'status',
+  title: 'title',
+  referenceNumber: 'referenceNumber',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  notes: 'notes',
+  linkedServiceId: 'linkedServiceId',
+  retentionUntil: 'retentionUntil',
+  legalHold: 'legalHold',
+  currentVersionId: 'currentVersionId',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeDocumentScalarFieldEnum = (typeof HrEmployeeDocumentScalarFieldEnum)[keyof typeof HrEmployeeDocumentScalarFieldEnum]
+
+
+export const HrEmployeeDocumentVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  documentId: 'documentId',
+  blobId: 'blobId',
+  version: 'version',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeDocumentVersionScalarFieldEnum = (typeof HrEmployeeDocumentVersionScalarFieldEnum)[keyof typeof HrEmployeeDocumentVersionScalarFieldEnum]
+
+
+export const HrEmployeeLetterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  letterType: 'letterType',
+  status: 'status',
+  letterNumber: 'letterNumber',
+  templateVersion: 'templateVersion',
+  locale: 'locale',
+  recipient: 'recipient',
+  snapshotJson: 'snapshotJson',
+  snapshotSha256: 'snapshotSha256',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason',
+  issuedByUserId: 'issuedByUserId',
+  issuedAt: 'issuedAt'
+} as const
+
+export type HrEmployeeLetterScalarFieldEnum = (typeof HrEmployeeLetterScalarFieldEnum)[keyof typeof HrEmployeeLetterScalarFieldEnum]
+
+
 export const HrEmployeeServiceScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -6166,6 +6550,13 @@ export const NullableJsonNullValueInput = {
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -6621,6 +7012,76 @@ export type EnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'HrEmployeeLeaveStatus[]'
  */
 export type ListEnumHrEmployeeLeaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeLeaveStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrDocumentBlobStatus'
+ */
+export type EnumHrDocumentBlobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrDocumentBlobStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrDocumentBlobStatus[]'
+ */
+export type ListEnumHrDocumentBlobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrDocumentBlobStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeDocumentType'
+ */
+export type EnumHrEmployeeDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeDocumentType'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeDocumentType[]'
+ */
+export type ListEnumHrEmployeeDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeDocumentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeDocumentStatus'
+ */
+export type EnumHrEmployeeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeDocumentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeDocumentStatus[]'
+ */
+export type ListEnumHrEmployeeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeDocumentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeLetterType'
+ */
+export type EnumHrEmployeeLetterTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeLetterType'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeLetterType[]'
+ */
+export type ListEnumHrEmployeeLetterTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeLetterType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeLetterStatus'
+ */
+export type EnumHrEmployeeLetterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeLetterStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeLetterStatus[]'
+ */
+export type ListEnumHrEmployeeLetterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeLetterStatus[]'>
     
 
 
@@ -7152,6 +7613,10 @@ export type GlobalOmitConfig = {
   financeOutflowAllocation?: Prisma.FinanceOutflowAllocationOmit
   hrEmployee?: Prisma.HrEmployeeOmit
   hrEmployeeLeave?: Prisma.HrEmployeeLeaveOmit
+  hrEmployeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobOmit
+  hrEmployeeDocument?: Prisma.HrEmployeeDocumentOmit
+  hrEmployeeDocumentVersion?: Prisma.HrEmployeeDocumentVersionOmit
+  hrEmployeeLetter?: Prisma.HrEmployeeLetterOmit
   hrEmployeeService?: Prisma.HrEmployeeServiceOmit
   hrEmployeeFinancialMovement?: Prisma.HrEmployeeFinancialMovementOmit
   hrEmployeeAdvance?: Prisma.HrEmployeeAdvanceOmit

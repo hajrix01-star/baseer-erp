@@ -321,6 +321,7 @@ export type FileMetadataWhereInput = {
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   replaces?: Prisma.XOR<Prisma.FileMetadataNullableScalarRelationFilter, Prisma.FileMetadataWhereInput> | null
   supersededBy?: Prisma.FileMetadataListRelationFilter
+  employeeDocumentBlob?: Prisma.XOR<Prisma.HrEmployeeDocumentBlobNullableScalarRelationFilter, Prisma.HrEmployeeDocumentBlobWhereInput> | null
 }
 
 export type FileMetadataOrderByWithRelationInput = {
@@ -346,6 +347,7 @@ export type FileMetadataOrderByWithRelationInput = {
   createdBy?: Prisma.UserOrderByWithRelationInput
   replaces?: Prisma.FileMetadataOrderByWithRelationInput
   supersededBy?: Prisma.FileMetadataOrderByRelationAggregateInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobOrderByWithRelationInput
 }
 
 export type FileMetadataWhereUniqueInput = Prisma.AtLeast<{
@@ -376,6 +378,7 @@ export type FileMetadataWhereUniqueInput = Prisma.AtLeast<{
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   replaces?: Prisma.XOR<Prisma.FileMetadataNullableScalarRelationFilter, Prisma.FileMetadataWhereInput> | null
   supersededBy?: Prisma.FileMetadataListRelationFilter
+  employeeDocumentBlob?: Prisma.XOR<Prisma.HrEmployeeDocumentBlobNullableScalarRelationFilter, Prisma.HrEmployeeDocumentBlobWhereInput> | null
 }, "id" | "storageReference" | "id_tenantId_companyId" | "tenantId_companyId_sourceType_sourceId_purpose_version">
 
 export type FileMetadataOrderByWithAggregationInput = {
@@ -445,6 +448,7 @@ export type FileMetadataCreateInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
   replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
   supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateInput = {
@@ -466,6 +470,7 @@ export type FileMetadataUncheckedCreateInput = {
   createdByUserId: string
   createdAt?: Date | string
   supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUpdateInput = {
@@ -487,6 +492,7 @@ export type FileMetadataUpdateInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
   replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
   supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateInput = {
@@ -508,6 +514,7 @@ export type FileMetadataUncheckedUpdateInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataCreateManyInput = {
@@ -664,6 +671,11 @@ export type FileMetadataMinOrderByAggregateInput = {
 export type FileMetadataSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
   declaredByteSize?: Prisma.SortOrder
+}
+
+export type FileMetadataScalarRelationFilter = {
+  is?: Prisma.FileMetadataWhereInput
+  isNot?: Prisma.FileMetadataWhereInput
 }
 
 export type FileMetadataCreateNestedManyWithoutTenantInput = {
@@ -854,6 +866,20 @@ export type FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput = {
   deleteMany?: Prisma.FileMetadataScalarWhereInput | Prisma.FileMetadataScalarWhereInput[]
 }
 
+export type FileMetadataCreateNestedOneWithoutEmployeeDocumentBlobInput = {
+  create?: Prisma.XOR<Prisma.FileMetadataCreateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedCreateWithoutEmployeeDocumentBlobInput>
+  connectOrCreate?: Prisma.FileMetadataCreateOrConnectWithoutEmployeeDocumentBlobInput
+  connect?: Prisma.FileMetadataWhereUniqueInput
+}
+
+export type FileMetadataUpdateOneRequiredWithoutEmployeeDocumentBlobNestedInput = {
+  create?: Prisma.XOR<Prisma.FileMetadataCreateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedCreateWithoutEmployeeDocumentBlobInput>
+  connectOrCreate?: Prisma.FileMetadataCreateOrConnectWithoutEmployeeDocumentBlobInput
+  upsert?: Prisma.FileMetadataUpsertWithoutEmployeeDocumentBlobInput
+  connect?: Prisma.FileMetadataWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileMetadataUpdateToOneWithWhereWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUpdateWithoutEmployeeDocumentBlobInput>, Prisma.FileMetadataUncheckedUpdateWithoutEmployeeDocumentBlobInput>
+}
+
 export type FileMetadataCreateWithoutTenantInput = {
   id: string
   sourceType: string
@@ -872,6 +898,7 @@ export type FileMetadataCreateWithoutTenantInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
   replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
   supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateWithoutTenantInput = {
@@ -892,6 +919,7 @@ export type FileMetadataUncheckedCreateWithoutTenantInput = {
   createdByUserId: string
   createdAt?: Date | string
   supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataCreateOrConnectWithoutTenantInput = {
@@ -961,6 +989,7 @@ export type FileMetadataCreateWithoutCreatedByInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFileMetadataInput
   replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
   supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateWithoutCreatedByInput = {
@@ -980,6 +1009,7 @@ export type FileMetadataUncheckedCreateWithoutCreatedByInput = {
   supersededAt?: Date | string | null
   createdAt?: Date | string
   supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataCreateOrConnectWithoutCreatedByInput = {
@@ -1026,6 +1056,7 @@ export type FileMetadataCreateWithoutCompanyInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
   replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
   supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateWithoutCompanyInput = {
@@ -1045,6 +1076,7 @@ export type FileMetadataUncheckedCreateWithoutCompanyInput = {
   createdByUserId: string
   createdAt?: Date | string
   supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataCreateOrConnectWithoutCompanyInput = {
@@ -1091,6 +1123,7 @@ export type FileMetadataCreateWithoutSupersededByInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFileMetadataInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
   replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateWithoutSupersededByInput = {
@@ -1111,6 +1144,7 @@ export type FileMetadataUncheckedCreateWithoutSupersededByInput = {
   supersededAt?: Date | string | null
   createdByUserId: string
   createdAt?: Date | string
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataCreateOrConnectWithoutSupersededByInput = {
@@ -1136,6 +1170,7 @@ export type FileMetadataCreateWithoutReplacesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFileMetadataInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
   supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataUncheckedCreateWithoutReplacesInput = {
@@ -1154,6 +1189,7 @@ export type FileMetadataUncheckedCreateWithoutReplacesInput = {
   createdByUserId: string
   createdAt?: Date | string
   supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedOneWithoutFileMetadataInput
 }
 
 export type FileMetadataCreateOrConnectWithoutReplacesInput = {
@@ -1195,6 +1231,7 @@ export type FileMetadataUpdateWithoutSupersededByInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFileMetadataNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
   replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateWithoutSupersededByInput = {
@@ -1215,6 +1252,7 @@ export type FileMetadataUncheckedUpdateWithoutSupersededByInput = {
   supersededAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUpsertWithWhereUniqueWithoutReplacesInput = {
@@ -1231,6 +1269,106 @@ export type FileMetadataUpdateWithWhereUniqueWithoutReplacesInput = {
 export type FileMetadataUpdateManyWithWhereWithoutReplacesInput = {
   where: Prisma.FileMetadataScalarWhereInput
   data: Prisma.XOR<Prisma.FileMetadataUpdateManyMutationInput, Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesInput>
+}
+
+export type FileMetadataCreateWithoutEmployeeDocumentBlobInput = {
+  id: string
+  sourceType: string
+  sourceId: string
+  purpose: string
+  version: number
+  status?: $Enums.FileMetadataStatus
+  displayName: string
+  declaredMimeType: string
+  declaredByteSize: bigint | number
+  declaredSha256: string
+  storageReference: string
+  supersededAt?: Date | string | null
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFileMetadataInput
+  company: Prisma.CompanyCreateNestedOneWithoutFileMetadataInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedFileMetadataInput
+  replaces?: Prisma.FileMetadataCreateNestedOneWithoutSupersededByInput
+  supersededBy?: Prisma.FileMetadataCreateNestedManyWithoutReplacesInput
+}
+
+export type FileMetadataUncheckedCreateWithoutEmployeeDocumentBlobInput = {
+  id: string
+  tenantId: string
+  companyId: string
+  sourceType: string
+  sourceId: string
+  purpose: string
+  version: number
+  status?: $Enums.FileMetadataStatus
+  displayName: string
+  declaredMimeType: string
+  declaredByteSize: bigint | number
+  declaredSha256: string
+  storageReference: string
+  replacesFileMetadataId?: string | null
+  supersededAt?: Date | string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  supersededBy?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutReplacesInput
+}
+
+export type FileMetadataCreateOrConnectWithoutEmployeeDocumentBlobInput = {
+  where: Prisma.FileMetadataWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileMetadataCreateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedCreateWithoutEmployeeDocumentBlobInput>
+}
+
+export type FileMetadataUpsertWithoutEmployeeDocumentBlobInput = {
+  update: Prisma.XOR<Prisma.FileMetadataUpdateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedUpdateWithoutEmployeeDocumentBlobInput>
+  create: Prisma.XOR<Prisma.FileMetadataCreateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedCreateWithoutEmployeeDocumentBlobInput>
+  where?: Prisma.FileMetadataWhereInput
+}
+
+export type FileMetadataUpdateToOneWithWhereWithoutEmployeeDocumentBlobInput = {
+  where?: Prisma.FileMetadataWhereInput
+  data: Prisma.XOR<Prisma.FileMetadataUpdateWithoutEmployeeDocumentBlobInput, Prisma.FileMetadataUncheckedUpdateWithoutEmployeeDocumentBlobInput>
+}
+
+export type FileMetadataUpdateWithoutEmployeeDocumentBlobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumFileMetadataStatusFieldUpdateOperationsInput | $Enums.FileMetadataStatus
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredMimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredByteSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  declaredSha256?: Prisma.StringFieldUpdateOperationsInput | string
+  storageReference?: Prisma.StringFieldUpdateOperationsInput | string
+  supersededAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFileMetadataNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFileMetadataNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
+  replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
+  supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+}
+
+export type FileMetadataUncheckedUpdateWithoutEmployeeDocumentBlobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumFileMetadataStatusFieldUpdateOperationsInput | $Enums.FileMetadataStatus
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredMimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredByteSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  declaredSha256?: Prisma.StringFieldUpdateOperationsInput | string
+  storageReference?: Prisma.StringFieldUpdateOperationsInput | string
+  replacesFileMetadataId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supersededAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
 }
 
 export type FileMetadataCreateManyTenantInput = {
@@ -1270,6 +1408,7 @@ export type FileMetadataUpdateWithoutTenantInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
   replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
   supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateWithoutTenantInput = {
@@ -1290,6 +1429,7 @@ export type FileMetadataUncheckedUpdateWithoutTenantInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateManyWithoutTenantInput = {
@@ -1347,6 +1487,7 @@ export type FileMetadataUpdateWithoutCreatedByInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFileMetadataNestedInput
   replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
   supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateWithoutCreatedByInput = {
@@ -1366,6 +1507,7 @@ export type FileMetadataUncheckedUpdateWithoutCreatedByInput = {
   supersededAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1422,6 +1564,7 @@ export type FileMetadataUpdateWithoutCompanyInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
   replaces?: Prisma.FileMetadataUpdateOneWithoutSupersededByNestedInput
   supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateWithoutCompanyInput = {
@@ -1441,6 +1584,7 @@ export type FileMetadataUncheckedUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateManyWithoutCompanyInput = {
@@ -1496,6 +1640,7 @@ export type FileMetadataUpdateWithoutReplacesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFileMetadataNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFileMetadataNestedInput
   supersededBy?: Prisma.FileMetadataUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateWithoutReplacesInput = {
@@ -1514,6 +1659,7 @@ export type FileMetadataUncheckedUpdateWithoutReplacesInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supersededBy?: Prisma.FileMetadataUncheckedUpdateManyWithoutReplacesNestedInput
+  employeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateOneWithoutFileMetadataNestedInput
 }
 
 export type FileMetadataUncheckedUpdateManyWithoutReplacesInput = {
@@ -1587,6 +1733,7 @@ export type FileMetadataSelect<ExtArgs extends runtime.Types.Extensions.Internal
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   replaces?: boolean | Prisma.FileMetadata$replacesArgs<ExtArgs>
   supersededBy?: boolean | Prisma.FileMetadata$supersededByArgs<ExtArgs>
+  employeeDocumentBlob?: boolean | Prisma.FileMetadata$employeeDocumentBlobArgs<ExtArgs>
   _count?: boolean | Prisma.FileMetadataCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fileMetadata"]>
 
@@ -1665,6 +1812,7 @@ export type FileMetadataInclude<ExtArgs extends runtime.Types.Extensions.Interna
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   replaces?: boolean | Prisma.FileMetadata$replacesArgs<ExtArgs>
   supersededBy?: boolean | Prisma.FileMetadata$supersededByArgs<ExtArgs>
+  employeeDocumentBlob?: boolean | Prisma.FileMetadata$employeeDocumentBlobArgs<ExtArgs>
   _count?: boolean | Prisma.FileMetadataCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FileMetadataIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1688,6 +1836,7 @@ export type $FileMetadataPayload<ExtArgs extends runtime.Types.Extensions.Intern
     createdBy: Prisma.$UserPayload<ExtArgs>
     replaces: Prisma.$FileMetadataPayload<ExtArgs> | null
     supersededBy: Prisma.$FileMetadataPayload<ExtArgs>[]
+    employeeDocumentBlob: Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2106,6 +2255,7 @@ export interface Prisma__FileMetadataClient<T, Null = never, ExtArgs extends run
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   replaces<T extends Prisma.FileMetadata$replacesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FileMetadata$replacesArgs<ExtArgs>>): Prisma.Prisma__FileMetadataClient<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   supersededBy<T extends Prisma.FileMetadata$supersededByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FileMetadata$supersededByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  employeeDocumentBlob<T extends Prisma.FileMetadata$employeeDocumentBlobArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FileMetadata$employeeDocumentBlobArgs<ExtArgs>>): Prisma.Prisma__HrEmployeeDocumentBlobClient<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2593,6 +2743,25 @@ export type FileMetadata$supersededByArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.FileMetadataScalarFieldEnum | Prisma.FileMetadataScalarFieldEnum[]
+}
+
+/**
+ * FileMetadata.employeeDocumentBlob
+ */
+export type FileMetadata$employeeDocumentBlobArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeDocumentBlob
+   */
+  select?: Prisma.HrEmployeeDocumentBlobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeDocumentBlob
+   */
+  omit?: Prisma.HrEmployeeDocumentBlobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeDocumentBlobInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeDocumentBlobWhereInput
 }
 
 /**

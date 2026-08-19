@@ -49,10 +49,11 @@ export class OutputService {
     const capability = input.request.format === 'preview'
       ? 'platform.output.preview'
       : 'platform.output.export';
+    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : null;
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
-      requiredCapabilities: input.reportCode.startsWith('hr.payroll') ? [capability, 'hr.payroll.read'] : [capability],
+      requiredCapabilities: hrCapability ? [capability, hrCapability] : [capability],
     });
     const trusted: TrustedCompanyActorContext = {
       tenantId: context.principal.tenantId,
@@ -173,6 +174,9 @@ export class OutputService {
     if (reportCode === 'hr.payroll-runs') {
       return this.createPayrollRunsSnapshot(transaction, context, request);
     }
+    if (reportCode === 'hr.employee-letter') {
+      return this.createEmployeeLetterSnapshot(transaction, context, request);
+    }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
     }
@@ -212,6 +216,40 @@ export class OutputService {
       }],
       sourceLabel: arabic ? 'سجل شركات بصير' : 'Baseer company registry',
     };
+  }
+
+  private async createEmployeeLetterSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const letterId = typeof request.filters['letterId'] === 'string' ? request.filters['letterId'] : null;
+    if (!letterId || Object.keys(request.filters).length !== 1) throw new BadRequestException('An employee-letter output requires exactly one letterId filter.');
+    const letter = await transaction.hrEmployeeLetter.findFirst({ where: { id: letterId, tenantId: context.tenantId, companyId: context.companyId } });
+    if (!letter) throw new NotFoundException('The issued employee letter was not found.');
+    if (letter.status !== 'ISSUED') throw new NotFoundException('The issued employee letter is not available for output.');
+    const canonical = canonicalJson(letter.snapshotJson);
+    if (createHash('sha256').update(canonical).digest('hex') !== letter.snapshotSha256) throw new ConflictException('The immutable employee-letter snapshot failed verification.');
+    const snapshot = letter.snapshotJson as Record<string, unknown>;
+    const employee = snapshot['employee'] as Record<string, unknown> | undefined;
+    const company = snapshot['company'] as Record<string, unknown> | undefined;
+    if (!employee || !company || typeof snapshot['letterNumber'] !== 'string' || typeof snapshot['issuedOn'] !== 'string') throw new ConflictException('The immutable employee-letter snapshot is invalid.');
+    const arabic = request.locale === 'ar';
+    const employeeName = arabic ? employee['nameAr'] : (employee['nameEn'] || employee['nameAr']);
+    const companyName = arabic ? company['nameAr'] : (company['nameEn'] || company['nameAr']);
+    const type = letter.letterType === 'SALARY_CERTIFICATE' ? (arabic ? 'تعريف بالراتب' : 'Salary Certificate') : (arabic ? 'شهادة خدمة' : 'Service Certificate');
+    const rows: Array<Record<string, string | number | null>> = [
+      { field: arabic ? 'رقم الخطاب' : 'Letter number', value: snapshot['letterNumber'] as string },
+      { field: arabic ? 'الموظف' : 'Employee', value: String(employeeName ?? '') },
+      { field: arabic ? 'رقم الموظف' : 'Employee no.', value: String(employee['employeeNumber'] ?? '') },
+      { field: arabic ? 'المسمى الوظيفي' : 'Job title', value: String(employee['jobTitle'] ?? '') },
+      { field: arabic ? 'تاريخ التعيين' : 'Hire date', value: String(employee['hireDate'] ?? '') },
+      ...(letter.letterType === 'SALARY_CERTIFICATE' ? [{ field: arabic ? 'إجمالي الراتب الشهري' : 'Monthly gross salary', value: typeof snapshot['monthlyGross'] === 'string' ? snapshot['monthlyGross'] : (arabic ? 'غير متاح' : 'Not available') }] : []),
+    ];
+    const dateResolution = await this.businessDate.resolveInTransaction(transaction, context);
+    const branding = await transaction.companyBranding.findFirst({ where: { companyId: context.companyId, tenantId: context.tenantId }, select: { logoFileMetadataId: true } });
+    const logo = await this.readPrintLogo(transaction, context, branding?.logoFileMetadataId ?? null);
+    return { snapshotId: randomUUID(), reportCode: 'hr.employee-letter', templateVersion: letter.templateVersion, title: type, direction: arabic ? 'rtl' : 'ltr', locale: request.locale, generatedAtRiyadh: dateResolution.generatedAt, companies: [{ id: context.companyId, name: String(companyName ?? '') }], companyLogoDataUri: logo, periodLabel: `${snapshot['letterNumber']} · ${snapshot['issuedOn']}`, taxPresentation: 'gross', columns: [{ key: 'field', label: arabic ? 'البيان' : 'Field', kind: 'text', width: 38 }, { key: 'value', label: arabic ? 'القيمة' : 'Value', kind: 'text', width: 62 }], rows, sourceLabel: arabic ? 'خطاب موظف صادر من بصير' : 'Issued Baseer employee letter' };
   }
 
   private async createPayrollRunSnapshot(
@@ -388,6 +426,13 @@ export class OutputService {
       },
     });
   }
+}
+
+function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== 'object') return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(',')}}`;
 }
 
 

@@ -161,9 +161,31 @@ export type HrEmployee = Prisma.HrEmployeeModel
  */
 export type HrEmployeeLeave = Prisma.HrEmployeeLeaveModel
 /**
- * Model HrEmployeeService
+ * Model HrEmployeeDocumentBlob
  * A personnel service is operational until its associated cost is issued.
  * The financial document is immutable and is never recreated by editing this record.
+ * Blob lifecycle is independent of FileMetadata's reservation workflow. The
+ * local storage reference is never returned to clients.
+ */
+export type HrEmployeeDocumentBlob = Prisma.HrEmployeeDocumentBlobModel
+/**
+ * Model HrEmployeeDocument
+ * 
+ */
+export type HrEmployeeDocument = Prisma.HrEmployeeDocumentModel
+/**
+ * Model HrEmployeeDocumentVersion
+ * 
+ */
+export type HrEmployeeDocumentVersion = Prisma.HrEmployeeDocumentVersionModel
+/**
+ * Model HrEmployeeLetter
+ * 
+ */
+export type HrEmployeeLetter = Prisma.HrEmployeeLetterModel
+/**
+ * Model HrEmployeeService
+ * 
  */
 export type HrEmployeeService = Prisma.HrEmployeeServiceModel
 /**

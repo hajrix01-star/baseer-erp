@@ -78,9 +78,13 @@ import { HrAdvanceService } from './hr/hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr/hr-administrative-deduction.service.js';
 import { HrPayrollService } from './hr/hr-payroll.service.js';
 import { HrLeaveService } from './hr/hr-leave.service.js';
+import { HrEmployeeDocumentController } from './hr/hr-employee-document.controller.js';
+import { HrEmployeeDocumentService } from './hr/hr-employee-document.service.js';
+import { HrEmployeeLetterController } from './hr/hr-employee-letter.controller.js';
+import { HrEmployeeLetterService } from './hr/hr-employee-letter.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -133,6 +137,8 @@ import { HrLeaveService } from './hr/hr-leave.service.js';
     HrAdministrativeDeductionService,
     HrPayrollService,
     HrLeaveService,
+    HrEmployeeDocumentService,
+    HrEmployeeLetterService,
   ],
 })
 export class AppModule {}
