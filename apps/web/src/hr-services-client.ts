@@ -40,6 +40,7 @@ export function listHrEmployees(session: ActiveSession, query: { status?: HrEmpl
   return api<HrEmployeesReceipt>(session, `/hr/employees${parameters.size ? `?${parameters}` : ""}`);
 }
 export function createHrEmployeeService(session: ActiveSession, payload: unknown) { return api(session, "/hr/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
+export function recordHrEmployeeServiceAndIssueCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/record-and-issue", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function issueHrEmployeeServiceCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/issue-cost", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrEmployeeServices(session: ActiveSession, query: { employeeId?: string; serviceType?: HrService["serviceType"]; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: string; expiryAfter?: string; cursor?: string; pageSize?: number } = {}) {
   const parameters = new URLSearchParams();

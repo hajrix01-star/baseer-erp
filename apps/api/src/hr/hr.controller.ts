@@ -4,6 +4,8 @@ import {
   createHrEmployeeRequestSchema,
   createHrEmployeePromotionRequestSchema,
   createHrEmployeeServiceRequestSchema,
+  recordHrEmployeeServiceAndIssueCostRequestSchema,
+  recordHrEmployeeServiceAndIssueCostReceiptSchema,
   updateHrEmployeeServiceRequestSchema,
   cancelHrEmployeeServiceRequestSchema,
   renewHrEmployeeServiceRequestSchema,
@@ -159,6 +161,17 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
     return hrEmployeeEntityReceiptSchema.parse(await this.hr.createService(context, input, idempotencyKey));
+  }
+
+  /** Records the service and its paid supplier invoice together; neither is committed alone. */
+  @Post('services/record-and-issue')
+  @HttpCode(201)
+  async recordServiceAndIssueCost(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = recordHrEmployeeServiceAndIssueCostRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee service registration request.');
+    const context = await this.authorize(authorization, companyId, [WRITE_CAPABILITY, 'finance.purchase_expense.create']);
+    const { idempotencyKey, ...request } = parsed.data;
+    return recordHrEmployeeServiceAndIssueCostReceiptSchema.parse(await this.documents.recordEmployeeServiceAndIssueCost({ context, idempotencyKey, request }));
   }
 
   @Get('services')

@@ -1,0 +1,16 @@
+.hr-services-form .administration-form-section-title {
+  grid-column: 1 / -1;
+  margin: 0.5rem 0 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: var(--font-body);
+}
+
+.hr-services-form .administration-form-checkbox {
+  display: flex;
+  align-items: center;
+  align-self: end;
+  min-height: var(--control-height);
+  gap: 0.5rem;
+}

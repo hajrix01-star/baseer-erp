@@ -8,6 +8,8 @@ import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, Financ
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 import { FinanceVaultService } from './finance-vault.service.js';
+import { HrService, type EmployeeServiceCreateInput } from '../hr/hr.service.js';
+import type { RecordHrEmployeeServiceAndIssueCostRequest } from '@baseer-erp/contracts';
 
 const DOCUMENT_OPERATION = 'finance.purchase_expense.create';
 const BATCH_OPERATION = 'finance.purchase_expense.batch.create';
@@ -23,12 +25,14 @@ export type RecurringExpensePaymentReceipt = PurchaseExpenseReceipt & Readonly<{
 export type RecurringExpensePaymentBatchRequest = Readonly<{ businessDate: Date; items: readonly Omit<RecurringExpensePaymentRequest, 'businessDate'>[] }>;
 export type RecurringExpensePaymentBatchReceipt = Readonly<{ batchId: string; batchNumber: string; businessDate: Date; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; payments: readonly RecurringExpensePaymentReceipt[] }>;
 export type IssueEmployeeServiceCostRequest = Readonly<{ serviceId: string; businessDate: Date; grossAmount: string; isTaxable: boolean; allocations: readonly PaymentAllocation[]; supplierInvoiceNumber?: string | undefined; supplierInvoiceMissingReason?: string | undefined; supplierInvoiceDate?: Date | undefined; notes?: string | undefined }>;
+export type RecordEmployeeServiceAndIssueCostRequest = Readonly<Omit<RecordHrEmployeeServiceAndIssueCostRequest, 'idempotencyKey' | 'allocations'>> & Readonly<{ allocations: readonly PaymentAllocation[] }>;
+export type RecordEmployeeServiceAndIssueCostReceipt = Readonly<{ serviceId: string; documentId: string; documentNumber: string; journalEntryId: string; replayed: boolean }>;
  type StoredRecurringExpensePaymentBatchReceipt = Omit<RecurringExpensePaymentBatchReceipt, 'businessDate'> & { businessDate: string };
  type StoredPurchaseExpenseBatchReceipt = Omit<PurchaseExpenseBatchReceipt, 'businessDate'> & { businessDate: string };
 
 @Injectable()
 export class PurchaseExpenseService {
-  constructor(private readonly db: DatabaseService, private readonly idem: IdempotencyService, private readonly serials: DocumentSerialService, private readonly journals: JournalPostingService, private readonly vaults: FinanceVaultService, private readonly dates: BusinessDateService) {}
+  constructor(private readonly db: DatabaseService, private readonly idem: IdempotencyService, private readonly serials: DocumentSerialService, private readonly journals: JournalPostingService, private readonly vaults: FinanceVaultService, private readonly dates: BusinessDateService, private readonly hr: HrService) {}
 
   async create(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: PurchaseExpenseRequest }): Promise<PurchaseExpenseReceipt> {
     return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
@@ -102,6 +106,31 @@ export class PurchaseExpenseService {
       await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: document } });
       return document;
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different employee-service cost data.'); throw error; });
+  }
+
+  /** One user action: the operational service, paid supplier invoice and employee movement are atomic. */
+  async recordEmployeeServiceAndIssueCost(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: RecordEmployeeServiceAndIssueCostRequest }): Promise<RecordEmployeeServiceAndIssueCostReceipt> {
+    return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
+      const request = this.normaliseRecordedEmployeeService(input.request);
+      const begun = await this.idem.beginInTransaction(tx, input.context, { operation: 'hr.employee_service.record_and_issue', key: input.idempotencyKey, request: this.recordedEmployeeServicePayload(request), expiresAt: new Date(Date.now() + 86_400_000) });
+      if (begun.kind === 'replay') return begun.response.body as RecordEmployeeServiceAndIssueCostReceipt;
+      if (begun.kind === 'in-progress') throw new ConflictException('This employee-service request is already being processed.');
+      const service = await this.hr.createServiceForFinancialIssueInTransaction(tx, input.context, this.employeeServiceCreateInput(request));
+      const document = await this.postDocument(tx, input.context, {
+        kind: 'EXPENSE', settlementKind: 'PAID', categoryId: request.categoryId, supplierId: request.supplierId,
+        businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations,
+        ...(request.supplierInvoiceNumber ? { supplierInvoiceNumber: request.supplierInvoiceNumber } : {}),
+        ...(request.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: request.supplierInvoiceMissingReason } : {}),
+        ...(request.supplierInvoiceDate ? { supplierInvoiceDate: request.supplierInvoiceDate } : {}),
+        ...(request.notes ? { notes: request.notes } : {}),
+      }, `hr-employee-service-record:${input.idempotencyKey}`);
+      await tx.hrEmployeeService.update({ where: { id: service.id }, data: { status: HrEmployeeServiceStatus.ISSUED, outflowDocumentId: document.documentId } });
+      await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, employeeId: service.employeeId, journalEntryId: document.journalEntryId, movementType: HrEmployeeFinancialMovementType.SERVICE_COST, businessDate: request.businessDate, amount: request.grossAmount, sourceReference: document.documentNumber, description: request.notes ?? null } });
+      const receipt: RecordEmployeeServiceAndIssueCostReceipt = { serviceId: service.id, documentId: document.documentId, documentNumber: document.documentNumber, journalEntryId: document.journalEntryId, replayed: false };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, actorUserId: input.context.actorUserId, action: 'hr.employee_service.recorded_and_cost_issued', entityType: 'HrEmployeeService', entityId: service.id, requestId: `hr-employee-service-record:${input.idempotencyKey}`, afterJson: receipt as unknown as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different employee-service data.'); throw error; });
   }
 
   async createRecurringPayment(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: RecurringExpensePaymentRequest }): Promise<RecurringExpensePaymentReceipt> {
@@ -294,12 +323,20 @@ export class PurchaseExpenseService {
   private async account(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, key: string) { const account = await tx.financeAccount.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, systemKey: key, status: FinanceAccountStatus.ACTIVE }, select: { id: true } }); if (!account) throw new BadRequestException('The company financial setup is incomplete.'); return account.id; }
   private normalise(request: PurchaseExpenseRequest): PurchaseExpenseRequest { const invoice = request.supplierInvoiceNumber?.trim(); const missingReason = request.supplierInvoiceMissingReason?.trim(); if (!invoice && !missingReason) throw new BadRequestException('Provide the supplier invoice number or a missing reason.'); if (invoice && missingReason) throw new BadRequestException('Provide an invoice number or a missing reason, not both.'); if (request.supplierInvoiceDate && request.supplierInvoiceDate > request.businessDate) throw new BadRequestException('Supplier invoice date cannot be after the batch date.'); return { ...request, ...(invoice ? { supplierInvoiceNumber: invoice } : {}), ...(missingReason ? { supplierInvoiceMissingReason: missingReason } : {}), ...(request.notes?.trim() ? { notes: request.notes.trim() } : {}) }; }
   private normaliseEmployeeServiceCost(request: IssueEmployeeServiceCostRequest): IssueEmployeeServiceCostRequest { const invoice = request.supplierInvoiceNumber?.trim(); const missingReason = request.supplierInvoiceMissingReason?.trim(); if (!invoice && !missingReason) throw new BadRequestException('Provide the supplier invoice number or a missing reason.'); if (invoice && missingReason) throw new BadRequestException('Provide an invoice number or a missing reason, not both.'); if (request.supplierInvoiceDate && request.supplierInvoiceDate > request.businessDate) throw new BadRequestException('Supplier invoice date cannot be after the business date.'); return { ...request, ...(invoice ? { supplierInvoiceNumber: invoice } : {}), ...(missingReason ? { supplierInvoiceMissingReason: missingReason } : {}), ...(request.notes?.trim() ? { notes: request.notes.trim() } : {}) }; }
+  private normaliseRecordedEmployeeService(request: RecordEmployeeServiceAndIssueCostRequest): RecordEmployeeServiceAndIssueCostRequest {
+    const cost = this.normaliseEmployeeServiceCost({ serviceId: 'recorded-service', businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations, supplierInvoiceNumber: request.supplierInvoiceNumber, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason, supplierInvoiceDate: request.supplierInvoiceDate, notes: request.notes });
+    return { ...request, ...cost, employeeId: request.employeeId, serviceType: request.serviceType, supplierId: request.supplierId, categoryId: request.categoryId, referenceNumber: request.referenceNumber?.trim() || undefined };
+  }
+  private employeeServiceCreateInput(request: RecordEmployeeServiceAndIssueCostRequest): EmployeeServiceCreateInput {
+    return { employeeId: request.employeeId, serviceType: request.serviceType, ...(request.referenceNumber ? { referenceNumber: request.referenceNumber } : {}), ...(request.issueDate ? { issueDate: request.issueDate } : {}), ...(request.expiryDate ? { expiryDate: request.expiryDate } : {}), ...(request.visaDurationMonths ? { visaDurationMonths: request.visaDurationMonths } : {}), supplierId: request.supplierId, categoryId: request.categoryId, ...(request.notes ? { notes: request.notes } : {}) };
+  }
   private normaliseBatch(request: PurchaseExpenseBatchRequest): PurchaseExpenseBatchRequest { if (!request.items.length || request.items.length > 25) throw new BadRequestException('A batch must contain from 1 to 25 invoices.'); const items = request.items.map((item) => { const { businessDate: _businessDate, ...normalised } = this.normalise({ ...item, businessDate: request.businessDate }); return normalised; }); const notes = request.notes?.trim(); return { businessDate: request.businessDate, items, ...(notes ? { notes } : {}) }; }
   private storeBatchReceipt(receipt: PurchaseExpenseBatchReceipt): StoredPurchaseExpenseBatchReceipt { return { ...receipt, businessDate: receipt.businessDate.toISOString() }; }
   private restoreBatchReceipt(value: unknown): PurchaseExpenseBatchReceipt { const stored = value as StoredPurchaseExpenseBatchReceipt; return { ...stored, businessDate: new Date(stored.businessDate) }; }
   private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount, paymentMethod: item.paymentMethod ?? null })), notes: request.notes ?? null } as const; }
   private batchPayload(request: PurchaseExpenseBatchRequest) { return { businessDate: request.businessDate.toISOString(), notes: request.notes ?? null, items: request.items.map((item) => this.payload({ ...item, businessDate: request.businessDate })) } as const; }
   private employeeServiceCostPayload(request: IssueEmployeeServiceCostRequest) { return { serviceId: request.serviceId, businessDate: request.businessDate.toISOString(), grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod ?? null })), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }
+  private recordedEmployeeServicePayload(request: RecordEmployeeServiceAndIssueCostRequest) { return { employeeId: request.employeeId, serviceType: request.serviceType, referenceNumber: request.referenceNumber ?? null, issueDate: request.issueDate?.toISOString() ?? null, expiryDate: request.expiryDate?.toISOString() ?? null, visaDurationMonths: request.visaDurationMonths ?? null, supplierId: request.supplierId, categoryId: request.categoryId, ...this.employeeServiceCostPayload({ serviceId: 'recorded-service', businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations, supplierInvoiceNumber: request.supplierInvoiceNumber, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason, supplierInvoiceDate: request.supplierInvoiceDate, notes: request.notes }) } as const; }
   private recurringPayload(request: RecurringExpensePaymentRequest) { return { profileId: request.profileId, businessDate: request.businessDate.toISOString(), coverageYear: request.coverageYear, coverageStartMonth: request.coverageStartMonth, grossAmount: request.grossAmount, isTaxable: request.isTaxable, vaultId: request.vaultId ?? null, allocations: request.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod ?? null })), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }
   private normaliseRecurringPayment(request: RecurringExpensePaymentRequest): RecurringExpensePaymentRequest {
     const invoice = request.supplierInvoiceNumber?.trim(); const missingReason = request.supplierInvoiceMissingReason?.trim();

@@ -15,7 +15,7 @@ type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
 type EmployeePromotionListQuery = Readonly<{ cursor?: string; pageSize: number }>;
-type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
+export type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceUpdateInput = Omit<UpdateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceCancelInput = Omit<CancelHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceRenewInput = Omit<RenewHrEmployeeServiceRequest, 'idempotencyKey'>;
@@ -207,6 +207,32 @@ export class HrService {
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);
+  }
+
+  /**
+   * Creates a service inside the caller's transaction.  This is used only by
+   * the single-step service-and-invoice workflow, so the service, invoice and
+   * employee financial movement either all commit or all roll back together.
+   */
+  async createServiceForFinancialIssueInTransaction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, raw: EmployeeServiceCreateInput) {
+    const input = serviceCreateInput(raw);
+    const employee = await tx.hrEmployee.findFirst({
+      where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+      select: { id: true },
+    });
+    if (!employee) throw new BadRequestException('Choose an active employee from this company.');
+    this.assertServiceTiming(input.issueDate, input.expiryDate);
+    this.assertServiceTypeRequirements(input.serviceType, input.referenceNumber, input.expiryDate, input.visaDurationMonths);
+    const references = await this.resolveServiceReferences(tx, context, input.serviceType, input.supplierId, input.categoryId);
+    await this.assertServiceReferences(tx, context, references.supplierId, references.categoryId);
+    if (!references.supplierId || !references.categoryId) throw new BadRequestException('Choose an active supplier and expense category before recording the service.');
+    const id = randomUUID();
+    const service = await tx.hrEmployeeService.create({
+      data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, ...references, status: HrEmployeeServiceStatus.DRAFT },
+      select: { id: true, employeeId: true },
+    });
+    await this.audit(tx, context, 'hr.employee_service.recorded_with_cost', 'HrEmployeeService', id, null, input);
+    return service;
   }
 
   async listServices(context: TrustedCompanyActorContext, query: EmployeeServiceListQuery) {

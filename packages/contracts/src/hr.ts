@@ -182,6 +182,35 @@ export const issueHrEmployeeServiceCostRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Records an employee service and posts its paid supplier invoice as one operation. */
+export const recordHrEmployeeServiceAndIssueCostRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  serviceType: hrEmployeeServiceTypeSchema,
+  referenceNumber: z.string().trim().max(160).optional(),
+  issueDate: hrDateSchema.optional(),
+  expiryDate: hrDateSchema.optional(),
+  visaDurationMonths: z.coerce.number().int().min(1).max(5).optional(),
+  supplierId: z.string().uuid(),
+  categoryId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  grossAmount: hrAmountSchema.refine((value) => Number(value) > 0),
+  isTaxable: z.boolean(),
+  allocations: z.array(z.object({ vaultId: z.string().uuid(), grossAmount: hrAmountSchema, paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional() }).strict()).min(1).max(25),
+  supplierInvoiceNumber: z.string().trim().max(160).optional(),
+  supplierInvoiceMissingReason: z.string().trim().max(500).optional(),
+  supplierInvoiceDate: hrDateSchema.optional(),
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const recordHrEmployeeServiceAndIssueCostReceiptSchema = z.object({
+  serviceId: z.string().uuid(),
+  documentId: z.string().uuid(),
+  documentNumber: z.string().max(80),
+  journalEntryId: z.string().uuid(),
+  replayed: z.boolean(),
+}).strict();
+
 /** Money paid before payroll. Allocations may split a single advance across vaults. */
 export const issueHrEmployeeAdvanceRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
@@ -644,6 +673,7 @@ export type UpdateHrEmployeeServiceRequest = z.infer<typeof updateHrEmployeeServ
 export type CancelHrEmployeeServiceRequest = z.infer<typeof cancelHrEmployeeServiceRequestSchema>;
 export type RenewHrEmployeeServiceRequest = z.infer<typeof renewHrEmployeeServiceRequestSchema>;
 export type IssueHrEmployeeServiceCostRequest = z.infer<typeof issueHrEmployeeServiceCostRequestSchema>;
+export type RecordHrEmployeeServiceAndIssueCostRequest = z.infer<typeof recordHrEmployeeServiceAndIssueCostRequestSchema>;
 export type IssueHrEmployeeAdvanceRequest = z.infer<typeof issueHrEmployeeAdvanceRequestSchema>;
 export type SettleHrEmployeeAdvanceDirectlyRequest = z.infer<typeof settleHrEmployeeAdvanceDirectlyRequestSchema>;
 export type DeferHrEmployeeAdvanceRequest = z.infer<typeof deferHrEmployeeAdvanceRequestSchema>;
