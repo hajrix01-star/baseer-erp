@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { ADMINISTRATION_PERMISSION_CATALOG } from "../administration/administration-permissions.js";
+import { ADMINISTRATION_PERMISSION_CATALOG, SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
 import { DatabaseService } from "../database/database.service.js";
 import {
   CompanyStatus,
@@ -10,6 +10,10 @@ import {
   IdentityTokenError,
   IdentityTokenService,
 } from "../identity/identity-token.service.js";
+
+const COMPANY_MANAGER_HR_CAPABILITIES = SYSTEM_ROLE_TEMPLATES.find(
+  (role) => role.code === "BASEER_COMPANY_MANAGER",
+)?.permissions.filter((permission) => permission.startsWith("hr.")) ?? [];
 
 @Injectable()
 export class CompanyAccessService {
@@ -56,6 +60,29 @@ export class CompanyAccessService {
           session.expiresAt <= now
         )
           throw this.unauthorized();
+        // Existing tenants can have a system manager role created before the
+        // HR capability catalogue grew. The paired SQL migration covers normal
+        // deployments; this idempotent guard also repairs a running local
+        // instance before its migration command is available. Custom roles are
+        // deliberately untouched.
+        const companyManager = await transaction.role.findFirst({
+          where: {
+            tenantId: claims.tenantId,
+            code: "BASEER_COMPANY_MANAGER",
+            isSystem: true,
+          },
+          select: { id: true },
+        });
+        if (companyManager && COMPANY_MANAGER_HR_CAPABILITIES.length) {
+          await transaction.rolePermission.createMany({
+            data: COMPANY_MANAGER_HR_CAPABILITIES.map((permissionCode) => ({
+              tenantId: claims.tenantId,
+              roleId: companyManager.id,
+              permissionCode,
+            })),
+            skipDuplicates: true,
+          });
+        }
         if (owner) {
           return transaction.company
             .findMany({
