@@ -42,21 +42,12 @@ const emptyDeferral = (advanceId = ""): DeferralForm => ({ advanceId, businessDa
 const emptyDeduction = (): DeductionForm => ({ employeeId: "", businessDate: today(), amount: "", description: "", plannedPayrollDate: "" });
 const emptyDeductionDeferral = (deductionId = ""): DeductionDeferralForm => ({ deductionId, businessDate: today(), deferredUntil: futureDate(30), reason: "" });
 const emptyDeductionCancellation = (deductionId = ""): DeductionCancellationForm => ({ deductionId, businessDate: today(), reason: "" });
-const HrPayrollWorkspace = lazy(() => import("./hr-payroll-workspace").then((module) => ({ default: module.HrPayrollWorkspace })));
-const HrLeaveWorkspace = lazy(() => import("./hr-leave-workspace").then((module) => ({ default: module.HrLeaveWorkspace })));
-const HrServicesWorkspace = lazy(() => import("./hr-services-workspace").then((module) => ({ default: module.HrServicesWorkspace })));
-const HrSalaryToolsWorkspace = lazy(() => import("./hr-salary-tools-workspace").then((module) => ({ default: module.HrSalaryToolsWorkspace })));
 const HrEmployeeProfileDialog = lazy(() => import("./hr-employee-profile-dialog").then((module) => ({ default: module.HrEmployeeProfileDialog })));
 const HrCompensationAgreementDialog = lazy(() => import("./hr-compensation-agreement-dialog").then((module) => ({ default: module.HrCompensationAgreementDialog })));
 const HrEmployeeOnboardingDialog = lazy(() => import("./hr-employee-onboarding-dialog").then((module) => ({ default: module.HrEmployeeOnboardingDialog })));
 const DailySalesSignIn = lazy(() => import("./daily-sales-sign-in").then((module) => ({ default: module.DailySalesSignIn })));
 
-export function HrWorkspace({ language, section }: { language: Language; section: number }) {
-  if (section === 6) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل أدوات الراتب…" : "Loading salary tools…"}</BaseerCard>}><HrSalaryToolsWorkspace language={language} /></Suspense>;
-  return <HrWorkspaceCore language={language} section={section} />;
-}
-
-function HrWorkspaceCore({ language, section }: { language: Language; section: number }) {
+export function HrWorkspaceCore({ language, section }: { language: Language; section: number }) {
   const text = hrText(language);
   const isAdvance = section === 4;
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
@@ -207,9 +198,6 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
   const createEmployeeAction = <BaseerButton type="button" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton>;
 
   if (!session) return <Suspense fallback={<BaseerCard>{text.loading}</BaseerCard>}><DailySalesSignIn language={language} /></Suspense>;
-  if (section === 3) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل مسير الرواتب…" : "Loading payroll…"}</BaseerCard>}><HrPayrollWorkspace language={language} /></Suspense>;
-  if (section === 2) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل الإجازات والعودة…" : "Loading leave & return…"}</BaseerCard>}><HrLeaveWorkspace language={language} /></Suspense>;
-  if (section === 5) return <Suspense fallback={<BaseerCard>{language === "ar" ? "جارٍ تحميل خدمات الموظفين…" : "Loading employee services…"}</BaseerCard>}><HrServicesWorkspace language={language} /></Suspense>;
   return <BaseerWorkspace aria-label={text.title}>
     <BaseerSectionHeader eyebrow={section === 0 ? (language === "ar" ? "مركز عمل الموارد البشرية" : "HR operations hub") : undefined} title={sectionTitle} description={section === 0 ? (language === "ar" ? "صورة تشغيلية سريعة للموظفين والاستحقاقات المفتوحة قبل الانتقال إلى السجل المناسب." : "A focused operational snapshot before moving into the relevant register.") : undefined} actions={section === 1 ? <BaseerButton type="button" variant="primary" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton> : isAdvance ? <><BaseerButton type="button" variant="primary" onClick={() => void openAdvance()}>{text.addAdvance}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => { setDeductionForm(emptyDeduction()); setDeductionOpen(true); }}>{text.addAdministrativeDeduction}</BaseerButton></> : undefined} />
     {message ? <BaseerNotice tone={message.tone}>{message.text}</BaseerNotice> : null}

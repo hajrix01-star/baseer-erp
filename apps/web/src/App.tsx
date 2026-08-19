@@ -15,7 +15,7 @@ const TreasuryWorkspace = lazy(async () => ({ default: (await import('./treasury
 const FinanceAccountsWorkspace = lazy(async () => ({ default: (await import('./finance-accounts-workspace')).FinanceAccountsWorkspace }));
 const CategoriesWorkspace = lazy(async () => ({ default: (await import('./categories-workspace')).CategoriesWorkspace }));
 const HrOverviewWorkspace = lazy(async () => ({ default: (await import('./hr-overview-workspace')).HrOverviewWorkspace }));
-const HrWorkspace = lazy(async () => ({ default: (await import('./hr-workspace')).HrWorkspace }));
+const HrWorkspace = lazy(async () => ({ default: (await import('./hr-workspace-router')).HrWorkspaceRouter }));
 import { getModule, modules, type ModuleId } from './modules';
 import { activeSession, clearActiveSession, listAvailableCompanies, signOutActiveSession } from './daily-sales-client';
 import { canOpenRoute, firstAllowedRoute, visibleModules, visibleSections } from './module-access';
