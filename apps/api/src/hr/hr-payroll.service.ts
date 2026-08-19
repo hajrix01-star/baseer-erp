@@ -327,10 +327,11 @@ export class HrPayrollService {
         payrollRun: mapRun(run),
         lines: run.lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
-          grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
+          grossSalary: fixed(line.grossSalary), eligibilityCode: line.eligibilityCode, compensationMethod: line.compensationMethod,
           basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), housingAllowance: fixed(line.housingAllowance), transportAllowance: fixed(line.transportAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
           compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
+          payrollCalculationSnapshot: parsePayrollCalculationSnapshot(line.payrollCalculationSnapshotJson),
           advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
