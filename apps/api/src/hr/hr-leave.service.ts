@@ -6,10 +6,11 @@ import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { HrEmployeeLeaveStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { HrEmployeeLeaveStatus, HrEmployeeLeaveType, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 
 type CreateInput = Omit<CreateHrEmployeeLeaveRequest, 'idempotencyKey'>;
 type ReturnInput = Omit<ReturnHrEmployeeLeaveRequest, 'idempotencyKey'>;
+type LeaveListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeLeaveStatus; leaveType?: HrEmployeeLeaveType; periodFrom?: Date; periodTo?: Date; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrLeaveService {
@@ -19,15 +20,27 @@ export class HrLeaveService {
     private readonly dates: BusinessDateService,
   ) {}
 
-  async list(context: TrustedCompanyActorContext) {
+  async list(context: TrustedCompanyActorContext, query: LeaveListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const leaves = await tx.hrEmployeeLeave.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId },
+      const cursor = query.cursor ? await tx.hrEmployeeLeave.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, startDate: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-leave cursor is invalid.');
+      const rows = await tx.hrEmployeeLeave.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+          ...(query.status ? { status: query.status } : {}),
+          ...(query.leaveType ? { leaveType: query.leaveType } : {}),
+          ...(query.periodFrom || query.periodTo ? { AND: [{ ...(query.periodTo ? { startDate: { lte: query.periodTo } } : {}) }, { ...(query.periodFrom ? { endDate: { gte: query.periodFrom } } : {}) }] } : {}),
+          ...(cursor ? { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] } : {}),
+        },
         orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
-        take: 500,
+        take: query.pageSize + 1,
         include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } } },
       });
-      return leaves.map(mapLeave);
+      const hasMore = rows.length > query.pageSize;
+      const leaves = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { leaves: leaves.map(mapLeave), hasMore, nextCursor: hasMore ? leaves.at(-1)?.id ?? null : null };
     });
   }
 

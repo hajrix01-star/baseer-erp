@@ -20,6 +20,7 @@ type AdvanceIssueInput = Omit<IssueHrEmployeeAdvanceRequest, 'idempotencyKey'>;
 type AdvanceSettlementInput = Omit<SettleHrEmployeeAdvanceDirectlyRequest, 'idempotencyKey'>;
 type AdvanceDeferralInput = Omit<DeferHrEmployeeAdvanceRequest, 'idempotencyKey'>;
 type AdvanceAllocationInput = { allocations: Array<{ vaultId: string; amount: Prisma.Decimal; paymentMethod?: FinanceVaultPaymentMethod }> };
+type AdvanceListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdvanceStatus; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrAdvanceService {
@@ -32,18 +33,28 @@ export class HrAdvanceService {
     private readonly journals: JournalPostingService,
   ) {}
 
-  async list(context: TrustedCompanyActorContext) {
+  async list(context: TrustedCompanyActorContext, query: AdvanceListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const advances = await tx.hrEmployeeAdvance.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId },
+      const cursor = query.cursor ? await tx.hrEmployeeAdvance.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-advance cursor is invalid.');
+      const rows = await tx.hrEmployeeAdvance.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+          ...(query.status ? { status: query.status } : {}),
+          ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
+        },
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
-        take: 500,
+        take: query.pageSize + 1,
         include: {
           employee: { select: { id: true, nameAr: true, nameEn: true } },
           allocations: { include: { vault: { select: { id: true, nameAr: true, nameEn: true } } }, orderBy: { createdAt: 'asc' } },
         },
       });
-      return advances.map((advance) => ({
+      const hasMore = rows.length > query.pageSize;
+      const advances = hasMore ? rows.slice(0, query.pageSize) : rows;
+      const values = advances.map((advance) => ({
         id: advance.id,
         employeeId: advance.employeeId,
         employeeNameAr: advance.employee.nameAr,
@@ -65,6 +76,7 @@ export class HrAdvanceService {
           amount: allocation.amount.toFixed(4),
         })),
       }));
+      return { advances: values, hasMore, nextCursor: hasMore ? advances.at(-1)?.id ?? null : null };
     });
   }
 

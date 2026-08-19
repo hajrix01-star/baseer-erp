@@ -44,6 +44,10 @@ export function HrWorkspace({ language, section }: { language: Language; section
   const [employees, setEmployees] = useState<HrEmployee[]>([]);
   const [advances, setAdvances] = useState<HrAdvance[]>([]);
   const [deductions, setDeductions] = useState<HrAdministrativeDeduction[]>([]);
+  const [overview, setOverview] = useState({ activeEmployees: 0, employeesOnLeave: 0, openAdvances: 0, openAdministrativeDeductions: 0 });
+  const [nextEmployeeCursor, setNextEmployeeCursor] = useState<string | null>(null);
+  const [nextAdvanceCursor, setNextAdvanceCursor] = useState<string | null>(null);
+  const [nextDeductionCursor, setNextDeductionCursor] = useState<string | null>(null);
   const [configuration, setConfiguration] = useState<FinanceConfiguration | null>(null);
   const [search, setSearch] = useState("");
   const [employeeFilter, setEmployeeFilter] = useState("");
@@ -72,12 +76,17 @@ export function HrWorkspace({ language, section }: { language: Language; section
   const load = useCallback(async () => {
     const current = activeSession(); setSession(current); if (!current) { setLoading(false); return; }
     setLoading(true);
-    try { const [employeeReceipt, advanceReceipt, deductionReceipt] = await Promise.all([listHrEmployees(current), listHrAdvances(current), listHrAdministrativeDeductions(current)]); setEmployees(employeeReceipt.employees); setAdvances(advanceReceipt.advances); setDeductions(deductionReceipt.deductions); }
+    try { const [employeeReceipt, advanceReceipt, deductionReceipt] = await Promise.all([listHrEmployees(current), listHrAdvances(current, { employeeId: employeeFilter || undefined }), listHrAdministrativeDeductions(current, { employeeId: employeeFilter || undefined })]); setEmployees(employeeReceipt.employees); setOverview(employeeReceipt.summary); setAdvances(advanceReceipt.advances); setDeductions(deductionReceipt.deductions); setNextEmployeeCursor(employeeReceipt.nextCursor); setNextAdvanceCursor(advanceReceipt.nextCursor); setNextDeductionCursor(deductionReceipt.nextCursor); }
     catch (error) { setMessage(presentBaseerApiError(error, language, text.loading)); }
     finally { setLoading(false); }
-  }, [language, text.loading]);
+  }, [employeeFilter, language, text.loading]);
   useEffect(() => { void load(); }, [load]);
   const loadConfiguration = useCallback(async () => { const current = activeSession(); if (!current) return null; const next = await api<FinanceConfiguration>(current, "/finance/configuration"); setConfiguration(next); return next; }, []);
+  const searchEmployeeOptions = useCallback(async (query: string) => {
+    const current = activeSession(); if (!current) return [];
+    const receipt = await listHrEmployees(current, { search: query.trim() || undefined, pageSize: 50 });
+    return receipt.employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE").map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}` }));
+  }, [language]);
   const refreshDetail = async (employeeId: string) => { const current = activeSession(); if (current) setDetail(await getHrEmployee(current, employeeId)); };
   const loadMoreMovements = async () => {
     const current = activeSession();
@@ -87,6 +96,24 @@ export function HrWorkspace({ language, section }: { language: Language; section
       setDetail((currentDetail) => currentDetail ? { ...next, movements: [...currentDetail.movements, ...next.movements] } : currentDetail);
     } catch (error) {
       setMessage(presentBaseerApiError(error, language, text.financialRecord));
+    }
+  };
+  const loadMoreRegister = async (kind: "employees" | "advances" | "deductions") => {
+    const current = activeSession();
+    if (!current) return;
+    try {
+      if (kind === "employees" && nextEmployeeCursor) {
+        const receipt = await listHrEmployees(current, { cursor: nextEmployeeCursor });
+        setEmployees((rows) => [...rows, ...receipt.employees]); setNextEmployeeCursor(receipt.nextCursor);
+      } else if (kind === "advances" && nextAdvanceCursor) {
+        const receipt = await listHrAdvances(current, { employeeId: employeeFilter || undefined, cursor: nextAdvanceCursor });
+        setAdvances((rows) => [...rows, ...receipt.advances]); setNextAdvanceCursor(receipt.nextCursor);
+      } else if (kind === "deductions" && nextDeductionCursor) {
+        const receipt = await listHrAdministrativeDeductions(current, { employeeId: employeeFilter || undefined, cursor: nextDeductionCursor });
+        setDeductions((rows) => [...rows, ...receipt.deductions]); setNextDeductionCursor(receipt.nextCursor);
+      }
+    } catch (error) {
+      setMessage(presentBaseerApiError(error, language, text.loadMore));
     }
   };
   const showDetail = async (employee: HrEmployee) => { try { await refreshDetail(employee.id); } catch (error) { setMessage(presentBaseerApiError(error, language, text.employeeFile)); } };
@@ -149,7 +176,9 @@ export function HrWorkspace({ language, section }: { language: Language; section
   return <section className="daily-sales-workspace" aria-label={text.title}>
     <header className="administration-section-heading"><h3>{sectionTitle}</h3>{section === 1 ? <BaseerButton type="button" variant="primary" onClick={() => { setEditingEmployeeId(null); setEmployeeForm(emptyEmployee()); setEmployeeOpen(true); }}>{text.addEmployee}</BaseerButton> : isAdvance ? <><BaseerButton type="button" variant="primary" onClick={() => void openAdvance()}>{text.addAdvance}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => { setDeductionForm(emptyDeduction()); setDeductionOpen(true); }}>{text.addAdministrativeDeduction}</BaseerButton></> : null}</header>
     {message ? <p className="daily-sales-message success">{message}</p> : null}
-    {section === 0 ? <><BaseerSummaryMetricGrid><BaseerSummaryMetric label={text.active} value={String(employees.filter((item) => item.status === "ACTIVE").length)} /><BaseerSummaryMetric label={text.onLeave} value={String(employees.filter((item) => item.status === "ON_LEAVE").length)} /><BaseerSummaryMetric label={text.advances} value={String(advances.filter((item) => item.remainingAmount !== "0.0000").length)} /><BaseerSummaryMetric label={text.administrativeDeductions} value={String(deductions.filter(deductionIsOpen).length)} /></BaseerSummaryMetricGrid><BaseerCard><p>{language === "ar" ? "ملف الموظف يجمع بياناته وخدماته وحركاته المالية. السلفة تبقى ذمة مستقلة، أما الخصومات الإدارية فلا تُسوّى منها." : "The employee file combines personal data, services, and financial movements. An advance remains a separate receivable; administrative deductions never settle it."}</p></BaseerCard></> : <><BaseerFilterBar language={language} search={search} searchLabel={sectionTitle} searchPlaceholder={sectionTitle} onSearchChange={setSearch} controls={isAdvance ? <BaseerSearchSelect label={text.selectEmployee} value={employeeFilter} placeholder={text.selectEmployee} options={activeEmployees.map((item) => ({ id: item.id, label: `${item.employeeNumber} · ${language === "ar" ? item.nameAr : item.nameEn ?? item.nameAr}` }))} onChange={setEmployeeFilter} /> : undefined} appliedFilters={[...(search ? [{ id: "q", label: search, onRemove: () => setSearch("") }] : []), ...(employeeFilter ? [{ id: "employee", label: activeEmployees.find((item) => item.id === employeeFilter)?.nameAr ?? employeeFilter, onRemove: () => setEmployeeFilter("") }] : [])]} onClear={() => { setSearch(""); setEmployeeFilter(""); }} />{loading ? <BaseerCard><p>{text.loading}</p></BaseerCard> : isAdvance ? <><BaseerCard><p>{text.advancePolicy}</p><p>{text.advancePending}</p></BaseerCard>{visibleAdvances.length ? <DataTable ariaLabel={text.advances} caption={text.advances} columns={advanceColumns} rows={visibleAdvances} rowKey={(row) => row.id} /> : <BaseerCard><p>{language === "ar" ? "لا توجد سلف مسجلة." : "No advances are recorded."}</p></BaseerCard>}{visibleDeductions.length ? <DataTable ariaLabel={text.administrativeDeductions} caption={text.administrativeDeductions} columns={deductionColumns} rows={visibleDeductions} rowKey={(row) => row.id} /> : <BaseerCard><p>{language === "ar" ? "لا توجد خصومات إدارية مسجلة." : "No administrative deductions are recorded."}</p></BaseerCard>}</> : visibleEmployees.length ? <DataTable ariaLabel={sectionTitle} caption={sectionTitle} columns={employeeColumns} rows={visibleEmployees} rowKey={(row) => row.id} /> : <BaseerCard><p>{text.noEmployees}</p></BaseerCard>}</>}
+    {section === 0 ? <><BaseerSummaryMetricGrid><BaseerSummaryMetric label={text.active} value={String(overview.activeEmployees)} /><BaseerSummaryMetric label={text.onLeave} value={String(overview.employeesOnLeave)} /><BaseerSummaryMetric label={text.advances} value={String(overview.openAdvances)} /><BaseerSummaryMetric label={text.administrativeDeductions} value={String(overview.openAdministrativeDeductions)} /></BaseerSummaryMetricGrid><BaseerCard><p>{language === "ar" ? "ملف الموظف يجمع بياناته وخدماته وحركاته المالية. السلفة تبقى ذمة مستقلة، أما الخصومات الإدارية فلا تُسوّى منها." : "The employee file combines personal data, services, and financial movements. An advance remains a separate receivable; administrative deductions never settle it."}</p></BaseerCard></> : <><BaseerFilterBar language={language} search={search} searchLabel={sectionTitle} searchPlaceholder={sectionTitle} onSearchChange={setSearch} controls={isAdvance ? <BaseerSearchSelect label={text.selectEmployee} value={employeeFilter} placeholder={text.selectEmployee} options={activeEmployees.map((item) => ({ id: item.id, label: `${item.employeeNumber} · ${language === "ar" ? item.nameAr : item.nameEn ?? item.nameAr}` }))} remoteSearch={searchEmployeeOptions} onChange={setEmployeeFilter} /> : undefined} appliedFilters={[...(search ? [{ id: "q", label: search, onRemove: () => setSearch("") }] : []), ...(employeeFilter ? [{ id: "employee", label: activeEmployees.find((item) => item.id === employeeFilter)?.nameAr ?? employeeFilter, onRemove: () => setEmployeeFilter("") }] : [])]} onClear={() => { setSearch(""); setEmployeeFilter(""); }} />{loading ? <BaseerCard><p>{text.loading}</p></BaseerCard> : isAdvance ? <><BaseerCard><p>{text.advancePolicy}</p><p>{text.advancePending}</p></BaseerCard>{visibleAdvances.length ? <DataTable ariaLabel={text.advances} caption={text.advances} columns={advanceColumns} rows={visibleAdvances} rowKey={(row) => row.id} /> : <BaseerCard><p>{language === "ar" ? "لا توجد سلف مسجلة." : "No advances are recorded."}</p></BaseerCard>}{visibleDeductions.length ? <DataTable ariaLabel={text.administrativeDeductions} caption={text.administrativeDeductions} columns={deductionColumns} rows={visibleDeductions} rowKey={(row) => row.id} /> : <BaseerCard><p>{language === "ar" ? "لا توجد خصومات إدارية مسجلة." : "No administrative deductions are recorded."}</p></BaseerCard>}</> : visibleEmployees.length ? <DataTable ariaLabel={sectionTitle} caption={sectionTitle} columns={employeeColumns} rows={visibleEmployees} rowKey={(row) => row.id} /> : <BaseerCard><p>{text.noEmployees}</p></BaseerCard>}</>}
+    {!loading && section === 1 && nextEmployeeCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreRegister("employees")}>{text.loadMore}</BaseerButton> : null}
+    {!loading && isAdvance && (nextAdvanceCursor || nextDeductionCursor) ? <BaseerButton type="button" variant="secondary" onClick={() => { if (nextAdvanceCursor) void loadMoreRegister("advances"); if (nextDeductionCursor) void loadMoreRegister("deductions"); }}>{text.loadMore}</BaseerButton> : null}
 
     <BaseerDialog open={employeeOpen} title={editingEmployeeId ? text.editEmployee : text.createEmployee} language={language} busy={saving} onClose={() => { setEmployeeOpen(false); setEditingEmployeeId(null); }} footer={<><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => { setEmployeeOpen(false); setEditingEmployeeId(null); }}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="hr-employee-form" variant="primary" disabled={saving}>{text.save}</BaseerButton></>}>
       <form id="hr-employee-form" className="administration-form" onSubmit={(event) => void saveEmployee(event)}>

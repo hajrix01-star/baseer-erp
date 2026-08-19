@@ -30,11 +30,15 @@ export type HrEmployeeServiceRecord = HrService & {
   renewalOfServiceId: string | null;
 };
 
-type HrEmployeesReceipt = { employees: HrEmployee[] };
+type HrEmployeesReceipt = { employees: HrEmployee[]; hasMore: boolean; nextCursor: string | null };
 type HrEmployeeServicesReceipt = { services: HrEmployeeServiceRecord[]; hasMore: boolean; nextCursor: string | null };
 type HrEmployeeServiceDetail = { service: HrEmployeeServiceRecord };
 
-export function listHrEmployees(session: ActiveSession) { return api<HrEmployeesReceipt>(session, "/hr/employees"); }
+export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployee["status"]; search?: string; cursor?: string; pageSize?: number } = {}) {
+  const parameters = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value));
+  return api<HrEmployeesReceipt>(session, `/hr/employees${parameters.size ? `?${parameters}` : ""}`);
+}
 export function createHrEmployeeService(session: ActiveSession, payload: unknown) { return api(session, "/hr/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function issueHrEmployeeServiceCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/issue-cost", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrEmployeeServices(session: ActiveSession, query: { employeeId?: string; serviceType?: HrService["serviceType"]; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: string; expiryAfter?: string; cursor?: string; pageSize?: number } = {}) {

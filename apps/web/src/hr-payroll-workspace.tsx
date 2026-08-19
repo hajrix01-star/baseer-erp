@@ -29,6 +29,7 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
   const ar = language === "ar";
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
   const [runs, setRuns] = useState<HrPayrollRun[]>([]);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [employees, setEmployees] = useState<HrEmployee[]>([]);
   const [advances, setAdvances] = useState<HrAdvance[]>([]);
   const [deductions, setDeductions] = useState<HrAdministrativeDeduction[]>([]);
@@ -41,19 +42,30 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [salary, setSalary] = useState({ employeeId: "", effectiveFrom: month(), monthlyGross: "", notes: "" });
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (cursor?: string, append = false) => {
     const current = activeSession(); setSession(current); if (!current) { setLoading(false); return; }
-    setLoading(true);
+    if (!append) setLoading(true);
     try {
       const [payroll, employeeReceipt, advanceReceipt, deductionReceipt] = await Promise.all([
-        listHrPayrollRuns(current), listHrEmployees(current), listHrAdvances(current), listHrAdministrativeDeductions(current),
+        listHrPayrollRuns(current, { cursor, pageSize: 50 }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 }), append ? Promise.resolve(null) : listHrAdvances(current, { pageSize: 100 }), append ? Promise.resolve(null) : listHrAdministrativeDeductions(current, { pageSize: 100 }),
       ]);
-      setRuns(payroll.payrollRuns); setEmployees(employeeReceipt.employees); setAdvances(advanceReceipt.advances); setDeductions(deductionReceipt.deductions);
+      setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
+      if (employeeReceipt) setEmployees(employeeReceipt.employees);
+      if (advanceReceipt) setAdvances(advanceReceipt.advances);
+      if (deductionReceipt) setDeductions(deductionReceipt.deductions);
     } catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
     finally { setLoading(false); }
   }, [ar, language]);
   useEffect(() => { void load(); }, [load]);
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
+  const searchEmployeeOptions = useCallback(async (query: string) => {
+    const current = activeSession();
+    if (!current) return [];
+    const receipt = await listHrEmployees(current, { search: query.trim() || undefined, pageSize: 50 });
+    return receipt.employees
+      .filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE")
+      .map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }));
+  }, [language]);
   const visibleRuns = useMemo(() => { const needle = search.trim().toLowerCase(); return needle ? runs.filter((run) => [run.runNumber, run.status, run.payrollMonth].join(" ").toLowerCase().includes(needle)) : runs; }, [runs, search]);
   const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "معكوس" : "Reversed" })[status];
   const openDetail = (run: HrPayrollRun) => setDetailId(run.id);
@@ -76,10 +88,11 @@ export function HrPayrollWorkspace({ language }: { language: Language }) {
     <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(String(totals.gross))} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(String(totals.advances))} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(String(totals.deductions))} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(String(totals.net))} /></BaseerSummaryMetricGrid>
     <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} />
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : visibleRuns.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={visibleRuns} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
+    {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
     {message ? <p className="daily-sales-message error">{message}</p> : null}
 
-    <BaseerDialog open={salaryOpen} title={ar ? "تحديد الراتب الشهري" : "Set monthly salary"} language={language} busy={busy} onClose={() => setSalaryOpen(false)} footer={<><BaseerButton type="button" variant="secondary" onClick={() => setSalaryOpen(false)}>{ar ? "إلغاء" : "Cancel"}</BaseerButton><BaseerButton type="submit" form="hr-compensation-form" disabled={busy}>{ar ? "حفظ" : "Save"}</BaseerButton></>}><form id="hr-compensation-form" className="administration-form" onSubmit={(event) => void saveSalary(event)}><label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={salary.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} onChange={(employeeId) => setSalary((value) => ({ ...value, employeeId }))} /></label><label>{ar ? "تاريخ السريان" : "Effective from"}<input required type="date" max={today()} value={salary.effectiveFrom} onChange={(event) => setSalary((value) => ({ ...value, effectiveFrom: event.target.value }))} /></label><label>{ar ? "الراتب الإجمالي الشهري" : "Monthly gross salary"}<input required inputMode="decimal" value={salary.monthlyGross} onChange={(event) => setSalary((value) => ({ ...value, monthlyGross: event.target.value }))} /></label><label>{ar ? "ملاحظات" : "Notes"}<textarea value={salary.notes} onChange={(event) => setSalary((value) => ({ ...value, notes: event.target.value }))} /></label></form></BaseerDialog>
+    <BaseerDialog open={salaryOpen} title={ar ? "تحديد الراتب الشهري" : "Set monthly salary"} language={language} busy={busy} onClose={() => setSalaryOpen(false)} footer={<><BaseerButton type="button" variant="secondary" onClick={() => setSalaryOpen(false)}>{ar ? "إلغاء" : "Cancel"}</BaseerButton><BaseerButton type="submit" form="hr-compensation-form" disabled={busy}>{ar ? "حفظ" : "Save"}</BaseerButton></>}><form id="hr-compensation-form" className="administration-form" onSubmit={(event) => void saveSalary(event)}><label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect required label={ar ? "الموظف" : "Employee"} value={salary.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} remoteSearch={searchEmployeeOptions} onChange={(employeeId) => setSalary((value) => ({ ...value, employeeId }))} /></label><label>{ar ? "تاريخ السريان" : "Effective from"}<input required type="date" max={today()} value={salary.effectiveFrom} onChange={(event) => setSalary((value) => ({ ...value, effectiveFrom: event.target.value }))} /></label><label>{ar ? "الراتب الإجمالي الشهري" : "Monthly gross salary"}<input required inputMode="decimal" value={salary.monthlyGross} onChange={(event) => setSalary((value) => ({ ...value, monthlyGross: event.target.value }))} /></label><label>{ar ? "ملاحظات" : "Notes"}<textarea value={salary.notes} onChange={(event) => setSalary((value) => ({ ...value, notes: event.target.value }))} /></label></form></BaseerDialog>
     {createOpen ? <Suspense fallback={null}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} employees={employees} advances={advances} deductions={deductions} onError={setMessage} /></Suspense> : null}
     {detailId ? <Suspense fallback={null}><HrPayrollDetailDialog runId={detailId} language={language} onClose={() => setDetailId(null)} onChanged={load} onError={setMessage} /></Suspense> : null}
   </section>;

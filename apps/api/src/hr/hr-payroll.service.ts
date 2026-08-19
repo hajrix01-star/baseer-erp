@@ -43,6 +43,7 @@ type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
+type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrPayrollService {
@@ -79,10 +80,23 @@ export class HrPayrollService {
     });
   }
 
-  async list(context: TrustedCompanyActorContext) {
+  async list(context: TrustedCompanyActorContext, query: PayrollRunListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const runs = await tx.hrPayrollRun.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }], take: 500 });
-      return runs.map(mapRun);
+      const cursor = query.cursor ? await tx.hrPayrollRun.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, payrollMonth: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The payroll-run cursor is invalid.');
+      const rows = await tx.hrPayrollRun.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.status ? { status: query.status } : {}),
+          ...(cursor ? { OR: [{ payrollMonth: { lt: cursor.payrollMonth } }, { payrollMonth: cursor.payrollMonth, id: { lt: cursor.id } }] } : {}),
+        },
+        orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }],
+        take: query.pageSize + 1,
+      });
+      const hasMore = rows.length > query.pageSize;
+      const runs = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { payrollRuns: runs.map(mapRun), hasMore, nextCursor: hasMore ? runs.at(-1)?.id ?? null : null };
     });
   }
 

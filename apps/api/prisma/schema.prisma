@@ -991,6 +991,8 @@ model HrEmployee {
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
   @@index([tenantId, companyId, status, nameAr])
+  @@index([tenantId, companyId, employeeNumber, id])
+  @@index([tenantId, companyId, status, employeeNumber, id], map: "HrEmployee_status_number_id_idx")
 }
 
 /// An approved absence window. Future records intentionally do not set the
@@ -1119,6 +1121,7 @@ model HrEmployeeAdvance {
   @@unique([companyId, advanceNumber])
   @@unique([issueJournalEntryId, tenantId, companyId])
   @@index([tenantId, companyId, employeeId, status, businessDate, id])
+  @@index([tenantId, companyId, status, businessDate, id])
 }
 
 /// Supports a split payment from multiple company vaults/methods while keeping
@@ -1215,6 +1218,7 @@ model HrEmployeeAdministrativeDeduction {
   @@unique([companyId, deductionNumber])
   @@index([tenantId, companyId, employeeId, status, businessDate, id])
   @@index([tenantId, companyId, status, plannedPayrollDate])
+  @@index([tenantId, companyId, status, businessDate, id], map: "HrEmpDed_status_date_id_idx")
 }
 
 /// Immutable history for a deduction. Payroll will append APPLY/REVERSE rows;
@@ -1295,6 +1299,7 @@ model HrPayrollRun {
   @@unique([companyId, payrollMonth])
   @@unique([companyId, runNumber])
   @@index([tenantId, companyId, payrollMonth, status, id])
+  @@index([tenantId, companyId, status, payrollMonth, id])
   @@unique([accrualJournalEntryId, tenantId, companyId])
 }
 

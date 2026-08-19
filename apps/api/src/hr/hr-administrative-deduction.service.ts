@@ -12,6 +12,7 @@ import { HrEmployeeAdministrativeDeductionActionType, HrEmployeeAdministrativeDe
 type CreateInput = Omit<CreateHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type DeferInput = Omit<DeferHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type CancelInput = Omit<CancelHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
+type DeductionListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdministrativeDeductionStatus; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrAdministrativeDeductionService {
@@ -22,15 +23,25 @@ export class HrAdministrativeDeductionService {
     private readonly serials: DocumentSerialService,
   ) {}
 
-  async list(context: TrustedCompanyActorContext) {
+  async list(context: TrustedCompanyActorContext, query: DeductionListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const deductions = await tx.hrEmployeeAdministrativeDeduction.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId },
+      const cursor = query.cursor ? await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The administrative-deduction cursor is invalid.');
+      const rows = await tx.hrEmployeeAdministrativeDeduction.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+          ...(query.status ? { status: query.status } : {}),
+          ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
+        },
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
-        take: 500,
+        take: query.pageSize + 1,
         include: { employee: { select: { id: true, nameAr: true, nameEn: true } } },
       });
-      return deductions.map((deduction) => ({
+      const hasMore = rows.length > query.pageSize;
+      const deductions = hasMore ? rows.slice(0, query.pageSize) : rows;
+      const values = deductions.map((deduction) => ({
         id: deduction.id,
         employeeId: deduction.employeeId,
         employeeNameAr: deduction.employee.nameAr,
@@ -45,6 +56,7 @@ export class HrAdministrativeDeductionService {
         description: deduction.description,
         cancellationReason: deduction.cancellationReason,
       }));
+      return { deductions: values, hasMore, nextCursor: hasMore ? deductions.at(-1)?.id ?? null : null };
     });
   }
 

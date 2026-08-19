@@ -8,6 +8,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { FinanceCategoryStatus, FinanceSupplierStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
+type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
@@ -20,13 +21,37 @@ type EmployeeServiceListQuery = Readonly<{ employeeId?: string; serviceType?: st
 export class HrService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
-  async listEmployees(context: TrustedCompanyActorContext) {
+  async listEmployees(context: TrustedCompanyActorContext, query: EmployeeListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const employees = await tx.hrEmployee.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId },
-        orderBy: [{ status: 'asc' }, { nameAr: 'asc' }, { id: 'asc' }],
-      });
-      return employees.map(mapEmployee);
+      const cursor = query.cursor ? await tx.hrEmployee.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, employeeNumber: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee cursor is invalid.');
+      const conditions: Prisma.HrEmployeeWhereInput[] = [];
+      if (query.search) conditions.push({ OR: [{ employeeNumber: { contains: query.search, mode: 'insensitive' } }, { nameAr: { contains: query.search, mode: 'insensitive' } }, { nameEn: { contains: query.search, mode: 'insensitive' } }] });
+      if (cursor) conditions.push({ OR: [{ employeeNumber: { gt: cursor.employeeNumber } }, { employeeNumber: cursor.employeeNumber, id: { gt: cursor.id } }] });
+      const [rows, activeEmployees, employeesOnLeave, openAdvances, openAdministrativeDeductions] = await Promise.all([
+        tx.hrEmployee.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.status ? { status: query.status } : {}),
+          ...(conditions.length ? { AND: conditions } : {}),
+        },
+        orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }],
+        take: query.pageSize + 1,
+        }),
+        tx.hrEmployee.count({ where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE } }),
+        tx.hrEmployee.count({ where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ON_LEAVE } }),
+        tx.hrEmployeeAdvance.count({ where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: ['ISSUED', 'PARTIALLY_SETTLED'] } } }),
+        tx.hrEmployeeAdministrativeDeduction.count({ where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: ['OPEN', 'PARTIALLY_APPLIED', 'DEFERRED'] } } }),
+      ]);
+      const hasMore = rows.length > query.pageSize;
+      const employees = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return {
+        employees: employees.map(mapEmployee),
+        hasMore,
+        nextCursor: hasMore ? employees.at(-1)?.id ?? null : null,
+        summary: { activeEmployees, employeesOnLeave, openAdvances, openAdministrativeDeductions },
+      };
     });
   }
 

@@ -13,12 +13,15 @@ import {
   hrEmployeeAdvanceIssueReceiptSchema,
   hrEmployeeAdvanceSettlementReceiptSchema,
   hrEmployeeAdvanceDeferralReceiptSchema,
+  hrEmployeeAdvancesQuerySchema,
   hrEmployeeAdvancesReceiptSchema,
   hrEmployeeAdvanceDetailReceiptSchema,
   hrEmployeeAdministrativeDeductionDetailReceiptSchema,
+  hrEmployeeAdministrativeDeductionsQuerySchema,
   hrEmployeeAdministrativeDeductionsReceiptSchema,
   hrEmployeeAdministrativeDeductionReceiptSchema,
   hrEmployeeEntityReceiptSchema,
+  hrEmployeesQuerySchema,
   hrEmployeesReceiptSchema,
   issueHrEmployeeAdvanceRequestSchema,
   settleHrEmployeeAdvanceDirectlyRequestSchema,
@@ -35,9 +38,11 @@ import {
   returnHrEmployeeLeaveRequestSchema,
   hrEmployeeCompensationProfileReceiptSchema,
   hrPayrollRunsReceiptSchema,
+  hrPayrollRunsQuerySchema,
   hrPayrollRunDetailReceiptSchema,
   hrPayrollRunReceiptSchema,
   hrEmployeeLeavesReceiptSchema,
+  hrEmployeeLeavesQuerySchema,
   hrEmployeeLeaveDetailReceiptSchema,
   hrEmployeeLeaveReceiptSchema,
   hrEmployeeServicesReceiptSchema,
@@ -71,9 +76,11 @@ export class HrController {
   ) {}
 
   @Get('employees')
-  async listEmployees(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async listEmployees(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeesQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee list query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
-    return hrEmployeesReceiptSchema.parse({ companyId: context.companyId, employees: await this.hr.listEmployees(context) });
+    return hrEmployeesReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.listEmployees(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('employees/:employeeId')
@@ -166,9 +173,11 @@ export class HrController {
   }
 
   @Get('advances')
-  async listAdvances(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async listAdvances(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeAdvancesQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-advance query.');
     const context = await this.authorize(authorization, companyId, 'hr.advances.read');
-    return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, advances: await this.advances.list(context) });
+    return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('advances/:advanceId')
@@ -208,9 +217,11 @@ export class HrController {
   }
 
   @Get('deductions')
-  async listAdministrativeDeductions(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async listAdministrativeDeductions(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeAdministrativeDeductionsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction query.');
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
-    return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, deductions: await this.deductions.list(context) });
+    return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('deductions/:deductionId')
@@ -258,9 +269,11 @@ export class HrController {
   }
 
   @Get('payroll-runs')
-  async listPayrollRuns(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async listPayrollRuns(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrPayrollRunsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll-run query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
-    return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, payrollRuns: await this.payroll.list(context) });
+    return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Get('payroll-runs/:payrollRunId')
@@ -307,9 +320,11 @@ export class HrController {
   }
 
   @Get('leaves')
-  async listLeaves(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async listLeaves(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeLeavesQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-leave query.');
     const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
-    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, leaves: await this.leaves.list(context) });
+    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.leaveType ? { leaveType: parsed.data.leaveType } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Post('leaves')
