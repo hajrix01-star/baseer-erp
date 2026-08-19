@@ -4,6 +4,11 @@ export type ModuleRoute = { moduleId: ModuleId; section: number };
 
 type Rule = readonly string[];
 
+const hrPayrollRule = ["hr.payroll.read", "hr.payroll.create", "hr.payroll.approve", "hr.payroll.pay", "hr.payroll.reverse"] as const;
+const hrAdvanceRule = ["hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.advances.reverse", "hr.deductions.manage"] as const;
+const hrFinalSettlementRule = ["hr.final_settlements.read", "hr.final_settlements.create", "hr.final_settlements.verify", "hr.final_settlements.approve", "hr.final_settlements.pay", "hr.final_settlements.reverse"] as const;
+const hrOverviewRule = ["hr.employees.read", "hr.employees.write", "hr.leaves.read", "hr.leaves.manage", ...hrPayrollRule, ...hrAdvanceRule, ...hrFinalSettlementRule] as const;
+
 /**
  * UI discoverability only. The API still authorizes every request using the
  * live company membership; this map simply prevents a user from being led to
@@ -23,12 +28,16 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     2: ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"],
   },
   hr: {
-    0: ["hr.employees.read", "hr.employees.write"],
+    // Keep discovery in sync with the server-owned HR capabilities. A user
+    // may legitimately work only in leave, payroll, or final settlements and
+    // must still be able to discover that permitted workspace.
+    0: hrOverviewRule,
     1: ["hr.employees.read", "hr.employees.write"],
-    2: ["hr.employees.read", "hr.employees.write"],
-    3: ["hr.employees.read", "hr.employees.write"],
-    4: ["hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.deductions.manage"],
+    2: ["hr.leaves.read", "hr.leaves.manage"],
+    3: hrPayrollRule,
+    4: hrAdvanceRule,
     5: ["hr.employees.read", "hr.employees.write"],
+    6: hrFinalSettlementRule,
   },
   administration: {
     0: ["administration.companies.read", "administration.users.read", "administration.roles.read"],
