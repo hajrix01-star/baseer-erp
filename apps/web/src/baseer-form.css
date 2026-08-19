@@ -20,6 +20,7 @@
 .baseer-form-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .baseer-form-grid > label { display: grid; min-width: 0; gap: .35rem; color: var(--ink); font-size: var(--font-label); font-weight: 700; }
 .baseer-form-field--full { grid-column: 1 / -1; }
+.baseer-form-static { display: flex; align-items: center; min-height: 2.75rem; padding: 0 .82rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); background: color-mix(in srgb, var(--surface) 90%, var(--canvas)); color: var(--ink); font-variant-numeric: tabular-nums; }
 .baseer-form-grid .company-session-control { width: 100%; min-width: 0; }
 .baseer-form-grid :is(input, select, textarea) { width: 100%; min-height: var(--control-height); min-inline-size: 0; box-sizing: border-box; padding: .45rem .65rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--ink); background: var(--surface); font: inherit; line-height: 1.4; }
 .baseer-form-grid :is(input, select, textarea):hover { border-color: color-mix(in srgb, var(--brand) 48%, var(--field-border)); }

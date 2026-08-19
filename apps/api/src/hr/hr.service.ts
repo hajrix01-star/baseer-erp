@@ -71,7 +71,7 @@ export class HrService {
         select: { id: true, businessDate: true },
       }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-ledger cursor is invalid.');
-      const [services, movementRows, compensation] = await Promise.all([
+      const [services, movementRows, compensation, compensationHistory] = await Promise.all([
         tx.hrEmployeeService.findMany({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
           orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }],
@@ -91,12 +91,18 @@ export class HrService {
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, effectiveFrom: { lte: new Date() }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: new Date() } }] },
           orderBy: { effectiveFrom: 'desc' },
         }),
+        tx.hrEmployeeCompensationProfile.findMany({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+          orderBy: [{ effectiveFrom: 'desc' }, { createdAt: 'desc' }],
+          take: 100,
+        }),
       ]);
       const hasMoreMovements = movementRows.length > query.pageSize;
       const movements = hasMoreMovements ? movementRows.slice(0, query.pageSize) : movementRows;
       return {
         employee: mapEmployee(employee, compensation?.monthlyGross ?? null),
         compensation: compensation ? mapCompensation(compensation) : null,
+        compensationHistory: compensationHistory.map(mapCompensation),
         services: services.map(mapService),
         movements: movements.map(mapMovement),
         hasMoreMovements,

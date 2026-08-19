@@ -643,6 +643,8 @@ export const hrEmployeeDetailReceiptSchema = z.object({
   companyId: companyIdSchema,
   employee: hrEmployeeSchema,
   compensation: hrEmployeeCompensationProfileSchema.nullable(),
+  /** Immutable salary history shown in the employee file; it never rewrites payroll snapshots. */
+  compensationHistory: z.array(hrEmployeeCompensationProfileSchema).max(100),
   services: z.array(hrEmployeeServiceSchema).max(500),
   movements: z.array(hrEmployeeFinancialMovementSchema).max(100),
   hasMoreMovements: z.boolean(),
