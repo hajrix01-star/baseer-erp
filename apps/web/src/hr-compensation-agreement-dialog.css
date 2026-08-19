@@ -1,3 +1,15 @@
+.hr-salary-manager-dialog {
+  display: flex;
+  flex-direction: column;
+  min-block-size: min(32rem, calc(100vh - 2rem));
+}
+
+.hr-salary-manager-dialog .daily-sales-dialog__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: auto;
+}
+
 .hr-salary-manager {
   gap: .8rem;
 }
@@ -60,11 +72,24 @@
   margin-top: -.1rem;
 }
 
+.hr-salary-manager__fields {
+  min-block-size: 12.5rem;
+  align-content: start;
+}
+
 .hr-salary-manager .baseer-form-field textarea {
   min-block-size: 3.4rem;
 }
 
 @media (max-width: 640px) {
+  .hr-salary-manager-dialog {
+    min-block-size: 0;
+  }
+
+  .hr-salary-manager__fields {
+    min-block-size: 0;
+  }
+
   .hr-salary-manager__operations,
   .hr-salary-manager__summary {
     grid-template-columns: 1fr;
