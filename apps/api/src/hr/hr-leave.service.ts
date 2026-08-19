@@ -23,16 +23,19 @@ export class HrLeaveService {
 
   async list(context: TrustedCompanyActorContext, query: LeaveListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const cursor = query.cursor ? await tx.hrEmployeeLeave.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, startDate: true } }) : null;
+      const leaveScope: Prisma.HrEmployeeLeaveWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.leaveType ? { leaveType: query.leaveType } : {}),
+        ...(query.periodFrom || query.periodTo ? { AND: [{ ...(query.periodTo ? { startDate: { lte: query.periodTo } } : {}) }, { ...(query.periodFrom ? { endDate: { gte: query.periodFrom } } : {}) }] } : {}),
+      };
+      const cursor = query.cursor ? await tx.hrEmployeeLeave.findFirst({ where: { id: query.cursor, ...leaveScope }, select: { id: true, startDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-leave cursor is invalid.');
       const rows = await tx.hrEmployeeLeave.findMany({
         where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
-          ...(query.status ? { status: query.status } : {}),
-          ...(query.leaveType ? { leaveType: query.leaveType } : {}),
-          ...(query.periodFrom || query.periodTo ? { AND: [{ ...(query.periodTo ? { startDate: { lte: query.periodTo } } : {}) }, { ...(query.periodFrom ? { endDate: { gte: query.periodFrom } } : {}) }] } : {}),
+          ...leaveScope,
           ...(cursor ? { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] } : {}),
         },
         orderBy: [{ startDate: 'desc' }, { id: 'desc' }],

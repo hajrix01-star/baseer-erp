@@ -38,14 +38,12 @@ export class HrAdvanceService {
 
   async list(context: TrustedCompanyActorContext, query: AdvanceListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const cursor = query.cursor ? await tx.hrEmployeeAdvance.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true } }) : null;
+      const advanceScope: Prisma.HrEmployeeAdvanceWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.employeeId ? { employeeId: query.employeeId } : {}), ...(query.status ? { status: query.status } : {}) };
+      const cursor = query.cursor ? await tx.hrEmployeeAdvance.findFirst({ where: { id: query.cursor, ...advanceScope }, select: { id: true, businessDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-advance cursor is invalid.');
       const rows = await tx.hrEmployeeAdvance.findMany({
         where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
-          ...(query.status ? { status: query.status } : {}),
+          ...advanceScope,
           ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
         },
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],

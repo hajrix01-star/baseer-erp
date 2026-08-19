@@ -27,14 +27,12 @@ export class HrAdministrativeDeductionService {
 
   async list(context: TrustedCompanyActorContext, query: DeductionListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const cursor = query.cursor ? await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true } }) : null;
+      const deductionScope: Prisma.HrEmployeeAdministrativeDeductionWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.employeeId ? { employeeId: query.employeeId } : {}), ...(query.status ? { status: query.status } : {}) };
+      const cursor = query.cursor ? await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: query.cursor, ...deductionScope }, select: { id: true, businessDate: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The administrative-deduction cursor is invalid.');
       const rows = await tx.hrEmployeeAdministrativeDeduction.findMany({
         where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
-          ...(query.status ? { status: query.status } : {}),
+          ...deductionScope,
           ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
         },
         orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],

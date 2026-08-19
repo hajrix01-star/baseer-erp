@@ -609,6 +609,12 @@ export const hrEmployeeAdvancesQuerySchema = z.object({ ...hrPageQueryShape, emp
 export const hrEmployeeAdministrativeDeductionsQuerySchema = z.object({ ...hrPageQueryShape, employeeId: hrEmployeeIdSchema.optional(), status: hrEmployeeAdministrativeDeductionStatusSchema.optional() }).strict();
 export const hrEmployeeLeavesQuerySchema = z.object({ ...hrPageQueryShape, employeeId: hrEmployeeIdSchema.optional(), status: hrEmployeeLeaveStatusSchema.optional(), leaveType: hrEmployeeLeaveTypeSchema.optional(), periodFrom: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(), periodTo: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional() }).strict();
 export const hrPayrollRunsQuerySchema = z.object({ ...hrPageQueryShape, status: z.enum(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED"]).optional() }).strict();
+export const hrPayrollRunDetailQuerySchema = z.object({
+  lineCursor: z.string().uuid().optional(),
+  linePageSize: z.coerce.number().int().min(1).max(1_000).optional().default(1_000),
+  paymentCursor: z.string().uuid().optional(),
+  paymentPageSize: z.coerce.number().int().min(1).max(500).optional().default(500),
+}).strict();
 export const hrEmployeePayrollHistoryQuerySchema = z.object({ ...hrPageQueryShape }).strict();
 
 export const hrEmployeesReceiptSchema = z.object({
@@ -626,7 +632,14 @@ export const hrEmployeeAdvanceDetailReceiptSchema = z.object({ companyId: compan
 export const hrEmployeeAdministrativeDeductionDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdministrativeDeductionDetailSchema.shape }).strict();
 export const hrEmployeeCompensationProfileReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrPayrollRunsReceiptSchema = z.object({ companyId: companyIdSchema, payrollRuns: z.array(hrPayrollRunSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
-export const hrPayrollRunDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrPayrollRunDetailSchema.shape }).strict();
+export const hrPayrollRunDetailReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  ...hrPayrollRunDetailSchema.shape,
+  hasMoreLines: z.boolean(),
+  nextLineCursor: z.string().uuid().nullable(),
+  hasMorePayments: z.boolean(),
+  nextPaymentCursor: z.string().uuid().nullable(),
+}).strict();
 export const hrEmployeePayrollHistoryReceiptSchema = z.object({ companyId: companyIdSchema, lines: z.array(hrEmployeePayrollHistoryLineSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrPayrollRunReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), replayed: z.boolean() }).strict();
 const hrPayrollPreviewApplicationSchema = z.object({ id: z.string().uuid(), referenceNumber: z.string().max(80), remainingAmount: hrAmountSchema }).strict();

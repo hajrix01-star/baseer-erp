@@ -71,6 +71,7 @@ type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'id
 type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; cursor?: string; pageSize: number }>;
+type PayrollRunDetailQuery = Readonly<{ lineCursor?: string; linePageSize: number; paymentCursor?: string; paymentPageSize: number }>;
 type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type PayrollCalculationPeriod = Readonly<{ calculationPeriodStart: Date; calculationPeriodEnd: Date; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: Prisma.Decimal; eligibilityCode: HrPayrollLineEligibilityCode; formulaCode: HrPayrollCalculationFormulaCode }>;
 
@@ -274,13 +275,12 @@ export class HrPayrollService {
 
   async list(context: TrustedCompanyActorContext, query: PayrollRunListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const cursor = query.cursor ? await tx.hrPayrollRun.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, payrollMonth: true } }) : null;
+      const runScope: Prisma.HrPayrollRunWhereInput = { tenantId: context.tenantId, companyId: context.companyId, ...(query.status ? { status: query.status } : {}) };
+      const cursor = query.cursor ? await tx.hrPayrollRun.findFirst({ where: { id: query.cursor, ...runScope }, select: { id: true, payrollMonth: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The payroll-run cursor is invalid.');
       const rows = await tx.hrPayrollRun.findMany({
         where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.status ? { status: query.status } : {}),
+          ...runScope,
           ...(cursor ? { OR: [{ payrollMonth: { lt: cursor.payrollMonth } }, { payrollMonth: cursor.payrollMonth, id: { lt: cursor.id } }] } : {}),
         },
         orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }],
@@ -329,12 +329,40 @@ export class HrPayrollService {
     });
   }
 
-  async detail(context: TrustedCompanyActorContext, payrollRunId: string) {
+  async detail(context: TrustedCompanyActorContext, payrollRunId: string, query: PayrollRunDetailQuery = { linePageSize: 1_000, paymentPageSize: 500 }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const run = await this.findRun(tx, context, payrollRunId, true);
+      const scope = { tenantId: context.tenantId, companyId: context.companyId, payrollRunId } as const;
+      const run = await tx.hrPayrollRun.findFirst({ where: { id: payrollRunId, tenantId: context.tenantId, companyId: context.companyId } });
+      if (!run) throw new NotFoundException('The payroll run was not found.');
+      const [lineCursor, paymentCursor] = await Promise.all([
+        query.lineCursor ? tx.hrPayrollLine.findFirst({ where: { id: query.lineCursor, ...scope }, select: { id: true, employeeNumberSnapshot: true } }) : null,
+        query.paymentCursor ? tx.hrPayrollPayment.findFirst({ where: { id: query.paymentCursor, ...scope }, select: { id: true, businessDate: true } }) : null,
+      ]);
+      if (query.lineCursor && !lineCursor) throw new BadRequestException('The payroll-line cursor is invalid for this run.');
+      if (query.paymentCursor && !paymentCursor) throw new BadRequestException('The payroll-payment cursor is invalid for this run.');
+      const [lineRows, paymentRows] = await Promise.all([
+        tx.hrPayrollLine.findMany({
+          where: { ...scope, ...(lineCursor ? { OR: [{ employeeNumberSnapshot: { gt: lineCursor.employeeNumberSnapshot } }, { employeeNumberSnapshot: lineCursor.employeeNumberSnapshot, id: { gt: lineCursor.id } }] } : {}) },
+          orderBy: [{ employeeNumberSnapshot: 'asc' }, { id: 'asc' }],
+          take: query.linePageSize + 1,
+          include: {
+            advanceApplications: { include: { advance: { select: { advanceNumber: true } } } },
+            deductionApplications: { include: { deduction: { select: { deductionNumber: true } } } },
+          },
+        }),
+        tx.hrPayrollPayment.findMany({
+          where: { ...scope, ...(paymentCursor ? { OR: [{ businessDate: { lt: paymentCursor.businessDate } }, { businessDate: paymentCursor.businessDate, id: { lt: paymentCursor.id } }] } : {}) },
+          orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
+          take: query.paymentPageSize + 1,
+        }),
+      ]);
+      const hasMoreLines = lineRows.length > query.linePageSize;
+      const lines = hasMoreLines ? lineRows.slice(0, query.linePageSize) : lineRows;
+      const hasMorePayments = paymentRows.length > query.paymentPageSize;
+      const payments = hasMorePayments ? paymentRows.slice(0, query.paymentPageSize) : paymentRows;
       return {
         payrollRun: mapRun(run),
-        lines: run.lines.map((line) => ({
+        lines: lines.map((line) => ({
           id: line.id, employeeId: line.employeeId, employeeNumber: line.employeeNumberSnapshot, employeeNameAr: line.employeeNameArSnapshot, employeeNameEn: line.employeeNameEnSnapshot,
           grossSalary: fixed(line.grossSalary), eligibilityCode: line.eligibilityCode, compensationMethod: line.compensationMethod,
           basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), housingAllowance: fixed(line.housingAllowance), transportAllowance: fixed(line.transportAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
@@ -345,7 +373,11 @@ export class HrPayrollService {
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
         })),
-        payments: run.payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId })),
+        payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId })),
+        hasMoreLines,
+        nextLineCursor: hasMoreLines ? lines.at(-1)?.id ?? null : null,
+        hasMorePayments,
+        nextPaymentCursor: hasMorePayments ? payments.at(-1)?.id ?? null : null,
       };
     });
   }
@@ -608,6 +640,11 @@ export class HrPayrollService {
     const active = population.activeEmployees.length;
     const activeWithProfile = population.employees.filter((employee) => employee.status === HrEmployeeStatus.ACTIVE && population.profileByEmployee.has(employee.id)).length;
     const includedOnLeaveWithProfile = population.employees.filter((employee) => employee.status === HrEmployeeStatus.ON_LEAVE && population.profileByEmployee.has(employee.id)).length;
+    const previewCursor = input.cursor ? await tx.hrEmployee.findFirst({
+      where: { id: input.cursor, ...base, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+      select: { id: true },
+    }) : null;
+    if (input.cursor && !previewCursor) throw new BadRequestException('The payroll-preview cursor is invalid for this company and population.');
     const page = await tx.hrEmployee.findMany({
       where: { ...base, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
       orderBy: { id: 'asc' }, take: input.pageSize + 1,

@@ -6,12 +6,13 @@ import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceCategoryStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceCategoryStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeFinancialMovementType, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
+type EmployeeReadProjection = Readonly<{ includePayroll: boolean }>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
@@ -20,29 +21,27 @@ export type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'i
 type EmployeeServiceUpdateInput = Omit<UpdateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceCancelInput = Omit<CancelHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceRenewInput = Omit<RenewHrEmployeeServiceRequest, 'idempotencyKey'>;
-type EmployeeServiceListQuery = Readonly<{ employeeId?: string; serviceType?: string; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: Date; expiryAfter?: Date; cursor?: string; pageSize: number }>;
+type EmployeeServiceListQuery = Readonly<{ employeeId?: string; serviceType?: CreateHrEmployeeServiceRequest['serviceType']; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: Date; expiryAfter?: Date; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly businessDates: BusinessDateService) {}
 
-  async listEmployees(context: TrustedCompanyActorContext, query: EmployeeListQuery) {
+  async listEmployees(context: TrustedCompanyActorContext, query: EmployeeListQuery, projection: EmployeeReadProjection = { includePayroll: true }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const businessDate = await this.businessDates.resolveInTransaction(tx, context, { kind: 'current' });
       const currentDate = new Date(`${businessDate.businessDate}T00:00:00.000Z`);
-      const cursor = query.cursor ? await tx.hrEmployee.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, employeeNumber: true } }) : null;
+      const employeeScope: Prisma.HrEmployeeWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [{ employeeNumber: { contains: query.search, mode: 'insensitive' } }, { nameAr: { contains: query.search, mode: 'insensitive' } }, { nameEn: { contains: query.search, mode: 'insensitive' } }] } : {}),
+      };
+      const cursor = query.cursor ? await tx.hrEmployee.findFirst({ where: { id: query.cursor, ...employeeScope }, select: { id: true, employeeNumber: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee cursor is invalid.');
-      const conditions: Prisma.HrEmployeeWhereInput[] = [];
-      if (query.search) conditions.push({ OR: [{ employeeNumber: { contains: query.search, mode: 'insensitive' } }, { nameAr: { contains: query.search, mode: 'insensitive' } }, { nameEn: { contains: query.search, mode: 'insensitive' } }] });
-      if (cursor) conditions.push({ OR: [{ employeeNumber: { gt: cursor.employeeNumber } }, { employeeNumber: cursor.employeeNumber, id: { gt: cursor.id } }] });
       const [rows, activeEmployees, employeesOnLeave, openAdvances, openAdministrativeDeductions] = await Promise.all([
         tx.hrEmployee.findMany({
-        where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.status ? { status: query.status } : {}),
-          ...(conditions.length ? { AND: conditions } : {}),
-        },
+        where: cursor ? { AND: [employeeScope, { OR: [{ employeeNumber: { gt: cursor.employeeNumber } }, { employeeNumber: cursor.employeeNumber, id: { gt: cursor.id } }] }] } : employeeScope,
         include: {
           compensationProfiles: { where: { effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] }, orderBy: { effectiveFrom: 'desc' }, take: 1, select: { monthlyGross: true } },
           documents: { where: { referenceNumber: 'HR_PROFILE_PHOTO_V1', status: HrEmployeeDocumentStatus.ACTIVE }, orderBy: { createdAt: 'desc' }, take: 1, select: { currentVersion: { select: { id: true, blob: { select: { status: true, mimeType: true } } } } } },
@@ -61,7 +60,7 @@ export class HrService {
         employees: employees.map((employee) => {
           const version = employee.documents[0]?.currentVersion;
           const profilePhotoVersionId = version?.blob.status === HrDocumentBlobStatus.READY && version.blob.mimeType.startsWith('image/') ? version.id : null;
-          return mapEmployee(employee, employee.compensationProfiles[0]?.monthlyGross ?? null, profilePhotoVersionId);
+          return mapEmployee(employee, projection.includePayroll ? employee.compensationProfiles[0]?.monthlyGross ?? null : null, profilePhotoVersionId);
         }),
         hasMore,
         nextCursor: hasMore ? employees.at(-1)?.id ?? null : null,
@@ -70,7 +69,7 @@ export class HrService {
     });
   }
 
-  async employeeDetail(context: TrustedCompanyActorContext, employeeId: string, query: EmployeeDetailQuery) {
+  async employeeDetail(context: TrustedCompanyActorContext, employeeId: string, query: EmployeeDetailQuery, projection: EmployeeReadProjection = { includePayroll: true }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       // Salary applicability follows the company's governed business date,
       // never the server clock. This keeps the employee file aligned with
@@ -79,8 +78,14 @@ export class HrService {
       const currentDate = new Date(`${businessDate.businessDate}T00:00:00.000Z`);
       const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId } });
       if (!employee) throw new NotFoundException('The employee is not available for this company.');
+      const movementScope: Prisma.HrEmployeeFinancialMovementWhereInput = {
+        employeeId,
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(projection.includePayroll ? {} : { movementType: { notIn: [HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, HrEmployeeFinancialMovementType.PAYROLL_PAYMENT] } }),
+      };
       const cursor = query.cursor ? await tx.hrEmployeeFinancialMovement.findFirst({
-        where: { id: query.cursor, employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        where: { id: query.cursor, ...movementScope },
         select: { id: true, businessDate: true },
       }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-ledger cursor is invalid.');
@@ -93,28 +98,26 @@ export class HrService {
         }),
         tx.hrEmployeeFinancialMovement.findMany({
           where: {
-            employeeId,
-            tenantId: context.tenantId,
-            companyId: context.companyId,
+            ...movementScope,
             ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}),
           },
           orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
           take: query.pageSize + 1,
         }),
-        tx.hrEmployeeCompensationProfile.findFirst({
+        projection.includePayroll ? tx.hrEmployeeCompensationProfile.findFirst({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, effectiveFrom: { lte: currentDate }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: currentDate } }] },
           orderBy: { effectiveFrom: 'desc' },
-        }),
-        tx.hrEmployeeCompensationProfile.findMany({
+        }) : null,
+        projection.includePayroll ? tx.hrEmployeeCompensationProfile.findMany({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
           orderBy: [{ effectiveFrom: 'desc' }, { createdAt: 'desc' }],
           take: 100,
-        }),
+        }) : [],
       ]);
       const hasMoreMovements = movementRows.length > query.pageSize;
       const movements = hasMoreMovements ? movementRows.slice(0, query.pageSize) : movementRows;
       return {
-        employee: mapEmployee(employee, compensation?.monthlyGross ?? null),
+        employee: mapEmployee(employee, projection.includePayroll ? compensation?.monthlyGross ?? null : null),
         compensation: compensation ? mapCompensation(compensation) : null,
         compensationHistory: compensationHistory.map(mapCompensation),
         services: services.map(mapService),
@@ -260,18 +263,21 @@ export class HrService {
 
   async listServices(context: TrustedCompanyActorContext, query: EmployeeServiceListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const serviceScope: Prisma.HrEmployeeServiceWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+        ...(query.serviceType ? { serviceType: query.serviceType } : {}),
+        ...(query.complianceStatus ? { complianceStatus: query.complianceStatus } : {}),
+        ...(query.expiryBefore || query.expiryAfter ? { expiryDate: { ...(query.expiryBefore ? { lte: query.expiryBefore } : {}), ...(query.expiryAfter ? { gte: query.expiryAfter } : {}) } } : {}),
+      };
       const cursor = query.cursor ? await tx.hrEmployeeService.findFirst({
-        where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, createdAt: true },
+        where: { id: query.cursor, ...serviceScope }, select: { id: true, createdAt: true },
       }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-service cursor is invalid.');
       const rows = await tx.hrEmployeeService.findMany({
         where: {
-          tenantId: context.tenantId,
-          companyId: context.companyId,
-          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
-          ...(query.serviceType ? { serviceType: query.serviceType } : {}),
-          ...(query.complianceStatus ? { complianceStatus: query.complianceStatus } : {}),
-          ...(query.expiryBefore || query.expiryAfter ? { expiryDate: { ...(query.expiryBefore ? { lte: query.expiryBefore } : {}), ...(query.expiryAfter ? { gte: query.expiryAfter } : {}) } } : {}),
+          ...serviceScope,
           ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}),
         },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],

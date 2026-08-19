@@ -24,15 +24,15 @@ export class HrEmployeeDocumentService {
   async list(context: TrustedCompanyActorContext, employeeId: string, query: DocumentQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.requireEmployee(tx, context, employeeId);
-      const cursor = query.cursor ? await tx.hrEmployeeDocument.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId, employeeId }, select: { id: true, createdAt: true } }) : null;
-      if (query.cursor && !cursor) throw new BadRequestException('The document cursor is invalid.');
       const today = day(new Date()); const soon = new Date(today); soon.setUTCDate(soon.getUTCDate() + 30);
-      const where: Prisma.HrEmployeeDocumentWhereInput = {
+      const documentScope: Prisma.HrEmployeeDocumentWhereInput = {
         tenantId: context.tenantId, companyId: context.companyId, employeeId,
         ...(query.documentType ? { documentType: query.documentType as never } : {}), ...(query.status ? { status: query.status } : {}),
-        ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}),
         ...(query.expiry === 'NONE' ? { expiryDate: null } : query.expiry === 'EXPIRED' ? { expiryDate: { lt: today } } : query.expiry === 'EXPIRING' ? { expiryDate: { gte: today, lte: soon } } : query.expiry === 'VALID' ? { expiryDate: { gt: soon } } : {}),
       };
+      const cursor = query.cursor ? await tx.hrEmployeeDocument.findFirst({ where: { id: query.cursor, ...documentScope }, select: { id: true, createdAt: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The document cursor is invalid.');
+      const where: Prisma.HrEmployeeDocumentWhereInput = { ...documentScope, ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}) };
       const rows = await tx.hrEmployeeDocument.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: query.pageSize + 1, include: { currentVersion: { include: { blob: true } } } });
       const hasMore = rows.length > query.pageSize; const documents = (hasMore ? rows.slice(0, query.pageSize) : rows).map((row) => mapDocument(row, today));
       return { documents, hasMore, nextCursor: hasMore ? documents.at(-1)?.id ?? null : null };
@@ -44,15 +44,16 @@ export class HrEmployeeDocumentService {
     const ids = { documentId: randomUUID(), blobId: randomUUID(), versionId: randomUUID(), metadataId: randomUUID() };
     const storageReference = `${STORAGE_NAMESPACE}/${context.tenantId}/${context.companyId}/${ids.blobId}.bin`;
     const encrypted = prepared ? this.encrypt(prepared.bytes) : null;
-    const stored = encrypted ? await this.writeStorage(storageReference, encrypted.bytes) : null;
+    let stored: string | null = null;
     try {
       const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
-        const begun = await this.begin(tx, context, 'hr.employee_document.create', idempotencyKey, { employeeId, ...input, sha256: prepared?.sha256 ?? null });
+        const begun = await this.begin(tx, context, 'hr.employee_document.create', idempotencyKey, { employeeId, ...input, fileName: prepared?.fileName ?? null, mimeType: prepared?.mimeType ?? null, sha256: prepared?.sha256 ?? null });
         if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; versionId: string; replayed: boolean }>(begun.response.body);
         if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
         await this.requireEmployee(tx, context, employeeId); await this.requireService(tx, context, employeeId, input.linkedServiceId);
         const scan = prepared ? await this.scan(prepared.bytes) : null;
         if (prepared && scan) {
+          stored = await this.writeStorage(storageReference, encrypted!.bytes);
           await tx.fileMetadata.create({ data: { id: ids.metadataId, tenantId: context.tenantId, companyId: context.companyId, sourceType: 'hr.employee_document_blob', sourceId: ids.blobId, purpose: 'attachment', version: 1, displayName: prepared.fileName, declaredMimeType: prepared.mimeType, declaredByteSize: BigInt(prepared.bytes.length), declaredSha256: prepared.sha256, storageReference, createdByUserId: context.actorUserId } });
           await tx.hrEmployeeDocumentBlob.create({ data: { id: ids.blobId, tenantId: context.tenantId, companyId: context.companyId, fileMetadataId: ids.metadataId, status: scan.status, storageReference, encryptionIv: encrypted!.iv, mimeType: prepared.mimeType, byteSize: BigInt(prepared.bytes.length), sha256: prepared.sha256, scannerName: scan.name, scannerResult: scan.result, scannedAt: scan.scannedAt, createdByUserId: context.actorUserId } });
         }
@@ -62,24 +63,24 @@ export class HrEmployeeDocumentService {
         await this.audit(tx, context, 'hr.employee_document.created', 'HrEmployeeDocument', ids.documentId, null, { employeeId, documentType: input.documentType, blobStatus: scan?.status ?? null });
         await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } }); return receipt;
       });
-      if (result.replayed && stored) await unlink(stored).catch(() => undefined);
       return result;
     } catch (error) { if (stored) await unlink(stored).catch(() => undefined); throw error; }
   }
 
   async replace(context: TrustedCompanyActorContext, documentId: string, raw: ReplaceHrEmployeeDocumentRequest) {
-    const prepared = this.prepare(raw.upload); const encrypted = this.encrypt(prepared.bytes); const blobId = randomUUID(), versionId = randomUUID(), metadataId = randomUUID(); const storageReference = `${STORAGE_NAMESPACE}/${context.tenantId}/${context.companyId}/${blobId}.bin`; const stored = await this.writeStorage(storageReference, encrypted.bytes);
+    const prepared = this.prepare(raw.upload); const encrypted = this.encrypt(prepared.bytes); const blobId = randomUUID(), versionId = randomUUID(), metadataId = randomUUID(); const storageReference = `${STORAGE_NAMESPACE}/${context.tenantId}/${context.companyId}/${blobId}.bin`; let stored: string | null = null;
     try { const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const begun = await this.begin(tx, context, 'hr.employee_document.replace', raw.idempotencyKey, { documentId, sha256: prepared.sha256 });
+      const begun = await this.begin(tx, context, 'hr.employee_document.replace', raw.idempotencyKey, { documentId, fileName: prepared.fileName, mimeType: prepared.mimeType, sha256: prepared.sha256 });
       if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; versionId: string; replayed: boolean }>(begun.response.body); if (begun.kind === 'in-progress') throw new ConflictException('The document request is already being processed.');
       const document = await tx.hrEmployeeDocument.findFirst({ where: { id: documentId, tenantId: context.tenantId, companyId: context.companyId } }); if (!document || document.status !== HrEmployeeDocumentStatus.ACTIVE) throw new NotFoundException('The active employee document is not available.');
       const latest = await tx.hrEmployeeDocumentVersion.aggregate({ where: { documentId, tenantId: context.tenantId, companyId: context.companyId }, _max: { version: true } }); const scan = await this.scan(prepared.bytes);
+      stored = await this.writeStorage(storageReference, encrypted.bytes);
       await tx.fileMetadata.create({ data: { id: metadataId, tenantId: context.tenantId, companyId: context.companyId, sourceType: 'hr.employee_document_blob', sourceId: blobId, purpose: 'attachment', version: (latest._max.version ?? 0) + 1, displayName: prepared.fileName, declaredMimeType: prepared.mimeType, declaredByteSize: BigInt(prepared.bytes.length), declaredSha256: prepared.sha256, storageReference, createdByUserId: context.actorUserId } });
       await tx.hrEmployeeDocumentBlob.create({ data: { id: blobId, tenantId: context.tenantId, companyId: context.companyId, fileMetadataId: metadataId, status: scan.status, storageReference, encryptionIv: encrypted.iv, mimeType: prepared.mimeType, byteSize: BigInt(prepared.bytes.length), sha256: prepared.sha256, scannerName: scan.name, scannerResult: scan.result, scannedAt: scan.scannedAt, createdByUserId: context.actorUserId } });
       await tx.hrEmployeeDocumentVersion.create({ data: { id: versionId, tenantId: context.tenantId, companyId: context.companyId, documentId, blobId, version: (latest._max.version ?? 0) + 1, createdByUserId: context.actorUserId } });
       await tx.hrEmployeeDocument.update({ where: { id: documentId }, data: { currentVersionId: versionId } }); const receipt = { id: documentId, versionId, replayed: false };
       await this.audit(tx, context, 'hr.employee_document.replaced', 'HrEmployeeDocument', documentId, { currentVersionId: document.currentVersionId }, { currentVersionId: versionId, blobStatus: scan.status }); await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } }); return receipt;
-    }); if (result.replayed) await unlink(stored).catch(() => undefined); return result; } catch (error) { await unlink(stored).catch(() => undefined); throw error; }
+    }); return result; } catch (error) { if (stored) await unlink(stored).catch(() => undefined); throw error; }
   }
 
   async revoke(context: TrustedCompanyActorContext, documentId: string, raw: RevokeHrEmployeeDocumentRequest) {

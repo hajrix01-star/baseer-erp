@@ -56,6 +56,7 @@ import {
   hrCompensationPolicyReceiptSchema,
   hrPayrollRunsReceiptSchema,
   hrPayrollRunsQuerySchema,
+  hrPayrollRunDetailQuerySchema,
   hrPayrollRunDetailReceiptSchema,
   hrPayrollRunReceiptSchema,
   hrPayrollPreviewReceiptSchema,
@@ -97,17 +98,17 @@ export class HrController {
   async listEmployees(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeesQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee list query.');
-    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
-    return hrEmployeesReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.listEmployees(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    const access = await this.authorizeEmployeeRead(authorization, companyId);
+    return hrEmployeesReceiptSchema.parse({ companyId: access.context.companyId, ...(await this.hr.listEmployees(access.context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) }, { includePayroll: access.canReadPayroll })) });
   }
 
   @Get('employees/:employeeId')
   async employeeDetail(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeeDetailQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-ledger query.');
-    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
-    const result = await this.hr.employeeDetail(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) });
-    return hrEmployeeDetailReceiptSchema.parse({ companyId: context.companyId, ...result });
+    const access = await this.authorizeEmployeeRead(authorization, companyId);
+    const result = await this.hr.employeeDetail(access.context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) }, { includePayroll: access.canReadPayroll });
+    return hrEmployeeDetailReceiptSchema.parse({ companyId: access.context.companyId, ...result });
   }
 
   @Get('employees/:employeeId/payroll')
@@ -384,9 +385,16 @@ export class HrController {
   }
 
   @Get('payroll-runs/:payrollRunId')
-  async payrollRunDetail(@Param('payrollRunId', ParseUUIDPipe) payrollRunId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async payrollRunDetail(@Param('payrollRunId', ParseUUIDPipe) payrollRunId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrPayrollRunDetailQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll-run detail query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
-    return hrPayrollRunDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.detail(context, payrollRunId)) });
+    return hrPayrollRunDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.detail(context, payrollRunId, {
+      linePageSize: parsed.data.linePageSize,
+      paymentPageSize: parsed.data.paymentPageSize,
+      ...(parsed.data.lineCursor ? { lineCursor: parsed.data.lineCursor } : {}),
+      ...(parsed.data.paymentCursor ? { paymentCursor: parsed.data.paymentCursor } : {}),
+    })) });
   }
 
   @Post('payroll-runs')
@@ -500,5 +508,22 @@ export class HrController {
     if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
     const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: Array.isArray(capability) ? capability : [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
+  }
+
+  private async authorizeEmployeeRead(authorization: string | undefined, companyId: string | undefined) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
+    if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
+    const parsedCompanyId = companyIdSchema.safeParse(companyId);
+    if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
+    const authorized = await this.companyContext.authorizeAvailable({
+      accessToken,
+      companyId: parsedCompanyId.data,
+      requestedCapabilities: [READ_CAPABILITY, 'hr.payroll.read'],
+    });
+    if (!authorized.capabilities.includes(READ_CAPABILITY)) throw new ForbiddenException('Company HR scope is not permitted.');
+    return {
+      context: { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId },
+      canReadPayroll: authorized.capabilities.includes('hr.payroll.read'),
+    };
   }
 }
