@@ -15,7 +15,7 @@ import "./hr-onboarding.css";
 type Language = "ar" | "en";
 type Draft = { nameAr: string; nameEn: string; jobTitle: string; hireDate: string; iqamaNumber: string; phone: string; email: string; monthlyGross: string; housingAllowance: string; transportAllowance: string; foodAllowance: string; otherAllowance: string; scheduledHoursPerDay: string; scheduledWorkDays: string; notes: string };
 const today = () => new Date().toISOString().slice(0, 10);
-const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: today(), iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "", transportAllowance: "", foodAllowance: "", otherAllowance: "", scheduledHoursPerDay: "12", scheduledWorkDays: "26", notes: "" });
+const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: "", iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "", transportAllowance: "", foodAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "", notes: "" });
 const number = (value: string) => { const parsed = Number(value || "0"); return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0; };
 
 /** Guided onboarding keeps the pleasant single form while persisting an effective-dated agreement. */
@@ -31,6 +31,11 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     setPhotoPreviewUrl(nextUrl);
     return () => URL.revokeObjectURL(nextUrl);
   }, [photoFile]);
+  useEffect(() => {
+    if (!open) return;
+    setDraft(empty());
+    setPhotoFile(null);
+  }, [open]);
   const calculation = useMemo(() => calculateSalaryTool({ monthlyGross: draft.monthlyGross, compensationMethod: "INCLUSIVE_OVERTIME", foodAllowance: draft.foodAllowance, housingAllowance: draft.housingAllowance, transportAllowance: draft.transportAllowance, otherAllowance: draft.otherAllowance, scheduledHoursPerDay: draft.scheduledHoursPerDay, scheduledWorkDays: draft.scheduledWorkDays }), [draft]);
   const allowancesTotal = number(draft.foodAllowance) + number(draft.housingAllowance) + number(draft.transportAllowance) + number(draft.otherAllowance);
   const identityComplete = Boolean(draft.nameAr.trim() && draft.hireDate);
