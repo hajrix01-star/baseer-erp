@@ -40,6 +40,7 @@ import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { FinanceFoundationService } from '../finance/finance-foundation.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
+import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 
@@ -359,6 +360,7 @@ export class HrPayrollService {
       const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const payrollMonth = firstOfMonth(input.payrollMonth);
       if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('Payroll preview is available only for the current operational business month.');
+      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
       return this.previewPopulation(tx, context, payrollMonth, input, input.businessDate);
     });
   }
@@ -371,6 +373,7 @@ export class HrPayrollService {
       if (begun.kind === 'in-progress') throw new ConflictException('The payroll creation request is already being processed.');
       const payrollMonth = firstOfMonth(input.payrollMonth);
       if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll run can be created only for the current operational business month.');
+      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
       const existing = await tx.hrPayrollRun.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth }, select: { id: true } });
       if (existing) throw new ConflictException('A payroll run already exists for this month.');
@@ -448,6 +451,7 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be approved.');
+      if (!isHrDateOnOrAfter(input.businessDate, run.businessDate)) throw new BadRequestException('The payroll approval date cannot be before the payroll business date.');
       // Older or newly created companies may not yet have all payroll accounts.
       // Initialising here is idempotent and runs in this same transaction before
       // the first payroll accrual; it never changes an existing journal entry.
@@ -464,10 +468,10 @@ export class HrPayrollService {
         for (const app of line.deductionApplications) await this.applyDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber);
         await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary, sourceReference: run.runNumber, description: 'Payroll accrued' } });
       }
-      await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.APPROVED, accrualJournalEntryId: journal.journalEntryId, approvedAt: new Date(), businessDate: input.businessDate } });
+      await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.APPROVED, accrualJournalEntryId: journal.journalEntryId, approvedAt: new Date() } });
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
-      await this.audit(tx, context, 'hr.payroll.approved', 'HrPayrollRun', run.id, { ...receipt, journalEntryId: journal.journalEntryId });
+      await this.audit(tx, context, 'hr.payroll.approved', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(input.businessDate), journalEntryId: journal.journalEntryId });
       return receipt;
     });
   }
@@ -506,6 +510,9 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED && run.status !== HrPayrollRunStatus.PARTIALLY_PAID) throw new ConflictException('Only an approved unpaid payroll can be paid.');
+      const paymentFloor = latestHrBusinessDate(run.accrualJournal?.businessDate, run.payments[0]?.businessDate);
+      if (!paymentFloor) throw new ConflictException('The payroll accrual is missing.');
+      if (!isHrDateOnOrAfter(input.businessDate, paymentFloor)) throw new BadRequestException('The payroll payment date cannot be before its approval or latest payment date.');
       await this.foundation.initializeInTransaction(tx, context);
       const allocations = await this.validateAllocations(tx, context, input.allocations);
       const paymentAmount = sum(allocations.map((allocation) => allocation.amount));
@@ -546,11 +553,13 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED) throw new ConflictException('A payroll must be unpaid before its accrual can be reversed.');
+      if (run.payments.length) throw new ConflictException('A payroll with payment history cannot be reversed as unpaid.');
       if (!run.accrualJournalEntryId) throw new ConflictException('The payroll accrual is missing.');
+      if (!run.accrualJournal || !isHrDateOnOrAfter(input.businessDate, run.accrualJournal.businessDate)) throw new BadRequestException('The payroll reversal date cannot be before its approval date.');
       const reversalJournal = await this.journals.reverseInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-reversal:${run.id}`, journalEntryId: run.accrualJournalEntryId, businessDate: input.businessDate, reason: input.reason });
       for (const line of run.lines) {
         await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: reversalJournal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary.negated(), sourceReference: `${run.runNumber}-REV`, description: `Payroll accrual reversed: ${input.reason}` } });
-        for (const app of line.advanceApplications) await this.reverseAdvance(tx, context, app.advanceId, app.amount, input.businessDate, run.runNumber);
+        for (const app of line.advanceApplications) await this.reverseAdvance(tx, context, app.advanceId, app.amount, input.businessDate, reversalJournal.journalEntryId, run.runNumber);
         for (const app of line.deductionApplications) await this.reverseDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber, input.reason);
       }
       await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.REVERSED, reversedAt: new Date(), reversalReason: input.reason } });
@@ -700,9 +709,22 @@ export class HrPayrollService {
   }
 
   private async findRun(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, id: string, _detail = true) {
-    const run = await tx.hrPayrollRun.findFirst({ where: { id, tenantId: context.tenantId, companyId: context.companyId }, include: { lines: { orderBy: { employeeNumberSnapshot: 'asc' }, include: { advanceApplications: { include: { advance: { select: { advanceNumber: true } } } }, deductionApplications: { include: { deduction: { select: { deductionNumber: true } } } } } }, payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }] } } });
+    const run = await tx.hrPayrollRun.findFirst({
+      where: { id, tenantId: context.tenantId, companyId: context.companyId },
+      include: {
+        accrualJournal: { select: { businessDate: true } },
+        lines: {
+          orderBy: { employeeNumberSnapshot: 'asc' },
+          include: {
+            advanceApplications: { include: { advance: { select: { advanceNumber: true } } } },
+            deductionApplications: { include: { deduction: { select: { deductionNumber: true } } } },
+          },
+        },
+        payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }] },
+      },
+    });
     if (!run) throw new NotFoundException('The payroll run was not found.');
-    return run as Prisma.HrPayrollRunGetPayload<{ include: { lines: { include: { advanceApplications: { include: { advance: true } }; deductionApplications: { include: { deduction: true } } } }; payments: true } }>;
+    return run;
   }
 
   private async resolveAdvanceApplications(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, employeeId: string, applications: readonly { id: string; amount: string }[]) {
@@ -727,6 +749,7 @@ export class HrPayrollService {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrEmployeeAdvanceLockKey(context.tenantId, context.companyId, advanceId)}, 0))`;
     const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!advance || advance.remainingAmount.lt(applied)) throw new ConflictException('An advance changed before payroll approval.');
+    if (!isHrDateOnOrAfter(businessDate, advance.businessDate)) throw new BadRequestException('A payroll advance settlement cannot predate the employee-advance issue.');
     const remaining = advance.remainingAmount.minus(applied);
     await tx.hrEmployeeAdvance.update({ where: { id: advanceId }, data: { settledAmount: { increment: applied }, remainingAmount: remaining, nextSettlementDate: null, status: remaining.eq(0) ? HrEmployeeAdvanceStatus.SETTLED : HrEmployeeAdvanceStatus.PARTIALLY_SETTLED } });
     await tx.hrEmployeeAdvanceSettlement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, advanceId, source: HrEmployeeAdvanceSettlementSource.PAYROLL, businessDate, amount: applied, journalEntryId } });
@@ -741,12 +764,13 @@ export class HrPayrollService {
     await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId, actionType: HrEmployeeAdministrativeDeductionActionType.APPLIED, businessDate, amount: applied, reason: reference, createdByUserId: context.actorUserId } });
   }
 
-  private async reverseAdvance(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, advanceId: string, applied: Prisma.Decimal, businessDate: Date, reference: string) {
+  private async reverseAdvance(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, advanceId: string, applied: Prisma.Decimal, businessDate: Date, journalEntryId: string, reference: string) {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrEmployeeAdvanceLockKey(context.tenantId, context.companyId, advanceId)}, 0))`;
     const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!advance || advance.settledAmount.lt(applied)) throw new ConflictException('Advance settlement cannot be reversed safely.');
     const remaining = advance.remainingAmount.plus(applied);
     await tx.hrEmployeeAdvance.update({ where: { id: advanceId }, data: { settledAmount: { decrement: applied }, remainingAmount: remaining, status: advance.settledAmount.eq(applied) ? HrEmployeeAdvanceStatus.ISSUED : HrEmployeeAdvanceStatus.PARTIALLY_SETTLED } });
+    await tx.hrEmployeeAdvanceSettlement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, advanceId, source: HrEmployeeAdvanceSettlementSource.PAYROLL, businessDate, amount: applied.negated(), journalEntryId } });
   }
 
   private async reverseDeduction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, deductionId: string, applied: Prisma.Decimal, businessDate: Date, reference: string, reason: string) {

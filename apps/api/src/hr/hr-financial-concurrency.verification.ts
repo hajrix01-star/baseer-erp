@@ -2,6 +2,7 @@ import { strict as assert } from 'node:assert';
 
 import { aggregateDailyBalanceChanges } from '../finance/journal/journal-posting.service.js';
 import { Prisma } from '../generated/prisma/client.js';
+import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
 
 const payrollKey = hrPayrollRunLockKey('tenant-a', 'company-a', 'payroll-a');
@@ -29,4 +30,14 @@ assert.equal(changes.get('recovery')?.creditAmount.toFixed(4), '-30.0000');
 assert.equal(changes.get('expense')?.debitAmount.toFixed(4), '-30.0000');
 assert.equal(changes.get('expense')?.creditAmount.toFixed(4), '0.0000');
 
-console.log('HR financial concurrency and repeated-account daily-balance verification passed.');
+const issued = new Date('2026-08-10T00:00:00.000Z');
+const settled = new Date('2026-08-11T00:00:00.000Z');
+assert.equal(isHrDateOnOrAfter(settled, issued), true);
+assert.equal(isHrDateOnOrAfter(issued, settled), false);
+assert.equal(isHrDateOnOrAfter(issued, issued), true);
+assert.equal(latestHrBusinessDate(null, issued, settled)?.toISOString(), settled.toISOString());
+assert.equal(latestHrBusinessDate(undefined, null), null);
+assert.equal(isSameHrBusinessMonth(new Date('2026-08-31T00:00:00.000Z'), new Date('2026-08-01T00:00:00.000Z')), true);
+assert.equal(isSameHrBusinessMonth(new Date('2026-09-01T00:00:00.000Z'), new Date('2026-08-01T00:00:00.000Z')), false);
+
+console.log('HR financial locking, chronology, and repeated-account daily-balance verification passed.');

@@ -11,6 +11,7 @@ import { FinanceAccountStatus, FinanceAccountType, FinanceVaultPaymentMethod, Hr
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { hrEmployeeAdvanceLockKey } from './hr-financial-lock.util.js';
+import { isHrDateOnOrAfter } from './hr-financial-date.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const ADVANCE_ASSET_SYSTEM_KEY = 'EMPLOYEE_ADVANCES';
@@ -210,6 +211,7 @@ export class HrAdvanceService {
         include: { employee: { select: { id: true, nameAr: true } } },
       });
       if (!advance || advance.remainingAmount.lte(0)) throw new NotFoundException('An open employee advance was not found.');
+      if (!isHrDateOnOrAfter(input.businessDate, advance.businessDate)) throw new BadRequestException('The settlement date cannot be before the employee-advance issue date.');
       if (input.amount.gt(advance.remainingAmount)) throw new BadRequestException('The settlement amount cannot exceed the remaining employee-advance balance.');
       if (input.deferRemainingUntil && (!input.amount.lt(advance.remainingAmount) || input.deferRemainingUntil.getTime() <= input.businessDate.getTime())) throw new BadRequestException('A deferred collection date requires a partial settlement and must be after the settlement date.');
 
@@ -253,8 +255,9 @@ export class HrAdvanceService {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       if (input.deferredUntil.getTime() <= input.businessDate.getTime()) throw new BadRequestException('The deferred collection date must be after the deferral date.');
       await this.lockAdvance(tx, context, input.advanceId);
-      const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: input.advanceId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] }, remainingAmount: { gt: 0 } }, select: { id: true, remainingAmount: true } });
+      const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: input.advanceId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] }, remainingAmount: { gt: 0 } }, select: { id: true, businessDate: true, remainingAmount: true } });
       if (!advance) throw new NotFoundException('An open employee advance was not found.');
+      if (!isHrDateOnOrAfter(input.businessDate, advance.businessDate)) throw new BadRequestException('The deferral date cannot be before the employee-advance issue date.');
       const deferralId = randomUUID();
       await tx.hrEmployeeAdvance.update({ where: { id: advance.id }, data: { nextSettlementDate: input.deferredUntil } });
       await tx.hrEmployeeAdvanceDeferral.create({ data: { id: deferralId, tenantId: context.tenantId, companyId: context.companyId, advanceId: advance.id, businessDate: input.businessDate, deferredUntil: input.deferredUntil, reason: input.reason, createdByUserId: context.actorUserId } });
