@@ -17,6 +17,8 @@ import { hrReplayReceipt } from './hr-idempotency.util.js';
 const EOS_EXPENSE = 'EOS_EXPENSE'; const EOS_PAYABLE = 'EOS_PAYABLE'; const ADVANCES = 'EMPLOYEE_ADVANCES'; const ADMIN_DEDUCTION = 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY'; const POLICY = 'SA-EOS-V1';
 type Recovery = { recoveryType: 'ADVANCE' | 'ADMINISTRATIVE_DEDUCTION'; sourceId: string; amount: string };
 type SettlementRequest = Omit<PreviewHrFinalSettlementRequest, 'recoveries'> & { recoveries: readonly Recovery[] };
+export type FinalSettlementPaymentReversalInput = Readonly<{ finalSettlementPaymentId: string; businessDate: Date; reason: string }>;
+export type FinalSettlementDetailQuery = Readonly<{ paymentCursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrFinalSettlementService {
@@ -101,7 +103,8 @@ export class HrFinalSettlementService {
       await this.lock(tx, context, input.settlementId);
       const settlement = await this.requireSettlement(tx, context, input.settlementId, false);
       if (!(new Set<HrFinalSettlementStatus>([HrFinalSettlementStatus.APPROVED, HrFinalSettlementStatus.PARTIALLY_PAID])).has(settlement.status)) throw new ConflictException('Only an approved final settlement can be paid.');
-      const paymentFloor = latestHrBusinessDate(settlement.terminationDate, settlement.accrualJournal?.businessDate, settlement.payments[0]?.businessDate);
+      const paymentHistoryFloor = settlement.payments.reduce<Date | null>((latest, payment) => latestHrBusinessDate(latest, payment.businessDate, payment.journalEntry.reversalEntry?.businessDate), null);
+      const paymentFloor = latestHrBusinessDate(settlement.terminationDate, settlement.accrualJournal?.businessDate, paymentHistoryFloor);
       if (!settlement.accrualJournal || !paymentFloor) throw new ConflictException('The final-settlement accrual is missing.');
       if (!isHrDateOnOrAfter(input.businessDate, paymentFloor)) throw new BadRequestException('The final-settlement payment date cannot be before its approval or latest payment date.');
       if (settlement.createdByUserId === context.actorUserId || settlement.approvedByUserId === context.actorUserId) throw new ConflictException('The final-settlement creator or approver cannot make its payment.');
@@ -120,6 +123,44 @@ export class HrFinalSettlementService {
     });
   }
 
+  async reversePayment(context: TrustedCompanyActorContext, raw: FinalSettlementPaymentReversalInput, idempotencyKey: string) {
+    const input = { finalSettlementPaymentId: raw.finalSettlementPaymentId, businessDate: raw.businessDate, reason: raw.reason.trim() };
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      const begun = await this.begin(tx, context, 'hr.final_settlement.payment.reverse', idempotencyKey, input);
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; settlementNumber: string; paymentId: string; reversalJournalEntryId: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The final-settlement payment reversal is already being processed.');
+      if (!input.reason) throw new BadRequestException('A final-settlement payment reversal reason is required.');
+      const locator = await tx.hrFinalSettlementPayment.findFirst({ where: { id: input.finalSettlementPaymentId, tenantId: context.tenantId, companyId: context.companyId }, select: { settlementId: true } });
+      if (!locator) throw new NotFoundException('The final-settlement payment was not found.');
+      await this.lock(tx, context, locator.settlementId);
+      const payment = await tx.hrFinalSettlementPayment.findFirst({
+        where: { id: input.finalSettlementPaymentId, tenantId: context.tenantId, companyId: context.companyId, settlementId: locator.settlementId },
+        include: {
+          journalEntry: { select: { id: true, reversalEntry: { select: { id: true, businessDate: true } } } },
+          settlement: { include: { payments: { include: { journalEntry: { select: { reversalEntry: { select: { businessDate: true } } } } } } } },
+        },
+      });
+      if (!payment) throw new NotFoundException('The final-settlement payment was not found.');
+      if (payment.journalEntry.reversalEntry) throw new ConflictException('The final-settlement payment has already been reversed.');
+      if (payment.createdByUserId === context.actorUserId) throw new ConflictException('The final-settlement payment creator cannot reverse the same payment.');
+      if (payment.settlement.paidAmount.lt(payment.amount) || !(new Set<HrFinalSettlementStatus>([HrFinalSettlementStatus.PARTIALLY_PAID, HrFinalSettlementStatus.PAID])).has(payment.settlement.status)) throw new ConflictException('The final-settlement balance cannot safely accept this payment reversal.');
+      const reversalFloor = payment.settlement.payments.reduce<Date | null>((latest, row) => latestHrBusinessDate(latest, row.businessDate, row.journalEntry.reversalEntry?.businessDate), payment.businessDate);
+      if (!isHrDateOnOrAfter(input.businessDate, reversalFloor!)) throw new BadRequestException('The final-settlement payment reversal cannot predate the latest payment event.');
+      const originalMovement = await tx.hrEmployeeFinancialMovement.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: payment.settlement.employeeId, journalEntryId: payment.journalEntryId, movementType: HrEmployeeFinancialMovementType.FINAL_SETTLEMENT_PAYMENT } });
+      if (!originalMovement || !originalMovement.amount.eq(payment.amount)) throw new ConflictException('The final-settlement payment movement is incomplete and cannot be reversed safely.');
+      const journal = await this.journals.reverseInTransaction(tx, { ...context, requestId: `hr-final-settlement-payment-reversal:${payment.id}`, journalEntryId: payment.journalEntryId, businessDate: input.businessDate, reason: input.reason });
+      const paidAmount = payment.settlement.paidAmount.minus(payment.amount);
+      const updated = await tx.hrFinalSettlement.updateMany({ where: { id: payment.settlementId, tenantId: context.tenantId, companyId: context.companyId, paidAmount: payment.settlement.paidAmount, status: { in: [HrFinalSettlementStatus.PARTIALLY_PAID, HrFinalSettlementStatus.PAID] } }, data: { paidAmount, status: paidAmount.eq(0) ? HrFinalSettlementStatus.APPROVED : HrFinalSettlementStatus.PARTIALLY_PAID } });
+      if (updated.count !== 1) throw new ConflictException('The final settlement changed while the payment reversal was being recorded.');
+      await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: payment.settlement.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.FINAL_SETTLEMENT_PAYMENT, businessDate: input.businessDate, amount: payment.amount.negated(), sourceReference: `${payment.paymentNumber}-REV`, description: `Final-settlement payment reversed: ${input.reason}` } });
+      const receipt = { id: payment.settlementId, settlementNumber: payment.settlement.settlementNumber, paymentId: payment.id, reversalJournalEntryId: journal.journalEntryId, replayed: false };
+      await this.complete(tx, context, begun.receiptId, 200, receipt);
+      await this.audit(tx, context, 'hr.final_settlement.payment_reversed', payment.settlementId, { ...receipt, businessDate: ymd(input.businessDate), reason: input.reason });
+      return receipt;
+    });
+  }
+
   async reverse(context: TrustedCompanyActorContext, input: Omit<ReverseHrFinalSettlementRequest, 'idempotencyKey'>, idempotencyKey: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
@@ -129,7 +170,7 @@ export class HrFinalSettlementService {
       await this.lock(tx, context, input.settlementId);
       const settlement = await this.requireSettlement(tx, context, input.settlementId, true);
       if (settlement.status !== HrFinalSettlementStatus.APPROVED) throw new ConflictException('Only an unpaid approved final settlement can be reversed.');
-      if (settlement.payments.length) throw new ConflictException('A final settlement with payment history cannot be reversed as unpaid.');
+      if (settlement.payments.some((payment) => !payment.journalEntry.reversalEntry)) throw new ConflictException('A final settlement with an active payment cannot have its accrual reversed.');
       const approvalBusinessDate = settlement.accrualJournal?.businessDate ?? await this.approvalBusinessDate(tx, context, settlement.id);
       if (!approvalBusinessDate) throw new ConflictException('The final-settlement approval business date is unavailable, so it cannot be reversed safely.');
       const reversalFloor = latestHrBusinessDate(settlement.terminationDate, approvalBusinessDate)!;
@@ -153,6 +194,25 @@ export class HrFinalSettlementService {
       const rows = await tx.hrFinalSettlement.findMany({ where: { ...scope, ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}) }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: query.pageSize + 1 });
       const hasMore = rows.length > query.pageSize; const settlements = hasMore ? rows.slice(0, query.pageSize) : rows;
       return { settlements: settlements.map(map), hasMore, nextCursor: hasMore ? settlements.at(-1)?.id ?? null : null };
+    });
+  }
+
+  async detail(context: TrustedCompanyActorContext, settlementId: string, query: FinalSettlementDetailQuery) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const scope = { tenantId: context.tenantId, companyId: context.companyId, settlementId } as const;
+      const settlement = await tx.hrFinalSettlement.findFirst({ where: { id: settlementId, tenantId: context.tenantId, companyId: context.companyId } });
+      if (!settlement) throw new NotFoundException('The final settlement was not found.');
+      const cursor = query.paymentCursor ? await tx.hrFinalSettlementPayment.findFirst({ where: { id: query.paymentCursor, ...scope }, select: { id: true, businessDate: true } }) : null;
+      if (query.paymentCursor && !cursor) throw new BadRequestException('The final-settlement payment cursor is invalid.');
+      const rows = await tx.hrFinalSettlementPayment.findMany({
+        where: { ...scope, ...(cursor ? { OR: [{ businessDate: { lt: cursor.businessDate } }, { businessDate: cursor.businessDate, id: { lt: cursor.id } }] } : {}) },
+        orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
+        take: query.pageSize + 1,
+        include: { journalEntry: { select: { reversalEntry: { select: { id: true, postedAt: true } } } } },
+      });
+      const hasMore = rows.length > query.pageSize;
+      const payments = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { settlement: map(settlement), payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: payment.amount.toFixed(4), journalEntryId: payment.journalEntryId, status: payment.journalEntry.reversalEntry ? 'REVERSED' as const : 'POSTED' as const, reversedAt: payment.journalEntry.reversalEntry?.postedAt.toISOString() ?? null, reversalJournalEntryId: payment.journalEntry.reversalEntry?.id ?? null })), hasMore, nextCursor: hasMore ? payments.at(-1)?.id ?? null : null };
     });
   }
 
@@ -207,7 +267,7 @@ export class HrFinalSettlementService {
     if (journalEntryId && advanceRecoveryAmount.gt(0)) await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: settlement.employeeId, journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_SETTLEMENT, businessDate, amount: advanceRecoveryAmount.negated(), sourceReference: `${settlement.settlementNumber}-REV`, description: 'Final-settlement advance recoveries reversed' } });
   }
   private async resolveAllocations(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, allocations: Omit<PayHrFinalSettlementRequest, 'idempotencyKey' | 'settlementId' | 'businessDate'>['allocations']) { const output: Array<{ vaultId: string; accountId: string; paymentMethod: (typeof allocations)[number]['paymentMethod']; amount: Prisma.Decimal }> = []; for (const allocation of allocations) { const vault = await this.vaults.assertActivePaymentDestination(tx, { tenantId: context.tenantId, companyId: context.companyId, vaultId: allocation.vaultId }); if (!vault.paymentMethods.includes(allocation.paymentMethod)) throw new BadRequestException('The selected payment method is not enabled for this vault.'); output.push({ vaultId: vault.id, accountId: vault.accountId, paymentMethod: allocation.paymentMethod, amount: dec(allocation.amount) }); } return output; }
-  private async requireSettlement(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, id: string, recoveries: boolean) { const settlement = await tx.hrFinalSettlement.findFirst({ where: { id, tenantId: context.tenantId, companyId: context.companyId }, include: { recoveries, accrualJournal: { select: { businessDate: true } }, payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 1, select: { businessDate: true } } } }); if (!settlement) throw new NotFoundException('The final settlement was not found.'); return settlement; }
+  private async requireSettlement(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, id: string, recoveries: boolean) { const settlement = await tx.hrFinalSettlement.findFirst({ where: { id, tenantId: context.tenantId, companyId: context.companyId }, include: { recoveries, accrualJournal: { select: { businessDate: true } }, payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], include: { journalEntry: { select: { reversalEntry: { select: { businessDate: true } } } } } } } }); if (!settlement) throw new NotFoundException('The final settlement was not found.'); return settlement; }
   private async approvalBusinessDate(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, settlementId: string) { const audit = await tx.auditEvent.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, action: 'hr.final_settlement.approved', entityType: 'HrFinalSettlement', entityId: settlementId, requestId: `hr.final_settlement.approved:${settlementId}` }, orderBy: { createdAt: 'desc' }, select: { afterJson: true } }); return auditDate(audit?.afterJson); }
   private async accounts(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, keys: string[]) { const rows = await tx.financeAccount.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, systemKey: { in: keys }, status: FinanceAccountStatus.ACTIVE }, select: { id: true, systemKey: true } }); const accounts = new Map(rows.map((row) => [row.systemKey!, row.id])); if (keys.some((key) => !accounts.has(key))) throw new ConflictException('The company finance setup is missing final-settlement accounts.'); return accounts; }
   private async lock(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, id: string) { await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:hr-final-settlement:${id}`}, 0))`; }

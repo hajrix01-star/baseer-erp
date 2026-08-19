@@ -49,6 +49,7 @@ try {
     { HrAdministrativeDeductionService },
     { HrFinalSettlementService },
     { HrService },
+    { PurchaseExpenseService },
   ] = await Promise.all([
     import('../apps/api/dist/app.module.js'),
     import('../apps/api/dist/database/database.service.js'),
@@ -58,6 +59,7 @@ try {
     import('../apps/api/dist/hr/hr-administrative-deduction.service.js'),
     import('../apps/api/dist/hr/hr-final-settlement.service.js'),
     import('../apps/api/dist/hr/hr.service.js'),
+    import('../apps/api/dist/finance/purchase-expense.service.js'),
   ]);
 
   app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }), { logger: false });
@@ -70,6 +72,7 @@ try {
   const deductions = app.get(HrAdministrativeDeductionService);
   const settlements = app.get(HrFinalSettlementService);
   const hr = app.get(HrService);
+  const purchaseExpenses = app.get(PurchaseExpenseService);
 
   const finance = await setup.initialize(creator, {
     fiscalPeriodNameAr: 'فترة تحقق دورة الموارد البشرية',
@@ -89,6 +92,21 @@ try {
   }, randomUUID());
   const reversalCashVaultId = reversalFinance.vaultIds[0];
   assert.ok(reversalCashVaultId, 'Payroll-reversal fixture must create a cash vault.');
+  const serviceReferences = await database.inTenantTransaction(fixture.tenantId, async (tx) => {
+    const expenseAccount = await tx.financeAccount.findFirstOrThrow({
+      where: { tenantId: fixture.tenantId, companyId: fixture.companyId, systemKey: 'PAYROLL_EXPENSE', status: 'ACTIVE' },
+      select: { id: true },
+    });
+    const category = await tx.financeCategory.create({
+      data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, accountId: expenseAccount.id, code: `HR-SVC-${suffix}`, nameAr: 'تكلفة خدمة موظف للتحقق', nameEn: 'HR service verification cost', kind: 'EXPENSE' },
+      select: { id: true },
+    });
+    const supplier = await tx.financeSupplier.create({
+      data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, categoryId: category.id, supplierType: 'EXPENSE', nameAr: 'مورد تحقق خدمات الموظفين', nameEn: 'HR service verification supplier' },
+      select: { id: true },
+    });
+    return { categoryId: category.id, supplierId: supplier.id };
+  });
 
   const employeeDefinitions = [
     ['payroll', 'موظف المسير'],
@@ -143,6 +161,62 @@ try {
   const manualSettlement = await advances.settleDirectly(creator, manualSettlementInput, manualSettlementKey);
   assert.equal(manualSettlement.remainingAmount, '250.0000');
   assert.equal((await advances.settleDirectly(creator, manualSettlementInput, manualSettlementKey)).replayed, true, 'Advance-settlement replay must be explicit.');
+
+  const reversibleAdvance = await advances.issue(creator, {
+    employeeId: payrollEmployee.id,
+    businessDate: monthStart,
+    amount: '40.0000',
+    allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: '40.0000' }],
+    notes: 'Advance issue reversal verification',
+  }, randomUUID());
+  await assert.rejects(
+    () => advances.reverseIssue(approver, { advanceId: reversibleAdvance.id, businessDate: beforeMonth, reason: 'Invalid historical advance reversal' }, randomUUID()),
+    /cannot predate its latest financial or collection event/,
+    'An advance issue reversal must not predate issuance.',
+  );
+  const advanceReversalKeys = [randomUUID(), randomUUID()];
+  const advanceReversalResults = await Promise.allSettled([
+    advances.reverseIssue(approver, { advanceId: reversibleAdvance.id, businessDate: monthStart, reason: 'Concurrent advance issue reversal' }, advanceReversalKeys[0]),
+    advances.reverseIssue(payer, { advanceId: reversibleAdvance.id, businessDate: monthStart, reason: 'Concurrent advance issue reversal' }, advanceReversalKeys[1]),
+  ]);
+  assert.equal(advanceReversalResults.filter((result) => result.status === 'fulfilled').length, 1, 'The advance lock must allow exactly one concurrent issue reversal.');
+  const successfulAdvanceReversal = advanceReversalResults.findIndex((result) => result.status === 'fulfilled');
+  assert.match(String(advanceReversalResults[1 - successfulAdvanceReversal].reason?.message), /already been reversed/);
+  const advanceReversalActor = successfulAdvanceReversal === 0 ? approver : payer;
+  assert.equal((await advances.reverseIssue(advanceReversalActor, { advanceId: reversibleAdvance.id, businessDate: monthStart, reason: 'Concurrent advance issue reversal' }, advanceReversalKeys[successfulAdvanceReversal])).replayed, true, 'Advance issue reversal replay must be explicit.');
+
+  const issuedService = await purchaseExpenses.recordEmployeeServiceAndIssueCost({
+    context: creator,
+    idempotencyKey: randomUUID(),
+    request: {
+      employeeId: payrollEmployee.id,
+      serviceType: 'OTHER',
+      issueDate: monthStart,
+      supplierId: serviceReferences.supplierId,
+      categoryId: serviceReferences.categoryId,
+      businessDate: monthStart,
+      grossAmount: '75.0000',
+      isTaxable: false,
+      allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', grossAmount: '75.0000' }],
+      supplierInvoiceMissingReason: 'Lifecycle verification fixture',
+      notes: 'Employee-service cost reversal verification',
+    },
+  });
+  await assert.rejects(
+    () => purchaseExpenses.reverseEmployeeServiceCost({ context: approver, idempotencyKey: randomUUID(), request: { serviceId: issuedService.serviceId, businessDate: beforeMonth, reason: 'Invalid historical service-cost reversal' } }),
+    /cannot predate the issued cost/,
+    'An employee-service cost reversal must not predate its financial issue.',
+  );
+  const serviceReversalKeys = [randomUUID(), randomUUID()];
+  const serviceReversalResults = await Promise.allSettled([
+    purchaseExpenses.reverseEmployeeServiceCost({ context: approver, idempotencyKey: serviceReversalKeys[0], request: { serviceId: issuedService.serviceId, businessDate: monthStart, reason: 'Concurrent employee-service cost reversal' } }),
+    purchaseExpenses.reverseEmployeeServiceCost({ context: payer, idempotencyKey: serviceReversalKeys[1], request: { serviceId: issuedService.serviceId, businessDate: monthStart, reason: 'Concurrent employee-service cost reversal' } }),
+  ]);
+  assert.equal(serviceReversalResults.filter((result) => result.status === 'fulfilled').length, 1, 'The service-cost lock must allow exactly one concurrent reversal.');
+  const successfulServiceReversal = serviceReversalResults.findIndex((result) => result.status === 'fulfilled');
+  assert.match(String(serviceReversalResults[1 - successfulServiceReversal].reason?.message), /already been reversed/);
+  const serviceReversalActor = successfulServiceReversal === 0 ? approver : payer;
+  assert.equal((await purchaseExpenses.reverseEmployeeServiceCost({ context: serviceReversalActor, idempotencyKey: serviceReversalKeys[successfulServiceReversal], request: { serviceId: issuedService.serviceId, businessDate: monthStart, reason: 'Concurrent employee-service cost reversal' } })).replayed, true, 'Employee-service cost reversal replay must be explicit.');
 
   const deferredAdvance = await advances.issue(creator, {
     employeeId: payrollEmployee.id,
@@ -213,6 +287,30 @@ try {
     /must be unpaid/,
     'A paid payroll reversal must be rejected.',
   );
+  const postedPayrollDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  const payrollPayment = postedPayrollDetail.payments[0];
+  assert.equal(payrollPayment?.status, 'POSTED');
+  await assert.rejects(
+    () => payroll.reversePayment(creator, { payrollPaymentId: payrollPayment.id, businessDate: beforeMonth, reason: 'Invalid historical payroll-payment reversal' }, randomUUID()),
+    /cannot predate the latest payroll payment event/,
+    'A payroll-payment reversal must not predate approval/payment history.',
+  );
+  const payrollPaymentReversalKeys = [randomUUID(), randomUUID()];
+  const payrollPaymentReversalResults = await Promise.allSettled([
+    payroll.reversePayment(creator, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[0]),
+    payroll.reversePayment(approver, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[1]),
+  ]);
+  assert.equal(payrollPaymentReversalResults.filter((result) => result.status === 'fulfilled').length, 1, 'The payroll-run lock must allow exactly one concurrent payment reversal.');
+  const successfulPayrollPaymentReversal = payrollPaymentReversalResults.findIndex((result) => result.status === 'fulfilled');
+  assert.match(String(payrollPaymentReversalResults[1 - successfulPayrollPaymentReversal].reason?.message), /already been reversed/);
+  const payrollPaymentReversalActor = successfulPayrollPaymentReversal === 0 ? creator : approver;
+  assert.equal((await payroll.reversePayment(payrollPaymentReversalActor, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[successfulPayrollPaymentReversal])).replayed, true, 'Payroll-payment reversal replay must be explicit.');
+  const reversedPayrollPaymentDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  assert.equal(reversedPayrollPaymentDetail.payments[0]?.status, 'REVERSED', 'Payroll payment detail must derive reversal state from the journal link.');
+  assert.ok(reversedPayrollPaymentDetail.payments[0]?.reversalJournalEntryId);
+  const mainPayrollReversalKey = randomUUID();
+  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, false);
+  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, true, 'Payroll accrual reversal replay must remain explicit after reversing its payment.');
 
   const reversalEmployee = await payroll.onboardEmployee(reversalCreator, onboardingInput('موظف عكس المسير'), randomUUID());
   const reversalAdvance = await advances.issue(reversalCreator, {
@@ -324,14 +422,44 @@ try {
     () => settlements.reverse(payer, { settlementId: paidSettlement.id, businessDate: today, reason: 'Paid final settlement must reject reversal' }, randomUUID()),
     /Only an unpaid approved final settlement can be reversed/,
   );
+  const postedFinalDetail = await settlements.detail(creator, paidSettlement.id, { pageSize: 100 });
+  const finalSettlementPayment = postedFinalDetail.payments[0];
+  assert.equal(finalSettlementPayment?.status, 'POSTED');
+  await assert.rejects(
+    () => settlements.reversePayment(creator, { finalSettlementPaymentId: finalSettlementPayment.id, businessDate: addDays(today, -1), reason: 'Invalid historical final-payment reversal' }, randomUUID()),
+    /cannot predate the latest payment event/,
+    'A final-settlement payment reversal must not predate payment history.',
+  );
+  const finalPaymentReversalKeys = [randomUUID(), randomUUID()];
+  const finalPaymentReversalResults = await Promise.allSettled([
+    settlements.reversePayment(creator, { finalSettlementPaymentId: finalSettlementPayment.id, businessDate: today, reason: 'Concurrent final-settlement payment reversal' }, finalPaymentReversalKeys[0]),
+    settlements.reversePayment(approver, { finalSettlementPaymentId: finalSettlementPayment.id, businessDate: today, reason: 'Concurrent final-settlement payment reversal' }, finalPaymentReversalKeys[1]),
+  ]);
+  assert.equal(finalPaymentReversalResults.filter((result) => result.status === 'fulfilled').length, 1, 'The final-settlement lock must allow exactly one concurrent payment reversal.');
+  const successfulFinalPaymentReversal = finalPaymentReversalResults.findIndex((result) => result.status === 'fulfilled');
+  assert.match(String(finalPaymentReversalResults[1 - successfulFinalPaymentReversal].reason?.message), /already been reversed/);
+  const finalPaymentReversalActor = successfulFinalPaymentReversal === 0 ? creator : approver;
+  assert.equal((await settlements.reversePayment(finalPaymentReversalActor, { finalSettlementPaymentId: finalSettlementPayment.id, businessDate: today, reason: 'Concurrent final-settlement payment reversal' }, finalPaymentReversalKeys[successfulFinalPaymentReversal])).replayed, true, 'Final-settlement payment reversal replay must be explicit.');
+  const reversedFinalDetail = await settlements.detail(creator, paidSettlement.id, { pageSize: 100 });
+  assert.equal(reversedFinalDetail.payments[0]?.status, 'REVERSED', 'Final-settlement payment detail must derive reversal state from the journal link.');
+  assert.ok(reversedFinalDetail.payments[0]?.reversalJournalEntryId);
+  const paidFinalReversalKey = randomUUID();
+  assert.equal((await settlements.reverse(payer, { settlementId: paidSettlement.id, businessDate: today, reason: 'Final accrual reversal after payment reversal' }, paidFinalReversalKey)).replayed, false);
+  assert.equal((await settlements.reverse(payer, { settlementId: paidSettlement.id, businessDate: today, reason: 'Final accrual reversal after payment reversal' }, paidFinalReversalKey)).replayed, true, 'Final accrual reversal replay must remain explicit after reversing its payment.');
 
   const proof = await database.inTenantTransaction(fixture.tenantId, async (tx) => {
-    const [payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries] = await Promise.all([
+    const [payrollRow, payrollAdvance, reversedAdvanceRow, reversedAdvanceMovements, serviceRow, serviceMovements, zeroRow, reversedRow, paidRow, payrollPaymentMovements, finalPaymentMovements, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries] = await Promise.all([
       tx.hrPayrollRun.findFirstOrThrow({ where: { id: run.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, businessDate: true, paidAmount: true, netPayableAmount: true } }),
       tx.hrEmployeeAdvance.findFirstOrThrow({ where: { id: advance.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { remainingAmount: true } }),
+      tx.hrEmployeeAdvance.findFirstOrThrow({ where: { id: reversibleAdvance.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, remainingAmount: true, issueJournalEntry: { select: { reversalEntry: { select: { id: true } } } } } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: payrollEmployee.id, movementType: 'ADVANCE_ISSUED', sourceReference: { in: [reversibleAdvance.advanceNumber, `${reversibleAdvance.advanceNumber}-REV`] } }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.hrEmployeeService.findFirstOrThrow({ where: { id: issuedService.serviceId, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, outflowDocumentId: true, outflowDocument: { select: { status: true, journalEntry: { select: { reversalEntry: { select: { id: true } } } } } } } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: payrollEmployee.id, movementType: 'SERVICE_COST', sourceReference: { in: [issuedService.documentNumber, `${issuedService.documentNumber}-REV`] } }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
       tx.hrFinalSettlement.findFirstOrThrow({ where: { id: zeroSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, accrualJournalEntryId: true } }),
       tx.hrFinalSettlement.findFirstOrThrow({ where: { id: reversingSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true } }),
       tx.hrFinalSettlement.findFirstOrThrow({ where: { id: paidSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, paidAmount: true, netPayableAmount: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: payrollEmployee.id, movementType: 'PAYROLL_PAYMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: paidEmployee.id, movementType: 'FINAL_SETTLEMENT_PAYMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
       tx.hrEmployeeAdvanceSettlement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, advanceId: recoveryAdvance.id, source: 'FINAL_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true, journalEntryId: true } }),
       tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: reverseEmployee.id, movementType: 'FINAL_SETTLEMENT_ACCRUAL' }, select: { amount: true } }),
       tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: payrollEmployee.id, movementType: 'ADVANCE_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
@@ -340,21 +468,33 @@ try {
       tx.hrEmployeeAdvanceSettlement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.reversalCompanyId, advanceId: reversalAdvance.id, source: 'PAYROLL' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
       tx.financeJournalEntry.findMany({ where: { tenantId: fixture.tenantId, companyId: { in: [fixture.companyId, fixture.reversalCompanyId] } }, include: { lines: true } }),
     ]);
-    return { payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries };
+    return { payrollRow, payrollAdvance, reversedAdvanceRow, reversedAdvanceMovements, serviceRow, serviceMovements, zeroRow, reversedRow, paidRow, payrollPaymentMovements, finalPaymentMovements, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries };
   });
-  assert.equal(proof.payrollRow.status, 'PAID');
+  assert.equal(proof.payrollRow.status, 'REVERSED');
   assert.equal(proof.payrollRow.businessDate.toISOString(), monthStart.toISOString());
-  assert.equal(proof.payrollRow.paidAmount.equals(proof.payrollRow.netPayableAmount), true);
-  assert.equal(proof.payrollAdvance.remainingAmount.toFixed(4), '150.0000');
+  assert.equal(proof.payrollRow.paidAmount.toFixed(4), '0.0000');
+  assert.equal(proof.payrollAdvance.remainingAmount.toFixed(4), '250.0000');
+  assert.equal(proof.reversedAdvanceRow.status, 'REVERSED');
+  assert.equal(proof.reversedAdvanceRow.remainingAmount.toFixed(4), '0.0000');
+  assert.ok(proof.reversedAdvanceRow.issueJournalEntry.reversalEntry?.id, 'A reversed advance issue must link its immutable reversal journal.');
+  assert.deepEqual(proof.reversedAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['40.0000', '-40.0000'], 'Advance issue/reversal movements must be append-only and net to zero.');
+  assert.equal(proof.serviceRow.status, 'ISSUED', 'Reversing service cost must not cancel the operational employee service.');
+  assert.equal(proof.serviceRow.outflowDocumentId, issuedService.documentId, 'The service must retain its historical cost-document link.');
+  assert.equal(proof.serviceRow.outflowDocument?.status, 'CANCELLED');
+  assert.ok(proof.serviceRow.outflowDocument?.journalEntry.reversalEntry?.id, 'A cancelled service-cost document must link its immutable reversal journal.');
+  assert.deepEqual(proof.serviceMovements.map((movement) => movement.amount.toFixed(4)), ['75.0000', '-75.0000'], 'Service cost/reversal movements must be append-only and net to zero.');
   assert.equal(proof.zeroRow.status, 'REVERSED');
   assert.equal(proof.zeroRow.accrualJournalEntryId, null, 'A zero settlement must not create an empty journal.');
   assert.equal(proof.reversedRow.status, 'REVERSED');
-  assert.equal(proof.paidRow.status, 'PAID');
-  assert.equal(proof.paidRow.paidAmount.equals(proof.paidRow.netPayableAmount), true);
+  assert.equal(proof.paidRow.status, 'REVERSED');
+  assert.equal(proof.paidRow.paidAmount.toFixed(4), '0.0000');
+  assert.equal(proof.payrollPaymentMovements.length, 2, 'Payroll payment reversal must append exactly one compensating employee movement.');
+  assert.equal(proof.payrollPaymentMovements.reduce((total, movement) => total + Number(movement.amount), 0), 0, 'Payroll payment/reversal movements must be append-only and net to zero.');
+  assert.deepEqual(proof.finalPaymentMovements.map((movement) => movement.amount.toFixed(4)), [proof.paidRow.netPayableAmount.toFixed(4), proof.paidRow.netPayableAmount.negated().toFixed(4)], 'Final-settlement payment/reversal movements must be append-only and net to zero.');
   assert.deepEqual(proof.recoveryRows.map((row) => row.amount.toFixed(4)), ['10.0000', '-10.0000'], 'Advance recovery reversal must be append-only.');
   assert.equal(proof.recoveryRows.every((row) => row.journalEntryId), true, 'Both recovery events must reference their journal.');
   assert.equal(proof.movements.reduce((sum, movement) => sum + Number(movement.amount), 0), 0, 'Final-settlement accrual and reversal movements must net to zero.');
-  assert.deepEqual(proof.payrollAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['50.0000', '100.0000'], 'Direct and payroll advance settlements must both appear once in the employee ledger.');
+  assert.deepEqual(proof.payrollAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['50.0000', '100.0000', '-100.0000'], 'Direct and payroll advance settlement/reversal events must remain append-only in the employee ledger.');
   assert.deepEqual(proof.finalAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['10.0000', '-10.0000'], 'Final-settlement advance recovery and reversal must be append-only and net to zero in the employee ledger.');
   assert.deepEqual(proof.reversedPayrollMovements.map((movement) => movement.amount.toFixed(4)), ['100.0000', '-100.0000'], 'Payroll advance settlement and reversal must be append-only and net to zero in the employee ledger.');
   assert.deepEqual(proof.reversedPayrollSettlements.map((settlement) => settlement.amount.toFixed(4)), ['100.0000', '-100.0000'], 'Payroll advance balance history must retain both application and reversal rows.');
@@ -365,7 +505,7 @@ try {
     assert.equal(debit, credit, `Journal ${journal.id} must balance.`);
   }
 
-  console.log('HR lifecycle verification passed: onboarding/salary, advance issue/settlement, deferred collection guards, payroll preview/create/approve/pay/reversal, zero/nonzero final settlements, append-only employee-ledger movements, explicit replay, and monotonic business dates.');
+  console.log('HR lifecycle verification passed: onboarding/salary, advance and service-cost issue/reversal, deferred collection guards, payroll and final-settlement payment/accrual reversal, append-only employee-ledger movements, explicit replay, concurrency locks, and monotonic business dates.');
   console.log(`Isolated fixture retained in the test database: ${fixture.tenantCode} (${fixture.tenantId}). Cleanup requires a privileged test-database reset because audit rows are immutable to the application role.`);
 } finally {
   if (app) await app.close();

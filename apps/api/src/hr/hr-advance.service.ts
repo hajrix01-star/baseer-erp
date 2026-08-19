@@ -11,17 +11,19 @@ import { FinanceAccountStatus, FinanceAccountType, FinanceVaultPaymentMethod, Hr
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { hrEmployeeAdvanceLockKey } from './hr-financial-lock.util.js';
-import { isHrDateOnOrAfter } from './hr-financial-date.util.js';
+import { isHrDateOnOrAfter, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 const ADVANCE_ASSET_SYSTEM_KEY = 'EMPLOYEE_ADVANCES';
 const ISSUE_OPERATION = 'hr.employee_advance.issue';
 const DIRECT_SETTLEMENT_OPERATION = 'hr.employee_advance.settle_directly';
 const DEFERRAL_OPERATION = 'hr.employee_advance.defer';
+const REVERSE_ISSUE_OPERATION = 'hr.employee_advance.reverse_issue';
 
 type AdvanceIssueInput = Omit<IssueHrEmployeeAdvanceRequest, 'idempotencyKey'>;
 type AdvanceSettlementInput = Omit<SettleHrEmployeeAdvanceDirectlyRequest, 'idempotencyKey'>;
 type AdvanceDeferralInput = Omit<DeferHrEmployeeAdvanceRequest, 'idempotencyKey'>;
+export type AdvanceIssueReversalInput = Readonly<{ advanceId: string; businessDate: Date; reason: string }>;
 type AdvanceAllocationInput = { allocations: Array<{ vaultId: string; amount: Prisma.Decimal; paymentMethod?: FinanceVaultPaymentMethod }> };
 type AdvanceListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeAdvanceStatus; cursor?: string; pageSize: number }>;
 
@@ -240,6 +242,40 @@ export class HrAdvanceService {
       const receipt = { id: settlementId, settlementNumber, advanceId: advance.id, journalEntryId: journal.journalEntryId, remainingAmount: nextRemaining.toFixed(4), replayed: false };
       await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: 'hr.employee_advance.settled_directly', entityType: 'HrEmployeeAdvanceSettlement', entityId: settlementId, requestId: `hr-advance-settlement:${idempotencyKey}`, afterJson: { ...receipt, amount: input.amount.toFixed(4), allocations: allocations.map((item) => ({ vaultId: item.vaultId, paymentMethod: item.paymentMethod, amount: item.amount.toFixed(4) })) } as Prisma.InputJsonValue } });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  async reverseIssue(context: TrustedCompanyActorContext, raw: AdvanceIssueReversalInput, idempotencyKey: string) {
+    const input = { advanceId: raw.advanceId, businessDate: raw.businessDate, reason: raw.reason.trim() };
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, { operation: REVERSE_ISSUE_OPERATION, key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow() });
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; advanceNumber: string; reversalJournalEntryId: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee-advance issue reversal is already being processed.');
+      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      if (!input.reason) throw new BadRequestException('An employee-advance reversal reason is required.');
+      await this.lockAdvance(tx, context, input.advanceId);
+      const advance = await tx.hrEmployeeAdvance.findFirst({
+        where: { id: input.advanceId, tenantId: context.tenantId, companyId: context.companyId },
+        include: {
+          issueJournalEntry: { select: { id: true, reversalEntry: { select: { id: true, businessDate: true } } } },
+          settlements: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 1, select: { businessDate: true } },
+          deferrals: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 1, select: { businessDate: true } },
+        },
+      });
+      if (!advance) throw new NotFoundException('The employee advance was not found.');
+      if (advance.status === HrEmployeeAdvanceStatus.REVERSED || advance.issueJournalEntry.reversalEntry) throw new ConflictException('The employee-advance issue has already been reversed.');
+      if (advance.status !== HrEmployeeAdvanceStatus.ISSUED || !advance.settledAmount.eq(0) || !advance.remainingAmount.eq(advance.originalAmount)) throw new ConflictException('Only a fully outstanding employee advance can have its issue reversed.');
+      if (advance.createdByUserId === context.actorUserId) throw new ConflictException('The employee-advance issuer cannot reverse the same issue.');
+      const reversalFloor = latestHrBusinessDate(advance.businessDate, advance.settlements[0]?.businessDate, advance.deferrals[0]?.businessDate)!;
+      if (!isHrDateOnOrAfter(input.businessDate, reversalFloor)) throw new BadRequestException('The employee-advance issue reversal cannot predate its latest financial or collection event.');
+      const journal = await this.journals.reverseInTransaction(tx, { ...context, requestId: `hr-advance-issue-reversal:${advance.id}`, journalEntryId: advance.issueJournalEntryId, businessDate: input.businessDate, reason: input.reason });
+      const updated = await tx.hrEmployeeAdvance.updateMany({ where: { id: advance.id, tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeAdvanceStatus.ISSUED, settledAmount: 0, remainingAmount: advance.originalAmount }, data: { status: HrEmployeeAdvanceStatus.REVERSED, remainingAmount: 0, nextSettlementDate: null } });
+      if (updated.count !== 1) throw new ConflictException('The employee advance changed while its issue reversal was being recorded.');
+      await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: advance.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_ISSUED, businessDate: input.businessDate, amount: advance.originalAmount.negated(), sourceReference: `${advance.advanceNumber}-REV`, description: `Employee-advance issue reversed: ${input.reason}` } });
+      const receipt = { id: advance.id, advanceNumber: advance.advanceNumber, reversalJournalEntryId: journal.journalEntryId, replayed: false };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: 'hr.employee_advance.issue_reversed', entityType: 'HrEmployeeAdvance', entityId: advance.id, requestId: `hr-advance-issue-reversal:${advance.id}`, afterJson: { ...receipt, businessDate: day(input.businessDate), reason: input.reason } as Prisma.InputJsonValue } });
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);
   }

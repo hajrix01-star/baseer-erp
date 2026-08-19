@@ -53,6 +53,7 @@ const CREATE_OPERATION = 'hr.payroll.create';
 const APPROVE_OPERATION = 'hr.payroll.approve';
 const DISCARD_OPERATION = 'hr.payroll.discard';
 const PAY_OPERATION = 'hr.payroll.pay';
+const REVERSE_PAYMENT_OPERATION = 'hr.payroll.payment.reverse';
 const REVERSE_OPERATION = 'hr.payroll.reverse';
 const PAYROLL_EXPENSE = 'PAYROLL_EXPENSE';
 const PAYROLL_PAYABLE = 'PAYROLL_PAYABLE';
@@ -65,6 +66,7 @@ type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type DiscardInput = Omit<DiscardHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
+export type PayrollPaymentReversalInput = Readonly<{ payrollPaymentId: string; businessDate: Date; reason: string }>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
 type EmployeeOnboardingInput = Omit<OnboardHrEmployeeRequest, 'idempotencyKey'>;
 type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
@@ -354,6 +356,7 @@ export class HrPayrollService {
           where: { ...scope, ...(paymentCursor ? { OR: [{ businessDate: { lt: paymentCursor.businessDate } }, { businessDate: paymentCursor.businessDate, id: { lt: paymentCursor.id } }] } : {}) },
           orderBy: [{ businessDate: 'desc' }, { id: 'desc' }],
           take: query.paymentPageSize + 1,
+          include: { journalEntry: { select: { reversalEntry: { select: { id: true, postedAt: true } } } } },
         }),
       ]);
       const hasMoreLines = lineRows.length > query.linePageSize;
@@ -373,7 +376,7 @@ export class HrPayrollService {
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
         })),
-        payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId })),
+        payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId, status: payment.journalEntry.reversalEntry ? 'REVERSED' as const : 'POSTED' as const, reversedAt: payment.journalEntry.reversalEntry?.postedAt.toISOString() ?? null, reversalJournalEntryId: payment.journalEntry.reversalEntry?.id ?? null })),
         hasMoreLines,
         nextLineCursor: hasMoreLines ? lines.at(-1)?.id ?? null : null,
         hasMorePayments,
@@ -544,7 +547,8 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED && run.status !== HrPayrollRunStatus.PARTIALLY_PAID) throw new ConflictException('Only an approved unpaid payroll can be paid.');
-      const paymentFloor = latestHrBusinessDate(run.accrualJournal?.businessDate, run.payments[0]?.businessDate);
+      const paymentHistoryFloor = run.payments.reduce<Date | null>((latest, payment) => latestHrBusinessDate(latest, payment.businessDate, payment.journalEntry.reversalEntry?.businessDate), null);
+      const paymentFloor = latestHrBusinessDate(run.accrualJournal?.businessDate, paymentHistoryFloor);
       if (!paymentFloor) throw new ConflictException('The payroll accrual is missing.');
       if (!isHrDateOnOrAfter(input.businessDate, paymentFloor)) throw new BadRequestException('The payroll payment date cannot be before its approval or latest payment date.');
       await this.foundation.initializeInTransaction(tx, context);
@@ -578,6 +582,51 @@ export class HrPayrollService {
     });
   }
 
+  async reversePayment(context: TrustedCompanyActorContext, raw: PayrollPaymentReversalInput, key: string) {
+    const input = { payrollPaymentId: raw.payrollPaymentId, businessDate: raw.businessDate, reason: raw.reason.trim() };
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      const begun = await this.begin(tx, context, REVERSE_PAYMENT_OPERATION, key, input);
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; paymentId: string; reversalJournalEntryId: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll-payment reversal is already being processed.');
+      if (!input.reason) throw new BadRequestException('A payroll-payment reversal reason is required.');
+      const locator = await tx.hrPayrollPayment.findFirst({ where: { id: input.payrollPaymentId, tenantId: context.tenantId, companyId: context.companyId }, select: { payrollRunId: true } });
+      if (!locator) throw new NotFoundException('The payroll payment was not found.');
+      await this.lockPayrollRun(tx, context, locator.payrollRunId);
+      const payment = await tx.hrPayrollPayment.findFirst({
+        where: { id: input.payrollPaymentId, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: locator.payrollRunId },
+        include: {
+          journalEntry: { select: { id: true, reversalEntry: { select: { id: true, businessDate: true } } } },
+          payrollRun: { include: { payments: { include: { journalEntry: { select: { reversalEntry: { select: { businessDate: true } } } } } }, lines: { select: { id: true, employeeId: true, paidAmount: true } } } },
+        },
+      });
+      if (!payment) throw new NotFoundException('The payroll payment was not found.');
+      if (payment.journalEntry.reversalEntry) throw new ConflictException('The payroll payment has already been reversed.');
+      if (payment.createdByUserId === context.actorUserId) throw new ConflictException('The payroll-payment creator cannot reverse the same payment.');
+      if (payment.payrollRun.paidAmount.lt(payment.amount)) throw new ConflictException('The payroll balance cannot safely accept this payment reversal.');
+      const reversalFloor = payment.payrollRun.payments.reduce<Date | null>((latest, row) => latestHrBusinessDate(latest, row.businessDate, row.journalEntry.reversalEntry?.businessDate), payment.businessDate);
+      if (!isHrDateOnOrAfter(input.businessDate, reversalFloor!)) throw new BadRequestException('The payroll-payment reversal cannot predate the latest payroll payment event.');
+      const originalMovements = await tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, journalEntryId: payment.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_PAYMENT }, orderBy: { id: 'asc' } });
+      if (!sum(originalMovements.map((movement) => movement.amount)).eq(payment.amount)) throw new ConflictException('The payroll-payment employee allocation is incomplete and cannot be reversed safely.');
+      const lineByEmployee = new Map(payment.payrollRun.lines.map((line) => [line.employeeId, line]));
+      if (originalMovements.some((movement) => !lineByEmployee.has(movement.employeeId) || lineByEmployee.get(movement.employeeId)!.paidAmount.lt(movement.amount))) throw new ConflictException('A payroll line cannot safely accept this payment reversal.');
+      const journal = await this.journals.reverseInTransaction(tx, { ...context, requestId: `payroll-payment-reversal:${payment.id}`, journalEntryId: payment.journalEntryId, businessDate: input.businessDate, reason: input.reason });
+      for (const movement of originalMovements) {
+        const line = lineByEmployee.get(movement.employeeId)!;
+        const updatedLine = await tx.hrPayrollLine.updateMany({ where: { id: line.id, tenantId: context.tenantId, companyId: context.companyId, paidAmount: { gte: movement.amount } }, data: { paidAmount: { decrement: movement.amount } } });
+        if (updatedLine.count !== 1) throw new ConflictException('A payroll line changed while the payment reversal was being recorded.');
+        await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: movement.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_PAYMENT, businessDate: input.businessDate, amount: movement.amount.negated(), sourceReference: `${payment.paymentNumber}-REV`, description: `Payroll payment reversed: ${input.reason}` } });
+      }
+      const paidAmount = payment.payrollRun.paidAmount.minus(payment.amount);
+      const updatedRun = await tx.hrPayrollRun.updateMany({ where: { id: payment.payrollRunId, tenantId: context.tenantId, companyId: context.companyId, paidAmount: payment.payrollRun.paidAmount, status: { in: [HrPayrollRunStatus.PARTIALLY_PAID, HrPayrollRunStatus.PAID] } }, data: { paidAmount, status: paidAmount.eq(0) ? HrPayrollRunStatus.APPROVED : HrPayrollRunStatus.PARTIALLY_PAID } });
+      if (updatedRun.count !== 1) throw new ConflictException('The payroll changed while the payment reversal was being recorded.');
+      const receipt = { id: payment.payrollRunId, runNumber: payment.payrollRun.runNumber, paymentId: payment.id, reversalJournalEntryId: journal.journalEntryId, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt);
+      await this.audit(tx, context, 'hr.payroll.payment_reversed', 'HrPayrollPayment', payment.id, { ...receipt, businessDate: ymd(input.businessDate), reason: input.reason });
+      return receipt;
+    });
+  }
+
   async reverse(context: TrustedCompanyActorContext, input: ReverseInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
@@ -587,7 +636,7 @@ export class HrPayrollService {
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED) throw new ConflictException('A payroll must be unpaid before its accrual can be reversed.');
-      if (run.payments.length) throw new ConflictException('A payroll with payment history cannot be reversed as unpaid.');
+      if (run.payments.some((payment) => !payment.journalEntry.reversalEntry)) throw new ConflictException('A payroll with an active payment cannot have its accrual reversed.');
       if (!run.accrualJournalEntryId) throw new ConflictException('The payroll accrual is missing.');
       if (!run.accrualJournal || !isHrDateOnOrAfter(input.businessDate, run.accrualJournal.businessDate)) throw new BadRequestException('The payroll reversal date cannot be before its approval date.');
       const reversalJournal = await this.journals.reverseInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-reversal:${run.id}`, journalEntryId: run.accrualJournalEntryId, businessDate: input.businessDate, reason: input.reason });
@@ -761,7 +810,7 @@ export class HrPayrollService {
             deductionApplications: { include: { deduction: { select: { deductionNumber: true } } } },
           },
         },
-        payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }] },
+        payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], include: { journalEntry: { select: { reversalEntry: { select: { businessDate: true } } } } } },
       },
     });
     if (!run) throw new NotFoundException('The payroll run was not found.');

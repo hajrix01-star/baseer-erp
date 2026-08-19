@@ -27,6 +27,8 @@ export type RecurringExpensePaymentBatchReceipt = Readonly<{ batchId: string; ba
 export type IssueEmployeeServiceCostRequest = Readonly<{ serviceId: string; businessDate: Date; grossAmount: string; isTaxable: boolean; allocations: readonly PaymentAllocation[]; supplierInvoiceNumber?: string | undefined; supplierInvoiceMissingReason?: string | undefined; supplierInvoiceDate?: Date | undefined; notes?: string | undefined }>;
 export type RecordEmployeeServiceAndIssueCostRequest = Readonly<Omit<RecordHrEmployeeServiceAndIssueCostRequest, 'idempotencyKey' | 'allocations'>> & Readonly<{ allocations: readonly PaymentAllocation[] }>;
 export type RecordEmployeeServiceAndIssueCostReceipt = Readonly<{ serviceId: string; documentId: string; documentNumber: string; journalEntryId: string; replayed: boolean }>;
+export type ReverseEmployeeServiceCostRequest = Readonly<{ serviceId: string; businessDate: Date; reason: string }>;
+export type ReverseEmployeeServiceCostReceipt = Readonly<{ serviceId: string; documentId: string; documentNumber: string; reversalJournalEntryId: string; replayed: boolean }>;
  type StoredRecurringExpensePaymentBatchReceipt = Omit<RecurringExpensePaymentBatchReceipt, 'businessDate'> & { businessDate: string };
  type StoredPurchaseExpenseBatchReceipt = Omit<PurchaseExpenseBatchReceipt, 'businessDate'> & { businessDate: string };
 
@@ -106,6 +108,36 @@ export class PurchaseExpenseService {
       await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: document } });
       return document;
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different employee-service cost data.'); throw error; });
+  }
+
+  async reverseEmployeeServiceCost(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: ReverseEmployeeServiceCostRequest }): Promise<ReverseEmployeeServiceCostReceipt> {
+    const request = { serviceId: input.request.serviceId, businessDate: input.request.businessDate, reason: input.request.reason.trim() };
+    return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
+      const begun = await this.idem.beginInTransaction(tx, input.context, { operation: 'hr.employee_service.cost.reverse', key: input.idempotencyKey, request: { serviceId: request.serviceId, businessDate: request.businessDate.toISOString(), reason: request.reason }, expiresAt: new Date(Date.now() + 86_400_000) });
+      if (begun.kind === 'replay') return { ...(begun.response.body as unknown as ReverseEmployeeServiceCostReceipt), replayed: true };
+      if (begun.kind === 'in-progress') throw new ConflictException('This employee-service cost reversal is already being processed.');
+      await this.dates.assertNotFutureInTransaction(tx, input.context, request.businessDate);
+      if (!request.reason) throw new BadRequestException('An employee-service cost reversal reason is required.');
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${input.context.tenantId}:${input.context.companyId}:hr-employee-service-cost:${request.serviceId}`}, 0))`;
+      const service = await tx.hrEmployeeService.findFirst({
+        where: { id: request.serviceId, tenantId: input.context.tenantId, companyId: input.context.companyId },
+        include: { outflowDocument: { include: { journalEntry: { select: { id: true, reversalEntry: { select: { id: true } } } } } } },
+      });
+      if (!service?.outflowDocument) throw new BadRequestException('The employee service has no issued financial cost to reverse.');
+      const document = service.outflowDocument;
+      if (document.status === FinanceOutflowDocumentStatus.CANCELLED || document.journalEntry.reversalEntry) throw new ConflictException('The employee-service cost has already been reversed.');
+      if (document.status !== FinanceOutflowDocumentStatus.POSTED || document.settlementKind !== FinanceOutflowSettlementKind.PAID) throw new ConflictException('Only a posted paid employee-service cost can be reversed.');
+      if (document.createdByUserId === input.context.actorUserId) throw new ConflictException('The employee-service cost issuer cannot reverse the same cost.');
+      if (request.businessDate < document.businessDate) throw new BadRequestException('The employee-service cost reversal cannot predate the issued cost.');
+      const journal = await this.journals.reverseInTransaction(tx, { ...input.context, requestId: `hr-employee-service-cost-reversal:${service.id}`, journalEntryId: document.journalEntryId, businessDate: request.businessDate, reason: request.reason });
+      const cancelledDocument = await tx.financeOutflowDocument.updateMany({ where: { id: document.id, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceOutflowDocumentStatus.POSTED }, data: { status: FinanceOutflowDocumentStatus.CANCELLED } });
+      if (cancelledDocument.count !== 1) throw new ConflictException('The employee-service cost changed while its reversal was being recorded.');
+      await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, employeeId: service.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.SERVICE_COST, businessDate: request.businessDate, amount: document.grossAmount.negated(), sourceReference: `${document.documentNumber}-REV`, description: `Employee-service cost reversed: ${request.reason}` } });
+      const receipt: ReverseEmployeeServiceCostReceipt = { serviceId: service.id, documentId: document.id, documentNumber: document.documentNumber, reversalJournalEntryId: journal.journalEntryId, replayed: false };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, actorUserId: input.context.actorUserId, action: 'hr.employee_service.cost_reversed', entityType: 'HrEmployeeService', entityId: service.id, requestId: `hr-employee-service-cost-reversal:${service.id}`, afterJson: { ...receipt, businessDate: request.businessDate.toISOString().slice(0, 10), reason: request.reason } as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different employee-service cost reversal data.'); throw error; });
   }
 
   /** One user action: the operational service, paid supplier invoice and employee movement are atomic. */
