@@ -48,6 +48,8 @@ import { TreasuryController } from './finance/treasury.controller.js';
 import { InvoiceRegisterController } from './finance/invoice-register.controller.js';
 import { TreasuryService } from './finance/treasury.service.js';
 import { InvoiceRegisterService } from './finance/invoice-register.service.js';
+import { FinanceAccountsController } from './finance/finance-accounts.controller.js';
+import { FinanceAccountsService } from './finance/finance-accounts.service.js';
 import { FinanceConfigurationService } from './finance/finance-configuration.service.js';
 import { FinanceConfigurationController } from './finance/finance-configuration.controller.js';
 import { ExpensesObligationsReadController } from './finance/expenses-obligations-read.controller.js';
@@ -86,7 +88,7 @@ import { HrFinalSettlementController } from './hr/hr-final-settlement.controller
 import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -120,7 +122,7 @@ import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
     InclusiveLoanService,
     InclusiveLoanRepaymentService,
     CompanyFinanceSetupService,
-    VaultManagementService, TreasuryService, InvoiceRegisterService,
+    VaultManagementService, TreasuryService, InvoiceRegisterService, FinanceAccountsService,
     FinanceConfigurationService,
     ExpensesObligationsReadService,
     FinanceMasterDataService,

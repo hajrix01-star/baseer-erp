@@ -26,6 +26,8 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     0: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
     1: ["finance.purchase_expense.read", "finance.purchase_expense.create", "finance.supplier_dues.read"],
     2: ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"],
+    3: ["finance.configuration.read"],
+    4: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
   },
   hr: {
     // System company-manager roles are upgraded by the paired data migration.

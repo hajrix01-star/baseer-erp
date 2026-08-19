@@ -1334,3 +1334,82 @@ export const financeInvoiceRegisterDetailSchema = z.object({
   }).strict(),
 }).strict();
 export type FinanceInvoiceRegisterDetail = z.infer<typeof financeInvoiceRegisterDetailSchema>;
+
+// Accounts are a drill-down into the same immutable journal that feeds the
+// unified financial register. They are intentionally not a second document
+// register and expose account balances plus account-scoped journal lines only.
+const financeAccountTypeSchema = z.enum(["ASSET", "LIABILITY", "EQUITY", "REVENUE", "EXPENSE"]);
+const financeAccountStatusSchema = z.enum(["ACTIVE", "ARCHIVED"]);
+export const financeAccountsWorkspaceQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  q: z.string().trim().min(1).max(160).optional(),
+}).strict();
+export const financeAccountMovementQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
+}).strict();
+const financeAccountRecordSchema = z.object({
+  id: z.string().uuid(),
+  code: z.string().min(1).max(80),
+  nameAr: z.string().min(1).max(160),
+  nameEn: z.string().min(1).max(160),
+  type: financeAccountTypeSchema,
+  status: financeAccountStatusSchema,
+  isSystem: z.boolean(),
+  balanceDebit: financeAmountSchema,
+  balanceCredit: financeAmountSchema,
+  periodDebit: financeAmountSchema,
+  periodCredit: financeAmountSchema,
+}).strict();
+export const financeAccountsWorkspaceReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  asOfBusinessDate: businessDateSchema,
+  fromBusinessDate: businessDateSchema.nullable(),
+  toBusinessDate: businessDateSchema.nullable(),
+  accounts: z.array(financeAccountRecordSchema).max(500),
+}).strict();
+export const financeAccountMovementReceiptSchema = z.object({
+  account: financeAccountRecordSchema,
+  asOfBusinessDate: businessDateSchema,
+  fromBusinessDate: businessDateSchema.nullable(),
+  toBusinessDate: businessDateSchema.nullable(),
+  summary: z.object({
+    balanceDebit: financeAmountSchema,
+    balanceCredit: financeAmountSchema,
+    periodDebit: financeAmountSchema,
+    periodCredit: financeAmountSchema,
+  }).strict(),
+  items: z.array(z.object({
+    id: z.string().uuid(),
+    journalEntryId: z.string().uuid(),
+    businessDate: businessDateSchema,
+    sourceType: z.string().min(1).max(80),
+    sourceReference: z.string().min(1).max(160),
+    description: z.string().max(1_000).nullable(),
+    debitAmount: financeAmountSchema,
+    creditAmount: financeAmountSchema,
+  }).strict()).max(100),
+  nextCursor: z.string().uuid().nullable(),
+}).strict();
+export const financeJournalEntryDetailSchema = z.object({
+  id: z.string().uuid(),
+  sourceType: z.string().min(1).max(80),
+  sourceReference: z.string().min(1).max(160),
+  businessDate: businessDateSchema,
+  description: z.string().max(1_000).nullable(),
+  status: z.enum(["POSTED", "REVERSED"]),
+  postedAt: z.date(),
+  reversalOfEntryId: z.string().uuid().nullable(),
+  reversalEntryId: z.string().uuid().nullable(),
+  lines: z.array(z.object({
+    id: z.string().uuid(), lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80),
+    accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().min(1).max(160),
+    debitAmount: financeAmountSchema, creditAmount: financeAmountSchema, description: z.string().max(1_000).nullable(),
+  }).strict()).min(2).max(100),
+}).strict();
+export type FinanceAccountsWorkspaceReceipt = z.infer<typeof financeAccountsWorkspaceReceiptSchema>;
+export type FinanceAccountMovementReceipt = z.infer<typeof financeAccountMovementReceiptSchema>;
+export type FinanceJournalEntryDetail = z.infer<typeof financeJournalEntryDetailSchema>;
