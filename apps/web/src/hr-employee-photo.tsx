@@ -4,6 +4,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerDialog } from "./baseer-dialog";
 import { activeSession, requestId } from "./daily-sales-client";
 import { createHrEmployeeDocument, downloadHrEmployeeDocumentVersion, listHrEmployeeDocuments, replaceHrEmployeeDocument, type HrEmployeeDocument } from "./hr-client";
+import { hrText } from "./hr-copy";
 import "./hr-employee-photo.css";
 
 type Language = "ar" | "en";
@@ -16,6 +17,7 @@ const initials = (value: string) => value.trim().split(/\s+/).map((part) => part
 
 export function HrEmployeePhoto({ employeeId, name, language, onError, onChanged }: { employeeId: string; name: string; language: Language; onError: (message: string) => void; onChanged: () => Promise<void> }) {
   const ar = language === "ar";
+  const text = hrText(language);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [photoDocument, setPhotoDocument] = useState<HrEmployeeDocument | null>(null);
   const [busy, setBusy] = useState(false);
@@ -30,7 +32,7 @@ export function HrEmployeePhoto({ employeeId, name, language, onError, onChanged
     const { blob } = await downloadHrEmployeeDocumentVersion(session, document.currentVersion.id);
     setPhotoUrl(URL.createObjectURL(blob));
   }, [employeeId, release]);
-  useEffect(() => { void load().catch((error) => onError(presentBaseerApiError(error, language, ar ? "تعذر تحميل صورة الموظف." : "Employee photo could not be loaded."))); return release; }, [ar, language, load, onError, release]);
+  useEffect(() => { void load().catch((error) => onError(presentBaseerApiError(error, language, text.employeePhotoLoadFailed))); return release; }, [language, load, onError, release, text.employeePhotoLoadFailed]);
   const choose = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; event.target.value = "";
     if (!file) return;
@@ -42,7 +44,7 @@ export function HrEmployeePhoto({ employeeId, name, language, onError, onChanged
       if (photoDocument) await replaceHrEmployeeDocument(session, photoDocument.id, { upload, idempotencyKey: requestId() });
       else await createHrEmployeeDocument(session, employeeId, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload, idempotencyKey: requestId() });
       await load(); await onChanged();
-    } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر حفظ صورة الموظف." : "Employee photo could not be saved.")); }
+    } catch (error) { onError(presentBaseerApiError(error, language, text.employeePhotoSaveFailed)); }
     finally { setBusy(false); }
   };
   return <><div className="hr-employee-photo"><button type="button" className="hr-employee-photo__avatar" disabled={busy || !photoUrl} aria-label={ar ? "عرض صورة الموظف" : "View employee photo"} onClick={() => setPreviewOpen(true)}>{photoUrl ? <img src={photoUrl} alt={ar ? `صورة ${name}` : `${name} photo`} /> : <span>{initials(name)}</span>}</button><label className="hr-employee-photo__upload"><input disabled={busy} accept="image/jpeg,image/png" type="file" onChange={(event) => void choose(event)} /><span>{busy ? (ar ? "جارٍ الحفظ…" : "Saving…") : photoUrl ? (ar ? "تحديث الصورة" : "Update photo") : (ar ? "إضافة صورة" : "Add photo")}</span></label></div><BaseerDialog open={previewOpen} title={ar ? "صورة الموظف" : "Employee photo"} language={language} onClose={() => setPreviewOpen(false)}>{photoUrl ? <img className="hr-employee-photo__preview" src={photoUrl} alt={ar ? `صورة ${name}` : `${name} photo`} /> : null}</BaseerDialog></>;

@@ -12,8 +12,9 @@ import { BaseerEmptyState, BaseerNotice } from "./baseer-workspace";
 import { DataTable } from "./data-table";
 import { activeSession, requestId } from "./daily-sales-client";
 import { HrCompensationAgreementDialog } from "./hr-compensation-agreement-dialog";
-import { createHrEmployeePromotion, getHrEmployee, listHrEmployeePromotions, setHrEmployeeCompensation, type HrCompensationProfile, type HrDetail, type HrEmployeePromotion } from "./hr-client";
+import { createHrEmployeePromotion, listHrEmployeePromotions, setHrEmployeeCompensation, type HrDetail, type HrEmployeePromotion } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
+import { hrText } from "./hr-copy";
 
 type Language = "ar" | "en";
 type Message = { tone: "info" | "danger"; text: string } | null;
@@ -29,9 +30,9 @@ const amount = (value: string) => Number(value || 0);
 
 /** Combines the employee's job path and compensation view while retaining two
  * governed records: promotion decisions and dated compensation profiles. */
-export function HrEmployeePromotionsPanel({ employeeId, language, salary, onError, onChanged }: { employeeId: string; language: Language; salary: HrCompensationProfile | null; onError: (message: string) => void; onChanged: () => Promise<void> }) {
+export function HrEmployeePromotionsPanel({ employeeId, language, detail, onError, onChanged }: { employeeId: string; language: Language; detail: Pick<HrDetail, "employee" | "compensation" | "compensationHistory">; onError: (message: string) => void; onChanged: () => Promise<void> }) {
   const ar = language === "ar";
-  const [detail, setDetail] = useState<HrDetail | null>(null);
+  const text = hrText(language);
   const [promotions, setPromotions] = useState<HrEmployeePromotion[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -51,29 +52,25 @@ export function HrEmployeePromotionsPanel({ employeeId, language, salary, onErro
     if (!session) { setLoading(false); return; }
     setLoading(true);
     try {
-      const [promotionReceipt, employeeDetail] = await Promise.all([
-        listHrEmployeePromotions(session, employeeId, { cursor, pageSize: 25 }),
-        getHrEmployee(session, employeeId),
-      ]);
+      const promotionReceipt = await listHrEmployeePromotions(session, employeeId, { cursor, pageSize: 25 });
       setPromotions((rows) => append ? [...rows, ...promotionReceipt.promotions] : promotionReceipt.promotions);
       setNextCursor(promotionReceipt.nextCursor);
-      setDetail(employeeDetail);
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر تحميل المسار والتعويض." : "Employment and compensation could not be loaded.")); }
     finally { setLoading(false); }
   }, [ar, employeeId, language, onError]);
 
   useEffect(() => { void load(); }, [load]);
 
-  const employee = detail?.employee;
-  const currentSalary = detail?.compensation ?? salary;
+  const employee = detail.employee;
+  const currentSalary = detail.compensation;
   const increase = amount(salaryIncreaseAmount);
   const nextSalary = currentSalary ? amount(currentSalary.monthlyGross) + increase : 0;
-  const salaryHistory = useMemo(() => (detail?.compensationHistory ?? []).map((row, index, rows) => {
+  const salaryHistory = useMemo(() => detail.compensationHistory.map((row, index, rows) => {
     const previous = rows[index + 1];
     const delta = previous ? Number(row.monthlyGross) - Number(previous.monthlyGross) : 0;
-    const label = row.notes?.startsWith("ترقية") ? (ar ? "ترقية وزيادة راتب" : "Promotion & increase") : delta > 0 ? (ar ? "زيادة راتب" : "Salary increase") : delta < 0 ? (ar ? "تخفيض راتب" : "Salary decrease") : (ar ? "الراتب الأول / تعديل" : "Initial salary / edit");
+    const label = row.notes?.startsWith("ترقية") ? text.promotionSalaryIncrease : delta > 0 ? text.salaryIncrease : delta < 0 ? text.salaryDecrease : text.initialSalaryOrEdit;
     return { ...row, label, changeAmount: previous ? Math.abs(delta).toFixed(4) : null };
-  }), [ar, detail?.compensationHistory]);
+  }), [detail.compensationHistory, text]);
 
   const resetPromotion = () => {
     setEffectiveDate(today());

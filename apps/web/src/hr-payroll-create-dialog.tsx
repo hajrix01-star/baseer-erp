@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -35,6 +35,7 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
   const [previewRows, setPreviewRows] = useState<HrPayrollPreviewEmployee[]>([]);
   const [previewCursor, setPreviewCursor] = useState<string | null>(null);
   const [applications, setApplications] = useState<Record<string, EmployeeApplications>>({});
+  const requestSequence = useRef(0);
 
   const applicationLines = useMemo(() => Object.entries(applications).flatMap(([employeeId, choices]) => {
     const employee = previewRows.find((row) => row.id === employeeId);
@@ -43,24 +44,36 @@ export function HrPayrollCreateDialog({ open, onClose, onCreated, language, onEr
     const administrativeDeductions = Object.entries(choices.deductions).filter(([, item]) => item.enabled && Number(item.amount) > 0).map(([id, item]) => ({ id, amount: item.amount }));
     return advances.length || administrativeDeductions.length ? [{ employeeId, advances, administrativeDeductions }] : [];
   }), [applications, previewRows]);
+  const includeOnLeaveIdsRef = useRef(includeOnLeaveIds);
+  const applicationLinesRef = useRef(applicationLines);
+  includeOnLeaveIdsRef.current = includeOnLeaveIds;
+  applicationLinesRef.current = applicationLines;
+  const previewInputKey = JSON.stringify({ payrollMonth: draft.payrollMonth, businessDate: draft.businessDate, includeOnLeaveIds, applicationLines });
 
   const resetApplications = () => { setIncludeOnLeaveIds([]); setApplications({}); };
   const loadPreview = useCallback(async (cursor?: string, append = false) => {
     const session = activeSession();
     if (!session) return;
+    const sequence = ++requestSequence.current;
     setPreviewLoading(true);
     try {
-      const receipt = await previewHrPayrollRun(session, { payrollMonth: draft.payrollMonth, businessDate: draft.businessDate, includeOnLeaveEmployeeIds: includeOnLeaveIds, lines: applicationLines, cursor, pageSize: 50 });
+      const receipt = await previewHrPayrollRun(session, { payrollMonth: draft.payrollMonth, businessDate: draft.businessDate, includeOnLeaveEmployeeIds: includeOnLeaveIdsRef.current, lines: applicationLinesRef.current, cursor, pageSize: 50 });
+      if (sequence !== requestSequence.current) return;
       setPreview(receipt);
       setPreviewRows((rows) => append ? [...rows, ...receipt.employees] : receipt.employees);
       setPreviewCursor(receipt.nextCursor);
     } catch (error) {
+      if (sequence !== requestSequence.current) return;
       onError(presentBaseerApiError(error, language, ar ? "معاينة المسير" : "Previewing payroll"));
       if (!append) { setPreview(null); setPreviewRows([]); setPreviewCursor(null); }
-    } finally { setPreviewLoading(false); }
-  }, [applicationLines, ar, draft.businessDate, draft.payrollMonth, includeOnLeaveIds, language, onError]);
+    } finally { if (sequence === requestSequence.current) setPreviewLoading(false); }
+  }, [ar, draft.businessDate, draft.payrollMonth, language, onError]);
 
-  useEffect(() => { if (!open) return; const timer = window.setTimeout(() => void loadPreview(), 250); return () => window.clearTimeout(timer); }, [loadPreview, open]);
+  useEffect(() => {
+    if (!open) return;
+    const timer = window.setTimeout(() => void loadPreview(), 250);
+    return () => { window.clearTimeout(timer); requestSequence.current += 1; };
+  }, [loadPreview, open, previewInputKey]);
 
   const updateApplication = (employeeId: string, kind: "advances" | "deductions", id: string, enabled: boolean, amount: string) => setApplications((rows) => ({ ...rows, [employeeId]: { advances: rows[employeeId]?.advances ?? {}, deductions: rows[employeeId]?.deductions ?? {}, [kind]: { ...(rows[employeeId]?.[kind] ?? {}), [id]: { enabled, amount } } } }));
 
