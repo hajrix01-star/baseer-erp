@@ -632,10 +632,13 @@ export const HrEmployeeServiceScalarFieldEnum = {
   referenceNumber: 'referenceNumber',
   issueDate: 'issueDate',
   expiryDate: 'expiryDate',
+  visaDurationMonths: 'visaDurationMonths',
+  renewalOfServiceId: 'renewalOfServiceId',
   supplierId: 'supplierId',
   categoryId: 'categoryId',
   outflowDocumentId: 'outflowDocumentId',
   status: 'status',
+  complianceStatus: 'complianceStatus',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

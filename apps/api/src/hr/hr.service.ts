@@ -1,16 +1,20 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
-import type { CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, UpdateHrEmployeeRequest } from '@baseer-erp/contracts';
+import type { CancelHrEmployeeServiceRequest, CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, RenewHrEmployeeServiceRequest, UpdateHrEmployeeRequest, UpdateHrEmployeeServiceRequest } from '@baseer-erp/contracts';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceCategoryStatus, FinanceSupplierStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceCategoryStatus, FinanceSupplierStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
+type EmployeeServiceUpdateInput = Omit<UpdateHrEmployeeServiceRequest, 'idempotencyKey'>;
+type EmployeeServiceCancelInput = Omit<CancelHrEmployeeServiceRequest, 'idempotencyKey'>;
+type EmployeeServiceRenewInput = Omit<RenewHrEmployeeServiceRequest, 'idempotencyKey'>;
+type EmployeeServiceListQuery = Readonly<{ employeeId?: string; serviceType?: string; complianceStatus?: HrEmployeeServiceComplianceStatus; expiryBefore?: Date; expiryAfter?: Date; cursor?: string; pageSize: number }>;
 
 @Injectable()
 export class HrService {
@@ -110,8 +114,10 @@ export class HrService {
       });
       if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service request is already being processed.');
-      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { not: HrEmployeeStatus.ARCHIVED } }, select: { id: true } });
+      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
       if (!employee) throw new BadRequestException('Choose an active employee from this company.');
+      this.assertServiceTiming(input.issueDate, input.expiryDate);
+      this.assertServiceTypeRequirements(input.serviceType, input.referenceNumber, input.expiryDate, input.visaDurationMonths);
       await this.assertServiceReferences(tx, context, input.supplierId, input.categoryId);
       const id = randomUUID();
       await tx.hrEmployeeService.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, status: HrEmployeeServiceStatus.DRAFT } });
@@ -120,6 +126,162 @@ export class HrService {
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);
+  }
+
+  async listServices(context: TrustedCompanyActorContext, query: EmployeeServiceListQuery) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const cursor = query.cursor ? await tx.hrEmployeeService.findFirst({
+        where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, createdAt: true },
+      }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-service cursor is invalid.');
+      const rows = await tx.hrEmployeeService.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          ...(query.employeeId ? { employeeId: query.employeeId } : {}),
+          ...(query.serviceType ? { serviceType: query.serviceType } : {}),
+          ...(query.complianceStatus ? { complianceStatus: query.complianceStatus } : {}),
+          ...(query.expiryBefore || query.expiryAfter ? { expiryDate: { ...(query.expiryBefore ? { lte: query.expiryBefore } : {}), ...(query.expiryAfter ? { gte: query.expiryAfter } : {}) } } : {}),
+          ...(cursor ? { OR: [{ createdAt: { lt: cursor.createdAt } }, { createdAt: cursor.createdAt, id: { lt: cursor.id } }] } : {}),
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: query.pageSize + 1,
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+      });
+      const hasMore = rows.length > query.pageSize;
+      const services = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { services: services.map(mapService), hasMore, nextCursor: hasMore ? services.at(-1)?.id ?? null : null };
+    });
+  }
+
+  async serviceDetail(context: TrustedCompanyActorContext, serviceId: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const service = await tx.hrEmployeeService.findFirst({
+        where: { id: serviceId, tenantId: context.tenantId, companyId: context.companyId },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+      });
+      if (!service) throw new NotFoundException('The employee service was not found.');
+      return { service: mapService(service) };
+    });
+  }
+
+  async updateService(context: TrustedCompanyActorContext, raw: EmployeeServiceUpdateInput, idempotencyKey: string) {
+    const input = serviceUpdateInput(raw);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'hr.employee_service.update', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee service update is already being processed.');
+      const prior = await this.serviceForOperationalChange(tx, context, input.serviceId);
+      const candidate = {
+        serviceType: input.serviceType ?? prior.serviceType,
+        referenceNumber: input.referenceNumber === undefined ? prior.referenceNumber : input.referenceNumber,
+        issueDate: input.issueDate === undefined ? prior.issueDate : input.issueDate,
+        expiryDate: input.expiryDate === undefined ? prior.expiryDate : input.expiryDate,
+        visaDurationMonths: input.visaDurationMonths === undefined ? prior.visaDurationMonths : input.visaDurationMonths,
+        supplierId: input.supplierId === undefined ? prior.supplierId : input.supplierId,
+        categoryId: input.categoryId === undefined ? prior.categoryId : input.categoryId,
+      };
+      this.assertServiceTiming(candidate.issueDate, candidate.expiryDate);
+      this.assertServiceTypeRequirements(candidate.serviceType, candidate.referenceNumber, candidate.expiryDate, candidate.visaDurationMonths);
+      await this.assertServiceReferences(tx, context, candidate.supplierId, candidate.categoryId);
+      const updated = await tx.hrEmployeeService.update({
+        where: { id: prior.id }, data: {
+          ...(input.serviceType !== undefined ? { serviceType: input.serviceType } : {}),
+          ...(input.referenceNumber !== undefined ? { referenceNumber: input.referenceNumber } : {}),
+          ...(input.issueDate !== undefined ? { issueDate: input.issueDate } : {}),
+          ...(input.expiryDate !== undefined ? { expiryDate: input.expiryDate } : {}),
+          ...(input.visaDurationMonths !== undefined ? { visaDurationMonths: input.visaDurationMonths } : {}),
+          ...(input.supplierId !== undefined ? { supplierId: input.supplierId } : {}),
+          ...(input.categoryId !== undefined ? { categoryId: input.categoryId } : {}),
+          ...(input.notes !== undefined ? { notes: input.notes } : {}),
+        },
+      });
+      const receipt = { id: updated.id, replayed: false };
+      await this.audit(tx, context, 'hr.employee_service.updated', 'HrEmployeeService', updated.id, mapService(prior), input);
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  async cancelService(context: TrustedCompanyActorContext, raw: EmployeeServiceCancelInput, idempotencyKey: string) {
+    const input = { serviceId: raw.serviceId, reason: raw.reason.trim() };
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'hr.employee_service.cancel', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee service cancellation is already being processed.');
+      const prior = await this.serviceForOperationalChange(tx, context, input.serviceId);
+      await tx.hrEmployeeService.update({ where: { id: prior.id }, data: { status: HrEmployeeServiceStatus.CANCELLED, complianceStatus: HrEmployeeServiceComplianceStatus.CANCELLED } });
+      const receipt = { id: prior.id, replayed: false };
+      await this.audit(tx, context, 'hr.employee_service.cancelled', 'HrEmployeeService', prior.id, mapService(prior), { complianceStatus: HrEmployeeServiceComplianceStatus.CANCELLED, reason: input.reason });
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  async renewService(context: TrustedCompanyActorContext, raw: EmployeeServiceRenewInput, idempotencyKey: string) {
+    const input = serviceRenewInput(raw);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'hr.employee_service.renew', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee service renewal is already being processed.');
+      const prior = await tx.hrEmployeeService.findFirst({
+        where: { id: input.serviceId, tenantId: context.tenantId, companyId: context.companyId, complianceStatus: HrEmployeeServiceComplianceStatus.ACTIVE, status: { not: HrEmployeeServiceStatus.CANCELLED } },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+      });
+      if (!prior) throw new NotFoundException('An active employee service was not found.');
+      const employee = await tx.hrEmployee.findFirst({ where: { id: prior.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
+      if (!employee) throw new BadRequestException('An active employee is required to renew this service.');
+      const next = {
+        employeeId: prior.employeeId, serviceType: prior.serviceType, referenceNumber: input.referenceNumber === undefined ? prior.referenceNumber : input.referenceNumber,
+        issueDate: input.issueDate === undefined ? prior.issueDate : input.issueDate, expiryDate: input.expiryDate === undefined ? prior.expiryDate : input.expiryDate,
+        visaDurationMonths: input.visaDurationMonths === undefined ? prior.visaDurationMonths : input.visaDurationMonths,
+        supplierId: input.supplierId === undefined ? prior.supplierId : input.supplierId, categoryId: input.categoryId === undefined ? prior.categoryId : input.categoryId,
+        notes: input.notes === undefined ? prior.notes : input.notes,
+      };
+      this.assertServiceTiming(next.issueDate, next.expiryDate);
+      this.assertServiceTypeRequirements(next.serviceType, next.referenceNumber, next.expiryDate, next.visaDurationMonths);
+      await this.assertServiceReferences(tx, context, next.supplierId, next.categoryId);
+      const id = randomUUID();
+      await tx.hrEmployeeService.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...next, renewalOfServiceId: prior.id, status: HrEmployeeServiceStatus.DRAFT, complianceStatus: HrEmployeeServiceComplianceStatus.ACTIVE } });
+      await tx.hrEmployeeService.update({ where: { id: prior.id }, data: { complianceStatus: HrEmployeeServiceComplianceStatus.RENEWED } });
+      const receipt = { id, replayed: false };
+      await this.audit(tx, context, 'hr.employee_service.renewed', 'HrEmployeeService', id, mapService(prior), { renewalOfServiceId: prior.id, ...next });
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  private async serviceForOperationalChange(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, serviceId: string) {
+    const service = await tx.hrEmployeeService.findFirst({
+      where: { id: serviceId, tenantId: context.tenantId, companyId: context.companyId },
+      include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+    });
+    if (!service) throw new NotFoundException('The employee service was not found.');
+    if (service.status !== HrEmployeeServiceStatus.DRAFT || service.complianceStatus !== HrEmployeeServiceComplianceStatus.ACTIVE) throw new ConflictException('Only an active service without an issued financial cost can be changed or cancelled.');
+    return service;
+  }
+
+  private assertServiceTiming(issueDate: Date | null, expiryDate: Date | null) {
+    if (issueDate && expiryDate && expiryDate.getTime() < issueDate.getTime()) throw new BadRequestException('The service expiry date cannot be before its issue date.');
+  }
+
+  private assertServiceTypeRequirements(serviceType: string, referenceNumber: string | null, expiryDate: Date | null, visaDurationMonths: number | null) {
+    if ((serviceType === 'IQAMA_ISSUANCE' || serviceType === 'IQAMA_RENEWAL') && (!referenceNumber || !expiryDate)) {
+      throw new BadRequestException('Iqama issuance and renewal require a reference number and an expiry date.');
+    }
+    if ((serviceType === 'MEDICAL_INSURANCE' || serviceType === 'HEALTH_CERTIFICATE') && !expiryDate) {
+      throw new BadRequestException('Medical insurance and health certificates require an expiry date.');
+    }
+    if (serviceType === 'EXIT_REENTRY_VISA' && (visaDurationMonths === null || visaDurationMonths < 1 || visaDurationMonths > 5)) {
+      throw new BadRequestException('Exit and re-entry visas require a duration from one to five months.');
+    }
+    if (visaDurationMonths !== null && serviceType !== 'EXIT_REENTRY_VISA') throw new BadRequestException('Visa duration is allowed only for exit and re-entry visas.');
   }
 
   private async assertServiceReferences(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, supplierId: string | null, categoryId: string | null) {
@@ -145,12 +307,37 @@ function employeeUpdateInput(value: EmployeeUpdateInput) {
   return { nameAr: value.nameAr.trim(), ...(value.nameEn !== undefined ? { nameEn: nullable(value.nameEn) } : {}), ...(value.jobTitle !== undefined ? { jobTitle: nullable(value.jobTitle) } : {}), ...(value.phone !== undefined ? { phone: nullable(value.phone) } : {}), ...(value.email !== undefined ? { email: nullable(value.email) } : {}), status: value.status, ...(value.terminatedAt !== undefined ? { terminatedAt: value.terminatedAt } : {}), ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}) };
 }
 function serviceCreateInput(value: EmployeeServiceCreateInput) {
-  return { employeeId: value.employeeId, serviceType: value.serviceType, referenceNumber: nullable(value.referenceNumber), issueDate: value.issueDate ?? null, expiryDate: value.expiryDate ?? null, supplierId: value.supplierId ?? null, categoryId: value.categoryId ?? null, notes: nullable(value.notes) };
+  return { employeeId: value.employeeId, serviceType: value.serviceType, referenceNumber: nullable(value.referenceNumber), issueDate: value.issueDate ?? null, expiryDate: value.expiryDate ?? null, visaDurationMonths: value.visaDurationMonths ?? null, supplierId: value.supplierId ?? null, categoryId: value.categoryId ?? null, notes: nullable(value.notes) };
+}
+function serviceUpdateInput(value: EmployeeServiceUpdateInput) {
+  return {
+    serviceId: value.serviceId,
+    ...(value.serviceType !== undefined ? { serviceType: value.serviceType } : {}),
+    ...(value.referenceNumber !== undefined ? { referenceNumber: nullable(value.referenceNumber) } : {}),
+    ...(value.issueDate !== undefined ? { issueDate: value.issueDate } : {}),
+    ...(value.expiryDate !== undefined ? { expiryDate: value.expiryDate } : {}),
+    ...(value.visaDurationMonths !== undefined ? { visaDurationMonths: value.visaDurationMonths } : {}),
+    ...(value.supplierId !== undefined ? { supplierId: value.supplierId } : {}),
+    ...(value.categoryId !== undefined ? { categoryId: value.categoryId } : {}),
+    ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}),
+  };
+}
+function serviceRenewInput(value: EmployeeServiceRenewInput) {
+  return {
+    serviceId: value.serviceId,
+    ...(value.referenceNumber !== undefined ? { referenceNumber: nullable(value.referenceNumber) } : {}),
+    ...(value.issueDate !== undefined ? { issueDate: value.issueDate } : {}),
+    ...(value.expiryDate !== undefined ? { expiryDate: value.expiryDate } : {}),
+    ...(value.visaDurationMonths !== undefined ? { visaDurationMonths: value.visaDurationMonths } : {}),
+    ...(value.supplierId !== undefined ? { supplierId: value.supplierId } : {}),
+    ...(value.categoryId !== undefined ? { categoryId: value.categoryId } : {}),
+    ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}),
+  };
 }
 function nullable(value: string | null | undefined) { const text = value?.trim(); return text || null; }
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
 function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, hireDate: day(value.hireDate)!, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
-function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, notes: value.notes }; }
+function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) }; }
 function mapMovement(value: { id: string; journalEntryId: string; movementType: string; businessDate: Date; amount: Prisma.Decimal; sourceReference: string; description: string | null }) { return { id: value.id, journalEntryId: value.journalEntryId, movementType: value.movementType, businessDate: day(value.businessDate)!, amount: value.amount.toFixed(4), sourceReference: value.sourceReference, description: value.description }; }
 function tomorrow() { return new Date(Date.now() + 86_400_000); }
 function rethrowIdempotency(error: unknown): never { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different HR data.'); throw error; }

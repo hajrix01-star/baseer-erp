@@ -5384,10 +5384,13 @@ export const HrEmployeeServiceScalarFieldEnum = {
   referenceNumber: 'referenceNumber',
   issueDate: 'issueDate',
   expiryDate: 'expiryDate',
+  visaDurationMonths: 'visaDurationMonths',
+  renewalOfServiceId: 'renewalOfServiceId',
   supplierId: 'supplierId',
   categoryId: 'categoryId',
   outflowDocumentId: 'outflowDocumentId',
   status: 'status',
+  complianceStatus: 'complianceStatus',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -6429,6 +6432,20 @@ export type EnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel> = FieldRefInp
  * Reference to a field of type 'HrEmployeeServiceStatus[]'
  */
 export type ListEnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeServiceStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeServiceComplianceStatus'
+ */
+export type EnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeServiceComplianceStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrEmployeeServiceComplianceStatus[]'
+ */
+export type ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrEmployeeServiceComplianceStatus[]'>
     
 
 

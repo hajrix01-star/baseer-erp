@@ -295,6 +295,15 @@ export const HrEmployeeServiceStatus = {
 export type HrEmployeeServiceStatus = (typeof HrEmployeeServiceStatus)[keyof typeof HrEmployeeServiceStatus]
 
 
+export const HrEmployeeServiceComplianceStatus = {
+  ACTIVE: 'ACTIVE',
+  RENEWED: 'RENEWED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrEmployeeServiceComplianceStatus = (typeof HrEmployeeServiceComplianceStatus)[keyof typeof HrEmployeeServiceComplianceStatus]
+
+
 export const HrEmployeeFinancialMovementType = {
   SERVICE_COST: 'SERVICE_COST',
   PAYROLL_ACCRUAL: 'PAYROLL_ACCRUAL',

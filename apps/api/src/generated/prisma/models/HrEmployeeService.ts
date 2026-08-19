@@ -21,8 +21,18 @@ export type HrEmployeeServiceModel = runtime.Types.Result.DefaultSelection<Prism
 
 export type AggregateHrEmployeeService = {
   _count: HrEmployeeServiceCountAggregateOutputType | null
+  _avg: HrEmployeeServiceAvgAggregateOutputType | null
+  _sum: HrEmployeeServiceSumAggregateOutputType | null
   _min: HrEmployeeServiceMinAggregateOutputType | null
   _max: HrEmployeeServiceMaxAggregateOutputType | null
+}
+
+export type HrEmployeeServiceAvgAggregateOutputType = {
+  visaDurationMonths: number | null
+}
+
+export type HrEmployeeServiceSumAggregateOutputType = {
+  visaDurationMonths: number | null
 }
 
 export type HrEmployeeServiceMinAggregateOutputType = {
@@ -34,10 +44,13 @@ export type HrEmployeeServiceMinAggregateOutputType = {
   referenceNumber: string | null
   issueDate: Date | null
   expiryDate: Date | null
+  visaDurationMonths: number | null
+  renewalOfServiceId: string | null
   supplierId: string | null
   categoryId: string | null
   outflowDocumentId: string | null
   status: $Enums.HrEmployeeServiceStatus | null
+  complianceStatus: $Enums.HrEmployeeServiceComplianceStatus | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,10 +65,13 @@ export type HrEmployeeServiceMaxAggregateOutputType = {
   referenceNumber: string | null
   issueDate: Date | null
   expiryDate: Date | null
+  visaDurationMonths: number | null
+  renewalOfServiceId: string | null
   supplierId: string | null
   categoryId: string | null
   outflowDocumentId: string | null
   status: $Enums.HrEmployeeServiceStatus | null
+  complianceStatus: $Enums.HrEmployeeServiceComplianceStatus | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -70,16 +86,27 @@ export type HrEmployeeServiceCountAggregateOutputType = {
   referenceNumber: number
   issueDate: number
   expiryDate: number
+  visaDurationMonths: number
+  renewalOfServiceId: number
   supplierId: number
   categoryId: number
   outflowDocumentId: number
   status: number
+  complianceStatus: number
   notes: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type HrEmployeeServiceAvgAggregateInputType = {
+  visaDurationMonths?: true
+}
+
+export type HrEmployeeServiceSumAggregateInputType = {
+  visaDurationMonths?: true
+}
 
 export type HrEmployeeServiceMinAggregateInputType = {
   id?: true
@@ -90,10 +117,13 @@ export type HrEmployeeServiceMinAggregateInputType = {
   referenceNumber?: true
   issueDate?: true
   expiryDate?: true
+  visaDurationMonths?: true
+  renewalOfServiceId?: true
   supplierId?: true
   categoryId?: true
   outflowDocumentId?: true
   status?: true
+  complianceStatus?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -108,10 +138,13 @@ export type HrEmployeeServiceMaxAggregateInputType = {
   referenceNumber?: true
   issueDate?: true
   expiryDate?: true
+  visaDurationMonths?: true
+  renewalOfServiceId?: true
   supplierId?: true
   categoryId?: true
   outflowDocumentId?: true
   status?: true
+  complianceStatus?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -126,10 +159,13 @@ export type HrEmployeeServiceCountAggregateInputType = {
   referenceNumber?: true
   issueDate?: true
   expiryDate?: true
+  visaDurationMonths?: true
+  renewalOfServiceId?: true
   supplierId?: true
   categoryId?: true
   outflowDocumentId?: true
   status?: true
+  complianceStatus?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -174,6 +210,18 @@ export type HrEmployeeServiceAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: HrEmployeeServiceAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: HrEmployeeServiceSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: HrEmployeeServiceMinAggregateInputType
@@ -204,6 +252,8 @@ export type HrEmployeeServiceGroupByArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   _count?: HrEmployeeServiceCountAggregateInputType | true
+  _avg?: HrEmployeeServiceAvgAggregateInputType
+  _sum?: HrEmployeeServiceSumAggregateInputType
   _min?: HrEmployeeServiceMinAggregateInputType
   _max?: HrEmployeeServiceMaxAggregateInputType
 }
@@ -217,14 +267,19 @@ export type HrEmployeeServiceGroupByOutputType = {
   referenceNumber: string | null
   issueDate: Date | null
   expiryDate: Date | null
+  visaDurationMonths: number | null
+  renewalOfServiceId: string | null
   supplierId: string | null
   categoryId: string | null
   outflowDocumentId: string | null
   status: $Enums.HrEmployeeServiceStatus
+  complianceStatus: $Enums.HrEmployeeServiceComplianceStatus
   notes: string | null
   createdAt: Date
   updatedAt: Date
   _count: HrEmployeeServiceCountAggregateOutputType | null
+  _avg: HrEmployeeServiceAvgAggregateOutputType | null
+  _sum: HrEmployeeServiceSumAggregateOutputType | null
   _min: HrEmployeeServiceMinAggregateOutputType | null
   _max: HrEmployeeServiceMaxAggregateOutputType | null
 }
@@ -256,10 +311,13 @@ export type HrEmployeeServiceWhereInput = {
   referenceNumber?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   issueDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
   expiryDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
+  visaDurationMonths?: Prisma.IntNullableFilter<"HrEmployeeService"> | number | null
+  renewalOfServiceId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   categoryId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   outflowDocumentId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
@@ -279,10 +337,13 @@ export type HrEmployeeServiceOrderByWithRelationInput = {
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   issueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  visaDurationMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  renewalOfServiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   outflowDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  complianceStatus?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -307,10 +368,13 @@ export type HrEmployeeServiceWhereUniqueInput = Prisma.AtLeast<{
   referenceNumber?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   issueDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
   expiryDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
+  visaDurationMonths?: Prisma.IntNullableFilter<"HrEmployeeService"> | number | null
+  renewalOfServiceId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   categoryId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   outflowDocumentId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
@@ -330,16 +394,21 @@ export type HrEmployeeServiceOrderByWithAggregationInput = {
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   issueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  visaDurationMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  renewalOfServiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   outflowDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  complianceStatus?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.HrEmployeeServiceCountOrderByAggregateInput
+  _avg?: Prisma.HrEmployeeServiceAvgOrderByAggregateInput
   _max?: Prisma.HrEmployeeServiceMaxOrderByAggregateInput
   _min?: Prisma.HrEmployeeServiceMinOrderByAggregateInput
+  _sum?: Prisma.HrEmployeeServiceSumOrderByAggregateInput
 }
 
 export type HrEmployeeServiceScalarWhereWithAggregatesInput = {
@@ -354,10 +423,13 @@ export type HrEmployeeServiceScalarWhereWithAggregatesInput = {
   referenceNumber?: Prisma.StringNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   issueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"HrEmployeeService"> | Date | string | null
   expiryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"HrEmployeeService"> | Date | string | null
+  visaDurationMonths?: Prisma.IntNullableWithAggregatesFilter<"HrEmployeeService"> | number | null
+  renewalOfServiceId?: Prisma.UuidNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   supplierId?: Prisma.UuidNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   categoryId?: Prisma.UuidNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   outflowDocumentId?: Prisma.UuidNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusWithAggregatesFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusWithAggregatesFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.StringNullableWithAggregatesFilter<"HrEmployeeService"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HrEmployeeService"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"HrEmployeeService"> | Date | string
@@ -369,7 +441,10 @@ export type HrEmployeeServiceCreateInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -389,10 +464,13 @@ export type HrEmployeeServiceUncheckedCreateInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -404,7 +482,10 @@ export type HrEmployeeServiceUpdateInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -424,10 +505,13 @@ export type HrEmployeeServiceUncheckedUpdateInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,10 +526,13 @@ export type HrEmployeeServiceCreateManyInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -457,7 +544,10 @@ export type HrEmployeeServiceUpdateManyMutationInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,10 +562,13 @@ export type HrEmployeeServiceUncheckedUpdateManyInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,13 +610,20 @@ export type HrEmployeeServiceCountOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
+  visaDurationMonths?: Prisma.SortOrder
+  renewalOfServiceId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   outflowDocumentId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complianceStatus?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type HrEmployeeServiceAvgOrderByAggregateInput = {
+  visaDurationMonths?: Prisma.SortOrder
 }
 
 export type HrEmployeeServiceMaxOrderByAggregateInput = {
@@ -535,10 +635,13 @@ export type HrEmployeeServiceMaxOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
+  visaDurationMonths?: Prisma.SortOrder
+  renewalOfServiceId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   outflowDocumentId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complianceStatus?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -553,13 +656,20 @@ export type HrEmployeeServiceMinOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
+  visaDurationMonths?: Prisma.SortOrder
+  renewalOfServiceId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   outflowDocumentId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complianceStatus?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type HrEmployeeServiceSumOrderByAggregateInput = {
+  visaDurationMonths?: Prisma.SortOrder
 }
 
 export type HrEmployeeServiceCreateNestedManyWithoutCompanyInput = {
@@ -766,13 +876,20 @@ export type EnumHrEmployeeServiceStatusFieldUpdateOperationsInput = {
   set?: $Enums.HrEmployeeServiceStatus
 }
 
+export type EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput = {
+  set?: $Enums.HrEmployeeServiceComplianceStatus
+}
+
 export type HrEmployeeServiceCreateWithoutCompanyInput = {
   id?: string
   serviceType: string
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -789,10 +906,13 @@ export type HrEmployeeServiceUncheckedCreateWithoutCompanyInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -836,10 +956,13 @@ export type HrEmployeeServiceScalarWhereInput = {
   referenceNumber?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   issueDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
   expiryDate?: Prisma.DateTimeNullableFilter<"HrEmployeeService"> | Date | string | null
+  visaDurationMonths?: Prisma.IntNullableFilter<"HrEmployeeService"> | number | null
+  renewalOfServiceId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   supplierId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   categoryId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   outflowDocumentId?: Prisma.UuidNullableFilter<"HrEmployeeService"> | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFilter<"HrEmployeeService"> | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.StringNullableFilter<"HrEmployeeService"> | string | null
   createdAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeService"> | Date | string
@@ -851,7 +974,10 @@ export type HrEmployeeServiceCreateWithoutCategoryInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -868,9 +994,12 @@ export type HrEmployeeServiceUncheckedCreateWithoutCategoryInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -908,7 +1037,10 @@ export type HrEmployeeServiceCreateWithoutSupplierInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -925,9 +1057,12 @@ export type HrEmployeeServiceUncheckedCreateWithoutSupplierInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -965,7 +1100,10 @@ export type HrEmployeeServiceCreateWithoutOutflowDocumentInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -982,9 +1120,12 @@ export type HrEmployeeServiceUncheckedCreateWithoutOutflowDocumentInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1012,7 +1153,10 @@ export type HrEmployeeServiceUpdateWithoutOutflowDocumentInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1029,9 +1173,12 @@ export type HrEmployeeServiceUncheckedUpdateWithoutOutflowDocumentInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1043,7 +1190,10 @@ export type HrEmployeeServiceCreateWithoutEmployeeInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1059,10 +1209,13 @@ export type HrEmployeeServiceUncheckedCreateWithoutEmployeeInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1101,10 +1254,13 @@ export type HrEmployeeServiceCreateManyCompanyInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1116,7 +1272,10 @@ export type HrEmployeeServiceUpdateWithoutCompanyInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1133,10 +1292,13 @@ export type HrEmployeeServiceUncheckedUpdateWithoutCompanyInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1149,10 +1311,13 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutCompanyInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1165,9 +1330,12 @@ export type HrEmployeeServiceCreateManyCategoryInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1179,7 +1347,10 @@ export type HrEmployeeServiceUpdateWithoutCategoryInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1196,9 +1367,12 @@ export type HrEmployeeServiceUncheckedUpdateWithoutCategoryInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1211,9 +1385,12 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutCategoryInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1226,9 +1403,12 @@ export type HrEmployeeServiceCreateManySupplierInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1240,7 +1420,10 @@ export type HrEmployeeServiceUpdateWithoutSupplierInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1257,9 +1440,12 @@ export type HrEmployeeServiceUncheckedUpdateWithoutSupplierInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1272,9 +1458,12 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutSupplierInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1286,10 +1475,13 @@ export type HrEmployeeServiceCreateManyEmployeeInput = {
   referenceNumber?: string | null
   issueDate?: Date | string | null
   expiryDate?: Date | string | null
+  visaDurationMonths?: number | null
+  renewalOfServiceId?: string | null
   supplierId?: string | null
   categoryId?: string | null
   outflowDocumentId?: string | null
   status?: $Enums.HrEmployeeServiceStatus
+  complianceStatus?: $Enums.HrEmployeeServiceComplianceStatus
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1301,7 +1493,10 @@ export type HrEmployeeServiceUpdateWithoutEmployeeInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1317,10 +1512,13 @@ export type HrEmployeeServiceUncheckedUpdateWithoutEmployeeInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1332,10 +1530,13 @@ export type HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visaDurationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  renewalOfServiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outflowDocumentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumHrEmployeeServiceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceStatus
+  complianceStatus?: Prisma.EnumHrEmployeeServiceComplianceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeServiceComplianceStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1352,10 +1553,13 @@ export type HrEmployeeServiceSelect<ExtArgs extends runtime.Types.Extensions.Int
   referenceNumber?: boolean
   issueDate?: boolean
   expiryDate?: boolean
+  visaDurationMonths?: boolean
+  renewalOfServiceId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   outflowDocumentId?: boolean
   status?: boolean
+  complianceStatus?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1375,10 +1579,13 @@ export type HrEmployeeServiceSelectCreateManyAndReturn<ExtArgs extends runtime.T
   referenceNumber?: boolean
   issueDate?: boolean
   expiryDate?: boolean
+  visaDurationMonths?: boolean
+  renewalOfServiceId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   outflowDocumentId?: boolean
   status?: boolean
+  complianceStatus?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1398,10 +1605,13 @@ export type HrEmployeeServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   referenceNumber?: boolean
   issueDate?: boolean
   expiryDate?: boolean
+  visaDurationMonths?: boolean
+  renewalOfServiceId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   outflowDocumentId?: boolean
   status?: boolean
+  complianceStatus?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1421,16 +1631,19 @@ export type HrEmployeeServiceSelectScalar = {
   referenceNumber?: boolean
   issueDate?: boolean
   expiryDate?: boolean
+  visaDurationMonths?: boolean
+  renewalOfServiceId?: boolean
   supplierId?: boolean
   categoryId?: boolean
   outflowDocumentId?: boolean
   status?: boolean
+  complianceStatus?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type HrEmployeeServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "serviceType" | "referenceNumber" | "issueDate" | "expiryDate" | "supplierId" | "categoryId" | "outflowDocumentId" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeService"]>
+export type HrEmployeeServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "serviceType" | "referenceNumber" | "issueDate" | "expiryDate" | "visaDurationMonths" | "renewalOfServiceId" | "supplierId" | "categoryId" | "outflowDocumentId" | "status" | "complianceStatus" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeService"]>
 export type HrEmployeeServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
@@ -1471,10 +1684,17 @@ export type $HrEmployeeServicePayload<ExtArgs extends runtime.Types.Extensions.I
     referenceNumber: string | null
     issueDate: Date | null
     expiryDate: Date | null
+    /**
+     * Relevant for an exit/re-entry visa; kept typed instead of inferring it
+     * from dates because its legal duration and dates can differ.
+     */
+    visaDurationMonths: number | null
+    renewalOfServiceId: string | null
     supplierId: string | null
     categoryId: string | null
     outflowDocumentId: string | null
     status: $Enums.HrEmployeeServiceStatus
+    complianceStatus: $Enums.HrEmployeeServiceComplianceStatus
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -1914,10 +2134,13 @@ export interface HrEmployeeServiceFieldRefs {
   readonly referenceNumber: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly issueDate: Prisma.FieldRef<"HrEmployeeService", 'DateTime'>
   readonly expiryDate: Prisma.FieldRef<"HrEmployeeService", 'DateTime'>
+  readonly visaDurationMonths: Prisma.FieldRef<"HrEmployeeService", 'Int'>
+  readonly renewalOfServiceId: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly supplierId: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly categoryId: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly outflowDocumentId: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly status: Prisma.FieldRef<"HrEmployeeService", 'HrEmployeeServiceStatus'>
+  readonly complianceStatus: Prisma.FieldRef<"HrEmployeeService", 'HrEmployeeServiceComplianceStatus'>
   readonly notes: Prisma.FieldRef<"HrEmployeeService", 'String'>
   readonly createdAt: Prisma.FieldRef<"HrEmployeeService", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"HrEmployeeService", 'DateTime'>

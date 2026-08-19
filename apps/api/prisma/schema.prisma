@@ -197,6 +197,15 @@ enum HrEmployeeServiceStatus {
   CANCELLED
 }
 
+/// Operational compliance state. It is deliberately separate from the
+/// financial-document state above: a service may be costed and still remain
+/// the employee's currently active compliance record.
+enum HrEmployeeServiceComplianceStatus {
+  ACTIVE
+  RENEWED
+  CANCELLED
+}
+
 enum HrEmployeeFinancialMovementType {
   SERVICE_COST
   PAYROLL_ACCRUAL
@@ -1016,21 +1025,26 @@ model HrEmployeeLeave {
 /// A personnel service is operational until its associated cost is issued.
 /// The financial document is immutable and is never recreated by editing this record.
 model HrEmployeeService {
-  id                String                  @id @default(uuid()) @db.Uuid
-  tenantId          String                  @db.Uuid
-  companyId         String                  @db.Uuid
-  employeeId        String                  @db.Uuid
-  serviceType       String                  @db.VarChar(80)
-  referenceNumber   String?                 @db.VarChar(160)
-  issueDate         DateTime?               @db.Date
-  expiryDate        DateTime?               @db.Date
-  supplierId        String?                 @db.Uuid
-  categoryId        String?                 @db.Uuid
-  outflowDocumentId String?                 @db.Uuid
-  status            HrEmployeeServiceStatus @default(DRAFT)
-  notes             String?                 @db.VarChar(2000)
-  createdAt         DateTime                @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime                @updatedAt @db.Timestamptz(6)
+  id               String                            @id @default(uuid()) @db.Uuid
+  tenantId         String                            @db.Uuid
+  companyId        String                            @db.Uuid
+  employeeId       String                            @db.Uuid
+  serviceType      String                            @db.VarChar(80)
+  referenceNumber  String?                           @db.VarChar(160)
+  issueDate        DateTime?                         @db.Date
+  expiryDate       DateTime?                         @db.Date
+  /// Relevant for an exit/re-entry visa; kept typed instead of inferring it
+  /// from dates because its legal duration and dates can differ.
+  visaDurationMonths Int?                            @db.SmallInt
+  renewalOfServiceId String?                         @db.Uuid
+  supplierId        String?                           @db.Uuid
+  categoryId        String?                           @db.Uuid
+  outflowDocumentId String?                           @db.Uuid
+  status            HrEmployeeServiceStatus           @default(DRAFT)
+  complianceStatus  HrEmployeeServiceComplianceStatus @default(ACTIVE)
+  notes             String?                           @db.VarChar(2000)
+  createdAt         DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                          @updatedAt @db.Timestamptz(6)
 
   company         Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   employee        HrEmployee              @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -1042,6 +1056,8 @@ model HrEmployeeService {
   @@unique([outflowDocumentId, tenantId, companyId])
   @@index([tenantId, companyId, employeeId, status, expiryDate])
   @@index([tenantId, companyId, serviceType, status])
+  @@index([tenantId, companyId, employeeId, complianceStatus, expiryDate])
+  @@index([tenantId, companyId, renewalOfServiceId])
 }
 
 /// A bounded, employee-facing index into immutable journal entries. It is a

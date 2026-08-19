@@ -793,6 +793,13 @@ export type EnumHrEmployeeServiceStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel> | $Enums.HrEmployeeServiceStatus
 }
 
+export type EnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeServiceComplianceStatus | Prisma.EnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel> | $Enums.HrEmployeeServiceComplianceStatus
+}
+
 export type EnumHrEmployeeServiceStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.HrEmployeeServiceStatus | Prisma.EnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrEmployeeServiceStatus[] | Prisma.ListEnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
@@ -801,6 +808,16 @@ export type EnumHrEmployeeServiceStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel>
+}
+
+export type EnumHrEmployeeServiceComplianceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeServiceComplianceStatus | Prisma.EnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeServiceComplianceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel>
 }
 
 export type EnumHrEmployeeFinancialMovementTypeFilter<$PrismaModel = never> = {
@@ -1914,6 +1931,13 @@ export type NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel> | $Enums.HrEmployeeServiceStatus
 }
 
+export type NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeServiceComplianceStatus | Prisma.EnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel> | $Enums.HrEmployeeServiceComplianceStatus
+}
+
 export type NestedEnumHrEmployeeServiceStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.HrEmployeeServiceStatus | Prisma.EnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrEmployeeServiceStatus[] | Prisma.ListEnumHrEmployeeServiceStatusFieldRefInput<$PrismaModel>
@@ -1922,6 +1946,16 @@ export type NestedEnumHrEmployeeServiceStatusWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrEmployeeServiceStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrEmployeeServiceComplianceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrEmployeeServiceComplianceStatus | Prisma.EnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrEmployeeServiceComplianceStatus[] | Prisma.ListEnumHrEmployeeServiceComplianceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrEmployeeServiceComplianceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrEmployeeServiceComplianceStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumHrEmployeeFinancialMovementTypeFilter<$PrismaModel = never> = {

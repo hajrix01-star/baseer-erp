@@ -10,11 +10,14 @@ const hrAmountSchema = z.string().trim().regex(/^\d+(?:\.\d{1,4})?$/).max(32);
 
 export const hrEmployeeStatusSchema = z.enum(["ACTIVE", "ON_LEAVE", "TERMINATED", "ARCHIVED"]);
 export const hrEmployeeServiceStatusSchema = z.enum(["DRAFT", "ISSUED", "CANCELLED"]);
+/** Financial issuing remains separate from operational compliance. Expiry is derived from the business date. */
+export const hrEmployeeServiceComplianceStatusSchema = z.enum(["ACTIVE", "RENEWED", "CANCELLED"]);
 export const hrEmployeeAdvanceStatusSchema = z.enum(["ISSUED", "PARTIALLY_SETTLED", "SETTLED", "REVERSED"]);
 export const hrEmployeeAdministrativeDeductionStatusSchema = z.enum(["OPEN", "PARTIALLY_APPLIED", "APPLIED", "DEFERRED", "CANCELLED"]);
 export const hrEmployeeLeaveTypeSchema = z.enum(["ANNUAL", "SICK", "UNPAID", "OTHER"]);
 export const hrEmployeeLeaveStatusSchema = z.enum(["APPROVED", "RETURNED"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
+  "IQAMA_ISSUANCE",
   "IQAMA_RENEWAL",
   "SPONSORSHIP_TRANSFER",
   "EXIT_REENTRY_VISA",
@@ -55,10 +58,54 @@ export const createHrEmployeeServiceRequestSchema = z.object({
   referenceNumber: z.string().trim().max(160).optional(),
   issueDate: hrDateSchema.optional(),
   expiryDate: hrDateSchema.optional(),
+  visaDurationMonths: z.coerce.number().int().min(1).max(5).optional(),
   supplierId: z.string().uuid().optional(),
   categoryId: z.string().uuid().optional(),
   notes: z.string().trim().max(2_000).optional(),
   idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+/** A service can be corrected only until its separate financial cost is issued. */
+export const updateHrEmployeeServiceRequestSchema = z.object({
+  serviceId: z.string().uuid(),
+  serviceType: hrEmployeeServiceTypeSchema.optional(),
+  referenceNumber: z.string().trim().max(160).nullable().optional(),
+  issueDate: hrDateSchema.nullable().optional(),
+  expiryDate: hrDateSchema.nullable().optional(),
+  visaDurationMonths: z.coerce.number().int().min(1).max(5).nullable().optional(),
+  supplierId: z.string().uuid().nullable().optional(),
+  categoryId: z.string().uuid().nullable().optional(),
+  notes: z.string().trim().max(2_000).nullable().optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const cancelHrEmployeeServiceRequestSchema = z.object({
+  serviceId: z.string().uuid(),
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+/** Renewal creates a new active record and preserves the previous one as history. */
+export const renewHrEmployeeServiceRequestSchema = z.object({
+  serviceId: z.string().uuid(),
+  referenceNumber: z.string().trim().max(160).nullable().optional(),
+  issueDate: hrDateSchema.nullable().optional(),
+  expiryDate: hrDateSchema.nullable().optional(),
+  visaDurationMonths: z.coerce.number().int().min(1).max(5).nullable().optional(),
+  supplierId: z.string().uuid().nullable().optional(),
+  categoryId: z.string().uuid().nullable().optional(),
+  notes: z.string().trim().max(2_000).nullable().optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const hrEmployeeServicesQuerySchema = z.object({
+  employeeId: hrEmployeeIdSchema.optional(),
+  serviceType: hrEmployeeServiceTypeSchema.optional(),
+  complianceStatus: hrEmployeeServiceComplianceStatusSchema.optional(),
+  expiryBefore: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(),
+  expiryAfter: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
 
 export const issueHrEmployeeServiceCostRequestSchema = z.object({
@@ -225,11 +272,15 @@ export const hrEmployeeServiceSchema = z.object({
   referenceNumber: z.string().max(160).nullable(),
   issueDate: businessDateSchema.nullable(),
   expiryDate: businessDateSchema.nullable(),
+  visaDurationMonths: z.number().int().min(1).max(5).nullable(),
+  renewalOfServiceId: z.string().uuid().nullable(),
   supplier: z.object({ id: z.string().uuid(), nameAr: z.string(), nameEn: z.string().nullable() }).nullable(),
   category: z.object({ id: z.string().uuid(), nameAr: z.string(), nameEn: z.string() }).nullable(),
   outflowDocumentId: z.string().uuid().nullable(),
   status: hrEmployeeServiceStatusSchema,
+  complianceStatus: hrEmployeeServiceComplianceStatusSchema,
   notes: z.string().max(2_000).nullable(),
+  employee: z.object({ id: hrEmployeeIdSchema, employeeNumber: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable() }).strict().optional(),
 }).strict();
 
 export const hrEmployeeFinancialMovementSchema = z.object({
@@ -355,10 +406,16 @@ export const hrEmployeeAdvanceSettlementReceiptSchema = z.object({ id: z.string(
 export const hrEmployeeAdvanceDeferralReceiptSchema = z.object({ id: z.string().uuid(), advanceId: z.string().uuid(), deferredUntil: businessDateSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdministrativeDeductionReceiptSchema = z.object({ id: z.string().uuid(), deductionNumber: z.string().min(1).max(80), replayed: z.boolean() }).strict();
 export const hrEmployeeLeaveReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeeServicesReceiptSchema = z.object({ companyId: companyIdSchema, services: z.array(hrEmployeeServiceSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
+export const hrEmployeeServiceDetailReceiptSchema = z.object({ companyId: companyIdSchema, service: hrEmployeeServiceSchema }).strict();
+export const hrEmployeeServiceReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
 export type CreateHrEmployeeServiceRequest = z.infer<typeof createHrEmployeeServiceRequestSchema>;
+export type UpdateHrEmployeeServiceRequest = z.infer<typeof updateHrEmployeeServiceRequestSchema>;
+export type CancelHrEmployeeServiceRequest = z.infer<typeof cancelHrEmployeeServiceRequestSchema>;
+export type RenewHrEmployeeServiceRequest = z.infer<typeof renewHrEmployeeServiceRequestSchema>;
 export type IssueHrEmployeeServiceCostRequest = z.infer<typeof issueHrEmployeeServiceCostRequestSchema>;
 export type IssueHrEmployeeAdvanceRequest = z.infer<typeof issueHrEmployeeAdvanceRequestSchema>;
 export type SettleHrEmployeeAdvanceDirectlyRequest = z.infer<typeof settleHrEmployeeAdvanceDirectlyRequestSchema>;

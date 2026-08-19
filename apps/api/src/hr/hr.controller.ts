@@ -3,6 +3,10 @@ import {
   companyIdSchema,
   createHrEmployeeRequestSchema,
   createHrEmployeeServiceRequestSchema,
+  updateHrEmployeeServiceRequestSchema,
+  cancelHrEmployeeServiceRequestSchema,
+  renewHrEmployeeServiceRequestSchema,
+  hrEmployeeServicesQuerySchema,
   financeOutflowDocumentReceiptSchema,
   hrEmployeeDetailQuerySchema,
   hrEmployeeDetailReceiptSchema,
@@ -36,6 +40,9 @@ import {
   hrEmployeeLeavesReceiptSchema,
   hrEmployeeLeaveDetailReceiptSchema,
   hrEmployeeLeaveReceiptSchema,
+  hrEmployeeServicesReceiptSchema,
+  hrEmployeeServiceDetailReceiptSchema,
+  hrEmployeeServiceReceiptSchema,
   issueHrEmployeeServiceCostRequestSchema,
   updateHrEmployeeRequestSchema,
 } from '@baseer-erp/contracts';
@@ -105,6 +112,57 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
     return hrEmployeeEntityReceiptSchema.parse(await this.hr.createService(context, input, idempotencyKey));
+  }
+
+  @Get('services')
+  async listServices(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeeServicesQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-services query.');
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    const result = await this.hr.listServices(context, {
+      pageSize: parsed.data.pageSize,
+      ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}),
+      ...(parsed.data.serviceType ? { serviceType: parsed.data.serviceType } : {}),
+      ...(parsed.data.complianceStatus ? { complianceStatus: parsed.data.complianceStatus } : {}),
+      ...(parsed.data.expiryBefore ? { expiryBefore: parsed.data.expiryBefore } : {}),
+      ...(parsed.data.expiryAfter ? { expiryAfter: parsed.data.expiryAfter } : {}),
+      ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
+    });
+    return hrEmployeeServicesReceiptSchema.parse({ companyId: context.companyId, ...result });
+  }
+
+  @Get('services/:serviceId')
+  async serviceDetail(@Param('serviceId') serviceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    return hrEmployeeServiceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.serviceDetail(context, serviceId)) });
+  }
+
+  @Post('services/update')
+  async updateService(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = updateHrEmployeeServiceRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-service update request.');
+    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeServiceReceiptSchema.parse(await this.hr.updateService(context, request, idempotencyKey));
+  }
+
+  @Post('services/cancel')
+  async cancelService(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = cancelHrEmployeeServiceRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-service cancellation request.');
+    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeServiceReceiptSchema.parse(await this.hr.cancelService(context, request, idempotencyKey));
+  }
+
+  @Post('services/renew')
+  @HttpCode(201)
+  async renewService(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = renewHrEmployeeServiceRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-service renewal request.');
+    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeServiceReceiptSchema.parse(await this.hr.renewService(context, request, idempotencyKey));
   }
 
   @Get('advances')
