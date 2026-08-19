@@ -43,8 +43,36 @@
   gap: .6rem .75rem;
 }
 
-.hr-employee-edit .baseer-form-advanced {
-  margin-top: -.05rem;
+.hr-employee-edit__additional-toggle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  min-block-size: 2.35rem;
+  padding: .45rem .65rem;
+  border-color: color-mix(in srgb, var(--line) 86%, var(--brand));
+  background: color-mix(in srgb, var(--canvas) 48%, var(--surface));
+  color: var(--brand-deep);
+  box-shadow: none;
+}
+
+.hr-employee-edit__additional-toggle:hover {
+  border-color: color-mix(in srgb, var(--brand) 48%, var(--line));
+  background: color-mix(in srgb, var(--brand) 6%, var(--surface));
+}
+
+.hr-employee-edit__additional-toggle b {
+  display: grid;
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 14%, var(--surface));
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.hr-employee-edit__additional-fields {
+  gap: .6rem .75rem;
 }
 
 .hr-employee-edit__notes textarea {
