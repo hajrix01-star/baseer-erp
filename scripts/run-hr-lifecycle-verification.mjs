@@ -14,6 +14,7 @@ const suffix = randomUUID().replaceAll('-', '').slice(0, 12);
 const fixture = {
   tenantId: randomUUID(),
   companyId: randomUUID(),
+  reversalCompanyId: randomUUID(),
   creatorId: randomUUID(),
   approverId: randomUUID(),
   payerId: randomUUID(),
@@ -28,6 +29,9 @@ const fiscalEnd = new Date(Date.UTC(today.getUTCFullYear(), 11, 31));
 const creator = actor(fixture.creatorId);
 const approver = actor(fixture.approverId);
 const payer = actor(fixture.payerId);
+const reversalCreator = actorFor(fixture.reversalCompanyId, fixture.creatorId);
+const reversalApprover = actorFor(fixture.reversalCompanyId, fixture.approverId);
+const reversalPayer = actorFor(fixture.reversalCompanyId, fixture.payerId);
 let app;
 
 try {
@@ -42,6 +46,7 @@ try {
     { CompanyFinanceSetupService },
     { HrPayrollService },
     { HrAdvanceService },
+    { HrAdministrativeDeductionService },
     { HrFinalSettlementService },
     { HrService },
   ] = await Promise.all([
@@ -50,6 +55,7 @@ try {
     import('../apps/api/dist/finance/company-finance-setup.service.js'),
     import('../apps/api/dist/hr/hr-payroll.service.js'),
     import('../apps/api/dist/hr/hr-advance.service.js'),
+    import('../apps/api/dist/hr/hr-administrative-deduction.service.js'),
     import('../apps/api/dist/hr/hr-final-settlement.service.js'),
     import('../apps/api/dist/hr/hr.service.js'),
   ]);
@@ -61,6 +67,7 @@ try {
   const setup = app.get(CompanyFinanceSetupService);
   const payroll = app.get(HrPayrollService);
   const advances = app.get(HrAdvanceService);
+  const deductions = app.get(HrAdministrativeDeductionService);
   const settlements = app.get(HrFinalSettlementService);
   const hr = app.get(HrService);
 
@@ -73,12 +80,22 @@ try {
   }, randomUUID());
   const cashVaultId = finance.vaultIds[0];
   assert.ok(cashVaultId, 'Finance setup must create a cash vault.');
+  const reversalFinance = await setup.initialize(reversalCreator, {
+    fiscalPeriodNameAr: 'فترة تحقق عكس مسير الموارد البشرية',
+    fiscalPeriodNameEn: 'HR payroll reversal verification period',
+    fiscalPeriodStartDate: fiscalStart,
+    fiscalPeriodEndDate: fiscalEnd,
+    selectedVaults: ['CASH'],
+  }, randomUUID());
+  const reversalCashVaultId = reversalFinance.vaultIds[0];
+  assert.ok(reversalCashVaultId, 'Payroll-reversal fixture must create a cash vault.');
 
   const employeeDefinitions = [
     ['payroll', 'موظف المسير'],
     ['zero', 'موظف مخالصة صفرية'],
     ['reverse', 'موظف مخالصة معكوسة'],
     ['paid', 'موظف مخالصة مدفوعة'],
+    ['late-final', 'موظف مخالصة خصم لاحق'],
   ];
   const employees = new Map();
   for (const [key, nameAr] of employeeDefinitions) {
@@ -127,6 +144,37 @@ try {
   assert.equal(manualSettlement.remainingAmount, '250.0000');
   assert.equal((await advances.settleDirectly(creator, manualSettlementInput, manualSettlementKey)).replayed, true, 'Advance-settlement replay must be explicit.');
 
+  const deferredAdvance = await advances.issue(creator, {
+    employeeId: payrollEmployee.id,
+    businessDate: monthStart,
+    amount: '25.0000',
+    allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: '25.0000' }],
+    notes: 'Deferred payroll collection guard',
+  }, randomUUID());
+  await advances.defer(creator, { advanceId: deferredAdvance.id, businessDate: monthStart, deferredUntil: today, reason: 'Collect no earlier than the current business date' }, randomUUID());
+  const deferredDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: monthStart, amount: '15.0000', description: 'Deferred payroll deduction' }, randomUUID());
+  await deductions.defer(creator, { deductionId: deferredDeduction.id, businessDate: monthStart, deferredUntil: today, reason: 'Collect no earlier than the current business date' }, randomUUID());
+  const laterDatedDeduction = await deductions.create(creator, { employeeId: payrollEmployee.id, businessDate: today, amount: '10.0000', description: 'Later-dated payroll deduction' }, randomUUID());
+  const unavailablePayrollLine = { employeeId: payrollEmployee.id, advances: [{ id: deferredAdvance.id, amount: '10.0000' }], administrativeDeductions: [{ id: deferredDeduction.id, amount: '5.0000' }, { id: laterDatedDeduction.id, amount: '5.0000' }] };
+  await assert.rejects(
+    () => payroll.preview(creator, { payrollMonth: monthStart, businessDate: monthStart, includeOnLeaveEmployeeIds: [], lines: [unavailablePayrollLine], pageSize: 50 }),
+    /unavailable/,
+    'Payroll preview must reject advance/deduction collections before their issue or planned collection dates.',
+  );
+  const availabilityPreview = await payroll.preview(creator, { payrollMonth: monthStart, businessDate: monthStart, includeOnLeaveEmployeeIds: [], lines: [], pageSize: 50 });
+  const payrollEmployeePreview = availabilityPreview.employees.find((employee) => employee.id === payrollEmployee.id);
+  assert.ok(payrollEmployeePreview, 'Payroll employee must be visible in the preview page.');
+  assert.equal(payrollEmployeePreview.advances.some((item) => item.id === deferredAdvance.id), false, 'Deferred advances must not be offered before their collection date.');
+  assert.equal(payrollEmployeePreview.administrativeDeductions.some((item) => item.id === deferredDeduction.id || item.id === laterDatedDeduction.id), false, 'Deferred or later-created deductions must not be offered early.');
+  await assert.rejects(
+    () => payroll.create(creator, { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [unavailablePayrollLine], notes: 'Rejected early collections' }, randomUUID()),
+    /unavailable/,
+    'Payroll creation must revalidate collection dates independently of preview.',
+  );
+
+  const lateFinalEmployee = employees.get('late-final');
+  const lateFinalDeduction = await deductions.create(creator, { employeeId: lateFinalEmployee.id, businessDate: today, amount: '10.0000', description: 'Final-settlement deduction created after termination' }, randomUUID());
+
   const payrollLine = { employeeId: payrollEmployee.id, advances: [{ id: advance.id, amount: '100.0000' }], administrativeDeductions: [] };
   const payrollPreviewInput = { payrollMonth: monthStart, businessDate: monthStart, includeOnLeaveEmployeeIds: [], lines: [payrollLine], pageSize: 50 };
   const preview = await payroll.preview(creator, payrollPreviewInput);
@@ -149,7 +197,7 @@ try {
   assert.equal(approvedRun.replayed, false);
   assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');
 
-  const payrollDetail = await payroll.detail(creator, run.id);
+  const payrollDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
   assert.equal(payrollDetail.payrollRun.businessDate, day(monthStart), 'Approval must not rewrite the payroll header date.');
   await assert.rejects(
     () => payroll.pay(payer, { payrollRunId: run.id, businessDate: beforeMonth, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] }, randomUUID()),
@@ -166,6 +214,27 @@ try {
     'A paid payroll reversal must be rejected.',
   );
 
+  const reversalEmployee = await payroll.onboardEmployee(reversalCreator, onboardingInput('موظف عكس المسير'), randomUUID());
+  const reversalAdvance = await advances.issue(reversalCreator, {
+    employeeId: reversalEmployee.id,
+    businessDate: monthStart,
+    amount: '100.0000',
+    allocations: [{ vaultId: reversalCashVaultId, paymentMethod: 'CASH', amount: '100.0000' }],
+    notes: 'Payroll reversal employee-ledger verification',
+  }, randomUUID());
+  const reversalPayroll = await payroll.create(reversalCreator, {
+    payrollMonth: monthStart,
+    businessDate: monthStart,
+    includeAllEligible: true,
+    includeOnLeaveEmployeeIds: [],
+    lines: [{ employeeId: reversalEmployee.id, advances: [{ id: reversalAdvance.id, amount: '100.0000' }], administrativeDeductions: [] }],
+    notes: 'Payroll reversal lifecycle',
+  }, randomUUID());
+  await payroll.approve(reversalApprover, { payrollRunId: reversalPayroll.id, businessDate: monthStart }, randomUUID());
+  const reversalPayrollKey = randomUUID();
+  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthStart, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, false);
+  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthStart, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, true, 'Payroll reversal replay must be explicit.');
+
   const reverseEmployee = employees.get('reverse');
   const recoveryAdvance = await advances.issue(creator, {
     employeeId: reverseEmployee.id,
@@ -178,6 +247,25 @@ try {
   for (const key of ['zero', 'reverse', 'paid']) {
     const employee = employees.get(key);
     await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: today }, randomUUID());
+  }
+  const yesterday = addDays(today, -1);
+  for (const key of ['late-final']) {
+    const employee = employees.get(key);
+    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: yesterday }, randomUUID());
+  }
+
+  for (const [key, deduction, expectedMessage] of [['late-final', lateFinalDeduction, /cannot predate its creation date/]]) {
+    const employee = employees.get(key);
+    const request = { ...finalSettlementInput(employee.id, 'EMPLOYER_TERMINATION', [{ recoveryType: 'ADMINISTRATIVE_DEDUCTION', sourceId: deduction.id, amount: '10.0000' }]), terminationDate: yesterday };
+    const settlement = await settlements.create(creator, request);
+    await settlements.verifyReason(approver, { settlementId: settlement.id, verificationNote: 'Verified chronology guard' }, randomUUID());
+    await assert.rejects(
+      () => settlements.approve(approver, { settlementId: settlement.id, businessDate: yesterday }, randomUUID()),
+      expectedMessage,
+      'Final-settlement deductions must not be recovered before their creation date.',
+    );
+    await settlements.approve(approver, { settlementId: settlement.id, businessDate: today }, randomUUID());
+    await settlements.reverse(payer, { settlementId: settlement.id, businessDate: today, reason: 'Chronology guard verification reversal' }, randomUUID());
   }
 
   const zeroEmployee = employees.get('zero');
@@ -238,7 +326,7 @@ try {
   );
 
   const proof = await database.inTenantTransaction(fixture.tenantId, async (tx) => {
-    const [payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, journalEntries] = await Promise.all([
+    const [payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries] = await Promise.all([
       tx.hrPayrollRun.findFirstOrThrow({ where: { id: run.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, businessDate: true, paidAmount: true, netPayableAmount: true } }),
       tx.hrEmployeeAdvance.findFirstOrThrow({ where: { id: advance.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { remainingAmount: true } }),
       tx.hrFinalSettlement.findFirstOrThrow({ where: { id: zeroSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, accrualJournalEntryId: true } }),
@@ -246,9 +334,13 @@ try {
       tx.hrFinalSettlement.findFirstOrThrow({ where: { id: paidSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, paidAmount: true, netPayableAmount: true } }),
       tx.hrEmployeeAdvanceSettlement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, advanceId: recoveryAdvance.id, source: 'FINAL_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true, journalEntryId: true } }),
       tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: reverseEmployee.id, movementType: 'FINAL_SETTLEMENT_ACCRUAL' }, select: { amount: true } }),
-      tx.financeJournalEntry.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId }, include: { lines: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: payrollEmployee.id, movementType: 'ADVANCE_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: reverseEmployee.id, movementType: 'ADVANCE_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.reversalCompanyId, employeeId: reversalEmployee.id, movementType: 'ADVANCE_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.hrEmployeeAdvanceSettlement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.reversalCompanyId, advanceId: reversalAdvance.id, source: 'PAYROLL' }, orderBy: { createdAt: 'asc' }, select: { amount: true } }),
+      tx.financeJournalEntry.findMany({ where: { tenantId: fixture.tenantId, companyId: { in: [fixture.companyId, fixture.reversalCompanyId] } }, include: { lines: true } }),
     ]);
-    return { payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, journalEntries };
+    return { payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries };
   });
   assert.equal(proof.payrollRow.status, 'PAID');
   assert.equal(proof.payrollRow.businessDate.toISOString(), monthStart.toISOString());
@@ -262,6 +354,10 @@ try {
   assert.deepEqual(proof.recoveryRows.map((row) => row.amount.toFixed(4)), ['10.0000', '-10.0000'], 'Advance recovery reversal must be append-only.');
   assert.equal(proof.recoveryRows.every((row) => row.journalEntryId), true, 'Both recovery events must reference their journal.');
   assert.equal(proof.movements.reduce((sum, movement) => sum + Number(movement.amount), 0), 0, 'Final-settlement accrual and reversal movements must net to zero.');
+  assert.deepEqual(proof.payrollAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['50.0000', '100.0000'], 'Direct and payroll advance settlements must both appear once in the employee ledger.');
+  assert.deepEqual(proof.finalAdvanceMovements.map((movement) => movement.amount.toFixed(4)), ['10.0000', '-10.0000'], 'Final-settlement advance recovery and reversal must be append-only and net to zero in the employee ledger.');
+  assert.deepEqual(proof.reversedPayrollMovements.map((movement) => movement.amount.toFixed(4)), ['100.0000', '-100.0000'], 'Payroll advance settlement and reversal must be append-only and net to zero in the employee ledger.');
+  assert.deepEqual(proof.reversedPayrollSettlements.map((settlement) => settlement.amount.toFixed(4)), ['100.0000', '-100.0000'], 'Payroll advance balance history must retain both application and reversal rows.');
   for (const journal of proof.journalEntries) {
     assert.equal(journal.isSealed, true, 'Every HR journal must remain sealed.');
     const debit = journal.lines.reduce((sum, line) => sum + Number(line.debitAmount), 0);
@@ -269,7 +365,7 @@ try {
     assert.equal(debit, credit, `Journal ${journal.id} must balance.`);
   }
 
-  console.log('HR lifecycle verification passed: onboarding/salary, advance issue/settlement, payroll preview/create/approve/pay/rejection, zero/nonzero final settlements, append-only reversal, explicit replay, and monotonic business dates.');
+  console.log('HR lifecycle verification passed: onboarding/salary, advance issue/settlement, deferred collection guards, payroll preview/create/approve/pay/reversal, zero/nonzero final settlements, append-only employee-ledger movements, explicit replay, and monotonic business dates.');
   console.log(`Isolated fixture retained in the test database: ${fixture.tenantCode} (${fixture.tenantId}). Cleanup requires a privileged test-database reset because audit rows are immutable to the application role.`);
 } finally {
   if (app) await app.close();
@@ -289,7 +385,12 @@ async function seedFixture() {
        ($3::uuid, $4::uuid, $7, 'مسدد تحقق الموارد البشرية', 'HR lifecycle payer', 'unused-test-hash')`,
       [fixture.creatorId, fixture.approverId, fixture.payerId, fixture.tenantId, `hr-creator-${suffix}@baseer.test`, `hr-approver-${suffix}@baseer.test`, `hr-payer-${suffix}@baseer.test`],
     );
-    await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4)', [fixture.companyId, fixture.tenantId, 'شركة تحقق دورة الموارد البشرية', 'HR lifecycle company']);
+    await client.query(
+      `INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES
+       ($1::uuid, $3::uuid, 'شركة تحقق دورة الموارد البشرية', 'HR lifecycle company'),
+       ($2::uuid, $3::uuid, 'شركة تحقق عكس مسير الموارد البشرية', 'HR payroll reversal company')`,
+      [fixture.companyId, fixture.reversalCompanyId, fixture.tenantId],
+    );
     await client.query('COMMIT');
   } catch (error) {
     await client.query('ROLLBACK');
@@ -300,6 +401,7 @@ async function seedFixture() {
 }
 
 function actor(actorUserId) { return { tenantId: fixture.tenantId, companyId: fixture.companyId, actorUserId }; }
+function actorFor(companyId, actorUserId) { return { tenantId: fixture.tenantId, companyId, actorUserId }; }
 function onboardingInput(nameAr) { return { nameAr, jobTitle: 'موظف تحقق', hireDate: monthStart, initialCompensation: { monthlyGross: '5000.0000', compensationMethod: 'FIXED_MONTHLY', foodAllowance: '0.0000', housingAllowance: '0.0000', transportAllowance: '0.0000', otherAllowance: '0.0000' } }; }
 function finalSettlementInput(employeeId, terminationReason, recoveries) { return { employeeId, terminationDate: today, terminationReason, reasonEvidenceReference: `HR-LIFECYCLE-${suffix}`, reasonEvidenceNote: 'Automated isolated lifecycle verification', recoveries, idempotencyKey: randomUUID() }; }
 function withoutKey(value) { const { idempotencyKey: _key, ...request } = value; return request; }

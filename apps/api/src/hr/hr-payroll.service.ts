@@ -425,7 +425,7 @@ export class HrPayrollService {
       const uniqueEmployeeIds = employees.map((employee) => employee.id);
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
       const profileByEmployee = population.profileByEmployee;
-      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines);
+      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, input.businessDate);
       const runId = randomUUID();
       const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(input.businessDate) });
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
@@ -498,6 +498,8 @@ export class HrPayrollService {
       for (const line of run.lines) {
         for (const app of line.advanceApplications) await this.applyAdvance(tx, context, app.advanceId, app.amount, input.businessDate, journal.journalEntryId, run.runNumber);
         for (const app of line.deductionApplications) await this.applyDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber);
+        const advanceSettlementAmount = sum(line.advanceApplications.map((application) => application.amount));
+        if (advanceSettlementAmount.gt(0)) await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_SETTLEMENT, businessDate: input.businessDate, amount: advanceSettlementAmount, sourceReference: run.runNumber, description: 'Employee advances settled through payroll' } });
         await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary, sourceReference: run.runNumber, description: 'Payroll accrued' } });
       }
       await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.APPROVED, accrualJournalEntryId: journal.journalEntryId, approvedAt: new Date() } });
@@ -593,6 +595,8 @@ export class HrPayrollService {
         await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: reversalJournal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary.negated(), sourceReference: `${run.runNumber}-REV`, description: `Payroll accrual reversed: ${input.reason}` } });
         for (const app of line.advanceApplications) await this.reverseAdvance(tx, context, app.advanceId, app.amount, input.businessDate, reversalJournal.journalEntryId, run.runNumber);
         for (const app of line.deductionApplications) await this.reverseDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber, input.reason);
+        const advanceSettlementAmount = sum(line.advanceApplications.map((application) => application.amount));
+        if (advanceSettlementAmount.gt(0)) await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: reversalJournal.journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_SETTLEMENT, businessDate: input.businessDate, amount: advanceSettlementAmount.negated(), sourceReference: `${run.runNumber}-REV`, description: `Payroll advance settlements reversed: ${input.reason}` } });
       }
       await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.REVERSED, reversedAt: new Date(), reversalReason: input.reason } });
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
@@ -656,8 +660,8 @@ export class HrPayrollService {
     const profileByEmployee = population.profileByEmployee;
     const employeeIds = employeesPage.map((employee) => employee.id);
     const [advances, deductions] = await Promise.all([
-      employeeIds.length ? tx.hrEmployeeAdvance.findMany({ where: { ...base, employeeId: { in: employeeIds }, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, advanceNumber: true, remainingAmount: true } }) : [],
-      employeeIds.length ? tx.hrEmployeeAdministrativeDeduction.findMany({ where: { ...base, employeeId: { in: employeeIds }, status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, deductionNumber: true, remainingAmount: true } }) : [],
+      employeeIds.length ? tx.hrEmployeeAdvance.findMany({ where: { ...base, employeeId: { in: employeeIds }, businessDate: { lte: businessDate }, OR: [{ nextSettlementDate: null }, { nextSettlementDate: { lte: businessDate } }], status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, advanceNumber: true, remainingAmount: true } }) : [],
+      employeeIds.length ? tx.hrEmployeeAdministrativeDeduction.findMany({ where: { ...base, employeeId: { in: employeeIds }, businessDate: { lte: businessDate }, OR: [{ plannedPayrollDate: null }, { plannedPayrollDate: { lte: businessDate } }], status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, orderBy: { id: 'asc' }, select: { id: true, employeeId: true, deductionNumber: true, remainingAmount: true } }) : [],
     ]);
     const advancesByEmployee = groupByEmployee(advances, (row) => ({ id: row.id, referenceNumber: row.advanceNumber, remainingAmount: fixed(row.remainingAmount) }));
     const deductionsByEmployee = groupByEmployee(deductions, (row) => ({ id: row.id, referenceNumber: row.deductionNumber, remainingAmount: fixed(row.remainingAmount) }));
@@ -666,7 +670,7 @@ export class HrPayrollService {
     const eligibleIds = new Set(population.employees.filter((employee) => population.profileByEmployee.has(employee.id)).map((employee) => employee.id));
     if (requestedEmployeeIds.some((employeeId) => !eligibleIds.has(employeeId))) throw new BadRequestException('Settlement applications can only target an employee included by the server in this payroll preview.');
     const calculatedByEmployee = new Map([...population.profileByEmployee.entries()].map(([employeeId, profile]) => [employeeId, prorateCompensation(calculateCompensation(profile, profile.policyVersion?.formulaCode ?? HrCompensationFormulaCode.STANDARD_MONTHLY_V1), population.periodByEmployee.get(employeeId)!)]));
-    const selectedApplications = await this.resolvePayrollApplications(tx, context, input.lines);
+    const selectedApplications = await this.resolvePayrollApplications(tx, context, input.lines, businessDate);
     const selectedAdvanceAmount = sum([...selectedApplications.values()].flatMap((selection) => selection.advances.map((application) => application.amount)));
     const selectedDeductionAmount = sum([...selectedApplications.values()].flatMap((selection) => selection.deductions.map((application) => application.amount)));
     for (const [employeeId, selection] of selectedApplications) {
@@ -726,15 +730,15 @@ export class HrPayrollService {
     return { profileByEmployee, incompleteCoverageEmployeeIds };
   }
 
-  private async resolvePayrollApplications(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, lines: readonly { employeeId: string; advances: readonly { id: string; amount: string }[]; administrativeDeductions: readonly { id: string; amount: string }[] }[]) {
+  private async resolvePayrollApplications(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, lines: readonly { employeeId: string; advances: readonly { id: string; amount: string }[]; administrativeDeductions: readonly { id: string; amount: string }[] }[], businessDate: Date) {
     const advanceRequests = lines.flatMap((line) => line.advances.map((application) => ({ ...application, employeeId: line.employeeId })));
     const deductionRequests = lines.flatMap((line) => line.administrativeDeductions.map((application) => ({ ...application, employeeId: line.employeeId })));
     const advanceIds = uniqueIds(advanceRequests.map((application) => application.id), 'An advance can be selected once per payroll run.');
     const deductionIds = uniqueIds(deductionRequests.map((application) => application.id), 'An administrative deduction can be selected once per payroll run.');
     const advances = [] as Array<{ id: string; employeeId: string; remainingAmount: Prisma.Decimal }>;
     const deductions = [] as Array<{ id: string; employeeId: string; remainingAmount: Prisma.Decimal }>;
-    for (const ids of chunks(advanceIds, 500)) advances.push(...await tx.hrEmployeeAdvance.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
-    for (const ids of chunks(deductionIds, 500)) deductions.push(...await tx.hrEmployeeAdministrativeDeduction.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
+    for (const ids of chunks(advanceIds, 500)) advances.push(...await tx.hrEmployeeAdvance.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, businessDate: { lte: businessDate }, OR: [{ nextSettlementDate: null }, { nextSettlementDate: { lte: businessDate } }], status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
+    for (const ids of chunks(deductionIds, 500)) deductions.push(...await tx.hrEmployeeAdministrativeDeduction.findMany({ where: { id: { in: ids }, tenantId: context.tenantId, companyId: context.companyId, businessDate: { lte: businessDate }, OR: [{ plannedPayrollDate: null }, { plannedPayrollDate: { lte: businessDate } }], status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, select: { id: true, employeeId: true, remainingAmount: true } }));
     if (advances.length !== advanceIds.length || deductions.length !== deductionIds.length) throw new BadRequestException('A selected advance or administrative deduction is unavailable.');
     const advanceById = new Map(advances.map((advance) => [advance.id, advance]));
     const deductionById = new Map(deductions.map((deduction) => [deduction.id, deduction]));
@@ -787,6 +791,7 @@ export class HrPayrollService {
     const advance = await tx.hrEmployeeAdvance.findFirst({ where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!advance || advance.remainingAmount.lt(applied)) throw new ConflictException('An advance changed before payroll approval.');
     if (!isHrDateOnOrAfter(businessDate, advance.businessDate)) throw new BadRequestException('A payroll advance settlement cannot predate the employee-advance issue.');
+    if (advance.nextSettlementDate && !isHrDateOnOrAfter(businessDate, advance.nextSettlementDate)) throw new BadRequestException('A payroll advance settlement cannot predate its deferred collection date.');
     const remaining = advance.remainingAmount.minus(applied);
     await tx.hrEmployeeAdvance.update({ where: { id: advanceId }, data: { settledAmount: { increment: applied }, remainingAmount: remaining, nextSettlementDate: null, status: remaining.eq(0) ? HrEmployeeAdvanceStatus.SETTLED : HrEmployeeAdvanceStatus.PARTIALLY_SETTLED } });
     await tx.hrEmployeeAdvanceSettlement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, advanceId, source: HrEmployeeAdvanceSettlementSource.PAYROLL, businessDate, amount: applied, journalEntryId } });
@@ -796,6 +801,8 @@ export class HrPayrollService {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrAdministrativeDeductionLockKey(context.tenantId, context.companyId, deductionId)}, 0))`;
     const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({ where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId } });
     if (!deduction || deduction.remainingAmount.lt(applied)) throw new ConflictException('An administrative deduction changed before payroll approval.');
+    if (!isHrDateOnOrAfter(businessDate, deduction.businessDate)) throw new BadRequestException('A payroll administrative deduction cannot predate its creation date.');
+    if (deduction.plannedPayrollDate && !isHrDateOnOrAfter(businessDate, deduction.plannedPayrollDate)) throw new BadRequestException('A payroll administrative deduction cannot predate its planned collection date.');
     const remaining = deduction.remainingAmount.minus(applied);
     await tx.hrEmployeeAdministrativeDeduction.update({ where: { id: deductionId }, data: { appliedAmount: { increment: applied }, remainingAmount: remaining, plannedPayrollDate: null, status: remaining.eq(0) ? HrEmployeeAdministrativeDeductionStatus.APPLIED : HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED } });
     await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId, actionType: HrEmployeeAdministrativeDeductionActionType.APPLIED, businessDate, amount: applied, reason: reference, createdByUserId: context.actorUserId } });
