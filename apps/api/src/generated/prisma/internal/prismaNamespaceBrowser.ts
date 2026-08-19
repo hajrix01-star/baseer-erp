@@ -86,6 +86,13 @@ export const ModelName = {
   HrEmployeeAdvanceDeferral: 'HrEmployeeAdvanceDeferral',
   HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
   HrEmployeeAdministrativeDeductionAction: 'HrEmployeeAdministrativeDeductionAction',
+  HrEmployeeCompensationProfile: 'HrEmployeeCompensationProfile',
+  HrPayrollRun: 'HrPayrollRun',
+  HrPayrollLine: 'HrPayrollLine',
+  HrPayrollAdvanceApplication: 'HrPayrollAdvanceApplication',
+  HrPayrollAdministrativeDeductionApplication: 'HrPayrollAdministrativeDeductionApplication',
+  HrPayrollPayment: 'HrPayrollPayment',
+  HrPayrollPaymentAllocation: 'HrPayrollPaymentAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -735,6 +742,127 @@ export const HrEmployeeAdministrativeDeductionActionScalarFieldEnum = {
 } as const
 
 export type HrEmployeeAdministrativeDeductionActionScalarFieldEnum = (typeof HrEmployeeAdministrativeDeductionActionScalarFieldEnum)[keyof typeof HrEmployeeAdministrativeDeductionActionScalarFieldEnum]
+
+
+export const HrEmployeeCompensationProfileScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  monthlyGross: 'monthlyGross',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeCompensationProfileScalarFieldEnum = (typeof HrEmployeeCompensationProfileScalarFieldEnum)[keyof typeof HrEmployeeCompensationProfileScalarFieldEnum]
+
+
+export const HrPayrollRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  runNumber: 'runNumber',
+  payrollMonth: 'payrollMonth',
+  businessDate: 'businessDate',
+  status: 'status',
+  employeeCount: 'employeeCount',
+  grossAmount: 'grossAmount',
+  advanceSettlementAmount: 'advanceSettlementAmount',
+  administrativeDeductionAmount: 'administrativeDeductionAmount',
+  netPayableAmount: 'netPayableAmount',
+  paidAmount: 'paidAmount',
+  notes: 'notes',
+  accrualJournalEntryId: 'accrualJournalEntryId',
+  approvedAt: 'approvedAt',
+  reversedAt: 'reversedAt',
+  reversalReason: 'reversalReason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrPayrollRunScalarFieldEnum = (typeof HrPayrollRunScalarFieldEnum)[keyof typeof HrPayrollRunScalarFieldEnum]
+
+
+export const HrPayrollLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  payrollRunId: 'payrollRunId',
+  employeeId: 'employeeId',
+  employeeNumberSnapshot: 'employeeNumberSnapshot',
+  employeeNameArSnapshot: 'employeeNameArSnapshot',
+  employeeNameEnSnapshot: 'employeeNameEnSnapshot',
+  grossSalary: 'grossSalary',
+  advanceSettlementAmount: 'advanceSettlementAmount',
+  administrativeDeductionAmount: 'administrativeDeductionAmount',
+  netPayableAmount: 'netPayableAmount',
+  paidAmount: 'paidAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrPayrollLineScalarFieldEnum = (typeof HrPayrollLineScalarFieldEnum)[keyof typeof HrPayrollLineScalarFieldEnum]
+
+
+export const HrPayrollAdvanceApplicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  payrollLineId: 'payrollLineId',
+  advanceId: 'advanceId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type HrPayrollAdvanceApplicationScalarFieldEnum = (typeof HrPayrollAdvanceApplicationScalarFieldEnum)[keyof typeof HrPayrollAdvanceApplicationScalarFieldEnum]
+
+
+export const HrPayrollAdministrativeDeductionApplicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  payrollLineId: 'payrollLineId',
+  deductionId: 'deductionId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type HrPayrollAdministrativeDeductionApplicationScalarFieldEnum = (typeof HrPayrollAdministrativeDeductionApplicationScalarFieldEnum)[keyof typeof HrPayrollAdministrativeDeductionApplicationScalarFieldEnum]
+
+
+export const HrPayrollPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  payrollRunId: 'payrollRunId',
+  paymentNumber: 'paymentNumber',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  journalEntryId: 'journalEntryId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrPayrollPaymentScalarFieldEnum = (typeof HrPayrollPaymentScalarFieldEnum)[keyof typeof HrPayrollPaymentScalarFieldEnum]
+
+
+export const HrPayrollPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  payrollPaymentId: 'payrollPaymentId',
+  vaultId: 'vaultId',
+  paymentMethod: 'paymentMethod',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type HrPayrollPaymentAllocationScalarFieldEnum = (typeof HrPayrollPaymentAllocationScalarFieldEnum)[keyof typeof HrPayrollPaymentAllocationScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {

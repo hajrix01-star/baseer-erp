@@ -135,6 +135,55 @@ export const cancelHrEmployeeAdministrativeDeductionRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Effective-dated monthly gross compensation. Payroll only reads this server record. */
+export const setHrEmployeeCompensationRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  effectiveFrom: hrDateSchema,
+  monthlyGross: hrAmountSchema.refine((value) => Number(value) > 0),
+  notes: z.string().trim().max(1_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+const payrollApplicationSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema.refine((value) => Number(value) > 0) }).strict();
+const payrollLineRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  advances: z.array(payrollApplicationSchema).max(100).default([]),
+  administrativeDeductions: z.array(payrollApplicationSchema).max(100).default([]),
+}).strict();
+
+/** The server snapshots compensation and validates every applied residual. */
+export const createHrPayrollRunRequestSchema = z.object({
+  payrollMonth: hrDateSchema,
+  businessDate: hrDateSchema,
+  notes: z.string().trim().max(2_000).optional(),
+  lines: z.array(payrollLineRequestSchema).min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const approveHrPayrollRunRequestSchema = z.object({
+  payrollRunId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const payHrPayrollRunRequestSchema = z.object({
+  payrollRunId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  allocations: z.array(z.object({
+    vaultId: z.string().uuid(),
+    amount: hrAmountSchema.refine((value) => Number(value) > 0),
+    paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]).optional(),
+  }).strict()).min(1).max(25),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const reverseHrPayrollRunRequestSchema = z.object({
+  payrollRunId: z.string().uuid(),
+  businessDate: hrDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 export const hrEmployeeSchema = z.object({
   id: hrEmployeeIdSchema,
   employeeNumber: z.string().min(1).max(80),
@@ -223,6 +272,25 @@ export const hrEmployeeAdministrativeDeductionDetailSchema = z.object({
   actions: z.array(z.object({ id: z.string().uuid(), actionType: z.enum(["CREATED", "DEFERRED", "CANCELLED", "APPLIED", "REVERSED"]), businessDate: businessDateSchema, amount: hrAmountSchema.nullable(), plannedPayrollDate: businessDateSchema.nullable(), reason: z.string().max(1_000).nullable() }).strict()).max(500),
 }).strict();
 
+export const hrEmployeeCompensationProfileSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, effectiveFrom: businessDateSchema,
+  effectiveTo: businessDateSchema.nullable(), monthlyGross: hrAmountSchema, notes: z.string().max(1_000).nullable(),
+}).strict();
+
+const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema, referenceNumber: z.string().max(80) }).strict();
+export const hrPayrollLineSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
+  grossSalary: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
+  advances: z.array(hrPayrollApplicationDetailSchema).max(100), administrativeDeductions: z.array(hrPayrollApplicationDetailSchema).max(100),
+}).strict();
+export const hrPayrollRunSchema = z.object({
+  id: z.string().uuid(), runNumber: z.string().max(80), payrollMonth: businessDateSchema, businessDate: businessDateSchema,
+  status: z.enum(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED"]), employeeCount: z.number().int().min(0),
+  grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
+  notes: z.string().max(2_000).nullable(), accrualJournalEntryId: z.string().uuid().nullable(),
+}).strict();
+export const hrPayrollRunDetailSchema = z.object({ payrollRun: hrPayrollRunSchema, lines: z.array(hrPayrollLineSchema).max(1_000), payments: z.array(z.object({ id: z.string().uuid(), paymentNumber: z.string().max(80), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid() }).strict()).max(500) }).strict();
+
 export const hrEmployeeDetailQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
@@ -233,6 +301,10 @@ export const hrEmployeeAdvancesReceiptSchema = z.object({ companyId: companyIdSc
 export const hrEmployeeAdministrativeDeductionsReceiptSchema = z.object({ companyId: companyIdSchema, deductions: z.array(hrEmployeeAdministrativeDeductionSchema).max(500) }).strict();
 export const hrEmployeeAdvanceDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdvanceDetailSchema.shape }).strict();
 export const hrEmployeeAdministrativeDeductionDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdministrativeDeductionDetailSchema.shape }).strict();
+export const hrEmployeeCompensationProfileReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrPayrollRunsReceiptSchema = z.object({ companyId: companyIdSchema, payrollRuns: z.array(hrPayrollRunSchema).max(500) }).strict();
+export const hrPayrollRunDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrPayrollRunDetailSchema.shape }).strict();
+export const hrPayrollRunReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), replayed: z.boolean() }).strict();
 export const hrEmployeeDetailReceiptSchema = z.object({
   companyId: companyIdSchema,
   employee: hrEmployeeSchema,
@@ -257,3 +329,8 @@ export type DeferHrEmployeeAdvanceRequest = z.infer<typeof deferHrEmployeeAdvanc
 export type CreateHrEmployeeAdministrativeDeductionRequest = z.infer<typeof createHrEmployeeAdministrativeDeductionRequestSchema>;
 export type DeferHrEmployeeAdministrativeDeductionRequest = z.infer<typeof deferHrEmployeeAdministrativeDeductionRequestSchema>;
 export type CancelHrEmployeeAdministrativeDeductionRequest = z.infer<typeof cancelHrEmployeeAdministrativeDeductionRequestSchema>;
+export type SetHrEmployeeCompensationRequest = z.infer<typeof setHrEmployeeCompensationRequestSchema>;
+export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequestSchema>;
+export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
+export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;
+export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;

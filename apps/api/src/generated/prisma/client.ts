@@ -228,6 +228,43 @@ export type HrEmployeeAdministrativeDeduction = Prisma.HrEmployeeAdministrativeD
  */
 export type HrEmployeeAdministrativeDeductionAction = Prisma.HrEmployeeAdministrativeDeductionActionModel
 /**
+ * Model HrEmployeeCompensationProfile
+ * Effective-dated compensation is the sole source used to prepare a payroll
+ * draft. A payroll line snapshots it on approval so a later salary change can
+ * never rewrite a historical run.
+ */
+export type HrEmployeeCompensationProfile = Prisma.HrEmployeeCompensationProfileModel
+/**
+ * Model HrPayrollRun
+ * 
+ */
+export type HrPayrollRun = Prisma.HrPayrollRunModel
+/**
+ * Model HrPayrollLine
+ * 
+ */
+export type HrPayrollLine = Prisma.HrPayrollLineModel
+/**
+ * Model HrPayrollAdvanceApplication
+ * 
+ */
+export type HrPayrollAdvanceApplication = Prisma.HrPayrollAdvanceApplicationModel
+/**
+ * Model HrPayrollAdministrativeDeductionApplication
+ * 
+ */
+export type HrPayrollAdministrativeDeductionApplication = Prisma.HrPayrollAdministrativeDeductionApplicationModel
+/**
+ * Model HrPayrollPayment
+ * 
+ */
+export type HrPayrollPayment = Prisma.HrPayrollPaymentModel
+/**
+ * Model HrPayrollPaymentAllocation
+ * 
+ */
+export type HrPayrollPaymentAllocation = Prisma.HrPayrollPaymentAllocationModel
+/**
  * Model FinanceJournalLine
  * 
  */

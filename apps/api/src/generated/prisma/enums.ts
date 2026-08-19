@@ -328,6 +328,17 @@ export const HrEmployeeAdministrativeDeductionActionType = {
 export type HrEmployeeAdministrativeDeductionActionType = (typeof HrEmployeeAdministrativeDeductionActionType)[keyof typeof HrEmployeeAdministrativeDeductionActionType]
 
 
+export const HrPayrollRunStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  REVERSED: 'REVERSED'
+} as const
+
+export type HrPayrollRunStatus = (typeof HrPayrollRunStatus)[keyof typeof HrPayrollRunStatus]
+
+
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',

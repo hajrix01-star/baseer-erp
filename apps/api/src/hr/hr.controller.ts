@@ -22,6 +22,15 @@ import {
   createHrEmployeeAdministrativeDeductionRequestSchema,
   deferHrEmployeeAdministrativeDeductionRequestSchema,
   cancelHrEmployeeAdministrativeDeductionRequestSchema,
+  setHrEmployeeCompensationRequestSchema,
+  createHrPayrollRunRequestSchema,
+  approveHrPayrollRunRequestSchema,
+  payHrPayrollRunRequestSchema,
+  reverseHrPayrollRunRequestSchema,
+  hrEmployeeCompensationProfileReceiptSchema,
+  hrPayrollRunsReceiptSchema,
+  hrPayrollRunDetailReceiptSchema,
+  hrPayrollRunReceiptSchema,
   issueHrEmployeeServiceCostRequestSchema,
   updateHrEmployeeRequestSchema,
 } from '@baseer-erp/contracts';
@@ -31,6 +40,7 @@ import { PurchaseExpenseService } from '../finance/purchase-expense.service.js';
 import { HrService } from './hr.service.js';
 import { HrAdvanceService } from './hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr-administrative-deduction.service.js';
+import { HrPayrollService } from './hr-payroll.service.js';
 
 const READ_CAPABILITY = 'hr.employees.read';
 const WRITE_CAPABILITY = 'hr.employees.write';
@@ -42,6 +52,7 @@ export class HrController {
     private readonly hr: HrService,
     private readonly advances: HrAdvanceService,
     private readonly deductions: HrAdministrativeDeductionService,
+    private readonly payroll: HrPayrollService,
     private readonly documents: PurchaseExpenseService,
   ) {}
 
@@ -169,6 +180,65 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
     const { idempotencyKey, ...request } = parsed.data;
     return hrEmployeeAdministrativeDeductionReceiptSchema.parse(await this.deductions.cancel(context, request, idempotencyKey));
+  }
+
+  @Post('compensation')
+  @HttpCode(201)
+  async setCompensation(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = setHrEmployeeCompensationRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee compensation request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrEmployeeCompensationProfileReceiptSchema.parse(await this.payroll.setCompensation(context, request, idempotencyKey));
+  }
+
+  @Get('payroll-runs')
+  async listPayrollRuns(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, payrollRuns: await this.payroll.list(context) });
+  }
+
+  @Get('payroll-runs/:payrollRunId')
+  async payrollRunDetail(@Param('payrollRunId') payrollRunId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrPayrollRunDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.detail(context, payrollRunId)) });
+  }
+
+  @Post('payroll-runs')
+  @HttpCode(201)
+  async createPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrPayrollRunRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll-run request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.create(context, request, idempotencyKey));
+  }
+
+  @Post('payroll-runs/approve')
+  async approvePayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = approveHrPayrollRunRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll approval request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.approve');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.approve(context, request, idempotencyKey));
+  }
+
+  @Post('payroll-runs/pay')
+  async payPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = payHrPayrollRunRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll payment request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.pay');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.pay(context, request, idempotencyKey));
+  }
+
+  @Post('payroll-runs/reverse')
+  async reversePayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = reverseHrPayrollRunRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll reversal request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.reverse');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.reverse(context, request, idempotencyKey));
   }
 
   /** A service becomes financial only when its actual supplier cost is issued. */

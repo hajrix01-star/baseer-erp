@@ -52,7 +52,7 @@ export class OutputService {
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
-      requiredCapabilities: [capability],
+      requiredCapabilities: input.reportCode.startsWith('hr.payroll') ? [capability, 'hr.payroll.read'] : [capability],
     });
     const trusted: TrustedCompanyActorContext = {
       tenantId: context.principal.tenantId,
@@ -163,6 +163,12 @@ export class OutputService {
     reportCode: string,
     request: OutputRequest,
   ): Promise<ReportSnapshot> {
+    if (reportCode === 'hr.payroll-run') {
+      return this.createPayrollRunSnapshot(transaction, context, request);
+    }
+    if (reportCode === 'hr.payroll-runs') {
+      return this.createPayrollRunsSnapshot(transaction, context, request);
+    }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
     }
@@ -201,6 +207,67 @@ export class OutputService {
         status: company.status,
       }],
       sourceLabel: arabic ? 'سجل شركات بصير' : 'Baseer company registry',
+    };
+  }
+
+  private async createPayrollRunSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const payrollRunId = typeof request.filters['payrollRunId'] === 'string' ? request.filters['payrollRunId'] : null;
+    if (!payrollRunId || Object.keys(request.filters).length !== 1) throw new BadRequestException('A payroll-run output requires exactly one payrollRunId filter.');
+    const run = await transaction.hrPayrollRun.findFirst({
+      where: { id: payrollRunId, tenantId: context.tenantId, companyId: context.companyId },
+      include: { lines: { orderBy: { employeeNumberSnapshot: 'asc' } } },
+    });
+    if (!run) throw new NotFoundException('The payroll run was not found.');
+    return this.payrollSnapshotBase(transaction, context, request, {
+      titleAr: `كشف مسير الرواتب ${run.runNumber}`,
+      titleEn: `Payroll run ${run.runNumber}`,
+      periodAr: `${run.runNumber} · ${date(run.payrollMonth)}`,
+      periodEn: `${run.runNumber} · ${date(run.payrollMonth)}`,
+      rows: run.lines.map((line) => ({
+        employeeNumber: line.employeeNumberSnapshot,
+        employee: request.locale === 'ar' ? line.employeeNameArSnapshot : line.employeeNameEnSnapshot ?? line.employeeNameArSnapshot,
+        gross: line.grossSalary.toFixed(4), advances: line.advanceSettlementAmount.toFixed(4), deductions: line.administrativeDeductionAmount.toFixed(4), net: line.netPayableAmount.toFixed(4), paid: line.paidAmount.toFixed(4),
+      })),
+    });
+  }
+
+  private async createPayrollRunsSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    if (Object.keys(request.filters).length > 0) throw new BadRequestException('The payroll register output does not accept filters.');
+    const runs = await transaction.hrPayrollRun.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }], take: 500 });
+    return this.payrollSnapshotBase(transaction, context, request, {
+      titleAr: 'سجل مسيرات الرواتب', titleEn: 'Payroll run register', periodAr: 'كل المسيرات المعروضة', periodEn: 'Displayed payroll runs',
+      rows: runs.map((run) => ({ number: run.runNumber, month: date(run.payrollMonth), status: run.status, employees: run.employeeCount, gross: run.grossAmount.toFixed(4), advances: run.advanceSettlementAmount.toFixed(4), deductions: run.administrativeDeductionAmount.toFixed(4), net: run.netPayableAmount.toFixed(4), paid: run.paidAmount.toFixed(4) })),
+    });
+  }
+
+  private async payrollSnapshotBase(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+    input: { titleAr: string; titleEn: string; periodAr: string; periodEn: string; rows: Array<Record<string, string | number | null>> },
+  ): Promise<ReportSnapshot> {
+    const company = await transaction.company.findFirst({ where: { id: context.companyId, tenantId: context.tenantId }, select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } } });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const isDetail = 'employeeNumber' in (input.rows[0] ?? {});
+    const arabic = request.locale === 'ar';
+    const dateResolution = await this.businessDate.resolveInTransaction(transaction, context);
+    return {
+      snapshotId: randomUUID(), reportCode: request.filters['payrollRunId'] ? 'hr.payroll-run' : 'hr.payroll-runs', templateVersion: '1', title: arabic ? input.titleAr : input.titleEn, direction: arabic ? 'rtl' : 'ltr', locale: request.locale, generatedAtRiyadh: dateResolution.generatedAt,
+      companies: [{ id: company.id, name: arabic ? company.nameAr : company.nameEn }], companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null), periodLabel: arabic ? input.periodAr : input.periodEn, taxPresentation: 'gross',
+      columns: isDetail ? [
+        { key: 'employeeNumber', label: arabic ? 'رقم الموظف' : 'Employee no.', kind: 'text', width: 12 }, { key: 'employee', label: arabic ? 'الموظف' : 'Employee', kind: 'text', width: 26 },
+        { key: 'gross', label: arabic ? 'إجمالي الراتب' : 'Gross', kind: 'amount' }, { key: 'advances', label: arabic ? 'تسوية السلف' : 'Advances', kind: 'amount' }, { key: 'deductions', label: arabic ? 'الخصم الإداري' : 'Administrative deduction', kind: 'amount' }, { key: 'net', label: arabic ? 'صافي المستحق' : 'Net payable', kind: 'amount' }, { key: 'paid', label: arabic ? 'المدفوع' : 'Paid', kind: 'amount' },
+      ] : [
+        { key: 'number', label: arabic ? 'رقم المسير' : 'Run no.', kind: 'text', width: 18 }, { key: 'month', label: arabic ? 'الشهر' : 'Month', kind: 'date' }, { key: 'status', label: arabic ? 'الحالة' : 'Status', kind: 'text' }, { key: 'employees', label: arabic ? 'الموظفون' : 'Employees', kind: 'integer' }, { key: 'gross', label: arabic ? 'الإجمالي' : 'Gross', kind: 'amount' }, { key: 'advances', label: arabic ? 'السلف' : 'Advances', kind: 'amount' }, { key: 'deductions', label: arabic ? 'الخصومات' : 'Deductions', kind: 'amount' }, { key: 'net', label: arabic ? 'الصافي' : 'Net', kind: 'amount' }, { key: 'paid', label: arabic ? 'المدفوع' : 'Paid', kind: 'amount' },
+      ], rows: input.rows, sourceLabel: arabic ? 'مسيرات الرواتب المعتمدة في بصير' : 'Baseer payroll run records',
     };
   }
 
@@ -286,4 +353,8 @@ export class OutputService {
 
 function contentHash(value: string): string {
   return createHash('sha256').update(value, 'utf8').digest('hex');
+}
+
+function date(value: Date): string {
+  return value.toISOString().slice(0, 10);
 }

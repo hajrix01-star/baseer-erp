@@ -6,20 +6,20 @@ import { downloadBaseerOutput, openBaseerPrintWindow, printBaseerOutput, request
 import type { ActiveSession } from "./daily-sales-client";
 
 /** Reusable actions for a server-defined report; never accepts screen data as input. */
-export function BaseerOutputActions({ session, reportCode, language }: { session: ActiveSession; reportCode: string; language: "ar" | "en" }) {
+export function BaseerOutputActions({ session, reportCode, language, filters = {} }: { session: ActiveSession; reportCode: string; language: "ar" | "en"; filters?: Record<string, string | number | boolean | null> }) {
   const [busy, setBusy] = useState<"preview" | "xlsx" | null>(null);
   const [message, setMessage] = useState("");
   const print = async () => {
     let printWindow: Window | null = null;
     try { printWindow = openBaseerPrintWindow(); } catch (error) { setMessage(presentBaseerApiError(error, language, language === "ar" ? "سمح للمتصفح بفتح نافذة الطباعة ثم أعد المحاولة." : "Allow the print pop-up, then try again.")); return; }
     setBusy("preview"); setMessage("");
-    try { const receipt = await requestBaseerOutput(session, reportCode, "preview", language); await printBaseerOutput(session, receipt, printWindow); }
+    try { const receipt = await requestBaseerOutput(session, reportCode, "preview", language, filters); await printBaseerOutput(session, receipt, printWindow); }
     catch (error) { printWindow.close(); setMessage(presentBaseerApiError(error, language, language === "ar" ? "تعذرت معاينة الطباعة." : "Could not preview the print document.")); }
     finally { setBusy(null); }
   };
   const exportXlsx = async () => {
     setBusy("xlsx"); setMessage("");
-    try { downloadBaseerOutput(await requestBaseerOutput(session, reportCode, "xlsx", language)); }
+    try { downloadBaseerOutput(await requestBaseerOutput(session, reportCode, "xlsx", language, filters)); }
     catch (error) { setMessage(presentBaseerApiError(error, language, language === "ar" ? "تعذر تصدير الملف." : "Could not export the file.")); }
     finally { setBusy(null); }
   };

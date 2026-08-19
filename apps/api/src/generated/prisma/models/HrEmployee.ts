@@ -268,6 +268,8 @@ export type HrEmployeeWhereInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementListRelationFilter
   advances?: Prisma.HrEmployeeAdvanceListRelationFilter
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionListRelationFilter
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileListRelationFilter
+  payrollLines?: Prisma.HrPayrollLineListRelationFilter
 }
 
 export type HrEmployeeOrderByWithRelationInput = {
@@ -291,6 +293,8 @@ export type HrEmployeeOrderByWithRelationInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementOrderByRelationAggregateInput
   advances?: Prisma.HrEmployeeAdvanceOrderByRelationAggregateInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionOrderByRelationAggregateInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileOrderByRelationAggregateInput
+  payrollLines?: Prisma.HrPayrollLineOrderByRelationAggregateInput
 }
 
 export type HrEmployeeWhereUniqueInput = Prisma.AtLeast<{
@@ -319,6 +323,8 @@ export type HrEmployeeWhereUniqueInput = Prisma.AtLeast<{
   financialMovements?: Prisma.HrEmployeeFinancialMovementListRelationFilter
   advances?: Prisma.HrEmployeeAdvanceListRelationFilter
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionListRelationFilter
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileListRelationFilter
+  payrollLines?: Prisma.HrPayrollLineListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_employeeNumber">
 
 export type HrEmployeeOrderByWithAggregationInput = {
@@ -382,6 +388,8 @@ export type HrEmployeeCreateInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateInput = {
@@ -404,6 +412,8 @@ export type HrEmployeeUncheckedCreateInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUpdateInput = {
@@ -425,6 +435,8 @@ export type HrEmployeeUpdateInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateInput = {
@@ -447,6 +459,8 @@ export type HrEmployeeUncheckedUpdateInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeCreateManyInput = {
@@ -683,6 +697,34 @@ export type HrEmployeeUpdateOneRequiredWithoutAdministrativeDeductionsNestedInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeUpdateToOneWithWhereWithoutAdministrativeDeductionsInput, Prisma.HrEmployeeUpdateWithoutAdministrativeDeductionsInput>, Prisma.HrEmployeeUncheckedUpdateWithoutAdministrativeDeductionsInput>
 }
 
+export type HrEmployeeCreateNestedOneWithoutCompensationProfilesInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCreateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedCreateWithoutCompensationProfilesInput>
+  connectOrCreate?: Prisma.HrEmployeeCreateOrConnectWithoutCompensationProfilesInput
+  connect?: Prisma.HrEmployeeWhereUniqueInput
+}
+
+export type HrEmployeeUpdateOneRequiredWithoutCompensationProfilesNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCreateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedCreateWithoutCompensationProfilesInput>
+  connectOrCreate?: Prisma.HrEmployeeCreateOrConnectWithoutCompensationProfilesInput
+  upsert?: Prisma.HrEmployeeUpsertWithoutCompensationProfilesInput
+  connect?: Prisma.HrEmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeUpdateToOneWithWhereWithoutCompensationProfilesInput, Prisma.HrEmployeeUpdateWithoutCompensationProfilesInput>, Prisma.HrEmployeeUncheckedUpdateWithoutCompensationProfilesInput>
+}
+
+export type HrEmployeeCreateNestedOneWithoutPayrollLinesInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCreateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedCreateWithoutPayrollLinesInput>
+  connectOrCreate?: Prisma.HrEmployeeCreateOrConnectWithoutPayrollLinesInput
+  connect?: Prisma.HrEmployeeWhereUniqueInput
+}
+
+export type HrEmployeeUpdateOneRequiredWithoutPayrollLinesNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCreateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedCreateWithoutPayrollLinesInput>
+  connectOrCreate?: Prisma.HrEmployeeCreateOrConnectWithoutPayrollLinesInput
+  upsert?: Prisma.HrEmployeeUpsertWithoutPayrollLinesInput
+  connect?: Prisma.HrEmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeUpdateToOneWithWhereWithoutPayrollLinesInput, Prisma.HrEmployeeUpdateWithoutPayrollLinesInput>, Prisma.HrEmployeeUncheckedUpdateWithoutPayrollLinesInput>
+}
+
 export type HrEmployeeCreateWithoutCompanyInput = {
   id?: string
   employeeNumber: string
@@ -701,6 +743,8 @@ export type HrEmployeeCreateWithoutCompanyInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateWithoutCompanyInput = {
@@ -721,6 +765,8 @@ export type HrEmployeeUncheckedCreateWithoutCompanyInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeCreateOrConnectWithoutCompanyInput = {
@@ -788,6 +834,8 @@ export type HrEmployeeCreateWithoutServicesInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateWithoutServicesInput = {
@@ -809,6 +857,8 @@ export type HrEmployeeUncheckedCreateWithoutServicesInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeCreateOrConnectWithoutServicesInput = {
@@ -845,6 +895,8 @@ export type HrEmployeeUpdateWithoutServicesInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateWithoutServicesInput = {
@@ -866,6 +918,8 @@ export type HrEmployeeUncheckedUpdateWithoutServicesInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeCreateWithoutFinancialMovementsInput = {
@@ -886,6 +940,8 @@ export type HrEmployeeCreateWithoutFinancialMovementsInput = {
   services?: Prisma.HrEmployeeServiceCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateWithoutFinancialMovementsInput = {
@@ -907,6 +963,8 @@ export type HrEmployeeUncheckedCreateWithoutFinancialMovementsInput = {
   services?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeCreateOrConnectWithoutFinancialMovementsInput = {
@@ -943,6 +1001,8 @@ export type HrEmployeeUpdateWithoutFinancialMovementsInput = {
   services?: Prisma.HrEmployeeServiceUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateWithoutFinancialMovementsInput = {
@@ -964,6 +1024,8 @@ export type HrEmployeeUncheckedUpdateWithoutFinancialMovementsInput = {
   services?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeCreateWithoutAdvancesInput = {
@@ -984,6 +1046,8 @@ export type HrEmployeeCreateWithoutAdvancesInput = {
   services?: Prisma.HrEmployeeServiceCreateNestedManyWithoutEmployeeInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateWithoutAdvancesInput = {
@@ -1005,6 +1069,8 @@ export type HrEmployeeUncheckedCreateWithoutAdvancesInput = {
   services?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutEmployeeInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeCreateOrConnectWithoutAdvancesInput = {
@@ -1041,6 +1107,8 @@ export type HrEmployeeUpdateWithoutAdvancesInput = {
   services?: Prisma.HrEmployeeServiceUpdateManyWithoutEmployeeNestedInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateWithoutAdvancesInput = {
@@ -1062,6 +1130,8 @@ export type HrEmployeeUncheckedUpdateWithoutAdvancesInput = {
   services?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeCreateWithoutAdministrativeDeductionsInput = {
@@ -1082,6 +1152,8 @@ export type HrEmployeeCreateWithoutAdministrativeDeductionsInput = {
   services?: Prisma.HrEmployeeServiceCreateNestedManyWithoutEmployeeInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeUncheckedCreateWithoutAdministrativeDeductionsInput = {
@@ -1103,6 +1175,8 @@ export type HrEmployeeUncheckedCreateWithoutAdministrativeDeductionsInput = {
   services?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutEmployeeInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type HrEmployeeCreateOrConnectWithoutAdministrativeDeductionsInput = {
@@ -1139,6 +1213,8 @@ export type HrEmployeeUpdateWithoutAdministrativeDeductionsInput = {
   services?: Prisma.HrEmployeeServiceUpdateManyWithoutEmployeeNestedInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateWithoutAdministrativeDeductionsInput = {
@@ -1160,6 +1236,220 @@ export type HrEmployeeUncheckedUpdateWithoutAdministrativeDeductionsInput = {
   services?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
+}
+
+export type HrEmployeeCreateWithoutCompensationProfilesInput = {
+  id?: string
+  employeeNumber: string
+  nameAr: string
+  nameEn?: string | null
+  jobTitle?: string | null
+  phone?: string | null
+  email?: string | null
+  hireDate: Date | string
+  status?: $Enums.HrEmployeeStatus
+  terminatedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeesInput
+  services?: Prisma.HrEmployeeServiceCreateNestedManyWithoutEmployeeInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
+  advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutEmployeeInput
+}
+
+export type HrEmployeeUncheckedCreateWithoutCompensationProfilesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeNumber: string
+  nameAr: string
+  nameEn?: string | null
+  jobTitle?: string | null
+  phone?: string | null
+  email?: string | null
+  hireDate: Date | string
+  status?: $Enums.HrEmployeeStatus
+  terminatedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  services?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutEmployeeInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
+  advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutEmployeeInput
+}
+
+export type HrEmployeeCreateOrConnectWithoutCompensationProfilesInput = {
+  where: Prisma.HrEmployeeWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeCreateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedCreateWithoutCompensationProfilesInput>
+}
+
+export type HrEmployeeUpsertWithoutCompensationProfilesInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeUpdateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedUpdateWithoutCompensationProfilesInput>
+  create: Prisma.XOR<Prisma.HrEmployeeCreateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedCreateWithoutCompensationProfilesInput>
+  where?: Prisma.HrEmployeeWhereInput
+}
+
+export type HrEmployeeUpdateToOneWithWhereWithoutCompensationProfilesInput = {
+  where?: Prisma.HrEmployeeWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeUpdateWithoutCompensationProfilesInput, Prisma.HrEmployeeUncheckedUpdateWithoutCompensationProfilesInput>
+}
+
+export type HrEmployeeUpdateWithoutCompensationProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hireDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumHrEmployeeStatusFieldUpdateOperationsInput | $Enums.HrEmployeeStatus
+  terminatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeesNestedInput
+  services?: Prisma.HrEmployeeServiceUpdateManyWithoutEmployeeNestedInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
+  advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
+}
+
+export type HrEmployeeUncheckedUpdateWithoutCompensationProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hireDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumHrEmployeeStatusFieldUpdateOperationsInput | $Enums.HrEmployeeStatus
+  terminatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  services?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
+  advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
+}
+
+export type HrEmployeeCreateWithoutPayrollLinesInput = {
+  id?: string
+  employeeNumber: string
+  nameAr: string
+  nameEn?: string | null
+  jobTitle?: string | null
+  phone?: string | null
+  email?: string | null
+  hireDate: Date | string
+  status?: $Enums.HrEmployeeStatus
+  terminatedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeesInput
+  services?: Prisma.HrEmployeeServiceCreateNestedManyWithoutEmployeeInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutEmployeeInput
+  advances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutEmployeeInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutEmployeeInput
+}
+
+export type HrEmployeeUncheckedCreateWithoutPayrollLinesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeNumber: string
+  nameAr: string
+  nameEn?: string | null
+  jobTitle?: string | null
+  phone?: string | null
+  email?: string | null
+  hireDate: Date | string
+  status?: $Enums.HrEmployeeStatus
+  terminatedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  services?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutEmployeeInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutEmployeeInput
+  advances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutEmployeeInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutEmployeeInput
+}
+
+export type HrEmployeeCreateOrConnectWithoutPayrollLinesInput = {
+  where: Prisma.HrEmployeeWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeCreateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedCreateWithoutPayrollLinesInput>
+}
+
+export type HrEmployeeUpsertWithoutPayrollLinesInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeUpdateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedUpdateWithoutPayrollLinesInput>
+  create: Prisma.XOR<Prisma.HrEmployeeCreateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedCreateWithoutPayrollLinesInput>
+  where?: Prisma.HrEmployeeWhereInput
+}
+
+export type HrEmployeeUpdateToOneWithWhereWithoutPayrollLinesInput = {
+  where?: Prisma.HrEmployeeWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeUpdateWithoutPayrollLinesInput, Prisma.HrEmployeeUncheckedUpdateWithoutPayrollLinesInput>
+}
+
+export type HrEmployeeUpdateWithoutPayrollLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hireDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumHrEmployeeStatusFieldUpdateOperationsInput | $Enums.HrEmployeeStatus
+  terminatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeesNestedInput
+  services?: Prisma.HrEmployeeServiceUpdateManyWithoutEmployeeNestedInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
+  advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+}
+
+export type HrEmployeeUncheckedUpdateWithoutPayrollLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hireDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumHrEmployeeStatusFieldUpdateOperationsInput | $Enums.HrEmployeeStatus
+  terminatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  services?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutEmployeeNestedInput
+  financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
+  advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
+  administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeCreateManyCompanyInput = {
@@ -1196,6 +1486,8 @@ export type HrEmployeeUpdateWithoutCompanyInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateWithoutCompanyInput = {
@@ -1216,6 +1508,8 @@ export type HrEmployeeUncheckedUpdateWithoutCompanyInput = {
   financialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutEmployeeNestedInput
   advances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
   administrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeNestedInput
+  compensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeNestedInput
+  payrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type HrEmployeeUncheckedUpdateManyWithoutCompanyInput = {
@@ -1244,6 +1538,8 @@ export type HrEmployeeCountOutputType = {
   financialMovements: number
   advances: number
   administrativeDeductions: number
+  compensationProfiles: number
+  payrollLines: number
 }
 
 export type HrEmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1251,6 +1547,8 @@ export type HrEmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   financialMovements?: boolean | HrEmployeeCountOutputTypeCountFinancialMovementsArgs
   advances?: boolean | HrEmployeeCountOutputTypeCountAdvancesArgs
   administrativeDeductions?: boolean | HrEmployeeCountOutputTypeCountAdministrativeDeductionsArgs
+  compensationProfiles?: boolean | HrEmployeeCountOutputTypeCountCompensationProfilesArgs
+  payrollLines?: boolean | HrEmployeeCountOutputTypeCountPayrollLinesArgs
 }
 
 /**
@@ -1291,6 +1589,20 @@ export type HrEmployeeCountOutputTypeCountAdministrativeDeductionsArgs<ExtArgs e
   where?: Prisma.HrEmployeeAdministrativeDeductionWhereInput
 }
 
+/**
+ * HrEmployeeCountOutputType without action
+ */
+export type HrEmployeeCountOutputTypeCountCompensationProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeCompensationProfileWhereInput
+}
+
+/**
+ * HrEmployeeCountOutputType without action
+ */
+export type HrEmployeeCountOutputTypeCountPayrollLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrPayrollLineWhereInput
+}
+
 
 export type HrEmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1313,6 +1625,8 @@ export type HrEmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   financialMovements?: boolean | Prisma.HrEmployee$financialMovementsArgs<ExtArgs>
   advances?: boolean | Prisma.HrEmployee$advancesArgs<ExtArgs>
   administrativeDeductions?: boolean | Prisma.HrEmployee$administrativeDeductionsArgs<ExtArgs>
+  compensationProfiles?: boolean | Prisma.HrEmployee$compensationProfilesArgs<ExtArgs>
+  payrollLines?: boolean | Prisma.HrEmployee$payrollLinesArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployee"]>
 
@@ -1379,6 +1693,8 @@ export type HrEmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   financialMovements?: boolean | Prisma.HrEmployee$financialMovementsArgs<ExtArgs>
   advances?: boolean | Prisma.HrEmployee$advancesArgs<ExtArgs>
   administrativeDeductions?: boolean | Prisma.HrEmployee$administrativeDeductionsArgs<ExtArgs>
+  compensationProfiles?: boolean | Prisma.HrEmployee$compensationProfilesArgs<ExtArgs>
+  payrollLines?: boolean | Prisma.HrEmployee$payrollLinesArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HrEmployeeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1396,6 +1712,8 @@ export type $HrEmployeePayload<ExtArgs extends runtime.Types.Extensions.Internal
     financialMovements: Prisma.$HrEmployeeFinancialMovementPayload<ExtArgs>[]
     advances: Prisma.$HrEmployeeAdvancePayload<ExtArgs>[]
     administrativeDeductions: Prisma.$HrEmployeeAdministrativeDeductionPayload<ExtArgs>[]
+    compensationProfiles: Prisma.$HrEmployeeCompensationProfilePayload<ExtArgs>[]
+    payrollLines: Prisma.$HrPayrollLinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1812,6 +2130,8 @@ export interface Prisma__HrEmployeeClient<T, Null = never, ExtArgs extends runti
   financialMovements<T extends Prisma.HrEmployee$financialMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployee$financialMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeFinancialMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   advances<T extends Prisma.HrEmployee$advancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployee$advancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   administrativeDeductions<T extends Prisma.HrEmployee$administrativeDeductionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployee$administrativeDeductionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdministrativeDeductionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  compensationProfiles<T extends Prisma.HrEmployee$compensationProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployee$compensationProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeCompensationProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payrollLines<T extends Prisma.HrEmployee$payrollLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployee$payrollLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrPayrollLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2350,6 +2670,54 @@ export type HrEmployee$administrativeDeductionsArgs<ExtArgs extends runtime.Type
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeAdministrativeDeductionScalarFieldEnum | Prisma.HrEmployeeAdministrativeDeductionScalarFieldEnum[]
+}
+
+/**
+ * HrEmployee.compensationProfiles
+ */
+export type HrEmployee$compensationProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeCompensationProfile
+   */
+  select?: Prisma.HrEmployeeCompensationProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeCompensationProfile
+   */
+  omit?: Prisma.HrEmployeeCompensationProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeCompensationProfileInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeCompensationProfileWhereInput
+  orderBy?: Prisma.HrEmployeeCompensationProfileOrderByWithRelationInput | Prisma.HrEmployeeCompensationProfileOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeCompensationProfileScalarFieldEnum | Prisma.HrEmployeeCompensationProfileScalarFieldEnum[]
+}
+
+/**
+ * HrEmployee.payrollLines
+ */
+export type HrEmployee$payrollLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrPayrollLine
+   */
+  select?: Prisma.HrPayrollLineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrPayrollLine
+   */
+  omit?: Prisma.HrPayrollLineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrPayrollLineInclude<ExtArgs> | null
+  where?: Prisma.HrPayrollLineWhereInput
+  orderBy?: Prisma.HrPayrollLineOrderByWithRelationInput | Prisma.HrPayrollLineOrderByWithRelationInput[]
+  cursor?: Prisma.HrPayrollLineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrPayrollLineScalarFieldEnum | Prisma.HrPayrollLineScalarFieldEnum[]
 }
 
 /**

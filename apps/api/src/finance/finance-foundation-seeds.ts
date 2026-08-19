@@ -40,6 +40,10 @@ export const FINANCE_BASE_ACCOUNT_SEEDS: readonly FinanceAccountSeed[] = [
   { code: 'OWNER-001', systemKey: 'OWNER_CURRENT', nameAr: 'جاري المالك ومسحوباته', nameEn: 'Owner current account and drawings', type: FinanceAccountType.EQUITY },
   { code: 'RETAINED-001', systemKey: 'RETAINED_EARNINGS', nameAr: 'أرباح مبقاة', nameEn: 'Retained earnings', type: FinanceAccountType.EQUITY },
   { code: 'REV-001', systemKey: 'SALES_REVENUE', nameAr: 'المبيعات', nameEn: 'Sales revenue', type: FinanceAccountType.REVENUE },
+  // Payroll administrative recoveries are separate from salary expense and
+  // employee advances. They are credited only when an approved payroll applies
+  // a documented administrative deduction.
+  { code: 'REV-002', systemKey: 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY', nameAr: 'استردادات خصومات إدارية للموظفين', nameEn: 'Employee administrative deduction recoveries', type: FinanceAccountType.REVENUE },
   { code: 'PUR-001', systemKey: 'FOOD_MATERIALS', nameAr: 'مواد غذائية', nameEn: 'Food and materials', type: FinanceAccountType.EXPENSE },
   { code: 'PUR-002', systemKey: 'BEVERAGES', nameAr: 'مشروبات', nameEn: 'Beverages', type: FinanceAccountType.EXPENSE },
   { code: 'PUR-003', systemKey: 'PACKAGING', nameAr: 'تعبئة وتغليف', nameEn: 'Packaging', type: FinanceAccountType.EXPENSE },

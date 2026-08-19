@@ -320,6 +320,7 @@ export type HrEmployeeAdvanceWhereInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   settlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   deferrals?: Prisma.HrEmployeeAdvanceDeferralListRelationFilter
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationListRelationFilter
 }
 
 export type HrEmployeeAdvanceOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type HrEmployeeAdvanceOrderByWithRelationInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationOrderByRelationAggregateInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementOrderByRelationAggregateInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralOrderByRelationAggregateInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationOrderByRelationAggregateInput
 }
 
 export type HrEmployeeAdvanceWhereUniqueInput = Prisma.AtLeast<{
@@ -376,6 +378,7 @@ export type HrEmployeeAdvanceWhereUniqueInput = Prisma.AtLeast<{
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationListRelationFilter
   settlements?: Prisma.HrEmployeeAdvanceSettlementListRelationFilter
   deferrals?: Prisma.HrEmployeeAdvanceDeferralListRelationFilter
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_advanceNumber" | "issueJournalEntryId_tenantId_companyId">
 
 export type HrEmployeeAdvanceOrderByWithAggregationInput = {
@@ -443,6 +446,7 @@ export type HrEmployeeAdvanceCreateInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateInput = {
@@ -465,6 +469,7 @@ export type HrEmployeeAdvanceUncheckedCreateInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUpdateInput = {
@@ -486,6 +491,7 @@ export type HrEmployeeAdvanceUpdateInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateInput = {
@@ -508,6 +514,7 @@ export type HrEmployeeAdvanceUncheckedUpdateInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateManyInput = {
@@ -831,6 +838,20 @@ export type HrEmployeeAdvanceUpdateOneRequiredWithoutDeferralsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateToOneWithWhereWithoutDeferralsInput, Prisma.HrEmployeeAdvanceUpdateWithoutDeferralsInput>, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput>
 }
 
+export type HrEmployeeAdvanceCreateNestedOneWithoutPayrollApplicationsInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutPayrollApplicationsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdvanceCreateOrConnectWithoutPayrollApplicationsInput
+  connect?: Prisma.HrEmployeeAdvanceWhereUniqueInput
+}
+
+export type HrEmployeeAdvanceUpdateOneRequiredWithoutPayrollApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutPayrollApplicationsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdvanceCreateOrConnectWithoutPayrollApplicationsInput
+  upsert?: Prisma.HrEmployeeAdvanceUpsertWithoutPayrollApplicationsInput
+  connect?: Prisma.HrEmployeeAdvanceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateToOneWithWhereWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUpdateWithoutPayrollApplicationsInput>, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutPayrollApplicationsInput>
+}
+
 export type HrEmployeeAdvanceCreateWithoutCompanyInput = {
   id?: string
   advanceNumber: string
@@ -849,6 +870,7 @@ export type HrEmployeeAdvanceCreateWithoutCompanyInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutCompanyInput = {
@@ -869,6 +891,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutCompanyInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutCompanyInput = {
@@ -937,6 +960,7 @@ export type HrEmployeeAdvanceCreateWithoutIssueJournalEntryInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutIssueJournalEntryInput = {
@@ -956,6 +980,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutIssueJournalEntryInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutIssueJournalEntryInput = {
@@ -992,6 +1017,7 @@ export type HrEmployeeAdvanceUpdateWithoutIssueJournalEntryInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutIssueJournalEntryInput = {
@@ -1011,6 +1037,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutIssueJournalEntryInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateWithoutEmployeeInput = {
@@ -1031,6 +1058,7 @@ export type HrEmployeeAdvanceCreateWithoutEmployeeInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutEmployeeInput = {
@@ -1050,6 +1078,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutEmployeeInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutEmployeeInput = {
@@ -1096,6 +1125,7 @@ export type HrEmployeeAdvanceCreateWithoutAllocationsInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutAllocationsInput = {
@@ -1117,6 +1147,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutAllocationsInput = {
   updatedAt?: Date | string
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutAllocationsInput = {
@@ -1153,6 +1184,7 @@ export type HrEmployeeAdvanceUpdateWithoutAllocationsInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutAllocationsInput = {
@@ -1174,6 +1206,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutAllocationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateWithoutSettlementsInput = {
@@ -1194,6 +1227,7 @@ export type HrEmployeeAdvanceCreateWithoutSettlementsInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutSettlementsInput = {
@@ -1215,6 +1249,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutSettlementsInput = {
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutSettlementsInput = {
@@ -1251,6 +1286,7 @@ export type HrEmployeeAdvanceUpdateWithoutSettlementsInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutSettlementsInput = {
@@ -1272,6 +1308,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutSettlementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateWithoutDeferralsInput = {
@@ -1292,6 +1329,7 @@ export type HrEmployeeAdvanceCreateWithoutDeferralsInput = {
   issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput = {
@@ -1313,6 +1351,7 @@ export type HrEmployeeAdvanceUncheckedCreateWithoutDeferralsInput = {
   updatedAt?: Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutAdvanceInput
 }
 
 export type HrEmployeeAdvanceCreateOrConnectWithoutDeferralsInput = {
@@ -1349,6 +1388,7 @@ export type HrEmployeeAdvanceUpdateWithoutDeferralsInput = {
   issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput = {
@@ -1370,6 +1410,109 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutDeferralsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
+}
+
+export type HrEmployeeAdvanceCreateWithoutPayrollApplicationsInput = {
+  id?: string
+  advanceNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeAdvancesInput
+  employee: Prisma.HrEmployeeCreateNestedOneWithoutAdvancesInput
+  issueJournalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutHrEmployeeAdvanceIssueInput
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutAdvanceInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutAdvanceInput
+}
+
+export type HrEmployeeAdvanceUncheckedCreateWithoutPayrollApplicationsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeId: string
+  advanceNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Date | string | null
+  notes?: string | null
+  issueJournalEntryId: string
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutAdvanceInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutAdvanceInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutAdvanceInput
+}
+
+export type HrEmployeeAdvanceCreateOrConnectWithoutPayrollApplicationsInput = {
+  where: Prisma.HrEmployeeAdvanceWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutPayrollApplicationsInput>
+}
+
+export type HrEmployeeAdvanceUpsertWithoutPayrollApplicationsInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutPayrollApplicationsInput>
+  create: Prisma.XOR<Prisma.HrEmployeeAdvanceCreateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedCreateWithoutPayrollApplicationsInput>
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+}
+
+export type HrEmployeeAdvanceUpdateToOneWithWhereWithoutPayrollApplicationsInput = {
+  where?: Prisma.HrEmployeeAdvanceWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeAdvanceUpdateWithoutPayrollApplicationsInput, Prisma.HrEmployeeAdvanceUncheckedUpdateWithoutPayrollApplicationsInput>
+}
+
+export type HrEmployeeAdvanceUpdateWithoutPayrollApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  advanceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeAdvancesNestedInput
+  employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdvancesNestedInput
+  issueJournalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutHrEmployeeAdvanceIssueNestedInput
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+}
+
+export type HrEmployeeAdvanceUncheckedUpdateWithoutPayrollApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  advanceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  settledAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdvanceStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdvanceStatus
+  nextSettlementDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueJournalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
+  settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
+  deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceCreateManyCompanyInput = {
@@ -1407,6 +1550,7 @@ export type HrEmployeeAdvanceUpdateWithoutCompanyInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutCompanyInput = {
@@ -1427,6 +1571,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutCompanyInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyInput = {
@@ -1480,6 +1625,7 @@ export type HrEmployeeAdvanceUpdateWithoutEmployeeInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateWithoutEmployeeInput = {
@@ -1499,6 +1645,7 @@ export type HrEmployeeAdvanceUncheckedUpdateWithoutEmployeeInput = {
   allocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutAdvanceNestedInput
   settlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutAdvanceNestedInput
   deferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutAdvanceNestedInput
+  payrollApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutAdvanceNestedInput
 }
 
 export type HrEmployeeAdvanceUncheckedUpdateManyWithoutEmployeeInput = {
@@ -1526,12 +1673,14 @@ export type HrEmployeeAdvanceCountOutputType = {
   allocations: number
   settlements: number
   deferrals: number
+  payrollApplications: number
 }
 
 export type HrEmployeeAdvanceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   allocations?: boolean | HrEmployeeAdvanceCountOutputTypeCountAllocationsArgs
   settlements?: boolean | HrEmployeeAdvanceCountOutputTypeCountSettlementsArgs
   deferrals?: boolean | HrEmployeeAdvanceCountOutputTypeCountDeferralsArgs
+  payrollApplications?: boolean | HrEmployeeAdvanceCountOutputTypeCountPayrollApplicationsArgs
 }
 
 /**
@@ -1565,6 +1714,13 @@ export type HrEmployeeAdvanceCountOutputTypeCountDeferralsArgs<ExtArgs extends r
   where?: Prisma.HrEmployeeAdvanceDeferralWhereInput
 }
 
+/**
+ * HrEmployeeAdvanceCountOutputType without action
+ */
+export type HrEmployeeAdvanceCountOutputTypeCountPayrollApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrPayrollAdvanceApplicationWhereInput
+}
+
 
 export type HrEmployeeAdvanceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1589,6 +1745,7 @@ export type HrEmployeeAdvanceSelect<ExtArgs extends runtime.Types.Extensions.Int
   allocations?: boolean | Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>
   settlements?: boolean | Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>
   deferrals?: boolean | Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>
+  payrollApplications?: boolean | Prisma.HrEmployeeAdvance$payrollApplicationsArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeAdvanceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeAdvance"]>
 
@@ -1663,6 +1820,7 @@ export type HrEmployeeAdvanceInclude<ExtArgs extends runtime.Types.Extensions.In
   allocations?: boolean | Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>
   settlements?: boolean | Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>
   deferrals?: boolean | Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>
+  payrollApplications?: boolean | Prisma.HrEmployeeAdvance$payrollApplicationsArgs<ExtArgs>
   _count?: boolean | Prisma.HrEmployeeAdvanceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HrEmployeeAdvanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1685,6 +1843,7 @@ export type $HrEmployeeAdvancePayload<ExtArgs extends runtime.Types.Extensions.I
     allocations: Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>[]
     settlements: Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>[]
     deferrals: Prisma.$HrEmployeeAdvanceDeferralPayload<ExtArgs>[]
+    payrollApplications: Prisma.$HrPayrollAdvanceApplicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2103,6 +2262,7 @@ export interface Prisma__HrEmployeeAdvanceClient<T, Null = never, ExtArgs extend
   allocations<T extends Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvancePayoutAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   settlements<T extends Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$settlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deferrals<T extends Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$deferralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdvanceDeferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payrollApplications<T extends Prisma.HrEmployeeAdvance$payrollApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdvance$payrollApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrPayrollAdvanceApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2618,6 +2778,30 @@ export type HrEmployeeAdvance$deferralsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeAdvanceDeferralScalarFieldEnum | Prisma.HrEmployeeAdvanceDeferralScalarFieldEnum[]
+}
+
+/**
+ * HrEmployeeAdvance.payrollApplications
+ */
+export type HrEmployeeAdvance$payrollApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrPayrollAdvanceApplication
+   */
+  select?: Prisma.HrPayrollAdvanceApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrPayrollAdvanceApplication
+   */
+  omit?: Prisma.HrPayrollAdvanceApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrPayrollAdvanceApplicationInclude<ExtArgs> | null
+  where?: Prisma.HrPayrollAdvanceApplicationWhereInput
+  orderBy?: Prisma.HrPayrollAdvanceApplicationOrderByWithRelationInput | Prisma.HrPayrollAdvanceApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.HrPayrollAdvanceApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrPayrollAdvanceApplicationScalarFieldEnum | Prisma.HrPayrollAdvanceApplicationScalarFieldEnum[]
 }
 
 /**

@@ -221,6 +221,16 @@ enum HrEmployeeAdministrativeDeductionActionType {
   REVERSED
 }
 
+/// Payroll is intentionally lifecycle-based: a draft has no financial effect,
+/// approval posts the accrued entitlement, and payments settle the payable.
+enum HrPayrollRunStatus {
+  DRAFT
+  APPROVED
+  PARTIALLY_PAID
+  PAID
+  REVERSED
+}
+
 enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
@@ -336,6 +346,13 @@ model Company {
   hrEmployeeAdvanceDeferrals   HrEmployeeAdvanceDeferral[]
   hrEmployeeAdministrativeDeductions HrEmployeeAdministrativeDeduction[]
   hrEmployeeAdministrativeDeductionActions HrEmployeeAdministrativeDeductionAction[]
+  hrEmployeeCompensationProfiles HrEmployeeCompensationProfile[]
+  hrPayrollRuns                 HrPayrollRun[]
+  hrPayrollLines                HrPayrollLine[]
+  hrPayrollAdvanceApplications  HrPayrollAdvanceApplication[]
+  hrPayrollDeductionApplications HrPayrollAdministrativeDeductionApplication[]
+  hrPayrollPayments             HrPayrollPayment[]
+  hrPayrollPaymentAllocations   HrPayrollPaymentAllocation[]
   aiCompanyIdentities          AiCompanyIdentity[]
   aiExecutionReceipts          AiExecutionReceipt[]
   branding                     CompanyBranding?
@@ -712,6 +729,7 @@ model FinanceVault {
   outflowAllocations         FinanceOutflowAllocation[]
   recurringExpenseDefaults   FinanceRecurringExpenseProfile[]
   employeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
+  payrollPaymentAllocations  HrPayrollPaymentAllocation[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, nameAr])
@@ -816,6 +834,8 @@ model FinanceJournalEntry {
   hrEmployeeMovements  HrEmployeeFinancialMovement[]
   hrEmployeeAdvanceIssue HrEmployeeAdvance?          @relation("HrEmployeeAdvanceIssueJournal")
   hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
+  hrPayrollAccrual      HrPayrollRun?                @relation("HrPayrollAccrualJournal")
+  hrPayrollPayment      HrPayrollPayment?            @relation("HrPayrollPaymentJournal")
 
   @@unique([id, tenantId, companyId])
   @@unique([reversalOfEntryId, tenantId, companyId])
@@ -939,6 +959,8 @@ model HrEmployee {
   financialMovements HrEmployeeFinancialMovement[]
   advances           HrEmployeeAdvance[]
   administrativeDeductions HrEmployeeAdministrativeDeduction[]
+  compensationProfiles     HrEmployeeCompensationProfile[]
+  payrollLines             HrPayrollLine[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
@@ -1029,6 +1051,7 @@ model HrEmployeeAdvance {
   allocations       HrEmployeeAdvancePayoutAllocation[]
   settlements       HrEmployeeAdvanceSettlement[]
   deferrals         HrEmployeeAdvanceDeferral[]
+  payrollApplications HrPayrollAdvanceApplication[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, advanceNumber])
@@ -1124,6 +1147,7 @@ model HrEmployeeAdministrativeDeduction {
   company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   actions  HrEmployeeAdministrativeDeductionAction[]
+  payrollApplications HrPayrollAdministrativeDeductionApplication[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, deductionNumber])
@@ -1151,6 +1175,168 @@ model HrEmployeeAdministrativeDeductionAction {
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, deductionId, businessDate, id])
+}
+
+/// Effective-dated compensation is the sole source used to prepare a payroll
+/// draft. A payroll line snapshots it on approval so a later salary change can
+/// never rewrite a historical run.
+model HrEmployeeCompensationProfile {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  companyId     String   @db.Uuid
+  employeeId    String   @db.Uuid
+  effectiveFrom DateTime @db.Date
+  effectiveTo   DateTime? @db.Date
+  monthlyGross  Decimal  @db.Decimal(18, 4)
+  notes         String?  @db.VarChar(1000)
+  createdByUserId String @db.Uuid
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, employeeId, effectiveFrom])
+  @@index([tenantId, companyId, employeeId, effectiveFrom])
+}
+
+model HrPayrollRun {
+  id                     String             @id @default(uuid()) @db.Uuid
+  tenantId               String             @db.Uuid
+  companyId              String             @db.Uuid
+  runNumber              String             @db.VarChar(80)
+  payrollMonth           DateTime           @db.Date
+  businessDate           DateTime           @db.Date
+  status                 HrPayrollRunStatus @default(DRAFT)
+  employeeCount          Int                @default(0)
+  grossAmount            Decimal            @default(0) @db.Decimal(18, 4)
+  advanceSettlementAmount Decimal           @default(0) @db.Decimal(18, 4)
+  administrativeDeductionAmount Decimal     @default(0) @db.Decimal(18, 4)
+  netPayableAmount       Decimal            @default(0) @db.Decimal(18, 4)
+  paidAmount             Decimal            @default(0) @db.Decimal(18, 4)
+  notes                  String?            @db.VarChar(2000)
+  accrualJournalEntryId  String?            @db.Uuid
+  approvedAt             DateTime?          @db.Timestamptz(6)
+  reversedAt             DateTime?          @db.Timestamptz(6)
+  reversalReason         String?            @db.VarChar(1000)
+  createdByUserId        String             @db.Uuid
+  createdAt              DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime           @updatedAt @db.Timestamptz(6)
+
+  company        Company              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  accrualJournal FinanceJournalEntry? @relation("HrPayrollAccrualJournal", fields: [accrualJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  lines          HrPayrollLine[]
+  payments       HrPayrollPayment[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, payrollMonth])
+  @@unique([companyId, runNumber])
+  @@index([tenantId, companyId, payrollMonth, status, id])
+  @@unique([accrualJournalEntryId, tenantId, companyId])
+}
+
+model HrPayrollLine {
+  id                            String   @id @default(uuid()) @db.Uuid
+  tenantId                      String   @db.Uuid
+  companyId                     String   @db.Uuid
+  payrollRunId                  String   @db.Uuid
+  employeeId                    String   @db.Uuid
+  employeeNumberSnapshot         String   @db.VarChar(80)
+  employeeNameArSnapshot         String   @db.VarChar(160)
+  employeeNameEnSnapshot         String?  @db.VarChar(160)
+  grossSalary                    Decimal  @db.Decimal(18, 4)
+  advanceSettlementAmount        Decimal  @default(0) @db.Decimal(18, 4)
+  administrativeDeductionAmount  Decimal  @default(0) @db.Decimal(18, 4)
+  netPayableAmount               Decimal  @db.Decimal(18, 4)
+  paidAmount                     Decimal  @default(0) @db.Decimal(18, 4)
+  createdAt                      DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt                      DateTime @updatedAt @db.Timestamptz(6)
+
+  company   Company       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  payrollRun HrPayrollRun @relation(fields: [payrollRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  employee  HrEmployee    @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  advanceApplications HrPayrollAdvanceApplication[]
+  deductionApplications HrPayrollAdministrativeDeductionApplication[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([payrollRunId, employeeId])
+  @@index([tenantId, companyId, employeeId, payrollRunId])
+}
+
+model HrPayrollAdvanceApplication {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  companyId     String   @db.Uuid
+  payrollLineId String   @db.Uuid
+  advanceId     String   @db.Uuid
+  amount        Decimal  @db.Decimal(18, 4)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  company     Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  payrollLine HrPayrollLine     @relation(fields: [payrollLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  advance     HrEmployeeAdvance @relation(fields: [advanceId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([payrollLineId, advanceId])
+  @@index([tenantId, companyId, advanceId])
+}
+
+model HrPayrollAdministrativeDeductionApplication {
+  id            String                              @id @default(uuid()) @db.Uuid
+  tenantId      String                              @db.Uuid
+  companyId     String                              @db.Uuid
+  payrollLineId String                              @db.Uuid
+  deductionId   String                              @db.Uuid
+  amount        Decimal                             @db.Decimal(18, 4)
+  createdAt     DateTime                            @default(now()) @db.Timestamptz(6)
+
+  company     Company                            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  payrollLine HrPayrollLine                      @relation(fields: [payrollLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  deduction   HrEmployeeAdministrativeDeduction @relation(fields: [deductionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([payrollLineId, deductionId])
+  @@index([tenantId, companyId, deductionId])
+}
+
+model HrPayrollPayment {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  companyId     String   @db.Uuid
+  payrollRunId  String   @db.Uuid
+  paymentNumber String   @db.VarChar(80)
+  businessDate  DateTime @db.Date
+  amount        Decimal  @db.Decimal(18, 4)
+  journalEntryId String  @db.Uuid
+  createdByUserId String @db.Uuid
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  company     Company             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  payrollRun  HrPayrollRun        @relation(fields: [payrollRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry FinanceJournalEntry @relation("HrPayrollPaymentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  allocations HrPayrollPaymentAllocation[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, paymentNumber])
+  @@index([tenantId, companyId, payrollRunId, businessDate, id])
+  @@unique([journalEntryId, tenantId, companyId])
+}
+
+model HrPayrollPaymentAllocation {
+  id            String                    @id @default(uuid()) @db.Uuid
+  tenantId      String                    @db.Uuid
+  companyId     String                    @db.Uuid
+  payrollPaymentId String                  @db.Uuid
+  vaultId       String                    @db.Uuid
+  paymentMethod FinanceVaultPaymentMethod
+  amount        Decimal                   @db.Decimal(18, 4)
+  createdAt     DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company       Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  payrollPayment HrPayrollPayment @relation(fields: [payrollPaymentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  vault         FinanceVault     @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([payrollPaymentId, vaultId, paymentMethod])
+  @@index([tenantId, companyId, vaultId, createdAt])
 }
 
 model FinanceJournalLine {
