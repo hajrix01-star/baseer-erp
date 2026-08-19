@@ -218,6 +218,18 @@ export type HrEmployeeAdministrativeDeductionAction = Prisma.HrEmployeeAdministr
  */
 export type HrEmployeeCompensationProfile = Prisma.HrEmployeeCompensationProfileModel
 /**
+ * Model HrCompensationPolicy
+ * Company-owned policy container. It does not contain employee amounts or a
+ * client-supplied formula; those remain separate employee agreements.
+ */
+export type HrCompensationPolicy = Prisma.HrCompensationPolicyModel
+/**
+ * Model HrCompensationPolicyVersion
+ * Effective-dated, approved company policy revision. Historic versions are
+ * never edited; approval closes only a preceding future/current interval.
+ */
+export type HrCompensationPolicyVersion = Prisma.HrCompensationPolicyVersionModel
+/**
  * Model HrPayrollRun
  * 
  */

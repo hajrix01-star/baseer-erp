@@ -3,6 +3,9 @@ import { randomUUID } from 'node:crypto';
 
 import type {
   ApproveHrPayrollRunRequest,
+  ApproveHrCompensationPolicyVersionRequest,
+  CreateHrCompensationPolicyRequest,
+  CreateHrCompensationPolicyVersionRequest,
   CreateHrPayrollRunRequest,
   PayHrPayrollRunRequest,
   ReverseHrPayrollRunRequest,
@@ -23,6 +26,8 @@ import {
   HrEmployeeFinancialMovementType,
   HrEmployeeStatus,
   HrCompensationMethod,
+  HrCompensationFormulaCode,
+  HrCompensationPolicyVersionStatus,
   HrPayrollRunStatus,
   Prisma,
 } from '../generated/prisma/client.js';
@@ -30,6 +35,9 @@ import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 
 const COMPENSATION_OPERATION = 'hr.compensation.set';
+const POLICY_CREATE_OPERATION = 'hr.compensation_policy.create';
+const POLICY_VERSION_OPERATION = 'hr.compensation_policy.version.create';
+const POLICY_APPROVE_OPERATION = 'hr.compensation_policy.version.approve';
 const CREATE_OPERATION = 'hr.payroll.create';
 const APPROVE_OPERATION = 'hr.payroll.approve';
 const PAY_OPERATION = 'hr.payroll.pay';
@@ -44,6 +52,9 @@ type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
+type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
+type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
+type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; cursor?: string; pageSize: number }>;
 type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 
@@ -58,21 +69,109 @@ export class HrPayrollService {
     private readonly journals: JournalPostingService,
   ) {}
 
+  async listCompensationPolicies(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const policies = await tx.hrCompensationPolicy.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+        orderBy: { code: 'asc' },
+        include: { versions: { orderBy: { versionNumber: 'desc' } } },
+      });
+      return { policies: policies.map((policy) => mapPolicy(policy)) };
+    });
+  }
+
+  async createCompensationPolicy(context: TrustedCompanyActorContext, input: CompensationPolicyCreateInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const current = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      assertNotPast(input.effectiveFrom, current.businessDate, 'A compensation policy cannot start in the past.');
+      assertFirstDayOfMonth(input.effectiveFrom, 'A compensation policy must start on the first day of a month.');
+      const begun = await this.begin(tx, context, POLICY_CREATE_OPERATION, key, input);
+      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy request is already being processed.');
+      const duplicate = await tx.hrCompensationPolicy.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, code: input.code }, select: { id: true } });
+      if (duplicate) throw new ConflictException('The compensation policy code already exists for this company.');
+      const id = randomUUID();
+      const policyVersionId = randomUUID();
+      await tx.hrCompensationPolicy.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, code: input.code.trim(), nameAr: input.nameAr.trim(), nameEn: nullable(input.nameEn), createdByUserId: context.actorUserId } });
+      await tx.hrCompensationPolicyVersion.create({ data: { id: policyVersionId, tenantId: context.tenantId, companyId: context.companyId, policyId: id, versionNumber: 1, effectiveFrom: input.effectiveFrom, status: HrCompensationPolicyVersionStatus.DRAFT, formulaCode: HrCompensationFormulaCode.STANDARD_MONTHLY_V1, createdByUserId: context.actorUserId } });
+      const receipt = { id, policyVersionId, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt);
+      await this.audit(tx, context, 'hr.compensation_policy.created', 'HrCompensationPolicy', id, receipt);
+      return receipt;
+    });
+  }
+
+  async createCompensationPolicyVersion(context: TrustedCompanyActorContext, input: CompensationPolicyVersionInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const current = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      assertNotPast(input.effectiveFrom, current.businessDate, 'A compensation policy version cannot start in the past.');
+      assertFirstDayOfMonth(input.effectiveFrom, 'A compensation policy version must start on the first day of a month.');
+      const begun = await this.begin(tx, context, POLICY_VERSION_OPERATION, key, input);
+      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy version request is already being processed.');
+      const policy = await tx.hrCompensationPolicy.findFirst({ where: { id: input.policyId, tenantId: context.tenantId, companyId: context.companyId }, include: { versions: { select: { versionNumber: true, effectiveFrom: true } } } });
+      if (!policy) throw new NotFoundException('The compensation policy is not available for this company.');
+      if (policy.versions.some((version) => version.effectiveFrom.getTime() === input.effectiveFrom.getTime())) throw new ConflictException('A policy version already starts on this effective date.');
+      const policyVersionId = randomUUID();
+      await tx.hrCompensationPolicyVersion.create({ data: { id: policyVersionId, tenantId: context.tenantId, companyId: context.companyId, policyId: policy.id, versionNumber: Math.max(0, ...policy.versions.map((version) => version.versionNumber)) + 1, effectiveFrom: input.effectiveFrom, status: HrCompensationPolicyVersionStatus.DRAFT, formulaCode: HrCompensationFormulaCode.STANDARD_MONTHLY_V1, createdByUserId: context.actorUserId } });
+      const receipt = { id: policy.id, policyVersionId, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt);
+      await this.audit(tx, context, 'hr.compensation_policy.version_created', 'HrCompensationPolicyVersion', policyVersionId, receipt);
+      return receipt;
+    });
+  }
+
+  async approveCompensationPolicyVersion(context: TrustedCompanyActorContext, input: CompensationPolicyApprovalInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const current = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      const begun = await this.begin(tx, context, POLICY_APPROVE_OPERATION, key, input);
+      if (begun.kind === 'replay') return begun.response.body as { id: string; policyVersionId: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The compensation policy approval is already being processed.');
+      const target = await tx.hrCompensationPolicyVersion.findFirst({ where: { id: input.policyVersionId, tenantId: context.tenantId, companyId: context.companyId, status: HrCompensationPolicyVersionStatus.DRAFT }, select: { id: true, policyId: true, effectiveFrom: true } });
+      if (!target) throw new NotFoundException('A draft compensation policy version was not found.');
+      assertNotPast(target.effectiveFrom, current.businessDate, 'A past compensation policy version cannot be approved.');
+      const conflicting = await tx.hrCompensationPolicyVersion.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, policyId: target.policyId, status: HrCompensationPolicyVersionStatus.APPROVED, effectiveFrom: { gte: target.effectiveFrom } }, select: { id: true } });
+      if (conflicting) throw new ConflictException('An approved policy version already covers this date or a later scheduled date.');
+      const preceding = await tx.hrCompensationPolicyVersion.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, policyId: target.policyId, status: HrCompensationPolicyVersionStatus.APPROVED, effectiveFrom: { lt: target.effectiveFrom }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: target.effectiveFrom } }] }, orderBy: { effectiveFrom: 'desc' } });
+      if (preceding) await tx.hrCompensationPolicyVersion.update({ where: { id: preceding.id }, data: { effectiveTo: previousDay(target.effectiveFrom), status: HrCompensationPolicyVersionStatus.SUPERSEDED } });
+      await tx.hrCompensationPolicyVersion.update({ where: { id: target.id }, data: { status: HrCompensationPolicyVersionStatus.APPROVED, approvedByUserId: context.actorUserId, approvedAt: new Date() } });
+      const receipt = { id: target.policyId, policyVersionId: target.id, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt);
+      await this.audit(tx, context, 'hr.compensation_policy.version_approved', 'HrCompensationPolicyVersion', target.id, receipt);
+      return receipt;
+    });
+  }
+
   async setCompensation(context: TrustedCompanyActorContext, input: CompensationInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      await this.dates.assertNotFutureInTransaction(tx, context, input.effectiveFrom, 'Compensation cannot start in the future.');
+      // Serialise all effective-dated agreements for one employee. A generic
+      // uniqueness key cannot protect range overlap when two future requests
+      // race in separate transactions.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:employee-compensation:${input.employeeId}`}, 0))`;
+      const currentDate = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      assertNotPast(input.effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Create a future agreement instead.');
+      assertFirstDayOfMonth(input.effectiveFrom, 'A compensation agreement must start on the first day of a month.');
       const begun = await this.begin(tx, context, COMPENSATION_OPERATION, key, input);
       if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
       const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
       if (!employee) throw new NotFoundException('The employee is not available for compensation.');
-      const current = await tx.hrEmployeeCompensationProfile.findFirst({
-        where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveTo: null },
-        orderBy: { effectiveFrom: 'desc' },
+      const approvedRun = await tx.hrPayrollRun.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrPayrollRunStatus.APPROVED, HrPayrollRunStatus.PARTIALLY_PAID, HrPayrollRunStatus.PAID] }, payrollMonth: { gte: firstOfMonth(input.effectiveFrom) }, lines: { some: { employeeId: input.employeeId } } },
+        select: { id: true },
       });
-      if (current && current.effectiveFrom.getTime() >= input.effectiveFrom.getTime()) {
-        throw new ConflictException('The effective compensation date must be later than the current profile.');
+      if (approvedRun) throw new ConflictException('A compensation agreement cannot alter a month with an approved payroll run.');
+      const policyVersion = await this.resolveCompensationPolicyVersion(tx, context, input.effectiveFrom, input.policyVersionId);
+      const agreements = await tx.hrEmployeeCompensationProfile.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId },
+        orderBy: { effectiveFrom: 'asc' },
+      });
+      if (agreements.some((agreement) => agreement.effectiveFrom.getTime() >= input.effectiveFrom.getTime())) {
+        throw new ConflictException('A future compensation agreement already starts on or after this date. Agreements must be added chronologically.');
       }
-      if (current) await tx.hrEmployeeCompensationProfile.update({ where: { id: current.id }, data: { effectiveTo: previousDay(input.effectiveFrom) } });
+      const overlapping = agreements.filter((agreement) => agreement.effectiveFrom.getTime() < input.effectiveFrom.getTime() && (!agreement.effectiveTo || agreement.effectiveTo.getTime() >= input.effectiveFrom.getTime()));
+      if (overlapping.length > 1) throw new ConflictException('Existing compensation agreements overlap and must be repaired before adding another agreement.');
+      const preceding = overlapping[0];
+      if (preceding) await tx.hrEmployeeCompensationProfile.update({ where: { id: preceding.id }, data: { effectiveTo: previousDay(input.effectiveFrom) } });
       const compensation = calculateCompensation({
         monthlyGross: amount(input.monthlyGross),
         compensationMethod: input.compensationMethod,
@@ -80,10 +179,10 @@ export class HrPayrollService {
         otherAllowance: nonNegativeAmount(input.otherAllowance),
         scheduledHoursPerDay: input.scheduledHoursPerDay ?? null,
         scheduledWorkDays: input.scheduledWorkDays ?? null,
-      });
+      }, policyVersion.formulaCode);
       const id = randomUUID();
       await tx.hrEmployeeCompensationProfile.create({ data: {
-        id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveFrom: input.effectiveFrom,
+        id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, policyVersionId: policyVersion.id, effectiveFrom: input.effectiveFrom,
         monthlyGross: compensation.gross, compensationMethod: compensation.method, foodAllowance: compensation.foodAllowance,
         otherAllowance: compensation.otherAllowance, scheduledHoursPerDay: compensation.scheduledHoursPerDay,
         scheduledWorkDays: compensation.scheduledWorkDays, notes: nullable(input.notes), createdByUserId: context.actorUserId,
@@ -141,6 +240,7 @@ export class HrPayrollService {
           grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
           basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
+          compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
           advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount), advances: [], administrativeDeductions: [],
           payrollRunId: line.payrollRun.id, runNumber: line.payrollRun.runNumber, payrollMonth: ymd(line.payrollRun.payrollMonth), businessDate: ymd(line.payrollRun.businessDate), payrollStatus: line.payrollRun.status,
         })),
@@ -160,6 +260,7 @@ export class HrPayrollService {
           grossSalary: fixed(line.grossSalary), compensationMethod: line.compensationMethod,
           basicSalary: fixed(line.basicSalary), foodAllowance: fixed(line.foodAllowance), otherAllowance: fixed(line.otherAllowance), overtimeAmount: fixed(line.overtimeAmount), overtimeHours: fixed(line.overtimeHours),
           scheduledHoursPerDay: line.scheduledHoursPerDay, scheduledWorkDays: line.scheduledWorkDays,
+          compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
           advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
           advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
           administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
@@ -171,10 +272,11 @@ export class HrPayrollService {
 
   async create(context: TrustedCompanyActorContext, input: CreateInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const begun = await this.begin(tx, context, CREATE_OPERATION, key, input);
       if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
       const payrollMonth = firstOfMonth(input.payrollMonth);
+      if (ymd(payrollMonth) > currentDate.businessDate) throw new BadRequestException('A payroll run cannot be created for a future month.');
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
       const existing = await tx.hrPayrollRun.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth }, select: { id: true } });
       if (existing) throw new ConflictException('A payroll run already exists for this month.');
@@ -195,23 +297,27 @@ export class HrPayrollService {
       const lines = employees.map((employee) => requestedLines.get(employee.id) ?? { employeeId: employee.id, advances: [], administrativeDeductions: [] });
       const uniqueEmployeeIds = employees.map((employee) => employee.id);
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
-      const profileRows = await tx.hrEmployeeCompensationProfile.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: uniqueEmployeeIds }, effectiveFrom: { lte: payrollMonth }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: payrollMonth } }] }, orderBy: { effectiveFrom: 'desc' } });
+      const profileRows = await tx.hrEmployeeCompensationProfile.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: uniqueEmployeeIds }, effectiveFrom: { lte: payrollMonth }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: payrollMonth } }] }, orderBy: { effectiveFrom: 'desc' }, include: { policyVersion: { include: { policy: true } } } });
       const profileByEmployee = new Map<string, typeof profileRows[number]>();
       for (const profile of profileRows) if (!profileByEmployee.has(profile.employeeId)) profileByEmployee.set(profile.employeeId, profile);
       if (profileByEmployee.size !== uniqueEmployeeIds.length) throw new BadRequestException('Every payroll employee must have an active monthly compensation profile.');
       const runId = randomUUID();
       const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(input.businessDate) });
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
+      const defaultPolicyVersion = await this.ensureDefaultCompensationPolicyVersion(tx, context);
       const rows = await Promise.all(lines.map(async (line) => {
         const employee = employeeById.get(line.employeeId)!;
-        const compensation = calculateCompensation(profileByEmployee.get(line.employeeId)!);
+        const profile = profileByEmployee.get(line.employeeId)!;
+        const policyVersion = profile.policyVersion ?? defaultPolicyVersion;
+        if (policyVersion.status !== HrCompensationPolicyVersionStatus.APPROVED && policyVersion.status !== HrCompensationPolicyVersionStatus.SUPERSEDED) throw new ConflictException('A payroll compensation agreement must reference an approved policy version.');
+        const compensation = calculateCompensation(profile, policyVersion.formulaCode);
         const gross = compensation.gross;
         const advances = await this.resolveAdvanceApplications(tx, context, line.employeeId, line.advances);
         const deductions = await this.resolveDeductionApplications(tx, context, line.employeeId, line.administrativeDeductions);
         const advanceAmount = sum(advances.map((item) => item.amount));
         const deductionAmount = sum(deductions.map((item) => item.amount));
         if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
-        return { id: randomUUID(), employee, compensation, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
+        return { id: randomUUID(), employee, compensation, policyVersion, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
       }));
       const grossAmount = sum(rows.map((row) => row.gross));
       const advanceSettlementAmount = sum(rows.map((row) => row.advanceAmount));
@@ -222,6 +328,7 @@ export class HrPayrollService {
         await tx.hrPayrollLine.create({ data: {
           id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: runId, employeeId: row.employee.id,
           employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
+          compensationPolicyVersionId: row.policyVersion.id, compensationPolicySnapshotJson: policySnapshot(row.policyVersion) as Prisma.InputJsonValue,
           grossSalary: row.gross, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
           foodAllowance: row.compensation.foodAllowance, otherAllowance: row.compensation.otherAllowance,
           overtimeAmount: row.compensation.overtimeAmount, overtimeHours: row.compensation.overtimeHours,
@@ -378,6 +485,38 @@ export class HrPayrollService {
     await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId, actionType: HrEmployeeAdministrativeDeductionActionType.REVERSED, businessDate, amount: applied, reason: `${reference}: ${reason}`, createdByUserId: context.actorUserId } });
   }
 
+  private async resolveCompensationPolicyVersion(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, effectiveFrom: Date, requestedPolicyVersionId: string | undefined) {
+    if (!requestedPolicyVersionId) return this.ensureDefaultCompensationPolicyVersion(tx, context);
+    const version = await tx.hrCompensationPolicyVersion.findFirst({
+      where: { id: requestedPolicyVersionId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrCompensationPolicyVersionStatus.APPROVED, HrCompensationPolicyVersionStatus.SUPERSEDED] }, effectiveFrom: { lte: effectiveFrom }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: effectiveFrom } }] },
+      include: { policy: true },
+    });
+    if (!version) throw new BadRequestException('Choose an approved company compensation policy version effective on the agreement date.');
+    return version;
+  }
+
+  /** A read-only system policy preserves existing companies while keeping the
+   * formula server-owned. Custom company policies remain explicit and require
+   * an approval step before an employee agreement may select them. */
+  private async ensureDefaultCompensationPolicyVersion(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:compensation-default-policy`}, 0))`;
+    const existing = await tx.hrCompensationPolicyVersion.findFirst({
+      where: { tenantId: context.tenantId, companyId: context.companyId, status: HrCompensationPolicyVersionStatus.APPROVED, policy: { code: 'BASEER_STANDARD' } },
+      include: { policy: true },
+    });
+    if (existing) return existing;
+    const policyId = randomUUID();
+    const versionId = randomUUID();
+    await tx.hrCompensationPolicy.create({ data: {
+      id: policyId, tenantId: context.tenantId, companyId: context.companyId, code: 'BASEER_STANDARD', nameAr: 'السياسة القياسية لبصير', nameEn: 'Baseer standard policy', createdByUserId: context.actorUserId,
+    } });
+    return tx.hrCompensationPolicyVersion.create({ data: {
+      id: versionId, tenantId: context.tenantId, companyId: context.companyId, policyId, versionNumber: 1,
+      effectiveFrom: new Date('2000-01-01T00:00:00.000Z'), status: HrCompensationPolicyVersionStatus.APPROVED,
+      formulaCode: HrCompensationFormulaCode.STANDARD_MONTHLY_V1, approvedByUserId: context.actorUserId, approvedAt: new Date(), createdByUserId: context.actorUserId,
+    }, include: { policy: true } });
+  }
+
   private async validateAllocations(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, allocations: readonly { vaultId: string; amount: string; paymentMethod?: 'CASH' | 'BANK_TRANSFER' | 'BANK_CARD' | 'BANK_PAYMENT' | 'APP' | undefined }[]) {
     const used = new Set<string>();
     const result: Array<{ vaultId: string; accountId: string; amount: Prisma.Decimal; paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'BANK_CARD' | 'BANK_PAYMENT' | 'APP' }> = [];
@@ -426,14 +565,17 @@ type CompensationInputForCalculation = Readonly<{
  * Mirrors the agreed Noorix inverse package calculation. This is a payroll
  * calculation only: it neither approves a schedule nor determines legality.
  */
-function calculateCompensation(input: CompensationInputForCalculation) {
+function calculateCompensation(input: CompensationInputForCalculation, formulaCode: HrCompensationFormulaCode) {
+  if (formulaCode !== HrCompensationFormulaCode.STANDARD_MONTHLY_V1) throw new ConflictException('The selected compensation policy formula is not supported by this server.');
   if (input.compensationMethod === HrCompensationMethod.FIXED_MONTHLY) {
+    const basicSalary = input.monthlyGross.minus(input.foodAllowance).minus(input.otherAllowance);
+    if (basicSalary.lte(0)) throw new BadRequestException('The agreed total cannot be lower than its fixed allowances.');
     return {
       method: HrCompensationMethod.FIXED_MONTHLY,
       gross: input.monthlyGross,
-      basicSalary: input.monthlyGross,
-      foodAllowance: new Prisma.Decimal(0),
-      otherAllowance: new Prisma.Decimal(0),
+      basicSalary,
+      foodAllowance: input.foodAllowance,
+      otherAllowance: input.otherAllowance,
       overtimeAmount: new Prisma.Decimal(0),
       overtimeHours: new Prisma.Decimal(0),
       scheduledHoursPerDay: null,
@@ -463,6 +605,17 @@ function calculateCompensation(input: CompensationInputForCalculation) {
     scheduledHoursPerDay: dailyHours,
     scheduledWorkDays: workDays,
   };
+}
+function assertNotPast(value: Date, currentYmd: string, message: string) { if (ymd(value) < currentYmd) throw new BadRequestException(message); }
+function assertFirstDayOfMonth(value: Date, message: string) { if (ymd(value).slice(8, 10) !== '01') throw new BadRequestException(message); }
+function policySnapshot(value: { id: string; policyId: string; versionNumber: number; effectiveFrom: Date; formulaCode: HrCompensationFormulaCode; policy: { code: string; nameAr: string; nameEn: string | null } }) {
+  return { policyId: value.policyId, policyVersionId: value.id, policyCode: value.policy.code, policyNameAr: value.policy.nameAr, policyNameEn: value.policy.nameEn, versionNumber: value.versionNumber, effectiveFrom: ymd(value.effectiveFrom), formulaCode: value.formulaCode };
+}
+function mapPolicy(value: { id: string; code: string; nameAr: string; nameEn: string | null; versions: Array<{ id: string; policyId: string; versionNumber: number; effectiveFrom: Date; effectiveTo: Date | null; status: HrCompensationPolicyVersionStatus; formulaCode: HrCompensationFormulaCode }> }) {
+  return { id: value.id, code: value.code, nameAr: value.nameAr, nameEn: value.nameEn, versions: value.versions.map((version) => ({ id: version.id, policyId: version.policyId, policyCode: value.code, policyNameAr: value.nameAr, policyNameEn: value.nameEn, versionNumber: version.versionNumber, effectiveFrom: ymd(version.effectiveFrom), effectiveTo: version.effectiveTo ? ymd(version.effectiveTo) : null, status: version.status, formulaCode: version.formulaCode })) };
+}
+function compensationPolicySnapshot(value: Prisma.JsonValue | null) {
+  return value === null ? null : value as unknown as { policyId: string; policyVersionId: string; policyCode: string; policyNameAr: string; policyNameEn: string | null; versionNumber: number; effectiveFrom: string; formulaCode: HrCompensationFormulaCode };
 }
 function ymd(value: Date): `${number}-${number}-${number}` { return value.toISOString().slice(0, 10) as `${number}-${number}-${number}`; }
 function firstOfMonth(value: Date) { return new Date(`${ymd(value).slice(0, 7)}-01T00:00:00.000Z`); }

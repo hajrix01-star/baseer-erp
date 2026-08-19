@@ -32,6 +32,9 @@ import {
   deferHrEmployeeAdministrativeDeductionRequestSchema,
   cancelHrEmployeeAdministrativeDeductionRequestSchema,
   setHrEmployeeCompensationRequestSchema,
+  createHrCompensationPolicyRequestSchema,
+  createHrCompensationPolicyVersionRequestSchema,
+  approveHrCompensationPolicyVersionRequestSchema,
   createHrPayrollRunRequestSchema,
   approveHrPayrollRunRequestSchema,
   payHrPayrollRunRequestSchema,
@@ -39,6 +42,8 @@ import {
   createHrEmployeeLeaveRequestSchema,
   returnHrEmployeeLeaveRequestSchema,
   hrEmployeeCompensationProfileReceiptSchema,
+  hrCompensationPoliciesReceiptSchema,
+  hrCompensationPolicyReceiptSchema,
   hrPayrollRunsReceiptSchema,
   hrPayrollRunsQuerySchema,
   hrPayrollRunDetailReceiptSchema,
@@ -276,6 +281,41 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
     const { idempotencyKey, ...request } = parsed.data;
     return hrEmployeeCompensationProfileReceiptSchema.parse(await this.payroll.setCompensation(context, request, idempotencyKey));
+  }
+
+  @Get('compensation-policies')
+  async listCompensationPolicies(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrCompensationPoliciesReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.listCompensationPolicies(context)) });
+  }
+
+  @Post('compensation-policies')
+  @HttpCode(201)
+  async createCompensationPolicy(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrCompensationPolicyRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid compensation policy request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrCompensationPolicyReceiptSchema.parse(await this.payroll.createCompensationPolicy(context, request, idempotencyKey));
+  }
+
+  @Post('compensation-policies/version')
+  @HttpCode(201)
+  async createCompensationPolicyVersion(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrCompensationPolicyVersionRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid compensation policy version request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrCompensationPolicyReceiptSchema.parse(await this.payroll.createCompensationPolicyVersion(context, request, idempotencyKey));
+  }
+
+  @Post('compensation-policies/approve')
+  async approveCompensationPolicyVersion(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = approveHrCompensationPolicyVersionRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid compensation policy approval request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.approve');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrCompensationPolicyReceiptSchema.parse(await this.payroll.approveCompensationPolicyVersion(context, request, idempotencyKey));
   }
 
   @Get('payroll-runs')

@@ -49,6 +49,7 @@ export type HrEmployeeCompensationProfileMinAggregateOutputType = {
   tenantId: string | null
   companyId: string | null
   employeeId: string | null
+  policyVersionId: string | null
   effectiveFrom: Date | null
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal | null
@@ -68,6 +69,7 @@ export type HrEmployeeCompensationProfileMaxAggregateOutputType = {
   tenantId: string | null
   companyId: string | null
   employeeId: string | null
+  policyVersionId: string | null
   effectiveFrom: Date | null
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal | null
@@ -87,6 +89,7 @@ export type HrEmployeeCompensationProfileCountAggregateOutputType = {
   tenantId: number
   companyId: number
   employeeId: number
+  policyVersionId: number
   effectiveFrom: number
   effectiveTo: number
   monthlyGross: number
@@ -124,6 +127,7 @@ export type HrEmployeeCompensationProfileMinAggregateInputType = {
   tenantId?: true
   companyId?: true
   employeeId?: true
+  policyVersionId?: true
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
@@ -143,6 +147,7 @@ export type HrEmployeeCompensationProfileMaxAggregateInputType = {
   tenantId?: true
   companyId?: true
   employeeId?: true
+  policyVersionId?: true
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
@@ -162,6 +167,7 @@ export type HrEmployeeCompensationProfileCountAggregateInputType = {
   tenantId?: true
   companyId?: true
   employeeId?: true
+  policyVersionId?: true
   effectiveFrom?: true
   effectiveTo?: true
   monthlyGross?: true
@@ -268,6 +274,7 @@ export type HrEmployeeCompensationProfileGroupByOutputType = {
   tenantId: string
   companyId: string
   employeeId: string
+  policyVersionId: string | null
   effectiveFrom: Date
   effectiveTo: Date | null
   monthlyGross: runtime.Decimal
@@ -310,6 +317,7 @@ export type HrEmployeeCompensationProfileWhereInput = {
   tenantId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   companyId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   employeeId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
+  policyVersionId?: Prisma.UuidNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -324,6 +332,7 @@ export type HrEmployeeCompensationProfileWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   employee?: Prisma.XOR<Prisma.HrEmployeeScalarRelationFilter, Prisma.HrEmployeeWhereInput>
+  policyVersion?: Prisma.XOR<Prisma.HrCompensationPolicyVersionNullableScalarRelationFilter, Prisma.HrCompensationPolicyVersionWhereInput> | null
 }
 
 export type HrEmployeeCompensationProfileOrderByWithRelationInput = {
@@ -331,6 +340,7 @@ export type HrEmployeeCompensationProfileOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  policyVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
@@ -345,6 +355,7 @@ export type HrEmployeeCompensationProfileOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   employee?: Prisma.HrEmployeeOrderByWithRelationInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionOrderByWithRelationInput
 }
 
 export type HrEmployeeCompensationProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -357,6 +368,7 @@ export type HrEmployeeCompensationProfileWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   companyId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   employeeId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
+  policyVersionId?: Prisma.UuidNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -371,6 +383,7 @@ export type HrEmployeeCompensationProfileWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   employee?: Prisma.XOR<Prisma.HrEmployeeScalarRelationFilter, Prisma.HrEmployeeWhereInput>
+  policyVersion?: Prisma.XOR<Prisma.HrCompensationPolicyVersionNullableScalarRelationFilter, Prisma.HrCompensationPolicyVersionWhereInput> | null
 }, "id" | "id_tenantId_companyId" | "companyId_employeeId_effectiveFrom">
 
 export type HrEmployeeCompensationProfileOrderByWithAggregationInput = {
@@ -378,6 +391,7 @@ export type HrEmployeeCompensationProfileOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  policyVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
@@ -405,6 +419,7 @@ export type HrEmployeeCompensationProfileScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string
   companyId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string
   employeeId?: Prisma.UuidWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string
+  policyVersionId?: Prisma.UuidNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | string | null
   effectiveFrom?: Prisma.DateTimeWithAggregatesFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableWithAggregatesFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalWithAggregatesFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -435,6 +450,7 @@ export type HrEmployeeCompensationProfileCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeCompensationProfilesInput
   employee: Prisma.HrEmployeeCreateNestedOneWithoutCompensationProfilesInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionCreateNestedOneWithoutCompensationProfilesInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedCreateInput = {
@@ -442,6 +458,7 @@ export type HrEmployeeCompensationProfileUncheckedCreateInput = {
   tenantId: string
   companyId: string
   employeeId: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -472,6 +489,7 @@ export type HrEmployeeCompensationProfileUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeCompensationProfilesNestedInput
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutCompensationProfilesNestedInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionUpdateOneWithoutCompensationProfilesNestedInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedUpdateInput = {
@@ -479,6 +497,7 @@ export type HrEmployeeCompensationProfileUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -498,6 +517,7 @@ export type HrEmployeeCompensationProfileCreateManyInput = {
   tenantId: string
   companyId: string
   employeeId: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -533,6 +553,7 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -574,6 +595,7 @@ export type HrEmployeeCompensationProfileCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  policyVersionId?: Prisma.SortOrder
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
@@ -601,6 +623,7 @@ export type HrEmployeeCompensationProfileMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  policyVersionId?: Prisma.SortOrder
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
@@ -620,6 +643,7 @@ export type HrEmployeeCompensationProfileMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  policyVersionId?: Prisma.SortOrder
   effectiveFrom?: Prisma.SortOrder
   effectiveTo?: Prisma.SortOrder
   monthlyGross?: Prisma.SortOrder
@@ -730,6 +754,48 @@ export type EnumHrCompensationMethodFieldUpdateOperationsInput = {
   set?: $Enums.HrCompensationMethod
 }
 
+export type HrEmployeeCompensationProfileCreateNestedManyWithoutPolicyVersionInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput> | Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput[] | Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput[]
+  connectOrCreate?: Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput[]
+  createMany?: Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInputEnvelope
+  connect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+}
+
+export type HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutPolicyVersionInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput> | Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput[] | Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput[]
+  connectOrCreate?: Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput[]
+  createMany?: Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInputEnvelope
+  connect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+}
+
+export type HrEmployeeCompensationProfileUpdateManyWithoutPolicyVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput> | Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput[] | Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput[]
+  connectOrCreate?: Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput[]
+  upsert?: Prisma.HrEmployeeCompensationProfileUpsertWithWhereUniqueWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpsertWithWhereUniqueWithoutPolicyVersionInput[]
+  createMany?: Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInputEnvelope
+  set?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  disconnect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  delete?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  connect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  update?: Prisma.HrEmployeeCompensationProfileUpdateWithWhereUniqueWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpdateWithWhereUniqueWithoutPolicyVersionInput[]
+  updateMany?: Prisma.HrEmployeeCompensationProfileUpdateManyWithWhereWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpdateManyWithWhereWithoutPolicyVersionInput[]
+  deleteMany?: Prisma.HrEmployeeCompensationProfileScalarWhereInput | Prisma.HrEmployeeCompensationProfileScalarWhereInput[]
+}
+
+export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutPolicyVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput> | Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput[] | Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput[]
+  connectOrCreate?: Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput[]
+  upsert?: Prisma.HrEmployeeCompensationProfileUpsertWithWhereUniqueWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpsertWithWhereUniqueWithoutPolicyVersionInput[]
+  createMany?: Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInputEnvelope
+  set?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  disconnect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  delete?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  connect?: Prisma.HrEmployeeCompensationProfileWhereUniqueInput | Prisma.HrEmployeeCompensationProfileWhereUniqueInput[]
+  update?: Prisma.HrEmployeeCompensationProfileUpdateWithWhereUniqueWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpdateWithWhereUniqueWithoutPolicyVersionInput[]
+  updateMany?: Prisma.HrEmployeeCompensationProfileUpdateManyWithWhereWithoutPolicyVersionInput | Prisma.HrEmployeeCompensationProfileUpdateManyWithWhereWithoutPolicyVersionInput[]
+  deleteMany?: Prisma.HrEmployeeCompensationProfileScalarWhereInput | Prisma.HrEmployeeCompensationProfileScalarWhereInput[]
+}
+
 export type HrEmployeeCompensationProfileCreateWithoutCompanyInput = {
   id?: string
   effectiveFrom: Date | string
@@ -745,11 +811,13 @@ export type HrEmployeeCompensationProfileCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employee: Prisma.HrEmployeeCreateNestedOneWithoutCompensationProfilesInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionCreateNestedOneWithoutCompensationProfilesInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedCreateWithoutCompanyInput = {
   id?: string
   employeeId: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -798,6 +866,7 @@ export type HrEmployeeCompensationProfileScalarWhereInput = {
   tenantId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   companyId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
   employeeId?: Prisma.UuidFilter<"HrEmployeeCompensationProfile"> | string
+  policyVersionId?: Prisma.UuidNullableFilter<"HrEmployeeCompensationProfile"> | string | null
   effectiveFrom?: Prisma.DateTimeFilter<"HrEmployeeCompensationProfile"> | Date | string
   effectiveTo?: Prisma.DateTimeNullableFilter<"HrEmployeeCompensationProfile"> | Date | string | null
   monthlyGross?: Prisma.DecimalFilter<"HrEmployeeCompensationProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -827,10 +896,12 @@ export type HrEmployeeCompensationProfileCreateWithoutEmployeeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeCompensationProfilesInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionCreateNestedOneWithoutCompensationProfilesInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedCreateWithoutEmployeeInput = {
   id?: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -871,9 +942,71 @@ export type HrEmployeeCompensationProfileUpdateManyWithWhereWithoutEmployeeInput
   data: Prisma.XOR<Prisma.HrEmployeeCompensationProfileUpdateManyMutationInput, Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeInput>
 }
 
+export type HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput = {
+  id?: string
+  effectiveFrom: Date | string
+  effectiveTo?: Date | string | null
+  monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeCompensationProfilesInput
+  employee: Prisma.HrEmployeeCreateNestedOneWithoutCompensationProfilesInput
+}
+
+export type HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput = {
+  id?: string
+  employeeId: string
+  effectiveFrom: Date | string
+  effectiveTo?: Date | string | null
+  monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type HrEmployeeCompensationProfileCreateOrConnectWithoutPolicyVersionInput = {
+  where: Prisma.HrEmployeeCompensationProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput>
+}
+
+export type HrEmployeeCompensationProfileCreateManyPolicyVersionInputEnvelope = {
+  data: Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInput | Prisma.HrEmployeeCompensationProfileCreateManyPolicyVersionInput[]
+  skipDuplicates?: boolean
+}
+
+export type HrEmployeeCompensationProfileUpsertWithWhereUniqueWithoutPolicyVersionInput = {
+  where: Prisma.HrEmployeeCompensationProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.HrEmployeeCompensationProfileUpdateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedUpdateWithoutPolicyVersionInput>
+  create: Prisma.XOR<Prisma.HrEmployeeCompensationProfileCreateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedCreateWithoutPolicyVersionInput>
+}
+
+export type HrEmployeeCompensationProfileUpdateWithWhereUniqueWithoutPolicyVersionInput = {
+  where: Prisma.HrEmployeeCompensationProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.HrEmployeeCompensationProfileUpdateWithoutPolicyVersionInput, Prisma.HrEmployeeCompensationProfileUncheckedUpdateWithoutPolicyVersionInput>
+}
+
+export type HrEmployeeCompensationProfileUpdateManyWithWhereWithoutPolicyVersionInput = {
+  where: Prisma.HrEmployeeCompensationProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeCompensationProfileUpdateManyMutationInput, Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutPolicyVersionInput>
+}
+
 export type HrEmployeeCompensationProfileCreateManyCompanyInput = {
   id?: string
   employeeId: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -903,11 +1036,13 @@ export type HrEmployeeCompensationProfileUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutCompensationProfilesNestedInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionUpdateOneWithoutCompensationProfilesNestedInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -925,6 +1060,7 @@ export type HrEmployeeCompensationProfileUncheckedUpdateWithoutCompanyInput = {
 export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -941,6 +1077,7 @@ export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyInput 
 
 export type HrEmployeeCompensationProfileCreateManyEmployeeInput = {
   id?: string
+  policyVersionId?: string | null
   effectiveFrom: Date | string
   effectiveTo?: Date | string | null
   monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -970,10 +1107,12 @@ export type HrEmployeeCompensationProfileUpdateWithoutEmployeeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeCompensationProfilesNestedInput
+  policyVersion?: Prisma.HrCompensationPolicyVersionUpdateOneWithoutCompensationProfilesNestedInput
 }
 
 export type HrEmployeeCompensationProfileUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -990,6 +1129,76 @@ export type HrEmployeeCompensationProfileUncheckedUpdateWithoutEmployeeInput = {
 
 export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HrEmployeeCompensationProfileCreateManyPolicyVersionInput = {
+  id?: string
+  employeeId: string
+  effectiveFrom: Date | string
+  effectiveTo?: Date | string | null
+  monthlyGross: runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: $Enums.HrCompensationMethod
+  foodAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: number | null
+  scheduledWorkDays?: number | null
+  notes?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type HrEmployeeCompensationProfileUpdateWithoutPolicyVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeCompensationProfilesNestedInput
+  employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutCompensationProfilesNestedInput
+}
+
+export type HrEmployeeCompensationProfileUncheckedUpdateWithoutPolicyVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  compensationMethod?: Prisma.EnumHrCompensationMethodFieldUpdateOperationsInput | $Enums.HrCompensationMethod
+  foodAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otherAllowance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  scheduledHoursPerDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  scheduledWorkDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type HrEmployeeCompensationProfileUncheckedUpdateManyWithoutPolicyVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   effectiveFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   effectiveTo?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   monthlyGross?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1011,6 +1220,7 @@ export type HrEmployeeCompensationProfileSelect<ExtArgs extends runtime.Types.Ex
   tenantId?: boolean
   companyId?: boolean
   employeeId?: boolean
+  policyVersionId?: boolean
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
@@ -1025,6 +1235,7 @@ export type HrEmployeeCompensationProfileSelect<ExtArgs extends runtime.Types.Ex
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeCompensationProfile"]>
 
 export type HrEmployeeCompensationProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1032,6 +1243,7 @@ export type HrEmployeeCompensationProfileSelectCreateManyAndReturn<ExtArgs exten
   tenantId?: boolean
   companyId?: boolean
   employeeId?: boolean
+  policyVersionId?: boolean
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
@@ -1046,6 +1258,7 @@ export type HrEmployeeCompensationProfileSelectCreateManyAndReturn<ExtArgs exten
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeCompensationProfile"]>
 
 export type HrEmployeeCompensationProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1053,6 +1266,7 @@ export type HrEmployeeCompensationProfileSelectUpdateManyAndReturn<ExtArgs exten
   tenantId?: boolean
   companyId?: boolean
   employeeId?: boolean
+  policyVersionId?: boolean
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
@@ -1067,6 +1281,7 @@ export type HrEmployeeCompensationProfileSelectUpdateManyAndReturn<ExtArgs exten
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeCompensationProfile"]>
 
 export type HrEmployeeCompensationProfileSelectScalar = {
@@ -1074,6 +1289,7 @@ export type HrEmployeeCompensationProfileSelectScalar = {
   tenantId?: boolean
   companyId?: boolean
   employeeId?: boolean
+  policyVersionId?: boolean
   effectiveFrom?: boolean
   effectiveTo?: boolean
   monthlyGross?: boolean
@@ -1088,18 +1304,21 @@ export type HrEmployeeCompensationProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HrEmployeeCompensationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "effectiveFrom" | "effectiveTo" | "monthlyGross" | "compensationMethod" | "foodAllowance" | "otherAllowance" | "scheduledHoursPerDay" | "scheduledWorkDays" | "notes" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeCompensationProfile"]>
+export type HrEmployeeCompensationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "employeeId" | "policyVersionId" | "effectiveFrom" | "effectiveTo" | "monthlyGross" | "compensationMethod" | "foodAllowance" | "otherAllowance" | "scheduledHoursPerDay" | "scheduledWorkDays" | "notes" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["hrEmployeeCompensationProfile"]>
 export type HrEmployeeCompensationProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }
 export type HrEmployeeCompensationProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }
 export type HrEmployeeCompensationProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  policyVersion?: boolean | Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>
 }
 
 export type $HrEmployeeCompensationProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1107,12 +1326,14 @@ export type $HrEmployeeCompensationProfilePayload<ExtArgs extends runtime.Types.
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     employee: Prisma.$HrEmployeePayload<ExtArgs>
+    policyVersion: Prisma.$HrCompensationPolicyVersionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tenantId: string
     companyId: string
     employeeId: string
+    policyVersionId: string | null
     effectiveFrom: Date
     effectiveTo: Date | null
     monthlyGross: runtime.Decimal
@@ -1521,6 +1742,7 @@ export interface Prisma__HrEmployeeCompensationProfileClient<T, Null = never, Ex
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.HrEmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__HrEmployeeClient<runtime.Types.Result.GetResult<Prisma.$HrEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  policyVersion<T extends Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs>>): Prisma.Prisma__HrCompensationPolicyVersionClient<runtime.Types.Result.GetResult<Prisma.$HrCompensationPolicyVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1554,6 +1776,7 @@ export interface HrEmployeeCompensationProfileFieldRefs {
   readonly tenantId: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
   readonly companyId: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
   readonly employeeId: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
+  readonly policyVersionId: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'String'>
   readonly effectiveFrom: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'DateTime'>
   readonly effectiveTo: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'DateTime'>
   readonly monthlyGross: Prisma.FieldRef<"HrEmployeeCompensationProfile", 'Decimal'>
@@ -1964,6 +2187,25 @@ export type HrEmployeeCompensationProfileDeleteManyArgs<ExtArgs extends runtime.
    * Limit how many HrEmployeeCompensationProfiles to delete.
    */
   limit?: number
+}
+
+/**
+ * HrEmployeeCompensationProfile.policyVersion
+ */
+export type HrEmployeeCompensationProfile$policyVersionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrCompensationPolicyVersion
+   */
+  select?: Prisma.HrCompensationPolicyVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrCompensationPolicyVersion
+   */
+  omit?: Prisma.HrCompensationPolicyVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrCompensationPolicyVersionInclude<ExtArgs> | null
+  where?: Prisma.HrCompensationPolicyVersionWhereInput
 }
 
 /**

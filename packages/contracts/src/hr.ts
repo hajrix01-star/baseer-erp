@@ -16,6 +16,8 @@ export const hrEmployeeAdvanceStatusSchema = z.enum(["ISSUED", "PARTIALLY_SETTLE
 export const hrEmployeeAdministrativeDeductionStatusSchema = z.enum(["OPEN", "PARTIALLY_APPLIED", "APPLIED", "DEFERRED", "CANCELLED"]);
 export const hrEmployeeLeaveTypeSchema = z.enum(["ANNUAL", "SICK", "UNPAID", "OTHER"]);
 export const hrEmployeeLeaveStatusSchema = z.enum(["APPROVED", "RETURNED"]);
+export const hrCompensationFormulaCodeSchema = z.enum(["STANDARD_MONTHLY_V1"]);
+export const hrCompensationPolicyVersionStatusSchema = z.enum(["DRAFT", "APPROVED", "SUPERSEDED"]);
 /** A fixed salary is entered as-is; an inclusive package derives the base and overtime. */
 export const hrCompensationMethodSchema = z.enum(["FIXED_MONTHLY", "INCLUSIVE_OVERTIME"]);
 export const hrEmployeeServiceTypeSchema = z.enum([
@@ -192,6 +194,8 @@ export const cancelHrEmployeeAdministrativeDeductionRequestSchema = z.object({
  */
 export const setHrEmployeeCompensationRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
+  /** Agreement may select an approved policy revision; absent selects the company default revision. */
+  policyVersionId: z.string().uuid().optional(),
   effectiveFrom: hrDateSchema,
   monthlyGross: hrAmountSchema.refine((value) => Number(value) > 0),
   compensationMethod: hrCompensationMethodSchema.default("FIXED_MONTHLY"),
@@ -210,6 +214,26 @@ export const setHrEmployeeCompensationRequestSchema = z.object({
     context.addIssue({ code: z.ZodIssueCode.custom, path: ["scheduledHoursPerDay"], message: "Inclusive overtime requires more than eight daily hours." });
   }
 });
+
+/** Policy formula is selected by the server; the client supplies no legal rates or coefficients. */
+export const createHrCompensationPolicyRequestSchema = z.object({
+  code: z.string().trim().min(1).max(80).regex(/^[A-Z0-9_\-]+$/),
+  nameAr: z.string().trim().min(1).max(160),
+  nameEn: z.string().trim().max(160).optional(),
+  effectiveFrom: hrDateSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const createHrCompensationPolicyVersionRequestSchema = z.object({
+  policyId: z.string().uuid(),
+  effectiveFrom: hrDateSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const approveHrCompensationPolicyVersionRequestSchema = z.object({
+  policyVersionId: z.string().uuid(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
 
 const payrollApplicationSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema.refine((value) => Number(value) > 0) }).strict();
 const payrollLineRequestSchema = z.object({
@@ -366,9 +390,26 @@ export const hrEmployeeAdministrativeDeductionDetailSchema = z.object({
 export const hrEmployeeCompensationProfileSchema = z.object({
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, effectiveFrom: businessDateSchema,
   effectiveTo: businessDateSchema.nullable(), monthlyGross: hrAmountSchema,
+  policyVersionId: z.string().uuid().nullable(),
   compensationMethod: hrCompensationMethodSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema,
   scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
   notes: z.string().max(1_000).nullable(),
+}).strict();
+
+export const hrCompensationPolicyVersionSchema = z.object({
+  id: z.string().uuid(), policyId: z.string().uuid(), policyCode: z.string().max(80), policyNameAr: z.string().max(160), policyNameEn: z.string().max(160).nullable(),
+  versionNumber: z.number().int().positive(), effectiveFrom: businessDateSchema, effectiveTo: businessDateSchema.nullable(),
+  status: hrCompensationPolicyVersionStatusSchema, formulaCode: hrCompensationFormulaCodeSchema,
+}).strict();
+
+export const hrCompensationPolicySchema = z.object({
+  id: z.string().uuid(), code: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable(),
+  versions: z.array(hrCompensationPolicyVersionSchema).max(100),
+}).strict();
+
+const hrCompensationPolicySnapshotSchema = z.object({
+  policyId: z.string().uuid(), policyVersionId: z.string().uuid(), policyCode: z.string().max(80), policyNameAr: z.string().max(160), policyNameEn: z.string().max(160).nullable(),
+  versionNumber: z.number().int().positive(), effectiveFrom: businessDateSchema, formulaCode: hrCompensationFormulaCodeSchema,
 }).strict();
 
 export const hrEmployeeLeaveSchema = z.object({
@@ -391,6 +432,7 @@ export const hrPayrollLineSchema = z.object({
   grossSalary: hrAmountSchema, compensationMethod: hrCompensationMethodSchema,
   basicSalary: hrAmountSchema, foodAllowance: hrAmountSchema, otherAllowance: hrAmountSchema, overtimeAmount: hrAmountSchema, overtimeHours: hrAmountSchema,
   scheduledHoursPerDay: z.number().int().nullable(), scheduledWorkDays: z.number().int().nullable(),
+  compensationPolicySnapshot: hrCompensationPolicySnapshotSchema.nullable(),
   advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema, paidAmount: hrAmountSchema,
   advances: z.array(hrPayrollApplicationDetailSchema).max(100), administrativeDeductions: z.array(hrPayrollApplicationDetailSchema).max(100),
 }).strict();
@@ -453,6 +495,8 @@ export const hrEmployeeAdvanceSettlementReceiptSchema = z.object({ id: z.string(
 export const hrEmployeeAdvanceDeferralReceiptSchema = z.object({ id: z.string().uuid(), advanceId: z.string().uuid(), deferredUntil: businessDateSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdministrativeDeductionReceiptSchema = z.object({ id: z.string().uuid(), deductionNumber: z.string().min(1).max(80), replayed: z.boolean() }).strict();
 export const hrEmployeeLeaveReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrCompensationPoliciesReceiptSchema = z.object({ companyId: companyIdSchema, policies: z.array(hrCompensationPolicySchema).max(100) }).strict();
+export const hrCompensationPolicyReceiptSchema = z.object({ id: z.string().uuid(), policyVersionId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeServicesReceiptSchema = z.object({ companyId: companyIdSchema, services: z.array(hrEmployeeServiceSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrEmployeeServiceDetailReceiptSchema = z.object({ companyId: companyIdSchema, service: hrEmployeeServiceSchema }).strict();
 export const hrEmployeeServiceReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
@@ -471,6 +515,9 @@ export type CreateHrEmployeeAdministrativeDeductionRequest = z.infer<typeof crea
 export type DeferHrEmployeeAdministrativeDeductionRequest = z.infer<typeof deferHrEmployeeAdministrativeDeductionRequestSchema>;
 export type CancelHrEmployeeAdministrativeDeductionRequest = z.infer<typeof cancelHrEmployeeAdministrativeDeductionRequestSchema>;
 export type SetHrEmployeeCompensationRequest = z.infer<typeof setHrEmployeeCompensationRequestSchema>;
+export type CreateHrCompensationPolicyRequest = z.infer<typeof createHrCompensationPolicyRequestSchema>;
+export type CreateHrCompensationPolicyVersionRequest = z.infer<typeof createHrCompensationPolicyVersionRequestSchema>;
+export type ApproveHrCompensationPolicyVersionRequest = z.infer<typeof approveHrCompensationPolicyVersionRequestSchema>;
 export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequestSchema>;
 export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
 export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;

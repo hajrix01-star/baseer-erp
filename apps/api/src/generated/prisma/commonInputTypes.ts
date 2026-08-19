@@ -949,6 +949,40 @@ export type EnumHrCompensationMethodWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
 }
 
+export type EnumHrCompensationPolicyVersionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationPolicyVersionStatus | Prisma.EnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel> | $Enums.HrCompensationPolicyVersionStatus
+}
+
+export type EnumHrCompensationFormulaCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationFormulaCode | Prisma.EnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel> | $Enums.HrCompensationFormulaCode
+}
+
+export type EnumHrCompensationPolicyVersionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationPolicyVersionStatus | Prisma.EnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationPolicyVersionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationPolicyVersionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel>
+}
+
+export type EnumHrCompensationFormulaCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationFormulaCode | Prisma.EnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationFormulaCodeWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationFormulaCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel>
+}
+
 export type EnumHrPayrollRunStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.HrPayrollRunStatus | Prisma.EnumHrPayrollRunStatusFieldRefInput<$PrismaModel>
   in?: $Enums.HrPayrollRunStatus[] | Prisma.ListEnumHrPayrollRunStatusFieldRefInput<$PrismaModel>
@@ -2102,6 +2136,40 @@ export type NestedEnumHrCompensationMethodWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHrCompensationMethodFilter<$PrismaModel>
+}
+
+export type NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationPolicyVersionStatus | Prisma.EnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel> | $Enums.HrCompensationPolicyVersionStatus
+}
+
+export type NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationFormulaCode | Prisma.EnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel> | $Enums.HrCompensationFormulaCode
+}
+
+export type NestedEnumHrCompensationPolicyVersionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationPolicyVersionStatus | Prisma.EnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationPolicyVersionStatus[] | Prisma.ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationPolicyVersionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationPolicyVersionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationPolicyVersionStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHrCompensationFormulaCodeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HrCompensationFormulaCode | Prisma.EnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  in?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HrCompensationFormulaCode[] | Prisma.ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHrCompensationFormulaCodeWithAggregatesFilter<$PrismaModel> | $Enums.HrCompensationFormulaCode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHrCompensationFormulaCodeFilter<$PrismaModel>
 }
 
 export type NestedEnumHrPayrollRunStatusFilter<$PrismaModel = never> = {

@@ -434,6 +434,8 @@ export const ModelName = {
   HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
   HrEmployeeAdministrativeDeductionAction: 'HrEmployeeAdministrativeDeductionAction',
   HrEmployeeCompensationProfile: 'HrEmployeeCompensationProfile',
+  HrCompensationPolicy: 'HrCompensationPolicy',
+  HrCompensationPolicyVersion: 'HrCompensationPolicyVersion',
   HrPayrollRun: 'HrPayrollRun',
   HrPayrollLine: 'HrPayrollLine',
   HrPayrollAdvanceApplication: 'HrPayrollAdvanceApplication',
@@ -471,7 +473,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeeLeave" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3213,6 +3215,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HrCompensationPolicy: {
+      payload: Prisma.$HrCompensationPolicyPayload<ExtArgs>
+      fields: Prisma.HrCompensationPolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrCompensationPolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrCompensationPolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.HrCompensationPolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrCompensationPolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        findMany: {
+          args: Prisma.HrCompensationPolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>[]
+        }
+        create: {
+          args: Prisma.HrCompensationPolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        createMany: {
+          args: Prisma.HrCompensationPolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrCompensationPolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.HrCompensationPolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        update: {
+          args: Prisma.HrCompensationPolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrCompensationPolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrCompensationPolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrCompensationPolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrCompensationPolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.HrCompensationPolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrCompensationPolicy>
+        }
+        groupBy: {
+          args: Prisma.HrCompensationPolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrCompensationPolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrCompensationPolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrCompensationPolicyCountAggregateOutputType> | number
+        }
+      }
+    }
+    HrCompensationPolicyVersion: {
+      payload: Prisma.$HrCompensationPolicyVersionPayload<ExtArgs>
+      fields: Prisma.HrCompensationPolicyVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrCompensationPolicyVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrCompensationPolicyVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.HrCompensationPolicyVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrCompensationPolicyVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        findMany: {
+          args: Prisma.HrCompensationPolicyVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>[]
+        }
+        create: {
+          args: Prisma.HrCompensationPolicyVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        createMany: {
+          args: Prisma.HrCompensationPolicyVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrCompensationPolicyVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.HrCompensationPolicyVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        update: {
+          args: Prisma.HrCompensationPolicyVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrCompensationPolicyVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrCompensationPolicyVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrCompensationPolicyVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrCompensationPolicyVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrCompensationPolicyVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.HrCompensationPolicyVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrCompensationPolicyVersion>
+        }
+        groupBy: {
+          args: Prisma.HrCompensationPolicyVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrCompensationPolicyVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrCompensationPolicyVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrCompensationPolicyVersionCountAggregateOutputType> | number
+        }
+      }
+    }
     HrPayrollRun: {
       payload: Prisma.$HrPayrollRunPayload<ExtArgs>
       fields: Prisma.HrPayrollRunFieldRefs
@@ -5527,6 +5677,7 @@ export const HrEmployeeCompensationProfileScalarFieldEnum = {
   tenantId: 'tenantId',
   companyId: 'companyId',
   employeeId: 'employeeId',
+  policyVersionId: 'policyVersionId',
   effectiveFrom: 'effectiveFrom',
   effectiveTo: 'effectiveTo',
   monthlyGross: 'monthlyGross',
@@ -5542,6 +5693,41 @@ export const HrEmployeeCompensationProfileScalarFieldEnum = {
 } as const
 
 export type HrEmployeeCompensationProfileScalarFieldEnum = (typeof HrEmployeeCompensationProfileScalarFieldEnum)[keyof typeof HrEmployeeCompensationProfileScalarFieldEnum]
+
+
+export const HrCompensationPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrCompensationPolicyScalarFieldEnum = (typeof HrCompensationPolicyScalarFieldEnum)[keyof typeof HrCompensationPolicyScalarFieldEnum]
+
+
+export const HrCompensationPolicyVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyId: 'policyId',
+  versionNumber: 'versionNumber',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  status: 'status',
+  formulaCode: 'formulaCode',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrCompensationPolicyVersionScalarFieldEnum = (typeof HrCompensationPolicyVersionScalarFieldEnum)[keyof typeof HrCompensationPolicyVersionScalarFieldEnum]
 
 
 export const HrPayrollRunScalarFieldEnum = {
@@ -5577,6 +5763,8 @@ export const HrPayrollLineScalarFieldEnum = {
   companyId: 'companyId',
   payrollRunId: 'payrollRunId',
   employeeId: 'employeeId',
+  compensationPolicyVersionId: 'compensationPolicyVersionId',
+  compensationPolicySnapshotJson: 'compensationPolicySnapshotJson',
   employeeNumberSnapshot: 'employeeNumberSnapshot',
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',
@@ -6547,6 +6735,34 @@ export type ListEnumHrCompensationMethodFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
+ * Reference to a field of type 'HrCompensationPolicyVersionStatus'
+ */
+export type EnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationPolicyVersionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrCompensationPolicyVersionStatus[]'
+ */
+export type ListEnumHrCompensationPolicyVersionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationPolicyVersionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrCompensationFormulaCode'
+ */
+export type EnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationFormulaCode'>
+    
+
+
+/**
+ * Reference to a field of type 'HrCompensationFormulaCode[]'
+ */
+export type ListEnumHrCompensationFormulaCodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrCompensationFormulaCode[]'>
+    
+
+
+/**
  * Reference to a field of type 'HrPayrollRunStatus'
  */
 export type EnumHrPayrollRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrPayrollRunStatus'>
@@ -6929,6 +7145,8 @@ export type GlobalOmitConfig = {
   hrEmployeeAdministrativeDeduction?: Prisma.HrEmployeeAdministrativeDeductionOmit
   hrEmployeeAdministrativeDeductionAction?: Prisma.HrEmployeeAdministrativeDeductionActionOmit
   hrEmployeeCompensationProfile?: Prisma.HrEmployeeCompensationProfileOmit
+  hrCompensationPolicy?: Prisma.HrCompensationPolicyOmit
+  hrCompensationPolicyVersion?: Prisma.HrCompensationPolicyVersionOmit
   hrPayrollRun?: Prisma.HrPayrollRunOmit
   hrPayrollLine?: Prisma.HrPayrollLineOmit
   hrPayrollAdvanceApplication?: Prisma.HrPayrollAdvanceApplicationOmit

@@ -88,6 +88,8 @@ export const ModelName = {
   HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
   HrEmployeeAdministrativeDeductionAction: 'HrEmployeeAdministrativeDeductionAction',
   HrEmployeeCompensationProfile: 'HrEmployeeCompensationProfile',
+  HrCompensationPolicy: 'HrCompensationPolicy',
+  HrCompensationPolicyVersion: 'HrCompensationPolicyVersion',
   HrPayrollRun: 'HrPayrollRun',
   HrPayrollLine: 'HrPayrollLine',
   HrPayrollAdvanceApplication: 'HrPayrollAdvanceApplication',
@@ -775,6 +777,7 @@ export const HrEmployeeCompensationProfileScalarFieldEnum = {
   tenantId: 'tenantId',
   companyId: 'companyId',
   employeeId: 'employeeId',
+  policyVersionId: 'policyVersionId',
   effectiveFrom: 'effectiveFrom',
   effectiveTo: 'effectiveTo',
   monthlyGross: 'monthlyGross',
@@ -790,6 +793,41 @@ export const HrEmployeeCompensationProfileScalarFieldEnum = {
 } as const
 
 export type HrEmployeeCompensationProfileScalarFieldEnum = (typeof HrEmployeeCompensationProfileScalarFieldEnum)[keyof typeof HrEmployeeCompensationProfileScalarFieldEnum]
+
+
+export const HrCompensationPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrCompensationPolicyScalarFieldEnum = (typeof HrCompensationPolicyScalarFieldEnum)[keyof typeof HrCompensationPolicyScalarFieldEnum]
+
+
+export const HrCompensationPolicyVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyId: 'policyId',
+  versionNumber: 'versionNumber',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  status: 'status',
+  formulaCode: 'formulaCode',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrCompensationPolicyVersionScalarFieldEnum = (typeof HrCompensationPolicyVersionScalarFieldEnum)[keyof typeof HrCompensationPolicyVersionScalarFieldEnum]
 
 
 export const HrPayrollRunScalarFieldEnum = {
@@ -825,6 +863,8 @@ export const HrPayrollLineScalarFieldEnum = {
   companyId: 'companyId',
   payrollRunId: 'payrollRunId',
   employeeId: 'employeeId',
+  compensationPolicyVersionId: 'compensationPolicyVersionId',
+  compensationPolicySnapshotJson: 'compensationPolicySnapshotJson',
   employeeNumberSnapshot: 'employeeNumberSnapshot',
   employeeNameArSnapshot: 'employeeNameArSnapshot',
   employeeNameEnSnapshot: 'employeeNameEnSnapshot',

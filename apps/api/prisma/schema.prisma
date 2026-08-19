@@ -261,6 +261,18 @@ enum HrCompensationMethod {
   INCLUSIVE_OVERTIME
 }
 
+/// Formula selection is server-owned. Legal-calculation catalogues are outside
+/// V1; a policy version only authorises a stable internal formula revision.
+enum HrCompensationFormulaCode {
+  STANDARD_MONTHLY_V1
+}
+
+enum HrCompensationPolicyVersionStatus {
+  DRAFT
+  APPROVED
+  SUPERSEDED
+}
+
 enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
@@ -377,6 +389,8 @@ model Company {
   hrEmployeeAdministrativeDeductions HrEmployeeAdministrativeDeduction[]
   hrEmployeeAdministrativeDeductionActions HrEmployeeAdministrativeDeductionAction[]
   hrEmployeeCompensationProfiles HrEmployeeCompensationProfile[]
+  hrCompensationPolicies        HrCompensationPolicy[]
+  hrCompensationPolicyVersions  HrCompensationPolicyVersion[]
   hrEmployeeLeaves             HrEmployeeLeave[]
   hrPayrollRuns                 HrPayrollRun[]
   hrPayrollLines                HrPayrollLine[]
@@ -1257,6 +1271,7 @@ model HrEmployeeCompensationProfile {
   tenantId      String   @db.Uuid
   companyId     String   @db.Uuid
   employeeId    String   @db.Uuid
+  policyVersionId String? @db.Uuid
   effectiveFrom DateTime @db.Date
   effectiveTo   DateTime? @db.Date
   monthlyGross  Decimal  @db.Decimal(18, 4)
@@ -1272,10 +1287,61 @@ model HrEmployeeCompensationProfile {
 
   company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  policyVersion HrCompensationPolicyVersion? @relation("HrCompensationProfilePolicyVersion", fields: [policyVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeId, effectiveFrom])
   @@index([tenantId, companyId, employeeId, effectiveFrom])
+}
+
+/// Company-owned policy container. It does not contain employee amounts or a
+/// client-supplied formula; those remain separate employee agreements.
+model HrCompensationPolicy {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  code      String   @db.VarChar(80)
+  nameAr    String   @db.VarChar(160)
+  nameEn    String?  @db.VarChar(160)
+  createdByUserId String @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  versions HrCompensationPolicyVersion[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, code])
+  @@index([tenantId, companyId, code])
+}
+
+/// Effective-dated, approved company policy revision. Historic versions are
+/// never edited; approval closes only a preceding future/current interval.
+model HrCompensationPolicyVersion {
+  id            String                            @id @default(uuid()) @db.Uuid
+  tenantId      String                            @db.Uuid
+  companyId     String                            @db.Uuid
+  policyId      String                            @db.Uuid
+  versionNumber Int
+  effectiveFrom DateTime                          @db.Date
+  effectiveTo   DateTime?                         @db.Date
+  status        HrCompensationPolicyVersionStatus @default(DRAFT)
+  formulaCode   HrCompensationFormulaCode         @default(STANDARD_MONTHLY_V1)
+  approvedByUserId String?                        @db.Uuid
+  approvedAt    DateTime?                         @db.Timestamptz(6)
+  createdByUserId String                          @db.Uuid
+  createdAt     DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime                          @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  policy  HrCompensationPolicy @relation(fields: [policyId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  compensationProfiles HrEmployeeCompensationProfile[] @relation("HrCompensationProfilePolicyVersion")
+  payrollLines HrPayrollLine[] @relation("HrPayrollLinePolicyVersion")
+
+  @@unique([id, tenantId, companyId])
+  @@unique([policyId, versionNumber])
+  @@unique([policyId, effectiveFrom])
+  @@index([tenantId, companyId, policyId, status, effectiveFrom])
 }
 
 model HrPayrollRun {
@@ -1320,6 +1386,8 @@ model HrPayrollLine {
   companyId                     String   @db.Uuid
   payrollRunId                  String   @db.Uuid
   employeeId                    String   @db.Uuid
+  compensationPolicyVersionId   String?  @db.Uuid
+  compensationPolicySnapshotJson Json?
   employeeNumberSnapshot         String   @db.VarChar(80)
   employeeNameArSnapshot         String   @db.VarChar(160)
   employeeNameEnSnapshot         String?  @db.VarChar(160)
@@ -1342,6 +1410,7 @@ model HrPayrollLine {
   company   Company       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   payrollRun HrPayrollRun @relation(fields: [payrollRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   employee  HrEmployee    @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  compensationPolicyVersion HrCompensationPolicyVersion? @relation("HrPayrollLinePolicyVersion", fields: [compensationPolicyVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   advanceApplications HrPayrollAdvanceApplication[]
   deductionApplications HrPayrollAdministrativeDeductionApplication[]
 

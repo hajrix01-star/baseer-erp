@@ -374,6 +374,22 @@ export const HrCompensationMethod = {
 export type HrCompensationMethod = (typeof HrCompensationMethod)[keyof typeof HrCompensationMethod]
 
 
+export const HrCompensationFormulaCode = {
+  STANDARD_MONTHLY_V1: 'STANDARD_MONTHLY_V1'
+} as const
+
+export type HrCompensationFormulaCode = (typeof HrCompensationFormulaCode)[keyof typeof HrCompensationFormulaCode]
+
+
+export const HrCompensationPolicyVersionStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  SUPERSEDED: 'SUPERSEDED'
+} as const
+
+export type HrCompensationPolicyVersionStatus = (typeof HrCompensationPolicyVersionStatus)[keyof typeof HrCompensationPolicyVersionStatus]
+
+
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',
