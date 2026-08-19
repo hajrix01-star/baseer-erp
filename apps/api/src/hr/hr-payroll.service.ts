@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 
 import type {
   ApproveHrPayrollRunRequest,
+  DiscardHrPayrollRunRequest,
   ApproveHrCompensationPolicyVersionRequest,
   CreateHrCompensationPolicyRequest,
   CreateHrCompensationPolicyVersionRequest,
@@ -46,6 +47,7 @@ const POLICY_VERSION_OPERATION = 'hr.compensation_policy.version.create';
 const POLICY_APPROVE_OPERATION = 'hr.compensation_policy.version.approve';
 const CREATE_OPERATION = 'hr.payroll.create';
 const APPROVE_OPERATION = 'hr.payroll.approve';
+const DISCARD_OPERATION = 'hr.payroll.discard';
 const PAY_OPERATION = 'hr.payroll.pay';
 const REVERSE_OPERATION = 'hr.payroll.reverse';
 const PAYROLL_EXPENSE = 'PAYROLL_EXPENSE';
@@ -56,6 +58,7 @@ const ADMIN_DEDUCTION_RECOVERY = 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY';
 type CreateInput = Omit<CreateHrPayrollRunRequest, 'idempotencyKey'>;
 type PreviewInput = PreviewHrPayrollRunRequest;
 type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
+type DiscardInput = Omit<DiscardHrPayrollRunRequest, 'idempotencyKey'>;
 type PayInput = Omit<PayHrPayrollRunRequest, 'idempotencyKey'>;
 type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
@@ -453,6 +456,27 @@ export class HrPayrollService {
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
       await this.audit(tx, context, 'hr.payroll.approved', 'HrPayrollRun', run.id, { ...receipt, journalEntryId: journal.journalEntryId });
+      return receipt;
+    });
+  }
+
+  /** Drafts have no posted journal, so discarding them is safe and leaves no financial history. */
+  async discard(context: TrustedCompanyActorContext, input: DiscardInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.begin(tx, context, DISCARD_OPERATION, key, input);
+      if (begun.kind === 'replay') return begun.response.body as { id: string; runNumber: string; replayed: boolean };
+      const run = await this.findRun(tx, context, input.payrollRunId, false);
+      if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be discarded.');
+      const lineIds = run.lines.map((line) => line.id);
+      if (lineIds.length) {
+        await tx.hrPayrollAdvanceApplication.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollLineId: { in: lineIds } } });
+        await tx.hrPayrollAdministrativeDeductionApplication.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollLineId: { in: lineIds } } });
+        await tx.hrPayrollLine.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollRunId: run.id } });
+      }
+      await tx.hrPayrollRun.delete({ where: { id: run.id } });
+      const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt);
+      await this.audit(tx, context, 'hr.payroll.discarded', 'HrPayrollRun', run.id, receipt);
       return receipt;
     });
   }

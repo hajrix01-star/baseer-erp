@@ -374,6 +374,12 @@ export const approveHrPayrollRunRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** A draft has no journal entry and may be discarded before approval. */
+export const discardHrPayrollRunRequestSchema = z.object({
+  payrollRunId: z.string().uuid(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 export const payHrPayrollRunRequestSchema = z.object({
   payrollRunId: z.string().uuid(),
   businessDate: hrDateSchema,
@@ -707,6 +713,7 @@ export type ApproveHrCompensationPolicyVersionRequest = z.infer<typeof approveHr
 export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequestSchema>;
 export type PreviewHrPayrollRunRequest = z.infer<typeof previewHrPayrollRunRequestSchema>;
 export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
+export type DiscardHrPayrollRunRequest = z.infer<typeof discardHrPayrollRunRequestSchema>;
 export type PayHrPayrollRunRequest = z.infer<typeof payHrPayrollRunRequestSchema>;
 export type ReverseHrPayrollRunRequest = z.infer<typeof reverseHrPayrollRunRequestSchema>;
 export type CreateHrEmployeeLeaveRequest = z.infer<typeof createHrEmployeeLeaveRequestSchema>;

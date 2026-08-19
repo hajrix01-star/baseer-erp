@@ -46,6 +46,7 @@ import {
   createHrPayrollRunRequestSchema,
   previewHrPayrollRunRequestSchema,
   approveHrPayrollRunRequestSchema,
+  discardHrPayrollRunRequestSchema,
   payHrPayrollRunRequestSchema,
   reverseHrPayrollRunRequestSchema,
   createHrEmployeeLeaveRequestSchema,
@@ -407,6 +408,15 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, 'hr.payroll.approve');
     const { idempotencyKey, ...request } = parsed.data;
     return hrPayrollRunReceiptSchema.parse(await this.payroll.approve(context, request, idempotencyKey));
+  }
+
+  @Post('payroll-runs/discard')
+  async discardPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = discardHrPayrollRunRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll draft discard request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.discard(context, request, idempotencyKey));
   }
 
   @Post('payroll-runs/pay')
