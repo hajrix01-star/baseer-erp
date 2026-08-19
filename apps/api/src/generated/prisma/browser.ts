@@ -198,6 +198,12 @@ export type HrEmployeeAdvanceDeferral = Prisma.HrEmployeeAdvanceDeferralModel
  */
 export type HrEmployeeAdministrativeDeduction = Prisma.HrEmployeeAdministrativeDeductionModel
 /**
+ * Model HrEmployeeAdministrativeDeductionAction
+ * Immutable history for a deduction. Payroll will append APPLY/REVERSE rows;
+ * planning actions never create a financial posting.
+ */
+export type HrEmployeeAdministrativeDeductionAction = Prisma.HrEmployeeAdministrativeDeductionActionModel
+/**
  * Model FinanceJournalLine
  * 
  */

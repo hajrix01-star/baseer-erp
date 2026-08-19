@@ -8,12 +8,16 @@ export type HrDetail = { employee: HrEmployee; services: HrService[]; movements:
 export type HrEmployeesReceipt = { employees: HrEmployee[] };
 export type HrAdvance = { id: string; employeeId: string; employeeNameAr: string; employeeNameEn: string | null; advanceNumber: string; businessDate: string; originalAmount: string; settledAmount: string; remainingAmount: string; status: "ISSUED" | "PARTIALLY_SETTLED" | "SETTLED" | "REVERSED"; nextSettlementDate: string | null; notes: string | null; journalEntryId: string; allocations: Array<{ vaultId: string; vaultNameAr: string; vaultNameEn: string; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; amount: string }> };
 export type HrAdvancesReceipt = { advances: HrAdvance[] };
+export type HrAdvanceDetail = { advance: HrAdvance; settlements: Array<{ id: string; source: "PAYROLL" | "MANUAL_RECEIPT"; businessDate: string; amount: string; journalEntryId: string | null; sourceReference: string | null }>; deferrals: Array<{ id: string; businessDate: string; deferredUntil: string; reason: string }> };
 export type HrAdministrativeDeduction = { id: string; employeeId: string; employeeNameAr: string; employeeNameEn: string | null; deductionNumber: string; businessDate: string; originalAmount: string; appliedAmount: string; remainingAmount: string; status: "OPEN" | "PARTIALLY_APPLIED" | "APPLIED" | "DEFERRED" | "CANCELLED"; plannedPayrollDate: string | null; description: string; cancellationReason: string | null };
 export type HrAdministrativeDeductionsReceipt = { deductions: HrAdministrativeDeduction[] };
+export type HrAdministrativeDeductionDetail = { deduction: HrAdministrativeDeduction; actions: Array<{ id: string; actionType: "CREATED" | "DEFERRED" | "CANCELLED" | "APPLIED" | "REVERSED"; businessDate: string; amount: string | null; plannedPayrollDate: string | null; reason: string | null }> };
 
 export function listHrEmployees(session: ActiveSession) { return api<HrEmployeesReceipt>(session, "/hr/employees"); }
 export function listHrAdvances(session: ActiveSession) { return api<HrAdvancesReceipt>(session, "/hr/advances"); }
+export function getHrAdvance(session: ActiveSession, advanceId: string) { return api<HrAdvanceDetail>(session, `/hr/advances/${encodeURIComponent(advanceId)}`); }
 export function listHrAdministrativeDeductions(session: ActiveSession) { return api<HrAdministrativeDeductionsReceipt>(session, "/hr/deductions"); }
+export function getHrAdministrativeDeduction(session: ActiveSession, deductionId: string) { return api<HrAdministrativeDeductionDetail>(session, `/hr/deductions/${encodeURIComponent(deductionId)}`); }
 export function issueHrEmployeeAdvance(session: ActiveSession, payload: unknown) { return api(session, "/hr/advances", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function settleHrEmployeeAdvanceDirectly(session: ActiveSession, payload: unknown) { return api(session, "/hr/advances/settle-directly", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function deferHrEmployeeAdvance(session: ActiveSession, payload: unknown) { return api(session, "/hr/advances/defer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

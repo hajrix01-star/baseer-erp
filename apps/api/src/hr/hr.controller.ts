@@ -10,6 +10,8 @@ import {
   hrEmployeeAdvanceSettlementReceiptSchema,
   hrEmployeeAdvanceDeferralReceiptSchema,
   hrEmployeeAdvancesReceiptSchema,
+  hrEmployeeAdvanceDetailReceiptSchema,
+  hrEmployeeAdministrativeDeductionDetailReceiptSchema,
   hrEmployeeAdministrativeDeductionsReceiptSchema,
   hrEmployeeAdministrativeDeductionReceiptSchema,
   hrEmployeeEntityReceiptSchema,
@@ -93,6 +95,12 @@ export class HrController {
     return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, advances: await this.advances.list(context) });
   }
 
+  @Get('advances/:advanceId')
+  async advanceDetail(@Param('advanceId') advanceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.advances.read');
+    return hrEmployeeAdvanceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.detail(context, advanceId)) });
+  }
+
   @Post('advances')
   @HttpCode(201)
   async issueAdvance(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
@@ -127,6 +135,12 @@ export class HrController {
   async listAdministrativeDeductions(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
     return hrEmployeeAdministrativeDeductionsReceiptSchema.parse({ companyId: context.companyId, deductions: await this.deductions.list(context) });
+  }
+
+  @Get('deductions/:deductionId')
+  async administrativeDeductionDetail(@Param('deductionId') deductionId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
+    return hrEmployeeAdministrativeDeductionDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.detail(context, deductionId)) });
   }
 
   @Post('deductions')

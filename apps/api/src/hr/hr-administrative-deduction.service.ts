@@ -7,7 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DocumentSerialService } from '../core-controls/document-serial.service.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { HrEmployeeAdministrativeDeductionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { HrEmployeeAdministrativeDeductionActionType, HrEmployeeAdministrativeDeductionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 
 type CreateInput = Omit<CreateHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
 type DeferInput = Omit<DeferHrEmployeeAdministrativeDeductionRequest, 'idempotencyKey'>;
@@ -48,6 +48,20 @@ export class HrAdministrativeDeductionService {
     });
   }
 
+  async detail(context: TrustedCompanyActorContext, deductionId: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const deduction = await tx.hrEmployeeAdministrativeDeduction.findFirst({
+        where: { id: deductionId, tenantId: context.tenantId, companyId: context.companyId },
+        include: { employee: { select: { id: true, nameAr: true, nameEn: true } }, actions: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500 } },
+      });
+      if (!deduction) throw new NotFoundException('The administrative deduction was not found.');
+      return {
+        deduction: mapDeduction({ ...deduction, employeeNameAr: deduction.employee.nameAr, employeeNameEn: deduction.employee.nameEn }),
+        actions: deduction.actions.map((action) => ({ id: action.id, actionType: action.actionType, businessDate: day(action.businessDate), amount: action.amount?.toFixed(4) ?? null, plannedPayrollDate: action.plannedPayrollDate ? day(action.plannedPayrollDate) : null, reason: action.reason })),
+      };
+    });
+  }
+
   async create(context: TrustedCompanyActorContext, raw: CreateInput, idempotencyKey: string) {
     const input = normalizeCreate(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
@@ -63,6 +77,7 @@ export class HrAdministrativeDeductionService {
       const deductionNumber = `DED-${businessDate.replaceAll('-', '')}-${serial.toString()}`;
       const id = randomUUID();
       await tx.hrEmployeeAdministrativeDeduction.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, deductionNumber, businessDate: input.businessDate, originalAmount: input.amount, remainingAmount: input.amount, plannedPayrollDate: input.plannedPayrollDate ?? null, description: input.description, createdByUserId: context.actorUserId } });
+      await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId: id, actionType: HrEmployeeAdministrativeDeductionActionType.CREATED, businessDate: input.businessDate, amount: input.amount, plannedPayrollDate: input.plannedPayrollDate ?? null, reason: input.description, createdByUserId: context.actorUserId } });
       const receipt = { id, deductionNumber, replayed: false };
       await this.audit(tx, context, 'hr.administrative_deduction.created', id, null, { ...input, ...receipt, amount: input.amount.toFixed(4) });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
@@ -80,6 +95,7 @@ export class HrAdministrativeDeductionService {
       if (input.deferredUntil.getTime() <= input.businessDate.getTime()) throw new BadRequestException('The deferred payroll date must be after the deferral date.');
       const prior = await this.openDeduction(tx, context, input.deductionId);
       const updated = await tx.hrEmployeeAdministrativeDeduction.update({ where: { id: prior.id }, data: { status: HrEmployeeAdministrativeDeductionStatus.DEFERRED, plannedPayrollDate: input.deferredUntil } });
+      await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId: prior.id, actionType: HrEmployeeAdministrativeDeductionActionType.DEFERRED, businessDate: input.businessDate, plannedPayrollDate: input.deferredUntil, reason: input.reason, createdByUserId: context.actorUserId } });
       const receipt = { id: updated.id, deductionNumber: updated.deductionNumber, replayed: false };
       await this.audit(tx, context, 'hr.administrative_deduction.deferred', updated.id, mapDeduction(prior), { ...receipt, deferredUntil: day(input.deferredUntil), reason: input.reason });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
@@ -96,6 +112,7 @@ export class HrAdministrativeDeductionService {
       await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const prior = await this.openDeduction(tx, context, input.deductionId);
       const updated = await tx.hrEmployeeAdministrativeDeduction.update({ where: { id: prior.id }, data: { status: HrEmployeeAdministrativeDeductionStatus.CANCELLED, remainingAmount: new Prisma.Decimal(0), plannedPayrollDate: null, cancellationReason: input.reason, cancelledAt: new Date() } });
+      await tx.hrEmployeeAdministrativeDeductionAction.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, deductionId: prior.id, actionType: HrEmployeeAdministrativeDeductionActionType.CANCELLED, businessDate: input.businessDate, amount: prior.remainingAmount, reason: input.reason, createdByUserId: context.actorUserId } });
       const receipt = { id: updated.id, deductionNumber: updated.deductionNumber, replayed: false };
       await this.audit(tx, context, 'hr.administrative_deduction.cancelled', updated.id, mapDeduction(prior), { ...receipt, reason: input.reason });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
@@ -122,4 +139,4 @@ function day(value: Date) { return value.toISOString().slice(0, 10) as `${number
 function tomorrow() { return new Date(Date.now() + 86_400_000); }
 function jsonPayload(value: unknown): never { return JSON.parse(JSON.stringify(value)) as never; }
 function rethrowIdempotency(error: unknown): never { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different administrative-deduction data.'); throw error; }
-function mapDeduction(value: { id: string; deductionNumber: string; businessDate: Date; originalAmount: Prisma.Decimal; appliedAmount: Prisma.Decimal; remainingAmount: Prisma.Decimal; status: HrEmployeeAdministrativeDeductionStatus; plannedPayrollDate: Date | null; description: string; cancellationReason: string | null }) { return { id: value.id, deductionNumber: value.deductionNumber, businessDate: day(value.businessDate), originalAmount: value.originalAmount.toFixed(4), appliedAmount: value.appliedAmount.toFixed(4), remainingAmount: value.remainingAmount.toFixed(4), status: value.status, plannedPayrollDate: value.plannedPayrollDate ? day(value.plannedPayrollDate) : null, description: value.description, cancellationReason: value.cancellationReason }; }
+function mapDeduction(value: { id: string; employeeId: string; employeeNameAr?: string; employeeNameEn?: string | null; deductionNumber: string; businessDate: Date; originalAmount: Prisma.Decimal; appliedAmount: Prisma.Decimal; remainingAmount: Prisma.Decimal; status: HrEmployeeAdministrativeDeductionStatus; plannedPayrollDate: Date | null; description: string; cancellationReason: string | null }) { return { id: value.id, employeeId: value.employeeId, employeeNameAr: value.employeeNameAr ?? '', employeeNameEn: value.employeeNameEn ?? null, deductionNumber: value.deductionNumber, businessDate: day(value.businessDate), originalAmount: value.originalAmount.toFixed(4), appliedAmount: value.appliedAmount.toFixed(4), remainingAmount: value.remainingAmount.toFixed(4), status: value.status, plannedPayrollDate: value.plannedPayrollDate ? day(value.plannedPayrollDate) : null, description: value.description, cancellationReason: value.cancellationReason }; }

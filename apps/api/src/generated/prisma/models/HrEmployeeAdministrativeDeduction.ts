@@ -323,6 +323,7 @@ export type HrEmployeeAdministrativeDeductionWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeAdministrativeDeduction"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   employee?: Prisma.XOR<Prisma.HrEmployeeScalarRelationFilter, Prisma.HrEmployeeWhereInput>
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionListRelationFilter
 }
 
 export type HrEmployeeAdministrativeDeductionOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type HrEmployeeAdministrativeDeductionOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   employee?: Prisma.HrEmployeeOrderByWithRelationInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionOrderByRelationAggregateInput
 }
 
 export type HrEmployeeAdministrativeDeductionWhereUniqueInput = Prisma.AtLeast<{
@@ -372,6 +374,7 @@ export type HrEmployeeAdministrativeDeductionWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"HrEmployeeAdministrativeDeduction"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   employee?: Prisma.XOR<Prisma.HrEmployeeScalarRelationFilter, Prisma.HrEmployeeWhereInput>
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_deductionNumber">
 
 export type HrEmployeeAdministrativeDeductionOrderByWithAggregationInput = {
@@ -439,6 +442,7 @@ export type HrEmployeeAdministrativeDeductionCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeAdministrativeDeductionsInput
   employee: Prisma.HrEmployeeCreateNestedOneWithoutAdministrativeDeductionsInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedCreateInput = {
@@ -459,6 +463,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedCreateInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionUpdateInput = {
@@ -478,6 +483,7 @@ export type HrEmployeeAdministrativeDeductionUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeAdministrativeDeductionsNestedInput
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdministrativeDeductionsNestedInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedUpdateInput = {
@@ -498,6 +504,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedUpdateInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionCreateManyInput = {
@@ -650,6 +657,11 @@ export type HrEmployeeAdministrativeDeductionSumOrderByAggregateInput = {
   remainingAmount?: Prisma.SortOrder
 }
 
+export type HrEmployeeAdministrativeDeductionScalarRelationFilter = {
+  is?: Prisma.HrEmployeeAdministrativeDeductionWhereInput
+  isNot?: Prisma.HrEmployeeAdministrativeDeductionWhereInput
+}
+
 export type HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput = {
   create?: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionCreateWithoutCompanyInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutCompanyInput> | Prisma.HrEmployeeAdministrativeDeductionCreateWithoutCompanyInput[] | Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutCompanyInput[]
   connectOrCreate?: Prisma.HrEmployeeAdministrativeDeductionCreateOrConnectWithoutCompanyInput | Prisma.HrEmployeeAdministrativeDeductionCreateOrConnectWithoutCompanyInput[]
@@ -738,6 +750,20 @@ export type EnumHrEmployeeAdministrativeDeductionStatusFieldUpdateOperationsInpu
   set?: $Enums.HrEmployeeAdministrativeDeductionStatus
 }
 
+export type HrEmployeeAdministrativeDeductionCreateNestedOneWithoutActionsInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionCreateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdministrativeDeductionCreateOrConnectWithoutActionsInput
+  connect?: Prisma.HrEmployeeAdministrativeDeductionWhereUniqueInput
+}
+
+export type HrEmployeeAdministrativeDeductionUpdateOneRequiredWithoutActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionCreateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.HrEmployeeAdministrativeDeductionCreateOrConnectWithoutActionsInput
+  upsert?: Prisma.HrEmployeeAdministrativeDeductionUpsertWithoutActionsInput
+  connect?: Prisma.HrEmployeeAdministrativeDeductionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionUpdateToOneWithWhereWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUpdateWithoutActionsInput>, Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutActionsInput>
+}
+
 export type HrEmployeeAdministrativeDeductionCreateWithoutCompanyInput = {
   id?: string
   deductionNumber: string
@@ -754,6 +780,7 @@ export type HrEmployeeAdministrativeDeductionCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employee: Prisma.HrEmployeeCreateNestedOneWithoutAdministrativeDeductionsInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedCreateWithoutCompanyInput = {
@@ -772,6 +799,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedCreateWithoutCompanyInput 
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionCreateOrConnectWithoutCompanyInput = {
@@ -839,6 +867,7 @@ export type HrEmployeeAdministrativeDeductionCreateWithoutEmployeeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeAdministrativeDeductionsInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedCreateWithoutEmployeeInput = {
@@ -856,6 +885,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedCreateWithoutEmployeeInput
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutDeductionInput
 }
 
 export type HrEmployeeAdministrativeDeductionCreateOrConnectWithoutEmployeeInput = {
@@ -882,6 +912,100 @@ export type HrEmployeeAdministrativeDeductionUpdateWithWhereUniqueWithoutEmploye
 export type HrEmployeeAdministrativeDeductionUpdateManyWithWhereWithoutEmployeeInput = {
   where: Prisma.HrEmployeeAdministrativeDeductionScalarWhereInput
   data: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionUpdateManyMutationInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeInput>
+}
+
+export type HrEmployeeAdministrativeDeductionCreateWithoutActionsInput = {
+  id?: string
+  deductionNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  appliedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdministrativeDeductionStatus
+  plannedPayrollDate?: Date | string | null
+  description: string
+  cancellationReason?: string | null
+  cancelledAt?: Date | string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutHrEmployeeAdministrativeDeductionsInput
+  employee: Prisma.HrEmployeeCreateNestedOneWithoutAdministrativeDeductionsInput
+}
+
+export type HrEmployeeAdministrativeDeductionUncheckedCreateWithoutActionsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  employeeId: string
+  deductionNumber: string
+  businessDate: Date | string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  appliedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.HrEmployeeAdministrativeDeductionStatus
+  plannedPayrollDate?: Date | string | null
+  description: string
+  cancellationReason?: string | null
+  cancelledAt?: Date | string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type HrEmployeeAdministrativeDeductionCreateOrConnectWithoutActionsInput = {
+  where: Prisma.HrEmployeeAdministrativeDeductionWhereUniqueInput
+  create: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionCreateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutActionsInput>
+}
+
+export type HrEmployeeAdministrativeDeductionUpsertWithoutActionsInput = {
+  update: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionUpdateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutActionsInput>
+  create: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionCreateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateWithoutActionsInput>
+  where?: Prisma.HrEmployeeAdministrativeDeductionWhereInput
+}
+
+export type HrEmployeeAdministrativeDeductionUpdateToOneWithWhereWithoutActionsInput = {
+  where?: Prisma.HrEmployeeAdministrativeDeductionWhereInput
+  data: Prisma.XOR<Prisma.HrEmployeeAdministrativeDeductionUpdateWithoutActionsInput, Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutActionsInput>
+}
+
+export type HrEmployeeAdministrativeDeductionUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deductionNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  appliedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdministrativeDeductionStatus
+  plannedPayrollDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeAdministrativeDeductionsNestedInput
+  employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdministrativeDeductionsNestedInput
+}
+
+export type HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  deductionNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  appliedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumHrEmployeeAdministrativeDeductionStatusFieldUpdateOperationsInput | $Enums.HrEmployeeAdministrativeDeductionStatus
+  plannedPayrollDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HrEmployeeAdministrativeDeductionCreateManyCompanyInput = {
@@ -918,6 +1042,7 @@ export type HrEmployeeAdministrativeDeductionUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employee?: Prisma.HrEmployeeUpdateOneRequiredWithoutAdministrativeDeductionsNestedInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutCompanyInput = {
@@ -936,6 +1061,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutCompanyInput 
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyInput = {
@@ -989,6 +1115,7 @@ export type HrEmployeeAdministrativeDeductionUpdateWithoutEmployeeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutHrEmployeeAdministrativeDeductionsNestedInput
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutEmployeeInput = {
@@ -1006,6 +1133,7 @@ export type HrEmployeeAdministrativeDeductionUncheckedUpdateWithoutEmployeeInput
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutDeductionNestedInput
 }
 
 export type HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeInput = {
@@ -1025,6 +1153,35 @@ export type HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutEmployeeI
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type HrEmployeeAdministrativeDeductionCountOutputType
+ */
+
+export type HrEmployeeAdministrativeDeductionCountOutputType = {
+  actions: number
+}
+
+export type HrEmployeeAdministrativeDeductionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  actions?: boolean | HrEmployeeAdministrativeDeductionCountOutputTypeCountActionsArgs
+}
+
+/**
+ * HrEmployeeAdministrativeDeductionCountOutputType without action
+ */
+export type HrEmployeeAdministrativeDeductionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdministrativeDeductionCountOutputType
+   */
+  select?: Prisma.HrEmployeeAdministrativeDeductionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * HrEmployeeAdministrativeDeductionCountOutputType without action
+ */
+export type HrEmployeeAdministrativeDeductionCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeAdministrativeDeductionActionWhereInput
+}
 
 
 export type HrEmployeeAdministrativeDeductionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1047,6 +1204,8 @@ export type HrEmployeeAdministrativeDeductionSelect<ExtArgs extends runtime.Type
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  actions?: boolean | Prisma.HrEmployeeAdministrativeDeduction$actionsArgs<ExtArgs>
+  _count?: boolean | Prisma.HrEmployeeAdministrativeDeductionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hrEmployeeAdministrativeDeduction"]>
 
 export type HrEmployeeAdministrativeDeductionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1117,6 +1276,8 @@ export type HrEmployeeAdministrativeDeductionOmit<ExtArgs extends runtime.Types.
 export type HrEmployeeAdministrativeDeductionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.HrEmployeeDefaultArgs<ExtArgs>
+  actions?: boolean | Prisma.HrEmployeeAdministrativeDeduction$actionsArgs<ExtArgs>
+  _count?: boolean | Prisma.HrEmployeeAdministrativeDeductionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HrEmployeeAdministrativeDeductionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1132,6 +1293,7 @@ export type $HrEmployeeAdministrativeDeductionPayload<ExtArgs extends runtime.Ty
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     employee: Prisma.$HrEmployeePayload<ExtArgs>
+    actions: Prisma.$HrEmployeeAdministrativeDeductionActionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1547,6 +1709,7 @@ export interface Prisma__HrEmployeeAdministrativeDeductionClient<T, Null = never
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.HrEmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__HrEmployeeClient<runtime.Types.Result.GetResult<Prisma.$HrEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  actions<T extends Prisma.HrEmployeeAdministrativeDeduction$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HrEmployeeAdministrativeDeduction$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeAdministrativeDeductionActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1991,6 +2154,30 @@ export type HrEmployeeAdministrativeDeductionDeleteManyArgs<ExtArgs extends runt
    * Limit how many HrEmployeeAdministrativeDeductions to delete.
    */
   limit?: number
+}
+
+/**
+ * HrEmployeeAdministrativeDeduction.actions
+ */
+export type HrEmployeeAdministrativeDeduction$actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeAdministrativeDeductionAction
+   */
+  select?: Prisma.HrEmployeeAdministrativeDeductionActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeAdministrativeDeductionAction
+   */
+  omit?: Prisma.HrEmployeeAdministrativeDeductionActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeAdministrativeDeductionActionInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeAdministrativeDeductionActionWhereInput
+  orderBy?: Prisma.HrEmployeeAdministrativeDeductionActionOrderByWithRelationInput | Prisma.HrEmployeeAdministrativeDeductionActionOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeAdministrativeDeductionActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeAdministrativeDeductionActionScalarFieldEnum | Prisma.HrEmployeeAdministrativeDeductionActionScalarFieldEnum[]
 }
 
 /**

@@ -85,6 +85,7 @@ export const ModelName = {
   HrEmployeeAdvanceSettlement: 'HrEmployeeAdvanceSettlement',
   HrEmployeeAdvanceDeferral: 'HrEmployeeAdvanceDeferral',
   HrEmployeeAdministrativeDeduction: 'HrEmployeeAdministrativeDeduction',
+  HrEmployeeAdministrativeDeductionAction: 'HrEmployeeAdministrativeDeductionAction',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
@@ -717,6 +718,23 @@ export const HrEmployeeAdministrativeDeductionScalarFieldEnum = {
 } as const
 
 export type HrEmployeeAdministrativeDeductionScalarFieldEnum = (typeof HrEmployeeAdministrativeDeductionScalarFieldEnum)[keyof typeof HrEmployeeAdministrativeDeductionScalarFieldEnum]
+
+
+export const HrEmployeeAdministrativeDeductionActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  deductionId: 'deductionId',
+  actionType: 'actionType',
+  businessDate: 'businessDate',
+  amount: 'amount',
+  plannedPayrollDate: 'plannedPayrollDate',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeAdministrativeDeductionActionScalarFieldEnum = (typeof HrEmployeeAdministrativeDeductionActionScalarFieldEnum)[keyof typeof HrEmployeeAdministrativeDeductionActionScalarFieldEnum]
 
 
 export const FinanceJournalLineScalarFieldEnum = {

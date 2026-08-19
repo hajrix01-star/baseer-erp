@@ -68,6 +68,31 @@ export class HrAdvanceService {
     });
   }
 
+  async detail(context: TrustedCompanyActorContext, advanceId: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const advance = await tx.hrEmployeeAdvance.findFirst({
+        where: { id: advanceId, tenantId: context.tenantId, companyId: context.companyId },
+        include: {
+          employee: { select: { id: true, nameAr: true, nameEn: true } },
+          allocations: { include: { vault: { select: { id: true, nameAr: true, nameEn: true } } }, orderBy: { createdAt: 'asc' } },
+          settlements: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500, include: { journalEntry: { select: { id: true, sourceReference: true } } } },
+          deferrals: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: 500 },
+        },
+      });
+      if (!advance) throw new NotFoundException('The employee advance was not found.');
+      return {
+        advance: {
+          id: advance.id, employeeId: advance.employeeId, employeeNameAr: advance.employee.nameAr, employeeNameEn: advance.employee.nameEn,
+          advanceNumber: advance.advanceNumber, businessDate: day(advance.businessDate), originalAmount: advance.originalAmount.toFixed(4), settledAmount: advance.settledAmount.toFixed(4), remainingAmount: advance.remainingAmount.toFixed(4), status: advance.status,
+          nextSettlementDate: advance.nextSettlementDate ? day(advance.nextSettlementDate) : null, notes: advance.notes, journalEntryId: advance.issueJournalEntryId,
+          allocations: advance.allocations.map((allocation) => ({ vaultId: allocation.vaultId, vaultNameAr: allocation.vault.nameAr, vaultNameEn: allocation.vault.nameEn, paymentMethod: allocation.paymentMethod, amount: allocation.amount.toFixed(4) })),
+        },
+        settlements: advance.settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null })),
+        deferrals: advance.deferrals.map((deferral) => ({ id: deferral.id, businessDate: day(deferral.businessDate), deferredUntil: day(deferral.deferredUntil), reason: deferral.reason })),
+      };
+    });
+  }
+
   async issue(context: TrustedCompanyActorContext, raw: AdvanceIssueInput, idempotencyKey: string) {
     const input = normalize(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {

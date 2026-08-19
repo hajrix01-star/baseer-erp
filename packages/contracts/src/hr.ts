@@ -212,6 +212,17 @@ export const hrEmployeeAdministrativeDeductionSchema = z.object({
   cancellationReason: z.string().max(1_000).nullable(),
 }).strict();
 
+export const hrEmployeeAdvanceDetailSchema = z.object({
+  advance: hrEmployeeAdvanceSchema,
+  settlements: z.array(z.object({ id: z.string().uuid(), source: z.enum(["PAYROLL", "MANUAL_RECEIPT"]), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid().nullable(), sourceReference: z.string().max(160).nullable() }).strict()).max(500),
+  deferrals: z.array(z.object({ id: z.string().uuid(), businessDate: businessDateSchema, deferredUntil: businessDateSchema, reason: z.string().max(1_000) }).strict()).max(500),
+}).strict();
+
+export const hrEmployeeAdministrativeDeductionDetailSchema = z.object({
+  deduction: hrEmployeeAdministrativeDeductionSchema,
+  actions: z.array(z.object({ id: z.string().uuid(), actionType: z.enum(["CREATED", "DEFERRED", "CANCELLED", "APPLIED", "REVERSED"]), businessDate: businessDateSchema, amount: hrAmountSchema.nullable(), plannedPayrollDate: businessDateSchema.nullable(), reason: z.string().max(1_000).nullable() }).strict()).max(500),
+}).strict();
+
 export const hrEmployeeDetailQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
@@ -220,6 +231,8 @@ export const hrEmployeeDetailQuerySchema = z.object({
 export const hrEmployeesReceiptSchema = z.object({ companyId: companyIdSchema, employees: z.array(hrEmployeeSchema).max(500) }).strict();
 export const hrEmployeeAdvancesReceiptSchema = z.object({ companyId: companyIdSchema, advances: z.array(hrEmployeeAdvanceSchema).max(500) }).strict();
 export const hrEmployeeAdministrativeDeductionsReceiptSchema = z.object({ companyId: companyIdSchema, deductions: z.array(hrEmployeeAdministrativeDeductionSchema).max(500) }).strict();
+export const hrEmployeeAdvanceDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdvanceDetailSchema.shape }).strict();
+export const hrEmployeeAdministrativeDeductionDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdministrativeDeductionDetailSchema.shape }).strict();
 export const hrEmployeeDetailReceiptSchema = z.object({
   companyId: companyIdSchema,
   employee: hrEmployeeSchema,
