@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./hr-compensation-agreement-dialog.css";
 
@@ -64,12 +64,14 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
   const [operation, setOperation] = useState<SalaryOperation>("FULL");
   const [draft, setDraft] = useState<Draft>(() => empty(fixedEmployeeId, profile));
   const [changeAmount, setChangeAmount] = useState("");
+  const submissionKey = useRef(requestId());
 
   useEffect(() => {
     if (!open) return;
     setOperation("FULL");
     setDraft(empty(fixedEmployeeId, profile));
     setChangeAmount("");
+    submissionKey.current = requestId();
   }, [fixedEmployeeId, open, profile]);
 
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
@@ -103,10 +105,11 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
         otherAllowance: (fullEdit ? draft.otherAllowance : existingSalary!.otherAllowance) || "0",
         ...(method === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: Number(fullEdit ? draft.scheduledHoursPerDay : existingSalary!.scheduledHoursPerDay), scheduledWorkDays: Number(fullEdit ? draft.scheduledWorkDays : existingSalary!.scheduledWorkDays) } : {}),
         notes: `${operationCopy(language, operation).label}${!fullEdit ? `: ${delta.toFixed(4)}` : ""}${draft.notes.trim() ? ` — ${draft.notes.trim()}` : ""}`,
-        idempotencyKey: requestId(),
+        idempotencyKey: submissionKey.current,
       });
-      await onSaved();
       onClose();
+      try { await onSaved(); }
+      catch (error) { onError(presentBaseerApiError(error, language, ar ? "حُفظ الراتب، لكن تعذر تحديث العرض الحالي." : "The salary was saved, but the current view could not be refreshed.")); }
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر حفظ الراتب." : "The salary could not be saved.")); }
     finally { setBusy(false); }
   };

@@ -74,8 +74,8 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: "success" | "danger"; text: string } | null>(null);
-  const showSuccess = (text: string) => setMessage({ tone: "success", text });
-  const showError = (text: string) => setMessage({ tone: "danger", text });
+  const showSuccess = useCallback((text: string) => setMessage({ tone: "success", text }), []);
+  const showError = useCallback((text: string) => setMessage({ tone: "danger", text }), []);
   const [detail, setDetail] = useState<HrDetail | null>(null);
   const [compensationTarget, setCompensationTarget] = useState<{ employee: HrEmployee; profile: HrDetail["compensation"] } | null>(null);
   const [advanceDetail, setAdvanceDetail] = useState<HrAdvanceDetail | null>(null);

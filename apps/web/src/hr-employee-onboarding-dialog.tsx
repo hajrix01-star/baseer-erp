@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -24,6 +24,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState("");
   const [busy, setBusy] = useState(false);
+  const submissionKey = useRef(requestId());
   useEffect(() => {
     if (!photoFile) { setPhotoPreviewUrl(""); return; }
     const nextUrl = URL.createObjectURL(photoFile);
@@ -34,6 +35,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     if (!open) return;
     setDraft(empty());
     setPhotoFile(null);
+    submissionKey.current = requestId();
   }, [open]);
   // Eight hours is a normal monthly agreement. The agreed total still has a
   // useful salary breakdown, but it must not be treated as inclusive overtime.
@@ -57,18 +59,22 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     if (photoFile && !isHrEmployeePhoto(photoFile)) { onError(ar ? "اختر صورة JPG أو PNG بحجم لا يتجاوز 5 ميجابايت." : "Choose a JPG or PNG image up to 5 MiB."); return; }
     setBusy(true);
     try {
-      const employee = await onboardHrEmployee(session, { nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, initialCompensation: { monthlyGross: calculation.monthlyGross.toFixed(4), compensationMethod, foodAllowance: number(draft.foodAllowance).toFixed(4), housingAllowance: number(draft.housingAllowance).toFixed(4), transportAllowance: number(draft.transportAllowance).toFixed(4), otherAllowance: number(draft.otherAllowance).toFixed(4), ...(compensationMethod === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: enteredHours!, scheduledWorkDays: enteredWorkDays! } : {}) }, idempotencyKey: requestId() });
-      if (photoFile) await createHrEmployeeDocument(session, employee.id, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload: { fileName: photoFile.name, contentBase64: await hrEmployeePhotoAsBase64(photoFile) }, idempotencyKey: requestId() });
-      const saved = await getHrEmployee(session, employee.id);
-      if (saved.employee.id !== employee.id || saved.compensation?.id !== employee.compensationId) {
-        onError(ar ? "تعذر التحقق من حفظ الموظف والراتب. لم تُعرض العملية كنجاح." : "The employee and salary could not be verified. The operation was not shown as successful.");
-        return;
+      const employee = await onboardHrEmployee(session, { nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, initialCompensation: { monthlyGross: calculation.monthlyGross.toFixed(4), compensationMethod, foodAllowance: number(draft.foodAllowance).toFixed(4), housingAllowance: number(draft.housingAllowance).toFixed(4), transportAllowance: number(draft.transportAllowance).toFixed(4), otherAllowance: number(draft.otherAllowance).toFixed(4), ...(compensationMethod === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: enteredHours!, scheduledWorkDays: enteredWorkDays! } : {}) }, idempotencyKey: submissionKey.current });
+      const followUpErrors: string[] = [];
+      if (photoFile) {
+        try { await createHrEmployeeDocument(session, employee.id, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload: { fileName: photoFile.name, contentBase64: await hrEmployeePhotoAsBase64(photoFile) }, idempotencyKey: requestId() }); }
+        catch (error) { followUpErrors.push(presentBaseerApiError(error, language, ar ? "حُفظ الموظف والراتب، لكن تعذر حفظ الصورة." : "The employee and salary were saved, but the photo could not be saved.")); }
       }
-      if (!await onSaved()) {
-        onError(ar ? "حُفظ الموظف والراتب، لكن تعذر تحديث جدول الموظفين. لم تُعرض العملية كنجاح." : "The employee and salary were saved, but the employee register could not be refreshed. The operation was not shown as successful.");
-        return;
-      }
+      try {
+        const saved = await getHrEmployee(session, employee.id);
+        if (saved.employee.id !== employee.id || saved.compensation?.id !== employee.compensationId) followUpErrors.push(ar ? "حُفظ الموظف، لكن تعذر التحقق من تحديث الراتب في العرض الحالي." : "The employee was saved, but the current view could not verify the salary update.");
+      } catch (error) { followUpErrors.push(presentBaseerApiError(error, language, ar ? "حُفظ الموظف والراتب، لكن تعذر التحقق من السجل." : "The employee and salary were saved, but the record could not be verified.")); }
+      let refreshed = false;
+      try { refreshed = await onSaved(); }
+      catch { refreshed = false; }
+      if (!refreshed) followUpErrors.push(ar ? "حُفظ الموظف والراتب، لكن تعذر تحديث جدول الموظفين." : "The employee and salary were saved, but the employee register could not be refreshed.");
       setDraft(empty()); setPhotoFile(null); onClose();
+      if (followUpErrors.length) onError(followUpErrors.join(" "));
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر إضافة الموظف وحفظ الراتب." : "The employee and salary could not be saved.")); }
     finally { setBusy(false); }
   };

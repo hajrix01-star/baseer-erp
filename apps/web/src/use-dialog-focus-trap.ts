@@ -1,5 +1,22 @@
 import { useEffect, useRef } from "react";
 
+const dialogStack: symbol[] = [];
+
+function addToDialogStack(dialogId: symbol) {
+  const existingIndex = dialogStack.indexOf(dialogId);
+  if (existingIndex !== -1) dialogStack.splice(existingIndex, 1);
+  dialogStack.push(dialogId);
+}
+
+function removeFromDialogStack(dialogId: symbol) {
+  const index = dialogStack.lastIndexOf(dialogId);
+  if (index !== -1) dialogStack.splice(index, 1);
+}
+
+function isTopmostDialog(dialogId: symbol) {
+  return dialogStack.at(-1) === dialogId;
+}
+
 /** Keeps keyboard navigation inside a dialog without stealing focus while fields change. */
 export function useDialogFocusTrap({
   open,
@@ -11,10 +28,18 @@ export function useDialogFocusTrap({
   onClose: () => void;
 }) {
   const dialogRef = useRef<HTMLElement>(null);
+  const dialogIdRef = useRef(Symbol("baseer-dialog"));
   const closeRef = useRef(onClose);
   useEffect(() => {
     closeRef.current = onClose;
   }, [onClose]);
+
+  useEffect(() => {
+    if (!open) return;
+    const dialogId = dialogIdRef.current;
+    addToDialogStack(dialogId);
+    return () => removeFromDialogStack(dialogId);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -44,6 +69,7 @@ export function useDialogFocusTrap({
         ) ?? [],
       );
     const onKeyDown = (event: KeyboardEvent) => {
+      if (!isTopmostDialog(dialogIdRef.current)) return;
       if (event.key === "Escape" && !saving) {
         event.preventDefault();
         closeRef.current();

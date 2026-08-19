@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -42,6 +42,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
   const [changeAmount, setChangeAmount] = useState("");
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
+  const submissionKey = useRef(requestId());
 
   useEffect(() => {
     if (!open) return;
@@ -57,6 +58,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
     setScheduledWorkDays(profile?.scheduledWorkDays?.toString() ?? "");
     setChangeAmount("");
     setReason("");
+    submissionKey.current = requestId();
   }, [open, profile]);
 
   const current = amount(profile?.monthlyGross ?? "0");
@@ -91,10 +93,11 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
         otherAllowance: (isFullEdit ? otherAllowance : profile!.otherAllowance) || "0",
         ...(method === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: Number(isFullEdit ? scheduledHoursPerDay : profile!.scheduledHoursPerDay), scheduledWorkDays: Number(isFullEdit ? scheduledWorkDays : profile!.scheduledWorkDays) } : {}),
         notes: `${operationLabel(language, operation)}${!isFullEdit ? `: ${delta.toFixed(4)}` : ""}${reason.trim() ? ` — ${reason.trim()}` : ""}`,
-        idempotencyKey: requestId(),
+        idempotencyKey: submissionKey.current,
       });
-      await onSaved();
       onClose();
+      try { await onSaved(); }
+      catch (error) { onError(presentBaseerApiError(error, language, ar ? "حُفظ الراتب، لكن تعذر تحديث العرض الحالي." : "The salary was saved, but the current view could not be refreshed.")); }
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر حفظ الراتب." : "The salary could not be saved.")); }
     finally { setBusy(false); }
   };
