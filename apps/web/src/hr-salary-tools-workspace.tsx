@@ -46,17 +46,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
     setLoadingEmployee(true); setMessage("");
     void getHrEmployee(session, selectedEmployeeId).then((detail) => {
       setSelectedDetail(detail);
-      const agreement = detail.compensation;
-      setDraft(agreement ? {
-        monthlyGross: agreement.monthlyGross,
-        compensationMethod: agreement.compensationMethod,
-        foodAllowance: agreement.foodAllowance,
-        housingAllowance: agreement.housingAllowance,
-        transportAllowance: agreement.transportAllowance,
-        otherAllowance: agreement.otherAllowance,
-        scheduledHoursPerDay: agreement.scheduledHoursPerDay?.toString() ?? "",
-        scheduledWorkDays: agreement.scheduledWorkDays?.toString() ?? "",
-      } : emptyDraft());
+      setDraft(emptyDraft());
     }).catch((error) => setMessage(presentBaseerApiError(error, language, ar ? "تحميل الراتب" : "Loading salary"))).finally(() => setLoadingEmployee(false));
   }, [ar, language, selectedEmployeeId]);
 
