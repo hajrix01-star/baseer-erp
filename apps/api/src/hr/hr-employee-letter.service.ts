@@ -18,7 +18,7 @@ export class HrEmployeeLetterService {
 
   async list(context: TrustedCompanyActorContext, employeeId: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const rows = await tx.hrEmployeeLetter.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId }, orderBy: [{ issuedAt: 'desc' }, { id: 'desc' }] });
+      const rows = await tx.hrEmployeeLetter.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId }, orderBy: [{ issuedAt: 'desc' }, { id: 'desc' }], take: 100 });
       return { letters: rows.map(mapLetter) };
     });
   }

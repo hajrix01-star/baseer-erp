@@ -87,7 +87,8 @@ export class HrService {
       const [services, movementRows, compensation, compensationHistory] = await Promise.all([
         tx.hrEmployeeService.findMany({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
-          orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }],
+          orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }, { id: 'desc' }],
+          take: 500,
           include: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
         }),
         tx.hrEmployeeFinancialMovement.findMany({

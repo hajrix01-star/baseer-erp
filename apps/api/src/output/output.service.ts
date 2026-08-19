@@ -30,6 +30,7 @@ import { IdempotencyReceiptStatus, Prisma } from '../generated/prisma/client.js'
 
 const GENERATE_OPERATION = 'platform.output.generate';
 const MAX_INLINE_ARTIFACT_BYTES = 5 * 1024 * 1024;
+const OUTPUTABLE_PAYROLL_STATUSES = new Set(['APPROVED', 'PARTIALLY_PAID', 'PAID']);
 
 @Injectable()
 export class OutputService {
@@ -304,6 +305,7 @@ export class OutputService {
       include: { lines: { orderBy: { employeeNumberSnapshot: 'asc' } } },
     });
     if (!run) throw new NotFoundException('The payroll run was not found.');
+    this.assertPayrollRunIsOutputable(run.status);
     return this.payrollSnapshotBase(transaction, context, request, {
       titleAr: `كشف مسير الرواتب ${run.runNumber}`,
       titleEn: `Payroll run ${run.runNumber}`,
@@ -342,6 +344,7 @@ export class OutputService {
       include: { lines: { orderBy: { employeeNumberSnapshot: 'asc' } } },
     });
     if (!run) throw new NotFoundException('The payroll run was not found.');
+    this.assertPayrollRunIsOutputable(run.status);
     const snapshot = await this.payrollSnapshotBase(transaction, context, request, {
       titleAr: `كشوف توقيع مسير الرواتب ${run.runNumber}`,
       titleEn: `Payroll signature slips ${run.runNumber}`,
@@ -387,6 +390,12 @@ export class OutputService {
         { key: 'number', label: arabic ? 'رقم المسير' : 'Run no.', kind: 'text', width: 18 }, { key: 'month', label: arabic ? 'الشهر' : 'Month', kind: 'date' }, { key: 'status', label: arabic ? 'الحالة' : 'Status', kind: 'text' }, { key: 'employees', label: arabic ? 'الموظفون' : 'Employees', kind: 'integer' }, { key: 'gross', label: arabic ? 'الإجمالي' : 'Gross', kind: 'amount' }, { key: 'advances', label: arabic ? 'السلف' : 'Advances', kind: 'amount' }, { key: 'deductions', label: arabic ? 'الخصومات' : 'Deductions', kind: 'amount' }, { key: 'net', label: arabic ? 'الصافي' : 'Net', kind: 'amount' }, { key: 'paid', label: arabic ? 'المدفوع' : 'Paid', kind: 'amount' },
       ], rows: input.rows, sourceLabel: arabic ? 'مسيرات الرواتب المعتمدة في بصير' : 'Baseer payroll run records',
     };
+  }
+
+  private assertPayrollRunIsOutputable(status: string) {
+    if (!OUTPUTABLE_PAYROLL_STATUSES.has(status)) {
+      throw new ConflictException('Payroll output is available only for approved, partially paid, or paid runs; draft and reversed runs are excluded.');
+    }
   }
 
   private async readPrintLogo(

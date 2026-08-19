@@ -16,6 +16,7 @@ export class HrFinalSettlementController {
   }
 
   @Post('preview')
+  @HttpCode(200)
   async preview(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = previewHrFinalSettlementRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid final-settlement preview request.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.create');
@@ -30,6 +31,7 @@ export class HrFinalSettlementController {
   }
 
   @Post('approve')
+  @HttpCode(200)
   async approve(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = approveHrFinalSettlementRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid final-settlement approval request.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.approve'); const { idempotencyKey, ...input } = parsed.data;
@@ -37,6 +39,7 @@ export class HrFinalSettlementController {
   }
 
   @Post('verify-reason')
+  @HttpCode(200)
   async verifyReason(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = verifyHrFinalSettlementReasonRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid final-settlement reason-verification request.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.verify'); const { idempotencyKey, ...input } = parsed.data;
@@ -44,6 +47,7 @@ export class HrFinalSettlementController {
   }
 
   @Post('pay')
+  @HttpCode(200)
   async pay(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = payHrFinalSettlementRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid final-settlement payment request.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.pay'); const { idempotencyKey, ...input } = parsed.data;
@@ -51,6 +55,7 @@ export class HrFinalSettlementController {
   }
 
   @Post('reverse')
+  @HttpCode(200)
   async reverse(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = reverseHrFinalSettlementRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid final-settlement reversal request.');
     const context = await this.authorize(authorization, companyId, 'hr.final_settlements.reverse'); const { idempotencyKey, ...input } = parsed.data;

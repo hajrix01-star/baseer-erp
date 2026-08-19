@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, UnauthorizedException } from '@nestjs/common';
 import {
   companyIdSchema,
   createHrEmployeeRequestSchema,
@@ -102,7 +102,7 @@ export class HrController {
   }
 
   @Get('employees/:employeeId')
-  async employeeDetail(@Param('employeeId') employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async employeeDetail(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeeDetailQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-ledger query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
@@ -111,7 +111,7 @@ export class HrController {
   }
 
   @Get('employees/:employeeId/payroll')
-  async employeePayrollHistory(@Param('employeeId') employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async employeePayrollHistory(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeePayrollHistoryQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-payroll query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
@@ -119,7 +119,7 @@ export class HrController {
   }
 
   @Get('employees/:employeeId/promotions')
-  async employeePromotions(@Param('employeeId') employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async employeePromotions(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeePromotionsQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-promotion query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
@@ -147,6 +147,7 @@ export class HrController {
   }
 
   @Post('employees/update')
+  @HttpCode(200)
   async updateEmployee(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = updateHrEmployeeRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee update request.');
@@ -157,7 +158,7 @@ export class HrController {
 
   @Post('employees/:employeeId/promotions')
   @HttpCode(201)
-  async createEmployeePromotion(@Param('employeeId') employeeId: string, @Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async createEmployeePromotion(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const payload = typeof body === 'object' && body !== null && !Array.isArray(body) ? body as Record<string, unknown> : {};
     const parsed = createHrEmployeePromotionRequestSchema.safeParse({ ...payload, employeeId });
     if (!parsed.success) throw new BadRequestException('Invalid employee-promotion request.');
@@ -205,12 +206,13 @@ export class HrController {
   }
 
   @Get('services/:serviceId')
-  async serviceDetail(@Param('serviceId') serviceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async serviceDetail(@Param('serviceId', ParseUUIDPipe) serviceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
     return hrEmployeeServiceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.serviceDetail(context, serviceId)) });
   }
 
   @Post('services/update')
+  @HttpCode(200)
   async updateService(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = updateHrEmployeeServiceRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee-service update request.');
@@ -220,6 +222,7 @@ export class HrController {
   }
 
   @Post('services/cancel')
+  @HttpCode(200)
   async cancelService(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = cancelHrEmployeeServiceRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee-service cancellation request.');
@@ -247,7 +250,7 @@ export class HrController {
   }
 
   @Get('advances/:advanceId')
-  async advanceDetail(@Param('advanceId') advanceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async advanceDetail(@Param('advanceId', ParseUUIDPipe) advanceId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, 'hr.advances.read');
     return hrEmployeeAdvanceDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.detail(context, advanceId)) });
   }
@@ -291,7 +294,7 @@ export class HrController {
   }
 
   @Get('deductions/:deductionId')
-  async administrativeDeductionDetail(@Param('deductionId') deductionId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async administrativeDeductionDetail(@Param('deductionId', ParseUUIDPipe) deductionId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, 'hr.deductions.manage');
     return hrEmployeeAdministrativeDeductionDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.deductions.detail(context, deductionId)) });
   }
@@ -307,6 +310,7 @@ export class HrController {
   }
 
   @Post('deductions/defer')
+  @HttpCode(200)
   async deferAdministrativeDeduction(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = deferHrEmployeeAdministrativeDeductionRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction deferral request.');
@@ -316,6 +320,7 @@ export class HrController {
   }
 
   @Post('deductions/cancel')
+  @HttpCode(200)
   async cancelAdministrativeDeduction(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = cancelHrEmployeeAdministrativeDeductionRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid administrative-deduction cancellation request.');
@@ -361,6 +366,7 @@ export class HrController {
   }
 
   @Post('compensation-policies/approve')
+  @HttpCode(200)
   async approveCompensationPolicyVersion(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = approveHrCompensationPolicyVersionRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid compensation policy approval request.');
@@ -378,7 +384,7 @@ export class HrController {
   }
 
   @Get('payroll-runs/:payrollRunId')
-  async payrollRunDetail(@Param('payrollRunId') payrollRunId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async payrollRunDetail(@Param('payrollRunId', ParseUUIDPipe) payrollRunId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
     return hrPayrollRunDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.detail(context, payrollRunId)) });
   }
@@ -394,6 +400,7 @@ export class HrController {
   }
 
   @Post('payroll-runs/preview')
+  @HttpCode(200)
   async previewPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = previewHrPayrollRunRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid payroll-preview request.');
@@ -402,6 +409,7 @@ export class HrController {
   }
 
   @Post('payroll-runs/approve')
+  @HttpCode(200)
   async approvePayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = approveHrPayrollRunRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid payroll approval request.');
@@ -411,6 +419,7 @@ export class HrController {
   }
 
   @Post('payroll-runs/discard')
+  @HttpCode(200)
   async discardPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = discardHrPayrollRunRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid payroll draft discard request.');
@@ -420,6 +429,7 @@ export class HrController {
   }
 
   @Post('payroll-runs/pay')
+  @HttpCode(200)
   async payPayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = payHrPayrollRunRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid payroll payment request.');
@@ -429,6 +439,7 @@ export class HrController {
   }
 
   @Post('payroll-runs/reverse')
+  @HttpCode(200)
   async reversePayrollRun(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = reverseHrPayrollRunRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid payroll reversal request.');
@@ -456,6 +467,7 @@ export class HrController {
   }
 
   @Post('leaves/return')
+  @HttpCode(200)
   async returnFromLeave(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = returnHrEmployeeLeaveRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee return request.');
@@ -465,7 +477,7 @@ export class HrController {
   }
 
   @Get('leaves/:leaveId')
-  async leaveDetail(@Param('leaveId') leaveId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+  async leaveDetail(@Param('leaveId', ParseUUIDPipe) leaveId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
     return hrEmployeeLeaveDetailReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.detail(context, leaveId)) });
   }
