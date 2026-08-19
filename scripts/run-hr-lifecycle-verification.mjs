@@ -50,6 +50,7 @@ try {
     { HrFinalSettlementService },
     { HrService },
     { PurchaseExpenseService },
+    { hrEmployeeServiceSchema },
   ] = await Promise.all([
     import('../apps/api/dist/app.module.js'),
     import('../apps/api/dist/database/database.service.js'),
@@ -60,6 +61,7 @@ try {
     import('../apps/api/dist/hr/hr-final-settlement.service.js'),
     import('../apps/api/dist/hr/hr.service.js'),
     import('../apps/api/dist/finance/purchase-expense.service.js'),
+    import('../packages/contracts/dist/index.js'),
   ]);
 
   app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }), { logger: false });
@@ -185,6 +187,15 @@ try {
   const advanceReversalActor = successfulAdvanceReversal === 0 ? approver : payer;
   assert.equal((await advances.reverseIssue(advanceReversalActor, { advanceId: reversibleAdvance.id, businessDate: monthStart, reason: 'Concurrent advance issue reversal' }, advanceReversalKeys[successfulAdvanceReversal])).replayed, true, 'Advance issue reversal replay must be explicit.');
 
+  const uncostedService = await hr.createService(creator, {
+    employeeId: payrollEmployee.id,
+    serviceType: 'OTHER',
+    issueDate: monthStart,
+    notes: 'No financial cost yet',
+  }, randomUUID());
+  const uncostedServiceDetail = (await hr.serviceDetail(creator, uncostedService.id)).service;
+  assert.equal(hrEmployeeServiceSchema.parse(uncostedServiceDetail).costStatus, 'NOT_ISSUED', 'A service without an outflow document must expose NOT_ISSUED.');
+
   const issuedService = await purchaseExpenses.recordEmployeeServiceAndIssueCost({
     context: creator,
     idempotencyKey: randomUUID(),
@@ -202,6 +213,8 @@ try {
       notes: 'Employee-service cost reversal verification',
     },
   });
+  const postedServiceDetail = (await hr.serviceDetail(creator, issuedService.serviceId)).service;
+  assert.equal(hrEmployeeServiceSchema.parse(postedServiceDetail).costStatus, 'POSTED', 'An issued service cost must expose POSTED before reversal.');
   await assert.rejects(
     () => purchaseExpenses.reverseEmployeeServiceCost({ context: approver, idempotencyKey: randomUUID(), request: { serviceId: issuedService.serviceId, businessDate: beforeMonth, reason: 'Invalid historical service-cost reversal' } }),
     /cannot predate the issued cost/,
@@ -217,6 +230,13 @@ try {
   assert.match(String(serviceReversalResults[1 - successfulServiceReversal].reason?.message), /already been reversed/);
   const serviceReversalActor = successfulServiceReversal === 0 ? approver : payer;
   assert.equal((await purchaseExpenses.reverseEmployeeServiceCost({ context: serviceReversalActor, idempotencyKey: serviceReversalKeys[successfulServiceReversal], request: { serviceId: issuedService.serviceId, businessDate: monthStart, reason: 'Concurrent employee-service cost reversal' } })).replayed, true, 'Employee-service cost reversal replay must be explicit.');
+  const reversedServiceDetail = hrEmployeeServiceSchema.parse((await hr.serviceDetail(creator, issuedService.serviceId)).service);
+  assert.equal(reversedServiceDetail.status, 'ISSUED', 'Financial reversal must preserve the operational service status.');
+  assert.equal(reversedServiceDetail.costStatus, 'REVERSED', 'Service detail must expose a reversed financial cost.');
+  const reversedServiceFromList = (await hr.listServices(creator, { pageSize: 100 })).services.find((service) => service.id === issuedService.serviceId);
+  assert.equal(hrEmployeeServiceSchema.parse(reversedServiceFromList).costStatus, 'REVERSED', 'The service register must expose a reversed financial cost.');
+  const employeeServiceProjection = (await hr.employeeDetail(creator, payrollEmployee.id, { pageSize: 50 })).services.find((service) => service.id === issuedService.serviceId);
+  assert.equal(hrEmployeeServiceSchema.parse(employeeServiceProjection).costStatus, 'REVERSED', 'The employee file must expose a reversed financial cost.');
 
   const deferredAdvance = await advances.issue(creator, {
     employeeId: payrollEmployee.id,

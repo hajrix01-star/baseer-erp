@@ -11,6 +11,7 @@ const hrSignedAmountSchema = z.string().trim().regex(/^-?\d+(?:\.\d{1,4})?$/).ma
 
 export const hrEmployeeStatusSchema = z.enum(["ACTIVE", "ON_LEAVE", "TERMINATED", "ARCHIVED"]);
 export const hrEmployeeServiceStatusSchema = z.enum(["DRAFT", "ISSUED", "CANCELLED"]);
+export const hrEmployeeServiceCostStatusSchema = z.enum(["NOT_ISSUED", "POSTED", "REVERSED"]);
 /** Financial issuing remains separate from operational compliance. Expiry is derived from the business date. */
 export const hrEmployeeServiceComplianceStatusSchema = z.enum(["ACTIVE", "RENEWED", "CANCELLED"]);
 export const hrEmployeeAdvanceStatusSchema = z.enum(["ISSUED", "PARTIALLY_SETTLED", "SETTLED", "REVERSED"]);
@@ -482,6 +483,7 @@ export const hrEmployeeServiceSchema = z.object({
   supplier: z.object({ id: z.string().uuid(), nameAr: z.string(), nameEn: z.string().nullable() }).nullable(),
   category: z.object({ id: z.string().uuid(), nameAr: z.string(), nameEn: z.string() }).nullable(),
   outflowDocumentId: z.string().uuid().nullable(),
+  costStatus: hrEmployeeServiceCostStatusSchema,
   status: hrEmployeeServiceStatusSchema,
   complianceStatus: hrEmployeeServiceComplianceStatusSchema,
   notes: z.string().max(2_000).nullable(),
@@ -787,6 +789,7 @@ export type RenewHrEmployeeServiceRequest = z.infer<typeof renewHrEmployeeServic
 export type IssueHrEmployeeServiceCostRequest = z.infer<typeof issueHrEmployeeServiceCostRequestSchema>;
 export type RecordHrEmployeeServiceAndIssueCostRequest = z.infer<typeof recordHrEmployeeServiceAndIssueCostRequestSchema>;
 export type ReverseHrEmployeeServiceCostRequest = z.infer<typeof reverseHrEmployeeServiceCostRequestSchema>;
+export type HrEmployeeServiceCostStatus = z.infer<typeof hrEmployeeServiceCostStatusSchema>;
 export type IssueHrEmployeeAdvanceRequest = z.infer<typeof issueHrEmployeeAdvanceRequestSchema>;
 export type ReverseHrEmployeeAdvanceIssueRequest = z.infer<typeof reverseHrEmployeeAdvanceIssueRequestSchema>;
 export type SettleHrEmployeeAdvanceDirectlyRequest = z.infer<typeof settleHrEmployeeAdvanceDirectlyRequestSchema>;

@@ -6,7 +6,7 @@ import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceCategoryStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeFinancialMovementType, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceCategoryStatus, FinanceOutflowDocumentStatus, FinanceSupplierStatus, HrDocumentBlobStatus, HrEmployeeDocumentStatus, HrEmployeeFinancialMovementType, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 
@@ -94,7 +94,7 @@ export class HrService {
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
           orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }, { id: 'desc' }],
           take: 500,
-          include: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+          include: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } }, outflowDocument: { select: { status: true } } },
         }),
         tx.hrEmployeeFinancialMovement.findMany({
           where: {
@@ -282,7 +282,7 @@ export class HrService {
         },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
         take: query.pageSize + 1,
-        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } }, outflowDocument: { select: { status: true } } },
       });
       const hasMore = rows.length > query.pageSize;
       const services = hasMore ? rows.slice(0, query.pageSize) : rows;
@@ -294,7 +294,7 @@ export class HrService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const service = await tx.hrEmployeeService.findFirst({
         where: { id: serviceId, tenantId: context.tenantId, companyId: context.companyId },
-        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } }, outflowDocument: { select: { status: true } } },
       });
       if (!service) throw new NotFoundException('The employee service was not found.');
       return { service: mapService(service) };
@@ -368,7 +368,7 @@ export class HrService {
       if (begun.kind === 'in-progress') throw new ConflictException('The employee service renewal is already being processed.');
       const prior = await tx.hrEmployeeService.findFirst({
         where: { id: input.serviceId, tenantId: context.tenantId, companyId: context.companyId, complianceStatus: HrEmployeeServiceComplianceStatus.ACTIVE, status: { not: HrEmployeeServiceStatus.CANCELLED } },
-        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+        include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } }, outflowDocument: { select: { status: true } } },
       });
       if (!prior) throw new NotFoundException('An active employee service was not found.');
       const employee = await tx.hrEmployee.findFirst({ where: { id: prior.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
@@ -396,7 +396,7 @@ export class HrService {
   private async serviceForOperationalChange(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, serviceId: string) {
     const service = await tx.hrEmployeeService.findFirst({
       where: { id: serviceId, tenantId: context.tenantId, companyId: context.companyId },
-      include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } },
+      include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } }, outflowDocument: { select: { status: true } } },
     });
     if (!service) throw new NotFoundException('The employee service was not found.');
     if (service.status !== HrEmployeeServiceStatus.DRAFT || service.complianceStatus !== HrEmployeeServiceComplianceStatus.ACTIVE) throw new ConflictException('Only an active service without an issued financial cost can be changed or cancelled.');
@@ -502,7 +502,14 @@ function day(value: Date | null) { return value ? value.toISOString().slice(0, 1
 function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null, profilePhotoVersionId: string | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, profilePhotoVersionId, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
 function mapPromotion(value: { id: string; employeeId: string; effectiveDate: Date; previousJobTitle: string | null; newJobTitle: string; decisionReference: string; reason: string | null; createdAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveDate: day(value.effectiveDate)!, previousJobTitle: value.previousJobTitle, newJobTitle: value.newJobTitle, decisionReference: value.decisionReference, reason: value.reason, createdAt: value.createdAt.toISOString() }; }
 function mapCompensation(value: { id: string; employeeId: string; policyVersionId: string | null; effectiveFrom: Date; effectiveTo: Date | null; monthlyGross: Prisma.Decimal; compensationMethod: string; foodAllowance: Prisma.Decimal; housingAllowance: Prisma.Decimal; transportAllowance: Prisma.Decimal; otherAllowance: Prisma.Decimal; scheduledHoursPerDay: number | null; scheduledWorkDays: number | null; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, policyVersionId: value.policyVersionId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), monthlyGross: value.monthlyGross.toFixed(4), compensationMethod: value.compensationMethod as 'FIXED_MONTHLY' | 'INCLUSIVE_OVERTIME', foodAllowance: value.foodAllowance.toFixed(4), housingAllowance: value.housingAllowance.toFixed(4), transportAllowance: value.transportAllowance.toFixed(4), otherAllowance: value.otherAllowance.toFixed(4), scheduledHoursPerDay: value.scheduledHoursPerDay, scheduledWorkDays: value.scheduledWorkDays, notes: value.notes }; }
-function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) }; }
+function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; outflowDocument?: { status: FinanceOutflowDocumentStatus } | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) {
+  const costStatus = value.outflowDocumentId === null
+    ? 'NOT_ISSUED' as const
+    : value.outflowDocument?.status === FinanceOutflowDocumentStatus.CANCELLED
+      ? 'REVERSED' as const
+      : 'POSTED' as const;
+  return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, costStatus, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) };
+}
 function mapMovement(value: { id: string; journalEntryId: string; movementType: string; businessDate: Date; amount: Prisma.Decimal; sourceReference: string; description: string | null }) { return { id: value.id, journalEntryId: value.journalEntryId, movementType: value.movementType, businessDate: day(value.businessDate)!, amount: value.amount.toFixed(4), sourceReference: value.sourceReference, description: value.description }; }
 function tomorrow() { return new Date(Date.now() + 86_400_000); }
 function rethrowIdempotency(error: unknown): never { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different HR data.'); throw error; }
