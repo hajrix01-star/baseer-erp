@@ -24,6 +24,7 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "finance.vaults.read", module: "finance", nameAr: "عرض الخزائن", nameEn: "View vaults", risk: "standard" },
   { code: "finance.vaults.write", module: "finance", nameAr: "إدارة الخزائن", nameEn: "Manage vaults", risk: "sensitive" },
   { code: "finance.vaults.transfer", module: "finance", nameAr: "تحويل بين الخزائن", nameEn: "Transfer between vaults", risk: "sensitive" },
+  { code: "finance.vaults.reconcile", module: "finance", nameAr: "مطابقة البنوك والجرد النقدي", nameEn: "Reconcile banks and count cash", risk: "sensitive" },
   { code: "finance.foundation.write", module: "finance", nameAr: "نسخ وإعداد البيانات المالية الأساسية", nameEn: "Copy and initialize finance master data", risk: "sensitive" },
   { code: "finance.suppliers.read", module: "finance", nameAr: "عرض الموردين", nameEn: "View suppliers", risk: "standard" },
   { code: "finance.supplier_dues.read", module: "finance", nameAr: "عرض ذمم الموردين", nameEn: "View supplier dues", risk: "standard" },
@@ -106,6 +107,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
   "finance.vaults.read",
   "finance.vaults.write",
   "finance.vaults.transfer",
+  "finance.vaults.reconcile",
   "finance.foundation.write",
   "finance.suppliers.read",
   "finance.supplier_dues.read",
@@ -155,7 +157,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
 
 export const SYSTEM_ROLE_TEMPLATES = [
   { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
-  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "finance.vaults.read", "finance.vaults.transfer", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
+  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
   { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
   { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },
   { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.loans.read", "finance.purchase_expense.read", "platform.business-date.read"] },

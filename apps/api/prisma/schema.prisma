@@ -92,6 +92,18 @@ enum FinanceVaultStatus {
   ARCHIVED
 }
 
+/// A control observation, not an accounting source. Differences remain visible
+/// for investigation and never change a vault or ledger balance automatically.
+enum FinanceVaultReconciliationKind {
+  BANK_RECONCILIATION
+  CASH_COUNT
+}
+
+enum FinanceVaultReconciliationStatus {
+  MATCHED
+  VARIANCE
+}
+
 enum FinanceSupplierDueStatus {
   OPEN
   PARTIALLY_PAID
@@ -444,6 +456,7 @@ model Company {
   financeSuppliers             FinanceSupplier[]
   financeFiscalPeriods         FinanceFiscalPeriod[]
   financeVaults                FinanceVault[]
+  financeVaultReconciliations  FinanceVaultReconciliation[]
   financeSupplierDues          FinanceSupplierDue[]
   financeSupplierDuePayments   FinanceSupplierDuePayment[]
   financeJournalEntries        FinanceJournalEntry[]
@@ -863,11 +876,40 @@ model FinanceVault {
   employeeAdvanceAllocations HrEmployeeAdvancePayoutAllocation[]
   payrollPaymentAllocations  HrPayrollPaymentAllocation[]
   finalSettlementPaymentAllocations HrFinalSettlementPaymentAllocation[]
+  reconciliations              FinanceVaultReconciliation[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, nameAr])
   @@unique([companyId, accountId])
   @@index([tenantId, companyId, status, sortOrder])
+}
+
+/// A bank-statement reconciliation or physical cash count. The record is an
+/// immutable control observation. A variance is intentionally not a journal
+/// entry: it requires an identified source transaction before any posting.
+model FinanceVaultReconciliation {
+  id                String                           @id @default(uuid()) @db.Uuid
+  tenantId          String                           @db.Uuid
+  companyId         String                           @db.Uuid
+  vaultId           String                           @db.Uuid
+  kind              FinanceVaultReconciliationKind
+  asOfBusinessDate  DateTime                         @db.Date
+  ledgerBalance     Decimal                          @db.Decimal(18, 4)
+  observedBalance   Decimal                          @db.Decimal(18, 4)
+  differenceAmount  Decimal                          @db.Decimal(18, 4)
+  status            FinanceVaultReconciliationStatus
+  referenceNumber   String?                          @db.VarChar(160)
+  notes             String?                          @db.VarChar(2000)
+  createdByUserId   String                           @db.Uuid
+  createdAt         DateTime                         @default(now()) @db.Timestamptz(6)
+
+  company Company      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  vault   FinanceVault @relation(fields: [vaultId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, vaultId, kind, asOfBusinessDate])
+  @@index([tenantId, companyId, vaultId, asOfBusinessDate, id])
+  @@index([tenantId, companyId, kind, asOfBusinessDate, id])
 }
 
 model FinanceSupplierDue {

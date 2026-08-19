@@ -142,6 +142,13 @@ export type FinanceFiscalPeriod = Prisma.FinanceFiscalPeriodModel
  */
 export type FinanceVault = Prisma.FinanceVaultModel
 /**
+ * Model FinanceVaultReconciliation
+ * A bank-statement reconciliation or physical cash count. The record is an
+ * immutable control observation. A variance is intentionally not a journal
+ * entry: it requires an identified source transaction before any posting.
+ */
+export type FinanceVaultReconciliation = Prisma.FinanceVaultReconciliationModel
+/**
  * Model FinanceSupplierDue
  * 
  */

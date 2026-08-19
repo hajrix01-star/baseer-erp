@@ -4,7 +4,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DocumentSerialService } from '../core-controls/document-serial.service.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, FinanceVaultPaymentMethod, HrEmployeeFinancialMovementType, HrEmployeeServiceStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDuePaymentStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, FinanceVaultPaymentMethod, HrEmployeeFinancialMovementType, HrEmployeeServiceStatus, Prisma } from '../generated/prisma/client.js';
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 import { FinanceVaultService } from './finance-vault.service.js';
@@ -13,6 +13,7 @@ import type { RecordHrEmployeeServiceAndIssueCostRequest } from '@baseer-erp/con
 
 const DOCUMENT_OPERATION = 'finance.purchase_expense.create';
 const BATCH_OPERATION = 'finance.purchase_expense.batch.create';
+const REVERSE_DOCUMENT_OPERATION = 'finance.purchase_expense.reverse';
 const RECURRING_PAYMENT_OPERATION = 'finance.recurring_expense.payment.create';
 const RECURRING_PAYMENT_BATCH_OPERATION = 'finance.recurring_expense.payment.batch.create';
 type PaymentAllocation = Readonly<{ vaultId: string; grossAmount: string; paymentMethod?: FinanceVaultPaymentMethod | undefined }>;
@@ -20,6 +21,8 @@ export type PurchaseExpenseRequest = Readonly<{ kind: 'PURCHASE' | 'EXPENSE'; se
 export type PurchaseExpenseReceipt = Readonly<{ documentId: string; documentNumber: string; journalEntryId: string; kind: FinanceOutflowDocumentKind; settlementKind: FinanceOutflowSettlementKind; status: FinanceOutflowDocumentStatus; grossAmount: string; netAmount: string; vatAmount: string; supplierDueId: string | null }>;
 export type PurchaseExpenseBatchRequest = Readonly<{ businessDate: Date; notes?: string; items: readonly Omit<PurchaseExpenseRequest, 'businessDate'>[] }>;
 export type PurchaseExpenseBatchReceipt = Readonly<{ batchId: string; batchNumber: string; businessDate: Date; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; documents: readonly PurchaseExpenseReceipt[] }>;
+export type ReversePurchaseExpenseDocumentRequest = Readonly<{ documentId: string; businessDate: Date; reason: string }>;
+export type ReversePurchaseExpenseDocumentReceipt = Readonly<{ documentId: string; documentNumber: string; reversalJournalEntryId: string; supplierDueId: string | null; businessDate: string }>;
 export type RecurringExpensePaymentRequest = Readonly<{ profileId: string; businessDate: Date; coverageYear: number; coverageStartMonth: number; grossAmount: string; isTaxable: boolean; vaultId?: string | undefined; allocations: readonly PaymentAllocation[]; supplierInvoiceNumber?: string | undefined; supplierInvoiceMissingReason?: string | undefined; supplierInvoiceDate?: Date | undefined; notes?: string | undefined }>;
 export type RecurringExpensePaymentReceipt = PurchaseExpenseReceipt & Readonly<{ profileId: string; coverageYear: number; coverageStartMonth: number; coverageMonths: number }>;
 export type RecurringExpensePaymentBatchRequest = Readonly<{ businessDate: Date; items: readonly Omit<RecurringExpensePaymentRequest, 'businessDate'>[] }>;
@@ -84,6 +87,81 @@ export class PurchaseExpenseService {
       await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: this.storeBatchReceipt(receipt) } });
       return receipt;
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different request.'); throw error; });
+  }
+
+  /**
+   * Financial documents remain immutable after posting. The only correction
+   * path is a separately dated journal reversal, followed (when required) by
+   * a new corrected document. A payable document can only be reversed while
+   * its supplier due has never been paid.
+   */
+  async reverse(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: ReversePurchaseExpenseDocumentRequest }): Promise<ReversePurchaseExpenseDocumentReceipt> {
+    const reason = input.request.reason.trim();
+    if (!reason) throw new BadRequestException('A purchase or expense reversal reason is required.');
+    return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
+      const request = { documentId: input.request.documentId, businessDate: input.request.businessDate, reason };
+      const begun = await this.idem.beginInTransaction(tx, input.context, {
+        operation: REVERSE_DOCUMENT_OPERATION,
+        key: input.idempotencyKey,
+        request: { documentId: request.documentId, businessDate: request.businessDate.toISOString().slice(0, 10), reason: request.reason },
+        expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return begun.response.body as unknown as ReversePurchaseExpenseDocumentReceipt;
+      if (begun.kind === 'in-progress') throw new ConflictException('The purchase or expense reversal is already in progress.');
+      await this.dates.assertNotFutureInTransaction(tx, input.context, request.businessDate);
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${input.context.tenantId}:${input.context.companyId}:finance-outflow-reversal:${request.documentId}`}, 0))`;
+      const document = await tx.financeOutflowDocument.findFirst({
+        where: { id: request.documentId, tenantId: input.context.tenantId, companyId: input.context.companyId },
+        include: {
+          journalEntry: { select: { id: true, reversalEntry: { select: { id: true } }, supplierDue: { include: { payments: { where: { status: FinanceSupplierDuePaymentStatus.POSTED }, select: { id: true } } } } } },
+          recurringCoverage: { select: { id: true } },
+          hrEmployeeService: { select: { id: true } },
+        },
+      });
+      if (!document) throw new BadRequestException('The purchase or expense document was not found for this company.');
+      if (document.hrEmployeeService) throw new ConflictException('Employee-service costs must be reversed from the employee service record to keep the employee financial file consistent.');
+      if (document.status !== FinanceOutflowDocumentStatus.POSTED || document.journalEntry.reversalEntry) throw new ConflictException('The purchase or expense document has already been reversed.');
+      if (request.businessDate < document.businessDate) throw new BadRequestException('A reversal cannot predate the original purchase or expense document.');
+      const due = document.journalEntry.supplierDue;
+      if (due && (due.status !== FinanceSupplierDueStatus.OPEN || !due.paidAmount.isZero() || due.payments.length)) {
+        throw new ConflictException('A payable document can only be reversed before any supplier payment is recorded. Reverse its payments first.');
+      }
+      const requestId = `purchase-expense-reversal:${document.id}`;
+      const journal = await this.journals.reverseInTransaction(tx, { ...input.context, requestId, journalEntryId: document.journalEntryId, businessDate: request.businessDate, reason: request.reason });
+      const cancelled = await tx.financeOutflowDocument.updateMany({
+        where: { id: document.id, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceOutflowDocumentStatus.POSTED },
+        data: { status: FinanceOutflowDocumentStatus.CANCELLED },
+      });
+      if (cancelled.count !== 1) throw new ConflictException('The purchase or expense document changed while its reversal was being recorded.');
+      if (due) {
+        const dueCancelled = await tx.financeSupplierDue.updateMany({
+          where: { id: due.id, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceSupplierDueStatus.OPEN, paidAmount: new Prisma.Decimal(0) },
+          data: { status: FinanceSupplierDueStatus.CANCELLED, remainingAmount: new Prisma.Decimal(0) },
+        });
+        if (dueCancelled.count !== 1) throw new ConflictException('The supplier due changed while the source document was being reversed.');
+      }
+      // Coverage is an operational reservation, not a financial record. Once
+      // the source document has a full journal reversal it is safe to make the
+      // saved recurring period available for a corrected payment.
+      if (document.recurringCoverage.length) await tx.financeRecurringExpenseCoverage.updateMany({
+        where: { tenantId: input.context.tenantId, companyId: input.context.companyId, documentId: document.id },
+        data: { documentId: null },
+      });
+      const receipt: ReversePurchaseExpenseDocumentReceipt = {
+        documentId: document.id,
+        documentNumber: document.documentNumber,
+        reversalJournalEntryId: journal.journalEntryId,
+        supplierDueId: due?.id ?? null,
+        businessDate: request.businessDate.toISOString().slice(0, 10),
+      };
+      await tx.auditEvent.create({ data: {
+        id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, actorUserId: input.context.actorUserId,
+        action: 'finance.purchase_expense.reversed', entityType: 'FinanceOutflowDocument', entityId: document.id, requestId,
+        afterJson: { ...receipt, reason: request.reason } as Prisma.InputJsonValue,
+      } });
+      await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different reversal data.'); throw error; });
   }
 
   /** Issues the cost of an already-recorded HR service in the same transaction as its expense document and employee-ledger projection. */

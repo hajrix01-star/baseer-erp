@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import { Prisma, FinanceVaultStatus } from "../generated/prisma/client.js";
+import { Prisma, FinanceVaultReconciliationKind, FinanceVaultReconciliationStatus, FinanceVaultStatus, FinanceVaultType } from "../generated/prisma/client.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
 import { IdempotencyPayloadMismatchError, IdempotencyService } from "../core-controls/idempotency.service.js";
@@ -11,6 +11,8 @@ import { BusinessDateService } from "../business-date/business-date.service.js";
 
 type TreasuryInput = { from?: Date; to?: Date; includeArchived: boolean };
 type ActivityInput = { from?: Date; to?: Date; cursor?: string; pageSize: number };
+type ReconciliationInput = { vaultId: string; kind: FinanceVaultReconciliationKind; asOfBusinessDate: Date; observedBalance: string; referenceNumber?: string; notes?: string; idempotencyKey: string };
+type ReconciliationsInput = { vaultId?: string; kind?: FinanceVaultReconciliationKind; cursor?: string; pageSize: number };
 type VaultRecord = { id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; paymentMethods: ("CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP")[]; status: FinanceVaultStatus; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number; accountId: string };
 type Amounts = { balanceAsOf: Prisma.Decimal; inflow: Prisma.Decimal; outflow: Prisma.Decimal };
 
@@ -247,13 +249,127 @@ export class TreasuryService {
       throw error;
     });
   }
+
+  /** A vault transfer is a journal-backed movement. It is corrected only by
+   * reversing that source journal; balances are never edited directly. */
+  async reverseTransfer(context: TrustedCompanyActorContext, input: { journalEntryId: string; businessDate: Date; reason: string; idempotencyKey: string }) {
+    const reason = input.reason.trim();
+    if (!reason) throw new BadRequestException('A vault-transfer reversal reason is required.');
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idem.beginInTransaction(tx, context, {
+        operation: 'finance.vault.transfer.reverse', key: input.idempotencyKey,
+        request: { journalEntryId: input.journalEntryId, businessDate: input.businessDate.toISOString().slice(0, 10), reason },
+        expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { originalJournalEntryId: string; reversalJournalEntryId: string; businessDate: string };
+      if (begun.kind === 'in-progress') throw new ConflictException('The vault-transfer reversal is still in progress.');
+      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:vault-transfer-reversal:${input.journalEntryId}`}, 0))`;
+      const original = await tx.financeJournalEntry.findFirst({
+        where: { id: input.journalEntryId, tenantId: context.tenantId, companyId: context.companyId, sourceType: 'vault_transfer', status: 'POSTED' },
+        select: { id: true, businessDate: true, reversalEntry: { select: { id: true } } },
+      });
+      if (!original) throw new NotFoundException('The posted vault transfer was not found for this company.');
+      if (original.reversalEntry) throw new ConflictException('The vault transfer has already been reversed.');
+      if (input.businessDate < original.businessDate) throw new BadRequestException('A vault-transfer reversal cannot predate the original transfer.');
+      const journal = await this.journals.reverseInTransaction(tx, { ...context, requestId: `vault-transfer-reversal:${original.id}`, journalEntryId: original.id, businessDate: input.businessDate, reason });
+      const receipt = { originalJournalEntryId: original.id, reversalJournalEntryId: journal.journalEntryId, businessDate: businessDateValue(input.businessDate) };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: 'finance.vault.transfer_reversed', entityType: 'FinanceJournalEntry', entityId: original.id, requestId: `vault-transfer-reversal:${original.id}`, afterJson: { ...receipt, reason } as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => {
+      if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different vault-transfer reversal data.');
+      throw error;
+    });
+  }
+
+  /**
+   * Reconciliation is evidence, not an adjustment. The ledger balance is
+   * snapshotted server-side and any variance remains an exception until a
+   * separately authorized source document explains it.
+   */
+  async reconcile(context: TrustedCompanyActorContext, input: ReconciliationInput) {
+    const referenceNumber = input.referenceNumber?.trim() || undefined;
+    const notes = input.notes?.trim() || undefined;
+    const observedBalance = signedDecimal(input.observedBalance, 'Observed balance must be a decimal amount with at most four places.');
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idem.beginInTransaction(tx, context, {
+        operation: 'finance.vault.reconcile', key: input.idempotencyKey,
+        request: { vaultId: input.vaultId, kind: input.kind, asOfBusinessDate: businessDateValue(input.asOfBusinessDate), observedBalance: observedBalance.toFixed(4), referenceNumber: referenceNumber ?? null, notes: notes ?? null },
+        expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return restoreReconciliation(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The treasury control record is still being processed.');
+      await this.dates.assertNotFutureInTransaction(tx, context, input.asOfBusinessDate);
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:vault-reconciliation:${input.vaultId}:${input.kind}:${businessDateValue(input.asOfBusinessDate)}`}, 0))`;
+      const expectedType = input.kind === FinanceVaultReconciliationKind.BANK_RECONCILIATION ? FinanceVaultType.BANK : FinanceVaultType.CASH;
+      const vault = await tx.financeVault.findFirst({
+        where: { id: input.vaultId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceVaultStatus.ACTIVE, type: expectedType },
+        select: { id: true, accountId: true, nameAr: true, nameEn: true, type: true },
+      });
+      if (!vault) throw new BadRequestException(input.kind === FinanceVaultReconciliationKind.BANK_RECONCILIATION ? 'Choose an active bank vault for a bank reconciliation.' : 'Choose an active cash vault for a cash count.');
+      if (input.kind === FinanceVaultReconciliationKind.BANK_RECONCILIATION && !referenceNumber) throw new BadRequestException('A bank statement reference is required for bank reconciliation.');
+      if (input.kind === FinanceVaultReconciliationKind.CASH_COUNT && observedBalance.isNegative()) throw new BadRequestException('A physical cash count cannot be negative.');
+      const total = await tx.financeAccountDailyBalance.aggregate({
+        where: { tenantId: context.tenantId, companyId: context.companyId, accountId: vault.accountId, businessDate: { lte: input.asOfBusinessDate } },
+        _sum: { debitAmount: true, creditAmount: true },
+      });
+      const ledgerBalance = decimal(total._sum.debitAmount).minus(decimal(total._sum.creditAmount));
+      const differenceAmount = observedBalance.minus(ledgerBalance);
+      if (!differenceAmount.isZero() && !notes) throw new BadRequestException('A variance explanation is required when the observed balance differs from the ledger.');
+      const status = differenceAmount.isZero() ? FinanceVaultReconciliationStatus.MATCHED : FinanceVaultReconciliationStatus.VARIANCE;
+      const id = randomUUID();
+      try {
+        await tx.financeVaultReconciliation.create({ data: {
+          id, tenantId: context.tenantId, companyId: context.companyId, vaultId: vault.id, kind: input.kind, asOfBusinessDate: input.asOfBusinessDate,
+          ledgerBalance, observedBalance, differenceAmount, status, referenceNumber: referenceNumber ?? null, notes: notes ?? null, createdByUserId: context.actorUserId,
+        } });
+      } catch (error) {
+        if ((error as { code?: string }).code === 'P2002') throw new ConflictException('A bank reconciliation or cash count already exists for this vault and date.');
+        throw error;
+      }
+      const receipt: TreasuryReconciliationReceipt = { id, vaultId: vault.id, vaultNameAr: vault.nameAr, vaultNameEn: vault.nameEn, kind: input.kind, asOfBusinessDate: businessDateValue(input.asOfBusinessDate), ledgerBalance: ledgerBalance.toFixed(4), observedBalance: observedBalance.toFixed(4), differenceAmount: differenceAmount.toFixed(4), status, referenceNumber: referenceNumber ?? null, notes: notes ?? null, createdAt: new Date() };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: 'finance.vault.reconciliation_recorded', entityType: 'FinanceVaultReconciliation', entityId: id, requestId: `vault-reconciliation:${id}`, afterJson: storeReconciliation(receipt) as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: storeReconciliation(receipt) } });
+      return receipt;
+    }).catch((error) => {
+      if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different reconciliation data.');
+      throw error;
+    });
+  }
+
+  async reconciliations(context: TrustedCompanyActorContext, input: ReconciliationsInput) {
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const baseWhere: Prisma.FinanceVaultReconciliationWhereInput = {
+        tenantId: context.tenantId, companyId: context.companyId,
+        ...(input.vaultId ? { vaultId: input.vaultId } : {}),
+        ...(input.kind ? { kind: input.kind } : {}),
+      };
+      const cursor = input.cursor ? await tx.financeVaultReconciliation.findFirst({ where: { ...baseWhere, id: input.cursor }, select: { id: true, asOfBusinessDate: true } }) : null;
+      if (input.cursor && !cursor) throw new BadRequestException('The treasury-control page cursor is no longer available.');
+      const rows = await tx.financeVaultReconciliation.findMany({
+        where: cursor ? { ...baseWhere, OR: [{ asOfBusinessDate: { lt: cursor.asOfBusinessDate } }, { asOfBusinessDate: cursor.asOfBusinessDate, id: { lt: cursor.id } }] } : baseWhere,
+        orderBy: [{ asOfBusinessDate: 'desc' }, { id: 'desc' }], take: input.pageSize + 1,
+        select: { id: true, kind: true, asOfBusinessDate: true, ledgerBalance: true, observedBalance: true, differenceAmount: true, status: true, referenceNumber: true, notes: true, createdAt: true, vault: { select: { id: true, nameAr: true, nameEn: true } } },
+      });
+      const hasMore = rows.length > input.pageSize;
+      const page = rows.slice(0, input.pageSize);
+      return { companyId: context.companyId, items: page.map((row) => ({ id: row.id, vaultId: row.vault.id, vaultNameAr: row.vault.nameAr, vaultNameEn: row.vault.nameEn, kind: row.kind, asOfBusinessDate: businessDateValue(row.asOfBusinessDate), ledgerBalance: row.ledgerBalance.toFixed(4), observedBalance: row.observedBalance.toFixed(4), differenceAmount: row.differenceAmount.toFixed(4), status: row.status, referenceNumber: row.referenceNumber, notes: row.notes, createdAt: row.createdAt })), nextCursor: hasMore ? page.at(-1)?.id ?? null : null };
+    });
+  }
 }
+
+type TreasuryReconciliationReceipt = { id: string; vaultId: string; vaultNameAr: string; vaultNameEn: string; kind: FinanceVaultReconciliationKind; asOfBusinessDate: string; ledgerBalance: string; observedBalance: string; differenceAmount: string; status: FinanceVaultReconciliationStatus; referenceNumber: string | null; notes: string | null; createdAt: Date };
+type StoredTreasuryReconciliationReceipt = Omit<TreasuryReconciliationReceipt, 'createdAt'> & { createdAt: string };
 
 function dateFilter(from?: Date, to?: Date) {
   if (!from && !to) return undefined;
   return { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) };
 }
 function decimal(value: Prisma.Decimal | number | string | null | undefined) { return new Prisma.Decimal(value === null || value === undefined ? 0 : value); }
+function signedDecimal(value: string, message: string) { let amount: Prisma.Decimal; try { amount = new Prisma.Decimal(value); } catch { throw new BadRequestException(message); } if (!amount.isFinite() || (amount.decimalPlaces() ?? 0) > 4 || amount.abs().gt('99999999999999.9999')) throw new BadRequestException(message); return amount; }
+function storeReconciliation(value: TreasuryReconciliationReceipt): StoredTreasuryReconciliationReceipt { return { ...value, createdAt: value.createdAt.toISOString() }; }
+function restoreReconciliation(value: unknown): TreasuryReconciliationReceipt { const stored = value as StoredTreasuryReconciliationReceipt; return { ...stored, createdAt: new Date(stored.createdAt) }; }
 function dateForBusinessDate(value: string) { return new Date(value + "T00:00:00.000Z"); }
 function capAsOfDate(requested: Date | undefined, businessDate: Date) { return requested && requested < businessDate ? requested : businessDate; }
 function businessDateValue(value: Date) { return value.toISOString().slice(0, 10); }

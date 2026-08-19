@@ -139,6 +139,22 @@ export const FinanceVaultStatus = {
 export type FinanceVaultStatus = (typeof FinanceVaultStatus)[keyof typeof FinanceVaultStatus]
 
 
+export const FinanceVaultReconciliationKind = {
+  BANK_RECONCILIATION: 'BANK_RECONCILIATION',
+  CASH_COUNT: 'CASH_COUNT'
+} as const
+
+export type FinanceVaultReconciliationKind = (typeof FinanceVaultReconciliationKind)[keyof typeof FinanceVaultReconciliationKind]
+
+
+export const FinanceVaultReconciliationStatus = {
+  MATCHED: 'MATCHED',
+  VARIANCE: 'VARIANCE'
+} as const
+
+export type FinanceVaultReconciliationStatus = (typeof FinanceVaultReconciliationStatus)[keyof typeof FinanceVaultReconciliationStatus]
+
+
 export const FinanceSupplierDueStatus = {
   OPEN: 'OPEN',
   PARTIALLY_PAID: 'PARTIALLY_PAID',

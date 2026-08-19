@@ -1,4 +1,4 @@
-import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsQuerySchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema } from '@baseer-erp/contracts';
+import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsQuerySchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema, reverseFinanceOutflowDocumentRequestSchema, reverseFinanceOutflowDocumentReceiptSchema } from '@baseer-erp/contracts';
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -48,6 +48,17 @@ export class PurchaseExpenseController {
         grossAmount: item.grossAmount, isTaxable: item.isTaxable, allocations: item.allocations,
         ...(item.notes ? { notes: item.notes } : {}),
       })) },
+    }));
+  }
+  @Post('reverse')
+  async reverse(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const request = reverseFinanceOutflowDocumentRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException('Invalid purchase or expense reversal request.');
+    const context = await this.authorize(authorization, companyId, 'finance.purchase_expense.cancel');
+    return reverseFinanceOutflowDocumentReceiptSchema.parse(await this.documents.reverse({
+      context,
+      idempotencyKey: request.data.idempotencyKey,
+      request: { documentId: request.data.documentId, businessDate: request.data.businessDate, reason: request.data.reason },
     }));
   }
   @Get('credit-workspace')

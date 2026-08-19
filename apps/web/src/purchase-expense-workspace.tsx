@@ -5,6 +5,7 @@ import { BaseerBatchFooter, BaseerBatchHeader, BaseerBatchPanel, BaseerWorkspace
 import { BaseerCard } from "./baseer-card";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerDialog } from "./baseer-dialog";
 import { DataTable } from "./data-table";
 import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
 import { formatMoney } from "./number-format";
@@ -41,6 +42,9 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
   const [rows, setRows] = useState<BatchRow[]>(initialRows);
   const [message, setMessage] = useState<{ kind: "idle" | "success" | "error"; text: string }>({ kind: "idle", text: "" });
   const [saving, setSaving] = useState(false);
+  const [reverseTarget, setReverseTarget] = useState<Document | null>(null);
+  const [reversalBusinessDate, setReversalBusinessDate] = useState("");
+  const [reversalReason, setReversalReason] = useState("");
   const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) return; const [nextConfiguration, nextDocuments] = await Promise.all([api<Configuration>(current, "/finance/configuration"), api<{ documents: Document[] }>(current, "/finance/purchase-expense-documents")]); setConfiguration(nextConfiguration); setDocuments(nextDocuments.documents); }, []);
   const loadCredit = useCallback(async (cursor?: string) => { const current = activeSession(); if (!current) return; const snapshot = await api<CreditWorkspace>(current, `/finance/purchase-expense-documents/credit-workspace?pageSize=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`); setCredit((previous) => cursor && previous ? { ...snapshot, suppliers: mergeCreditSupplierPages(previous.suppliers, snapshot.suppliers) } : snapshot); setBusinessDate((currentDate) => currentDate || snapshot.asOfBusinessDate.slice(0, 10)); }, []);
   useEffect(() => { void load().catch((error) => setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.loadingPurchaseData) })); }, [language, load, text.loadingPurchaseData]);
@@ -85,6 +89,16 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
   const renderSupplierAction = (supplier: { id: string; isFavorite?: boolean }) => { const isFavorite = Boolean(supplier.isFavorite); return <BaseerButton aria-label={isFavorite ? text.removeFavoriteSupplier : text.addFavoriteSupplier} title={isFavorite ? text.removeFavoriteSupplier : text.addFavoriteSupplier} type="button" variant="icon" style={{ width: "2rem", minWidth: "2rem", minHeight: "2rem", padding: 0, border: 0, background: "transparent", boxShadow: "none", color: isFavorite ? "var(--brand)" : "var(--muted)" }} onClick={() => void setSupplierFavorite(supplier.id, !isFavorite)}>{isFavorite ? "★" : "☆"}</BaseerButton>; };
   const remove = (rowId: string) => setRows((current) => current.length === 1 ? current : current.filter((row) => row.id !== rowId));
   const submit = async (event: React.FormEvent) => { event.preventDefault(); const current = activeSession(); if (!current || saving) return; if (!businessDate) { setMessage({ kind: "error", text: text.selectDate }); return; } if (!enteredRows.length) { setMessage({ kind: "error", text: text.atLeastOneRow }); return; } for (const [index, row] of enteredRows.entries()) { if (!row.kind || !row.categoryId || !row.grossAmount || !Number.isFinite(Number(row.grossAmount)) || Number(row.grossAmount) <= 0 || (!row.invoiceNumber.trim() && !row.missingReason.trim()) || (row.invoiceNumber.trim() && row.missingReason.trim()) || (row.settlementKind === "PAYABLE" && !row.supplierId) || (row.settlementKind === "PAID" && !row.vaultId)) { setMessage({ kind: "error", text: text.invoiceValidation(index + 1) }); return; } } setSaving(true); setMessage({ kind: "idle", text: "" }); try { const receipt = await api<{ documentCount: number; grossAmount: string; netAmount: string; vatAmount: string }>(current, "/finance/purchase-expense-documents/batch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ businessDate, ...(batchNotes.trim() ? { notes: batchNotes.trim() } : {}), items: enteredRows.map((row) => ({ kind: row.kind, settlementKind: row.settlementKind, categoryId: row.categoryId, ...(row.supplierId ? { supplierId: row.supplierId } : {}), ...(row.invoiceNumber.trim() ? { supplierInvoiceNumber: row.invoiceNumber.trim() } : { supplierInvoiceMissingReason: row.missingReason.trim() }), ...(row.supplierInvoiceDate ? { supplierInvoiceDate: row.supplierInvoiceDate } : {}), grossAmount: row.grossAmount, isTaxable: row.isTaxable, allocations: row.settlementKind === "PAID" ? [{ vaultId: row.vaultId, grossAmount: row.grossAmount }] : [], ...(row.notes.trim() ? { notes: row.notes.trim() } : {}) })), idempotencyKey: requestId() }) }); setRows(initialRows()); setBatchNotes(""); setLastReceipt(receipt); setMessage({ kind: "success", text: text.batchSaved(receipt.documentCount) }); await Promise.all([load(), loadCredit()]); } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.saveBatch) }); } finally { setSaving(false); } };
+  const openReverse = (document: Document) => { setReverseTarget(document); setReversalBusinessDate(businessDate || document.businessDate.slice(0, 10)); setReversalReason(""); };
+  const reverseDocument = async (event: React.FormEvent) => {
+    event.preventDefault(); const current = activeSession(); if (!current || !reverseTarget || saving || !reversalBusinessDate || !reversalReason.trim()) return;
+    setSaving(true); setMessage({ kind: "idle", text: "" });
+    try {
+      await api(current, "/finance/purchase-expense-documents/reverse", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ documentId: reverseTarget.id, businessDate: reversalBusinessDate, reason: reversalReason.trim(), idempotencyKey: requestId() }) });
+      setReverseTarget(null); setMessage({ kind: "success", text: text.documentReversed }); await Promise.all([load(), loadCredit()]);
+    } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.reverseDocument) }); }
+    finally { setSaving(false); }
+  };
   if (!session) return <DailySalesSignIn language={language} />;
   return <section className="daily-sales-workspace baseer-batch-workspace" aria-label={text.purchases}>
     {message.kind !== "idle" && <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>}
@@ -103,11 +117,12 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
           </form>
           <section style={{ marginTop: "var(--section-gap)", paddingTop: "var(--section-gap)", borderTop: "1px solid var(--line)" }}>
             <div className="administration-section-heading"><div><h3>{text.invoiceHistory}</h3></div><span>{documents.length} {text.invoiceCount}</span></div>
-            {documents.length ? <div className="administration-list">{documents.map((document) => <article key={document.id}><strong>{document.documentNumber}</strong><span>{document.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {document.businessDate.slice(0, 10)}</span><span>{displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}{document.supplierNameAr ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}` : ""}</span><strong>{formatMoney(document.grossAmount)}</strong></article>)}</div> : <p className="empty-results">{text.noInvoices}</p>}
+            {documents.length ? <div className="administration-list">{documents.map((document) => <article key={document.id}><strong>{document.documentNumber}</strong><span>{document.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {document.businessDate.slice(0, 10)} · {document.status === "POSTED" ? text.posted : text.cancelled}</span><span>{displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}{document.supplierNameAr ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}` : ""}</span><strong>{formatMoney(document.grossAmount)}</strong>{document.status === "POSTED" ? <BaseerButton type="button" variant="secondary" onClick={() => openReverse(document)}>{text.reverseDocument}</BaseerButton> : null}</article>)}</div> : <p className="empty-results">{text.noInvoices}</p>}
           </section>
         </> : <CreditPanel credit={credit} language={language} vaults={paymentVaults} reload={loadCredit} />}
       </BaseerBatchPanel>
     </section>}
+    <BaseerDialog open={reverseTarget !== null} language={language} busy={saving} title={text.reverseDocument} onClose={() => setReverseTarget(null)} footer={<><BaseerButton type="button" onClick={() => setReverseTarget(null)}>{text.cancel}</BaseerButton><BaseerButton type="submit" variant="danger" form="reverse-purchase-document" disabled={saving || !reversalBusinessDate || !reversalReason.trim()}>{saving ? text.saving : text.confirmReversal}</BaseerButton></>}><form id="reverse-purchase-document" className="administration-form" onSubmit={(event) => void reverseDocument(event)}><p>{text.reverseDocumentDescription}</p><BaseerDatePicker language={language} label={text.documentDate} min={reverseTarget?.businessDate.slice(0, 10)} max={businessDate || undefined} value={reversalBusinessDate} onChange={setReversalBusinessDate} /><label>{text.reversalReason}<textarea required value={reversalReason} onChange={(event) => setReversalReason(event.target.value)} /></label></form></BaseerDialog>
   </section>;
 }
 

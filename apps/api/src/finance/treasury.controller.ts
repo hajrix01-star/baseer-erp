@@ -1,5 +1,5 @@
 import { BadRequestException, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Body, Query, UnauthorizedException } from "@nestjs/common";
-import { companyIdSchema, treasuryTransferRequestSchema, treasuryTransferReceiptSchema, treasuryVaultActivityQuerySchema, treasuryVaultActivityReceiptSchema, treasuryWorkspaceQuerySchema, treasuryWorkspaceReceiptSchema } from "@baseer-erp/contracts";
+import { companyIdSchema, createTreasuryReconciliationRequestSchema, reverseTreasuryTransferRequestSchema, reverseTreasuryTransferReceiptSchema, treasuryReconciliationReceiptSchema, treasuryReconciliationsQuerySchema, treasuryReconciliationsReceiptSchema, treasuryTransferRequestSchema, treasuryTransferReceiptSchema, treasuryVaultActivityQuerySchema, treasuryVaultActivityReceiptSchema, treasuryWorkspaceQuerySchema, treasuryWorkspaceReceiptSchema } from "@baseer-erp/contracts";
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { TreasuryService } from "./treasury.service.js";
 
@@ -33,6 +33,19 @@ export class TreasuryController {
     }));
   }
 
+  @Get("reconciliations")
+  async reconciliations(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = treasuryReconciliationsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException("Invalid treasury-control query.");
+    const context = await this.authorize(authorization, companyId, "finance.vaults.read");
+    return treasuryReconciliationsReceiptSchema.parse(await this.treasury.reconciliations(context, {
+      pageSize: parsed.data.pageSize,
+      ...(parsed.data.vaultId ? { vaultId: parsed.data.vaultId } : {}),
+      ...(parsed.data.kind ? { kind: parsed.data.kind } : {}),
+      ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
+    }));
+  }
+
   @Post("transfers")
   @HttpCode(201)
   async transfer(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -41,6 +54,28 @@ export class TreasuryController {
     const context = await this.authorize(authorization, companyId, "finance.vaults.transfer");
     const { notes, ...transfer } = parsed.data;
     return treasuryTransferReceiptSchema.parse(await this.treasury.transfer(context, { ...transfer, ...(notes ? { notes } : {}) }));
+  }
+
+  @Post("transfers/reverse")
+  async reverseTransfer(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = reverseTreasuryTransferRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid vault-transfer reversal request.");
+    const context = await this.authorize(authorization, companyId, "finance.vaults.transfer");
+    return reverseTreasuryTransferReceiptSchema.parse(await this.treasury.reverseTransfer(context, parsed.data));
+  }
+
+  @Post("reconciliations")
+  @HttpCode(201)
+  async reconcile(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = createTreasuryReconciliationRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid bank reconciliation or cash-count request.");
+    const context = await this.authorize(authorization, companyId, "finance.vaults.reconcile");
+    const { referenceNumber, notes, ...command } = parsed.data;
+    return treasuryReconciliationReceiptSchema.parse(await this.treasury.reconcile(context, {
+      ...command,
+      ...(referenceNumber ? { referenceNumber } : {}),
+      ...(notes ? { notes } : {}),
+    }));
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string) {

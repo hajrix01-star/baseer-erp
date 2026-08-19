@@ -67,6 +67,11 @@ const financeAmountSchema = z
   .trim()
   .regex(/^\d+(?:\.\d{1,4})?$/)
   .max(32);
+const financeSignedAmountSchema = z
+  .string()
+  .trim()
+  .regex(/^-?\d+(?:\.\d{1,4})?$/)
+  .max(32);
 
 export const createSupplierDueRequestSchema = z
   .object({
@@ -1001,8 +1006,24 @@ export const financeOutflowDocumentReceiptSchema = z.object({
   vatAmount: financeAmountSchema,
   supplierDueId: z.string().uuid().nullable(),
 }).strict();
+/** Posted documents are never edited. A correction starts by reversing the
+ * original journal-backed document, then entering a new replacement document. */
+export const reverseFinanceOutflowDocumentRequestSchema = z.object({
+  documentId: z.string().uuid(),
+  businessDate: financeDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const reverseFinanceOutflowDocumentReceiptSchema = z.object({
+  documentId: z.string().uuid(),
+  documentNumber: z.string().min(1).max(80),
+  reversalJournalEntryId: z.string().uuid(),
+  supplierDueId: z.string().uuid().nullable(),
+  businessDate: businessDateSchema,
+}).strict();
 
 export type CreateFinanceOutflowDocumentRequest = z.infer<typeof createFinanceOutflowDocumentRequestSchema>;
+export type ReverseFinanceOutflowDocumentRequest = z.infer<typeof reverseFinanceOutflowDocumentRequestSchema>;
 export const financeOutflowBatchReceiptSchema = z.object({
   batchId: z.string().uuid(),
   batchNumber: z.string().min(1).max(80),
@@ -1176,6 +1197,53 @@ export const treasuryTransferReceiptSchema = z.object({
   fromVaultId: z.string().uuid(),
   toVaultId: z.string().uuid(),
   amount: financeAmountSchema,
+}).strict();
+export const reverseTreasuryTransferRequestSchema = z.object({
+  journalEntryId: z.string().uuid(),
+  businessDate: financeDateSchema,
+  reason: z.string().trim().min(1).max(1_000),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+export const reverseTreasuryTransferReceiptSchema = z.object({
+  originalJournalEntryId: z.string().uuid(),
+  reversalJournalEntryId: z.string().uuid(),
+  businessDate: businessDateSchema,
+}).strict();
+export const createTreasuryReconciliationRequestSchema = z.object({
+  vaultId: z.string().uuid(),
+  kind: z.enum(["BANK_RECONCILIATION", "CASH_COUNT"]),
+  asOfBusinessDate: financeDateSchema,
+  observedBalance: financeSignedAmountSchema,
+  referenceNumber: z.string().trim().min(1).max(160).optional(),
+  notes: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+const treasuryReconciliationRecordSchema = z.object({
+  id: z.string().uuid(),
+  vaultId: z.string().uuid(),
+  vaultNameAr: z.string().min(1).max(160),
+  vaultNameEn: z.string().min(1).max(160),
+  kind: z.enum(["BANK_RECONCILIATION", "CASH_COUNT"]),
+  asOfBusinessDate: businessDateSchema,
+  ledgerBalance: financeSignedAmountSchema,
+  observedBalance: financeSignedAmountSchema,
+  differenceAmount: financeSignedAmountSchema,
+  status: z.enum(["MATCHED", "VARIANCE"]),
+  referenceNumber: z.string().max(160).nullable(),
+  notes: z.string().max(2_000).nullable(),
+  createdAt: z.coerce.date(),
+}).strict();
+export const treasuryReconciliationReceiptSchema = treasuryReconciliationRecordSchema;
+export const treasuryReconciliationsQuerySchema = z.object({
+  vaultId: z.string().uuid().optional(),
+  kind: z.enum(["BANK_RECONCILIATION", "CASH_COUNT"]).optional(),
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
+}).strict();
+export const treasuryReconciliationsReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  items: z.array(treasuryReconciliationRecordSchema).max(100),
+  nextCursor: z.string().uuid().nullable(),
 }).strict();
 export const treasuryWorkspaceQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),

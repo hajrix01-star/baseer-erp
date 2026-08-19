@@ -218,6 +218,7 @@ export type CompanyWhereInput = {
   financeSuppliers?: Prisma.FinanceSupplierListRelationFilter
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodListRelationFilter
   financeVaults?: Prisma.FinanceVaultListRelationFilter
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationListRelationFilter
   financeSupplierDues?: Prisma.FinanceSupplierDueListRelationFilter
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentListRelationFilter
   financeJournalEntries?: Prisma.FinanceJournalEntryListRelationFilter
@@ -284,6 +285,7 @@ export type CompanyOrderByWithRelationInput = {
   financeSuppliers?: Prisma.FinanceSupplierOrderByRelationAggregateInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodOrderByRelationAggregateInput
   financeVaults?: Prisma.FinanceVaultOrderByRelationAggregateInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationOrderByRelationAggregateInput
   financeSupplierDues?: Prisma.FinanceSupplierDueOrderByRelationAggregateInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentOrderByRelationAggregateInput
   financeJournalEntries?: Prisma.FinanceJournalEntryOrderByRelationAggregateInput
@@ -354,6 +356,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   financeSuppliers?: Prisma.FinanceSupplierListRelationFilter
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodListRelationFilter
   financeVaults?: Prisma.FinanceVaultListRelationFilter
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationListRelationFilter
   financeSupplierDues?: Prisma.FinanceSupplierDueListRelationFilter
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentListRelationFilter
   financeJournalEntries?: Prisma.FinanceJournalEntryListRelationFilter
@@ -447,6 +450,7 @@ export type CompanyCreateInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -512,6 +516,7 @@ export type CompanyUncheckedCreateInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -577,6 +582,7 @@ export type CompanyUpdateInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -642,6 +648,7 @@ export type CompanyUncheckedUpdateInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -991,6 +998,20 @@ export type CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput = {
   upsert?: Prisma.CompanyUpsertWithoutFinanceVaultsInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutFinanceVaultsInput, Prisma.CompanyUpdateWithoutFinanceVaultsInput>, Prisma.CompanyUncheckedUpdateWithoutFinanceVaultsInput>
+}
+
+export type CompanyCreateNestedOneWithoutFinanceVaultReconciliationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutFinanceVaultReconciliationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutFinanceVaultReconciliationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutFinanceVaultReconciliationsInput
+  upsert?: Prisma.CompanyUpsertWithoutFinanceVaultReconciliationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUpdateWithoutFinanceVaultReconciliationsInput>, Prisma.CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput>
 }
 
 export type CompanyCreateNestedOneWithoutFinanceSupplierDuesInput = {
@@ -1600,6 +1621,7 @@ export type CompanyCreateWithoutTenantInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -1664,6 +1686,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -1769,6 +1792,7 @@ export type CompanyCreateWithoutBrandingInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -1833,6 +1857,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -1913,6 +1938,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -1977,6 +2003,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -2040,6 +2067,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -2104,6 +2132,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -2184,6 +2213,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -2248,6 +2278,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -2312,6 +2343,7 @@ export type CompanyCreateWithoutAuditsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -2376,6 +2408,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -2456,6 +2489,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -2520,6 +2554,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -2584,6 +2619,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -2648,6 +2684,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -2728,6 +2765,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -2792,6 +2830,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -2856,6 +2895,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -2920,6 +2960,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -3000,6 +3041,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -3064,6 +3106,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3128,6 +3171,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -3192,6 +3236,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -3272,6 +3317,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -3336,6 +3382,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3400,6 +3447,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -3464,6 +3512,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -3544,6 +3593,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -3608,6 +3658,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3672,6 +3723,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -3736,6 +3788,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -3816,6 +3869,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -3880,6 +3934,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3944,6 +3999,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -4008,6 +4064,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -4088,6 +4145,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -4152,6 +4210,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4216,6 +4275,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -4280,6 +4340,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -4360,6 +4421,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -4424,6 +4486,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4488,6 +4551,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -4552,6 +4616,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -4632,6 +4697,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -4696,6 +4762,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4760,6 +4827,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -4824,6 +4892,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -4904,6 +4973,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -4968,6 +5038,283 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutFinanceVaultReconciliationsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput>
+}
+
+export type CompanyUpsertWithoutFinanceVaultReconciliationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutFinanceVaultReconciliationsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutFinanceVaultReconciliationsInput, Prisma.CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput>
+}
+
+export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5033,6 +5380,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
@@ -5097,6 +5445,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
@@ -5177,6 +5526,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
@@ -5241,6 +5591,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5305,6 +5656,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
@@ -5369,6 +5721,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
@@ -5449,6 +5802,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
@@ -5513,6 +5867,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5577,6 +5932,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
@@ -5641,6 +5997,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
@@ -5721,6 +6078,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
@@ -5785,6 +6143,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5849,6 +6208,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -5913,6 +6273,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -5993,6 +6354,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -6057,6 +6419,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6121,6 +6484,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -6185,6 +6549,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -6265,6 +6630,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -6329,6 +6695,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6393,6 +6760,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -6457,6 +6825,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -6537,6 +6906,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -6601,6 +6971,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6665,6 +7036,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -6729,6 +7101,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -6809,6 +7182,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -6873,6 +7247,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6937,6 +7312,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -7001,6 +7377,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -7081,6 +7458,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -7145,6 +7523,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7209,6 +7588,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -7273,6 +7653,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -7353,6 +7734,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -7417,6 +7799,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7481,6 +7864,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -7545,6 +7929,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -7625,6 +8010,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -7689,6 +8075,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7753,6 +8140,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -7817,6 +8205,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -7897,6 +8286,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -7961,6 +8351,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8025,6 +8416,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -8089,6 +8481,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -8169,6 +8562,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -8233,6 +8627,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8297,6 +8692,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -8361,6 +8757,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -8441,6 +8838,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -8505,6 +8903,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8569,6 +8968,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -8633,6 +9033,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -8713,6 +9114,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -8777,6 +9179,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8841,6 +9244,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -8905,6 +9309,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -8985,6 +9390,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -9049,6 +9455,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9113,6 +9520,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -9177,6 +9585,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -9257,6 +9666,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -9321,6 +9731,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9385,6 +9796,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -9449,6 +9861,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -9529,6 +9942,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -9593,6 +10007,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9657,6 +10072,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -9721,6 +10137,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -9801,6 +10218,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -9865,6 +10283,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9929,6 +10348,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -9993,6 +10413,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -10073,6 +10494,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -10137,6 +10559,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10201,6 +10624,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -10265,6 +10689,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -10345,6 +10770,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -10409,6 +10835,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10473,6 +10900,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -10537,6 +10965,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -10617,6 +11046,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -10681,6 +11111,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10745,6 +11176,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -10809,6 +11241,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -10889,6 +11322,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -10953,6 +11387,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11017,6 +11452,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -11081,6 +11517,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -11161,6 +11598,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -11225,6 +11663,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11289,6 +11728,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -11353,6 +11793,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -11433,6 +11874,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -11497,6 +11939,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11561,6 +12004,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -11625,6 +12069,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -11705,6 +12150,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -11769,6 +12215,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11833,6 +12280,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -11897,6 +12345,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -11977,6 +12426,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -12041,6 +12491,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12105,6 +12556,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -12169,6 +12621,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -12249,6 +12702,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -12313,6 +12767,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12377,6 +12832,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -12441,6 +12897,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -12521,6 +12978,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -12585,6 +13043,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12649,6 +13108,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -12713,6 +13173,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -12793,6 +13254,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -12857,6 +13319,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12921,6 +13384,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -12985,6 +13449,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -13065,6 +13530,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -13129,6 +13595,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13193,6 +13660,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -13257,6 +13725,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -13337,6 +13806,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -13401,6 +13871,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13465,6 +13936,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -13529,6 +14001,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -13609,6 +14082,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -13673,6 +14147,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13737,6 +14212,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -13801,6 +14277,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -13881,6 +14358,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -13945,6 +14423,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14009,6 +14488,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -14073,6 +14553,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -14153,6 +14634,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -14217,6 +14699,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14281,6 +14764,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -14345,6 +14829,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -14425,6 +14910,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -14489,6 +14975,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14553,6 +15040,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -14617,6 +15105,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -14697,6 +15186,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -14761,6 +15251,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14825,6 +15316,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -14889,6 +15381,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -14969,6 +15462,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -15033,6 +15527,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15097,6 +15592,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -15161,6 +15657,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -15241,6 +15738,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -15305,6 +15803,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15369,6 +15868,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -15433,6 +15933,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -15513,6 +16014,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -15577,6 +16079,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15641,6 +16144,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -15705,6 +16209,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -15785,6 +16290,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -15849,6 +16355,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15913,6 +16420,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -15977,6 +16485,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -16057,6 +16566,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -16121,6 +16631,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16185,6 +16696,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
@@ -16249,6 +16761,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
   financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
@@ -16329,6 +16842,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -16393,6 +16907,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16466,6 +16981,7 @@ export type CompanyUpdateWithoutTenantInput = {
   financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
@@ -16530,6 +17046,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
   financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
   financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
   financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16601,6 +17118,7 @@ export type CompanyCountOutputType = {
   financeSuppliers: number
   financeFiscalPeriods: number
   financeVaults: number
+  financeVaultReconciliations: number
   financeSupplierDues: number
   financeSupplierDuePayments: number
   financeJournalEntries: number
@@ -16656,6 +17174,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   financeSuppliers?: boolean | CompanyCountOutputTypeCountFinanceSuppliersArgs
   financeFiscalPeriods?: boolean | CompanyCountOutputTypeCountFinanceFiscalPeriodsArgs
   financeVaults?: boolean | CompanyCountOutputTypeCountFinanceVaultsArgs
+  financeVaultReconciliations?: boolean | CompanyCountOutputTypeCountFinanceVaultReconciliationsArgs
   financeSupplierDues?: boolean | CompanyCountOutputTypeCountFinanceSupplierDuesArgs
   financeSupplierDuePayments?: boolean | CompanyCountOutputTypeCountFinanceSupplierDuePaymentsArgs
   financeJournalEntries?: boolean | CompanyCountOutputTypeCountFinanceJournalEntriesArgs
@@ -16778,6 +17297,13 @@ export type CompanyCountOutputTypeCountFinanceFiscalPeriodsArgs<ExtArgs extends 
  */
 export type CompanyCountOutputTypeCountFinanceVaultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FinanceVaultWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountFinanceVaultReconciliationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceVaultReconciliationWhereInput
 }
 
 /**
@@ -17096,6 +17622,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   financeSuppliers?: boolean | Prisma.Company$financeSuppliersArgs<ExtArgs>
   financeFiscalPeriods?: boolean | Prisma.Company$financeFiscalPeriodsArgs<ExtArgs>
   financeVaults?: boolean | Prisma.Company$financeVaultsArgs<ExtArgs>
+  financeVaultReconciliations?: boolean | Prisma.Company$financeVaultReconciliationsArgs<ExtArgs>
   financeSupplierDues?: boolean | Prisma.Company$financeSupplierDuesArgs<ExtArgs>
   financeSupplierDuePayments?: boolean | Prisma.Company$financeSupplierDuePaymentsArgs<ExtArgs>
   financeJournalEntries?: boolean | Prisma.Company$financeJournalEntriesArgs<ExtArgs>
@@ -17191,6 +17718,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   financeSuppliers?: boolean | Prisma.Company$financeSuppliersArgs<ExtArgs>
   financeFiscalPeriods?: boolean | Prisma.Company$financeFiscalPeriodsArgs<ExtArgs>
   financeVaults?: boolean | Prisma.Company$financeVaultsArgs<ExtArgs>
+  financeVaultReconciliations?: boolean | Prisma.Company$financeVaultReconciliationsArgs<ExtArgs>
   financeSupplierDues?: boolean | Prisma.Company$financeSupplierDuesArgs<ExtArgs>
   financeSupplierDuePayments?: boolean | Prisma.Company$financeSupplierDuePaymentsArgs<ExtArgs>
   financeJournalEntries?: boolean | Prisma.Company$financeJournalEntriesArgs<ExtArgs>
@@ -17258,6 +17786,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     financeSuppliers: Prisma.$FinanceSupplierPayload<ExtArgs>[]
     financeFiscalPeriods: Prisma.$FinanceFiscalPeriodPayload<ExtArgs>[]
     financeVaults: Prisma.$FinanceVaultPayload<ExtArgs>[]
+    financeVaultReconciliations: Prisma.$FinanceVaultReconciliationPayload<ExtArgs>[]
     financeSupplierDues: Prisma.$FinanceSupplierDuePayload<ExtArgs>[]
     financeSupplierDuePayments: Prisma.$FinanceSupplierDuePaymentPayload<ExtArgs>[]
     financeJournalEntries: Prisma.$FinanceJournalEntryPayload<ExtArgs>[]
@@ -17717,6 +18246,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   financeSuppliers<T extends Prisma.Company$financeSuppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeSuppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeFiscalPeriods<T extends Prisma.Company$financeFiscalPeriodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeFiscalPeriodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceFiscalPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeVaults<T extends Prisma.Company$financeVaultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeVaultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceVaultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  financeVaultReconciliations<T extends Prisma.Company$financeVaultReconciliationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeVaultReconciliationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceVaultReconciliationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeSupplierDues<T extends Prisma.Company$financeSupplierDuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeSupplierDuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierDuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeSupplierDuePayments<T extends Prisma.Company$financeSupplierDuePaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeSupplierDuePaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierDuePaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeJournalEntries<T extends Prisma.Company$financeJournalEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeJournalEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18454,6 +18984,30 @@ export type Company$financeVaultsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.FinanceVaultScalarFieldEnum | Prisma.FinanceVaultScalarFieldEnum[]
+}
+
+/**
+ * Company.financeVaultReconciliations
+ */
+export type Company$financeVaultReconciliationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceVaultReconciliation
+   */
+  select?: Prisma.FinanceVaultReconciliationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceVaultReconciliation
+   */
+  omit?: Prisma.FinanceVaultReconciliationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceVaultReconciliationInclude<ExtArgs> | null
+  where?: Prisma.FinanceVaultReconciliationWhereInput
+  orderBy?: Prisma.FinanceVaultReconciliationOrderByWithRelationInput | Prisma.FinanceVaultReconciliationOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceVaultReconciliationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceVaultReconciliationScalarFieldEnum | Prisma.FinanceVaultReconciliationScalarFieldEnum[]
 }
 
 /**

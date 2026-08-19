@@ -589,6 +589,13 @@ export type EnumFinanceVaultStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumFinanceVaultStatusFilter<$PrismaModel>
 }
 
+export type EnumFinanceVaultReconciliationKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationKind | Prisma.EnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationKind
+}
+
 export type DecimalFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel>
@@ -600,11 +607,21 @@ export type DecimalFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type EnumFinanceSupplierDueStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.FinanceSupplierDueStatus | Prisma.EnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel> | $Enums.FinanceSupplierDueStatus
+export type EnumFinanceVaultReconciliationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationStatus | Prisma.EnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationStatus
+}
+
+export type EnumFinanceVaultReconciliationKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationKind | Prisma.EnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel>
 }
 
 export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -621,6 +638,23 @@ export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
+}
+
+export type EnumFinanceVaultReconciliationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationStatus | Prisma.EnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel>
+}
+
+export type EnumFinanceSupplierDueStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierDueStatus | Prisma.EnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel> | $Enums.FinanceSupplierDueStatus
 }
 
 export type EnumFinanceSupplierDueStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -1999,6 +2033,13 @@ export type NestedEnumFinanceVaultStatusWithAggregatesFilter<$PrismaModel = neve
   _max?: Prisma.NestedEnumFinanceVaultStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationKind | Prisma.EnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationKind
+}
+
 export type NestedDecimalFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel>
@@ -2010,11 +2051,21 @@ export type NestedDecimalFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.FinanceSupplierDueStatus | Prisma.EnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel> | $Enums.FinanceSupplierDueStatus
+export type NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationStatus | Prisma.EnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationStatus
+}
+
+export type NestedEnumFinanceVaultReconciliationKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationKind | Prisma.EnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationKind[] | Prisma.ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationKindWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultReconciliationKindFilter<$PrismaModel>
 }
 
 export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -2031,6 +2082,23 @@ export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceVaultReconciliationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceVaultReconciliationStatus | Prisma.EnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceVaultReconciliationStatus[] | Prisma.ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceVaultReconciliationStatusWithAggregatesFilter<$PrismaModel> | $Enums.FinanceVaultReconciliationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFinanceVaultReconciliationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FinanceSupplierDueStatus | Prisma.EnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FinanceSupplierDueStatus[] | Prisma.ListEnumFinanceSupplierDueStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFinanceSupplierDueStatusFilter<$PrismaModel> | $Enums.FinanceSupplierDueStatus
 }
 
 export type NestedEnumFinanceSupplierDueStatusWithAggregatesFilter<$PrismaModel = never> = {

@@ -417,6 +417,7 @@ export const ModelName = {
   SupplierCopyProvenance: 'SupplierCopyProvenance',
   FinanceFiscalPeriod: 'FinanceFiscalPeriod',
   FinanceVault: 'FinanceVault',
+  FinanceVaultReconciliation: 'FinanceVaultReconciliation',
   FinanceSupplierDue: 'FinanceSupplierDue',
   FinanceSupplierDuePayment: 'FinanceSupplierDuePayment',
   FinanceJournalEntry: 'FinanceJournalEntry',
@@ -482,7 +483,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1963,6 +1964,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FinanceVaultCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FinanceVaultCountAggregateOutputType> | number
+        }
+      }
+    }
+    FinanceVaultReconciliation: {
+      payload: Prisma.$FinanceVaultReconciliationPayload<ExtArgs>
+      fields: Prisma.FinanceVaultReconciliationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceVaultReconciliationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceVaultReconciliationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceVaultReconciliationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceVaultReconciliationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        findMany: {
+          args: Prisma.FinanceVaultReconciliationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>[]
+        }
+        create: {
+          args: Prisma.FinanceVaultReconciliationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        createMany: {
+          args: Prisma.FinanceVaultReconciliationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceVaultReconciliationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceVaultReconciliationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        update: {
+          args: Prisma.FinanceVaultReconciliationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceVaultReconciliationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceVaultReconciliationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceVaultReconciliationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceVaultReconciliationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceVaultReconciliationPayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceVaultReconciliationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceVaultReconciliation>
+        }
+        groupBy: {
+          args: Prisma.FinanceVaultReconciliationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceVaultReconciliationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceVaultReconciliationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceVaultReconciliationCountAggregateOutputType> | number
         }
       }
     }
@@ -6026,6 +6101,26 @@ export const FinanceVaultScalarFieldEnum = {
 export type FinanceVaultScalarFieldEnum = (typeof FinanceVaultScalarFieldEnum)[keyof typeof FinanceVaultScalarFieldEnum]
 
 
+export const FinanceVaultReconciliationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  vaultId: 'vaultId',
+  kind: 'kind',
+  asOfBusinessDate: 'asOfBusinessDate',
+  ledgerBalance: 'ledgerBalance',
+  observedBalance: 'observedBalance',
+  differenceAmount: 'differenceAmount',
+  status: 'status',
+  referenceNumber: 'referenceNumber',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceVaultReconciliationScalarFieldEnum = (typeof FinanceVaultReconciliationScalarFieldEnum)[keyof typeof FinanceVaultReconciliationScalarFieldEnum]
+
+
 export const FinanceSupplierDueScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -7358,6 +7453,20 @@ export type ListEnumFinanceVaultStatusFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
+ * Reference to a field of type 'FinanceVaultReconciliationKind'
+ */
+export type EnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultReconciliationKind'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceVaultReconciliationKind[]'
+ */
+export type ListEnumFinanceVaultReconciliationKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultReconciliationKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -7368,6 +7477,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceVaultReconciliationStatus'
+ */
+export type EnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultReconciliationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'FinanceVaultReconciliationStatus[]'
+ */
+export type ListEnumFinanceVaultReconciliationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceVaultReconciliationStatus[]'>
     
 
 
@@ -8143,6 +8266,7 @@ export type GlobalOmitConfig = {
   supplierCopyProvenance?: Prisma.SupplierCopyProvenanceOmit
   financeFiscalPeriod?: Prisma.FinanceFiscalPeriodOmit
   financeVault?: Prisma.FinanceVaultOmit
+  financeVaultReconciliation?: Prisma.FinanceVaultReconciliationOmit
   financeSupplierDue?: Prisma.FinanceSupplierDueOmit
   financeSupplierDuePayment?: Prisma.FinanceSupplierDuePaymentOmit
   financeJournalEntry?: Prisma.FinanceJournalEntryOmit

@@ -71,6 +71,7 @@ export const ModelName = {
   SupplierCopyProvenance: 'SupplierCopyProvenance',
   FinanceFiscalPeriod: 'FinanceFiscalPeriod',
   FinanceVault: 'FinanceVault',
+  FinanceVaultReconciliation: 'FinanceVaultReconciliation',
   FinanceSupplierDue: 'FinanceSupplierDue',
   FinanceSupplierDuePayment: 'FinanceSupplierDuePayment',
   FinanceJournalEntry: 'FinanceJournalEntry',
@@ -458,6 +459,26 @@ export const FinanceVaultScalarFieldEnum = {
 } as const
 
 export type FinanceVaultScalarFieldEnum = (typeof FinanceVaultScalarFieldEnum)[keyof typeof FinanceVaultScalarFieldEnum]
+
+
+export const FinanceVaultReconciliationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  vaultId: 'vaultId',
+  kind: 'kind',
+  asOfBusinessDate: 'asOfBusinessDate',
+  ledgerBalance: 'ledgerBalance',
+  observedBalance: 'observedBalance',
+  differenceAmount: 'differenceAmount',
+  status: 'status',
+  referenceNumber: 'referenceNumber',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceVaultReconciliationScalarFieldEnum = (typeof FinanceVaultReconciliationScalarFieldEnum)[keyof typeof FinanceVaultReconciliationScalarFieldEnum]
 
 
 export const FinanceSupplierDueScalarFieldEnum = {
