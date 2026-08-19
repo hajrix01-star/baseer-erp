@@ -533,15 +533,16 @@ export class HrPayrollService {
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.APPROVED) throw new ConflictException('A payroll must be unpaid before its accrual can be reversed.');
       if (!run.accrualJournalEntryId) throw new ConflictException('The payroll accrual is missing.');
-      await this.journals.reverseInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-reversal:${run.id}`, journalEntryId: run.accrualJournalEntryId, businessDate: input.businessDate, reason: input.reason });
+      const reversalJournal = await this.journals.reverseInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-reversal:${run.id}`, journalEntryId: run.accrualJournalEntryId, businessDate: input.businessDate, reason: input.reason });
       for (const line of run.lines) {
+        await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: reversalJournal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary.negated(), sourceReference: `${run.runNumber}-REV`, description: `Payroll accrual reversed: ${input.reason}` } });
         for (const app of line.advanceApplications) await this.reverseAdvance(tx, context, app.advanceId, app.amount, input.businessDate, run.runNumber);
         for (const app of line.deductionApplications) await this.reverseDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber, input.reason);
       }
       await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.REVERSED, reversedAt: new Date(), reversalReason: input.reason } });
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
-      await this.audit(tx, context, 'hr.payroll.reversed', 'HrPayrollRun', run.id, receipt);
+      await this.audit(tx, context, 'hr.payroll.reversed', 'HrPayrollRun', run.id, { ...receipt, reversalJournalEntryId: reversalJournal.journalEntryId });
       return receipt;
     });
   }
