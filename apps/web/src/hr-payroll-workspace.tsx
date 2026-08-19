@@ -10,6 +10,7 @@ import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-m
 import { DataTable, type DataTableColumn } from "./data-table";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
 import { listHrPayrollRuns, type HrPayrollRun } from "./hr-client";
+import { formatNumber } from "./number-format";
 
 type Language = "ar" | "en";
 
@@ -19,7 +20,7 @@ const HrCompensationPoliciesDialog = lazy(async () => ({ default: (await import(
 
 const today = () => new Date().toISOString().slice(0, 10);
 const month = () => `${today().slice(0, 7)}-01`;
-const money = (value: string) => Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money = (value: string) => formatNumber(value);
 
 export function HrPayrollWorkspace({ language }: { language: Language }) {
   const ar = language === "ar";

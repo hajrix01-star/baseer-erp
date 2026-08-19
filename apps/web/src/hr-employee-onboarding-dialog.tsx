@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoney } from "./baseer-money";
+import { formatNumber } from "./number-format";
 import { activeSession, requestId } from "./daily-sales-client";
 import { createHrEmployeeDocument, getHrEmployee, onboardHrEmployee } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
@@ -84,7 +85,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
           <div className="hr-onboarding__summary-identity"><span>{ar ? "الاسم" : "Name"}</span><strong>{draft.nameAr.trim() || (ar ? "لم يُدخل بعد" : "Not entered yet")}</strong><span>{ar ? "المسمى" : "Job title"}</span><strong>{draft.jobTitle || "—"}</strong><span>{ar ? "تاريخ التعيين" : "Hire date"}</span><strong dir="ltr">{draft.hireDate || "—"}</strong></div>
           <div className="hr-onboarding__summary-divider" />
           <div className="hr-onboarding__result-heading"><span>{ar ? "نتيجة الراتب" : "Salary result"}</span><small>{ar ? "محسوبة تلقائياً" : "Calculated automatically"}</small></div>
-          {calculation.valid ? <div className="hr-onboarding__calculation"><div className="hr-onboarding__total hr-onboarding__total--featured"><span>{ar ? "إجمالي الراتب" : "Total salary"}</span><BaseerMoney value={calculation.monthlyGross} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><BaseerMoney value={calculation.basicSalary} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "إجمالي البدلات" : "Total allowances"}</span><BaseerMoney value={allowancesTotal} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "مكوّن الأوفر تايم" : "Overtime component"}</span><BaseerMoney value={calculation.overtimeAmount} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "ساعات الأوفر تايم" : "Overtime hours"}</span><strong>{calculation.overtimeHours.toLocaleString("en-US", { maximumFractionDigits: 1 })}</strong></div></div> : null}
+          {calculation.valid ? <div className="hr-onboarding__calculation"><div className="hr-onboarding__total hr-onboarding__total--featured"><span>{ar ? "إجمالي الراتب" : "Total salary"}</span><BaseerMoney value={calculation.monthlyGross} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><BaseerMoney value={calculation.basicSalary} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "إجمالي البدلات" : "Total allowances"}</span><BaseerMoney value={allowancesTotal} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "مكوّن الأوفر تايم" : "Overtime component"}</span><BaseerMoney value={calculation.overtimeAmount} language={language} /></div><div className="hr-onboarding__total"><span>{ar ? "ساعات الأوفر تايم" : "Overtime hours"}</span><strong>{formatNumber(calculation.overtimeHours)}</strong></div></div> : null}
         </aside>
       </div>
     </form>

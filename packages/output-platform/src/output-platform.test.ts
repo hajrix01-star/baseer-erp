@@ -3,6 +3,7 @@ import test from 'node:test';
 import * as XLSX from 'xlsx';
 
 import type { OutputActor, OutputRequest, ReportDefinition } from './contracts.js';
+import { formatDisplayNumber } from './formatting.js';
 import { OutputPlatform } from './output-platform.js';
 import { renderPrintPreviewDocument } from './print-preview.js';
 
@@ -51,6 +52,13 @@ test('refuses reports outside the registered contract', async () => {
   const platform = new OutputPlatform();
   await assert.rejects(platform.createSnapshot(actor, { ...request, reportCode: 'unknown' }), /OUTPUT_REPORT_NOT_FOUND/);
 });
+
+test('formats display numbers with no unnecessary decimals and at most one decimal place', () => {
+  assert.equal(formatDisplayNumber('2500'), '2,500');
+  assert.equal(formatDisplayNumber('2500.5'), '2,500.5');
+  assert.equal(formatDisplayNumber('2500.56'), '2,500.6');
+});
+
 test('renders a content-only branded print document with company identity and period', async () => {
   const snapshot = await definition.createSnapshot(actor, request);
   const html = renderPrintPreviewDocument(snapshot);

@@ -15,6 +15,7 @@ import { BaseerSearchSelect } from "./baseer-search-select";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { DataTable } from "./data-table";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
+import { formatNumber, formatPercent } from "./number-format";
 import {
   approveHrFinalSettlement, createHrFinalSettlement, listHrAdministrativeDeductions,
   listHrAdvances, listHrEmployees, listHrFinalSettlements, payHrFinalSettlement,
@@ -33,7 +34,7 @@ type RecoveryRow = { id: string; recoveryType: HrFinalSettlementRecovery["recove
 
 const today = () => new Date().toISOString().slice(0, 10);
 const emptyDraft = (): Draft => ({ employeeId: "", terminationDate: today(), terminationReason: "EMPLOYER_TERMINATION", reasonEvidenceReference: "", reasonEvidenceNote: "" });
-const money = (value: string) => Number(value || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money = (value: string) => formatNumber(value);
 
 export function HrFinalSettlementWorkspace({ language, employee }: { language: Language; employee?: HrEmployee }) {
   const ar = language === "ar";
@@ -229,7 +230,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
           <BaseerSummaryMetric label={ar ? "أيام الخدمة" : "Service days"} value={preview.serviceDays} />
           <BaseerSummaryMetric label={ar ? "أجر نهاية الخدمة" : "EOS wage"} value={money(preview.eosWage)} />
           <BaseerSummaryMetric label={ar ? "المكافأة الكاملة" : "Full award"} value={money(preview.fullAwardAmount)} />
-          <BaseerSummaryMetric label={ar ? "نسبة الاستحقاق" : "Entitlement"} value={`${(Number(preview.entitlementFactor) * 100).toLocaleString("en-US", { maximumFractionDigits: 2 })}%`} />
+          <BaseerSummaryMetric label={ar ? "نسبة الاستحقاق" : "Entitlement"} value={formatPercent(Number(preview.entitlementFactor) * 100)} />
           <BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS amount"} value={money(preview.eosAmount)} />
           <BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(preview.recoveryAmount)} />
           <BaseerSummaryMetric label={ar ? "صافي المخالصة" : "Net settlement"} value={money(preview.netPayableAmount)} />

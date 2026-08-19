@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
+import { formatMoney } from "./number-format";
 
 export function formatBaseerMoney(value: string | number, _language: "ar" | "en", currency = "SAR") {
-  const amount = Number(value);
-  const formatted = (Number.isFinite(amount) ? amount : 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 1 });
-  return `${formatted} ${currency}`;
+  return formatMoney(value, currency);
 }
 
 export function BaseerMoney({ value, language, currency = "SAR", className }: { value: string | number; language: "ar" | "en"; currency?: string; className?: string }) {

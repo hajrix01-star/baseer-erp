@@ -13,13 +13,14 @@ import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-m
 import { DataTable } from "./data-table";
 import { activeSession, api, requestId } from "./daily-sales-client";
 import { approveHrPayrollRun, getHrPayrollRun, payHrPayrollRun, reverseHrPayrollRun, type HrPayrollDetail } from "./hr-client";
+import { formatNumber } from "./number-format";
 
 type Language = "ar" | "en";
 type PaymentMethod = "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP";
 type Vault = { id: string; nameAr: string; nameEn: string; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean; paymentMethod: PaymentMethod; paymentMethods: PaymentMethod[] };
 type Allocation = { vaultId: string; paymentMethod: PaymentMethod | ""; amount: string };
 const today = () => new Date().toISOString().slice(0, 10);
-const money = (value: string) => Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money = (value: string) => formatNumber(value);
 
 export function HrPayrollDetailDialog({ runId, language, onClose, onChanged, onError }: { runId: string; language: Language; onClose: () => void; onChanged: () => Promise<void>; onError: (message: string) => void }) {
   const ar = language === "ar";

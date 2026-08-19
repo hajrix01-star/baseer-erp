@@ -5,6 +5,7 @@ import { BaseerSearchSelect } from "./baseer-search-select";
 import { DataTable } from "./data-table";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
+import { formatNumber } from "./number-format";
 
 export type OutflowBatchEntryRow = { id: string; kind: "" | "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; vaultId: string; notes: string };
 type Category = { id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" };
@@ -27,7 +28,7 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({ langu
     { id: "amount", header: text.totalAmount, width: "6.25rem", numeric: true, cell: (row) => <input aria-label={text.totalAmount} inputMode="decimal" placeholder={text.enterAmount} value={row.grossAmount} onChange={(event) => onChange(row.id, "grossAmount" as keyof Row, event.target.value as Row[keyof Row])} /> },
     { id: "taxAmount", header: text.vat, width: "4rem", numeric: true, cell: (row) => {
       const amount = row.isTaxable && vatEnabled ? inclusiveTaxAmount(row.grossAmount, vatRateBasisPoints) : null;
-      return amount === null ? null : <span>{amount.toFixed(2)}</span>;
+      return amount === null ? null : <span>{formatNumber(amount)}</span>;
     } },
     { id: "settlement", header: text.settlement, width: "6rem", cell: (row) => <BaseerSearchSelect searchable={false} id={`settlement-${row.id}`} label={text.settlement} value={row.settlementKind} placeholder={text.settlement} options={[{ id: "PAID", label: text.paid }, { id: "PAYABLE", label: text.payable }]} onChange={(settlementKind) => onChange(row.id, "settlementKind" as keyof Row, settlementKind as Row[keyof Row])} /> },
     { id: "vault", header: text.paymentChannel, width: "7.25rem", cell: (row) => <BaseerSearchSelect id={`vault-${row.id}`} label={text.paymentChannel} disabled={row.settlementKind !== "PAID"} value={row.vaultId} placeholder={text.selectChannel} options={vaults.map((vault) => ({ id: vault.id, label: displayName(language, vault) }))} onChange={(vaultId) => onChange(row.id, "vaultId" as keyof Row, vaultId as Row[keyof Row])} /> },

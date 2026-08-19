@@ -11,13 +11,14 @@ import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-m
 import { activeSession } from "./daily-sales-client";
 import { getHrEmployee, listHrEmployees, type HrCompensationMethod, type HrDetail, type HrEmployee } from "./hr-client";
 import { calculateSalaryTool, type SalaryToolInput } from "./hr-salary-tools-calculations";
+import { formatNumber } from "./number-format";
 
 type Language = "ar" | "en";
 type Tab = "salary" | "documents";
 
 const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import("./hr-compensation-agreement-dialog")).HrCompensationAgreementDialog }));
 const HrEmployeeLettersPanel = lazy(async () => ({ default: (await import("./hr-employee-letters-panel")).HrEmployeeLettersPanel }));
-const money = (value: number) => value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money = (value: number) => formatNumber(value);
 const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "", housingAllowance: "", transportAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 
@@ -93,7 +94,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
         <BaseerSummaryMetric label={ar ? "الراتب الأساسي" : "Basic salary"} value={money(calculation.basicSalary)} />
         <BaseerSummaryMetric label={ar ? "البدلات الثابتة" : "Fixed allowances"} value={money(calculation.fixedAllowances)} />
         <BaseerSummaryMetric label={ar ? "مكوّن الأوفر تايم" : "Overtime component"} value={money(calculation.overtimeAmount)} />
-        {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات الأوفر تايم" : "Overtime hours"} value={calculation.overtimeHours.toLocaleString("en-US", { maximumFractionDigits: 2 })} /> : null}
+        {calculation.overtimeHours > 0 ? <BaseerSummaryMetric label={ar ? "ساعات الأوفر تايم" : "Overtime hours"} value={formatNumber(calculation.overtimeHours)} /> : null}
       </BaseerSummaryMetricGrid><BaseerCard><strong>{ar ? "حدود هذه المعاينة" : "Preview boundary"}</strong><p>{ar ? "يُشتق الأوفر تايم من جدول الراتب فقط، ولا يثبت ساعات عمل فعلية أو غياباً أو إجازة. عند إنشاء المسير، يعيد الخادم حساب الراتب الساري ويحفظ لقطة مستقلة لكل مسير." : "Overtime is derived only from the salary schedule; it does not prove actual worked hours, absence, or leave. When a payroll run is created, the server saves an independent snapshot."}</p></BaseerCard></> : null}
       {selectedDetail ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setAgreementOpen(true)}>{ar ? "تعديل راتب الموظف" : "Edit employee salary"}</BaseerButton></div> : null}
       </> : null}
