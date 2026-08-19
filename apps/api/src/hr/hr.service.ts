@@ -7,6 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceCategoryStatus, FinanceSupplierStatus, HrEmployeeServiceComplianceStatus, HrEmployeeServiceStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
@@ -109,10 +110,11 @@ export class HrService {
       });
       if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
       if (begun.kind === 'in-progress') throw new ConflictException('The employee request is already being processed.');
-      const duplicate = await tx.hrEmployee.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeNumber: input.employeeNumber }, select: { id: true } });
-      if (duplicate) throw new ConflictException('The employee number already exists for this company.');
+      const employeeNumber = await generateHrEmployeeNumber(tx, context.companyId);
+      const duplicate = await tx.hrEmployee.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeNumber }, select: { id: true } });
+      if (duplicate) throw new ConflictException('Employee-number generation conflicted. Please submit the employee again.');
       const id = randomUUID();
-      await tx.hrEmployee.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input } });
+      await tx.hrEmployee.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, employeeNumber } });
       const receipt = { id, replayed: false };
       await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', id, null, input);
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
@@ -393,7 +395,7 @@ export class HrService {
 }
 
 function employeeCreateInput(value: EmployeeCreateInput) {
-  return { employeeNumber: value.employeeNumber.trim(), nameAr: value.nameAr.trim(), nameEn: nullable(value.nameEn), jobTitle: nullable(value.jobTitle), phone: nullable(value.phone), email: nullable(value.email), hireDate: value.hireDate, notes: nullable(value.notes) };
+  return { nameAr: value.nameAr.trim(), nameEn: nullable(value.nameEn), jobTitle: nullable(value.jobTitle), phone: nullable(value.phone), email: nullable(value.email), hireDate: value.hireDate, notes: nullable(value.notes) };
 }
 function employeeUpdateInput(value: EmployeeUpdateInput) {
   return { nameAr: value.nameAr.trim(), ...(value.nameEn !== undefined ? { nameEn: nullable(value.nameEn) } : {}), ...(value.jobTitle !== undefined ? { jobTitle: nullable(value.jobTitle) } : {}), ...(value.phone !== undefined ? { phone: nullable(value.phone) } : {}), ...(value.email !== undefined ? { email: nullable(value.email) } : {}), status: value.status, ...(value.terminatedAt !== undefined ? { terminatedAt: value.terminatedAt } : {}), ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}) };

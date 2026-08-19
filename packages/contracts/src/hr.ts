@@ -71,7 +71,6 @@ export const issueHrEmployeeLetterRequestSchema = z.object({ letterType: hrEmplo
 export const revokeHrEmployeeLetterRequestSchema = z.object({ reason: z.string().trim().min(1).max(1_000), idempotencyKey: idempotencyKeySchema }).strict();
 
 export const createHrEmployeeRequestSchema = z.object({
-  employeeNumber: z.string().trim().min(1).max(80),
   nameAr: z.string().trim().min(1).max(160),
   nameEn: z.string().trim().max(160).optional(),
   jobTitle: z.string().trim().max(160).optional(),
