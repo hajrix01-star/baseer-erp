@@ -727,14 +727,30 @@ export class HrPayrollService {
       include: { policy: true },
     });
     if (existing) return existing;
-    const policyId = randomUUID();
-    const versionId = randomUUID();
-    await tx.hrCompensationPolicy.create({ data: {
+
+    // Older companies can already have the system policy shell (or an
+    // unfinished draft) without an approved version. Do not try to create
+    // the same company/code again: that would violate the policy key and turn
+    // an ordinary employee onboarding request into a server error.
+    const policy = await tx.hrCompensationPolicy.findFirst({
+      where: { tenantId: context.tenantId, companyId: context.companyId, code: 'BASEER_STANDARD' },
+      select: { id: true },
+    });
+    const policyId = policy?.id ?? randomUUID();
+    if (!policy) await tx.hrCompensationPolicy.create({ data: {
       id: policyId, tenantId: context.tenantId, companyId: context.companyId, code: 'BASEER_STANDARD', nameAr: 'السياسة القياسية لبصير', nameEn: 'Baseer standard policy', createdByUserId: context.actorUserId,
     } });
+
+    const [latestVersion, occupiedDefaultDate] = await Promise.all([
+      tx.hrCompensationPolicyVersion.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, policyId }, orderBy: { versionNumber: 'desc' }, select: { versionNumber: true } }),
+      tx.hrCompensationPolicyVersion.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, policyId, effectiveFrom: new Date('2000-01-01T00:00:00.000Z') }, select: { id: true } }),
+    ]);
     return tx.hrCompensationPolicyVersion.create({ data: {
-      id: versionId, tenantId: context.tenantId, companyId: context.companyId, policyId, versionNumber: 1,
-      effectiveFrom: new Date('2000-01-01T00:00:00.000Z'), status: HrCompensationPolicyVersionStatus.APPROVED,
+      id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, policyId, versionNumber: (latestVersion?.versionNumber ?? 0) + 1,
+      // A legacy draft may already occupy the original system start date.
+      // The next day remains effective for every live company and preserves
+      // the draft for an explicit policy workflow.
+      effectiveFrom: occupiedDefaultDate ? new Date('2000-01-02T00:00:00.000Z') : new Date('2000-01-01T00:00:00.000Z'), status: HrCompensationPolicyVersionStatus.APPROVED,
       formulaCode: HrCompensationFormulaCode.STANDARD_MONTHLY_V1, approvedByUserId: context.actorUserId, approvedAt: new Date(), createdByUserId: context.actorUserId,
     }, include: { policy: true } });
   }
