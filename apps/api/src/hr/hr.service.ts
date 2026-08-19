@@ -1,7 +1,8 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
-import type { CancelHrEmployeeServiceRequest, CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, RenewHrEmployeeServiceRequest, UpdateHrEmployeeRequest, UpdateHrEmployeeServiceRequest } from '@baseer-erp/contracts';
+import type { CancelHrEmployeeServiceRequest, CreateHrEmployeePromotionRequest, CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, RenewHrEmployeeServiceRequest, UpdateHrEmployeeRequest, UpdateHrEmployeeServiceRequest } from '@baseer-erp/contracts';
+import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
@@ -11,6 +12,8 @@ type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
+type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
+type EmployeePromotionListQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceUpdateInput = Omit<UpdateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceCancelInput = Omit<CancelHrEmployeeServiceRequest, 'idempotencyKey'>;
@@ -19,7 +22,7 @@ type EmployeeServiceListQuery = Readonly<{ employeeId?: string; serviceType?: st
 
 @Injectable()
 export class HrService {
-  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
+  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly businessDates: BusinessDateService) {}
 
   async listEmployees(context: TrustedCompanyActorContext, query: EmployeeListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
@@ -133,6 +136,50 @@ export class HrService {
       const receipt = { id: updated.id, replayed: false };
       await this.audit(tx, context, 'hr.employee.updated', 'HrEmployee', updated.id, mapEmployee(prior), mapEmployee(updated));
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  async listPromotions(context: TrustedCompanyActorContext, employeeId: string, query: EmployeePromotionListQuery) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true } });
+      if (!employee) throw new NotFoundException('The employee is not available for this company.');
+      const cursor = query.cursor ? await tx.hrEmployeePromotion.findFirst({ where: { id: query.cursor, employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, effectiveDate: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The employee-promotion cursor is invalid.');
+      const rows = await tx.hrEmployeePromotion.findMany({
+        where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, ...(cursor ? { OR: [{ effectiveDate: { lt: cursor.effectiveDate } }, { effectiveDate: cursor.effectiveDate, id: { lt: cursor.id } }] } : {}) },
+        orderBy: [{ effectiveDate: 'desc' }, { id: 'desc' }], take: query.pageSize + 1,
+      });
+      const hasMore = rows.length > query.pageSize;
+      const promotions = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { promotions: promotions.map(mapPromotion), hasMore, nextCursor: hasMore ? promotions.at(-1)?.id ?? null : null };
+    });
+  }
+
+  async createPromotion(context: TrustedCompanyActorContext, raw: EmployeePromotionCreateInput, idempotencyKey: string) {
+    const input = promotionCreateInput(raw);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'hr.employee.promotion.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee-promotion request is already being processed.');
+      const [employee, businessDate] = await Promise.all([
+        tx.hrEmployee.findFirst({ where: { id: raw.employeeId, tenantId: context.tenantId, companyId: context.companyId } }),
+        this.businessDates.resolveInTransaction(tx, context),
+      ]);
+      if (!employee || (employee.status !== HrEmployeeStatus.ACTIVE && employee.status !== HrEmployeeStatus.ON_LEAVE)) throw new BadRequestException('Choose an active employee from this company.');
+      if (input.effectiveDate.getTime() < employee.hireDate.getTime()) throw new BadRequestException('The promotion effective date cannot be before the hire date.');
+      if (day(input.effectiveDate)! > businessDate.businessDate) throw new BadRequestException('A future promotion cannot be recorded before its effective date.');
+      if (employee.jobTitle === input.newJobTitle) throw new ConflictException('The new job title is already the employee current title.');
+      const duplicate = await tx.hrEmployeePromotion.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: employee.id, effectiveDate: input.effectiveDate, decisionReference: input.decisionReference }, select: { id: true } });
+      if (duplicate) throw new ConflictException('This promotion decision is already recorded for the employee.');
+      const id = randomUUID();
+      const promotion = await tx.hrEmployeePromotion.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, employeeId: employee.id, previousJobTitle: employee.jobTitle, newJobTitle: input.newJobTitle, effectiveDate: input.effectiveDate, decisionReference: input.decisionReference, reason: input.reason, createdByUserId: context.actorUserId } });
+      await tx.hrEmployee.update({ where: { id: employee.id }, data: { jobTitle: input.newJobTitle } });
+      const receipt = { id, replayed: false };
+      await this.audit(tx, context, 'hr.employee.promoted', 'HrEmployeePromotion', id, { employeeId: employee.id, jobTitle: employee.jobTitle }, mapPromotion(promotion));
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);
   }
@@ -351,6 +398,9 @@ function employeeCreateInput(value: EmployeeCreateInput) {
 function employeeUpdateInput(value: EmployeeUpdateInput) {
   return { nameAr: value.nameAr.trim(), ...(value.nameEn !== undefined ? { nameEn: nullable(value.nameEn) } : {}), ...(value.jobTitle !== undefined ? { jobTitle: nullable(value.jobTitle) } : {}), ...(value.phone !== undefined ? { phone: nullable(value.phone) } : {}), ...(value.email !== undefined ? { email: nullable(value.email) } : {}), status: value.status, ...(value.terminatedAt !== undefined ? { terminatedAt: value.terminatedAt } : {}), ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}) };
 }
+function promotionCreateInput(value: EmployeePromotionCreateInput) {
+  return { employeeId: value.employeeId, effectiveDate: value.effectiveDate, newJobTitle: value.newJobTitle.trim(), decisionReference: value.decisionReference.trim(), reason: nullable(value.reason) };
+}
 function serviceCreateInput(value: EmployeeServiceCreateInput) {
   return { employeeId: value.employeeId, serviceType: value.serviceType, referenceNumber: nullable(value.referenceNumber), issueDate: value.issueDate ?? null, expiryDate: value.expiryDate ?? null, visaDurationMonths: value.visaDurationMonths ?? null, supplierId: value.supplierId ?? null, categoryId: value.categoryId ?? null, notes: nullable(value.notes) };
 }
@@ -393,6 +443,7 @@ function defaultCategoryCodeForService(serviceType: string) {
 }
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
 function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, hireDate: day(value.hireDate)!, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
+function mapPromotion(value: { id: string; employeeId: string; effectiveDate: Date; previousJobTitle: string | null; newJobTitle: string; decisionReference: string; reason: string | null; createdAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveDate: day(value.effectiveDate)!, previousJobTitle: value.previousJobTitle, newJobTitle: value.newJobTitle, decisionReference: value.decisionReference, reason: value.reason, createdAt: value.createdAt.toISOString() }; }
 function mapCompensation(value: { id: string; employeeId: string; policyVersionId: string | null; effectiveFrom: Date; effectiveTo: Date | null; monthlyGross: Prisma.Decimal; compensationMethod: string; foodAllowance: Prisma.Decimal; otherAllowance: Prisma.Decimal; scheduledHoursPerDay: number | null; scheduledWorkDays: number | null; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, policyVersionId: value.policyVersionId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), monthlyGross: value.monthlyGross.toFixed(4), compensationMethod: value.compensationMethod as 'FIXED_MONTHLY' | 'INCLUSIVE_OVERTIME', foodAllowance: value.foodAllowance.toFixed(4), otherAllowance: value.otherAllowance.toFixed(4), scheduledHoursPerDay: value.scheduledHoursPerDay, scheduledWorkDays: value.scheduledWorkDays, notes: value.notes }; }
 function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) { return { id: value.id, employeeId: value.employeeId, serviceType: value.serviceType as CreateHrEmployeeServiceRequest['serviceType'], referenceNumber: value.referenceNumber, issueDate: day(value.issueDate), expiryDate: day(value.expiryDate), visaDurationMonths: value.visaDurationMonths, renewalOfServiceId: value.renewalOfServiceId, supplier: value.supplier, category: value.category, outflowDocumentId: value.outflowDocumentId, status: value.status, complianceStatus: value.complianceStatus, notes: value.notes, ...(value.employee ? { employee: value.employee } : {}) }; }
 function mapMovement(value: { id: string; journalEntryId: string; movementType: string; businessDate: Date; amount: Prisma.Decimal; sourceReference: string; description: string | null }) { return { id: value.id, journalEntryId: value.journalEntryId, movementType: value.movementType, businessDate: day(value.businessDate)!, amount: value.amount.toFixed(4), sourceReference: value.sourceReference, description: value.description }; }

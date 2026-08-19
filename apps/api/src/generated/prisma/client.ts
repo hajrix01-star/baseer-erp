@@ -178,6 +178,13 @@ export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
  */
 export type HrEmployee = Prisma.HrEmployeeModel
 /**
+ * Model HrEmployeePromotion
+ * An immutable, operational career-history event. Compensation remains in
+ * HrEmployeeCompensationProfile so a promotion can never rewrite payroll
+ * snapshots or post a financial entry by itself.
+ */
+export type HrEmployeePromotion = Prisma.HrEmployeePromotionModel
+/**
  * Model HrEmployeeLeave
  * An approved absence window. Future records intentionally do not set the
  * employee to ON_LEAVE; the service derives that status only for a leave

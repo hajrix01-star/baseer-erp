@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers
 import {
   companyIdSchema,
   createHrEmployeeRequestSchema,
+  createHrEmployeePromotionRequestSchema,
   createHrEmployeeServiceRequestSchema,
   updateHrEmployeeServiceRequestSchema,
   cancelHrEmployeeServiceRequestSchema,
@@ -10,6 +11,9 @@ import {
   financeOutflowDocumentReceiptSchema,
   hrEmployeeDetailQuerySchema,
   hrEmployeeDetailReceiptSchema,
+  hrEmployeePromotionsQuerySchema,
+  hrEmployeePromotionsReceiptSchema,
+  hrEmployeePromotionReceiptSchema,
   hrEmployeePayrollHistoryQuerySchema,
   hrEmployeePayrollHistoryReceiptSchema,
   hrEmployeeAdvanceIssueReceiptSchema,
@@ -109,6 +113,14 @@ export class HrController {
     return hrEmployeePayrollHistoryReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.listForEmployee(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
+  @Get('employees/:employeeId/promotions')
+  async employeePromotions(@Param('employeeId') employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrEmployeePromotionsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid employee-promotion query.');
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    return hrEmployeePromotionsReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.listPromotions(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+  }
+
   @Post('employees')
   @HttpCode(201)
   async createEmployee(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
@@ -126,6 +138,17 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
     return hrEmployeeEntityReceiptSchema.parse(await this.hr.updateEmployee(context, input, idempotencyKey));
+  }
+
+  @Post('employees/:employeeId/promotions')
+  @HttpCode(201)
+  async createEmployeePromotion(@Param('employeeId') employeeId: string, @Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const payload = typeof body === 'object' && body !== null && !Array.isArray(body) ? body as Record<string, unknown> : {};
+    const parsed = createHrEmployeePromotionRequestSchema.safeParse({ ...payload, employeeId });
+    if (!parsed.success) throw new BadRequestException('Invalid employee-promotion request.');
+    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const { idempotencyKey, ...input } = parsed.data;
+    return hrEmployeePromotionReceiptSchema.parse(await this.hr.createPromotion(context, input, idempotencyKey));
   }
 
   @Post('services')

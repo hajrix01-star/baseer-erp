@@ -95,6 +95,21 @@ export const updateHrEmployeeRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** A promotion is an immutable career-history event. It never changes a payroll snapshot. */
+export const createHrEmployeePromotionRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  effectiveDate: hrDateSchema,
+  newJobTitle: z.string().trim().min(1).max(160),
+  decisionReference: z.string().trim().min(1).max(240),
+  reason: z.string().trim().max(2_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+export const hrEmployeePromotionsQuerySchema = z.object({
+  cursor: z.string().uuid().optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
+}).strict();
+
 export const createHrEmployeeServiceRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
   serviceType: hrEmployeeServiceTypeSchema,
@@ -362,6 +377,17 @@ export const hrEmployeeSchema = z.object({
   notes: z.string().max(2_000).nullable(),
 }).strict();
 
+export const hrEmployeePromotionSchema = z.object({
+  id: z.string().uuid(),
+  employeeId: hrEmployeeIdSchema,
+  effectiveDate: businessDateSchema,
+  previousJobTitle: z.string().max(160).nullable(),
+  newJobTitle: z.string().max(160),
+  decisionReference: z.string().max(240),
+  reason: z.string().max(2_000).nullable(),
+  createdAt: z.string().datetime(),
+}).strict();
+
 export const hrEmployeeServiceSchema = z.object({
   id: z.string().uuid(),
   employeeId: hrEmployeeIdSchema,
@@ -578,6 +604,8 @@ export const hrEmployeeAdvanceSettlementReceiptSchema = z.object({ id: z.string(
 export const hrEmployeeAdvanceDeferralReceiptSchema = z.object({ id: z.string().uuid(), advanceId: z.string().uuid(), deferredUntil: businessDateSchema, replayed: z.boolean() }).strict();
 export const hrEmployeeAdministrativeDeductionReceiptSchema = z.object({ id: z.string().uuid(), deductionNumber: z.string().min(1).max(80), replayed: z.boolean() }).strict();
 export const hrEmployeeLeaveReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeePromotionReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
+export const hrEmployeePromotionsReceiptSchema = z.object({ companyId: companyIdSchema, promotions: z.array(hrEmployeePromotionSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrCompensationPoliciesReceiptSchema = z.object({ companyId: companyIdSchema, policies: z.array(hrCompensationPolicySchema).max(100) }).strict();
 export const hrCompensationPolicyReceiptSchema = z.object({ id: z.string().uuid(), policyVersionId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeServicesReceiptSchema = z.object({ companyId: companyIdSchema, services: z.array(hrEmployeeServiceSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
@@ -603,6 +631,7 @@ export const hrFinalSettlementReceiptSchema = z.object({ id: z.string().uuid(), 
 
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
+export type CreateHrEmployeePromotionRequest = z.infer<typeof createHrEmployeePromotionRequestSchema>;
 export type CreateHrEmployeeServiceRequest = z.infer<typeof createHrEmployeeServiceRequestSchema>;
 export type UpdateHrEmployeeServiceRequest = z.infer<typeof updateHrEmployeeServiceRequestSchema>;
 export type CancelHrEmployeeServiceRequest = z.infer<typeof cancelHrEmployeeServiceRequestSchema>;

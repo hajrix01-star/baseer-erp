@@ -78,6 +78,7 @@ export const ModelName = {
   FinanceOutflowBatch: 'FinanceOutflowBatch',
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   HrEmployee: 'HrEmployee',
+  HrEmployeePromotion: 'HrEmployeePromotion',
   HrEmployeeLeave: 'HrEmployeeLeave',
   HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
   HrEmployeeDocument: 'HrEmployeeDocument',
@@ -609,6 +610,23 @@ export const HrEmployeeScalarFieldEnum = {
 } as const
 
 export type HrEmployeeScalarFieldEnum = (typeof HrEmployeeScalarFieldEnum)[keyof typeof HrEmployeeScalarFieldEnum]
+
+
+export const HrEmployeePromotionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  effectiveDate: 'effectiveDate',
+  previousJobTitle: 'previousJobTitle',
+  newJobTitle: 'newJobTitle',
+  decisionReference: 'decisionReference',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeePromotionScalarFieldEnum = (typeof HrEmployeePromotionScalarFieldEnum)[keyof typeof HrEmployeePromotionScalarFieldEnum]
 
 
 export const HrEmployeeLeaveScalarFieldEnum = {
