@@ -1,0 +1,310 @@
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+
+import dotenv from 'dotenv';
+import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
+import pg from 'pg';
+
+dotenv.config({ path: 'apps/api/.env.baseer-test' });
+
+const { Pool } = pg;
+const pool = new Pool({ connectionString: requiredEnvironment('DATABASE_URL') });
+const suffix = randomUUID().replaceAll('-', '').slice(0, 12);
+const fixture = {
+  tenantId: randomUUID(),
+  companyId: randomUUID(),
+  creatorId: randomUUID(),
+  approverId: randomUUID(),
+  payerId: randomUUID(),
+  tenantCode: `hr-lifecycle-${suffix}`,
+};
+const todayText = riyadhDate();
+const today = date(todayText);
+const monthStart = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+const beforeMonth = addDays(monthStart, -1);
+const fiscalStart = new Date(Date.UTC(today.getUTCFullYear(), 0, 1));
+const fiscalEnd = new Date(Date.UTC(today.getUTCFullYear(), 11, 31));
+const creator = actor(fixture.creatorId);
+const approver = actor(fixture.approverId);
+const payer = actor(fixture.payerId);
+let app;
+
+try {
+  if (today.getUTCDate() < 2) throw new Error('The HR lifecycle verification requires at least two elapsed days in the current month.');
+  await seedFixture();
+  console.log(`HR lifecycle fixture: ${fixture.tenantCode} (${fixture.tenantId})`);
+  process.env.BASEER_SYSTEM_TENANT_CODE = fixture.tenantCode;
+
+  const [
+    { AppModule },
+    { DatabaseService },
+    { CompanyFinanceSetupService },
+    { HrPayrollService },
+    { HrAdvanceService },
+    { HrFinalSettlementService },
+    { HrService },
+  ] = await Promise.all([
+    import('../apps/api/dist/app.module.js'),
+    import('../apps/api/dist/database/database.service.js'),
+    import('../apps/api/dist/finance/company-finance-setup.service.js'),
+    import('../apps/api/dist/hr/hr-payroll.service.js'),
+    import('../apps/api/dist/hr/hr-advance.service.js'),
+    import('../apps/api/dist/hr/hr-final-settlement.service.js'),
+    import('../apps/api/dist/hr/hr.service.js'),
+  ]);
+
+  app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }), { logger: false });
+  await app.init();
+
+  const database = app.get(DatabaseService);
+  const setup = app.get(CompanyFinanceSetupService);
+  const payroll = app.get(HrPayrollService);
+  const advances = app.get(HrAdvanceService);
+  const settlements = app.get(HrFinalSettlementService);
+  const hr = app.get(HrService);
+
+  const finance = await setup.initialize(creator, {
+    fiscalPeriodNameAr: 'فترة تحقق دورة الموارد البشرية',
+    fiscalPeriodNameEn: 'HR lifecycle verification period',
+    fiscalPeriodStartDate: fiscalStart,
+    fiscalPeriodEndDate: fiscalEnd,
+    selectedVaults: ['CASH'],
+  }, randomUUID());
+  const cashVaultId = finance.vaultIds[0];
+  assert.ok(cashVaultId, 'Finance setup must create a cash vault.');
+
+  const employeeDefinitions = [
+    ['payroll', 'موظف المسير'],
+    ['zero', 'موظف مخالصة صفرية'],
+    ['reverse', 'موظف مخالصة معكوسة'],
+    ['paid', 'موظف مخالصة مدفوعة'],
+  ];
+  const employees = new Map();
+  for (const [key, nameAr] of employeeDefinitions) {
+    const idempotencyKey = randomUUID();
+    const input = onboardingInput(nameAr);
+    const receipt = await payroll.onboardEmployee(creator, input, idempotencyKey);
+    assert.equal(receipt.replayed, false);
+    if (key === 'payroll') {
+      const replay = await payroll.onboardEmployee(creator, input, idempotencyKey);
+      assert.equal(replay.id, receipt.id);
+      assert.equal(replay.compensationId, receipt.compensationId);
+      assert.equal(replay.replayed, true, 'Onboarding replay must be explicit.');
+      const detail = await hr.employeeDetail(creator, receipt.id, { pageSize: 50 });
+      assert.equal(detail.compensation?.monthlyGross, '5000.0000', 'Onboarding must atomically persist salary.');
+    }
+    employees.set(key, { id: receipt.id, nameAr });
+  }
+
+  const payrollEmployee = employees.get('payroll');
+  const advanceIssueKey = randomUUID();
+  const advanceInput = {
+    employeeId: payrollEmployee.id,
+    businessDate: monthStart,
+    amount: '300.0000',
+    allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: '300.0000' }],
+    notes: 'HR lifecycle advance',
+  };
+  const advance = await advances.issue(creator, advanceInput, advanceIssueKey);
+  assert.equal(advance.replayed, false);
+  assert.equal((await advances.issue(creator, advanceInput, advanceIssueKey)).replayed, true, 'Advance issue replay must be explicit.');
+
+  const manualSettlementInput = {
+    advanceId: advance.id,
+    businessDate: monthStart,
+    amount: '50.0000',
+    allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: '50.0000' }],
+    notes: 'HR lifecycle manual settlement',
+  };
+  await assert.rejects(
+    () => advances.settleDirectly(creator, { ...manualSettlementInput, businessDate: beforeMonth }, randomUUID()),
+    /cannot be before the employee-advance issue date/,
+    'An advance settlement must not predate issuance.',
+  );
+  const manualSettlementKey = randomUUID();
+  const manualSettlement = await advances.settleDirectly(creator, manualSettlementInput, manualSettlementKey);
+  assert.equal(manualSettlement.remainingAmount, '250.0000');
+  assert.equal((await advances.settleDirectly(creator, manualSettlementInput, manualSettlementKey)).replayed, true, 'Advance-settlement replay must be explicit.');
+
+  const payrollLine = { employeeId: payrollEmployee.id, advances: [{ id: advance.id, amount: '100.0000' }], administrativeDeductions: [] };
+  const payrollPreviewInput = { payrollMonth: monthStart, businessDate: monthStart, includeOnLeaveEmployeeIds: [], lines: [payrollLine], pageSize: 50 };
+  const preview = await payroll.preview(creator, payrollPreviewInput);
+  assert.equal(preview.totals.employeeCount, employeeDefinitions.length);
+  assert.equal(preview.totals.advanceSettlementAmount, '100.0000');
+
+  const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [payrollLine], notes: 'HR lifecycle payroll' };
+  const payrollCreateKey = randomUUID();
+  const run = await payroll.create(creator, createPayrollInput, payrollCreateKey);
+  assert.equal(run.replayed, false);
+  assert.equal((await payroll.create(creator, createPayrollInput, payrollCreateKey)).replayed, true, 'Payroll-create replay must be explicit.');
+
+  await assert.rejects(
+    () => payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, randomUUID()),
+    /cannot be before the payroll business date/,
+    'Payroll approval must not predate its header.',
+  );
+  const approvePayrollKey = randomUUID();
+  const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey);
+  assert.equal(approvedRun.replayed, false);
+  assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');
+
+  const payrollDetail = await payroll.detail(creator, run.id);
+  assert.equal(payrollDetail.payrollRun.businessDate, day(monthStart), 'Approval must not rewrite the payroll header date.');
+  await assert.rejects(
+    () => payroll.pay(payer, { payrollRunId: run.id, businessDate: beforeMonth, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] }, randomUUID()),
+    /cannot be before its approval or latest payment date/,
+    'Payroll payment must not predate approval.',
+  );
+  const payPayrollInput = { payrollRunId: run.id, businessDate: monthStart, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] };
+  const payPayrollKey = randomUUID();
+  assert.equal((await payroll.pay(payer, payPayrollInput, payPayrollKey)).replayed, false);
+  assert.equal((await payroll.pay(payer, payPayrollInput, payPayrollKey)).replayed, true, 'Payroll-payment replay must be explicit.');
+  await assert.rejects(
+    () => payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'A paid payroll must reject reversal' }, randomUUID()),
+    /must be unpaid/,
+    'A paid payroll reversal must be rejected.',
+  );
+
+  const reverseEmployee = employees.get('reverse');
+  const recoveryAdvance = await advances.issue(creator, {
+    employeeId: reverseEmployee.id,
+    businessDate: monthStart,
+    amount: '20.0000',
+    allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: '20.0000' }],
+    notes: 'Final-settlement reversal recovery',
+  }, randomUUID());
+
+  for (const key of ['zero', 'reverse', 'paid']) {
+    const employee = employees.get(key);
+    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: today }, randomUUID());
+  }
+
+  const zeroEmployee = employees.get('zero');
+  const zeroRequest = finalSettlementInput(zeroEmployee.id, 'ARTICLE_80', []);
+  const zeroPreview = await settlements.preview(creator, withoutKey(zeroRequest));
+  assert.equal(zeroPreview.netPayableAmount, '0.0000', 'Article 80 fixture must produce a zero settlement.');
+  const zeroSettlement = await settlements.create(creator, zeroRequest);
+  assert.equal((await settlements.create(creator, zeroRequest)).replayed, true, 'Zero-settlement create replay must be explicit.');
+  await assert.rejects(
+    () => settlements.approve(approver, { settlementId: zeroSettlement.id, businessDate: addDays(today, -1) }, randomUUID()),
+    /cannot be before the termination date/,
+    'Final-settlement approval must not predate termination.',
+  );
+  await settlements.verifyReason(approver, { settlementId: zeroSettlement.id, verificationNote: 'Verified by lifecycle runner' }, randomUUID());
+  const zeroApproveKey = randomUUID();
+  await settlements.approve(approver, { settlementId: zeroSettlement.id, businessDate: today }, zeroApproveKey);
+  assert.equal((await settlements.approve(approver, { settlementId: zeroSettlement.id, businessDate: today }, zeroApproveKey)).replayed, true, 'Zero-settlement approval replay must be explicit.');
+  await assert.rejects(
+    () => settlements.reverse(payer, { settlementId: zeroSettlement.id, businessDate: addDays(today, -1), reason: 'Invalid historical reversal' }, randomUUID()),
+    /cannot be before its termination or approval date/,
+    'Zero-settlement reversal must use its audit-backed approval business date.',
+  );
+  const zeroReverseKey = randomUUID();
+  assert.equal((await settlements.reverse(payer, { settlementId: zeroSettlement.id, businessDate: today, reason: 'Zero settlement lifecycle reversal' }, zeroReverseKey)).replayed, false);
+  assert.equal((await settlements.reverse(payer, { settlementId: zeroSettlement.id, businessDate: today, reason: 'Zero settlement lifecycle reversal' }, zeroReverseKey)).replayed, true, 'Zero-settlement reversal replay must be explicit.');
+
+  const reverseRequest = finalSettlementInput(reverseEmployee.id, 'EMPLOYER_TERMINATION', [{ recoveryType: 'ADVANCE', sourceId: recoveryAdvance.id, amount: '10.0000' }]);
+  const reversePreview = await settlements.preview(creator, withoutKey(reverseRequest));
+  assert.ok(Number(reversePreview.netPayableAmount) > 0, 'Nonzero reversal fixture must have a payable amount.');
+  const reversingSettlement = await settlements.create(creator, reverseRequest);
+  await settlements.approve(approver, { settlementId: reversingSettlement.id, businessDate: today }, randomUUID());
+  await assert.rejects(
+    () => settlements.reverse(payer, { settlementId: reversingSettlement.id, businessDate: addDays(today, -1), reason: 'Invalid historical reversal' }, randomUUID()),
+    /cannot be before its termination or approval date/,
+  );
+  const reverseFinalKey = randomUUID();
+  assert.equal((await settlements.reverse(payer, { settlementId: reversingSettlement.id, businessDate: today, reason: 'Nonzero settlement lifecycle reversal' }, reverseFinalKey)).replayed, false);
+  assert.equal((await settlements.reverse(payer, { settlementId: reversingSettlement.id, businessDate: today, reason: 'Nonzero settlement lifecycle reversal' }, reverseFinalKey)).replayed, true, 'Nonzero-settlement reversal replay must be explicit.');
+
+  const paidEmployee = employees.get('paid');
+  const paidRequest = finalSettlementInput(paidEmployee.id, 'EMPLOYER_TERMINATION', []);
+  const paidPreview = await settlements.preview(creator, withoutKey(paidRequest));
+  assert.ok(Number(paidPreview.netPayableAmount) > 0, 'Paid final-settlement fixture must have a payable amount.');
+  const paidSettlement = await settlements.create(creator, paidRequest);
+  await settlements.approve(approver, { settlementId: paidSettlement.id, businessDate: today }, randomUUID());
+  await assert.rejects(
+    () => settlements.pay(payer, { settlementId: paidSettlement.id, businessDate: addDays(today, -1), allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: paidPreview.netPayableAmount }] }, randomUUID()),
+    /cannot be before its approval or latest payment date/,
+    'Final-settlement payment must not predate approval.',
+  );
+  const finalPayInput = { settlementId: paidSettlement.id, businessDate: today, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: paidPreview.netPayableAmount }] };
+  const finalPayKey = randomUUID();
+  assert.equal((await settlements.pay(payer, finalPayInput, finalPayKey)).replayed, false);
+  assert.equal((await settlements.pay(payer, finalPayInput, finalPayKey)).replayed, true, 'Final-settlement payment replay must be explicit.');
+  await assert.rejects(
+    () => settlements.reverse(payer, { settlementId: paidSettlement.id, businessDate: today, reason: 'Paid final settlement must reject reversal' }, randomUUID()),
+    /Only an unpaid approved final settlement can be reversed/,
+  );
+
+  const proof = await database.inTenantTransaction(fixture.tenantId, async (tx) => {
+    const [payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, journalEntries] = await Promise.all([
+      tx.hrPayrollRun.findFirstOrThrow({ where: { id: run.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, businessDate: true, paidAmount: true, netPayableAmount: true } }),
+      tx.hrEmployeeAdvance.findFirstOrThrow({ where: { id: advance.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { remainingAmount: true } }),
+      tx.hrFinalSettlement.findFirstOrThrow({ where: { id: zeroSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, accrualJournalEntryId: true } }),
+      tx.hrFinalSettlement.findFirstOrThrow({ where: { id: reversingSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true } }),
+      tx.hrFinalSettlement.findFirstOrThrow({ where: { id: paidSettlement.id, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, paidAmount: true, netPayableAmount: true } }),
+      tx.hrEmployeeAdvanceSettlement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, advanceId: recoveryAdvance.id, source: 'FINAL_SETTLEMENT' }, orderBy: { createdAt: 'asc' }, select: { amount: true, journalEntryId: true } }),
+      tx.hrEmployeeFinancialMovement.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, employeeId: reverseEmployee.id, movementType: 'FINAL_SETTLEMENT_ACCRUAL' }, select: { amount: true } }),
+      tx.financeJournalEntry.findMany({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId }, include: { lines: true } }),
+    ]);
+    return { payrollRow, payrollAdvance, zeroRow, reversedRow, paidRow, recoveryRows, movements, journalEntries };
+  });
+  assert.equal(proof.payrollRow.status, 'PAID');
+  assert.equal(proof.payrollRow.businessDate.toISOString(), monthStart.toISOString());
+  assert.equal(proof.payrollRow.paidAmount.equals(proof.payrollRow.netPayableAmount), true);
+  assert.equal(proof.payrollAdvance.remainingAmount.toFixed(4), '150.0000');
+  assert.equal(proof.zeroRow.status, 'REVERSED');
+  assert.equal(proof.zeroRow.accrualJournalEntryId, null, 'A zero settlement must not create an empty journal.');
+  assert.equal(proof.reversedRow.status, 'REVERSED');
+  assert.equal(proof.paidRow.status, 'PAID');
+  assert.equal(proof.paidRow.paidAmount.equals(proof.paidRow.netPayableAmount), true);
+  assert.deepEqual(proof.recoveryRows.map((row) => row.amount.toFixed(4)), ['10.0000', '-10.0000'], 'Advance recovery reversal must be append-only.');
+  assert.equal(proof.recoveryRows.every((row) => row.journalEntryId), true, 'Both recovery events must reference their journal.');
+  assert.equal(proof.movements.reduce((sum, movement) => sum + Number(movement.amount), 0), 0, 'Final-settlement accrual and reversal movements must net to zero.');
+  for (const journal of proof.journalEntries) {
+    assert.equal(journal.isSealed, true, 'Every HR journal must remain sealed.');
+    const debit = journal.lines.reduce((sum, line) => sum + Number(line.debitAmount), 0);
+    const credit = journal.lines.reduce((sum, line) => sum + Number(line.creditAmount), 0);
+    assert.equal(debit, credit, `Journal ${journal.id} must balance.`);
+  }
+
+  console.log('HR lifecycle verification passed: onboarding/salary, advance issue/settlement, payroll preview/create/approve/pay/rejection, zero/nonzero final settlements, append-only reversal, explicit replay, and monotonic business dates.');
+  console.log(`Isolated fixture retained in the test database: ${fixture.tenantCode} (${fixture.tenantId}). Cleanup requires a privileged test-database reset because audit rows are immutable to the application role.`);
+} finally {
+  if (app) await app.close();
+  await pool.end();
+}
+
+async function seedFixture() {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.tenantId]);
+    await client.query('INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)', [fixture.tenantId, fixture.tenantCode, 'HR lifecycle verification']);
+    await client.query(
+      `INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES
+       ($1::uuid, $4::uuid, $5, 'منشئ تحقق الموارد البشرية', 'HR lifecycle creator', 'unused-test-hash'),
+       ($2::uuid, $4::uuid, $6, 'معتمد تحقق الموارد البشرية', 'HR lifecycle approver', 'unused-test-hash'),
+       ($3::uuid, $4::uuid, $7, 'مسدد تحقق الموارد البشرية', 'HR lifecycle payer', 'unused-test-hash')`,
+      [fixture.creatorId, fixture.approverId, fixture.payerId, fixture.tenantId, `hr-creator-${suffix}@baseer.test`, `hr-approver-${suffix}@baseer.test`, `hr-payer-${suffix}@baseer.test`],
+    );
+    await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4)', [fixture.companyId, fixture.tenantId, 'شركة تحقق دورة الموارد البشرية', 'HR lifecycle company']);
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+function actor(actorUserId) { return { tenantId: fixture.tenantId, companyId: fixture.companyId, actorUserId }; }
+function onboardingInput(nameAr) { return { nameAr, jobTitle: 'موظف تحقق', hireDate: monthStart, initialCompensation: { monthlyGross: '5000.0000', compensationMethod: 'FIXED_MONTHLY', foodAllowance: '0.0000', housingAllowance: '0.0000', transportAllowance: '0.0000', otherAllowance: '0.0000' } }; }
+function finalSettlementInput(employeeId, terminationReason, recoveries) { return { employeeId, terminationDate: today, terminationReason, reasonEvidenceReference: `HR-LIFECYCLE-${suffix}`, reasonEvidenceNote: 'Automated isolated lifecycle verification', recoveries, idempotencyKey: randomUUID() }; }
+function withoutKey(value) { const { idempotencyKey: _key, ...request } = value; return request; }
+function date(value) { return new Date(`${value}T00:00:00.000Z`); }
+function day(value) { return value.toISOString().slice(0, 10); }
+function addDays(value, amount) { return new Date(value.getTime() + amount * 86_400_000); }
+function riyadhDate() { const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Riyadh', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()); const fields = new Map(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value])); return `${fields.get('year')}-${fields.get('month')}-${fields.get('day')}`; }
+function requiredEnvironment(name) { const value = process.env[name]; if (!value) throw new Error(`${name} is required.`); return value; }
