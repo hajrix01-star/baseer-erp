@@ -17,6 +17,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { hrText } from "./hr-copy";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { HrEmployeeDirectoryGrid } from "./hr-employee-directory-grid";
+import "./hr-employee-edit-dialog.css";
 import { cancelHrEmployeeAdministrativeDeduction, createHrEmployeeAdministrativeDeduction, deferHrEmployeeAdministrativeDeduction, deferHrEmployeeAdvance, getHrAdministrativeDeduction, getHrAdvance, getHrEmployee, issueHrEmployeeAdvance, listHrAdministrativeDeductions, listHrAdvances, listHrEmployees, settleHrEmployeeAdvanceDirectly, updateHrEmployee, type HrAdministrativeDeduction, type HrAdministrativeDeductionDetail, type HrAdvance, type HrAdvanceDetail, type HrDetail, type HrEmployee, type HrEmployeeStatus } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -230,29 +231,17 @@ function HrWorkspaceCore({ language, section }: { language: Language; section: n
     {!loading && isAdvance && (nextAdvanceCursor || nextDeductionCursor) ? <BaseerButton type="button" variant="secondary" onClick={() => { if (nextAdvanceCursor) void loadMoreRegister("advances"); if (nextDeductionCursor) void loadMoreRegister("deductions"); }}>{text.loadMore}</BaseerButton> : null}
 
     {onboardingOpen ? <Suspense fallback={null}><HrEmployeeOnboardingDialog open language={language} onClose={() => setOnboardingOpen(false)} onSaved={async () => { const refreshed = await load(); if (refreshed) showSuccess(text.employeeSaved); return refreshed; }} onError={showError} /></Suspense> : null}
-    <BaseerFormDialog open={employeeOpen} title={text.editEmployee} language={language} busy={saving} size="standard" formId="hr-employee-form" submitLabel={text.save} onClose={() => { setEmployeeOpen(false); setEditingEmployeeId(null); }}>
-      <form id="hr-employee-form" className="baseer-form" onSubmit={(event) => void saveEmployee(event)}>
-        <BaseerFormSection title={language === "ar" ? "بيانات الموظف" : "Employee details"} description={language === "ar" ? "بيانات الهوية والتواصل الأساسية." : "Core identity and contact information."}>
-          <BaseerFormGrid>
-            <label className="baseer-form-field">{text.employeeNumber}<input readOnly value={employeeForm.employeeNumber} /></label>
-            <label className="baseer-form-field">{text.employeeName}<input required autoFocus value={employeeForm.nameAr} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameAr: event.target.value }))} /></label>
-            <label className="baseer-form-field">{text.englishName}<input dir="ltr" value={employeeForm.nameEn} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameEn: event.target.value }))} /></label>
-            <label className="baseer-form-field">{text.jobTitle}<HrJobTitleSelect id="hr-edit-job-titles" language={language} value={employeeForm.jobTitle} onChange={(jobTitle) => setEmployeeForm((value) => ({ ...value, jobTitle }))} /></label>
-            <label className="baseer-form-field">{text.hireDate}<input required readOnly type="date" value={employeeForm.hireDate} max={today()} /></label>
-            <label className="baseer-form-field">{language === "ar" ? "رقم الإقامة" : "Iqama number"}<input inputMode="numeric" value={employeeForm.iqamaNumber} onChange={(event) => setEmployeeForm((value) => ({ ...value, iqamaNumber: event.target.value }))} /></label>
-            <label className="baseer-form-field">{text.phone}<input dir="ltr" inputMode="tel" value={employeeForm.phone} onChange={(event) => setEmployeeForm((value) => ({ ...value, phone: event.target.value }))} /></label>
-            <label className="baseer-form-field">{text.email}<input dir="ltr" type="email" value={employeeForm.email} onChange={(event) => setEmployeeForm((value) => ({ ...value, email: event.target.value }))} /></label>
-          </BaseerFormGrid>
-        </BaseerFormSection>
-        <BaseerFormSection title={language === "ar" ? "حالة العمل" : "Employment status"}>
-          <BaseerFormGrid>
-            <label className="baseer-form-field">{text.status}<BaseerSearchSelect searchable={false} required label={text.status} value={employeeForm.status} placeholder={text.status} options={(["ACTIVE", "ON_LEAVE", "TERMINATED", "ARCHIVED"] as const).map((status) => ({ id: status, label: statusLabel(status) }))} onChange={(status) => setEmployeeForm((value) => ({ ...value, status: status as HrEmployeeStatus, terminatedAt: status === "TERMINATED" ? value.terminatedAt : "" }))} /></label>
-            {employeeForm.status === "TERMINATED" ? <label className="baseer-form-field">{text.terminationDate}<input required type="date" min={employeeForm.hireDate} max={today()} value={employeeForm.terminatedAt} onChange={(event) => setEmployeeForm((value) => ({ ...value, terminatedAt: event.target.value }))} /></label> : null}
-          </BaseerFormGrid>
-        </BaseerFormSection>
-        <BaseerFormSection title={text.notes}>
-          <BaseerFormGrid columns="one"><label className="baseer-form-field">{text.notes}<textarea value={employeeForm.notes} onChange={(event) => setEmployeeForm((value) => ({ ...value, notes: event.target.value }))} /></label></BaseerFormGrid>
-        </BaseerFormSection>
+    <BaseerFormDialog open={employeeOpen} title={text.editEmployee} language={language} busy={saving} size="standard" className="hr-employee-edit-dialog" formId="hr-employee-form" submitLabel={text.save} onClose={() => { setEmployeeOpen(false); setEditingEmployeeId(null); }}>
+      <form id="hr-employee-form" className="baseer-form hr-employee-edit" onSubmit={(event) => void saveEmployee(event)}>
+        <div className="hr-employee-edit__meta"><span><small>{text.employeeNumber}</small><bdi>{employeeForm.employeeNumber}</bdi></span><span><small>{text.hireDate}</small><bdi>{employeeForm.hireDate}</bdi></span></div>
+        <BaseerFormGrid className="hr-employee-edit__core">
+          <label className="baseer-form-field">{text.employeeName}<input required autoFocus value={employeeForm.nameAr} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameAr: event.target.value }))} /></label>
+          <label className="baseer-form-field">{text.jobTitle}<HrJobTitleSelect id="hr-edit-job-titles" language={language} value={employeeForm.jobTitle} onChange={(jobTitle) => setEmployeeForm((value) => ({ ...value, jobTitle }))} /></label>
+          <label className="baseer-form-field">{text.status}<BaseerSearchSelect searchable={false} required label={text.status} value={employeeForm.status} placeholder={text.status} options={(["ACTIVE", "ON_LEAVE", "TERMINATED", "ARCHIVED"] as const).map((status) => ({ id: status, label: statusLabel(status) }))} onChange={(status) => setEmployeeForm((value) => ({ ...value, status: status as HrEmployeeStatus, terminatedAt: status === "TERMINATED" ? value.terminatedAt : "" }))} /></label>
+          {employeeForm.status === "TERMINATED" ? <label className="baseer-form-field">{text.terminationDate}<input required type="date" min={employeeForm.hireDate} max={today()} value={employeeForm.terminatedAt} onChange={(event) => setEmployeeForm((value) => ({ ...value, terminatedAt: event.target.value }))} /></label> : null}
+        </BaseerFormGrid>
+        <details className="baseer-form-advanced"><summary>{language === "ar" ? "معلومات إضافية" : "Additional information"}</summary><div><label>{text.englishName}<input dir="ltr" value={employeeForm.nameEn} onChange={(event) => setEmployeeForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{language === "ar" ? "رقم الإقامة" : "Iqama number"}<input inputMode="numeric" value={employeeForm.iqamaNumber} onChange={(event) => setEmployeeForm((value) => ({ ...value, iqamaNumber: event.target.value }))} /></label><label>{text.phone}<input dir="ltr" inputMode="tel" value={employeeForm.phone} onChange={(event) => setEmployeeForm((value) => ({ ...value, phone: event.target.value }))} /></label><label>{text.email}<input dir="ltr" type="email" value={employeeForm.email} onChange={(event) => setEmployeeForm((value) => ({ ...value, email: event.target.value }))} /></label></div></details>
+        <label className="baseer-form-field hr-employee-edit__notes">{text.notes}<textarea rows={1} value={employeeForm.notes} onChange={(event) => setEmployeeForm((value) => ({ ...value, notes: event.target.value }))} /></label>
       </form>
     </BaseerFormDialog>
     {detail ? <Suspense fallback={null}><HrEmployeeProfileDialog detail={detail} language={language} onClose={() => setDetail(null)} onEdit={() => { openEmployeeEdit(detail.employee); setDetail(null); }} onManageCompensation={() => { setCompensationTarget({ employee: detail.employee, profile: detail.compensation }); setDetail(null); }} onLoadMoreMovements={loadMoreMovements} onError={showError} onChanged={async () => { await load(); await refreshDetail(detail.employee.id); }} /></Suspense> : null}

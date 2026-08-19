@@ -1,0 +1,57 @@
+.hr-employee-edit-dialog .daily-sales-dialog__body {
+  padding-top: .5rem;
+}
+
+.hr-employee-edit {
+  gap: .75rem;
+}
+
+.hr-employee-edit__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+
+.hr-employee-edit__meta > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .6rem;
+  min-inline-size: 0;
+  padding: .5rem .65rem;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  border-radius: .65rem;
+  background: color-mix(in srgb, var(--canvas) 42%, var(--surface));
+}
+
+.hr-employee-edit__meta small {
+  color: var(--muted);
+  font-size: var(--font-caption);
+  font-weight: 650;
+}
+
+.hr-employee-edit__meta bdi {
+  overflow: hidden;
+  color: var(--brand-deep);
+  font-size: var(--font-label);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hr-employee-edit__core {
+  gap: .6rem .75rem;
+}
+
+.hr-employee-edit .baseer-form-advanced {
+  margin-top: -.05rem;
+}
+
+.hr-employee-edit__notes textarea {
+  min-block-size: var(--control-height) !important;
+  resize: vertical;
+}
+
+@media (max-width: 640px) {
+  .hr-employee-edit__meta { grid-template-columns: 1fr; }
+}
