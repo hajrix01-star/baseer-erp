@@ -41,7 +41,7 @@
   --font-page: clamp(1.75rem, 2.5vw, 2.25rem);
   --font-display: clamp(2rem, 4vw, 2.75rem);
   --font-display-mobile: 1.875rem;
-  --font-navigation: 0.8125rem;
+  --font-navigation: 0.875rem;
   --font-heading-weight: 700;
   --icon-size-lg: 1.5rem;
   --card-radius: 0.75rem;
@@ -399,13 +399,13 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
   color: #fff;
   background: transparent;
   font-size: var(--font-navigation);
-  font-weight: 500;
+  font-weight: 600;
   text-align: start;
 }
 .nav-item.active {
   color: #fff;
   background: #086b49;
-  font-weight: 650;
+  font-weight: 700;
 }
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.08);
