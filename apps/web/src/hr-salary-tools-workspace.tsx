@@ -4,6 +4,8 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerMoneyInput } from "./baseer-form-fields";
+import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { BaseerSearchSelect } from "./baseer-search-select";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { activeSession } from "./daily-sales-client";
@@ -16,7 +18,7 @@ type Tab = "salary" | "documents";
 const HrCompensationAgreementDialog = lazy(async () => ({ default: (await import("./hr-compensation-agreement-dialog")).HrCompensationAgreementDialog }));
 const HrEmployeeLettersPanel = lazy(async () => ({ default: (await import("./hr-employee-letters-panel")).HrEmployeeLettersPanel }));
 const money = (value: number) => value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "0", housingAllowance: "0", transportAllowance: "0", otherAllowance: "0", scheduledHoursPerDay: "", scheduledWorkDays: "" });
+const emptyDraft = (): SalaryToolInput => ({ monthlyGross: "", compensationMethod: "FIXED_MONTHLY", foodAllowance: "", housingAllowance: "", transportAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "" });
 const labelEmployee = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 
 /** Read-only salary calculator. It never creates a payroll event. */
@@ -74,16 +76,16 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
       {tab === "salary" ? <>
       <div className="administration-section-heading"><div><h2>{ar ? "حاسبة الراتب" : "Salary calculator"}</h2><p>{ar ? "معاينة تفسيرية للراتب والبدلات. لا تتصل بالحضور أو الانصراف ولا تُنشئ قيداً أو مسير رواتب." : "An explanatory preview of salary and allowances. It has no attendance integration and never creates a journal or payroll run."}</p></div></div>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
-      <div className="administration-form">
-        <label>{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
+      <section className="baseer-form"><BaseerFormSection title={ar ? "مدخلات الحاسبة" : "Calculator inputs"} description={ar ? "هذه معاينة فقط؛ لا تحفظ ولا تنشئ أي حركة." : "This is a preview only; it does not save or create a transaction."}><BaseerFormGrid>
+        <label className="baseer-form-field--full">{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} onChange={setSelectedEmployeeId} /></label>
         <label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
-        <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input inputMode="decimal" value={draft.monthlyGross} onChange={(event) => setField("monthlyGross", event.target.value)} /></label>
-        <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<input inputMode="decimal" value={draft.foodAllowance} onChange={(event) => setField("foodAllowance", event.target.value)} /></label>
-        <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => setField("housingAllowance", event.target.value)} /></label>
-        <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => setField("transportAllowance", event.target.value)} /></label>
-        <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => setField("otherAllowance", event.target.value)} /></label>
+        <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<BaseerMoneyInput value={draft.monthlyGross} onValueChange={(monthlyGross) => setField("monthlyGross", monthlyGross)} /></label>
+        <label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<BaseerMoneyInput value={draft.foodAllowance} onValueChange={(foodAllowance) => setField("foodAllowance", foodAllowance)} /></label>
+        <label>{ar ? "بدل السكن الشهري" : "Monthly housing allowance"}<BaseerMoneyInput value={draft.housingAllowance} onValueChange={(housingAllowance) => setField("housingAllowance", housingAllowance)} /></label>
+        <label>{ar ? "بدل المواصلات الشهري" : "Monthly transport allowance"}<BaseerMoneyInput value={draft.transportAllowance} onValueChange={(transportAllowance) => setField("transportAllowance", transportAllowance)} /></label>
+        <label>{ar ? "بدلات ثابتة أخرى" : "Other fixed allowances"}<BaseerMoneyInput value={draft.otherAllowance} onValueChange={(otherAllowance) => setField("otherAllowance", otherAllowance)} /></label>
         {draft.compensationMethod === "INCLUSIVE_OVERTIME" ? <><label>{ar ? "ساعات الدوام المتفق عليها يومياً" : "Agreed daily hours"}<input type="number" min="9" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => setField("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل المتفق عليها شهرياً" : "Agreed monthly working days"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => setField("scheduledWorkDays", event.target.value)} /></label></> : null}
-      </div>
+      </BaseerFormGrid></BaseerFormSection></section>
       {loadingEmployee ? <BaseerCard>{ar ? "جارٍ تحميل راتب الموظف…" : "Loading employee salary…"}</BaseerCard> : null}
       {errorMessage ? <BaseerCard tone="muted">{errorMessage}</BaseerCard> : null}
       {calculation.valid ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "نتيجة حاسبة الراتب" : "Salary calculator result"}>
