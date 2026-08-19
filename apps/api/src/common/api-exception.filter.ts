@@ -59,7 +59,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       DEPENDENCY_UNAVAILABLE: { ar: 'الخدمة المطلوبة غير متاحة مؤقتًا.', en: 'A required service is temporarily unavailable.' },
       IDEMPOTENCY_MISMATCH: { ar: 'مفتاح الإعادة لا يطابق الطلب الأصلي.', en: 'The idempotency key does not match the original request.' },
       INTERNAL_ERROR: { ar: 'حدث خطأ داخلي آمن.', en: 'A safe internal error occurred.' },
-      NOT_FOUND: { ar: 'المورد المطلوب غير موجود.', en: 'The requested resource was not found.' },
+      NOT_FOUND: { ar: 'السجل المطلوب غير موجود.', en: 'The requested resource was not found.' },
       RATE_LIMITED: { ar: '\u062a\u0645 \u062a\u0642\u064a\u064a\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0627\u062a \u0645\u0624\u0642\u062a\u0627\u064b. \u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0644\u0627\u062d\u0642\u0627\u064b.', en: 'Sign-in attempts are temporarily limited. Try again later.' },
       VALIDATION_FAILED: { ar: 'بيانات الطلب غير صالحة.', en: 'The request data is invalid.' },
     };
