@@ -31,11 +31,12 @@ export class InvoiceRegisterService {
         if (!matchingCursor.length) throw new BadRequestException("The register cursor does not match the active filters.");
       }
       const predicate = registerPredicate(context, query, cursor);
-      const [summaryRows, pageRows, suppliers, categories] = await Promise.all([
+      const [summaryRows, pageRows, suppliers, categories, classifications] = await Promise.all([
         tx.$queryRaw<SummaryRow[]>(summarySql(predicate)),
         tx.$queryRaw<Array<{ id: string }>>(pageSql(predicate, query.pageSize + 1)),
         tx.financeSupplier.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, orderBy: { nameAr: "asc" }, take: 1000, select: { id: true, nameAr: true, nameEn: true } }),
         tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE", isPosting: true }, orderBy: { nameAr: "asc" }, take: 500, select: { id: true, nameAr: true, nameEn: true } }),
+        tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, accountId: true, parentId: true, nameAr: true, nameEn: true } }),
       ]);
       const pageIds = pageRows.slice(0, query.pageSize).map((row) => row.id);
       const entries = pageIds.length ? await tx.financeJournalEntry.findMany({ where: { id: { in: pageIds }, tenantId: context.tenantId, companyId: context.companyId }, select: entrySelect }) : [];
@@ -43,7 +44,7 @@ export class InvoiceRegisterService {
       const records = pageIds.map((id) => {
         const entry = entriesById.get(id);
         if (!entry) throw new BadRequestException("The register page changed while it was being read.");
-        return mapEntry(entry);
+        return mapEntry(entry, classificationByAccountId(classifications));
       });
       const summary = summaryRows[0] ?? zeroSummary();
       return {
@@ -74,6 +75,7 @@ export class InvoiceRegisterService {
         select: detailEntrySelect,
       });
       if (!entry) throw new BadRequestException("The financial movement is not available for this company.");
+      const classifications = await tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, accountId: true, parentId: true, nameAr: true, nameEn: true } });
       const outflow = entry.outflowDocument;
       const sourceDetail = {
         supplierInvoiceNumber: outflow?.supplierInvoiceNumber ?? null,
@@ -83,7 +85,7 @@ export class InvoiceRegisterService {
           : null,
       };
       return {
-        movement: mapEntry(entry),
+        movement: mapEntry(entry, classificationByAccountId(classifications)),
         journal: {
           id: entry.id,
           sourceType: entry.sourceType,
@@ -125,10 +127,16 @@ export class InvoiceRegisterService {
 
 const entrySelect = {
   id: true, sourceType: true, sourceReference: true, businessDate: true, description: true, status: true, postedAt: true,
-  lines: { select: { debitAmount: true, creditAmount: true } },
-  outflowDocument: { select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, supplierInvoiceDate: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true, recurringExpenseProfileId: true, batch: { select: { batchNumber: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } } } },
+  lines: { select: { accountId: true, debitAmount: true, creditAmount: true, account: { select: { id: true, nameAr: true, nameEn: true, systemKey: true } } } },
+  outflowDocument: { select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, supplierInvoiceDate: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true, recurringExpenseProfileId: true, batch: { select: { batchNumber: true } }, supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, parent: { select: { id: true, nameAr: true, nameEn: true } } } } } },
   dailySalesClosing: { select: { id: true, documentNumber: true, status: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true } },
-  supplierDuePayment: { select: { id: true, amount: true, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
+  supplierDuePayment: { select: {
+    id: true, amount: true,
+    due: { select: {
+      supplier: { select: { id: true, nameAr: true, nameEn: true } },
+      category: { select: { id: true, nameAr: true, nameEn: true, kind: true, parent: { select: { id: true, nameAr: true, nameEn: true } } } },
+    } },
+  } },
   inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
   inclusiveLoanPayment: { select: { id: true, amount: true, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
   hrPayrollAccrual: { select: { runNumber: true, grossAmount: true, advanceSettlementAmount: true, administrativeDeductionAmount: true, netPayableAmount: true } },
@@ -142,16 +150,22 @@ const entrySelect = {
 const detailEntrySelect = {
   id: true, sourceType: true, sourceReference: true, businessDate: true, description: true, status: true, postedAt: true, reversalOfEntryId: true,
   reversalEntry: { select: { id: true } },
-  lines: { orderBy: { lineNumber: "asc" }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
+  lines: { orderBy: { lineNumber: "asc" }, select: { id: true, lineNumber: true, accountId: true, debitAmount: true, creditAmount: true, description: true, account: { select: { id: true, code: true, nameAr: true, nameEn: true, systemKey: true } } } },
   outflowDocument: { select: {
     id: true, documentNumber: true, kind: true, settlementKind: true, status: true, supplierInvoiceDate: true, supplierInvoiceNumber: true, supplierInvoiceMissingReason: true,
     grossAmount: true, netAmount: true, vatAmount: true, notes: true, recurringExpenseProfileId: true, coverageYear: true, coverageStartMonth: true, coverageMonths: true,
     batch: { select: { batchNumber: true, documentCount: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true } },
-    supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true } },
+    supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, parent: { select: { id: true, nameAr: true, nameEn: true } } } },
     allocations: { select: { vaultId: true, grossAmount: true, paymentMethod: true, vault: { select: { nameAr: true, nameEn: true } } } },
   } },
   dailySalesClosing: { select: { id: true, documentNumber: true, status: true, grossAmount: true, netAmount: true, vatAmount: true, notes: true, allocations: { select: { vaultId: true, grossAmount: true, vault: { select: { nameAr: true, nameEn: true } } } } } },
-  supplierDuePayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
+  supplierDuePayment: { select: {
+    id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } },
+    due: { select: {
+      supplier: { select: { id: true, nameAr: true, nameEn: true } },
+      category: { select: { id: true, nameAr: true, nameEn: true, kind: true, parent: { select: { id: true, nameAr: true, nameEn: true } } } },
+    } },
+  } },
   inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
   inclusiveLoanPayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
   hrPayrollAccrual: { select: { runNumber: true, grossAmount: true, advanceSettlementAmount: true, administrativeDeductionAmount: true, netPayableAmount: true } },
@@ -220,14 +234,44 @@ function summarySql(predicate: Prisma.Sql) { const kind = kindExpression(); cons
 function pageSql(predicate: Prisma.Sql, take: number) { return Prisma.sql`SELECT j."id" ${joins()} WHERE ${predicate} ORDER BY j."businessDate" DESC, j."postedAt" DESC, j."id" DESC LIMIT ${take}`; }
 function monthRanges(months: readonly string[]) { return [...new Set(months)].sort().map((month) => { const [year, value] = month.split("-").map(Number); const last = new Date(Date.UTC(year!, value!, 0)).getUTCDate(); return { from: `${month}-01`, to: `${month}-${String(last).padStart(2, "0")}` }; }); }
 function zeroSummary(): SummaryRow { return { documentCount: 0, postedCount: 0, cancelledCount: 0, salesCount: 0, purchaseCount: 0, expenseCount: 0, obligationCount: 0, otherCount: 0, paidCount: 0, payableCount: 0 }; }
-function mapEntry(entry: any) {
+type Classification = Readonly<{ id: string; nameAr: string; nameEn: string | null }>;
+type ClassificationCategory = Classification & Readonly<{ accountId: string | null; parentId: string | null }>;
+
+function classificationByAccountId(categories: readonly ClassificationCategory[]) {
+  return new Map(categories.filter((category) => category.accountId && category.parentId === null).map((category) => [category.accountId!, toClassification(category)]));
+}
+
+function toClassification(value: Classification) { return { id: value.id, nameAr: value.nameAr, nameEn: value.nameEn }; }
+
+function categoryParent(category: (Classification & { parent?: Classification | null }) | null | undefined) {
+  return category ? toClassification(category.parent ?? category) : null;
+}
+
+function mainAccountClassification(entry: any, operationClass: OperationClass, classifications: ReadonlyMap<string, Classification>) {
+  const preferredSystemKey: Partial<Record<OperationClass, string>> = {
+    PAYROLL_ACCRUAL: "PAYROLL_EXPENSE",
+    PAYROLL_PAYMENT: "PAYROLL_PAYABLE",
+    EMPLOYEE_ADVANCE: "EMPLOYEE_ADVANCES",
+    EMPLOYEE_ADVANCE_SETTLEMENT: "EMPLOYEE_ADVANCES",
+    FINAL_SETTLEMENT_ACCRUAL: "EOS_EXPENSE",
+    FINAL_SETTLEMENT_PAYMENT: "EOS_PAYABLE",
+  };
+  const preferred = preferredSystemKey[operationClass];
+  const line = (preferred ? entry.lines.find((item: any) => item.account.systemKey === preferred) : null)
+    ?? entry.lines.find((item: any) => item.debitAmount.gt(0))
+    ?? entry.lines[0];
+  if (!line) return null;
+  return classifications.get(line.accountId) ?? toClassification(line.account);
+}
+
+function mapEntry(entry: any, classifications: ReadonlyMap<string, Classification>) {
   const totals = journalTotals(entry.lines); const movement = totals.debit; const payrollAccrual = payrollAccrualSummary(entry.hrPayrollAccrual); const outflow = entry.outflowDocument; const sales = entry.dailySalesClosing; const duePayment = entry.supplierDuePayment; const businessDate = dateValue(entry.businessDate);
-  if (outflow) { const operationClass = operationClassForEntry(entry); return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: outflow.category, grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt }; }
-  if (sales) { const operationClass = operationClassForEntry(entry); return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt }; }
-  if (duePayment) { const operationClass = operationClassForEntry(entry); return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: duePayment.due.category, grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt }; }
-  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, totals, payrollAccrual, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
-  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, totals, payrollAccrual, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
-  return generic(entry, "JOURNAL", "OTHER", movement, entry.description, totals, payrollAccrual);
+  if (outflow) { const operationClass = operationClassForEntry(entry); return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: toClassification(outflow.category), parentClassification: categoryParent(outflow.category), grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt }; }
+  if (sales) { const operationClass = operationClassForEntry(entry); return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, parentClassification: mainAccountClassification(entry, operationClass, classifications), grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt }; }
+  if (duePayment) { const operationClass = operationClassForEntry(entry); return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: toClassification(duePayment.due.category), parentClassification: categoryParent(duePayment.due.category), grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt }; }
+  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, totals, payrollAccrual, classifications, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
+  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, totals, payrollAccrual, classifications, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
+  return generic(entry, "JOURNAL", "OTHER", movement, entry.description, totals, payrollAccrual, classifications);
 }
 function operationClassForEntry(entry: any): OperationClass {
   if (entry.dailySalesClosing) return "SALE_COLLECTION";
@@ -258,7 +302,7 @@ function operationFamilyForClass(operationClass: OperationClass): OperationFamil
 }
 function journalTotals(lines: readonly { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }[]) { const debit = lines.reduce((total, line) => total.plus(line.debitAmount), new Prisma.Decimal(0)); return { debit }; }
 function payrollAccrualSummary(run: { grossAmount: Prisma.Decimal; advanceSettlementAmount: Prisma.Decimal; administrativeDeductionAmount: Prisma.Decimal; netPayableAmount: Prisma.Decimal } | null | undefined) { return run ? { grossExpense: run.grossAmount.toFixed(4), advanceSettlement: run.advanceSettlementAmount.toFixed(4), administrativeRecovery: run.administrativeDeductionAmount.toFixed(4), netPayable: run.netPayableAmount.toFixed(4) } : null; }
-function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, _totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, display = financeJournalPresentation(entry)) { const operationClass = operationClassForEntry(entry); return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
+function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, _totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, classifications: ReadonlyMap<string, Classification>, display = financeJournalPresentation(entry)) { const operationClass = operationClassForEntry(entry); return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, parentClassification: mainAccountClassification(entry, operationClass, classifications), grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
 
 function detailAllocations(entry: any) {

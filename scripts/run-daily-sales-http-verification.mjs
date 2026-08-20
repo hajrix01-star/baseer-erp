@@ -189,6 +189,7 @@ try {
   assert.equal(expensesOnlyRegister.statusCode, 200, expensesOnlyRegister.body);
   assert.equal(expensesOnlyRegister.json().records.length, 1, "The expenses family must return the actual expense document exactly once.");
   assert.equal(expensesOnlyRegister.json().records[0].operationClass, "EXPENSE_INVOICE", "A non-recurring expense must remain distinguishable from recurring expenses and settlements.");
+  assert.equal(expensesOnlyRegister.json().records[0].parentClassification?.id, creditCategory.json().id, "A posting category without a parent must remain its own root classification in the financial register.");
   const recurringOnlyRegister = await server.inject({ method: "GET", url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-14&toBusinessDate=2026-08-14&operationClasses=RECURRING_EXPENSE", headers });
   assert.equal(recurringOnlyRegister.statusCode, 200, recurringOnlyRegister.body);
   assert.equal(recurringOnlyRegister.json().records.length, 0, "A one-off expense must not be returned by the recurring-expense filter.");

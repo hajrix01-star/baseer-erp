@@ -1359,6 +1359,7 @@ const financeInvoiceRegisterRecordSchema = z.object({
   status: financeInvoiceRegisterStatusSchema,
   supplier: financeInvoiceRegisterOptionSchema.nullable(),
   category: financeInvoiceRegisterOptionSchema.nullable(),
+  parentClassification: financeInvoiceRegisterOptionSchema.nullable(),
   grossAmount: financeAmountSchema,
   netAmount: financeAmountSchema,
   vatAmount: financeAmountSchema,
