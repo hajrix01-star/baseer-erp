@@ -145,7 +145,7 @@ function Navigation({ moduleId, active, language, onSelect, permissionCodes }: {
     return <button key={label} type="button" onClick={() => onSelect(index)} className={"nav-item" + (index === active ? " active" : "")}><span className="nav-icon" style={{ '--section-accent': colors[index % colors.length] } as React.CSSProperties}><BaseerSectionIcon moduleId={moduleId} index={index} /></span><span>{label}</span></button>;
   })}</nav>;
 }
-function ModuleWorkspace({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onSection, onStage, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onSection: (section: number) => void; onStage: (stage: string) => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
+function ModuleWorkspaceContents({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onSection, onStage, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onSection: (section: number) => void; onStage: (stage: string) => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   useEffect(() => {
     if (!drawerOpen) return;
@@ -167,6 +167,13 @@ function ModuleWorkspace({ route, language, theme, background, onLanguage, onThe
     </main>
     {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
   </>;
+}
+
+const WorkspaceStyles = lazy(async () => ({ default: (await import('./workspace-styles')).default }));
+
+function ModuleWorkspace(props: Parameters<typeof ModuleWorkspaceContents>[0]) {
+  const text = appText(props.language);
+  return <Suspense fallback={<section className="module-page__placeholder" aria-busy="true">{text.loading}</section>}><WorkspaceStyles /><ModuleWorkspaceContents {...props} /></Suspense>;
 }
 
 export function App() {
