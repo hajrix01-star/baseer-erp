@@ -53,12 +53,12 @@ const enumLabels = {
   ar: {
     IQAMA_ISSUANCE: "إصدار إقامة", IQAMA_RENEWAL: "تجديد إقامة", SPONSORSHIP_TRANSFER: "نقل كفالة", EXIT_REENTRY_VISA: "تأشيرة خروج وعودة", FLIGHT_TICKET: "تذكرة سفر", MEDICAL_INSURANCE: "تأمين طبي", HEALTH_CERTIFICATE: "شهادة صحية", OTHER: "خدمة أخرى",
     SERVICE_COST: "تكلفة خدمة", PAYROLL_ACCRUAL: "استحقاق راتب", PAYROLL_PAYMENT: "سداد راتب", ADVANCE_ISSUED: "إصدار سلفة", ADVANCE_SETTLEMENT: "تسوية سلفة", FINAL_SETTLEMENT_ACCRUAL: "استحقاق مخالصة", FINAL_SETTLEMENT_PAYMENT: "سداد مخالصة",
-    DRAFT: "مسودة", APPROVED: "معتمد", PARTIALLY_PAID: "مسدد جزئياً", PAID: "مسدد", REVERSED: "معكوس", CANCELLED: "ملغى", ISSUED: "مصدر", PARTIALLY_SETTLED: "مسدد جزئياً", SETTLED: "مسدد", OPEN: "مفتوح", PARTIALLY_APPLIED: "مطبق جزئياً", APPLIED: "مطبق", DEFERRED: "مؤجل",
+    DRAFT: "مسودة", APPROVED: "معتمد", PARTIALLY_PAID: "مسدد جزئياً", PAID: "مسدد", REVERSED: "ملغى", CANCELLED: "ملغى", ISSUED: "مصدر", PARTIALLY_SETTLED: "مسدد جزئياً", SETTLED: "مسدد", OPEN: "مفتوح", PARTIALLY_APPLIED: "مطبق جزئياً", APPLIED: "مطبق", DEFERRED: "مؤجل",
   },
   en: {
     IQAMA_ISSUANCE: "Iqama issuance", IQAMA_RENEWAL: "Iqama renewal", SPONSORSHIP_TRANSFER: "Sponsorship transfer", EXIT_REENTRY_VISA: "Exit/re-entry visa", FLIGHT_TICKET: "Flight ticket", MEDICAL_INSURANCE: "Medical insurance", HEALTH_CERTIFICATE: "Health certificate", OTHER: "Other service",
     SERVICE_COST: "Service cost", PAYROLL_ACCRUAL: "Payroll accrual", PAYROLL_PAYMENT: "Payroll payment", ADVANCE_ISSUED: "Advance issued", ADVANCE_SETTLEMENT: "Advance settlement", FINAL_SETTLEMENT_ACCRUAL: "Final-settlement accrual", FINAL_SETTLEMENT_PAYMENT: "Final-settlement payment",
-    DRAFT: "Draft", APPROVED: "Approved", PARTIALLY_PAID: "Partially paid", PAID: "Paid", REVERSED: "Reversed", CANCELLED: "Cancelled", ISSUED: "Issued", PARTIALLY_SETTLED: "Partially settled", SETTLED: "Settled", OPEN: "Open", PARTIALLY_APPLIED: "Partially applied", APPLIED: "Applied", DEFERRED: "Deferred",
+    DRAFT: "Draft", APPROVED: "Approved", PARTIALLY_PAID: "Partially paid", PAID: "Paid", REVERSED: "Cancelled", CANCELLED: "Cancelled", ISSUED: "Issued", PARTIALLY_SETTLED: "Partially settled", SETTLED: "Settled", OPEN: "Open", PARTIALLY_APPLIED: "Partially applied", APPLIED: "Applied", DEFERRED: "Deferred",
   },
 } as const;
 

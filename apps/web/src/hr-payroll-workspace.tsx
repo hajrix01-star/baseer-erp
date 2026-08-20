@@ -62,7 +62,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, language, serverSearch]);
   useEffect(() => { void load(); }, [load]);
-  const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "معكوس" : "Reversed" })[status];
+  const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "ملغى" : "Cancelled" })[status];
   const openDetail = (run: HrPayrollRun) => { setReviewDraft(false); setSelectedRun(run); };
 
   const columns: readonly DataTableColumn<HrPayrollRun>[] = [

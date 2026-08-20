@@ -26,26 +26,22 @@ export function DailySalesReversalDialog({
   const cancellation =
     language === "ar"
       ? {
-          title:
-            "\u062a\u0623\u0643\u064a\u062f \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0642\u0641\u064a\u0644",
-          intro:
-            "\u064a\u064f\u0644\u063a\u064a \u0627\u0644\u0646\u0638\u0627\u0645 \u0627\u0644\u0623\u062b\u0631 \u0627\u0644\u0645\u062d\u0627\u0633\u0628\u064a \u0628\u0642\u064a\u062f \u0645\u0642\u0627\u0628\u0644 \u0645\u0648\u062b\u0642\u060c \u0648\u0644\u0627 \u064a\u062d\u0630\u0641 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u0623\u0635\u0644\u064a.",
+          title: "\u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u0645\u0644\u062e\u0635",
+          intro: "\u0647\u0644 \u062a\u0631\u064a\u062f \u0625\u0644\u063a\u0627\u0621 \u0647\u0630\u0627 \u0627\u0644\u0645\u0644\u062e\u0635\u061f",
           record:
             "\u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u062f \u0625\u0644\u063a\u0627\u0624\u0647",
           reason:
             "\u0633\u0628\u0628 \u0627\u0644\u0625\u0644\u063a\u0627\u0621",
-          confirm:
-            "\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0625\u0644\u063a\u0627\u0621",
-          hint: "\u0627\u0644\u0625\u0644\u063a\u0627\u0621 \u0644\u0627 \u064a\u062d\u0630\u0641 \u0627\u0644\u0633\u062c\u0644\u061b \u064a\u0646\u0634\u0626 \u0642\u064a\u062f\u064b\u0627 \u0645\u0642\u0627\u0628\u0644\u064b\u0627 \u0645\u0648\u062b\u0642\u064b\u0627.",
+          confirm: "\u0625\u0644\u063a\u0627\u0621",
+          hint: "",
         }
       : {
-          title: "Confirm closing cancellation",
-          intro:
-            "Cancellation creates a documented offsetting journal; the original record is never deleted.",
+          title: "Cancel summary",
+          intro: "Cancel this summary?",
           record: "Record to cancel",
           reason: "Cancellation reason",
-          confirm: "Confirm cancellation",
-          hint: "Cancellation preserves history and creates a documented offsetting journal.",
+          confirm: "Cancel",
+          hint: "",
         };
   const dialogRef = useDialogFocusTrap({ open: !!closing, saving, onClose });
   if (!closing) return null;
@@ -100,7 +96,7 @@ export function DailySalesReversalDialog({
             minLength={3}
             required
           />
-          <small>{cancellation.hint}</small>
+          {cancellation.hint ? <small>{cancellation.hint}</small> : null}
         </label>
         <footer className="daily-sales-dialog__actions">
           <button

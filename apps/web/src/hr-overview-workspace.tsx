@@ -16,11 +16,11 @@ function serviceTypeLabel(value: HrService["serviceType"], language: Language) {
   return labels[value][language === "ar" ? 0 : 1];
 }
 function payrollStatusLabel(value: HrPayrollStatus, language: Language) {
-  const labels = { DRAFT: ["مسودة", "Draft"], APPROVED: ["معتمد", "Approved"], PARTIALLY_PAID: ["مدفوع جزئياً", "Partially paid"], PAID: ["مدفوع", "Paid"], REVERSED: ["معكوس", "Reversed"] } as const;
+  const labels = { DRAFT: ["مسودة", "Draft"], APPROVED: ["معتمد", "Approved"], PARTIALLY_PAID: ["مدفوع جزئياً", "Partially paid"], PAID: ["مدفوع", "Paid"], REVERSED: ["ملغى", "Cancelled"] } as const;
   return labels[value][language === "ar" ? 0 : 1];
 }
 function settlementStatusLabel(value: HrFinalSettlementStatus, language: Language) {
-  const labels = { DRAFT: ["مسودة", "Draft"], APPROVED: ["معتمد", "Approved"], PARTIALLY_PAID: ["مدفوع جزئياً", "Partially paid"], PAID: ["مدفوع", "Paid"], REVERSED: ["معكوس", "Reversed"], CANCELLED: ["ملغى", "Cancelled"] } as const;
+  const labels = { DRAFT: ["مسودة", "Draft"], APPROVED: ["معتمد", "Approved"], PARTIALLY_PAID: ["مدفوع جزئياً", "Partially paid"], PAID: ["مدفوع", "Paid"], REVERSED: ["ملغى", "Cancelled"], CANCELLED: ["ملغى", "Cancelled"] } as const;
   return labels[value][language === "ar" ? 0 : 1];
 }
 
