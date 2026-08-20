@@ -60,7 +60,7 @@ export class TreasuryController {
   async reverseTransfer(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = reverseTreasuryTransferRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException("Invalid vault-transfer reversal request.");
-    const context = await this.authorize(authorization, companyId, "finance.vaults.transfer");
+    const context = await this.authorize(authorization, companyId, "finance.vaults.cancel");
     return reverseTreasuryTransferReceiptSchema.parse(await this.treasury.reverseTransfer(context, parsed.data));
   }
 

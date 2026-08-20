@@ -1872,6 +1872,9 @@ model FinanceJournalLine {
   companyId      String   @db.Uuid
   journalEntryId String   @db.Uuid
   accountId      String   @db.Uuid
+  /// Denormalized from the immutable parent entry solely for seek pagination
+  /// and its supporting account-activity index.
+  businessDate   DateTime @db.Date
   lineNumber     Int
   debitAmount    Decimal  @default(0) @db.Decimal(18, 4)
   creditAmount   Decimal  @default(0) @db.Decimal(18, 4)
@@ -1886,11 +1889,13 @@ model FinanceJournalLine {
   @@unique([journalEntryId, lineNumber])
   @@index([tenantId, companyId, accountId, createdAt])
   @@index([tenantId, companyId, accountId, journalEntryId, createdAt, id], map: "FinanceJournalLine_tenant_company_account_entry_created_id_idx")
+  @@index([tenantId, companyId, accountId, businessDate, createdAt, lineNumber, id], map: "FinanceJournalLine_tenant_company_account_activity_idx")
   @@index([tenantId, companyId, journalEntryId])
 }
 
-/// Read projection only. Its values are rebuilt from posted journal lines and
-/// never replace the journal as the accounting source of truth.
+/// Read projection only. Its values are rebuilt from the immutable journal
+/// lines, including cancellation entries, and never replace the journal as
+/// the accounting source of truth.
 model FinanceAccountDailyBalance {
   tenantId     String   @db.Uuid
   companyId    String   @db.Uuid
@@ -1902,6 +1907,21 @@ model FinanceAccountDailyBalance {
 
   @@id([tenantId, companyId, accountId, businessDate])
   @@index([tenantId, companyId, accountId, businessDate], map: "FinanceAccountDailyBalance_tenant_company_account_date_idx")
+}
+
+/// Monthly roll-up of the daily read projection. It shortens historical
+/// as-of balance reads while remaining fully rebuildable from the journal.
+model FinanceAccountMonthlyBalance {
+  tenantId     String   @db.Uuid
+  companyId    String   @db.Uuid
+  accountId    String   @db.Uuid
+  monthStart   DateTime @db.Date
+  debitAmount  Decimal  @default(0) @db.Decimal(18, 4)
+  creditAmount Decimal  @default(0) @db.Decimal(18, 4)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
+
+  @@id([tenantId, companyId, accountId, monthStart])
+  @@index([tenantId, companyId, accountId, monthStart], map: "FinanceAccountMonthlyBalance_tenant_company_account_month_idx")
 }
 
 model FinanceOperationalDay {

@@ -107,13 +107,14 @@ export class JournalPostingService {
         companyId: input.companyId,
         journalEntryId,
         accountId: line.accountId,
+        businessDate: input.businessDate,
         lineNumber: index + 1,
         debitAmount: line.debitAmount,
         creditAmount: line.creditAmount,
         description: line.description ?? null,
       })),
     });
-    await this.updateDailyBalances(transaction, input, normalizedLines);
+    await this.updateAccountBalanceProjections(transaction, input, normalizedLines);
     await transaction.financeJournalEntry.update({
       where: { id: journalEntryId },
       data: { isSealed: true, sealedAt: new Date() },
@@ -194,21 +195,17 @@ export class JournalPostingService {
         companyId: input.companyId,
         journalEntryId,
         accountId: line.accountId,
+        businessDate: input.businessDate,
         lineNumber: line.lineNumber,
         debitAmount: line.creditAmount,
         creditAmount: line.debitAmount,
         description: line.description ?? null,
       })),
     });
-    // The projection must follow the same POSTED-only rule as ledger reads:
-    // remove the original contribution once its status becomes REVERSED, then
-    // add the reversal entry's opposite lines.
-    await this.updateDailyBalances(transaction, {
-      tenantId: input.tenantId,
-      companyId: input.companyId,
-      businessDate: original.businessDate,
-    }, original.lines, -1);
-    await this.updateDailyBalances(transaction, {
+    // A reversal is a second immutable journal entry.  The original remains
+    // part of ledger history, including as-of balances before the cancellation
+    // date; the opposite lines below neutralise it from the cancellation date.
+    await this.updateAccountBalanceProjections(transaction, {
       tenantId: input.tenantId,
       companyId: input.companyId,
       businessDate: input.businessDate,
@@ -294,22 +291,31 @@ export class JournalPostingService {
   }
 
   /**
-   * Keeps the bounded daily read projection in the exact transaction that
-   * changes the immutable journal. It is a cache of POSTED journal totals,
-   * not a second ledger: the migration can rebuild it deterministically.
+   * Keeps bounded daily and monthly read projections in the exact transaction
+   * that changes the immutable journal. They are caches of posted journal
+   * totals and immutable cancellation entries, not a second ledger: the
+   * migration can rebuild them deterministically.
    */
-  private async updateDailyBalances(
+  private async updateAccountBalanceProjections(
     transaction: Prisma.TransactionClient,
     input: Readonly<{ tenantId: string; companyId: string; businessDate: Date }>,
     lines: readonly Readonly<{ accountId: string; debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }>[],
     multiplier = 1,
   ) {
     const byAccount = aggregateDailyBalanceChanges(lines, multiplier);
-    await Promise.all([...byAccount.entries()].map(([accountId, amount]) => transaction.financeAccountDailyBalance.upsert({
+    const monthStart = new Date(Date.UTC(input.businessDate.getUTCFullYear(), input.businessDate.getUTCMonth(), 1));
+    await Promise.all([...byAccount.entries()].flatMap(([accountId, amount]) => [
+      transaction.financeAccountDailyBalance.upsert({
       where: { tenantId_companyId_accountId_businessDate: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate } },
       create: { tenantId: input.tenantId, companyId: input.companyId, accountId, businessDate: input.businessDate, debitAmount: amount.debitAmount, creditAmount: amount.creditAmount },
       update: { debitAmount: { increment: amount.debitAmount }, creditAmount: { increment: amount.creditAmount } },
-    })));
+      }),
+      transaction.financeAccountMonthlyBalance.upsert({
+        where: { tenantId_companyId_accountId_monthStart: { tenantId: input.tenantId, companyId: input.companyId, accountId, monthStart } },
+        create: { tenantId: input.tenantId, companyId: input.companyId, accountId, monthStart, debitAmount: amount.debitAmount, creditAmount: amount.creditAmount },
+        update: { debitAmount: { increment: amount.debitAmount }, creditAmount: { increment: amount.creditAmount } },
+      }),
+    ]));
   }
 
   private decimalAmount(value: string | undefined): Prisma.Decimal {

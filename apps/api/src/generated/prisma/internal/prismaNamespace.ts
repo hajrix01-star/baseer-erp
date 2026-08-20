@@ -454,6 +454,7 @@ export const ModelName = {
   HrPayrollPaymentAllocation: 'HrPayrollPaymentAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
+  FinanceAccountMonthlyBalance: 'FinanceAccountMonthlyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
   FinanceDailySalesClosing: 'FinanceDailySalesClosing',
   FinanceDailySalesAllocation: 'FinanceDailySalesAllocation',
@@ -483,7 +484,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4705,6 +4706,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FinanceAccountMonthlyBalance: {
+      payload: Prisma.$FinanceAccountMonthlyBalancePayload<ExtArgs>
+      fields: Prisma.FinanceAccountMonthlyBalanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinanceAccountMonthlyBalanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinanceAccountMonthlyBalanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        findFirst: {
+          args: Prisma.FinanceAccountMonthlyBalanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinanceAccountMonthlyBalanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        findMany: {
+          args: Prisma.FinanceAccountMonthlyBalanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>[]
+        }
+        create: {
+          args: Prisma.FinanceAccountMonthlyBalanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        createMany: {
+          args: Prisma.FinanceAccountMonthlyBalanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinanceAccountMonthlyBalanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>[]
+        }
+        delete: {
+          args: Prisma.FinanceAccountMonthlyBalanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        update: {
+          args: Prisma.FinanceAccountMonthlyBalanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        deleteMany: {
+          args: Prisma.FinanceAccountMonthlyBalanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinanceAccountMonthlyBalanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinanceAccountMonthlyBalanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>[]
+        }
+        upsert: {
+          args: Prisma.FinanceAccountMonthlyBalanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinanceAccountMonthlyBalancePayload>
+        }
+        aggregate: {
+          args: Prisma.FinanceAccountMonthlyBalanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinanceAccountMonthlyBalance>
+        }
+        groupBy: {
+          args: Prisma.FinanceAccountMonthlyBalanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceAccountMonthlyBalanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinanceAccountMonthlyBalanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinanceAccountMonthlyBalanceCountAggregateOutputType> | number
+        }
+      }
+    }
     FinanceOperationalDay: {
       payload: Prisma.$FinanceOperationalDayPayload<ExtArgs>
       fields: Prisma.FinanceOperationalDayFieldRefs
@@ -6813,6 +6888,7 @@ export const FinanceJournalLineScalarFieldEnum = {
   companyId: 'companyId',
   journalEntryId: 'journalEntryId',
   accountId: 'accountId',
+  businessDate: 'businessDate',
   lineNumber: 'lineNumber',
   debitAmount: 'debitAmount',
   creditAmount: 'creditAmount',
@@ -6834,6 +6910,19 @@ export const FinanceAccountDailyBalanceScalarFieldEnum = {
 } as const
 
 export type FinanceAccountDailyBalanceScalarFieldEnum = (typeof FinanceAccountDailyBalanceScalarFieldEnum)[keyof typeof FinanceAccountDailyBalanceScalarFieldEnum]
+
+
+export const FinanceAccountMonthlyBalanceScalarFieldEnum = {
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  accountId: 'accountId',
+  monthStart: 'monthStart',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceAccountMonthlyBalanceScalarFieldEnum = (typeof FinanceAccountMonthlyBalanceScalarFieldEnum)[keyof typeof FinanceAccountMonthlyBalanceScalarFieldEnum]
 
 
 export const FinanceOperationalDayScalarFieldEnum = {
@@ -8303,6 +8392,7 @@ export type GlobalOmitConfig = {
   hrPayrollPaymentAllocation?: Prisma.HrPayrollPaymentAllocationOmit
   financeJournalLine?: Prisma.FinanceJournalLineOmit
   financeAccountDailyBalance?: Prisma.FinanceAccountDailyBalanceOmit
+  financeAccountMonthlyBalance?: Prisma.FinanceAccountMonthlyBalanceOmit
   financeOperationalDay?: Prisma.FinanceOperationalDayOmit
   financeDailySalesClosing?: Prisma.FinanceDailySalesClosingOmit
   financeDailySalesAllocation?: Prisma.FinanceDailySalesAllocationOmit

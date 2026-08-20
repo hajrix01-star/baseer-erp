@@ -14,8 +14,9 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model FinanceAccountDailyBalance
- * Read projection only. Its values are rebuilt from posted journal lines and
- * never replace the journal as the accounting source of truth.
+ * Read projection only. Its values are rebuilt from the immutable journal
+ * lines, including cancellation entries, and never replace the journal as
+ * the accounting source of truth.
  */
 export type FinanceAccountDailyBalanceModel = runtime.Types.Result.DefaultSelection<Prisma.$FinanceAccountDailyBalancePayload>
 

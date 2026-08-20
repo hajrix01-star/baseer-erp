@@ -108,6 +108,7 @@ export const ModelName = {
   HrPayrollPaymentAllocation: 'HrPayrollPaymentAllocation',
   FinanceJournalLine: 'FinanceJournalLine',
   FinanceAccountDailyBalance: 'FinanceAccountDailyBalance',
+  FinanceAccountMonthlyBalance: 'FinanceAccountMonthlyBalance',
   FinanceOperationalDay: 'FinanceOperationalDay',
   FinanceDailySalesClosing: 'FinanceDailySalesClosing',
   FinanceDailySalesAllocation: 'FinanceDailySalesAllocation',
@@ -1173,6 +1174,7 @@ export const FinanceJournalLineScalarFieldEnum = {
   companyId: 'companyId',
   journalEntryId: 'journalEntryId',
   accountId: 'accountId',
+  businessDate: 'businessDate',
   lineNumber: 'lineNumber',
   debitAmount: 'debitAmount',
   creditAmount: 'creditAmount',
@@ -1194,6 +1196,19 @@ export const FinanceAccountDailyBalanceScalarFieldEnum = {
 } as const
 
 export type FinanceAccountDailyBalanceScalarFieldEnum = (typeof FinanceAccountDailyBalanceScalarFieldEnum)[keyof typeof FinanceAccountDailyBalanceScalarFieldEnum]
+
+
+export const FinanceAccountMonthlyBalanceScalarFieldEnum = {
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  accountId: 'accountId',
+  monthStart: 'monthStart',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceAccountMonthlyBalanceScalarFieldEnum = (typeof FinanceAccountMonthlyBalanceScalarFieldEnum)[keyof typeof FinanceAccountMonthlyBalanceScalarFieldEnum]
 
 
 export const FinanceOperationalDayScalarFieldEnum = {

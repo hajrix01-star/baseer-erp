@@ -186,6 +186,7 @@ try {
       grossAmount: '115.0000',
       isTaxable: false,
       vaultId: master.vaultId,
+      allocations: [{ vaultId: master.vaultId, grossAmount: '115.0000' }],
       supplierInvoiceMissingReason: 'Finance gate test receipt unavailable',
     },
   });
@@ -225,8 +226,8 @@ try {
     request: {
       businessDate: date('2026-08-20'),
       items: [
-        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
-        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
+        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '115.0000' }], supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
+        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '85.0000' }], supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
       ],
     },
   });
@@ -237,8 +238,8 @@ try {
     request: {
       businessDate: date('2026-08-20'),
       items: [
-        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
-        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
+        { profileId: recurring.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '115.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '115.0000' }], supplierInvoiceMissingReason: 'Finance gate recurring batch electricity' },
+        { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 8, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '85.0000' }], supplierInvoiceMissingReason: 'Finance gate recurring batch telecom' },
       ],
     },
   });
@@ -250,8 +251,8 @@ try {
       request: {
         businessDate: date('2026-08-20'),
         items: [
-          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'First duplicate candidate' },
-          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Second duplicate candidate' },
+          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '85.0000' }], supplierInvoiceMissingReason: 'First duplicate candidate' },
+          { profileId: recurringBatchProfile.id, coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '85.0000' }], supplierInvoiceMissingReason: 'Second duplicate candidate' },
         ],
       },
     }),
@@ -260,7 +261,7 @@ try {
   const rollbackProof = await services.documents.createRecurringPayment({
     context,
     idempotencyKey: randomUUID(),
-    request: { profileId: recurringBatchProfile.id, businessDate: date('2026-08-20'), coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, supplierInvoiceMissingReason: 'Rollback coverage proof' },
+    request: { profileId: recurringBatchProfile.id, businessDate: date('2026-08-20'), coverageYear: 2026, coverageStartMonth: 9, grossAmount: '85.0000', isTaxable: false, vaultId: master.vaultId, allocations: [{ vaultId: master.vaultId, grossAmount: '85.0000' }], supplierInvoiceMissingReason: 'Rollback coverage proof' },
   });
   assert.equal(rollbackProof.coverageMonths, 1, 'A failed recurring batch must not reserve coverage slots.');
   const payableBatch = await services.documents.createBatch({
@@ -297,6 +298,14 @@ try {
   const secondActivity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 1, cursor: activity.nextCursor });
   assert.equal(secondActivity.items.length, 1, "Vault activity cursor must return the next row.");
   assert.equal(secondActivity.items[0].journalEntryId, earlierTransfer.journalEntryId, "Vault activity cursor must preserve chronological ordering.");
+  await services.treasury.reverseTransfer(context, { journalEntryId: earlierTransfer.journalEntryId, businessDate: date("2026-08-20"), reason: "Finance gate cancellation", idempotencyKey: randomUUID() });
+  const bankBeforeCancellationDate = await services.treasury.workspace(context, { includeArchived: false, to: date("2026-08-19") });
+  const bankAfterCancellation = await services.treasury.workspace(context, { includeArchived: false, to: date("2026-08-20") });
+  assert.equal(bankBeforeCancellationDate.vaults.find((vault) => vault.id === master.bankVaultId)?.balanceAsOf, "10.0000", "An as-of balance before cancellation must retain the original transfer.");
+  assert.equal(bankAfterCancellation.vaults.find((vault) => vault.id === master.bankVaultId)?.balanceAsOf, "25.0000", "A cancellation must neutralise only its original transfer after the cancellation date.");
+  const cancelledTransferActivity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 50 });
+  assert.equal(cancelledTransferActivity.summary.inflow, "35.0000", "Activity must retain original inflows for an auditable ledger history.");
+  assert.equal(cancelledTransferActivity.summary.outflow, "10.0000", "Activity must include the cancellation entry as an offsetting outflow.");
   await verifySealedBalancedJournals();
   await verifySealedLineCannotChange(due.journalEntryId);
 
@@ -307,7 +316,7 @@ try {
 }
 
 async function loadServices() {
-  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }, { FinanceMasterDataService }] = await Promise.all([
+  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }, { FinanceMasterDataService }, { HrService }] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
     import('../apps/api/dist/finance/finance-period.service.js'),
@@ -323,6 +332,7 @@ async function loadServices() {
     import('../apps/api/dist/finance/purchase-expense.service.js'),
     import('../apps/api/dist/business-date/business-date.service.js'),
     import('../apps/api/dist/finance/finance-master-data.service.js'),
+    import('../apps/api/dist/hr/hr.service.js'),
   ]);
   const { TreasuryService } = await import('../apps/api/dist/finance/treasury.service.js');
   database = new DatabaseService();
@@ -337,12 +347,12 @@ async function loadServices() {
     { now: () => new Date('2026-08-20T12:00:00.000Z') },
   );
   return {
-    setup: new CompanyFinanceSetupService(database, foundation, periods),
-    dues: new SupplierDuesService(database, idempotency, journals, new FinanceVaultService(), businessDates),
+    setup: new CompanyFinanceSetupService(database, foundation, periods, idempotency),
+    dues: new SupplierDuesService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
     loans: new InclusiveLoanService(database, idempotency, journals, businessDates),
     repayments: new InclusiveLoanRepaymentService(database, idempotency, journals, businessDates),
     recurring: new RecurringExpenseService(database, idempotency),
-    documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
+    documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates, new HrService(database, idempotency, businessDates)),
     masterData: new FinanceMasterDataService(database, idempotency),
     treasury: new TreasuryService(database, idempotency, journals, new FinanceVaultService(), businessDates),
   };

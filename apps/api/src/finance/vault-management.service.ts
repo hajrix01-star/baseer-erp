@@ -76,7 +76,7 @@ export class VaultManagementService {
         transaction.financeSupplierDuePayment.count({ where: { tenantId: context.tenantId, companyId: context.companyId, vaultId } }),
         transaction.financeInclusiveLoanPayment.count({ where: { tenantId: context.tenantId, companyId: context.companyId, vaultId } }),
         transaction.financeJournalLine.count({ where: { tenantId: context.tenantId, companyId: context.companyId, accountId: vault.accountId } }),
-        transaction.financeJournalLine.groupBy({ by: ["accountId"], where: { tenantId: context.tenantId, companyId: context.companyId, accountId: vault.accountId, journalEntry: { status: "POSTED" } }, _sum: { debitAmount: true, creditAmount: true } }),
+        transaction.financeJournalLine.groupBy({ by: ["accountId"], where: { tenantId: context.tenantId, companyId: context.companyId, accountId: vault.accountId, journalEntry: { status: { in: ["POSTED", "REVERSED"] } } }, _sum: { debitAmount: true, creditAmount: true } }),
       ]);
       const balance = new Prisma.Decimal(balanceGroups[0]?._sum.debitAmount ?? 0).minus(balanceGroups[0]?._sum.creditAmount ?? 0);
       const mustArchive = vault.account.isSystem || supplierPayments + loanPayments + journalLines > 0;

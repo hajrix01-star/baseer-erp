@@ -56,24 +56,25 @@ export class FinanceAccountsService {
         tenantId: context.tenantId,
         companyId: context.companyId,
         accountId,
-        journalEntry: { is: { status: "POSTED", ...(period ? { businessDate: period } : {}) } },
+        ...(period ? { businessDate: period } : {}),
+        journalEntry: { is: { status: { in: ["POSTED", "REVERSED"] } } },
       };
       const cursor = input.cursor ? await tx.financeJournalLine.findFirst({
         where: { ...baseWhere, id: input.cursor },
-        select: { id: true, createdAt: true, lineNumber: true, journalEntry: { select: { businessDate: true } } },
+        select: { id: true, businessDate: true, createdAt: true, lineNumber: true },
       }) : null;
       if (input.cursor && !cursor) throw new BadRequestException("The account movement cursor is no longer available.");
       const lines = await tx.financeJournalLine.findMany({
         where: cursor ? {
           ...baseWhere,
           OR: [
-            { journalEntry: { is: { businessDate: { lt: cursor.journalEntry.businessDate } } } },
-            { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: { lt: cursor.createdAt } },
-            { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
-            { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
+            { businessDate: { lt: cursor.businessDate } },
+            { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
+            { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
+            { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
           ],
         } : baseWhere,
-        orderBy: [{ journalEntry: { businessDate: "desc" } }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
+        orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
         take: input.pageSize + 1,
         select: { id: true, debitAmount: true, creditAmount: true, description: true, journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true } } },
       });
@@ -124,13 +125,15 @@ export class FinanceAccountsService {
     const amounts = new Map<string, Amounts>(accountIds.map((id) => [id, zeroAmounts()]));
     if (!accountIds.length) return amounts;
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
-    const [balanceGroups, periodGroups] = await Promise.all([
-      tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, businessDate: { lte: asOf } }, _sum: { debitAmount: true, creditAmount: true } }),
+    const currentMonth = monthStart(asOf);
+    const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
+      tx.financeAccountMonthlyBalance.groupBy({ by: ["accountId"], where: { ...common, monthStart: { lt: currentMonth } }, _sum: { debitAmount: true, creditAmount: true } }),
+      tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, businessDate: { gte: currentMonth, lte: asOf } }, _sum: { debitAmount: true, creditAmount: true } }),
       tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, ...(dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : {}) }, _sum: { debitAmount: true, creditAmount: true } }),
     ]);
-    for (const group of balanceGroups) {
+    for (const group of [...monthlyBalanceGroups, ...currentMonthBalanceGroups]) {
       const value = amounts.get(group.accountId); if (!value) continue;
-      value.balanceDebit = decimal(group._sum.debitAmount); value.balanceCredit = decimal(group._sum.creditAmount);
+      value.balanceDebit = value.balanceDebit.plus(decimal(group._sum.debitAmount)); value.balanceCredit = value.balanceCredit.plus(decimal(group._sum.creditAmount));
     }
     for (const group of periodGroups) {
       const value = amounts.get(group.accountId); if (!value) continue;
@@ -149,3 +152,4 @@ function dateFilter(from?: Date, to?: Date) { return !from && !to ? undefined : 
 function dateForBusinessDate(value: string) { return new Date(`${value}T00:00:00.000Z`); }
 function capAsOf(requested: Date | undefined, current: Date) { return requested && requested < current ? requested : current; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
+function monthStart(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 1)); }

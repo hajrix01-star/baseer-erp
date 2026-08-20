@@ -346,10 +346,17 @@ export type HrPayrollPaymentAllocation = Prisma.HrPayrollPaymentAllocationModel
 export type FinanceJournalLine = Prisma.FinanceJournalLineModel
 /**
  * Model FinanceAccountDailyBalance
- * Read projection only. Its values are rebuilt from posted journal lines and
- * never replace the journal as the accounting source of truth.
+ * Read projection only. Its values are rebuilt from the immutable journal
+ * lines, including cancellation entries, and never replace the journal as
+ * the accounting source of truth.
  */
 export type FinanceAccountDailyBalance = Prisma.FinanceAccountDailyBalanceModel
+/**
+ * Model FinanceAccountMonthlyBalance
+ * Monthly roll-up of the daily read projection. It shortens historical
+ * as-of balance reads while remaining fully rebuildable from the journal.
+ */
+export type FinanceAccountMonthlyBalance = Prisma.FinanceAccountMonthlyBalanceModel
 /**
  * Model FinanceOperationalDay
  * 

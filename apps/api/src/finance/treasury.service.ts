@@ -83,12 +83,13 @@ export class TreasuryService {
           tenantId: context.tenantId,
           companyId: context.companyId,
           accountId: vault.accountId,
-          journalEntry: { is: { status: "POSTED", ...(periodDate ? { businessDate: periodDate } : {}) } },
+          ...(periodDate ? { businessDate: periodDate } : {}),
+          journalEntry: { is: { status: { in: ["POSTED", "REVERSED"] } } },
         };
       const cursor = input.cursor
         ? await tx.financeJournalLine.findFirst({
             where: { ...baseWhere, id: input.cursor },
-            select: { id: true, createdAt: true, lineNumber: true, journalEntry: { select: { businessDate: true } } },
+            select: { id: true, businessDate: true, createdAt: true, lineNumber: true },
           })
         : null;
       if (input.cursor && !cursor)
@@ -98,14 +99,14 @@ export class TreasuryService {
           ? {
               ...baseWhere,
               OR: [
-                { journalEntry: { is: { businessDate: { lt: cursor.journalEntry.businessDate } } } },
-                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: { lt: cursor.createdAt } },
-                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
-                { journalEntry: { is: { businessDate: cursor.journalEntry.businessDate } }, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
+                { businessDate: { lt: cursor.businessDate } },
+                { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
+                { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
+                { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
               ],
             }
           : baseWhere,
-        orderBy: [{ journalEntry: { businessDate: "desc" } }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
+        orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
         take: input.pageSize + 1,
         select: {
           id: true,
@@ -169,10 +170,16 @@ export class TreasuryService {
     const accountIds = vaults.map((vault) => vault.accountId);
     const accountToVault = new Map(vaults.map((vault) => [vault.accountId, vault.id]));
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
-    const [balanceGroups, periodGroups] = await Promise.all([
+    const currentMonth = monthStart(asOf);
+    const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
+      tx.financeAccountMonthlyBalance.groupBy({
+        by: ["accountId"],
+        where: { ...common, monthStart: { lt: currentMonth } },
+        _sum: { debitAmount: true, creditAmount: true },
+      }),
       tx.financeAccountDailyBalance.groupBy({
         by: ["accountId"],
-        where: { ...common, businessDate: { lte: asOf } },
+        where: { ...common, businessDate: { gte: currentMonth, lte: asOf } },
         _sum: { debitAmount: true, creditAmount: true },
       }),
       tx.financeAccountDailyBalance.groupBy({
@@ -181,10 +188,10 @@ export class TreasuryService {
         _sum: { debitAmount: true, creditAmount: true },
       }),
     ]);
-    for (const group of balanceGroups) {
+    for (const group of [...monthlyBalanceGroups, ...currentMonthBalanceGroups]) {
       const vaultId = accountToVault.get(group.accountId);
       if (!vaultId) continue;
-      results.get(vaultId)!.balanceAsOf = decimal(group._sum.debitAmount).minus(decimal(group._sum.creditAmount));
+      results.get(vaultId)!.balanceAsOf = results.get(vaultId)!.balanceAsOf.plus(decimal(group._sum.debitAmount)).minus(decimal(group._sum.creditAmount));
     }
     for (const group of periodGroups) {
       const vaultId = accountToVault.get(group.accountId);
@@ -373,5 +380,6 @@ function restoreReconciliation(value: unknown): TreasuryReconciliationReceipt { 
 function dateForBusinessDate(value: string) { return new Date(value + "T00:00:00.000Z"); }
 function capAsOfDate(requested: Date | undefined, businessDate: Date) { return requested && requested < businessDate ? requested : businessDate; }
 function businessDateValue(value: Date) { return value.toISOString().slice(0, 10); }
+function monthStart(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 1)); }
 function zeroAmounts(): Amounts { return { balanceAsOf: new Prisma.Decimal(0), inflow: new Prisma.Decimal(0), outflow: new Prisma.Decimal(0) }; }
 function sum(items: Array<{ balanceAsOf: string; inflow: string; outflow: string }>, key: "balanceAsOf" | "inflow" | "outflow") { return items.reduce((total, item) => total.plus(item[key]), new Prisma.Decimal(0)).toFixed(4); }
