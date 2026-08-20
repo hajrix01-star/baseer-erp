@@ -1,0 +1,61 @@
+.baseer-filter-bar__search--menu {
+  position: relative;
+  display: flex;
+  flex: 0 1 28rem;
+  min-inline-size: 0;
+}
+
+.baseer-filter-bar__search--menu > label { flex: 1; min-inline-size: 0; }
+.baseer-filter-bar__search--menu input { padding-inline-end: 3.5rem; }
+
+.baseer-filter-bar__menu-trigger {
+  position: absolute;
+  inset-inline-end: .25rem;
+  inset-block-start: 50%;
+  display: grid;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: .55rem;
+  color: var(--brand-deep);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.baseer-filter-bar__menu-trigger:hover,
+.baseer-filter-bar__menu-trigger:focus-visible { background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
+
+.baseer-filter-bar__menu {
+  position: absolute;
+  z-index: 50;
+  inset-block-start: calc(100% + .5rem);
+  inset-inline-end: 0;
+  inline-size: min(34rem, calc(100vw - 2rem));
+  padding: .85rem;
+  border: 1px solid var(--line);
+  border-radius: .9rem;
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgb(10 45 31 / 16%);
+}
+
+.baseer-filter-bar__menu-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.baseer-filter-bar__menu-controls > :is(.baseer-period-filter, .company-session-control) { inline-size: 100%; min-inline-size: 0; }
+.baseer-filter-bar__menu-controls .baseer-period-filter__bar { display: flex; inline-size: 100%; }
+.baseer-filter-bar__menu-controls .baseer-period-filter__trigger { flex: 1; min-block-size: 2.75rem; padding-inline: .75rem; border: 1px solid var(--line); border-radius: var(--control-radius); background: var(--surface); }
+.baseer-filter-bar__menu-controls .baseer-period-filter__popover { z-index: 60; }
+.baseer-filter-bar__menu-controls .company-session-control__menu { z-index: 60; inline-size: min(100%, 20rem); }
+
+@media (max-width: 640px) {
+  .baseer-filter-bar__search--menu { flex-basis: 100%; }
+  .baseer-filter-bar__menu { inline-size: min(100vw - 1.25rem, 34rem); }
+  .baseer-filter-bar__menu-controls { grid-template-columns: 1fr; }
+}
