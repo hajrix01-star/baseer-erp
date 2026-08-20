@@ -39,6 +39,42 @@ export class FinanceConfigurationService {
   }
 
   /**
+   * Setup is a readiness hub, not a duplicate master-data screen. Keep this
+   * response bounded even when suppliers and categories grow very large.
+   */
+  async readiness(input: { accessToken: string; companyId: string }) {
+    const authorized = await this.companyContext.authorize({
+      accessToken: input.accessToken,
+      companyId: input.companyId,
+      requiredCapabilities: [FINANCE_CONFIGURATION_READ_CAPABILITY],
+    });
+    return this.database.inTenantTransaction(authorized.principal.tenantId, async (transaction) => {
+      const companyId = authorized.company.id;
+      const [profile, openPeriod, activeVaults, activeAccounts, activeCategories, activeSuppliers] = await Promise.all([
+        transaction.companyFinanceProfile.findFirst({ where: { tenantId: authorized.principal.tenantId, companyId }, select: { baseSeedVersion: true, accountingMode: true, vatAccountingEnabled: true, vatRateBasisPoints: true, initializedAt: true } }),
+        transaction.financeFiscalPeriod.findFirst({ where: { tenantId: authorized.principal.tenantId, companyId, status: 'OPEN' }, orderBy: { startDate: 'desc' }, select: { id: true, nameAr: true, nameEn: true, startDate: true, endDate: true, status: true, closeReason: true } }),
+        transaction.financeVault.count({ where: { tenantId: authorized.principal.tenantId, companyId, status: 'ACTIVE' } }),
+        transaction.financeAccount.count({ where: { tenantId: authorized.principal.tenantId, companyId, status: 'ACTIVE' } }),
+        transaction.financeCategory.count({ where: { tenantId: authorized.principal.tenantId, companyId, status: 'ACTIVE', isPosting: true } }),
+        transaction.financeSupplier.count({ where: { tenantId: authorized.principal.tenantId, companyId, status: 'ACTIVE' } }),
+      ]);
+      const issues: Array<'FINANCE_NOT_INITIALIZED' | 'NO_OPEN_PERIOD' | 'NO_ACTIVE_VAULT' | 'NO_POSTING_CATEGORY'> = [];
+      if (!profile) issues.push('FINANCE_NOT_INITIALIZED');
+      if (profile && !openPeriod) issues.push('NO_OPEN_PERIOD');
+      if (profile && !activeVaults) issues.push('NO_ACTIVE_VAULT');
+      if (profile && !activeCategories) issues.push('NO_POSTING_CATEGORY');
+      return {
+        companyId,
+        profile,
+        openPeriod,
+        counts: { activeVaults, activeAccounts, activeCategories, activeSuppliers },
+        issues,
+        standardSuppliers: STANDARD_SUPPLIER_SEEDS.map((supplier) => ({ key: supplier.key, nameAr: supplier.nameAr, nameEn: supplier.nameEn })),
+      };
+    });
+  }
+
+  /**
    * Long master-data lists are searched at the server, rather than shipped to
    * a browser and filtered there. An empty search intentionally returns only
    * the first useful choices (favourites first); typing reaches every record.

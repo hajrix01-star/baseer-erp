@@ -1,6 +1,7 @@
 import {
   companyIdSchema,
   financeCategoryReferenceSearchReceiptSchema,
+  financeConfigurationReadinessReceiptSchema,
   financeConfigurationReceiptSchema,
   financeReferenceSearchQuerySchema,
   financeSupplierReferenceSearchReceiptSchema,
@@ -42,6 +43,15 @@ export class FinanceConfigurationController {
         companyId: parsedCompanyId.data,
       }),
     );
+  }
+
+  @Get('readiness')
+  async readiness(
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const input = this.identity(authorization, companyId);
+    return financeConfigurationReadinessReceiptSchema.parse(await this.configuration.readiness(input));
   }
 
   @Get('suppliers')

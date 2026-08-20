@@ -582,6 +582,19 @@ export const financeConfigurationReceiptSchema = z
   })
   .strict();
 
+/** Lightweight finance-setup status. It deliberately avoids shipping master
+ * data lists; each list is owned by its dedicated workspace. */
+export const financeConfigurationReadinessReceiptSchema = z
+  .object({
+    companyId: companyIdSchema,
+    profile: financeConfigurationProfileSchema.nullable(),
+    openPeriod: financeConfigurationPeriodSchema.nullable(),
+    counts: z.object({ activeVaults: z.number().int().nonnegative(), activeAccounts: z.number().int().nonnegative(), activeCategories: z.number().int().nonnegative(), activeSuppliers: z.number().int().nonnegative() }).strict(),
+    issues: z.array(z.enum(["FINANCE_NOT_INITIALIZED", "NO_OPEN_PERIOD", "NO_ACTIVE_VAULT", "NO_POSTING_CATEGORY"])).max(4),
+    standardSuppliers: z.array(financeConfigurationStandardSupplierSchema).max(32),
+  })
+  .strict();
+
 /** Bounded server search used by long reference lists; results are never a financial aggregate. */
 export const financeReferenceSearchQuerySchema = z
   .object({
