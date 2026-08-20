@@ -13,6 +13,13 @@ type CursorRow = { id: string; businessDate: Date; postedAt: Date };
 export class InvoiceRegisterService {
   constructor(private readonly db: DatabaseService) {}
 
+  /**
+   * Financial-register read model: one row per posted financial event with its
+   * journal evidence. It is not a cash-position screen: vault balances,
+   * inflows, outflows, transfers and reconciliations belong exclusively to
+   * TreasuryService. Any summary here describes the filtered register rows,
+   * never an available-cash balance, profit, or trial balance.
+   */
   async workspace(context: TrustedCompanyActorContext, query: Query) {
     return this.db.inTenantTransaction(context.tenantId, async (tx) => {
       const cursor = query.cursor ? await tx.financeJournalEntry.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, businessDate: true, postedAt: true } }) : null;

@@ -26,6 +26,12 @@ export class TreasuryService {
     private readonly dates: BusinessDateService,
   ) {}
 
+  /**
+   * Treasury is the sole read model for cash and bank positions. Its balances
+   * and movement totals are derived from the sealed accounting journal; it
+   * does not create a parallel financial truth. The financial register shows
+   * source events and journal evidence, not vault balances.
+   */
   async workspace(context: TrustedCompanyActorContext, input: TreasuryInput) {
     return this.db.inTenantTransaction(context.tenantId, async (tx) => {
       const businessDate = await this.dates.currentForTrustedContext(context);
