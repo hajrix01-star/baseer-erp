@@ -1353,10 +1353,6 @@ const financeInvoiceRegisterRecordSchema = z.object({
   status: financeInvoiceRegisterStatusSchema,
   supplier: financeInvoiceRegisterOptionSchema.nullable(),
   category: financeInvoiceRegisterOptionSchema.nullable(),
-  // A journal is always balanced. These totals are deliberately explicit so
-  // callers never mistake a source document value for a cash movement.
-  debitTotal: financeAmountSchema,
-  creditTotal: financeAmountSchema,
   grossAmount: financeAmountSchema,
   netAmount: financeAmountSchema,
   vatAmount: financeAmountSchema,
