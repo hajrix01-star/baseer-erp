@@ -19,7 +19,8 @@ import {
 } from './finance-foundation-seeds.js';
 
 // v7 adds the utility parent/leaves and supplier suggestions for recurring costs.
-const BASE_SEED_VERSION = 8;
+/** The server is the single owner of the required financial foundation version. */
+export const BASE_FINANCE_SEED_VERSION = 8;
 
 export type FinanceFoundationReceipt = Readonly<{
   initialized: boolean;
@@ -51,7 +52,7 @@ export class FinanceFoundationService {
     const existingProfile = await transaction.companyFinanceProfile.findFirst({
       where: { tenantId: context.tenantId, companyId: context.companyId },
     });
-    if (existingProfile && existingProfile.baseSeedVersion > BASE_SEED_VERSION) {
+    if (existingProfile && existingProfile.baseSeedVersion > BASE_FINANCE_SEED_VERSION) {
       throw new ConflictException('The company finance foundation uses an unsupported future seed version.');
     }
 
@@ -113,15 +114,15 @@ export class FinanceFoundationService {
       where: { tenantId: context.tenantId, companyId: context.companyId, code: { in: parentCodes }, parentId: null },
       data: { isPosting: false },
     });
-    if (existingProfile && existingProfile.baseSeedVersion < BASE_SEED_VERSION) {
+    if (existingProfile && existingProfile.baseSeedVersion < BASE_FINANCE_SEED_VERSION) {
       await this.upgradeUtilities(transaction, context, categoriesByCode);
     }
     if (!existingProfile) {
       await transaction.companyFinanceProfile.create({
-        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true },
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_FINANCE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true },
       });
-    } else if (existingProfile.baseSeedVersion < BASE_SEED_VERSION) {
-      await transaction.companyFinanceProfile.update({ where: { id: existingProfile.id }, data: { baseSeedVersion: BASE_SEED_VERSION } });
+    } else if (existingProfile.baseSeedVersion < BASE_FINANCE_SEED_VERSION) {
+      await transaction.companyFinanceProfile.update({ where: { id: existingProfile.id }, data: { baseSeedVersion: BASE_FINANCE_SEED_VERSION } });
     }
     const [accountCount, categoryCount] = await Promise.all([
       transaction.financeAccount.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }),
@@ -131,7 +132,7 @@ export class FinanceFoundationService {
       initialized: !existingProfile,
       accountCount,
       categoryCount,
-      baseSeedVersion: BASE_SEED_VERSION,
+      baseSeedVersion: BASE_FINANCE_SEED_VERSION,
     };
     await transaction.auditEvent.create({
       data: {
@@ -214,7 +215,7 @@ export class FinanceFoundationService {
         id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId,
         action: 'finance.foundation.utilities_upgraded', entityType: 'CompanyFinanceProfile', entityId: context.companyId,
         requestId: RequestContext.correlationId() ?? randomUUID(),
-        afterJson: { suppliersReassigned, recurringProfilesReassigned, openDuesReassigned, baseSeedVersion: BASE_SEED_VERSION } as Prisma.InputJsonValue,
+        afterJson: { suppliersReassigned, recurringProfilesReassigned, openDuesReassigned, baseSeedVersion: BASE_FINANCE_SEED_VERSION } as Prisma.InputJsonValue,
       },
     });
   }

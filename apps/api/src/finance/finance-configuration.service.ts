@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
 import { STANDARD_SUPPLIER_SEEDS } from './finance-foundation-seeds.js';
+import { BASE_FINANCE_SEED_VERSION } from './finance-foundation.service.js';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { DatabaseService } from '../database/database.service.js';
@@ -65,6 +66,7 @@ export class FinanceConfigurationService {
       if (profile && !activeCategories) issues.push('NO_POSTING_CATEGORY');
       return {
         companyId,
+        requiredBaseSeedVersion: BASE_FINANCE_SEED_VERSION,
         profile,
         openPeriod,
         counts: { activeVaults, activeAccounts, activeCategories, activeSuppliers },

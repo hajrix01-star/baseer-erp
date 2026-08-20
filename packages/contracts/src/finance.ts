@@ -572,6 +572,7 @@ const financeConfigurationSupplierSchema = z
 export const financeConfigurationReceiptSchema = z
   .object({
     companyId: companyIdSchema,
+    requiredBaseSeedVersion: z.number().int().positive(),
     profile: financeConfigurationProfileSchema.nullable(),
     periods: z.array(financeConfigurationPeriodSchema).max(120),
     vaults: z.array(financeConfigurationVaultSchema).max(100),
