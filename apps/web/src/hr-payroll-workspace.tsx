@@ -16,6 +16,7 @@ import { formatNumber } from "./number-format";
 import "./hr-payroll-create-dialog.css";
 
 type Language = "ar" | "en";
+type WorkspaceMessage = { tone: "success" | "error"; text: string };
 
 const HrPayrollCreateDialog = lazy(async () => ({ default: (await import("./hr-payroll-create-dialog")).HrPayrollCreateDialog }));
 const HrPayrollDetailDialog = lazy(async () => ({ default: (await import("./hr-payroll-detail-dialog")).HrPayrollDetailDialog }));
@@ -37,8 +38,8 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   const [search, setSearch] = useState("");
   const [serverSearch, setServerSearch] = useState("");
   const [summary, setSummary] = useState({ count: 0, cancelledCount: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
-  const [message, setMessage] = useState("");
-  const showError = useCallback((message: string) => { if (!reportTopmostDialogError(message)) setMessage(message); }, []);
+  const [message, setMessage] = useState<WorkspaceMessage | null>(null);
+  const showError = useCallback((text: string) => { if (!reportTopmostDialogError(text)) setMessage({ tone: "error", text }); }, []);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [selectedRun, setSelectedRun] = useState<HrPayrollRun | null>(null);
@@ -86,11 +87,11 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
-    {message ? <p className="daily-sales-message error">{message}</p> : null}
+    {message ? <p className={`daily-sales-message ${message.tone}`}>{message.text}</p> : null}
 
     {policiesOpen ? <Suspense fallback={null}><HrCompensationPoliciesDialog open={policiesOpen} language={language} onClose={() => setPoliciesOpen(false)} onChanged={load} onError={showError} /></Suspense> : null}
-    {createOpen ? <Suspense fallback={<PayrollDialogLoadingShell title={ar ? "إنشاء مسير راتب" : "Create payroll run"} language={language} onClose={() => setCreateOpen(false)} />}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage(ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve."); await load(); }} language={language} onError={showError} /></Suspense> : null}
-    {selectedRun?.status === "DRAFT" && !reviewDraft ? <Suspense fallback={<PayrollDialogLoadingShell title={ar ? `تعديل مسودة ${selectedRun.runNumber}` : `Edit draft ${selectedRun.runNumber}`} language={language} onClose={() => setSelectedRun(null)} />}><HrPayrollCreateDialog open payrollRunId={selectedRun.id} runNumber={selectedRun.runNumber} onClose={() => setSelectedRun(null)} onReview={() => setReviewDraft(true)} onCreated={async () => { setMessage(ar ? "تم حفظ تعديلات مسودة المسير." : "Payroll draft changes were saved."); await load(); }} onDiscarded={async () => { setMessage(ar ? "تم حذف مسودة المسير." : "Payroll draft discarded."); await load(); }} language={language} onError={showError} /></Suspense> : null}
+    {createOpen ? <Suspense fallback={<PayrollDialogLoadingShell title={ar ? "إنشاء مسير راتب" : "Create payroll run"} language={language} onClose={() => setCreateOpen(false)} />}><HrPayrollCreateDialog open={createOpen} onClose={() => setCreateOpen(false)} onCreated={async () => { setMessage({ tone: "success", text: ar ? "تم إنشاء مسودة المسير. راجعها ثم اعتمدها." : "Payroll draft created. Review it, then approve." }); await load(); }} language={language} onError={showError} /></Suspense> : null}
+    {selectedRun?.status === "DRAFT" && !reviewDraft ? <Suspense fallback={<PayrollDialogLoadingShell title={ar ? `تعديل مسودة ${selectedRun.runNumber}` : `Edit draft ${selectedRun.runNumber}`} language={language} onClose={() => setSelectedRun(null)} />}><HrPayrollCreateDialog open payrollRunId={selectedRun.id} runNumber={selectedRun.runNumber} onClose={() => setSelectedRun(null)} onReview={() => setReviewDraft(true)} onCreated={async () => { setMessage({ tone: "success", text: ar ? "تم حفظ تعديلات مسودة المسير." : "Payroll draft changes were saved." }); await load(); }} onDiscarded={async () => { setMessage({ tone: "success", text: ar ? "تم حذف مسودة المسير." : "Payroll draft discarded." }); await load(); }} language={language} onError={showError} /></Suspense> : null}
     {selectedRun && (selectedRun.status !== "DRAFT" || reviewDraft) ? <Suspense fallback={<PayrollDialogLoadingShell title={selectedRun.runNumber} language={language} onClose={() => setSelectedRun(null)} />}><HrPayrollDetailDialog runId={selectedRun.id} runNumber={selectedRun.runNumber} language={language} onClose={() => setSelectedRun(null)} onChanged={load} onError={showError} /></Suspense> : null}
   </section>;
 }

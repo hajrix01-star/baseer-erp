@@ -247,8 +247,10 @@ test("payroll create and saved draft edit keep one stable full editor", async ({
   await expect(editor.getByLabel("الشهر")).toBeDisabled();
   await expect(editor.locator('.hr-payroll-create__application-list input[type="checkbox"]')).toBeChecked();
   await expect(editor.locator(".hr-payroll-create__application-list .baseer-money-input")).toHaveValue("100");
+  await expect(editor.locator(".hr-payroll-create__total")).toContainText("2,900");
   const previewRequestsBeforeEdit = requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length;
   await editor.locator(".hr-payroll-create__application-list .baseer-money-input").fill("125");
+  await expect(editor.locator(".hr-payroll-create__total")).toContainText("2,875");
   await page.waitForTimeout(350);
   expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(previewRequestsBeforeEdit);
   await editor.getByLabel("ملاحظات").fill("ملاحظة معدلة");
