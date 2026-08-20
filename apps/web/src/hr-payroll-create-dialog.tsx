@@ -2,11 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
+import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerMoneyInput, formatBaseerEditableAmount } from "./baseer-form-fields";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, requestId } from "./daily-sales-client";
-import { createHrPayrollRun, getHrPayrollRun, previewHrPayrollRun, updateHrPayrollRun, type HrPayrollDetail, type HrPayrollPreviewEmployee, type HrPayrollPreviewReceipt } from "./hr-client";
+import { createHrPayrollRun, discardHrPayrollRun, getHrPayrollRun, previewHrPayrollRun, updateHrPayrollRun, type HrPayrollDetail, type HrPayrollPreviewEmployee, type HrPayrollPreviewReceipt } from "./hr-client";
 import "./hr-payroll-create-dialog.css";
 
 type Language = "ar" | "en";
@@ -19,12 +20,13 @@ const employeeLabel = (language: Language, employee: HrPayrollPreviewEmployee) =
 const selectedApplicationsTotal = (applications: EmployeeApplications | undefined) => Object.values(applications?.advances ?? {}).concat(Object.values(applications?.deductions ?? {})).reduce((total, item) => total + (item.enabled && Number(item.amount) > 0 ? Number(item.amount) : 0), 0);
 
 /** A compact operational view. The server remains the sole owner of eligibility and payroll math. */
-export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, onCreated, onReview, language, onError }: {
+export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, onCreated, onDiscarded, onReview, language, onError }: {
   open: boolean;
   payrollRunId?: string;
   runNumber?: string;
   onClose: () => void;
   onCreated: () => Promise<void>;
+  onDiscarded?: () => Promise<void>;
   onReview?: () => void;
   language: Language;
   onError: (message: string) => void;
@@ -42,6 +44,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const [previewRows, setPreviewRows] = useState<HrPayrollPreviewEmployee[]>([]);
   const [previewCursor, setPreviewCursor] = useState<string | null>(null);
   const [applications, setApplications] = useState<Record<string, EmployeeApplications>>({});
+  const [discardOpen, setDiscardOpen] = useState(false);
   const requestSequence = useRef(0);
   const previewAbortRef = useRef<AbortController | null>(null);
   const detailRequestSequence = useRef(0);
@@ -163,6 +166,20 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
     finally { setBusy(false); }
   };
 
+  const discard = async () => {
+    const session = activeSession();
+    if (!session || !payrollRunId || busy) return;
+    setBusy(true);
+    try {
+      await discardHrPayrollRun(session, { payrollRunId, idempotencyKey: requestId() });
+      setDiscardOpen(false);
+      onClose();
+      await (onDiscarded ?? onCreated)();
+    } catch (error) {
+      onError(presentBaseerApiError(error, language, ar ? "حذف مسودة المسير" : "Discarding payroll draft"));
+    } finally { setBusy(false); }
+  };
+
   const reason = (employee: HrPayrollPreviewEmployee) => ({
     ACTIVE_WITH_VALID_COMPENSATION: ar ? "مدرج" : "Included",
     ACTIVE_NEW_HIRE_PRORATED: ar ? "استحقاق نسبي" : "Prorated",
@@ -199,7 +216,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const canSubmit = !busy && !draftLoading && !previewLoading && preview !== null && preview.counts.included > 0 && preview.counts.exceptions === 0 && !hasIncompleteApplications && sourceIdsComplete;
 
   const title = editing ? (ar ? `تعديل مسودة ${runNumber ?? ""}`.trim() : `Edit draft ${runNumber ?? ""}`.trim()) : (ar ? "إنشاء مسير راتب" : "Create payroll run");
-  return <BaseerDialog open={open} title={title} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose} footer={<><div className="hr-payroll-create__total"><span>{ar ? "صافي المستحق" : "Net payable"}</span>{preview ? <BaseerMoney value={preview.totals.netPayableAmount} language={language} /> : "—"}</div><div className="hr-payroll-create__actions">{editing && onReview ? <BaseerButton type="button" variant="secondary" disabled={busy || draftLoading} onClick={onReview}>{ar ? "مراجعة واعتماد" : "Review and approve"}</BaseerButton> : null}<BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{ar ? "إلغاء" : "Cancel"}</BaseerButton><BaseerButton type="submit" form="hr-payroll-create-form" disabled={!canSubmit}>{editing ? (ar ? "حفظ التعديلات" : "Save changes") : (ar ? "إنشاء المسودة" : "Create draft")}</BaseerButton></div></>}>
+  return <><BaseerDialog open={open} title={title} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose} footer={<><div className="hr-payroll-create__total"><span>{ar ? "صافي المستحق" : "Net payable"}</span>{preview ? <BaseerMoney value={preview.totals.netPayableAmount} language={language} /> : "—"}</div><div className="hr-payroll-create__actions">{editing ? <BaseerButton type="button" variant="danger" disabled={busy || draftLoading} onClick={() => setDiscardOpen(true)}>{ar ? "حذف المسودة" : "Discard draft"}</BaseerButton> : null}{editing && onReview ? <BaseerButton type="button" variant="secondary" disabled={busy || draftLoading} onClick={onReview}>{ar ? "مراجعة واعتماد" : "Review and approve"}</BaseerButton> : null}<BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{ar ? "إغلاق" : "Close"}</BaseerButton><BaseerButton type="submit" form="hr-payroll-create-form" disabled={!canSubmit}>{editing ? (ar ? "حفظ التعديلات" : "Save changes") : (ar ? "إنشاء المسودة" : "Create draft")}</BaseerButton></div></>}>
     {draftLoading ? <p className="hr-payroll-create__loading-shell" role="status">{ar ? "جارٍ فتح مسودة المسير…" : "Opening payroll draft…"}</p> : <form id="hr-payroll-create-form" className="hr-payroll-create" onSubmit={(event) => void submit(event)}>
       <header className="hr-payroll-create__controls"><label>{ar ? "الشهر" : "Month"}<input required disabled={editing} type="month" value={draft.payrollMonth.slice(0, 7)} onChange={(event) => { setDraft((value) => ({ ...value, payrollMonth: `${event.target.value}-01` })); resetApplications(); }} /></label><label>{ar ? "ملاحظات" : "Notes"}<input value={draft.notes} onChange={(event) => setDraft((value) => ({ ...value, notes: event.target.value }))} /></label></header>
       <div className="hr-payroll-create__table-heading"><strong>{ar ? `قائمة الموظفين (${preview?.totals.employeeCount ?? 0})` : `Employees (${preview?.totals.employeeCount ?? 0})`}</strong><BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview()}>{ar ? "تحديث" : "Refresh"}</BaseerButton></div>
@@ -214,5 +231,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
       })}</tbody></table></div> : null}
       {previewCursor ? <BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview(previewCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     </form>}
-  </BaseerDialog>;
+  </BaseerDialog>
+  <BaseerConfirmDialog open={discardOpen} language={language} busy={busy} destructive title={ar ? "حذف مسودة المسير" : "Discard payroll draft"} message={ar ? "سيُحذف هذا المسير قبل الاعتماد. لا توجد قيود محاسبية أو مدفوعات مرتبطة به." : "This draft will be deleted before approval. No accounting entries or payments are attached."} confirmLabel={ar ? "حذف المسودة" : "Discard draft"} onCancel={() => setDiscardOpen(false)} onConfirm={() => void discard()} />
+  </>;
 }

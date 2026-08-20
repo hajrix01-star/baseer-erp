@@ -161,7 +161,7 @@ const journalPresentationSelect = {
   hrFinalSettlementAccrual: { select: { settlementNumber: true } },
   hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
   reversalOfEntry: { select: {
-    sourceType: true, sourceReference: true,
+    sourceType: true, sourceReference: true, description: true,
     hrPayrollAccrual: { select: { runNumber: true } },
     hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
     hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },

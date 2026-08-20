@@ -9,6 +9,7 @@
 type Source = {
   sourceType: string;
   sourceReference: string;
+  description?: string | null;
   hrPayrollAccrual?: { runNumber: string } | null;
   hrPayrollPayment?: { paymentNumber: string; payrollRun: { runNumber: string } } | null;
   hrEmployeeAdvanceIssue?: { advanceNumber: string } | null;
@@ -47,7 +48,16 @@ export function financeJournalPresentation(entry: Source): FinanceJournalPresent
       return { labelAr: "استحقاق نهاية خدمة", labelEn: "Final settlement accrual", reference: entry.hrFinalSettlementAccrual?.settlementNumber ?? entry.sourceReference };
     case "hr_final_settlement_payment":
       return { labelAr: "دفع نهاية خدمة", labelEn: "Final settlement payment", reference: entry.hrFinalSettlementPayment?.settlement.settlementNumber ?? entry.hrFinalSettlementPayment?.paymentNumber ?? entry.sourceReference };
+    case "daily_sales_closing":
+      return { labelAr: "تحصيل مبيعات", labelEn: "Sales collection", reference: dailySalesDocumentNumber(entry.description) ?? entry.sourceReference };
     default:
       return { labelAr: "قيد أو تسوية", labelEn: "Journal or adjustment", reference: entry.sourceReference };
   }
+}
+
+/** Daily-sales entries keep an immutable source id/version; their document
+ * number is intentionally taken from the journal description for historical
+ * versions that no longer have a direct closing relation. */
+function dailySalesDocumentNumber(description: string | null | undefined) {
+  return description?.match(/Daily sales closing\s+([A-Z]+-\d{8}-\d{4})/i)?.[1] ?? null;
 }

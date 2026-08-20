@@ -508,6 +508,10 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: payrollRun.runNumber }).click();
   const payrollEditor = await expectTopmostDialog(page, `تعديل مسودة ${payrollRun.runNumber}`);
+  await payrollEditor.getByRole("button", { name: "حذف المسودة" }).click();
+  await expectTopmostDialog(page, "حذف مسودة المسير");
+  await page.keyboard.press("Escape");
+  await expect(payrollEditor).toHaveAttribute("aria-modal", "true");
   await payrollEditor.getByRole("button", { name: "مراجعة واعتماد" }).click();
   const payrollDetail = await expectTopmostDialog(page, payrollRun.runNumber);
   await expect(payrollDetail.getByRole("button", { name: "اعتماد" })).toBeVisible();
