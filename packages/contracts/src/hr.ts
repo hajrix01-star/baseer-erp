@@ -684,7 +684,7 @@ export const hrEmployeeAdvanceDetailReceiptSchema = z.object({ companyId: compan
 export const hrEmployeeAdministrativeDeductionDetailReceiptSchema = z.object({ companyId: companyIdSchema, ...hrEmployeeAdministrativeDeductionDetailSchema.shape }).strict();
 export const hrEmployeeCompensationProfileReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeCompensationHistoryReceiptSchema = z.object({ companyId: companyIdSchema, compensationHistory: z.array(hrEmployeeCompensationProfileSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
-export const hrPayrollRunsReceiptSchema = z.object({ companyId: companyIdSchema, payrollRuns: z.array(hrPayrollRunSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable(), summary: z.object({ count: z.number().int().nonnegative(), grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema }).strict() }).strict();
+export const hrPayrollRunsReceiptSchema = z.object({ companyId: companyIdSchema, payrollRuns: z.array(hrPayrollRunSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable(), summary: z.object({ count: z.number().int().nonnegative(), cancelledCount: z.number().int().nonnegative(), grossAmount: hrAmountSchema, advanceSettlementAmount: hrAmountSchema, administrativeDeductionAmount: hrAmountSchema, netPayableAmount: hrAmountSchema }).strict() }).strict();
 export const hrPayrollRunDetailReceiptSchema = z.object({
   companyId: companyIdSchema,
   ...hrPayrollRunDetailSchema.shape,

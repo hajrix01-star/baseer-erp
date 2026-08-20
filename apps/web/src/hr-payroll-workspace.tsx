@@ -36,7 +36,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [serverSearch, setServerSearch] = useState("");
-  const [summary, setSummary] = useState({ count: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
+  const [summary, setSummary] = useState({ count: 0, cancelledCount: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
   const [message, setMessage] = useState("");
   const showError = useCallback((message: string) => { if (!reportTopmostDialogError(message)) setMessage(message); }, []);
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   if (!session) return null;
   return <section className="administration-panel">
     <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
-    <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /></BaseerSummaryMetricGrid>
+    <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /><BaseerSummaryMetric tone="muted" label={ar ? "مسيرات ملغاة" : "Cancelled runs"} value={String(summary.cancelledCount)} /></BaseerSummaryMetricGrid>
     <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} />
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}

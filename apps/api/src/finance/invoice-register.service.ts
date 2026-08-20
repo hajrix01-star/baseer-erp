@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
+import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
 type Kind = "SALE" | "PURCHASE" | "EXPENSE" | "OBLIGATION" | "OTHER";
 type Query = Readonly<{ from?: Date; to?: Date; businessMonths: readonly string[]; kinds: readonly Kind[]; supplierIds: readonly string[]; categoryIds: readonly string[]; statuses: readonly ("POSTED" | "CANCELLED")[]; q?: string; cursor?: string; pageSize: number }>;
@@ -78,6 +79,9 @@ export class InvoiceRegisterService {
           id: entry.id,
           sourceType: entry.sourceType,
           sourceReference: entry.sourceReference,
+          displayLabelAr: financeJournalPresentation(entry).labelAr,
+          displayLabelEn: financeJournalPresentation(entry).labelEn,
+          displayReference: financeJournalPresentation(entry).reference,
           businessDate: dateValue(entry.businessDate),
           description: entry.description,
           status: entry.status,
@@ -118,6 +122,12 @@ const entrySelect = {
   supplierDuePayment: { select: { id: true, amount: true, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
   inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
   inclusiveLoanPayment: { select: { id: true, amount: true, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 
 const detailEntrySelect = {
@@ -135,6 +145,21 @@ const detailEntrySelect = {
   supplierDuePayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, due: { select: { supplier: { select: { id: true, nameAr: true, nameEn: true } }, category: { select: { id: true, nameAr: true, nameEn: true, kind: true } } } } } },
   inclusiveLoan: { select: { id: true, originalAmount: true, notes: true } },
   inclusiveLoanPayment: { select: { id: true, amount: true, vaultId: true, vault: { select: { nameAr: true, nameEn: true } }, loan: { select: { sourceDocumentNumber: true, notes: true } } } },
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  reversalOfEntry: { select: {
+    sourceType: true, sourceReference: true,
+    hrPayrollAccrual: { select: { runNumber: true } },
+    hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+    hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+    hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+    hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+    hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 
 function registerPredicate(context: TrustedCompanyActorContext, query: Query, cursor: CursorRow | null) {
@@ -168,14 +193,14 @@ function decimalText(value: string | null | undefined) { return new Prisma.Decim
 function zeroSummary(): SummaryRow { return { documentCount: 0, salesCount: 0, purchaseCount: 0, expenseCount: 0, obligationCount: 0, otherCount: 0, paidCount: 0, payableCount: 0, grossAmount: "0", netAmount: "0", vatAmount: "0" }; }
 function mapEntry(entry: any) {
   const movement = entry.lines.reduce((total: Prisma.Decimal, line: { debitAmount: Prisma.Decimal }) => total.plus(line.debitAmount), new Prisma.Decimal(0)); const outflow = entry.outflowDocument; const sales = entry.dailySalesClosing; const duePayment = entry.supplierDuePayment; const businessDate = dateValue(entry.businessDate);
-  if (outflow) return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: outflow.category, grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt };
-  if (sales) return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, businessDate, supplierInvoiceDate: null, kind: "SALE" as const, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt };
-  if (duePayment) return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: duePayment.due.category, grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt };
-  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes);
-  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes);
+  if (outflow) return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: outflow.category, grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt };
+  if (sales) return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt };
+  if (duePayment) return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: duePayment.due.category, grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt };
+  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
+  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
   return generic(entry, "JOURNAL", "OTHER", movement, entry.description);
 }
-function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null) { return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: entry.sourceReference, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
+function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, display = financeJournalPresentation(entry)) { return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
 
 function detailAllocations(entry: any) {

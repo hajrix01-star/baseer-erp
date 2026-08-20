@@ -144,7 +144,7 @@ try {
   assert.equal(payrollPage.statusCode, 200, payrollPage.body);
   assert.equal(payrollPage.json().payrollRuns.length, 1);
   assert.equal(payrollPage.json().hasMore, true);
-  assert.deepEqual(payrollPage.json().summary, { count: 2, grossAmount: "3000.0000", advanceSettlementAmount: "300.0000", administrativeDeductionAmount: "150.0000", netPayableAmount: "2550.0000" }, "Payroll summary must cover the full filtered scope, not one page.");
+  assert.deepEqual(payrollPage.json().summary, { count: 2, cancelledCount: 1, grossAmount: "3000.0000", advanceSettlementAmount: "300.0000", administrativeDeductionAmount: "150.0000", netPayableAmount: "2550.0000" }, "Payroll summary must cover the full active filtered scope and disclose cancelled runs separately.");
   const payrollSearch = await server.inject({ method: "GET", url: "/v1/hr/payroll-runs?search=TARGET&pageSize=1", headers: managerHeaders });
   assert.equal(payrollSearch.statusCode, 200, payrollSearch.body);
   assert.equal(payrollSearch.json().summary.count, 1);
@@ -422,7 +422,8 @@ async function seedFixture() {
     await client.query(
       `INSERT INTO "HrPayrollRun" ("id", "tenantId", "companyId", "runNumber", "payrollMonth", "businessDate", "status", "employeeCount", "grossAmount", "advanceSettlementAmount", "administrativeDeductionAmount", "netPayableAmount", "createdByUserId", "updatedAt")
        VALUES ($1::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-CURRENT', DATE '2026-08-01', DATE '2026-08-20', 'DRAFT', 1, 2000.0000, 200.0000, 100.0000, 1700.0000, $4::uuid, CURRENT_TIMESTAMP),
-              ($5::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-TARGET', DATE '2026-07-01', DATE '2026-07-31', 'APPROVED', 1, 1000.0000, 100.0000, 50.0000, 850.0000, $4::uuid, CURRENT_TIMESTAMP)`,
+              ($5::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-TARGET', DATE '2026-07-01', DATE '2026-07-31', 'APPROVED', 1, 1000.0000, 100.0000, 50.0000, 850.0000, $4::uuid, CURRENT_TIMESTAMP),
+              (gen_random_uuid(), $2::uuid, $3::uuid, 'PAY-HTTP-CANCELLED', DATE '2026-06-01', DATE '2026-06-30', 'REVERSED', 1, 9000.0000, 900.0000, 450.0000, 7650.0000, $4::uuid, CURRENT_TIMESTAMP)`,
       [fixture.payrollRunId, fixture.tenantId, fixture.companyId, fixture.managerUserId, fixture.approvedPayrollRunId],
     );
     await client.query(

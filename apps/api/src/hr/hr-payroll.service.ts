@@ -293,17 +293,27 @@ export class HrPayrollService {
       };
       const cursor = query.cursor ? await tx.hrPayrollRun.findFirst({ where: { id: query.cursor, ...runScope }, select: { id: true, payrollMonth: true } }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The payroll-run cursor is invalid.');
-      const [rows, aggregate] = await Promise.all([
+      // The register deliberately keeps cancelled runs visible for audit.  The
+      // four money KPIs, however, are operational totals and must never make a
+      // cancelled run look payable again.
+      const activeSummaryScope: Prisma.HrPayrollRunWhereInput = {
+        AND: [runScope, { status: { not: HrPayrollRunStatus.REVERSED } }],
+      };
+      const cancelledSummaryScope: Prisma.HrPayrollRunWhereInput = {
+        AND: [runScope, { status: HrPayrollRunStatus.REVERSED }],
+      };
+      const [rows, aggregate, cancelledCount] = await Promise.all([
         tx.hrPayrollRun.findMany({
           where: cursor ? { AND: [runScope, { OR: [{ payrollMonth: { lt: cursor.payrollMonth } }, { payrollMonth: cursor.payrollMonth, id: { lt: cursor.id } }] }] } : runScope,
           orderBy: [{ payrollMonth: 'desc' }, { id: 'desc' }],
           take: query.pageSize + 1,
         }),
         tx.hrPayrollRun.aggregate({
-          where: runScope,
+          where: activeSummaryScope,
           _count: true,
           _sum: { grossAmount: true, advanceSettlementAmount: true, administrativeDeductionAmount: true, netPayableAmount: true },
         }),
+        tx.hrPayrollRun.count({ where: cancelledSummaryScope }),
       ]);
       const hasMore = rows.length > query.pageSize;
       const runs = hasMore ? rows.slice(0, query.pageSize) : rows;
@@ -313,6 +323,7 @@ export class HrPayrollService {
         nextCursor: hasMore ? runs.at(-1)?.id ?? null : null,
         summary: {
           count: aggregate._count,
+          cancelledCount,
           grossAmount: aggregate._sum.grossAmount?.toFixed(4) ?? '0.0000',
           advanceSettlementAmount: aggregate._sum.advanceSettlementAmount?.toFixed(4) ?? '0.0000',
           administrativeDeductionAmount: aggregate._sum.administrativeDeductionAmount?.toFixed(4) ?? '0.0000',

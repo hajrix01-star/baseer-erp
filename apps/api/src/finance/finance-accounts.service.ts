@@ -3,6 +3,7 @@ import { Prisma } from "../generated/prisma/client.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
 import { BusinessDateService } from "../business-date/business-date.service.js";
+import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
 type AccountInput = { from?: Date; to?: Date; q?: string };
 type MovementInput = AccountInput & { cursor?: string; pageSize: number };
@@ -76,19 +77,24 @@ export class FinanceAccountsService {
         } : baseWhere,
         orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
         take: input.pageSize + 1,
-        select: { id: true, debitAmount: true, creditAmount: true, description: true, journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true } } },
+        select: { id: true, debitAmount: true, creditAmount: true, description: true, journalEntry: { select: journalPresentationSelect } },
       });
       const page = lines.slice(0, input.pageSize);
-      const items = page.map((line) => ({
+      const items = page.map((line) => {
+        const display = financeJournalPresentation(line.journalEntry);
+        return {
         id: line.id,
         journalEntryId: line.journalEntry.id,
         businessDate: dateValue(line.journalEntry.businessDate),
         sourceType: line.journalEntry.sourceType,
         sourceReference: line.journalEntry.sourceReference,
+        displayLabelAr: display.labelAr,
+        displayLabelEn: display.labelEn,
+        displayReference: display.reference,
         description: line.description ?? line.journalEntry.description,
         debitAmount: line.debitAmount.toFixed(4),
         creditAmount: line.creditAmount.toFixed(4),
-      }));
+      }; });
       return {
         account: accountReceipt(account, amount),
         asOfBusinessDate: dateValue(asOf),
@@ -106,14 +112,16 @@ export class FinanceAccountsService {
       const entry = await tx.financeJournalEntry.findFirst({
         where: { id: journalEntryId, tenantId: context.tenantId, companyId: context.companyId },
         select: {
-          id: true, sourceType: true, sourceReference: true, businessDate: true, description: true, status: true, postedAt: true, reversalOfEntryId: true,
+          ...journalPresentationSelect,
           reversalEntry: { select: { id: true } },
           lines: { orderBy: { lineNumber: "asc" }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
         },
       });
       if (!entry) throw new NotFoundException("The journal entry was not found for this company.");
+      const display = financeJournalPresentation(entry);
       return {
         id: entry.id, sourceType: entry.sourceType, sourceReference: entry.sourceReference, businessDate: dateValue(entry.businessDate),
+        displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, displayReference: display.reference,
         description: entry.description, status: entry.status, postedAt: entry.postedAt, reversalOfEntryId: entry.reversalOfEntryId,
         reversalEntryId: entry.reversalEntry?.id ?? null,
         lines: entry.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })),
@@ -144,6 +152,24 @@ export class FinanceAccountsService {
 }
 
 const accountSelect = { id: true, code: true, nameAr: true, nameEn: true, type: true, status: true, isSystem: true } satisfies Prisma.FinanceAccountSelect;
+const journalPresentationSelect = {
+  id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, status: true, postedAt: true, reversalOfEntryId: true,
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  reversalOfEntry: { select: {
+    sourceType: true, sourceReference: true,
+    hrPayrollAccrual: { select: { runNumber: true } },
+    hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+    hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+    hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+    hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+    hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  } },
+} satisfies Prisma.FinanceJournalEntrySelect;
 function accountReceipt(account: Prisma.FinanceAccountGetPayload<{ select: typeof accountSelect }>, amounts: Amounts) { return { ...account, ...amountReceipt(amounts) }; }
 function amountReceipt(amounts: Amounts) { return { balanceDebit: amounts.balanceDebit.toFixed(4), balanceCredit: amounts.balanceCredit.toFixed(4), periodDebit: amounts.periodDebit.toFixed(4), periodCredit: amounts.periodCredit.toFixed(4) }; }
 function zeroAmounts(): Amounts { return { balanceDebit: new Prisma.Decimal(0), balanceCredit: new Prisma.Decimal(0), periodDebit: new Prisma.Decimal(0), periodCredit: new Prisma.Decimal(0) }; }
