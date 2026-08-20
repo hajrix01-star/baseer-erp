@@ -1,6 +1,6 @@
 # BASEER ERP Module Delivery Register
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-20
 **Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
@@ -24,6 +24,7 @@
 | Suppliers and categories | Owner verification | Company-scoped master-data maintenance, safeguarded archive, category hierarchy and server-backed lookup for long lists. | Owner acceptance and final seed/business-profile policy. |
 | Unified Invoice Register | Read-only local delivery | Posted financial movements except internal vault transfers, server filters, dynamic server summaries and stable pages. | Official report/P&L scope; multi-year aggregate read model and volume proof. |
 | Daily Sales Closing | Ready for owner acceptance | Aggregated operating-day close, bounded history and read-only operational calendar. | Owner UI acceptance; it is not a POS or formal reporting replacement. |
+| Human Resources | **Closed — Go on local test database** | Employee file, compensation, leave, services, advances/deductions, payroll drafts through payment/cancellation, final settlements, print/output controls, RLS and HR browser coverage. | For another database: apply HR RLS as table owner and re-run the HR lifecycle, HTTP, integrity and browser gates. Production/cutover acceptance remains a separate decision. |
 | Administration and access | Foundation enhanced | Company/user/role management, session revocation, audit redaction and last-owner protection. | Invitations, MFA and production file lifecycle. |
 | Reports and Command Center | Not started as official reporting | Operational cards/calendar exist where stated by the source module. | Reconciled reports, P&L, exports and official report read models. |
 | Assets & Warranty | Planned | Purchase follow-up marker only. | Dedicated asset/warranty register and separate capitalization/depreciation policy. |
