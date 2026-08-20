@@ -158,6 +158,14 @@ try {
   assert.equal(financialRegister.json().records[0].debitTotal, undefined, "The operational register must not expose duplicate debit totals; full lines stay in the journal detail.");
   assert.equal(financialRegister.json().records[0].creditTotal, undefined, "The operational register must not expose duplicate credit totals; full lines stay in the journal detail.");
   assert.equal(financialRegister.json().records[0].grossAmount, "115.0000", "Each register row must retain its source operation value.");
+  assert.equal(financialRegister.json().records[0].operationFamily, "SALES", "Sales collections must carry an explicit operation family.");
+  assert.equal(financialRegister.json().records[0].operationClass, "SALE_COLLECTION", "Sales collections must carry an explicit operation classification.");
+  const salesOnlyRegister = await server.inject({ method: "GET", url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-15&toBusinessDate=2026-08-15&operationFamilies=SALES&operationClasses=SALE_COLLECTION", headers });
+  assert.equal(salesOnlyRegister.statusCode, 200, salesOnlyRegister.body);
+  assert.equal(salesOnlyRegister.json().records.length, 1, "The operation-family and operation-class filters must be applied server-side.");
+  const noExpenseOnSalesDate = await server.inject({ method: "GET", url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-15&toBusinessDate=2026-08-15&operationFamilies=EXPENSES", headers });
+  assert.equal(noExpenseOnSalesDate.statusCode, 200, noExpenseOnSalesDate.body);
+  assert.equal(noExpenseOnSalesDate.json().records.length, 0, "Expenses must not absorb sales collections or unrelated financial operations.");
   assert.equal(financialRegister.json().hasMore, false, "A complete one-record register scope must not advertise a next page.");
   const creditCategory = await server.inject({ method: "POST", url: "/v1/finance/master-data/categories", headers, payload: { code: `HTTP-CREDIT-${suffix}`, nameAr: "مصروف اختبار آجل", nameEn: "HTTP credit expense", kind: "EXPENSE", isPosting: true, idempotencyKey: randomUUID() } });
   assert.equal(creditCategory.statusCode, 201, creditCategory.body);
@@ -177,6 +185,13 @@ try {
     payload: { kind: "EXPENSE", settlementKind: "PAYABLE", categoryId: creditCategory.json().id, supplierId: creditSupplier.json().id, supplierInvoiceMissingReason: "Scale verification fixture", businessDate: "2026-08-13", grossAmount: "80.0000", isTaxable: false, allocations: [], idempotencyKey: randomUUID() },
   });
   assert.equal(secondPayable.statusCode, 201, secondPayable.body);
+  const expensesOnlyRegister = await server.inject({ method: "GET", url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-14&toBusinessDate=2026-08-14&operationFamilies=EXPENSES", headers });
+  assert.equal(expensesOnlyRegister.statusCode, 200, expensesOnlyRegister.body);
+  assert.equal(expensesOnlyRegister.json().records.length, 1, "The expenses family must return the actual expense document exactly once.");
+  assert.equal(expensesOnlyRegister.json().records[0].operationClass, "EXPENSE_INVOICE", "A non-recurring expense must remain distinguishable from recurring expenses and settlements.");
+  const recurringOnlyRegister = await server.inject({ method: "GET", url: "/v1/finance/invoice-register?fromBusinessDate=2026-08-14&toBusinessDate=2026-08-14&operationClasses=RECURRING_EXPENSE", headers });
+  assert.equal(recurringOnlyRegister.statusCode, 200, recurringOnlyRegister.body);
+  assert.equal(recurringOnlyRegister.json().records.length, 0, "A one-off expense must not be returned by the recurring-expense filter.");
   const creditWorkspace = await server.inject({ method: "GET", url: "/v1/finance/purchase-expense-documents/credit-workspace?pageSize=1", headers });
   assert.equal(creditWorkspace.statusCode, 200, creditWorkspace.body);
   assert.equal(creditWorkspace.json().openInvoiceCount, 2, "The credit summary must cover every open due, independently of the page size.");

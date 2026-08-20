@@ -1324,12 +1324,16 @@ export const treasuryVaultActivityReceiptSchema = z.object({
 }).strict();
 const financeInvoiceRegisterKindSchema = z.enum(["SALE", "PURCHASE", "EXPENSE", "OBLIGATION", "OTHER"]);
 const financeInvoiceRegisterStatusSchema = z.enum(["POSTED", "CANCELLED"]);
+const financeInvoiceRegisterOperationFamilySchema = z.enum(["SALES", "PURCHASES", "EXPENSES", "SUPPLIER_SETTLEMENTS", "EMPLOYEE_OPERATIONS", "FINANCING", "OTHER"]);
+const financeInvoiceRegisterOperationClassSchema = z.enum(["SALE_COLLECTION", "PURCHASE_INVOICE", "EXPENSE_INVOICE", "RECURRING_EXPENSE", "SUPPLIER_SETTLEMENT", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "EMPLOYEE_ADVANCE", "EMPLOYEE_ADVANCE_SETTLEMENT", "FINAL_SETTLEMENT_ACCRUAL", "FINAL_SETTLEMENT_PAYMENT", "LOAN_OPENING", "LOAN_REPAYMENT", "GENERAL_JOURNAL"]);
 
 export const financeInvoiceRegisterQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),
   toBusinessDate: businessDateSchema.optional(),
   businessMonths: z.string().trim().regex(/^\d{4}-\d{2}(,\d{4}-\d{2})*$/).optional(),
   kinds: z.string().trim().regex(/^(SALE|PURCHASE|EXPENSE|OBLIGATION|OTHER)(,(SALE|PURCHASE|EXPENSE|OBLIGATION|OTHER))*$/).optional(),
+  operationFamilies: z.string().trim().regex(/^(SALES|PURCHASES|EXPENSES|SUPPLIER_SETTLEMENTS|EMPLOYEE_OPERATIONS|FINANCING|OTHER)(,(SALES|PURCHASES|EXPENSES|SUPPLIER_SETTLEMENTS|EMPLOYEE_OPERATIONS|FINANCING|OTHER))*$/).optional(),
+  operationClasses: z.string().trim().regex(/^(SALE_COLLECTION|PURCHASE_INVOICE|EXPENSE_INVOICE|RECURRING_EXPENSE|SUPPLIER_SETTLEMENT|PAYROLL_ACCRUAL|PAYROLL_PAYMENT|EMPLOYEE_ADVANCE|EMPLOYEE_ADVANCE_SETTLEMENT|FINAL_SETTLEMENT_ACCRUAL|FINAL_SETTLEMENT_PAYMENT|LOAN_OPENING|LOAN_REPAYMENT|GENERAL_JOURNAL)(,(SALE_COLLECTION|PURCHASE_INVOICE|EXPENSE_INVOICE|RECURRING_EXPENSE|SUPPLIER_SETTLEMENT|PAYROLL_ACCRUAL|PAYROLL_PAYMENT|EMPLOYEE_ADVANCE|EMPLOYEE_ADVANCE_SETTLEMENT|FINAL_SETTLEMENT_ACCRUAL|FINAL_SETTLEMENT_PAYMENT|LOAN_OPENING|LOAN_REPAYMENT|GENERAL_JOURNAL))*$/).optional(),
   supplierIds: z.string().trim().regex(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(,\w{8}-\w{4}-\w{4}-\w{4}-\w{12})*$/).optional(),
   categoryIds: z.string().trim().regex(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}(,\w{8}-\w{4}-\w{4}-\w{4}-\w{12})*$/).optional(),
   statuses: z.string().trim().regex(/^(POSTED|CANCELLED)(,(POSTED|CANCELLED))*$/).optional(),
@@ -1349,6 +1353,8 @@ const financeInvoiceRegisterRecordSchema = z.object({
   businessDate: businessDateSchema,
   supplierInvoiceDate: businessDateSchema.nullable(),
   kind: financeInvoiceRegisterKindSchema,
+  operationFamily: financeInvoiceRegisterOperationFamilySchema,
+  operationClass: financeInvoiceRegisterOperationClassSchema,
   settlementKind: financeOutflowSettlementSchema.nullable(),
   status: financeInvoiceRegisterStatusSchema,
   supplier: financeInvoiceRegisterOptionSchema.nullable(),

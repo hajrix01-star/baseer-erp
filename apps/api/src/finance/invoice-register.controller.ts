@@ -13,10 +13,12 @@ export class InvoiceRegisterController {
     const context = await this.authorize(authorization, companyId);
     const months = parsed.data.businessMonths?.split(",") ?? [];
     const kinds = parsed.data.kinds?.split(",") as ("SALE" | "PURCHASE" | "EXPENSE" | "OBLIGATION" | "OTHER")[] | undefined;
+    const operationFamilies = parsed.data.operationFamilies?.split(",") as ("SALES" | "PURCHASES" | "EXPENSES" | "SUPPLIER_SETTLEMENTS" | "EMPLOYEE_OPERATIONS" | "FINANCING" | "OTHER")[] | undefined;
+    const operationClasses = parsed.data.operationClasses?.split(",") as ("SALE_COLLECTION" | "PURCHASE_INVOICE" | "EXPENSE_INVOICE" | "RECURRING_EXPENSE" | "SUPPLIER_SETTLEMENT" | "PAYROLL_ACCRUAL" | "PAYROLL_PAYMENT" | "EMPLOYEE_ADVANCE" | "EMPLOYEE_ADVANCE_SETTLEMENT" | "FINAL_SETTLEMENT_ACCRUAL" | "FINAL_SETTLEMENT_PAYMENT" | "LOAN_OPENING" | "LOAN_REPAYMENT" | "GENERAL_JOURNAL")[] | undefined;
     const supplierIds = parsed.data.supplierIds?.split(",") ?? [];
     const categoryIds = parsed.data.categoryIds?.split(",") ?? [];
     const statuses = parsed.data.statuses?.split(",") as ("POSTED" | "CANCELLED")[] | undefined;
-    return financeInvoiceRegisterReceiptSchema.parse(await this.register.workspace(context, { ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}), ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}), businessMonths: months, kinds: kinds ?? [], supplierIds, categoryIds, statuses: statuses ?? [], ...(parsed.data.q ? { q: parsed.data.q } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), pageSize: parsed.data.pageSize }));
+    return financeInvoiceRegisterReceiptSchema.parse(await this.register.workspace(context, { ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}), ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}), businessMonths: months, kinds: kinds ?? [], operationFamilies: operationFamilies ?? [], operationClasses: operationClasses ?? [], supplierIds, categoryIds, statuses: statuses ?? [], ...(parsed.data.q ? { q: parsed.data.q } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}), pageSize: parsed.data.pageSize }));
   }
 
   @Get(":journalEntryId")

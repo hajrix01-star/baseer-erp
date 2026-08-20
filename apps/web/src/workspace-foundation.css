@@ -188,6 +188,7 @@ html[dir="rtl"] .baseer-metric::before { inset: 0 0 0 auto; }
   white-space: nowrap;
 }
 .invoice-register__number:hover { color: var(--brand); text-decoration: none; }
+.invoice-register__classification { color: var(--ink-muted); font-size: .82rem; white-space: nowrap; }
 :where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form, .baseer-batch-header) :is(input, select, textarea) {
   width: 100%;
   min-height: var(--control-height);

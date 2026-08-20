@@ -16,14 +16,16 @@ type Language = "ar" | "en";
 type Option = { id: string; nameAr: string; nameEn: string | null };
 type InvoiceKind = "SALE" | "PURCHASE" | "EXPENSE" | "OBLIGATION" | "OTHER";
 type InvoiceStatus = "POSTED" | "CANCELLED";
+type OperationFamily = "SALES" | "PURCHASES" | "EXPENSES" | "SUPPLIER_SETTLEMENTS" | "EMPLOYEE_OPERATIONS" | "FINANCING" | "OTHER";
+type OperationClass = "SALE_COLLECTION" | "PURCHASE_INVOICE" | "EXPENSE_INVOICE" | "RECURRING_EXPENSE" | "SUPPLIER_SETTLEMENT" | "PAYROLL_ACCRUAL" | "PAYROLL_PAYMENT" | "EMPLOYEE_ADVANCE" | "EMPLOYEE_ADVANCE_SETTLEMENT" | "FINAL_SETTLEMENT_ACCRUAL" | "FINAL_SETTLEMENT_PAYMENT" | "LOAN_OPENING" | "LOAN_REPAYMENT" | "GENERAL_JOURNAL";
 type MovementSource = "DAILY_SALES" | "OUTFLOW_DOCUMENT" | "SUPPLIER_DUE_PAYMENT" | "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL";
 type PayrollAccrual = { grossExpense: string; advanceSettlement: string; administrativeRecovery: string; netPayable: string };
-type Movement = { id: string; source: MovementSource; sourceType: string; documentNumber: string; displayLabelAr: string; displayLabelEn: string; businessDate: string; supplierInvoiceDate: string | null; kind: InvoiceKind; settlementKind: "PAID" | "PAYABLE" | null; status: InvoiceStatus; supplier: Option | null; category: Option | null; grossAmount: string; netAmount: string; vatAmount: string; payrollAccrual: PayrollAccrual | null; journalEntryId: string; batchNumber: string | null; notes: string | null; recurring: boolean; createdAt: string };
+type Movement = { id: string; source: MovementSource; sourceType: string; documentNumber: string; displayLabelAr: string; displayLabelEn: string; businessDate: string; supplierInvoiceDate: string | null; kind: InvoiceKind; operationFamily: OperationFamily; operationClass: OperationClass; settlementKind: "PAID" | "PAYABLE" | null; status: InvoiceStatus; supplier: Option | null; category: Option | null; grossAmount: string; netAmount: string; vatAmount: string; payrollAccrual: PayrollAccrual | null; journalEntryId: string; batchNumber: string | null; notes: string | null; recurring: boolean; createdAt: string };
 type Receipt = { companyId: string; appliedPeriod: { fromBusinessDate: string | null; toBusinessDate: string | null; businessMonths: string[] }; summary: { documentCount: number; postedCount: number; cancelledCount: number; salesCount: number; purchaseCount: number; expenseCount: number; obligationCount: number; otherCount: number; paidCount: number; payableCount: number }; filters: { suppliers: Option[]; categories: Option[] }; records: Movement[]; hasMore: boolean; nextCursor: string | null };
 type MovementDetail = { movement: Movement; journal: { id: string; sourceType: string; sourceReference: string; displayLabelAr: string; displayLabelEn: string; displayReference: string; businessDate: string; description: string | null; status: "POSTED" | "REVERSED"; postedAt: string; reversalOfEntryId: string | null; reversalEntryId: string | null; lines: Array<{ id: string; lineNumber: number; accountCode: string; accountNameAr: string; accountNameEn: string; debitAmount: string; creditAmount: string; description: string | null }> }; allocations: Array<{ vaultId: string; vaultNameAr: string; vaultNameEn: string; paymentMethod: string; grossAmount: string }>; batch: { batchNumber: string; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; notes: string | null } | null; sourceDetail: { supplierInvoiceNumber: string | null; supplierInvoiceMissingReason: string | null; coverageLabel: string | null } };
-type Filters = { kinds: InvoiceKind[]; supplierIds: string[]; categoryIds: string[]; statuses: InvoiceStatus[]; q: string };
-type MultiFilterKey = "kinds" | "supplierIds" | "categoryIds" | "statuses";
-const emptyFilters: Filters = { kinds: [], supplierIds: [], categoryIds: [], statuses: [], q: "" };
+type Filters = { operationFamilies: OperationFamily[]; operationClasses: OperationClass[]; supplierIds: string[]; categoryIds: string[]; statuses: InvoiceStatus[]; q: string };
+type MultiFilterKey = "operationFamilies" | "operationClasses" | "supplierIds" | "categoryIds" | "statuses";
+const emptyFilters: Filters = { operationFamilies: [], operationClasses: [], supplierIds: [], categoryIds: [], statuses: [], q: "" };
 const BaseerFilterAutocomplete = lazy(async () => ({ default: (await import("./baseer-filter-autocomplete")).BaseerFilterAutocomplete }));
 const BaseerFilterBar = lazy(async () => ({ default: (await import("./baseer-filter-bar")).BaseerFilterBar }));
 
@@ -44,7 +46,8 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const load = useCallback(async (cursor?: string) => {
     const current = activeSession(); setSession(current); if (!current) return;
     const query = new URLSearchParams(baseerPeriodQuery(period));
-    if (filters.kinds.length) query.set("kinds", filters.kinds.join(","));
+    if (filters.operationFamilies.length) query.set("operationFamilies", filters.operationFamilies.join(","));
+    if (filters.operationClasses.length) query.set("operationClasses", filters.operationClasses.join(","));
     if (filters.supplierIds.length) query.set("supplierIds", filters.supplierIds.join(","));
     if (filters.categoryIds.length) query.set("categoryIds", filters.categoryIds.join(","));
     if (filters.statuses.length) query.set("statuses", filters.statuses.join(","));
@@ -56,7 +59,8 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   useEffect(() => { void load().catch((error) => setMessage(presentBaseerApiError(error, language, text.invoiceRegister))); }, [language, load, text.invoiceRegister]);
 
   const optionName = (item: Option | null) => item ? (language === "ar" ? item.nameAr : item.nameEn || item.nameAr) : "—";
-  const kindLabel = (kind: InvoiceKind) => kind === "SALE" ? text.sales : kind === "PURCHASE" ? text.purchases : kind === "EXPENSE" ? text.expenses : kind === "OBLIGATION" ? text.obligations : text.otherMovements;
+  const operationFamilyLabel = (family: OperationFamily) => operationLabels(language).family[family];
+  const operationClassLabel = (operationClass: OperationClass) => operationLabels(language).operation[operationClass];
   const statusLabel = (status: InvoiceStatus) => status === "POSTED" ? text.posted : text.cancelled;
   const sourceLabel = (movement: Movement) => language === "ar" ? movement.displayLabelAr : movement.displayLabelEn;
   const clearFilters = () => { setFilters(emptyFilters); setPeriod(defaultBaseerPeriodRange()); };
@@ -74,17 +78,20 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const appliedFilters = [
     ...(hasCustomPeriod ? [{ id: "period", label: baseerPeriodLabel(period, language), onRemove: () => setPeriod(defaultBaseerPeriodRange()) }] : []),
     ...(filters.q.trim() ? [{ id: "search", label: filters.q.trim(), onRemove: () => selectText("") }] : []),
-    ...filters.kinds.map((value) => ({ id: `kind:${value}`, label: kindLabel(value), onRemove: () => selectValues("kinds", filters.kinds.filter((item) => item !== value)) })),
+    ...filters.operationFamilies.map((value) => ({ id: `family:${value}`, label: operationFamilyLabel(value), onRemove: () => selectValues("operationFamilies", filters.operationFamilies.filter((item) => item !== value)) })),
+    ...filters.operationClasses.map((value) => ({ id: `operation:${value}`, label: operationClassLabel(value), onRemove: () => selectValues("operationClasses", filters.operationClasses.filter((item) => item !== value)) })),
     ...filters.supplierIds.map((value) => ({ id: `supplier:${value}`, label: optionName(receipt?.filters.suppliers.find((item) => item.id === value) ?? null), onRemove: () => selectValues("supplierIds", filters.supplierIds.filter((item) => item !== value)) })),
     ...filters.categoryIds.map((value) => ({ id: `category:${value}`, label: optionName(receipt?.filters.categories.find((item) => item.id === value) ?? null), onRemove: () => selectValues("categoryIds", filters.categoryIds.filter((item) => item !== value)) })),
     ...filters.statuses.map((value) => ({ id: `status:${value}`, label: statusLabel(value), onRemove: () => selectValues("statuses", filters.statuses.filter((item) => item !== value)) })),
   ];
-  const kindOptions = (["SALE", "PURCHASE", "EXPENSE", "OBLIGATION", "OTHER"] as const).map((id) => ({ id, label: kindLabel(id) }));
+  const operationFamilyOptions = (["SALES", "PURCHASES", "EXPENSES", "SUPPLIER_SETTLEMENTS", "EMPLOYEE_OPERATIONS", "FINANCING", "OTHER"] as const).map((id) => ({ id, label: operationFamilyLabel(id) }));
+  const operationClassOptions = (["SALE_COLLECTION", "PURCHASE_INVOICE", "EXPENSE_INVOICE", "RECURRING_EXPENSE", "SUPPLIER_SETTLEMENT", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "EMPLOYEE_ADVANCE", "EMPLOYEE_ADVANCE_SETTLEMENT", "FINAL_SETTLEMENT_ACCRUAL", "FINAL_SETTLEMENT_PAYMENT", "LOAN_OPENING", "LOAN_REPAYMENT", "GENERAL_JOURNAL"] as const).map((id) => ({ id, label: operationClassLabel(id) }));
   const statusOptions = (["POSTED", "CANCELLED"] as const).map((id) => ({ id, label: statusLabel(id) }));
   const columns: DataTableColumn<Movement>[] = useMemo(() => [
     { id: "number", header: language === "ar" ? "رقم المستند / الحركة" : "Document / movement no.", cell: (item) => <button className="baseer-link-button invoice-register__number" type="button" dir="ltr" title={item.documentNumber} onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
     { id: "date", header: text.documentDate, cell: (item) => item.businessDate },
     { id: "source", header: text.documentSource, cell: (item) => <span className="daily-sales-badge">{sourceLabel(item)}{item.recurring ? ` · ${text.recurring}` : ""}</span> },
+    { id: "classification", header: language === "ar" ? "التصنيف" : "Classification", cell: (item) => <span className="invoice-register__classification">{operationClassLabel(item.operationClass)}</span> },
     { id: "supplier", header: text.supplier, cell: (item) => optionName(item.supplier) },
     { id: "category", header: text.financialCategory, cell: (item) => optionName(item.category) },
     { id: "batch", header: text.batchInvoices, cell: (item) => item.batchNumber ?? "—" },
@@ -95,7 +102,7 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
 
   return <section className="daily-sales-workspace invoice-register-workspace" aria-label={text.invoiceRegister}>
     <header className="administration-section-heading"><div><p className="eyebrow">{text.finance}</p><h3>{text.invoiceRegister}</h3><p>{text.invoiceRegisterDescription}</p></div></header>
-    <Suspense fallback={null}><BaseerFilterBar controlsPresentation="menu" language={language} search={filters.q} searchLabel={text.searchInvoices} searchPlaceholder={text.searchInvoices} onSearchChange={selectText} appliedFilters={appliedFilters} onClear={clearFilters} controls={<><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} /><BaseerFilterAutocomplete id="invoice-register-kind" label={text.invoiceType} placeholder={`${text.all} — ${text.invoiceType}`} values={filters.kinds} options={kindOptions} onChange={(values) => selectValues("kinds", values)} /><BaseerFilterAutocomplete id="invoice-register-supplier" label={text.supplier} placeholder={text.supplier} values={filters.supplierIds} options={(receipt?.filters.suppliers ?? []).map((item) => ({ id: item.id, label: optionName(item) }))} onChange={(values) => selectValues("supplierIds", values)} /><BaseerFilterAutocomplete id="invoice-register-category" label={text.financialCategory} placeholder={text.financialCategory} values={filters.categoryIds} options={(receipt?.filters.categories ?? []).map((item) => ({ id: item.id, label: optionName(item) }))} onChange={(values) => selectValues("categoryIds", values)} /><BaseerFilterAutocomplete id="invoice-register-status" label={text.status} placeholder={`${text.all} — ${text.status}`} values={filters.statuses} options={statusOptions} onChange={(values) => selectValues("statuses", values)} /></>} /></Suspense>
+    <Suspense fallback={null}><BaseerFilterBar controlsPresentation="menu" language={language} search={filters.q} searchLabel={text.searchInvoices} searchPlaceholder={text.searchInvoices} onSearchChange={selectText} appliedFilters={appliedFilters} onClear={clearFilters} controls={<><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} /><BaseerFilterAutocomplete id="invoice-register-family" label={language === "ar" ? "نوع العملية" : "Operation type"} placeholder={language === "ar" ? "كل أنواع العمليات" : "All operation types"} values={filters.operationFamilies} options={operationFamilyOptions} onChange={(values) => selectValues("operationFamilies", values)} /><BaseerFilterAutocomplete id="invoice-register-class" label={language === "ar" ? "تفصيل العملية" : "Operation detail"} placeholder={language === "ar" ? "كل التفاصيل" : "All details"} values={filters.operationClasses} options={operationClassOptions} onChange={(values) => selectValues("operationClasses", values)} /><BaseerFilterAutocomplete id="invoice-register-supplier" label={text.supplier} placeholder={text.supplier} values={filters.supplierIds} options={(receipt?.filters.suppliers ?? []).map((item) => ({ id: item.id, label: optionName(item) }))} onChange={(values) => selectValues("supplierIds", values)} /><BaseerFilterAutocomplete id="invoice-register-category" label={text.financialCategory} placeholder={text.financialCategory} values={filters.categoryIds} options={(receipt?.filters.categories ?? []).map((item) => ({ id: item.id, label: optionName(item) }))} onChange={(values) => selectValues("categoryIds", values)} /><BaseerFilterAutocomplete id="invoice-register-status" label={text.status} placeholder={`${text.all} — ${text.status}`} values={filters.statuses} options={statusOptions} onChange={(values) => selectValues("statuses", values)} /></>} /></Suspense>
     {message ? <p className="daily-sales-message error">{message}</p> : null}
     {!receipt ? <BaseerCard><p>{text.loading}</p></BaseerCard> : <><BaseerSummaryMetricGrid><BaseerSummaryMetric label={text.matchingMovements} value={String(receipt.summary.documentCount)} /><BaseerSummaryMetric label={text.posted} value={String(receipt.summary.postedCount)} /><BaseerSummaryMetric label={text.cancelled} value={String(receipt.summary.cancelledCount)} /><BaseerSummaryMetric label={text.sales} value={String(receipt.summary.salesCount)} /><BaseerSummaryMetric label={text.purchases} value={String(receipt.summary.purchaseCount)} /><BaseerSummaryMetric label={text.expenses} value={String(receipt.summary.expenseCount)} /><BaseerSummaryMetric label={text.obligations} value={String(receipt.summary.obligationCount)} /><BaseerSummaryMetric label={text.otherMovements} value={String(receipt.summary.otherCount)} /></BaseerSummaryMetricGrid>{receipt.records.length ? <DataTable ariaLabel={text.invoiceRegister} caption={text.invoiceRegister} columns={columns} rows={receipt.records} rowKey={(item) => item.journalEntryId} /> : <BaseerCard><p>{text.noInvoices}</p></BaseerCard>}{receipt.hasMore && receipt.nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(receipt.nextCursor ?? undefined)}>{text.loadMore}</BaseerButton> : null}</>}
     <BaseerDialog open={selected !== null} language={language} title={detail?.movement.documentNumber ?? selected?.documentNumber ?? text.movementFile} onClose={closeMovement} footer={<BaseerButton type="button" onClick={closeMovement}>{text.cancel}</BaseerButton>}>
@@ -136,4 +143,23 @@ function MovementFile({ detail, language, text, optionName, sourceLabel, pane, o
 
 function OperationEffect({ movement }: { movement: Movement }) {
   return <bdi>{formatMoney(movement.grossAmount)}</bdi>;
+}
+
+function operationLabels(language: Language) {
+  if (language === "ar") return {
+    family: {
+      SALES: "المبيعات", PURCHASES: "المشتريات", EXPENSES: "المصروفات", SUPPLIER_SETTLEMENTS: "تسويات الموردين", EMPLOYEE_OPERATIONS: "عمليات الموظفين", FINANCING: "التمويل والقروض", OTHER: "قيود وتسويات أخرى",
+    } satisfies Record<OperationFamily, string>,
+    operation: {
+      SALE_COLLECTION: "تحصيل مبيعات", PURCHASE_INVOICE: "فاتورة مشتريات", EXPENSE_INVOICE: "فاتورة مصروف", RECURRING_EXPENSE: "مصروف دوري", SUPPLIER_SETTLEMENT: "سداد التزام مورد", PAYROLL_ACCRUAL: "استحقاق مسير رواتب", PAYROLL_PAYMENT: "دفع رواتب", EMPLOYEE_ADVANCE: "إصدار سلفة موظف", EMPLOYEE_ADVANCE_SETTLEMENT: "تسوية سلفة موظف", FINAL_SETTLEMENT_ACCRUAL: "استحقاق نهاية خدمة", FINAL_SETTLEMENT_PAYMENT: "دفع نهاية خدمة", LOAN_OPENING: "إثبات قرض", LOAN_REPAYMENT: "سداد قرض", GENERAL_JOURNAL: "قيد أو تسوية أخرى",
+    } satisfies Record<OperationClass, string>,
+  };
+  return {
+    family: {
+      SALES: "Sales", PURCHASES: "Purchases", EXPENSES: "Expenses", SUPPLIER_SETTLEMENTS: "Supplier settlements", EMPLOYEE_OPERATIONS: "Employee operations", FINANCING: "Financing & loans", OTHER: "Other journals & adjustments",
+    } satisfies Record<OperationFamily, string>,
+    operation: {
+      SALE_COLLECTION: "Sales collection", PURCHASE_INVOICE: "Purchase invoice", EXPENSE_INVOICE: "Expense invoice", RECURRING_EXPENSE: "Recurring expense", SUPPLIER_SETTLEMENT: "Supplier settlement", PAYROLL_ACCRUAL: "Payroll accrual", PAYROLL_PAYMENT: "Payroll payment", EMPLOYEE_ADVANCE: "Employee advance issued", EMPLOYEE_ADVANCE_SETTLEMENT: "Employee advance settlement", FINAL_SETTLEMENT_ACCRUAL: "Final-settlement accrual", FINAL_SETTLEMENT_PAYMENT: "Final-settlement payment", LOAN_OPENING: "Loan opening", LOAN_REPAYMENT: "Loan repayment", GENERAL_JOURNAL: "Journal or adjustment",
+    } satisfies Record<OperationClass, string>,
+  };
 }

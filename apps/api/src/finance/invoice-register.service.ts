@@ -5,7 +5,9 @@ import { DatabaseService } from "../database/database.service.js";
 import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
 type Kind = "SALE" | "PURCHASE" | "EXPENSE" | "OBLIGATION" | "OTHER";
-type Query = Readonly<{ from?: Date; to?: Date; businessMonths: readonly string[]; kinds: readonly Kind[]; supplierIds: readonly string[]; categoryIds: readonly string[]; statuses: readonly ("POSTED" | "CANCELLED")[]; q?: string; cursor?: string; pageSize: number }>;
+type OperationFamily = "SALES" | "PURCHASES" | "EXPENSES" | "SUPPLIER_SETTLEMENTS" | "EMPLOYEE_OPERATIONS" | "FINANCING" | "OTHER";
+type OperationClass = "SALE_COLLECTION" | "PURCHASE_INVOICE" | "EXPENSE_INVOICE" | "RECURRING_EXPENSE" | "SUPPLIER_SETTLEMENT" | "PAYROLL_ACCRUAL" | "PAYROLL_PAYMENT" | "EMPLOYEE_ADVANCE" | "EMPLOYEE_ADVANCE_SETTLEMENT" | "FINAL_SETTLEMENT_ACCRUAL" | "FINAL_SETTLEMENT_PAYMENT" | "LOAN_OPENING" | "LOAN_REPAYMENT" | "GENERAL_JOURNAL";
+type Query = Readonly<{ from?: Date; to?: Date; businessMonths: readonly string[]; kinds: readonly Kind[]; operationFamilies: readonly OperationFamily[]; operationClasses: readonly OperationClass[]; supplierIds: readonly string[]; categoryIds: readonly string[]; statuses: readonly ("POSTED" | "CANCELLED")[]; q?: string; cursor?: string; pageSize: number }>;
 type SummaryRow = { documentCount: number; postedCount: number; cancelledCount: number; salesCount: number; purchaseCount: number; expenseCount: number; obligationCount: number; otherCount: number; paidCount: number; payableCount: number };
 type CursorRow = { id: string; businessDate: Date; postedAt: Date };
 
@@ -175,6 +177,8 @@ function registerPredicate(context: TrustedCompanyActorContext, query: Query, cu
   if (months.length) clauses.push(Prisma.sql`(${Prisma.join(months.map((range) => Prisma.sql`j."businessDate" >= ${range.from}::date AND j."businessDate" <= ${range.to}::date`), " OR ")})`);
   else if (query.from || query.to) clauses.push(Prisma.sql`${query.from ? Prisma.sql`j."businessDate" >= ${query.from}::date` : Prisma.empty}${query.from && query.to ? Prisma.sql` AND ` : Prisma.empty}${query.to ? Prisma.sql`j."businessDate" <= ${query.to}::date` : Prisma.empty}`);
   if (query.kinds.length) clauses.push(Prisma.sql`${kindExpression()} IN (${Prisma.join(query.kinds)})`);
+  if (query.operationFamilies.length) clauses.push(Prisma.sql`${operationFamilyExpression()} IN (${Prisma.join(query.operationFamilies)})`);
+  if (query.operationClasses.length) clauses.push(Prisma.sql`${operationClassExpression()} IN (${Prisma.join(query.operationClasses)})`);
   if (query.supplierIds.length) clauses.push(inIds(query.supplierIds, Prisma.sql`o."supplierId"`, Prisma.sql`due."supplierId"`, Prisma.sql`sales."financeSupplierId"`));
   if (query.categoryIds.length) clauses.push(inIds(query.categoryIds, Prisma.sql`o."categoryId"`, Prisma.sql`due."categoryId"`, Prisma.sql`sales."financeCategoryId"`));
   if (query.statuses.length) clauses.push(Prisma.sql`${statusExpression()} IN (${Prisma.join(query.statuses)})`);
@@ -186,6 +190,31 @@ function registerPredicate(context: TrustedCompanyActorContext, query: Query, cu
 function inIds(ids: readonly string[], ...columns: Prisma.Sql[]) { return Prisma.sql`(${Prisma.join(columns.map((column) => Prisma.sql`${column} = ANY(ARRAY[${Prisma.join(ids)}]::uuid[])`), " OR ")})`; }
 function joins() { return Prisma.sql`FROM "FinanceJournalEntry" j LEFT JOIN "FinanceOutflowDocument" o ON o."journalEntryId" = j."id" AND o."tenantId" = j."tenantId" AND o."companyId" = j."companyId" LEFT JOIN "FinanceDailySalesClosing" sales ON sales."journalEntryId" = j."id" AND sales."tenantId" = j."tenantId" AND sales."companyId" = j."companyId" LEFT JOIN "FinanceSupplierDuePayment" payment ON payment."journalEntryId" = j."id" AND payment."tenantId" = j."tenantId" AND payment."companyId" = j."companyId" LEFT JOIN "FinanceSupplierDue" due ON due."id" = payment."dueId" AND due."tenantId" = j."tenantId" AND due."companyId" = j."companyId" LEFT JOIN "FinanceCategory" due_category ON due_category."id" = due."categoryId" AND due_category."tenantId" = j."tenantId" AND due_category."companyId" = j."companyId" LEFT JOIN "FinanceInclusiveLoan" loan ON loan."openingJournalEntryId" = j."id" AND loan."tenantId" = j."tenantId" AND loan."companyId" = j."companyId" LEFT JOIN "FinanceInclusiveLoanPayment" loan_payment ON loan_payment."journalEntryId" = j."id" AND loan_payment."tenantId" = j."tenantId" AND loan_payment."companyId" = j."companyId"`; }
 function kindExpression() { return Prisma.sql`CASE WHEN sales."id" IS NOT NULL THEN 'SALE' WHEN o."id" IS NOT NULL THEN o."kind"::text WHEN payment."id" IS NOT NULL THEN CASE WHEN due_category."kind" = 'PURCHASE' THEN 'PURCHASE' ELSE 'EXPENSE' END WHEN loan."id" IS NOT NULL OR loan_payment."id" IS NOT NULL THEN 'OBLIGATION' ELSE 'OTHER' END`; }
+function operationClassExpression() { return Prisma.sql`CASE
+  WHEN sales."id" IS NOT NULL THEN 'SALE_COLLECTION'
+  WHEN o."id" IS NOT NULL AND o."kind" = 'PURCHASE' THEN 'PURCHASE_INVOICE'
+  WHEN o."id" IS NOT NULL AND o."recurringExpenseProfileId" IS NOT NULL THEN 'RECURRING_EXPENSE'
+  WHEN o."id" IS NOT NULL THEN 'EXPENSE_INVOICE'
+  WHEN payment."id" IS NOT NULL THEN 'SUPPLIER_SETTLEMENT'
+  WHEN j."sourceType" = 'hr_payroll_accrual' THEN 'PAYROLL_ACCRUAL'
+  WHEN j."sourceType" = 'hr_payroll_payment' THEN 'PAYROLL_PAYMENT'
+  WHEN j."sourceType" = 'hr_employee_advance' THEN 'EMPLOYEE_ADVANCE'
+  WHEN j."sourceType" = 'hr_employee_advance_receipt' THEN 'EMPLOYEE_ADVANCE_SETTLEMENT'
+  WHEN j."sourceType" = 'hr_final_settlement_accrual' THEN 'FINAL_SETTLEMENT_ACCRUAL'
+  WHEN j."sourceType" = 'hr_final_settlement_payment' THEN 'FINAL_SETTLEMENT_PAYMENT'
+  WHEN loan."id" IS NOT NULL THEN 'LOAN_OPENING'
+  WHEN loan_payment."id" IS NOT NULL THEN 'LOAN_REPAYMENT'
+  ELSE 'GENERAL_JOURNAL'
+END`; }
+function operationFamilyExpression() { const operation = operationClassExpression(); return Prisma.sql`CASE
+  WHEN ${operation} = 'SALE_COLLECTION' THEN 'SALES'
+  WHEN ${operation} = 'PURCHASE_INVOICE' THEN 'PURCHASES'
+  WHEN ${operation} IN ('EXPENSE_INVOICE', 'RECURRING_EXPENSE') THEN 'EXPENSES'
+  WHEN ${operation} = 'SUPPLIER_SETTLEMENT' THEN 'SUPPLIER_SETTLEMENTS'
+  WHEN ${operation} IN ('PAYROLL_ACCRUAL', 'PAYROLL_PAYMENT', 'EMPLOYEE_ADVANCE', 'EMPLOYEE_ADVANCE_SETTLEMENT', 'FINAL_SETTLEMENT_ACCRUAL', 'FINAL_SETTLEMENT_PAYMENT') THEN 'EMPLOYEE_OPERATIONS'
+  WHEN ${operation} IN ('LOAN_OPENING', 'LOAN_REPAYMENT') THEN 'FINANCING'
+  ELSE 'OTHER'
+END`; }
 function statusExpression() { return Prisma.sql`CASE WHEN o."id" IS NOT NULL THEN o."status"::text WHEN sales."id" IS NOT NULL THEN CASE WHEN sales."status" = 'REVERSED' THEN 'CANCELLED' ELSE 'POSTED' END WHEN j."status" = 'REVERSED' THEN 'CANCELLED' ELSE 'POSTED' END`; }
 function summarySql(predicate: Prisma.Sql) { const kind = kindExpression(); const status = statusExpression(); return Prisma.sql`SELECT COUNT(*)::int AS "documentCount", COUNT(*) FILTER (WHERE ${status} = 'POSTED')::int AS "postedCount", COUNT(*) FILTER (WHERE ${status} = 'CANCELLED')::int AS "cancelledCount", COUNT(*) FILTER (WHERE ${kind} = 'SALE')::int AS "salesCount", COUNT(*) FILTER (WHERE ${kind} = 'PURCHASE')::int AS "purchaseCount", COUNT(*) FILTER (WHERE ${kind} = 'EXPENSE')::int AS "expenseCount", COUNT(*) FILTER (WHERE ${kind} = 'OBLIGATION')::int AS "obligationCount", COUNT(*) FILTER (WHERE ${kind} = 'OTHER')::int AS "otherCount", COUNT(*) FILTER (WHERE ${status} = 'POSTED' AND (o."settlementKind" = 'PAID' OR sales."id" IS NOT NULL OR payment."id" IS NOT NULL))::int AS "paidCount", COUNT(*) FILTER (WHERE ${status} = 'POSTED' AND o."settlementKind" = 'PAYABLE')::int AS "payableCount" ${joins()} WHERE ${predicate}`; }
 function pageSql(predicate: Prisma.Sql, take: number) { return Prisma.sql`SELECT j."id" ${joins()} WHERE ${predicate} ORDER BY j."businessDate" DESC, j."postedAt" DESC, j."id" DESC LIMIT ${take}`; }
@@ -193,16 +222,43 @@ function monthRanges(months: readonly string[]) { return [...new Set(months)].so
 function zeroSummary(): SummaryRow { return { documentCount: 0, postedCount: 0, cancelledCount: 0, salesCount: 0, purchaseCount: 0, expenseCount: 0, obligationCount: 0, otherCount: 0, paidCount: 0, payableCount: 0 }; }
 function mapEntry(entry: any) {
   const totals = journalTotals(entry.lines); const movement = totals.debit; const payrollAccrual = payrollAccrualSummary(entry.hrPayrollAccrual); const outflow = entry.outflowDocument; const sales = entry.dailySalesClosing; const duePayment = entry.supplierDuePayment; const businessDate = dateValue(entry.businessDate);
-  if (outflow) return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: outflow.category, debitTotal: totals.debitTotal, creditTotal: totals.creditTotal, grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt };
-  if (sales) return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, debitTotal: totals.debitTotal, creditTotal: totals.creditTotal, grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt };
-  if (duePayment) return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: duePayment.due.category, debitTotal: totals.debitTotal, creditTotal: totals.creditTotal, grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt };
+  if (outflow) { const operationClass = operationClassForEntry(entry); return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: outflow.category, grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt }; }
+  if (sales) { const operationClass = operationClassForEntry(entry); return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt }; }
+  if (duePayment) { const operationClass = operationClassForEntry(entry); return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: duePayment.due.category, grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt }; }
   if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, totals, payrollAccrual, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
   if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, totals, payrollAccrual, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
   return generic(entry, "JOURNAL", "OTHER", movement, entry.description, totals, payrollAccrual);
 }
-function journalTotals(lines: readonly { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }[]) { const debit = lines.reduce((total, line) => total.plus(line.debitAmount), new Prisma.Decimal(0)); const credit = lines.reduce((total, line) => total.plus(line.creditAmount), new Prisma.Decimal(0)); return { debitTotal: debit.toFixed(4), creditTotal: credit.toFixed(4), debit, credit }; }
+function operationClassForEntry(entry: any): OperationClass {
+  if (entry.dailySalesClosing) return "SALE_COLLECTION";
+  if (entry.outflowDocument?.kind === "PURCHASE") return "PURCHASE_INVOICE";
+  if (entry.outflowDocument?.recurringExpenseProfileId) return "RECURRING_EXPENSE";
+  if (entry.outflowDocument) return "EXPENSE_INVOICE";
+  if (entry.supplierDuePayment) return "SUPPLIER_SETTLEMENT";
+  switch (entry.sourceType) {
+    case "hr_payroll_accrual": return "PAYROLL_ACCRUAL";
+    case "hr_payroll_payment": return "PAYROLL_PAYMENT";
+    case "hr_employee_advance": return "EMPLOYEE_ADVANCE";
+    case "hr_employee_advance_receipt": return "EMPLOYEE_ADVANCE_SETTLEMENT";
+    case "hr_final_settlement_accrual": return "FINAL_SETTLEMENT_ACCRUAL";
+    case "hr_final_settlement_payment": return "FINAL_SETTLEMENT_PAYMENT";
+    default: return entry.inclusiveLoan ? "LOAN_OPENING" : entry.inclusiveLoanPayment ? "LOAN_REPAYMENT" : "GENERAL_JOURNAL";
+  }
+}
+function operationFamilyForClass(operationClass: OperationClass): OperationFamily {
+  switch (operationClass) {
+    case "SALE_COLLECTION": return "SALES";
+    case "PURCHASE_INVOICE": return "PURCHASES";
+    case "EXPENSE_INVOICE": case "RECURRING_EXPENSE": return "EXPENSES";
+    case "SUPPLIER_SETTLEMENT": return "SUPPLIER_SETTLEMENTS";
+    case "PAYROLL_ACCRUAL": case "PAYROLL_PAYMENT": case "EMPLOYEE_ADVANCE": case "EMPLOYEE_ADVANCE_SETTLEMENT": case "FINAL_SETTLEMENT_ACCRUAL": case "FINAL_SETTLEMENT_PAYMENT": return "EMPLOYEE_OPERATIONS";
+    case "LOAN_OPENING": case "LOAN_REPAYMENT": return "FINANCING";
+    default: return "OTHER";
+  }
+}
+function journalTotals(lines: readonly { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }[]) { const debit = lines.reduce((total, line) => total.plus(line.debitAmount), new Prisma.Decimal(0)); return { debit }; }
 function payrollAccrualSummary(run: { grossAmount: Prisma.Decimal; advanceSettlementAmount: Prisma.Decimal; administrativeDeductionAmount: Prisma.Decimal; netPayableAmount: Prisma.Decimal } | null | undefined) { return run ? { grossExpense: run.grossAmount.toFixed(4), advanceSettlement: run.advanceSettlementAmount.toFixed(4), administrativeRecovery: run.administrativeDeductionAmount.toFixed(4), netPayable: run.netPayableAmount.toFixed(4) } : null; }
-function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, display = financeJournalPresentation(entry)) { return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, debitTotal: totals.debitTotal, creditTotal: totals.creditTotal, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
+function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, _totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, display = financeJournalPresentation(entry)) { const operationClass = operationClassForEntry(entry); return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
 
 function detailAllocations(entry: any) {
