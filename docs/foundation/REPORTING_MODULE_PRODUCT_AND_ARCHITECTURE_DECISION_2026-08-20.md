@@ -44,7 +44,7 @@ Settings stay with their owner: company and tax setup stay in Administration, ac
 | Section | Goal | What it contains | What it deliberately does not contain |
 | --- | --- | --- | --- |
 | **0. Reports overview** | Give a fast, honest entry point. | Period status, report catalogue, recently generated outputs, readiness/data-coverage notices and saved report views. | Financial input fields or a second dashboard total. |
-| **1. Financial reports** | Explain money, position and movement. | Management performance, cash movement, account balances, account activity, supplier-dues commitments and drill-down to the unified register. | Editing of entries, suppliers, vaults or accounting settings. |
+| **1. Financial reports** | Explain money, position and movement. | A catalogue separated into ledger statements, management-cash reports and supplier commitments; account balances/activity and drill-down to the unified register. | Editing of entries, suppliers, vaults or accounting settings. It does not claim a P&L until its account mapping and source facts are approved. |
 | **2. VAT report** | Provide a governed tax view. | Taxable net, VAT, document counts, exceptions and the approved return period when the company tax rule supports it. | Tax-rate configuration or an unapproved statutory filing claim. |
 | **3. Hajri Tax** | Host Hajri-specific approved tax/analysis products. | A catalogue entry and report only after its rule, authority, inputs and acceptance tests are approved. | Guessed tax logic, copied totals, or a placeholder that claims compliance. |
 | **4. Print & export** | Make a report shareable and reproducible. | Server preview, A4/PDF-compatible print, XLSX export, output history and applied-filter snapshot. | Browser `window.print()`, screenshots, or editable report numbers. |
@@ -61,7 +61,9 @@ The visual reference is the useful part of Odoo's reporting experience, not a li
 - mobile keeps filters in a compact menu and shows a concise table/card form; it never squeezes a desktop ledger into unreadable columns;
 - report-specific actions are limited to **open source**, **print/export**, and permitted saved view actions. There is no financial write button.
 
-The central `BaseerFilterBar`, `BaseerPeriodFilter`, `DataTable`, `BaseerDialog`, `BaseerOutputActions` and lazy workspaces are mandatory. No report creates a local styling system.
+The central `BaseerFilterBar`, `BaseerPeriodFilter`, `DataTable`, `BaseerDialog`, `BaseerOutputActions` and lazy workspaces are mandatory. No report creates a local styling system. A filter bar is central in behaviour, not identical in every report: company context and period are always explicit, while comparison, search and view options appear only when the report definition supports them.
+
+Every report header and every exported output must disclose: accounting basis (ledger/accrual, management cash, commitment, or tax), source kind (ledger or named projection), company, business timezone/date basis, currency, rounding rule, selected period, `asOf`, data coverage, cancellation treatment and reconciliation/freshness status. A number that is clickable must explain why it is present through its bounded evidence rows and applied filters.
 
 ## 6. Odoo reference — what Baseer adopts
 
@@ -91,14 +93,16 @@ Every implemented report must declare:
 
 The server returns all totals, comparison values and notices. A client can format, sort only a received page where allowed, unfold a provided hierarchy and request the next evidence page; it cannot calculate a financial total.
 
+The report snapshot contract additionally requires `sourceCutoff`/watermark, projection version and freshness state, report-definition version, account-mapping version where applicable, reconciliation receipt/checksum, maximum interactive period/rows, asynchronous-export threshold, and explicit cancellation semantics. `asOf` by itself is not sufficient to keep a total, its drill-down pages and its export mutually consistent while posting continues.
+
 ## 8. Scale and reliability requirements
 
 1. Interactive report requests must have a default bounded period; broad history is explicit.
 2. Lists and drill-downs use keyset pagination, not `OFFSET` or unbounded `take` values.
-3. Long-range summary totals read durable daily/monthly projections or controlled rollups, never repeat full journal scans on every refresh.
+3. Long-range summary totals read durable daily/monthly projections or controlled rollups, never repeat full journal scans on every refresh. A report may use a projection only when that projection actually contains its named facts: the current daily financial summary is a sales summary, not a general purchases/expenses/profit fact.
 4. Search/select filters with large dimensions are server-backed autocomplete.
 5. A report response includes `asOf`, selected period, source coverage and cancellation treatment.
-6. Exports over the interactive threshold run from a server snapshot/job and preserve applied filters, issuer and generated time.
+6. Exports over the interactive threshold run as an asynchronous, chunked server job. They preserve applied filters, issuer, generated time, watermark and checksum; they do not load millions of rows into one transaction or inline snapshot payload.
 7. Every projection is rebuildable and must reconcile to active ledger/source evidence.
 
 ## 9. Delivery sequence and gates
@@ -107,9 +111,11 @@ The server returns all totals, comparison values and notices. A client can forma
 
 Create the report catalogue/definition contract, central options parser, response/snapshot contract, capability map, source-coverage metadata and report-output registration. Deliver the empty module shell only after it explains readiness and no-data states honestly.
 
-### Gate R1 — management and accounting reports
+### Gate R1 — first safe accounting reports
 
-Implement, in this order: financial overview, account balances/activity, paid cash movement and supplier-dues commitments. Each must support period/comparison where meaningful, bounded drill-down and A4/XLSX output.
+Implement, in this order: trial balance, account balances/activity, treasury balances and supplier-dues commitments. Each must support period/comparison where meaningful, bounded drill-down and A4/XLSX output. The catalogue labels the basis visibly: **ledger statements**, **management cash**, and **supplier commitments**.
+
+Do **not** implement a general financial overview, P&L, cash-flow statement or statutory VAT report in R1. They require approved account-to-statement mapping, normal-balance/opening/closing policy, retained-earnings treatment and correctly scoped fact/rollup sources.
 
 ### Gate R2 — VAT report
 
@@ -121,14 +127,15 @@ Begin only with a separately approved source/rule/ownership document. It is not 
 
 ## 10. Acceptance criteria
 
-- A report total reconciles to the approved source for a selected company and period.
-- Cancelled accounting operations have zero ordinary economic effect yet remain traceable in audit drill-down.
+- A report total reconciles to the approved source for a selected company and period, and the same total reconciles after rebuilding its projection.
+- Cancellation behaviour is tested for a date before cancellation, a range containing only the source, a range containing only the cancellation, and a range containing both. Historical `asOf` reporting must retain the original effect until the cancellation business date.
 - Supplier dues follow the approved cash-basis commitment rule.
 - Company and permission boundaries are enforced in catalogue, data, drill-down and output.
 - Comparisons use disclosed periods and server-calculated values.
-- Page 1 and deep drill-down pages retain stable keyset order at high volume.
+- Page 1 and deep drill-down pages retain stable keyset order at high volume under concurrent posting/cancellation, using the same report watermark.
 - Preview/A4/XLSX contain server snapshot metadata and exactly the applied filters.
 - Browser code has no financial write path or independently computed financial total.
+- A report has an approved source/index plan and measured acceptance: representative data at 100k then at least 1m journal entries/lines across five or more years, `EXPLAIN ANALYZE`, p95/timeout/lock-wait thresholds, RLS checks and reconciliation/rebuild checksum. Partitioning is not a substitute for this evidence.
 
 ## 11. Explicit exclusions for the first release
 
