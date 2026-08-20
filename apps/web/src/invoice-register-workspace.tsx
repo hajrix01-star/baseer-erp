@@ -92,7 +92,8 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const columns: DataTableColumn<Movement>[] = useMemo(() => [
     { id: "number", header: language === "ar" ? "رقم المستند / الحركة" : "Document / movement no.", cell: (item) => <button className="baseer-link-button invoice-register__number" type="button" dir="ltr" title={item.documentNumber} onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
     { id: "date", header: text.documentDate, cell: (item) => item.businessDate },
-    { id: "operation-type", header: language === "ar" ? "نوع العملية" : "Operation type", cell: (item) => <span className="daily-sales-badge">{operationClassLabel(item.operationClass)}</span> },
+    { id: "operation-type", header: language === "ar" ? "نوع العملية" : "Operation type", cell: (item) => <span className="daily-sales-badge">{item.kind === "SALE" || item.kind === "PURCHASE" || item.kind === "EXPENSE" ? documentKindLabel(item.kind) : "—"}</span> },
+    { id: "operation-detail", header: language === "ar" ? "تفصيل العملية" : "Operation detail", cell: (item) => <span className="daily-sales-badge">{operationClassLabel(item.operationClass)}</span> },
     { id: "classification", header: language === "ar" ? "التصنيف الأب" : "Parent classification", cell: (item) => <span className="invoice-register__classification">{operationFamilyLabel(item.operationFamily)}</span> },
     { id: "supplier", header: text.supplier, cell: (item) => optionName(item.supplier) },
     { id: "category", header: text.financialCategory, cell: (item) => optionName(item.category) },
