@@ -20,6 +20,9 @@ const fixture = {
   readerUserId: randomUUID(),
   activeEmployeeId: randomUUID(),
   terminatedEmployeeId: randomUUID(),
+  payrollRunId: randomUUID(),
+  approvedPayrollRunId: randomUUID(),
+  deductionId: randomUUID(),
   tenantCode: `hr-http-${suffix}`,
 };
 let app;
@@ -185,6 +188,39 @@ try {
   assert.equal(activePayrollPreview.hasMoreAdministrativeDeductions, true, "Payroll preview must disclose truncated administrative deductions.");
   assert.equal(activePayrollPreview.advanceCount, 0);
   assert.equal(activePayrollPreview.hasMoreAdvances, false);
+  const updatePayrollDraftPayload = {
+    payrollRunId: fixture.payrollRunId,
+    payrollMonth: "2026-08-01",
+    businessDate: "2026-08-20",
+    notes: "Updated through HTTP verification",
+    includeAllEligible: true,
+    includeOnLeaveEmployeeIds: [],
+    lines: [{ employeeId: fixture.activeEmployeeId, advances: [], administrativeDeductions: [{ id: fixture.deductionId, amount: "5.0000" }] }],
+    idempotencyKey: randomUUID(),
+  };
+  const payrollDraftUpdate = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: managerHeaders, payload: updatePayrollDraftPayload });
+  assert.equal(payrollDraftUpdate.statusCode, 200, payrollDraftUpdate.body);
+  assert.equal(payrollDraftUpdate.json().id, fixture.payrollRunId);
+  assert.equal(payrollDraftUpdate.json().replayed, false);
+  const payrollDraftReplay = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: managerHeaders, payload: updatePayrollDraftPayload });
+  assert.equal(payrollDraftReplay.statusCode, 200, payrollDraftReplay.body);
+  assert.equal(payrollDraftReplay.json().replayed, true, "Payroll-draft HTTP replay must be explicit.");
+  const updatedPayrollDetail = await server.inject({ method: "GET", url: `/v1/hr/payroll-runs/${fixture.payrollRunId}`, headers: managerHeaders });
+  assert.equal(updatedPayrollDetail.statusCode, 200, updatedPayrollDetail.body);
+  assert.equal(updatedPayrollDetail.json().payrollRun.notes, "Updated through HTTP verification");
+  assert.equal(updatedPayrollDetail.json().lines[0].administrativeDeductions[0].sourceId, fixture.deductionId);
+  await expectError(
+    server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: readerHeaders, payload: { ...updatePayrollDraftPayload, idempotencyKey: randomUUID() } }),
+    403,
+    "AUTHORIZATION_DENIED",
+    "Payroll-draft updates must require payroll-create capability.",
+  );
+  await expectError(
+    server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: managerHeaders, payload: { ...updatePayrollDraftPayload, payrollRunId: fixture.approvedPayrollRunId, payrollMonth: "2026-07-01", businessDate: "2026-08-20", idempotencyKey: randomUUID() } }),
+    409,
+    "CONFLICT",
+    "A non-draft payroll run must reject updates.",
+  );
   const emptyAdvanceSearch = await server.inject({ method: "GET", url: "/v1/hr/advances?search=missing&pageSize=1", headers: managerHeaders });
   assert.equal(emptyAdvanceSearch.statusCode, 200, emptyAdvanceSearch.body);
   assert.deepEqual(emptyAdvanceSearch.json().advances, []);
@@ -387,7 +423,7 @@ async function seedFixture() {
       `INSERT INTO "HrPayrollRun" ("id", "tenantId", "companyId", "runNumber", "payrollMonth", "businessDate", "status", "employeeCount", "grossAmount", "advanceSettlementAmount", "administrativeDeductionAmount", "netPayableAmount", "createdByUserId", "updatedAt")
        VALUES ($1::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-CURRENT', DATE '2026-08-01', DATE '2026-08-20', 'DRAFT', 1, 2000.0000, 200.0000, 100.0000, 1700.0000, $4::uuid, CURRENT_TIMESTAMP),
               ($5::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-TARGET', DATE '2026-07-01', DATE '2026-07-31', 'APPROVED', 1, 1000.0000, 100.0000, 50.0000, 850.0000, $4::uuid, CURRENT_TIMESTAMP)`,
-      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.managerUserId, randomUUID()],
+      [fixture.payrollRunId, fixture.tenantId, fixture.companyId, fixture.managerUserId, fixture.approvedPayrollRunId],
     );
     await client.query(
       `INSERT INTO "HrEmployeeLeave" ("id", "tenantId", "companyId", "employeeId", "leaveType", "status", "startDate", "endDate", "actualReturnDate", "approvedByUserId", "returnedByUserId", "returnedAt", "updatedAt")
@@ -428,7 +464,7 @@ async function seedFixture() {
       `INSERT INTO "HrEmployeeAdministrativeDeduction" ("id", "tenantId", "companyId", "employeeId", "deductionNumber", "businessDate", "originalAmount", "remainingAmount", "description", "createdByUserId", "updatedAt")
        VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'DED-HTTP-001', DATE '2026-08-18', 10.0000, 10.0000, 'TARGET-DEDUCTION', $5::uuid, CURRENT_TIMESTAMP),
               ($6::uuid, $2::uuid, $3::uuid, $7::uuid, 'DED-HTTP-002', DATE '2026-08-17', 20.0000, 20.0000, 'Other deduction', $5::uuid, CURRENT_TIMESTAMP)`,
-      [randomUUID(), fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId, randomUUID(), fixture.terminatedEmployeeId],
+      [fixture.deductionId, fixture.tenantId, fixture.companyId, fixture.activeEmployeeId, fixture.managerUserId, randomUUID(), fixture.terminatedEmployeeId],
     );
     await client.query(
       `INSERT INTO "HrEmployeeAdministrativeDeduction" ("id", "tenantId", "companyId", "employeeId", "deductionNumber", "businessDate", "originalAmount", "remainingAmount", "description", "createdByUserId", "updatedAt")

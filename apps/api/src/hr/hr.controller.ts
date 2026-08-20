@@ -50,6 +50,7 @@ import {
   createHrCompensationPolicyVersionRequestSchema,
   approveHrCompensationPolicyVersionRequestSchema,
   createHrPayrollRunRequestSchema,
+  updateHrPayrollDraftRequestSchema,
   previewHrPayrollRunRequestSchema,
   approveHrPayrollRunRequestSchema,
   discardHrPayrollRunRequestSchema,
@@ -451,6 +452,16 @@ export class HrController {
     if (!parsed.success) throw new BadRequestException('Invalid payroll-preview request.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
     return hrPayrollPreviewReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.preview(context, parsed.data)) });
+  }
+
+  @Post('payroll-runs/update')
+  @HttpCode(200)
+  async updatePayrollDraft(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = updateHrPayrollDraftRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid payroll draft update request.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const { idempotencyKey, ...request } = parsed.data;
+    return hrPayrollRunReceiptSchema.parse(await this.payroll.updateDraft(context, request, idempotencyKey));
   }
 
   @Post('payroll-runs/approve')

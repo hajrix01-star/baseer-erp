@@ -379,6 +379,11 @@ export const createHrPayrollRunRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Recalculates an existing draft in place; the payroll month is immutable. */
+export const updateHrPayrollDraftRequestSchema = createHrPayrollRunRequestSchema.extend({
+  payrollRunId: z.string().uuid(),
+}).strict();
+
 /** Read-only, server-authored payroll population. Cursor pages are by employee id. */
 export const previewHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
@@ -605,7 +610,14 @@ export const hrEmployeeLeaveSchema = z.object({
   notes: z.string().max(2_000).nullable(),
 }).strict();
 
-const hrPayrollApplicationDetailSchema = z.object({ id: z.string().uuid(), amount: hrAmountSchema, referenceNumber: z.string().max(80) }).strict();
+const hrPayrollApplicationDetailSchema = z.object({
+  /** Stable id of the payroll-line application record. */
+  id: z.string().uuid(),
+  /** Employee advance/deduction id accepted by preview/create/update inputs. */
+  sourceId: z.string().uuid(),
+  amount: hrAmountSchema,
+  referenceNumber: z.string().max(80),
+}).strict();
 export const hrPaymentPostingStatusSchema = z.enum(["POSTED", "REVERSED"]);
 export const hrPayrollPaymentSchema = z.object({
   id: z.string().uuid(), paymentNumber: z.string().max(80), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid(),
@@ -819,6 +831,7 @@ export type CreateHrCompensationPolicyRequest = z.infer<typeof createHrCompensat
 export type CreateHrCompensationPolicyVersionRequest = z.infer<typeof createHrCompensationPolicyVersionRequestSchema>;
 export type ApproveHrCompensationPolicyVersionRequest = z.infer<typeof approveHrCompensationPolicyVersionRequestSchema>;
 export type CreateHrPayrollRunRequest = z.infer<typeof createHrPayrollRunRequestSchema>;
+export type UpdateHrPayrollDraftRequest = z.infer<typeof updateHrPayrollDraftRequestSchema>;
 export type PreviewHrPayrollRunRequest = z.infer<typeof previewHrPayrollRunRequestSchema>;
 export type ApproveHrPayrollRunRequest = z.infer<typeof approveHrPayrollRunRequestSchema>;
 export type DiscardHrPayrollRunRequest = z.infer<typeof discardHrPayrollRunRequestSchema>;

@@ -308,11 +308,49 @@ try {
   assert.equal(payrollEmployeePreviewWithCollections.administrativeDeductionCount, payrollEmployeePreviewWithCollections.administrativeDeductions.length);
   assert.equal(payrollEmployeePreviewWithCollections.hasMoreAdministrativeDeductions, false);
 
-  const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [payrollLine], notes: 'HR lifecycle payroll' };
+  const initialPayrollLine = { employeeId: payrollEmployee.id, advances: [{ id: advance.id, amount: '80.0000' }], administrativeDeductions: [] };
+  const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [initialPayrollLine], notes: 'HR lifecycle payroll draft' };
   const payrollCreateKey = randomUUID();
   const run = await payroll.create(creator, createPayrollInput, payrollCreateKey);
   assert.equal(run.replayed, false);
   assert.equal((await payroll.create(creator, createPayrollInput, payrollCreateKey)).replayed, true, 'Payroll-create replay must be explicit.');
+
+  const initialDraftDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  const initialDraftLine = initialDraftDetail.lines.find((line) => line.employeeId === payrollEmployee.id);
+  assert.equal(initialDraftLine.advanceSettlementAmount, '80.0000');
+  assert.equal(initialDraftLine.advances[0].sourceId, advance.id, 'Payroll detail must expose the source advance id separately from the application id.');
+  const initialApplicationId = initialDraftLine.advances[0].id;
+  const updatePayrollInput = { payrollRunId: run.id, payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [payrollLine], notes: 'HR lifecycle payroll updated' };
+  const payrollUpdateKey = randomUUID();
+  assert.equal((await payroll.updateDraft(creator, updatePayrollInput, payrollUpdateKey)).replayed, false);
+  assert.equal((await payroll.updateDraft(creator, updatePayrollInput, payrollUpdateKey)).replayed, true, 'Payroll-draft update replay must be explicit.');
+  const updatedDraftDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  const updatedDraftLine = updatedDraftDetail.lines.find((line) => line.employeeId === payrollEmployee.id);
+  assert.equal(updatedDraftDetail.payrollRun.notes, 'HR lifecycle payroll updated');
+  assert.equal(updatedDraftLine.advanceSettlementAmount, '100.0000', 'Draft update must recalculate settlement totals.');
+  assert.equal(updatedDraftLine.advances.length, 1, 'Draft update must replace applications without duplication.');
+  assert.equal(updatedDraftLine.advances[0].sourceId, advance.id);
+  assert.notEqual(updatedDraftLine.advances[0].id, initialApplicationId, 'Draft update must replace its application records atomically.');
+  await assert.rejects(
+    () => payroll.updateDraft(creator, { ...updatePayrollInput, notes: 'Changed payload with reused key' }, payrollUpdateKey),
+    /idempotency key was used with a different payroll request/,
+    'A payroll-draft update key must stay bound to its canonical request.',
+  );
+  await assert.rejects(
+    () => payroll.updateDraft(creator, { ...updatePayrollInput, payrollMonth: new Date(Date.UTC(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1)) }, randomUUID()),
+    /cannot be moved to another month/,
+    'A payroll draft update must not move the run to another month.',
+  );
+  const concurrentDraftUpdates = await Promise.all([
+    payroll.updateDraft(creator, { ...updatePayrollInput, notes: 'Concurrent draft update A' }, randomUUID()),
+    payroll.updateDraft(approver, { ...updatePayrollInput, notes: 'Concurrent draft update B' }, randomUUID()),
+  ]);
+  assert.equal(concurrentDraftUpdates.every((receipt) => receipt.replayed === false), true);
+  const concurrentDraftDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  const concurrentDraftLine = concurrentDraftDetail.lines.find((line) => line.employeeId === payrollEmployee.id);
+  assert.equal(['Concurrent draft update A', 'Concurrent draft update B'].includes(concurrentDraftDetail.payrollRun.notes), true);
+  assert.equal(concurrentDraftLine.advances.length, 1, 'Concurrent draft updates must serialize without duplicate applications.');
+  assert.equal(concurrentDraftLine.advanceSettlementAmount, '100.0000');
 
   await assert.rejects(
     () => payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, randomUUID()),
@@ -323,6 +361,11 @@ try {
   const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey);
   assert.equal(approvedRun.replayed, false);
   assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');
+  await assert.rejects(
+    () => payroll.updateDraft(creator, updatePayrollInput, randomUUID()),
+    /Only an unposted draft payroll run can be updated/,
+    'An approved payroll run must reject draft updates.',
+  );
   const firstSettlementPage = await advances.detail(creator, advance.id, { settlementPageSize: 1, deferralPageSize: 1 });
   assert.equal(firstSettlementPage.settlements.length, 1);
   assert.equal(firstSettlementPage.hasMoreSettlements, true, 'Advance detail must disclose additional settlement history.');

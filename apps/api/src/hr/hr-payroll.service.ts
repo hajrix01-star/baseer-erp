@@ -8,6 +8,7 @@ import type {
   CreateHrCompensationPolicyRequest,
   CreateHrCompensationPolicyVersionRequest,
   CreateHrPayrollRunRequest,
+  UpdateHrPayrollDraftRequest,
   PreviewHrPayrollRunRequest,
   PayHrPayrollRunRequest,
   ReverseHrPayrollRunRequest,
@@ -51,6 +52,7 @@ const POLICY_CREATE_OPERATION = 'hr.compensation_policy.create';
 const POLICY_VERSION_OPERATION = 'hr.compensation_policy.version.create';
 const POLICY_APPROVE_OPERATION = 'hr.compensation_policy.version.approve';
 const CREATE_OPERATION = 'hr.payroll.create';
+const UPDATE_DRAFT_OPERATION = 'hr.payroll.draft.update';
 const APPROVE_OPERATION = 'hr.payroll.approve';
 const DISCARD_OPERATION = 'hr.payroll.discard';
 const PAY_OPERATION = 'hr.payroll.pay';
@@ -62,6 +64,7 @@ const EMPLOYEE_ADVANCES = 'EMPLOYEE_ADVANCES';
 const ADMIN_DEDUCTION_RECOVERY = 'EMPLOYEE_ADMIN_DEDUCTION_RECOVERY';
 
 type CreateInput = Omit<CreateHrPayrollRunRequest, 'idempotencyKey'>;
+type UpdateDraftInput = Omit<UpdateHrPayrollDraftRequest, 'idempotencyKey'>;
 type PreviewInput = PreviewHrPayrollRunRequest;
 type ApproveInput = Omit<ApproveHrPayrollRunRequest, 'idempotencyKey'>;
 type DiscardInput = Omit<DiscardHrPayrollRunRequest, 'idempotencyKey'>;
@@ -398,8 +401,8 @@ export class HrPayrollService {
           compensationPolicySnapshot: compensationPolicySnapshot(line.compensationPolicySnapshotJson),
           payrollCalculationSnapshot: parsePayrollCalculationSnapshot(line.payrollCalculationSnapshotJson),
           advanceSettlementAmount: fixed(line.advanceSettlementAmount), administrativeDeductionAmount: fixed(line.administrativeDeductionAmount), netPayableAmount: fixed(line.netPayableAmount), paidAmount: fixed(line.paidAmount),
-          advances: line.advanceApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
-          administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
+          advances: line.advanceApplications.map((app) => ({ id: app.id, sourceId: app.advanceId, amount: fixed(app.amount), referenceNumber: app.advance.advanceNumber })),
+          administrativeDeductions: line.deductionApplications.map((app) => ({ id: app.id, sourceId: app.deductionId, amount: fixed(app.amount), referenceNumber: app.deduction.deductionNumber })),
         })),
         payments: payments.map((payment) => ({ id: payment.id, paymentNumber: payment.paymentNumber, businessDate: ymd(payment.businessDate), amount: fixed(payment.amount), journalEntryId: payment.journalEntryId, ...hrPaymentPostingProjection(payment.journalEntry.reversalEntry) })),
         hasMoreLines,
@@ -498,6 +501,94 @@ export class HrPayrollService {
       const receipt = { id: runId, runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
       await this.audit(tx, context, 'hr.payroll.created', 'HrPayrollRun', runId, { ...receipt, includedEmployeeCount: rows.length, includeOnLeaveEmployeeIds: input.includeOnLeaveEmployeeIds });
+      return receipt;
+    });
+  }
+
+  async updateDraft(context: TrustedCompanyActorContext, input: UpdateDraftInput, key: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
+      const begun = await this.begin(tx, context, UPDATE_DRAFT_OPERATION, key, input);
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The payroll draft update is already being processed.');
+
+      await this.lockPayrollRun(tx, context, input.payrollRunId);
+      const run = await this.findRun(tx, context, input.payrollRunId, true);
+      if (run.status !== HrPayrollRunStatus.DRAFT || run.accrualJournalEntryId || !run.paidAmount.eq(0) || run.payments.length) {
+        throw new ConflictException('Only an unposted draft payroll run can be updated.');
+      }
+      const payrollMonth = firstOfMonth(input.payrollMonth);
+      if (payrollMonth.getTime() !== run.payrollMonth.getTime()) throw new ConflictException('A payroll draft cannot be moved to another month.');
+      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll draft can be updated only in the current operational business month.');
+      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
+
+      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, input.businessDate, input.includeOnLeaveEmployeeIds);
+      const employees = population.employees;
+      if (population.hiredAfterBusinessDate.length) throw new BadRequestException(`Employees hired after the payroll business date cannot be included: ${population.hiredAfterBusinessDate.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.compensationCoverageIssue.length) throw new BadRequestException(`Compensation agreements must cover the entire payroll calculation period: ${population.compensationCoverageIssue.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.activeMissingProfile.length) throw new BadRequestException(`Active employees without a valid monthly compensation agreement: ${population.activeMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (population.onLeaveMissingProfile.length) throw new BadRequestException(`Included employees on leave without a valid monthly compensation agreement: ${population.onLeaveMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
+      if (!employees.length) throw new BadRequestException('No active employees with a valid compensation agreement are available for this payroll run.');
+      const requestedEmployeeIds = [...new Set(input.lines.map((line) => line.employeeId))];
+      if (requestedEmployeeIds.length !== input.lines.length) throw new BadRequestException('An employee can appear once in payroll settlement applications.');
+      const requestedLines = new Map(input.lines.map((line) => [line.employeeId, line]));
+      const eligibleIds = new Set(employees.map((employee) => employee.id));
+      if (requestedEmployeeIds.some((employeeId) => !eligibleIds.has(employeeId))) throw new BadRequestException('Settlement applications can only target an employee included by the server in this payroll run.');
+      const lines = employees.map((employee) => requestedLines.get(employee.id) ?? { employeeId: employee.id, advances: [], administrativeDeductions: [] });
+      const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
+      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, input.businessDate);
+      const defaultPolicyVersion = await this.ensureDefaultCompensationPolicyVersion(tx, context);
+      const rows = lines.map((line) => {
+        const employee = employeeById.get(line.employeeId)!;
+        const profile = population.profileByEmployee.get(line.employeeId)!;
+        const policyVersion = profile.policyVersion ?? defaultPolicyVersion;
+        if (policyVersion.status !== HrCompensationPolicyVersionStatus.APPROVED && policyVersion.status !== HrCompensationPolicyVersionStatus.SUPERSEDED) throw new ConflictException('A payroll compensation agreement must reference an approved policy version.');
+        const fullCompensation = calculateCompensation(profile, policyVersion.formulaCode);
+        const period = population.periodByEmployee.get(employee.id)!;
+        const compensation = prorateCompensation(fullCompensation, period);
+        const gross = compensation.gross;
+        const applications = applicationsByEmployee.get(line.employeeId)!;
+        const advances = applications.advances;
+        const deductions = applications.deductions;
+        const advanceAmount = sum(advances.map((item) => item.amount));
+        const deductionAmount = sum(deductions.map((item) => item.amount));
+        if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
+        return { id: randomUUID(), employee, compensation, policyVersion, eligibilityCode: period.eligibilityCode, calculationSnapshot: payrollCalculationSnapshot(period, profile.monthlyGross), gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
+      });
+      const grossAmount = sum(rows.map((row) => row.gross));
+      const advanceSettlementAmount = sum(rows.map((row) => row.advanceAmount));
+      const administrativeDeductionAmount = sum(rows.map((row) => row.deductionAmount));
+      const netPayableAmount = grossAmount.minus(advanceSettlementAmount).minus(administrativeDeductionAmount);
+
+      const oldLineIds = run.lines.map((line) => line.id);
+      if (oldLineIds.length) {
+        await tx.hrPayrollAdvanceApplication.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollLineId: { in: oldLineIds } } });
+        await tx.hrPayrollAdministrativeDeductionApplication.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollLineId: { in: oldLineIds } } });
+        await tx.hrPayrollLine.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollRunId: run.id } });
+      }
+      const updated = await tx.hrPayrollRun.updateMany({
+        where: { id: run.id, tenantId: context.tenantId, companyId: context.companyId, status: HrPayrollRunStatus.DRAFT, accrualJournalEntryId: null, paidAmount: 0 },
+        data: { businessDate: input.businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes) },
+      });
+      if (updated.count !== 1) throw new ConflictException('The payroll draft changed before the update could be applied.');
+      for (const rowChunk of chunks(rows, 500)) await tx.hrPayrollLine.createMany({ data: rowChunk.map((row) => ({
+        id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: run.id, employeeId: row.employee.id,
+        employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
+        compensationPolicyVersionId: row.policyVersion.id, compensationPolicySnapshotJson: policySnapshot(row.policyVersion) as Prisma.InputJsonValue, payrollCalculationSnapshotJson: row.calculationSnapshot as Prisma.InputJsonValue,
+        grossSalary: row.gross, eligibilityCode: row.eligibilityCode, compensationMethod: row.compensation.method, basicSalary: row.compensation.basicSalary,
+        foodAllowance: row.compensation.foodAllowance, housingAllowance: row.compensation.housingAllowance, transportAllowance: row.compensation.transportAllowance, otherAllowance: row.compensation.otherAllowance,
+        overtimeAmount: row.compensation.overtimeAmount, overtimeHours: row.compensation.overtimeHours,
+        scheduledHoursPerDay: row.compensation.scheduledHoursPerDay, scheduledWorkDays: row.compensation.scheduledWorkDays,
+        advanceSettlementAmount: row.advanceAmount, administrativeDeductionAmount: row.deductionAmount, netPayableAmount: row.net,
+      })) });
+      const advanceApplications = rows.flatMap((row) => row.advances.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, advanceId: app.id, amount: app.amount })));
+      const deductionApplications = rows.flatMap((row) => row.deductions.map((app) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollLineId: row.id, deductionId: app.id, amount: app.amount })));
+      for (const applicationChunk of chunks(advanceApplications, 500)) await tx.hrPayrollAdvanceApplication.createMany({ data: applicationChunk });
+      for (const applicationChunk of chunks(deductionApplications, 500)) await tx.hrPayrollAdministrativeDeductionApplication.createMany({ data: applicationChunk });
+
+      const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
+      await this.complete(tx, context, begun.receiptId, receipt, 200);
+      await this.audit(tx, context, 'hr.payroll.draft_updated', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(input.businessDate), includedEmployeeCount: rows.length, includeOnLeaveEmployeeIds: input.includeOnLeaveEmployeeIds });
       return receipt;
     });
   }
@@ -973,7 +1064,7 @@ export class HrPayrollService {
     try { return await this.idempotency.beginInTransaction(tx, context, { operation, key, request: jsonPayload(request), expiresAt: tomorrow() }); }
     catch (error) { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different payroll request.'); throw error; }
   }
-  private async complete(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, receiptId: string, body: object) { await this.idempotency.completeInTransaction(tx, context, { receiptId, response: { status: 201, headers: null, body: body as never } }); }
+  private async complete(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, receiptId: string, body: object, status = 201) { await this.idempotency.completeInTransaction(tx, context, { receiptId, response: { status, headers: null, body: body as never } }); }
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, afterJson: object) { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, afterJson: afterJson as Prisma.InputJsonValue } }); }
   private async lockPayrollRun(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollRunId: string) {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrPayrollRunLockKey(context.tenantId, context.companyId, payrollRunId)}, 0))`;
