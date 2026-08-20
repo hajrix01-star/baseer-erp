@@ -57,7 +57,10 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
       const payroll = await listHrPayrollRuns(current, { search: serverSearch || undefined, cursor, pageSize: 50 });
       if (requestNumber !== loadRequestRef.current) return;
       setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
-      setSummary(payroll.summary);
+      // An older API process can temporarily omit the newly-added cancelled
+      // count while it is being restarted. Never render the technical string
+      // "undefined" in the financial workspace.
+      setSummary({ ...payroll.summary, cancelledCount: payroll.summary.cancelledCount ?? 0 });
     } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, language, serverSearch]);

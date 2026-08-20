@@ -448,9 +448,12 @@ export class HrPayrollService {
       const payrollMonth = firstOfMonth(input.payrollMonth);
       if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll run can be created only for the current operational business month.');
       if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
-      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
-      const existing = await tx.hrPayrollRun.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth }, select: { id: true } });
-      if (existing) throw new ConflictException('A payroll run already exists for this month.');
+      await this.lockPayrollMonth(tx, context, payrollMonth);
+      const existing = await tx.hrPayrollRun.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth, status: { not: HrPayrollRunStatus.REVERSED } },
+        select: { runNumber: true, status: true },
+      });
+      if (existing) throw new ConflictException(`The active payroll ${existing.runNumber} (${existing.status}) already covers this month.`);
       const population = await this.loadPayrollPopulation(tx, context, payrollMonth, input.businessDate, input.includeOnLeaveEmployeeIds);
       const employees = population.employees;
       if (population.hiredAfterBusinessDate.length) throw new BadRequestException(`Employees hired after the payroll business date cannot be included: ${population.hiredAfterBusinessDate.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
@@ -525,6 +528,7 @@ export class HrPayrollService {
 
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
+      await this.lockPayrollMonth(tx, context, run.payrollMonth);
       if (run.status !== HrPayrollRunStatus.DRAFT || run.accrualJournalEntryId || !run.paidAmount.eq(0) || run.payments.length) {
         throw new ConflictException('Only an unposted draft payroll run can be updated.');
       }
@@ -1079,6 +1083,9 @@ export class HrPayrollService {
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, afterJson: object) { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, afterJson: afterJson as Prisma.InputJsonValue } }); }
   private async lockPayrollRun(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollRunId: string) {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${hrPayrollRunLockKey(context.tenantId, context.companyId, payrollRunId)}, 0))`;
+  }
+  private async lockPayrollMonth(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, payrollMonth: Date) {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:payroll:${ymd(payrollMonth)}`}, 0))`;
   }
 }
 

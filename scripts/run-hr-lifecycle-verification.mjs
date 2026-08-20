@@ -417,6 +417,14 @@ try {
   const mainPayrollReversalKey = randomUUID();
   assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, false);
   assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, true, 'Payroll accrual reversal replay must remain explicit after reversing its payment.');
+  const replacementRun = await payroll.create(creator, { ...createPayrollInput, notes: 'Replacement payroll after cancellation' }, randomUUID());
+  assert.notEqual(replacementRun.id, run.id, 'A replacement payroll must be a new immutable record, never a revived cancellation.');
+  assert.notEqual(replacementRun.runNumber, run.runNumber, 'A replacement payroll must receive a new document number.');
+  await assert.rejects(
+    () => payroll.create(creator, { ...createPayrollInput, notes: 'Second active payroll must be rejected' }, randomUUID()),
+    /active payroll.*already covers this month/,
+    'Only one active payroll may exist for a company/month after a cancelled predecessor.',
+  );
 
   const reversalEmployee = await payroll.onboardEmployee(reversalCreator, onboardingInput('موظف عكس المسير'), randomUUID());
   const reversalAdvance = await advances.issue(reversalCreator, {

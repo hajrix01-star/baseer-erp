@@ -1741,7 +1741,9 @@ model HrPayrollRun {
   payments       HrPayrollPayment[]
 
   @@unique([id, tenantId, companyId])
-  @@unique([companyId, payrollMonth])
+  // The database enforces one *active* run per company/month with a partial
+  // unique index. A reversed run stays immutable as audit history and must not
+  // prevent a newly calculated replacement run for the same month.
   @@unique([companyId, runNumber])
   @@index([tenantId, companyId, payrollMonth, status, id])
   @@index([tenantId, companyId, status, payrollMonth, id])
