@@ -107,15 +107,46 @@ The report snapshot contract additionally requires `sourceCutoff`/watermark, pro
 
 ## 9. Delivery sequence and gates
 
-### Gate R0 — foundation (first)
+### Gate R0-A — approved accounting reporting policy (before API/UI)
 
-Create the report catalogue/definition contract, central options parser, response/snapshot contract, capability map, source-coverage metadata and report-output registration. Deliver the empty module shell only after it explains readiness and no-data states honestly.
+No report contract is implemented before this policy is accepted and versioned. It defines:
+
+1. **Ledger Trial Balance** as opening debit/credit, period debit/credit movement and closing debit/credit, with equal debit and credit totals for every eligible scope.
+2. Separate temporal concepts: economic business date, fiscal-period boundary, posted watermark (what was known/committed), and report-run creation time. A current entry status is never used alone to rewrite a historical result.
+3. The eligible-entry predicate and its version: sealed/posted source entries, cancellation entries and their original linkage, account status, system/opening accounts, zero balances and normal debit/credit presentation.
+4. Cancellation semantics: a ledger report includes the original effect until its cancellation business date and includes the cancellation entry from that date. The technical cancellation line may be hidden from the commercial table only when a complete audit trail remains available.
+5. Opening/closing policy, locked/reopened fiscal periods, retained-earnings policy and account-to-statement mapping versioning for any future statement.
+6. R1 functional-currency restriction. Current Finance models do not support foreign-currency/FX/revaluation or consolidation; R1 is a single authorised company in its functional currency only.
+
+### Gate R0-B — durable report-run consistency (before R1)
+
+`asOf` is a business meaning, not a concurrency mechanism. The platform must implement a durable `ReportRun`/snapshot with a company ledger revision or equivalent monotonically committed watermark allocated in the same transaction as every posting and accounting cancellation.
+
+Each run persists canonical options, company scope, `economicAsOfDate`, ledger revision/watermark, eligible-entry-predicate version, projection version/watermark when used, report-definition version, account-mapping version where applicable, source coverage, checksum, creator, expiry and output-job linkage. Every page of a drill-down and every export is constrained to the same run. A projection may serve a run only when it is reconciled at or before that run's revision.
+
+The output platform must gain a report-output job contract before any long export claim: bounded inline previews are allowed; large XLSX/PDF-compatible output streams in chunks from the frozen report run, supports retry/idempotency/failure status, stores the filter/definition/revision checksum, and follows retention/cleanup policy. It must not load millions of rows into a single in-memory JSON snapshot or transaction.
+
+### Gate R0-C — R1 behaviour matrix (before catalogue/API)
+
+| Report | Basis and primary source | Time model | Comparison in R1 | Presentation |
+| --- | --- | --- | --- | --- |
+| Ledger Trial Balance | Ledger entries/lines and approved account hierarchy | End of fiscal period with opening + movement + closing | Optional end-of-period comparison after the initial correctness release | Hierarchical account tree; no unfold-all |
+| Account Balance | Ledger/account-balance projection reconciled to ledger | End of period or `asOf` | Equivalent `asOf`/period only | One account balance card/table |
+| Account Activity / Statement | Ledger lines | Explicit date range | None at row level; summary comparison may follow later | Keyset-paged movement table |
+| Ledger Vault Balance / Activity | Account-backed vault ledger account | `asOf` and/or explicit activity range | Off by default; no cash-flow claim | Ledger balance and activity, with last reconciliation/count shown separately |
+| Supplier-Dues Commitment Schedule | Immutable due/payment/cancellation events plus control-ledger reconciliation | Outstanding `asOf`, due-date aging and paid-in-period as separate measures | Off by default | Paged schedule and aging buckets; not a general AP/AR subledger |
+
+Every R1 report declares the exact comparison behaviour rather than using “where meaningful”. The catalogue groups them visibly as **Ledger**, **Cash and Vaults**, and **Supplier Commitments**. Comparison starts off, then offers simple presets (previous period / same period last year) only for a report that supports them. The hierarchy is a report capability, not a template: Trial Balance may unfold; account activity and supplier commitments remain tables.
+
+### Gate R0 — technical foundation
+
+After R0-A/R0-B/R0-C are accepted, create the report catalogue/definition contract, central options parser, durable report-run API, response contract, capability map, source-coverage metadata, report-output job registration and empty module shell. The shell explains the distinct states **no data**, **coverage incomplete** and **report not ready** honestly; it hides reports the current user is not authorised to read.
 
 ### Gate R1 — first safe accounting reports
 
-Implement, in this order: trial balance, account balances/activity, treasury balances and supplier-dues commitments. Each must support period/comparison where meaningful, bounded drill-down and A4/XLSX output. The catalogue labels the basis visibly: **ledger statements**, **management cash**, and **supplier commitments**.
+Implement, in this order: Ledger Trial Balance, Account Balance, Account Activity, Ledger Vault Balance/Activity and Supplier-Dues Commitment Schedule. Each must use its R0-C behaviour contract, bounded drill-down and authorised output. The catalogue labels the basis visibly: **Ledger**, **Cash and Vaults**, and **Supplier Commitments**.
 
-Do **not** implement a general financial overview, P&L, cash-flow statement or statutory VAT report in R1. They require approved account-to-statement mapping, normal-balance/opening/closing policy, retained-earnings treatment and correctly scoped fact/rollup sources.
+Do **not** implement a general financial overview, P&L, cash-flow statement or statutory VAT report in R1. They require approved account-to-statement mapping, normal-balance/opening/closing policy, retained-earnings treatment and correctly scoped fact/rollup sources. Supplier dues require their own source gate: no status/remaining-amount-at-read-time model may be used as a historical proof unless its due/payment/cancellation events reconcile to the control ledger at the report run revision.
 
 ### Gate R2 — VAT report
 
