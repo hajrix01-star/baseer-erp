@@ -14,9 +14,12 @@
 
 .hr-payroll-create-dialog .daily-sales-dialog__body {
   min-height: 0;
+  block-size: min(44rem, calc(100vh - 10rem));
   padding: 0 1.25rem;
   overflow: auto;
 }
+
+.hr-payroll-create__loading-shell { display:grid; min-height:100%; margin:0; place-items:center; color:var(--muted); font-weight:700; }
 
 .hr-payroll-create-dialog .daily-sales-dialog__actions {
   display: flex;

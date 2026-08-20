@@ -16,7 +16,7 @@ Legend: ✅ verified by automated behavior or shared primitive; 🔴 release blo
 | Employee profile — leave history | `hr-employee-profile-dialog.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Lazy and cached per tab; tab exercised in both viewports |
 | Employee profile — documents/letters | `hr-employee-documents-panel.tsx`, `hr-employee-letters-panel.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Lazy panels; paginated letters; upload/preview and document/letter actions exercised |
 | Leave & return | `hr-leave-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Create/detail/return and nested modal containment exercised |
-| Payroll | `hr-payroll-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Server search/paging and table containment tested; preview blocks truncated applications |
+| Payroll | `hr-payroll-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Server search/paging; stable create/edit shell; saved drafts restore applications and update in place |
 | Advances & deductions | `hr-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Server search, remote employee lookup, detail and financial action dialogs exercised |
 | Residencies & services | `hr-services-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Direct route-stage dialog exercised; server search/summary, remote employee lookup and cost reversal |
 | Salary tools | `hr-salary-tools-workspace.tsx` | ✅ | ✅ | ✅ | ✅ | ✅ | Independent lazy journey |
@@ -35,7 +35,7 @@ Legend: ✅ verified by automated behavior or shared primitive; 🔴 release blo
 | Document create/detail/replace/revoke | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Letter issue/detail/revoke | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Leave create/return/detail | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Payroll create/preview | `BaseerDialog` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Payroll create/edit/preview | `BaseerDialog` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Payroll detail/discard/pay/reverse | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Compensation policies/create/version | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Advance detail/issue/repay/defer/reverse | central dialogs | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -49,7 +49,7 @@ Legend: ✅ verified by automated behavior or shared primitive; 🔴 release blo
 | Shared modal stack; Escape closes topmost; nested body scroll lock | ✅ | `use-dialog-focus-trap.ts`; mobile/desktop nested-dialog assertions |
 | Consistent modal widths and responsive collapse | ✅ | `baseer-form.css`, `BaseerFormDialog` |
 | Error is visible and announced inside the active dialog | ✅ | Dynamic `BaseerDialog` error slot + topmost error channel; failed onboarding POST asserted inside dialog |
-| Authenticated desktop/mobile/RTL/LTR journey coverage | ✅ | Mock-auth HR suite: 12 scenarios × desktop/mobile; full suite 29 passed, 1 intentionally skipped |
+| Authenticated desktop/mobile/RTL/LTR journey coverage | ✅ | Mock-auth HR suite includes stable payroll create/edit; full suite 31 passed, 1 intentionally skipped |
 | POST completion does not retry after refresh | ✅ | Onboarding success closes and refreshes with exactly one POST in E2E |
 | HR route JavaScript budget | ✅ | Largest HR journey: leave 59,329 B; services 55,821 B; both below 85,000 B. Largest HR route CSS: leave 10,031 B / 16,000 B. |
 | Server search and aggregate summaries | ✅ | Employees, payroll, leaves, services, advances, deductions and final settlements |

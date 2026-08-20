@@ -78,7 +78,7 @@ const settlementPayment = { id: "payment-settlement-1", paymentNumber: "SP-001",
 
 async function fulfill(route: Route, json: unknown, status = 200) { await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) }); }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; payrollPreviewFailure?: boolean } = {}) {
   const language = options.language ?? "ar";
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "e2e-token");
@@ -131,9 +131,18 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
       const more = url.searchParams.has("cursor");
       return fulfill(route, { companyId, payrollRuns: more ? [{ ...payrollRun, id: "66666666-6666-4666-8666-666666666666", runNumber: "PAY-2026-07" }] : [payrollRun, approvedPayrollRun], hasMore: !more, nextCursor: more ? null : payrollRun.id, summary: { count: 12, grossAmount: "36000.0000", advanceSettlementAmount: "500.0000", administrativeDeductionAmount: "250.0000", netPayableAmount: "35250.0000" } });
     }
-    if (url.pathname === `/v1/hr/payroll-runs/${payrollRun.id}`) return fulfill(route, { payrollRun, lines: [{ id: "line-1", employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, grossSalary: "3000.0000", compensationMethod: "FIXED_MONTHLY", eligibilityCode: "FULL_MONTH_V1", basicSalary: "3000.0000", foodAllowance: "0.0000", housingAllowance: "0.0000", transportAllowance: "0.0000", otherAllowance: "0.0000", overtimeAmount: "0.0000", overtimeHours: "0.0000", scheduledHoursPerDay: null, scheduledWorkDays: null, compensationPolicySnapshot: null, payrollCalculationSnapshot: null, advanceSettlementAmount: "0.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "3000.0000", paidAmount: "0.0000", advances: [], administrativeDeductions: [] }], payments: [], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
+    if (url.pathname === `/v1/hr/payroll-runs/${payrollRun.id}`) {
+      if (options.slowPayrollDetail) await new Promise((resolve) => setTimeout(resolve, 350));
+      return fulfill(route, { payrollRun: { ...payrollRun, notes: "ملاحظة المسودة" }, lines: [{ id: "line-1", employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, grossSalary: "3000.0000", compensationMethod: "FIXED_MONTHLY", eligibilityCode: "FULL_MONTH_V1", basicSalary: "3000.0000", foodAllowance: "0.0000", housingAllowance: "0.0000", transportAllowance: "0.0000", otherAllowance: "0.0000", overtimeAmount: "0.0000", overtimeHours: "0.0000", scheduledHoursPerDay: null, scheduledWorkDays: null, compensationPolicySnapshot: null, payrollCalculationSnapshot: null, advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000", paidAmount: "0.0000", advances: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", sourceId: advance.id, amount: "100.0000", referenceNumber: advance.advanceNumber }], administrativeDeductions: [] }], payments: [], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
+    }
     if (url.pathname === `/v1/hr/payroll-runs/${approvedPayrollRun.id}`) return fulfill(route, { payrollRun: approvedPayrollRun, lines: [], payments: [payrollPayment], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
-    if (url.pathname === "/v1/hr/payroll-runs/preview") return fulfill(route, { companyId, counts: { active: 1, onLeave: 0, included: 1, excluded: 0, exceptions: 0 }, totals: { employeeCount: 1, grossAmount: "3000.0000", advanceSettlementAmount: "0.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "3000.0000" }, exceptions: [], employees: options.truncatedPreview ? [{ id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", included: true, reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: "88888888-8888-4888-8888-888888888888", referenceNumber: "ADV-001", remainingAmount: "300.0000" }], advanceCount: 101, hasMoreAdvances: true, administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false }] : [], hasMore: false, nextCursor: null });
+    if (url.pathname === "/v1/hr/payroll-runs/preview") {
+      if (options.payrollPreviewFailure) return fulfill(route, { error: { code: "PAYROLL_PREVIEW_FAILED", message: { ar: "تعذر إعداد معاينة المسير.", en: "The payroll preview could not be prepared." }, correlationId: "e2e-payroll-preview", retry: { kind: "safe-retry" } } }, 503);
+      const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", included: true, reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false };
+      return fulfill(route, { companyId, counts: { active: 1, onLeave: 0, included: 1, excluded: 0, exceptions: 0 }, totals: { employeeCount: 1, grossAmount: "3000.0000", advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000" }, exceptions: [], employees: [previewEmployee], hasMore: false, nextCursor: null });
+    }
+    if (url.pathname === "/v1/hr/payroll-runs/update" && route.request().method() === "POST") return fulfill(route, { id: payrollRun.id, runNumber: payrollRun.runNumber, replayed: false });
+    if (url.pathname === "/v1/hr/payroll-runs" && route.request().method() === "POST") return fulfill(route, { id: payrollRun.id, runNumber: payrollRun.runNumber, replayed: false });
     if (url.pathname === "/v1/hr/employee-payroll-history") return fulfill(route, { companyId, lines: [], hasMore: false, nextCursor: null });
     if (url.pathname === "/v1/hr/compensation-policies") return fulfill(route, { policies: [compensationPolicy] });
     if (url.pathname === "/v1/finance/configuration") return fulfill(route, { suppliers: [{ id: "supplier-1", nameAr: "مورد", nameEn: "Supplier", status: "ACTIVE" }], categories: [{ id: "category-1", code: "IQAMA", nameAr: "إقامة", nameEn: "Iqama", kind: "EXPENSE", status: "ACTIVE", suggestedSupplierId: null, isPosting: true }], vaults: [{ id: "vault-1", nameAr: "الخزينة", nameEn: "Vault", status: "ACTIVE", isPaymentDestination: true, paymentMethod: "CASH", paymentMethods: ["CASH"] }] });
@@ -204,6 +213,63 @@ test("payroll uses server search and cursor paging without page-level overflow",
     const parent = table.parentElement; return !!parent && parent.scrollWidth >= parent.clientWidth && document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1;
   });
   expect(tableOverflowIsContained).toBe(true);
+});
+
+test("payroll create and saved draft edit keep one stable full editor", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { slowPayrollDetail: true });
+  await page.goto("/#module=hr&section=3");
+
+  await page.getByRole("button", { name: "إنشاء مسير" }).click();
+  const createDialog = await expectTopmostDialog(page, "إنشاء مسير راتب");
+  await createDialog.getByLabel("ملاحظات").fill("مسودة جديدة");
+  const createButton = createDialog.getByRole("button", { name: "إنشاء المسودة" });
+  await expect(createButton).toBeEnabled();
+  const createRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs" && request.method() === "POST");
+  await createButton.click();
+  const createRequest = await createRequestPromise;
+  expect(createRequest.postDataJSON()).toMatchObject({ notes: "مسودة جديدة", includeAllEligible: true });
+  await expect(createDialog).toBeHidden();
+
+  await page.getByRole("button", { name: payrollRun.runNumber }).click();
+  const editor = page.getByRole("dialog", { name: `تعديل مسودة ${payrollRun.runNumber}` });
+  await expect(editor).toBeVisible();
+  await expect(editor.getByRole("status")).toHaveText("جارٍ فتح مسودة المسير…");
+  const loadingBox = await editor.boundingBox();
+  expect(loadingBox).not.toBeNull();
+  await expect(editor.getByLabel("ملاحظات")).toHaveValue("ملاحظة المسودة");
+  const readyBox = await editor.boundingBox();
+  expect(readyBox).not.toBeNull();
+  expect(Math.abs(readyBox!.x - loadingBox!.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(readyBox!.y - loadingBox!.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(readyBox!.width - loadingBox!.width)).toBeLessThanOrEqual(1);
+  expect(Math.abs(readyBox!.height - loadingBox!.height)).toBeLessThanOrEqual(1);
+  await expect(editor.getByLabel("الشهر")).toBeDisabled();
+  await expect(editor.locator('.hr-payroll-create__application-list input[type="checkbox"]')).toBeChecked();
+  await expect(editor.locator(".hr-payroll-create__application-list .baseer-money-input")).toHaveValue("100");
+  const previewRequestsBeforeEdit = requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length;
+  await editor.locator(".hr-payroll-create__application-list .baseer-money-input").fill("125");
+  await page.waitForTimeout(350);
+  expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(previewRequestsBeforeEdit);
+  await editor.getByLabel("ملاحظات").fill("ملاحظة معدلة");
+  const updateRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
+  await editor.getByRole("button", { name: "حفظ التعديلات" }).click();
+  const updateRequest = await updateRequestPromise;
+  expect(updateRequest.postDataJSON()).toMatchObject({ payrollRunId: payrollRun.id, notes: "ملاحظة معدلة", lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "125" }] }] });
+  await expect(editor).toBeHidden();
+  expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/update")).toHaveLength(1);
+  await expectViewportContained(page);
+});
+
+test("payroll preview failure reports once without a request loop", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { payrollPreviewFailure: true });
+  await page.goto("/#module=hr&section=3");
+  await page.getByRole("button", { name: "إنشاء مسير" }).click();
+  const dialog = await expectTopmostDialog(page, "إنشاء مسير راتب");
+  await expect(dialog.getByRole("alert")).toContainText("تعذر إعداد معاينة المسير");
+  await page.waitForTimeout(700);
+  expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(1);
 });
 
 test("employee profile shows exact counts, lazy compliance paging, and topmost modal semantics", async ({ page }) => {
@@ -441,6 +507,8 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: payrollRun.runNumber }).click();
+  const payrollEditor = await expectTopmostDialog(page, `تعديل مسودة ${payrollRun.runNumber}`);
+  await payrollEditor.getByRole("button", { name: "مراجعة واعتماد" }).click();
   const payrollDetail = await expectTopmostDialog(page, payrollRun.runNumber);
   await expect(payrollDetail.getByRole("button", { name: "اعتماد" })).toBeVisible();
   await payrollDetail.getByRole("button", { name: "حذف المسودة" }).click();
