@@ -91,7 +91,7 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
     { id: "number", header: language === "ar" ? "رقم المستند / الحركة" : "Document / movement no.", cell: (item) => <button className="baseer-link-button invoice-register__number" type="button" dir="ltr" title={item.documentNumber} onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
     { id: "date", header: text.documentDate, cell: (item) => item.businessDate },
     { id: "source", header: text.documentSource, cell: (item) => <span className="daily-sales-badge">{sourceLabel(item)}{item.recurring ? ` · ${text.recurring}` : ""}</span> },
-    { id: "classification", header: language === "ar" ? "التصنيف" : "Classification", cell: (item) => <span className="invoice-register__classification">{operationClassLabel(item.operationClass)}</span> },
+    { id: "classification", header: language === "ar" ? "التصنيف الأب" : "Parent classification", cell: (item) => <span className="invoice-register__classification">{operationFamilyLabel(item.operationFamily)}</span> },
     { id: "supplier", header: text.supplier, cell: (item) => optionName(item.supplier) },
     { id: "category", header: text.financialCategory, cell: (item) => optionName(item.category) },
     { id: "batch", header: text.batchInvoices, cell: (item) => item.batchNumber ?? "—" },
