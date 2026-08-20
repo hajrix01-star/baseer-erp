@@ -153,7 +153,10 @@ try {
   });
   assert.equal(financialRegister.statusCode, 200, financialRegister.body);
   assert.equal(financialRegister.json().summary.salesCount, 1, "The financial register summary must be calculated from the full server filter scope.");
+  assert.equal(financialRegister.json().summary.grossAmount, undefined, "A mixed financial register must never expose a cross-source monetary total.");
   assert.equal(financialRegister.json().records.length, 1, "The financial register must return the requested bounded page size.");
+  assert.equal(financialRegister.json().records[0].debitTotal, "115.0000", "Each register row must disclose its journal debit total.");
+  assert.equal(financialRegister.json().records[0].creditTotal, "115.0000", "Each register row must disclose its journal credit total.");
   assert.equal(financialRegister.json().hasMore, false, "A complete one-record register scope must not advertise a next page.");
   const creditCategory = await server.inject({ method: "POST", url: "/v1/finance/master-data/categories", headers, payload: { code: `HTTP-CREDIT-${suffix}`, nameAr: "مصروف اختبار آجل", nameEn: "HTTP credit expense", kind: "EXPENSE", isPosting: true, idempotencyKey: randomUUID() } });
   assert.equal(creditCategory.statusCode, 201, creditCategory.body);

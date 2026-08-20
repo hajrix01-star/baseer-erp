@@ -1353,9 +1353,19 @@ const financeInvoiceRegisterRecordSchema = z.object({
   status: financeInvoiceRegisterStatusSchema,
   supplier: financeInvoiceRegisterOptionSchema.nullable(),
   category: financeInvoiceRegisterOptionSchema.nullable(),
+  // A journal is always balanced. These totals are deliberately explicit so
+  // callers never mistake a source document value for a cash movement.
+  debitTotal: financeAmountSchema,
+  creditTotal: financeAmountSchema,
   grossAmount: financeAmountSchema,
   netAmount: financeAmountSchema,
   vatAmount: financeAmountSchema,
+  payrollAccrual: z.object({
+    grossExpense: financeAmountSchema,
+    advanceSettlement: financeAmountSchema,
+    administrativeRecovery: financeAmountSchema,
+    netPayable: financeAmountSchema,
+  }).strict().nullable(),
   journalEntryId: z.string().uuid(),
   batchNumber: z.string().max(80).nullable(),
   notes: z.string().max(2_000).nullable(),
@@ -1365,7 +1375,9 @@ const financeInvoiceRegisterRecordSchema = z.object({
 export const financeInvoiceRegisterReceiptSchema = z.object({
   companyId: companyIdSchema,
   appliedPeriod: z.object({ fromBusinessDate: businessDateSchema.nullable(), toBusinessDate: businessDateSchema.nullable(), businessMonths: z.array(z.string().regex(/^\d{4}-\d{2}$/)).max(120) }).strict(),
-  summary: z.object({ documentCount: z.number().int().nonnegative(), salesCount: z.number().int().nonnegative(), purchaseCount: z.number().int().nonnegative(), expenseCount: z.number().int().nonnegative(), obligationCount: z.number().int().nonnegative(), otherCount: z.number().int().nonnegative(), paidCount: z.number().int().nonnegative(), payableCount: z.number().int().nonnegative(), grossAmount: financeAmountSchema, netAmount: financeAmountSchema, vatAmount: financeAmountSchema }).strict(),
+  // Cross-source monetary aggregation is intentionally forbidden here. Sales,
+  // payroll accruals, advances and settlements have different accounting bases.
+  summary: z.object({ documentCount: z.number().int().nonnegative(), postedCount: z.number().int().nonnegative(), cancelledCount: z.number().int().nonnegative(), salesCount: z.number().int().nonnegative(), purchaseCount: z.number().int().nonnegative(), expenseCount: z.number().int().nonnegative(), obligationCount: z.number().int().nonnegative(), otherCount: z.number().int().nonnegative(), paidCount: z.number().int().nonnegative(), payableCount: z.number().int().nonnegative() }).strict(),
   filters: z.object({ suppliers: z.array(financeInvoiceRegisterOptionSchema).max(1000), categories: z.array(financeInvoiceRegisterOptionSchema).max(500) }).strict(),
   records: z.array(financeInvoiceRegisterRecordSchema).max(100),
   hasMore: z.boolean(),
