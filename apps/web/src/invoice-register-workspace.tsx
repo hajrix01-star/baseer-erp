@@ -88,7 +88,7 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
     { id: "supplier", header: text.supplier, cell: (item) => optionName(item.supplier) },
     { id: "category", header: text.financialCategory, cell: (item) => optionName(item.category) },
     { id: "batch", header: text.batchInvoices, cell: (item) => item.batchNumber ?? "—" },
-    { id: "effect", header: text.operation, cell: (item) => <OperationEffect movement={item} text={text} /> },
+    { id: "effect", header: text.operation, numeric: true, align: "end", cell: (item) => <OperationEffect movement={item} /> },
     { id: "status", header: text.status, cell: (item) => <span className={`daily-sales-badge ${item.status === "CANCELLED" ? "is-muted" : ""}`}>{statusLabel(item.status)}</span> },
   ], [language, receipt, text]);
   if (!session) return <DailySalesSignIn language={language} />;
@@ -134,7 +134,6 @@ function MovementFile({ detail, language, text, optionName, sourceLabel, pane, o
   </>;
 }
 
-function OperationEffect({ movement, text }: { movement: Movement; text: ReturnType<typeof financeText> }) {
-  if (!movement.payrollAccrual) return <bdi>{formatMoney(movement.grossAmount)}</bdi>;
-  return <div className="invoice-register__effect"><bdi>{text.payrollExpense} {formatMoney(movement.payrollAccrual.grossExpense)}</bdi><bdi>{text.advanceSettlement} {formatMoney(movement.payrollAccrual.advanceSettlement)} · {text.netPayrollPayable} {formatMoney(movement.payrollAccrual.netPayable)} · {text.noCashMovement}</bdi></div>;
+function OperationEffect({ movement }: { movement: Movement }) {
+  return <bdi>{formatMoney(movement.grossAmount)}</bdi>;
 }

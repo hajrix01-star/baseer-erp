@@ -188,8 +188,6 @@ html[dir="rtl"] .baseer-metric::before { inset: 0 0 0 auto; }
   white-space: nowrap;
 }
 .invoice-register__number:hover { color: var(--brand); text-decoration: none; }
-.invoice-register__effect { display: grid; gap: .2rem; min-inline-size: 18rem; color: var(--ink); font-size: .8rem; line-height: 1.45; }
-.invoice-register__effect bdi:last-child { color: var(--ink-muted); }
 :where(.daily-sales-form, .daily-sales-dialog__form, .administration-form, .administration-dialog-form, .baseer-batch-header) :is(input, select, textarea) {
   width: 100%;
   min-height: var(--control-height);
