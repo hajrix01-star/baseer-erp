@@ -20,6 +20,13 @@ const hrOverviewRule = ["hr.employees.read", "hr.employees.write", "hr.leaves.re
  */
 const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
   command: { 0: ["finance.daily_sales.read", "finance.purchase_expense.read", "finance.loans.read"] },
+  decision: {
+    0: ["decision.metrics.read", "decision.alerts.read", "decision.context.read"],
+    1: ["decision.context.read", "decision.context.company.manage"],
+    2: ["decision.alerts.read", "decision.feedback.write"],
+    3: ["decision.metrics.read", "decision.policy.manage"],
+    4: ["decision.context.global.manage", "decision.policy.manage"],
+  },
   operations: {
     1: ["finance.daily_sales.read", "finance.daily_sales.create"],
     2: ["finance.purchase_expense.read", "finance.purchase_expense.create"],
