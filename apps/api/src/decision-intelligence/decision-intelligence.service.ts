@@ -16,6 +16,17 @@ type CreateCompanyEvent = Readonly<{
   sourceReference?: string | undefined;
 }>;
 
+type UpdateCompanyEvent = CreateCompanyEvent;
+
+type ManualGlobalEvent = Readonly<{
+  eventKind: string;
+  titleAr: string;
+  startsOn: string;
+  endsOn: string;
+  sourceReference?: string | undefined;
+  reason: string;
+}>;
+
 type AlertFeedback = Readonly<{
   alertId: string;
   kind: string;
@@ -37,6 +48,7 @@ type SalesChangePolicyInput = Readonly<{
 }>;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const MANUAL_GLOBAL_CONTEXT_SOURCE_CODE = "BASEER_MANUAL_CONTEXT";
 
 /**
  * The Decision Intelligence module is a consumer of official facts. It has no
@@ -403,7 +415,8 @@ export class DecisionIntelligenceService {
             scope: true,
             locationCode: true,
             locationLabelAr: true,
-            revisions: { select: { revision: true, titleAr: true, startsOn: true, endsOn: true, status: true, sourceChecksum: true, verificationStatus: true } },
+            source: { select: { sourceCode: true } },
+            revisions: { select: { revision: true, titleAr: true, startsOn: true, endsOn: true, status: true, sourceChecksum: true, verificationStatus: true, importReceipt: true } },
           },
           take: 500,
         }),
@@ -423,8 +436,9 @@ export class DecisionIntelligenceService {
           startsOn: day(revision.startsOn),
           endsOn: day(revision.endsOn),
           verificationStatus: revision.verificationStatus,
-          sourceReference: revision.sourceChecksum,
+          sourceReference: event.source.sourceCode === MANUAL_GLOBAL_CONTEXT_SOURCE_CODE ? manualSourceReference(revision.importReceipt) : revision.sourceChecksum,
           locationLabelAr: event.locationLabelAr,
+          isManual: event.source.sourceCode === MANUAL_GLOBAL_CONTEXT_SOURCE_CODE,
         })));
       const company = companyEvents.map((event) => ({
         id: event.id,
@@ -436,6 +450,7 @@ export class DecisionIntelligenceService {
         verificationStatus: event.verificationStatus,
         sourceReference: event.sourceReference,
         locationLabelAr: null,
+        isManual: false,
       }));
       return [...global, ...company].sort((left, right) => left.startsOn.localeCompare(right.startsOn) || left.titleAr.localeCompare(right.titleAr));
     });
@@ -522,6 +537,138 @@ export class DecisionIntelligenceService {
       await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 200, headers: null, body } });
       return body;
     });
+  }
+
+  async updateCompanyEvent(context: TrustedCompanyActorContext, eventId: string, input: UpdateCompanyEvent, idempotencyKey: string) {
+    const startsOn = parseDate(input.startsOn);
+    const endsOn = parseDate(input.endsOn);
+    if (endsOn < startsOn) throw new ConflictException("The context-event end date cannot be before its start date.");
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const receipt = await this.idempotency.beginInTransaction(transaction, context, {
+        operation: "decision.context.company.update", key: idempotencyKey,
+        request: { eventId, eventKind: input.eventKind, titleAr: input.titleAr, startsOn: input.startsOn, endsOn: input.endsOn, sourceReference: input.sourceReference ?? null },
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      if (receipt.kind === "replay") return receipt.response.body;
+      if (receipt.kind === "in-progress") throw new ConflictException("The context-event update is already in progress.");
+      const event = await transaction.decisionCompanyContextEvent.findFirst({
+        where: { id: eventId, tenantId: context.tenantId, companyId: context.companyId },
+        select: { id: true, status: true, eventKind: true, titleAr: true, startsOn: true, endsOn: true, sourceReference: true },
+      });
+      if (!event) throw new NotFoundException("The company context event was not found.");
+      if (event.status !== "PUBLISHED") throw new ConflictException("Only a published company context event can be edited.");
+      const duplicateCandidates = await transaction.decisionCompanyContextEvent.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, eventKind: input.eventKind, startsOn, endsOn, status: "PUBLISHED", id: { not: event.id } },
+        select: { id: true, titleAr: true },
+      });
+      if (duplicateCandidates.some((candidate) => normalizeContextText(candidate.titleAr) === normalizeContextText(input.titleAr))) throw new ConflictException("A matching company context event is already recorded.");
+      await transaction.decisionCompanyContextEvent.update({
+        where: { id_tenantId_companyId: { id: event.id, tenantId: context.tenantId, companyId: context.companyId } },
+        data: { eventKind: input.eventKind, titleAr: input.titleAr, startsOn, endsOn, sourceReference: input.sourceReference ?? null },
+      });
+      const body = { id: event.id, status: "PUBLISHED" as const };
+      await transaction.auditEvent.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId,
+        action: "decision.context.company.updated", entityType: "DecisionCompanyContextEvent", entityId: event.id,
+        requestId: RequestContext.correlationId() ?? randomUUID(),
+        beforeJson: { eventKind: event.eventKind, titleAr: event.titleAr, startsOn: day(event.startsOn), endsOn: day(event.endsOn), sourceReference: event.sourceReference },
+        afterJson: { ...body, eventKind: input.eventKind, titleAr: input.titleAr, startsOn: input.startsOn, endsOn: input.endsOn, sourceReference: input.sourceReference ?? null },
+      } });
+      await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 200, headers: null, body } });
+      return body;
+    });
+  }
+
+  async createManualGlobalEvent(context: TrustedCompanyActorContext, input: ManualGlobalEvent, idempotencyKey: string) {
+    const startsOn = parseDate(input.startsOn);
+    const endsOn = parseDate(input.endsOn);
+    if (endsOn < startsOn) throw new ConflictException("The context-event end date cannot be before its start date.");
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const receipt = await this.idempotency.beginInTransaction(transaction, context, {
+        operation: "decision.context.global.manual.create", key: idempotencyKey,
+        request: { ...input, sourceReference: input.sourceReference ?? null },
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      if (receipt.kind === "replay") return receipt.response.body;
+      if (receipt.kind === "in-progress") throw new ConflictException("The global context-event request is already in progress.");
+      if (await hasMatchingGlobalContextEvent(transaction, context.tenantId, input.eventKind, input.titleAr, startsOn, endsOn)) throw new ConflictException("A matching global context event is already recorded.");
+      const source = await manualGlobalContextSource(transaction, context.tenantId);
+      const id = randomUUID();
+      const externalKey = `MANUAL:${id}`;
+      const checksum = manualGlobalRevisionChecksum({ eventKind: input.eventKind, titleAr: input.titleAr, startsOn: input.startsOn, endsOn: input.endsOn, sourceReference: input.sourceReference ?? null, reason: input.reason, status: "PUBLISHED" });
+      await transaction.decisionGlobalContextEvent.create({ data: { id, tenantId: context.tenantId, sourceId: source.id, externalKey, eventKind: input.eventKind, scope: "TENANT_GLOBAL", currentRevision: 1 } });
+      await transaction.decisionGlobalContextEventRevision.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, eventId: id, revision: 1, titleAr: input.titleAr, startsOn, endsOn,
+        sourceChecksum: checksum, importReceipt: { source: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE, sourceReference: input.sourceReference ?? null, reason: input.reason, actorUserId: context.actorUserId },
+        verificationStatus: "HUMAN_CONFIRMED", status: "PUBLISHED",
+      } });
+      const body = { id, status: "PUBLISHED" as const, revision: 1 };
+      await this.auditManualGlobalEvent(transaction, context, "created", id, null, { ...body, ...input, sourceReference: input.sourceReference ?? null });
+      await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 201, headers: null, body } });
+      return body;
+    });
+  }
+
+  async updateManualGlobalEvent(context: TrustedCompanyActorContext, eventId: string, input: ManualGlobalEvent, idempotencyKey: string) {
+    const startsOn = parseDate(input.startsOn);
+    const endsOn = parseDate(input.endsOn);
+    if (endsOn < startsOn) throw new ConflictException("The context-event end date cannot be before its start date.");
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const receipt = await this.idempotency.beginInTransaction(transaction, context, {
+        operation: "decision.context.global.manual.update", key: idempotencyKey,
+        request: { eventId, ...input, sourceReference: input.sourceReference ?? null },
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      if (receipt.kind === "replay") return receipt.response.body;
+      if (receipt.kind === "in-progress") throw new ConflictException("The global context-event update is already in progress.");
+      const event = await manualGlobalEvent(transaction, context.tenantId, eventId);
+      if (event.status !== "PUBLISHED") throw new ConflictException("Only a published manual global context event can be edited.");
+      if (await hasMatchingGlobalContextEvent(transaction, context.tenantId, input.eventKind, input.titleAr, startsOn, endsOn, event.id)) throw new ConflictException("A matching global context event is already recorded.");
+      const revision = event.currentRevision + 1;
+      const checksum = manualGlobalRevisionChecksum({ eventKind: input.eventKind, titleAr: input.titleAr, startsOn: input.startsOn, endsOn: input.endsOn, sourceReference: input.sourceReference ?? null, reason: input.reason, status: "PUBLISHED" });
+      await transaction.decisionGlobalContextEventRevision.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, eventId: event.id, revision, titleAr: input.titleAr, startsOn, endsOn,
+        sourceChecksum: checksum, importReceipt: { source: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE, sourceReference: input.sourceReference ?? null, reason: input.reason, actorUserId: context.actorUserId, supersedesRevision: event.currentRevision }, verificationStatus: "HUMAN_CONFIRMED", status: "PUBLISHED",
+      } });
+      await transaction.decisionGlobalContextEvent.update({ where: { id_tenantId: { id: event.id, tenantId: context.tenantId } }, data: { eventKind: input.eventKind, currentRevision: revision } });
+      const body = { id: event.id, status: "PUBLISHED" as const, revision };
+      await this.auditManualGlobalEvent(transaction, context, "updated", event.id, manualGlobalAuditShape(event), { ...body, ...input, sourceReference: input.sourceReference ?? null });
+      await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 200, headers: null, body } });
+      return body;
+    });
+  }
+
+  async archiveManualGlobalEvent(context: TrustedCompanyActorContext, eventId: string, reason: string, idempotencyKey: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const receipt = await this.idempotency.beginInTransaction(transaction, context, {
+        operation: "decision.context.global.manual.archive", key: idempotencyKey, request: { eventId, reason }, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      if (receipt.kind === "replay") return receipt.response.body;
+      if (receipt.kind === "in-progress") throw new ConflictException("The global context-event archive is already in progress.");
+      const event = await manualGlobalEvent(transaction, context.tenantId, eventId);
+      if (event.status === "ARCHIVED") throw new ConflictException("The global context event is already withdrawn.");
+      const current = event.revisions.find((revision) => revision.revision === event.currentRevision);
+      if (!current) throw new ConflictException("The manual global context event is missing its current revision.");
+      const revision = event.currentRevision + 1;
+      const checksum = manualGlobalRevisionChecksum({ eventKind: event.eventKind, titleAr: current.titleAr, startsOn: day(current.startsOn), endsOn: day(current.endsOn), sourceReference: manualSourceReference(current.importReceipt), reason, status: "ARCHIVED" });
+      await transaction.decisionGlobalContextEventRevision.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, eventId: event.id, revision, titleAr: current.titleAr, startsOn: current.startsOn, endsOn: current.endsOn,
+        sourceChecksum: checksum, importReceipt: { source: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE, reason, actorUserId: context.actorUserId, supersedesRevision: event.currentRevision }, verificationStatus: "HUMAN_CONFIRMED", status: "ARCHIVED",
+      } });
+      await transaction.decisionGlobalContextEvent.update({ where: { id_tenantId: { id: event.id, tenantId: context.tenantId } }, data: { status: "ARCHIVED", currentRevision: revision } });
+      const body = { id: event.id, status: "ARCHIVED" as const, revision };
+      await this.auditManualGlobalEvent(transaction, context, "archived", event.id, manualGlobalAuditShape(event), { ...body, reason });
+      await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 200, headers: null, body } });
+      return body;
+    });
+  }
+
+  private async auditManualGlobalEvent(transaction: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: "created" | "updated" | "archived", eventId: string, beforeJson: Prisma.InputJsonValue | null, afterJson: Prisma.InputJsonValue) {
+    await transaction.auditEvent.create({ data: {
+      id: randomUUID(), tenantId: context.tenantId, companyId: null, actorUserId: context.actorUserId,
+      action: `decision.context.global.manual.${action}`, entityType: "DecisionGlobalContextEvent", entityId: eventId,
+      requestId: RequestContext.correlationId() ?? randomUUID(), beforeJson: beforeJson ?? Prisma.JsonNull, afterJson,
+    } });
   }
 
   async listAlerts(context: TrustedCompanyActorContext, status?: "OPEN" | "ACKNOWLEDGED" | "CLOSED", pageSize = 50) {
@@ -806,6 +953,62 @@ function serializableSalesChangePolicy(policy: Readonly<{
 
 function normalizeContextText(value: string): string {
   return value.trim().replace(/\s+/gu, " ").toLocaleLowerCase("ar-SA");
+}
+
+async function manualGlobalContextSource(transaction: Prisma.TransactionClient, tenantId: string) {
+  return transaction.decisionContextSource.upsert({
+    where: { tenantId_sourceCode: { tenantId, sourceCode: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE } },
+    update: { displayNameAr: "مركز القرار — أحداث عامة يدوية", sourceUrl: "baseer://decision-context/manual", scheduleCode: "MANUAL" },
+    create: { id: randomUUID(), tenantId, sourceCode: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE, displayNameAr: "مركز القرار — أحداث عامة يدوية", sourceUrl: "baseer://decision-context/manual", scheduleCode: "MANUAL" },
+    select: { id: true },
+  });
+}
+
+async function manualGlobalEvent(transaction: Prisma.TransactionClient, tenantId: string, eventId: string) {
+  const event = await transaction.decisionGlobalContextEvent.findFirst({
+    where: { id: eventId, tenantId },
+    select: {
+      id: true, tenantId: true, eventKind: true, status: true, currentRevision: true,
+      source: { select: { sourceCode: true } },
+      revisions: { select: { revision: true, titleAr: true, startsOn: true, endsOn: true, importReceipt: true, status: true } },
+    },
+  });
+  if (!event) throw new NotFoundException("The global context event was not found.");
+  if (event.source.sourceCode !== MANUAL_GLOBAL_CONTEXT_SOURCE_CODE) throw new ConflictException("An imported or researched context event cannot be changed manually.");
+  return event;
+}
+
+async function hasMatchingGlobalContextEvent(transaction: Prisma.TransactionClient, tenantId: string, eventKind: string, titleAr: string, startsOn: Date, endsOn: Date, excludeId?: string) {
+  const events = await transaction.decisionGlobalContextEvent.findMany({
+    where: { tenantId, eventKind, scope: "TENANT_GLOBAL", status: "PUBLISHED", ...(excludeId ? { id: { not: excludeId } } : {}) },
+    select: { id: true, currentRevision: true, revisions: { select: { revision: true, titleAr: true, startsOn: true, endsOn: true, status: true } } },
+    take: 100,
+  });
+  const title = normalizeContextText(titleAr);
+  return events.some((event) => event.revisions.some((revision) => revision.revision === event.currentRevision && revision.status === "PUBLISHED" && revision.startsOn.getTime() === startsOn.getTime() && revision.endsOn.getTime() === endsOn.getTime() && normalizeContextText(revision.titleAr) === title));
+}
+
+function manualGlobalRevisionChecksum(value: Readonly<{ eventKind: string; titleAr: string; startsOn: string; endsOn: string; sourceReference: string | null; reason: string; status: "PUBLISHED" | "ARCHIVED" }>) {
+  return createHash("sha256").update(canonicalJson({ source: MANUAL_GLOBAL_CONTEXT_SOURCE_CODE, ...value })).digest("hex");
+}
+
+function manualSourceReference(value: unknown): string | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const reference = (value as { sourceReference?: unknown }).sourceReference;
+  return typeof reference === "string" ? reference : null;
+}
+
+function manualGlobalAuditShape(event: Awaited<ReturnType<typeof manualGlobalEvent>>): Prisma.InputJsonValue {
+  const current = event.revisions.find((revision) => revision.revision === event.currentRevision);
+  return {
+    eventKind: event.eventKind,
+    status: event.status,
+    revision: event.currentRevision,
+    titleAr: current?.titleAr ?? null,
+    startsOn: current ? day(current.startsOn) : null,
+    endsOn: current ? day(current.endsOn) : null,
+    sourceReference: current ? manualSourceReference(current.importReceipt) : null,
+  };
 }
 
 function unavailableSalesMetric(period: Readonly<{ from: Date; to: Date }>): DecisionSalesMetricRead {

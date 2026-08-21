@@ -158,16 +158,41 @@ export const runDecisionSalesChangeEvaluationRequestSchema = z.object({
   idempotencyKey: z.string().min(8).max(255),
 }).strict();
 
-export const createDecisionCompanyContextEventRequestSchema = z.object({
+const decisionContextEventFields = z.object({
   eventKind: z.string().trim().min(2).max(80),
   titleAr: z.string().trim().min(2).max(240),
   startsOn: z.string().date(),
   endsOn: z.string().date(),
   sourceReference: z.string().trim().max(500).optional(),
+}).strict().superRefine((value, context) => {
+  if (value.endsOn < value.startsOn) context.addIssue({ code: "custom", message: "A context event cannot end before it starts." });
+});
+
+export const createDecisionCompanyContextEventRequestSchema = decisionContextEventFields.extend({
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+export const updateDecisionCompanyContextEventRequestSchema = decisionContextEventFields.extend({
   idempotencyKey: z.string().min(8).max(255),
 }).strict();
 
 export const archiveDecisionCompanyContextEventRequestSchema = z.object({
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+/** A tenant-wide, human-confirmed event such as an exceptional economic event. */
+export const createDecisionGlobalContextEventRequestSchema = decisionContextEventFields.extend({
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+export const updateDecisionGlobalContextEventRequestSchema = decisionContextEventFields.extend({
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+export const archiveDecisionGlobalContextEventRequestSchema = z.object({
   reason: z.string().trim().min(3).max(500),
   idempotencyKey: z.string().min(8).max(255),
 }).strict();

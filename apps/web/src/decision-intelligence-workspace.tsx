@@ -42,7 +42,7 @@ type SalesChangePolicy = {
   cooldownHours: number | null;
   updatedAt: string | null;
 };
-type TimelineEvent = { id: string; scope: "GLOBAL" | "AREA" | "COMPANY"; eventKind: string; titleAr: string; startsOn: string; endsOn: string; verificationStatus: string; sourceReference: string | null; locationLabelAr: string | null };
+type TimelineEvent = { id: string; scope: "GLOBAL" | "AREA" | "COMPANY"; eventKind: string; titleAr: string; startsOn: string; endsOn: string; verificationStatus: string; sourceReference: string | null; locationLabelAr: string | null; isManual: boolean };
 type Alert = { id: string; ruleCode: string; ruleVersion: string; status: "OPEN" | "ACKNOWLEDGED" | "CLOSED"; titleAr: string; createdAt: string; acknowledgedAt: string | null; closedAt: string | null; evidenceSnapshotId: string | null };
 type AlertEvidence = {
   alert: Alert;
@@ -86,9 +86,10 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [eventDialogOpen, setEventDialogOpen] = useState(false);
+  const [companyEventEditing, setCompanyEventEditing] = useState<TimelineEvent | null>(null);
   const [eventBusy, setEventBusy] = useState(false);
   const [eventError, setEventError] = useState<string | null>(null);
-  const [eventArchive, setEventArchive] = useState<TimelineEvent | null>(null);
+  const [eventArchive, setEventArchive] = useState<{ event: TimelineEvent; scope: "COMPANY" | "GLOBAL" } | null>(null);
   const [eventArchiveReason, setEventArchiveReason] = useState("");
   const [eventArchiveBusy, setEventArchiveBusy] = useState(false);
   const [eventArchiveError, setEventArchiveError] = useState<string | null>(null);
@@ -100,6 +101,11 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
   const [alertActionError, setAlertActionError] = useState<string | null>(null);
   const [researchBusy, setResearchBusy] = useState(false);
   const [eventForm, setEventForm] = useState({ eventKind: "OPERATIONAL_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "" });
+  const [globalEventDialogOpen, setGlobalEventDialogOpen] = useState(false);
+  const [globalEventEditing, setGlobalEventEditing] = useState<TimelineEvent | null>(null);
+  const [globalEventBusy, setGlobalEventBusy] = useState(false);
+  const [globalEventError, setGlobalEventError] = useState<string | null>(null);
+  const [globalEventForm, setGlobalEventForm] = useState({ eventKind: "PUBLIC_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "", reason: "" });
   const canReadMetrics = hasActivePermission("decision.metrics.read");
   const canReadContext = hasActivePermission("decision.context.read");
   const canReadAlerts = hasActivePermission("decision.alerts.read");
@@ -150,7 +156,7 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
   const companyEvents = events.filter((event) => event.scope === "COMPANY");
   const globalEvents = events.filter((event) => event.scope === "GLOBAL" || event.scope === "AREA");
   const sectionContent = useMemo(() => {
-    if (section === 1) return <TimelinePanel language={language} events={events} companyEvents={companyEvents} globalEvents={globalEvents} canManage={canManageCompanyContext} onCreate={() => setEventDialogOpen(true)} onArchive={(event) => { setEventArchive(event); setEventArchiveReason(""); setEventArchiveError(null); }} />;
+    if (section === 1) return <TimelinePanel language={language} events={events} companyEvents={companyEvents} globalEvents={globalEvents} canManage={canManageCompanyContext} canManageGlobal={canManageGlobalContext} onCreate={() => { setCompanyEventEditing(null); setEventForm({ eventKind: "OPERATIONAL_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "" }); setEventDialogOpen(true); }} onEditCompany={(event) => { setCompanyEventEditing(event); setEventForm({ eventKind: event.eventKind, titleAr: event.titleAr, startsOn: event.startsOn, endsOn: event.endsOn, sourceReference: event.sourceReference ?? "" }); setEventDialogOpen(true); }} onCreateGlobal={() => { setGlobalEventEditing(null); setGlobalEventForm({ eventKind: "PUBLIC_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "", reason: "" }); setGlobalEventError(null); setGlobalEventDialogOpen(true); }} onEditGlobal={(event) => { setGlobalEventEditing(event); setGlobalEventForm({ eventKind: event.eventKind, titleAr: event.titleAr, startsOn: event.startsOn, endsOn: event.endsOn, sourceReference: event.sourceReference ?? "", reason: "" }); setGlobalEventError(null); setGlobalEventDialogOpen(true); }} onArchive={(event, scope) => { setEventArchive({ event, scope }); setEventArchiveReason(""); setEventArchiveError(null); }} />;
     if (section === 2) return <AlertsPanel language={language} alerts={alerts} canGiveFeedback={canGiveFeedback} canManage={canManageAlerts} onViewEvidence={async (alertId) => {
       const current = activeSession(); if (!current) return;
       setEvidenceBusy(true);
@@ -200,9 +206,21 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
     const current = activeSession(); if (!current) return;
     setEventBusy(true); setEventError(null);
     try {
-      await api(current, "/decision-intelligence/context/company-events", { method: "POST", headers: { "Content-Type": "application/json", "X-Idempotency-Key": requestId() }, body: JSON.stringify({ ...eventForm, sourceReference: eventForm.sourceReference.trim() || undefined, idempotencyKey: requestId() }) });
-      setEventDialogOpen(false); setEventForm({ eventKind: "OPERATIONAL_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "" }); await load();
+      const path = companyEventEditing ? `/decision-intelligence/context/company-events/${companyEventEditing.id}` : "/decision-intelligence/context/company-events";
+      await api(current, path, { method: companyEventEditing ? "PUT" : "POST", headers: { "Content-Type": "application/json", "X-Idempotency-Key": requestId() }, body: JSON.stringify({ ...eventForm, sourceReference: eventForm.sourceReference.trim() || undefined, idempotencyKey: requestId() }) });
+      setEventDialogOpen(false); setCompanyEventEditing(null); setEventForm({ eventKind: "OPERATIONAL_EVENT", titleAr: "", startsOn: period.from, endsOn: period.to, sourceReference: "" }); await load();
     } catch (reason) { setEventError(presentBaseerApiError(reason, language, language === "ar" ? "تعذر حفظ الحدث." : "The event could not be saved.")); } finally { setEventBusy(false); }
+  }
+
+  async function submitGlobalEvent(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const current = activeSession(); if (!current) return;
+    setGlobalEventBusy(true); setGlobalEventError(null);
+    try {
+      const path = globalEventEditing ? `/decision-intelligence/context/global-events/${globalEventEditing.id}` : "/decision-intelligence/context/global-events";
+      await api(current, path, { method: globalEventEditing ? "PUT" : "POST", headers: { "Content-Type": "application/json", "X-Idempotency-Key": requestId() }, body: JSON.stringify({ ...globalEventForm, sourceReference: globalEventForm.sourceReference.trim() || undefined, idempotencyKey: requestId() }) });
+      setGlobalEventDialogOpen(false); setGlobalEventEditing(null); await load();
+    } catch (reason) { setGlobalEventError(presentBaseerApiError(reason, language, language === "ar" ? "تعذر حفظ المناسبة العامة." : "The global context event could not be saved.")); } finally { setGlobalEventBusy(false); }
   }
 
   async function submitAlertAction(event: React.FormEvent<HTMLFormElement>) {
@@ -225,7 +243,8 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
     const current = activeSession(); if (!current) return;
     setEventArchiveBusy(true); setEventArchiveError(null);
     try {
-      await api(current, `/decision-intelligence/context/company-events/${eventArchive.id}/archive`, {
+      const path = eventArchive.scope === "GLOBAL" ? `/decision-intelligence/context/global-events/${eventArchive.event.id}/archive` : `/decision-intelligence/context/company-events/${eventArchive.event.id}/archive`;
+      await api(current, path, {
         method: "POST", headers: { "Content-Type": "application/json", "X-Idempotency-Key": requestId() },
         body: JSON.stringify({ reason: eventArchiveReason, idempotencyKey: requestId() }),
       });
@@ -241,12 +260,22 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
     </header>
     {error ? <p className="daily-sales-message error" role="alert">{error}</p> : null}
     {sectionContent}
-    <BaseerFormDialog open={eventDialogOpen} title={language === "ar" ? "إضافة حدث للشركة" : "Add company event"} language={language} formId="decision-company-event" submitLabel={language === "ar" ? "حفظ الحدث" : "Save event"} busy={eventBusy} error={eventError} onClose={() => !eventBusy && setEventDialogOpen(false)}>
+    <BaseerFormDialog open={eventDialogOpen} title={companyEventEditing ? (language === "ar" ? "تعديل حدث الشركة" : "Edit company event") : (language === "ar" ? "إضافة حدث للشركة" : "Add company event")} language={language} formId="decision-company-event" submitLabel={language === "ar" ? "حفظ الحدث" : "Save event"} busy={eventBusy} error={eventError} onClose={() => !eventBusy && setEventDialogOpen(false)}>
       <form id="decision-company-event" className="decision-event-form" onSubmit={(event) => void createEvent(event)}>
         <label>{language === "ar" ? "نوع الحدث" : "Event kind"}<select value={eventForm.eventKind} onChange={(event) => setEventForm((value) => ({ ...value, eventKind: event.target.value }))}><option value="OPERATIONAL_EVENT">{language === "ar" ? "حدث تشغيلي" : "Operational event"}</option><option value="CLOSURE">{language === "ar" ? "إغلاق" : "Closure"}</option><option value="STOCK_SHORTAGE">{language === "ar" ? "نقص مخزون" : "Stock shortage"}</option><option value="HOURS_CHANGE">{language === "ar" ? "تغيير ساعات" : "Hours change"}</option><option value="PROMOTION">{language === "ar" ? "عرض أو مبادرة" : "Promotion"}</option></select></label>
         <label>{language === "ar" ? "العنوان" : "Title"}<input required minLength={2} maxLength={240} value={eventForm.titleAr} onChange={(event) => setEventForm((value) => ({ ...value, titleAr: event.target.value }))} /></label>
         <div className="decision-event-form__dates"><label>{language === "ar" ? "من" : "From"}<input required type="date" value={eventForm.startsOn} onChange={(event) => setEventForm((value) => ({ ...value, startsOn: event.target.value }))} /></label><label>{language === "ar" ? "إلى" : "To"}<input required min={eventForm.startsOn} type="date" value={eventForm.endsOn} onChange={(event) => setEventForm((value) => ({ ...value, endsOn: event.target.value }))} /></label></div>
         <label>{language === "ar" ? "مرجع أو ملاحظة المصدر (اختياري)" : "Source reference (optional)"}<input maxLength={500} value={eventForm.sourceReference} onChange={(event) => setEventForm((value) => ({ ...value, sourceReference: event.target.value }))} /></label>
+      </form>
+    </BaseerFormDialog>
+    <BaseerFormDialog open={globalEventDialogOpen} title={globalEventEditing ? (language === "ar" ? "تعديل مناسبة عامة" : "Edit global event") : (language === "ar" ? "إضافة مناسبة عامة" : "Add global event")} language={language} formId="decision-global-event" submitLabel={language === "ar" ? "حفظ المناسبة" : "Save event"} busy={globalEventBusy} error={globalEventError} onClose={() => !globalEventBusy && setGlobalEventDialogOpen(false)}>
+      <form id="decision-global-event" className="decision-event-form" onSubmit={(event) => void submitGlobalEvent(event)}>
+        <p>{language === "ar" ? "تظهر هذه المناسبة لكل الشركات كجزء من السياق الزمني فقط؛ لا تثبت سبباً للمبيعات." : "This event is shared with every company as time context only; it does not prove a sales cause."}</p>
+        <label>{language === "ar" ? "نوع المناسبة" : "Event kind"}<select value={globalEventForm.eventKind} onChange={(event) => setGlobalEventForm((value) => ({ ...value, eventKind: event.target.value }))}><option value="PUBLIC_EVENT">{language === "ar" ? "مناسبة عامة" : "Public event"}</option><option value="ECONOMIC_EVENT">{language === "ar" ? "حدث اقتصادي" : "Economic event"}</option><option value="EXCEPTIONAL_EVENT">{language === "ar" ? "حدث استثنائي" : "Exceptional event"}</option></select></label>
+        <label>{language === "ar" ? "العنوان" : "Title"}<input required minLength={2} maxLength={240} value={globalEventForm.titleAr} onChange={(event) => setGlobalEventForm((value) => ({ ...value, titleAr: event.target.value }))} /></label>
+        <div className="decision-event-form__dates"><label>{language === "ar" ? "من" : "From"}<input required type="date" value={globalEventForm.startsOn} onChange={(event) => setGlobalEventForm((value) => ({ ...value, startsOn: event.target.value }))} /></label><label>{language === "ar" ? "إلى" : "To"}<input required min={globalEventForm.startsOn} type="date" value={globalEventForm.endsOn} onChange={(event) => setGlobalEventForm((value) => ({ ...value, endsOn: event.target.value }))} /></label></div>
+        <label>{language === "ar" ? "مرجع أو ملاحظة (اختياري)" : "Reference or note (optional)"}<input maxLength={500} value={globalEventForm.sourceReference} onChange={(event) => setGlobalEventForm((value) => ({ ...value, sourceReference: event.target.value }))} /></label>
+        <label>{language === "ar" ? "سبب التسجيل أو التعديل" : "Reason for this change"}<textarea required minLength={3} maxLength={500} value={globalEventForm.reason} onChange={(event) => setGlobalEventForm((value) => ({ ...value, reason: event.target.value }))} /></label>
       </form>
     </BaseerFormDialog>
     <BaseerFormDialog open={evidence !== null || evidenceBusy} title={language === "ar" ? "حزمة أدلة التنبيه" : "Alert evidence package"} language={language} formId="decision-alert-evidence" submitLabel={language === "ar" ? "إغلاق" : "Close"} busy={evidenceBusy} onClose={() => !evidenceBusy && setEvidence(null)}>
@@ -260,9 +289,9 @@ export function DecisionIntelligenceWorkspace({ language, section }: { language:
         <label>{language === "ar" ? "السبب" : "Reason"}<textarea required minLength={3} maxLength={500} value={alertActionReason} onChange={(event) => setAlertActionReason(event.target.value)} /></label>
       </form>
     </BaseerFormDialog>
-    <BaseerFormDialog open={eventArchive !== null} title={language === "ar" ? "سحب حدث الشركة" : "Withdraw company event"} language={language} formId="decision-company-event-archive" submitLabel={language === "ar" ? "تأكيد السحب" : "Confirm withdrawal"} busy={eventArchiveBusy} error={eventArchiveError} onClose={() => !eventArchiveBusy && setEventArchive(null)}>
+    <BaseerFormDialog open={eventArchive !== null} title={eventArchive?.scope === "GLOBAL" ? (language === "ar" ? "سحب مناسبة عامة" : "Withdraw global event") : (language === "ar" ? "سحب حدث الشركة" : "Withdraw company event")} language={language} formId="decision-company-event-archive" submitLabel={language === "ar" ? "تأكيد السحب" : "Confirm withdrawal"} busy={eventArchiveBusy} error={eventArchiveError} onClose={() => !eventArchiveBusy && setEventArchive(null)}>
       <form id="decision-company-event-archive" className="decision-event-form" onSubmit={(event) => void submitEventArchive(event)}>
-        <p>{language === "ar" ? `سيُسحب الحدث «${eventArchive?.titleAr ?? ""}» من خط الزمن ولا تُحذف سجلاته.` : `“${eventArchive?.titleAr ?? ""}” will be withdrawn from the timeline; its records are not deleted.`}</p>
+        <p>{language === "ar" ? `سيُسحب الحدث «${eventArchive?.event.titleAr ?? ""}» من خط الزمن ولا تُحذف سجلاته.` : `“${eventArchive?.event.titleAr ?? ""}” will be withdrawn from the timeline; its records are not deleted.`}</p>
         <label>{language === "ar" ? "سبب السحب" : "Withdrawal reason"}<textarea required minLength={3} maxLength={500} value={eventArchiveReason} onChange={(event) => setEventArchiveReason(event.target.value)} /></label>
       </form>
     </BaseerFormDialog>
@@ -286,8 +315,8 @@ function SalesComparisonCard({ language, comparison }: { language: Language; com
   return <BaseerCard className="decision-workspace__notice decision-sales-comparison"><header className="decision-card__header"><div><h3>{weekday ? (language === "ar" ? "مقارنة اليوم نفسه من الأسبوع السابق" : "Same weekday, previous week") : (language === "ar" ? "مقارنة المبيعات بالفترة السابقة المماثلة" : "Sales compared with the previous equal period")}</h3><p>{weekday ? (language === "ar" ? "قراءة يومية فقط تقارن التاريخ المختار بالتاريخ نفسه قبل سبعة أيام. لا تثبت السبب." : "A daily-only read comparing the selected date with the same weekday seven days earlier. It does not prove cause.") : (language === "ar" ? "نفس عدد الأيام مباشرة قبل الفترة المحددة. هذه قراءة وصفية وليست إثباتاً للسبب." : "The same number of days immediately before the selected period. This is descriptive, not proof of cause.")}</p></div><BaseerStatusBadge tone={qualityTone[comparison.dataQuality]}>{qualityCopy[language][comparison.dataQuality]}</BaseerStatusBadge></header>{ready ? <BaseerSummaryMetricGrid ariaLabel={language === "ar" ? "مقارنة المبيعات" : "Sales comparison"}><BaseerSummaryMetric label={language === "ar" ? "الفترة الحالية" : "Current period"} value={formatMoney(comparison.payload.currentNetAmount)} /><BaseerSummaryMetric label={language === "ar" ? "الفترة السابقة" : "Previous period"} value={formatMoney(comparison.payload.comparisonNetAmount)} /><BaseerSummaryMetric label={language === "ar" ? `الفرق (${direction})` : `${direction} difference`} value={formatMoney(comparison.payload.differenceNetAmount)} /><BaseerSummaryMetric label={language === "ar" ? "نسبة التغير" : "Change rate"} value={comparison.payload.percentDifference === null ? "—" : `${comparison.payload.percentDifference}%`} /></BaseerSummaryMetricGrid> : <p>{language === "ar" ? "لا يصدر المركز حكماً عن التغير لأن إحدى الفترتين ناقصة أو غير متاحة. راجع جودة البيانات أولاً." : "The center does not judge the change because one period is incomplete or unavailable. Review data quality first."}</p>}</BaseerCard>;
 }
 
-function TimelinePanel({ language, events, companyEvents, globalEvents, canManage, onCreate, onArchive }: { language: Language; events: TimelineEvent[]; companyEvents: TimelineEvent[]; globalEvents: TimelineEvent[]; canManage: boolean; onCreate: () => void; onArchive: (event: TimelineEvent) => void }) {
-  return <div className="decision-workspace__stack"><BaseerCard className="decision-timeline-intro"><div><h3>{language === "ar" ? "خط الزمن والسياق" : "Timeline and context"}</h3><p>{language === "ar" ? "تظهر أحداث المنطقة فقط للشركات التي حفظت رمز موقعها المطابق؛ أحداث الشركة لا تعدّل الحقيقة المالية ولا تتحول إلى سبب تلقائياً." : "Area events appear only to companies with a matching saved location code; company events never alter financial facts or become automatic causes."}</p></div>{canManage && <BaseerButton type="button" onClick={onCreate}>{language === "ar" ? "إضافة حدث للشركة" : "Add company event"}</BaseerButton>}</BaseerCard><BaseerSummaryMetricGrid><BaseerSummaryMetric label={language === "ar" ? "كل الأحداث" : "All events"} value={events.length} /><BaseerSummaryMetric label={language === "ar" ? "أحداث الشركة" : "Company events"} value={companyEvents.length} /><BaseerSummaryMetric label={language === "ar" ? "مناسبات عامة/منطقة" : "Public or area events"} value={globalEvents.length} /></BaseerSummaryMetricGrid>{events.length ? <ol className="decision-timeline">{events.map((item) => <li key={`${item.scope}-${item.id}`}><span className={`decision-timeline__scope is-${item.scope.toLowerCase()}`}>{timelineScopeLabel(language, item.scope)}</span><div><strong>{item.titleAr}</strong><small>{item.startsOn} — {item.endsOn} · {item.eventKind}{item.locationLabelAr ? ` · ${item.locationLabelAr}` : ""}</small></div><BaseerStatusBadge tone={item.verificationStatus === "SYSTEM_RECONCILED" ? "success" : "neutral"}>{item.verificationStatus === "SYSTEM_RECONCILED" ? (language === "ar" ? "موثق" : "Reconciled") : (language === "ar" ? "مسجل" : "Recorded")}</BaseerStatusBadge>{canManage && item.scope === "COMPANY" && <BaseerButton type="button" variant="quiet" onClick={() => onArchive(item)}>{language === "ar" ? "سحب" : "Withdraw"}</BaseerButton>}</li>)}</ol> : <Empty language={language} message={language === "ar" ? "لا توجد مناسبات أو أحداث ضمن الفترة المحددة." : "There are no events in the selected period."} />}</div>;
+function TimelinePanel({ language, events, companyEvents, globalEvents, canManage, canManageGlobal, onCreate, onEditCompany, onCreateGlobal, onEditGlobal, onArchive }: { language: Language; events: TimelineEvent[]; companyEvents: TimelineEvent[]; globalEvents: TimelineEvent[]; canManage: boolean; canManageGlobal: boolean; onCreate: () => void; onEditCompany: (event: TimelineEvent) => void; onCreateGlobal: () => void; onEditGlobal: (event: TimelineEvent) => void; onArchive: (event: TimelineEvent, scope: "COMPANY" | "GLOBAL") => void }) {
+  return <div className="decision-workspace__stack"><BaseerCard className="decision-timeline-intro"><div><h3>{language === "ar" ? "خط الزمن والسياق" : "Timeline and context"}</h3><p>{language === "ar" ? "تظهر أحداث المنطقة فقط للشركات التي حفظت رمز موقعها المطابق؛ أحداث الشركة لا تعدّل الحقيقة المالية ولا تتحول إلى سبب تلقائياً." : "Area events appear only to companies with a matching saved location code; company events never alter financial facts or become automatic causes."}</p></div><footer>{canManage && <BaseerButton type="button" onClick={onCreate}>{language === "ar" ? "إضافة حدث للشركة" : "Add company event"}</BaseerButton>}{canManageGlobal && <BaseerButton type="button" variant="secondary" onClick={onCreateGlobal}>{language === "ar" ? "إضافة مناسبة عامة" : "Add global event"}</BaseerButton>}</footer></BaseerCard><BaseerSummaryMetricGrid><BaseerSummaryMetric label={language === "ar" ? "كل الأحداث" : "All events"} value={events.length} /><BaseerSummaryMetric label={language === "ar" ? "أحداث الشركة" : "Company events"} value={companyEvents.length} /><BaseerSummaryMetric label={language === "ar" ? "مناسبات عامة/منطقة" : "Public or area events"} value={globalEvents.length} /></BaseerSummaryMetricGrid>{events.length ? <ol className="decision-timeline">{events.map((item) => <li key={`${item.scope}-${item.id}`}><span className={`decision-timeline__scope is-${item.scope.toLowerCase()}`}>{timelineScopeLabel(language, item.scope)}</span><div><strong>{item.titleAr}</strong><small>{item.startsOn} — {item.endsOn} · {item.eventKind}{item.locationLabelAr ? ` · ${item.locationLabelAr}` : ""}</small></div><BaseerStatusBadge tone={item.verificationStatus === "SYSTEM_RECONCILED" ? "success" : "neutral"}>{item.verificationStatus === "SYSTEM_RECONCILED" ? (language === "ar" ? "موثق" : "Reconciled") : (language === "ar" ? "مسجل" : "Recorded")}</BaseerStatusBadge>{canManage && item.scope === "COMPANY" && <footer><BaseerButton type="button" variant="quiet" onClick={() => onEditCompany(item)}>{language === "ar" ? "تعديل" : "Edit"}</BaseerButton><BaseerButton type="button" variant="quiet" onClick={() => onArchive(item, "COMPANY")}>{language === "ar" ? "سحب" : "Withdraw"}</BaseerButton></footer>}{canManageGlobal && item.scope === "GLOBAL" && item.isManual && <footer><BaseerButton type="button" variant="quiet" onClick={() => onEditGlobal(item)}>{language === "ar" ? "تعديل" : "Edit"}</BaseerButton><BaseerButton type="button" variant="quiet" onClick={() => onArchive(item, "GLOBAL")}>{language === "ar" ? "سحب" : "Withdraw"}</BaseerButton></footer>}</li>)}</ol> : <Empty language={language} message={language === "ar" ? "لا توجد مناسبات أو أحداث ضمن الفترة المحددة." : "There are no events in the selected period."} />}</div>;
 }
 
 function timelineScopeLabel(language: Language, scope: TimelineEvent["scope"]) { if (scope === "GLOBAL") return language === "ar" ? "عام" : "Global"; if (scope === "AREA") return language === "ar" ? "منطقة" : "Area"; return language === "ar" ? "الشركة" : "Company"; }

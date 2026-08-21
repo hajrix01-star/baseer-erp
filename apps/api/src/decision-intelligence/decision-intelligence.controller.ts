@@ -1,7 +1,9 @@
 import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
 import {
   archiveDecisionCompanyContextEventRequestSchema,
+  archiveDecisionGlobalContextEventRequestSchema,
   createDecisionCompanyContextEventRequestSchema,
+  createDecisionGlobalContextEventRequestSchema,
   decisionAlertFeedbackRequestSchema,
   decisionAlertListQuerySchema,
   decisionContextCandidateListQuerySchema,
@@ -11,6 +13,8 @@ import {
   runDecisionSalesChangeEvaluationRequestSchema,
   runDecisionSalesQualityEvaluationRequestSchema,
   updateDecisionAlertStatusRequestSchema,
+  updateDecisionCompanyContextEventRequestSchema,
+  updateDecisionGlobalContextEventRequestSchema,
   updateDecisionSalesChangePolicyRequestSchema,
 } from "@baseer-erp/contracts";
 
@@ -125,6 +129,37 @@ export class DecisionIntelligenceController {
     const parsed = archiveDecisionCompanyContextEventRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException("Invalid company context-event archive request.");
     return this.decisions.archiveCompanyEvent(await this.context(authorization, companyId, CONTEXT_COMPANY_MANAGE), eventId, parsed.data.reason, parsed.data.idempotencyKey);
+  }
+
+  @Put("context/company-events/:eventId")
+  async updateCompanyEvent(@Param("eventId") eventId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = updateDecisionCompanyContextEventRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid company context-event update.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.decisions.updateCompanyEvent(await this.context(authorization, companyId, CONTEXT_COMPANY_MANAGE), eventId, input, idempotencyKey);
+  }
+
+  @Post("context/global-events")
+  async createGlobalEvent(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = createDecisionGlobalContextEventRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid global context-event request.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.decisions.createManualGlobalEvent(await this.context(authorization, companyId, "decision.context.global.manage"), input, idempotencyKey);
+  }
+
+  @Put("context/global-events/:eventId")
+  async updateGlobalEvent(@Param("eventId") eventId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = updateDecisionGlobalContextEventRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid global context-event update.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.decisions.updateManualGlobalEvent(await this.context(authorization, companyId, "decision.context.global.manage"), eventId, input, idempotencyKey);
+  }
+
+  @Post("context/global-events/:eventId/archive")
+  async archiveGlobalEvent(@Param("eventId") eventId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = archiveDecisionGlobalContextEventRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid global context-event archive request.");
+    return this.decisions.archiveManualGlobalEvent(await this.context(authorization, companyId, "decision.context.global.manage"), eventId, parsed.data.reason, parsed.data.idempotencyKey);
   }
 
   @Get("alerts")
