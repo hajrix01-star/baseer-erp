@@ -84,7 +84,23 @@ export type CalendarDay = {
   salesGrossAmount: string;
   customerCount: number;
 };
-export type ActiveSession = { accessToken: string; companyId: string };
+export type AuthSessionReceipt = {
+  accessToken: string;
+  refreshToken: string;
+  sessionExpiresAt: string;
+  user: {
+    id: string;
+    nameAr: string;
+    nameEn: string;
+    preferredLanguage: string;
+  };
+};
+export type ActiveSession = {
+  accessToken: string;
+  refreshToken: string;
+  sessionExpiresAt: string;
+  companyId: string;
+};
 export type AvailableCompany = {
   id: string;
   nameAr: string;
@@ -105,8 +121,11 @@ export type DayOffReason =
   "WEEKLY_CLOSURE" | "HOLIDAY" | "MAINTENANCE" | "EMERGENCY" | "OTHER";
 
 const tokenStorageKey = "baseer.erp.access-token";
+const refreshTokenStorageKey = "baseer.erp.refresh-token";
+const sessionExpiryStorageKey = "baseer.erp.session-expires-at";
 const companyStorageKey = "baseer.erp.company-id";
 let sessionExpiryReloadScheduled = false;
+let refreshInFlight: Promise<ActiveSession | null> | null = null;
 export const baseerApiBaseUrl = (
   import.meta.env.VITE_BASEER_API_URL ?? "/v1"
 ).replace(/\/$/, "");
@@ -175,12 +194,26 @@ export function initialFormForVaults(vaults: readonly Vault[]): FormState {
 }
 export function activeSession(): ActiveSession | null {
   const accessToken = sessionStorage.getItem(tokenStorageKey);
+  const refreshToken = sessionStorage.getItem(refreshTokenStorageKey);
+  const sessionExpiresAt = sessionStorage.getItem(sessionExpiryStorageKey);
   const companyId = sessionStorage.getItem(companyStorageKey);
-  return accessToken && companyId ? { accessToken, companyId } : null;
+  return accessToken && refreshToken && sessionExpiresAt && companyId
+    ? { accessToken, refreshToken, sessionExpiresAt, companyId }
+    : null;
+}
+
+/** Stores the complete rotating token pair. Access tokens alone are not sessions. */
+export function persistActiveSession(receipt: AuthSessionReceipt, companyId: string): void {
+  sessionStorage.setItem(tokenStorageKey, receipt.accessToken);
+  sessionStorage.setItem(refreshTokenStorageKey, receipt.refreshToken);
+  sessionStorage.setItem(sessionExpiryStorageKey, receipt.sessionExpiresAt);
+  sessionStorage.setItem(companyStorageKey, companyId);
 }
 
 export function clearActiveSession(): void {
   sessionStorage.removeItem(tokenStorageKey);
+  sessionStorage.removeItem(refreshTokenStorageKey);
+  sessionStorage.removeItem(sessionExpiryStorageKey);
   sessionStorage.removeItem(companyStorageKey);
 }
 
@@ -221,6 +254,27 @@ export async function api<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
+  try {
+    return await requestWithSession<T>(session, path, options);
+  } catch (error) {
+    if (!(error instanceof BaseerApiError) || error.status !== 401) throw error;
+    const refreshed = await refreshSessionOnce(session.accessToken);
+    if (!refreshed) throw error;
+    try {
+      return await requestWithSession<T>(refreshed, path, options);
+    } catch (retryError) {
+      // A new access token was rejected as well: the session is no longer valid.
+      if (retryError instanceof BaseerApiError && retryError.status === 401) clearExpiredSession();
+      throw retryError;
+    }
+  }
+}
+
+async function requestWithSession<T>(
+  session: ActiveSession,
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
   const response = await fetch(`${baseerApiBaseUrl}${path}`, {
     ...options,
     // Financial workspace receipts are live, company-scoped data. Never let a
@@ -233,11 +287,44 @@ export async function api<T>(
       ...(options?.headers ?? {}),
     },
   });
+  return parseBaseerApiResponse<T>(response);
+}
+
+/**
+ * Uses one shared refresh request for all 401s caused by an expired access
+ * token, rotates the pair, then lets each request retry once. A network or
+ * server failure intentionally leaves the local session intact; only a failed
+ * refresh authentication clears it.
+ */
+async function refreshSessionOnce(staleAccessToken: string): Promise<ActiveSession | null> {
+  const current = activeSession();
+  if (!current) return null;
+  if (current.accessToken !== staleAccessToken) return current;
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = (async () => {
+    const beforeRefresh = activeSession();
+    if (!beforeRefresh) return null;
+    if (beforeRefresh.accessToken !== staleAccessToken) return beforeRefresh;
+    const response = await fetch(`${baseerApiBaseUrl}/auth/refresh`, {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: beforeRefresh.refreshToken }),
+    });
+    try {
+      const receipt = await parseBaseerApiResponse<AuthSessionReceipt>(response);
+      persistActiveSession(receipt, beforeRefresh.companyId);
+      return activeSession();
+    } catch (error) {
+      if (error instanceof BaseerApiError && error.status === 401) {
+        clearExpiredSession();
+        return null;
+      }
+      throw error;
+    }
+  })();
   try {
-    return await parseBaseerApiResponse<T>(response);
-  } catch (error) {
-    if (error instanceof BaseerApiError && error.status === 401)
-      clearExpiredSession();
-    throw error;
+    return await refreshInFlight;
+  } finally {
+    refreshInFlight = null;
   }
 }

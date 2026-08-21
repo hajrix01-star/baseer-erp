@@ -272,6 +272,8 @@ export type OperationsRecipeVersionWhereInput = {
   outputItem?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   outputUnit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
   lines?: Prisma.OperationsRecipeLineListRelationFilter
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }
 
 export type OperationsRecipeVersionOrderByWithRelationInput = {
@@ -290,6 +292,8 @@ export type OperationsRecipeVersionOrderByWithRelationInput = {
   outputItem?: Prisma.OperationsItemOrderByWithRelationInput
   outputUnit?: Prisma.OperationsUnitOrderByWithRelationInput
   lines?: Prisma.OperationsRecipeLineOrderByRelationAggregateInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineOrderByRelationAggregateInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionOrderByRelationAggregateInput
 }
 
 export type OperationsRecipeVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -313,6 +317,8 @@ export type OperationsRecipeVersionWhereUniqueInput = Prisma.AtLeast<{
   outputItem?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   outputUnit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
   lines?: Prisma.OperationsRecipeLineListRelationFilter
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }, "id" | "id_tenantId_companyId" | "outputItemId_version">
 
 export type OperationsRecipeVersionOrderByWithAggregationInput = {
@@ -363,6 +369,8 @@ export type OperationsRecipeVersionCreateInput = {
   outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
   outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
   lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUncheckedCreateInput = {
@@ -378,6 +386,8 @@ export type OperationsRecipeVersionUncheckedCreateInput = {
   publishedAt?: Date | string
   createdAt?: Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUpdateInput = {
@@ -392,6 +402,8 @@ export type OperationsRecipeVersionUpdateInput = {
   outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
   outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
   lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateInput = {
@@ -407,6 +419,8 @@ export type OperationsRecipeVersionUncheckedUpdateInput = {
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionCreateManyInput = {
@@ -455,6 +469,16 @@ export type OperationsRecipeVersionListRelationFilter = {
 
 export type OperationsRecipeVersionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type OperationsRecipeVersionNullableScalarRelationFilter = {
+  is?: Prisma.OperationsRecipeVersionWhereInput | null
+  isNot?: Prisma.OperationsRecipeVersionWhereInput | null
+}
+
+export type OperationsRecipeVersionScalarRelationFilter = {
+  is?: Prisma.OperationsRecipeVersionWhereInput
+  isNot?: Prisma.OperationsRecipeVersionWhereInput
 }
 
 export type OperationsRecipeVersionIdTenantIdCompanyIdCompoundUniqueInput = {
@@ -518,11 +542,6 @@ export type OperationsRecipeVersionMinOrderByAggregateInput = {
 export type OperationsRecipeVersionSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
-}
-
-export type OperationsRecipeVersionScalarRelationFilter = {
-  is?: Prisma.OperationsRecipeVersionWhereInput
-  isNot?: Prisma.OperationsRecipeVersionWhereInput
 }
 
 export type OperationsRecipeVersionCreateNestedManyWithoutCompanyInput = {
@@ -651,6 +670,36 @@ export type OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemNestedInp
   deleteMany?: Prisma.OperationsRecipeVersionScalarWhereInput | Prisma.OperationsRecipeVersionScalarWhereInput[]
 }
 
+export type OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput = {
+  create?: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationLinesInput>
+  connectOrCreate?: Prisma.OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationLinesInput
+  connect?: Prisma.OperationsRecipeVersionWhereUniqueInput
+}
+
+export type OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationLinesInput>
+  connectOrCreate?: Prisma.OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationLinesInput
+  upsert?: Prisma.OperationsRecipeVersionUpsertWithoutInternalRegistrationLinesInput
+  disconnect?: Prisma.OperationsRecipeVersionWhereInput | boolean
+  delete?: Prisma.OperationsRecipeVersionWhereInput | boolean
+  connect?: Prisma.OperationsRecipeVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsRecipeVersionUpdateToOneWithWhereWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationLinesInput>, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationLinesInput>
+}
+
+export type OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationConsumptionsInput = {
+  create?: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationConsumptionsInput
+  connect?: Prisma.OperationsRecipeVersionWhereUniqueInput
+}
+
+export type OperationsRecipeVersionUpdateOneRequiredWithoutInternalRegistrationConsumptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationConsumptionsInput
+  upsert?: Prisma.OperationsRecipeVersionUpsertWithoutInternalRegistrationConsumptionsInput
+  connect?: Prisma.OperationsRecipeVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsRecipeVersionUpdateToOneWithWhereWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationConsumptionsInput>, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+}
+
 export type EnumOperationsRecipeVersionStatusFieldUpdateOperationsInput = {
   set?: $Enums.OperationsRecipeVersionStatus
 }
@@ -680,6 +729,8 @@ export type OperationsRecipeVersionCreateWithoutCompanyInput = {
   outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
   outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
   lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUncheckedCreateWithoutCompanyInput = {
@@ -693,6 +744,8 @@ export type OperationsRecipeVersionUncheckedCreateWithoutCompanyInput = {
   publishedAt?: Date | string
   createdAt?: Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionCreateOrConnectWithoutCompanyInput = {
@@ -749,6 +802,8 @@ export type OperationsRecipeVersionCreateWithoutOutputUnitInput = {
   company: Prisma.CompanyCreateNestedOneWithoutOperationsRecipeVersionsInput
   outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
   lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUncheckedCreateWithoutOutputUnitInput = {
@@ -761,6 +816,8 @@ export type OperationsRecipeVersionUncheckedCreateWithoutOutputUnitInput = {
   publishedAt?: Date | string
   createdAt?: Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionCreateOrConnectWithoutOutputUnitInput = {
@@ -800,6 +857,8 @@ export type OperationsRecipeVersionCreateWithoutOutputItemInput = {
   company: Prisma.CompanyCreateNestedOneWithoutOperationsRecipeVersionsInput
   outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
   lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUncheckedCreateWithoutOutputItemInput = {
@@ -812,6 +871,8 @@ export type OperationsRecipeVersionUncheckedCreateWithoutOutputItemInput = {
   publishedAt?: Date | string
   createdAt?: Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionCreateOrConnectWithoutOutputItemInput = {
@@ -840,6 +901,162 @@ export type OperationsRecipeVersionUpdateManyWithWhereWithoutOutputItemInput = {
   data: Prisma.XOR<Prisma.OperationsRecipeVersionUpdateManyMutationInput, Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemInput>
 }
 
+export type OperationsRecipeVersionCreateWithoutInternalRegistrationLinesInput = {
+  id?: string
+  version: number
+  outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.OperationsRecipeVersionStatus
+  publishedBy: string
+  publishedAt?: Date | string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsRecipeVersionsInput
+  outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
+  outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
+  lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
+}
+
+export type OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationLinesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  outputItemId: string
+  outputUnitId: string
+  version: number
+  outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.OperationsRecipeVersionStatus
+  publishedBy: string
+  publishedAt?: Date | string
+  createdAt?: Date | string
+  lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
+}
+
+export type OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationLinesInput = {
+  where: Prisma.OperationsRecipeVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationLinesInput>
+}
+
+export type OperationsRecipeVersionUpsertWithoutInternalRegistrationLinesInput = {
+  update: Prisma.XOR<Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationLinesInput>
+  create: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationLinesInput>
+  where?: Prisma.OperationsRecipeVersionWhereInput
+}
+
+export type OperationsRecipeVersionUpdateToOneWithWhereWithoutInternalRegistrationLinesInput = {
+  where?: Prisma.OperationsRecipeVersionWhereInput
+  data: Prisma.XOR<Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationLinesInput, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationLinesInput>
+}
+
+export type OperationsRecipeVersionUpdateWithoutInternalRegistrationLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumOperationsRecipeVersionStatusFieldUpdateOperationsInput | $Enums.OperationsRecipeVersionStatus
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsRecipeVersionsNestedInput
+  outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
+  outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
+  lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
+}
+
+export type OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumOperationsRecipeVersionStatusFieldUpdateOperationsInput | $Enums.OperationsRecipeVersionStatus
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
+}
+
+export type OperationsRecipeVersionCreateWithoutInternalRegistrationConsumptionsInput = {
+  id?: string
+  version: number
+  outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.OperationsRecipeVersionStatus
+  publishedBy: string
+  publishedAt?: Date | string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsRecipeVersionsInput
+  outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
+  outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
+  lines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+}
+
+export type OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationConsumptionsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  outputItemId: string
+  outputUnitId: string
+  version: number
+  outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.OperationsRecipeVersionStatus
+  publishedBy: string
+  publishedAt?: Date | string
+  createdAt?: Date | string
+  lines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+}
+
+export type OperationsRecipeVersionCreateOrConnectWithoutInternalRegistrationConsumptionsInput = {
+  where: Prisma.OperationsRecipeVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+}
+
+export type OperationsRecipeVersionUpsertWithoutInternalRegistrationConsumptionsInput = {
+  update: Prisma.XOR<Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+  create: Prisma.XOR<Prisma.OperationsRecipeVersionCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  where?: Prisma.OperationsRecipeVersionWhereInput
+}
+
+export type OperationsRecipeVersionUpdateToOneWithWhereWithoutInternalRegistrationConsumptionsInput = {
+  where?: Prisma.OperationsRecipeVersionWhereInput
+  data: Prisma.XOR<Prisma.OperationsRecipeVersionUpdateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+}
+
+export type OperationsRecipeVersionUpdateWithoutInternalRegistrationConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumOperationsRecipeVersionStatusFieldUpdateOperationsInput | $Enums.OperationsRecipeVersionStatus
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsRecipeVersionsNestedInput
+  outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
+  outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
+  lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+}
+
+export type OperationsRecipeVersionUncheckedUpdateWithoutInternalRegistrationConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumOperationsRecipeVersionStatusFieldUpdateOperationsInput | $Enums.OperationsRecipeVersionStatus
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+}
+
 export type OperationsRecipeVersionCreateWithoutLinesInput = {
   id?: string
   version: number
@@ -851,6 +1068,8 @@ export type OperationsRecipeVersionCreateWithoutLinesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutOperationsRecipeVersionsInput
   outputItem: Prisma.OperationsItemCreateNestedOneWithoutRecipeOutputsInput
   outputUnit: Prisma.OperationsUnitCreateNestedOneWithoutRecipeOutputsInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionUncheckedCreateWithoutLinesInput = {
@@ -865,6 +1084,8 @@ export type OperationsRecipeVersionUncheckedCreateWithoutLinesInput = {
   publishedBy: string
   publishedAt?: Date | string
   createdAt?: Date | string
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRecipeVersionInput
 }
 
 export type OperationsRecipeVersionCreateOrConnectWithoutLinesInput = {
@@ -894,6 +1115,8 @@ export type OperationsRecipeVersionUpdateWithoutLinesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsRecipeVersionsNestedInput
   outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
   outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateWithoutLinesInput = {
@@ -908,6 +1131,8 @@ export type OperationsRecipeVersionUncheckedUpdateWithoutLinesInput = {
   publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionCreateManyCompanyInput = {
@@ -933,6 +1158,8 @@ export type OperationsRecipeVersionUpdateWithoutCompanyInput = {
   outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
   outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
   lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateWithoutCompanyInput = {
@@ -946,6 +1173,8 @@ export type OperationsRecipeVersionUncheckedUpdateWithoutCompanyInput = {
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyInput = {
@@ -982,6 +1211,8 @@ export type OperationsRecipeVersionUpdateWithoutOutputUnitInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsRecipeVersionsNestedInput
   outputItem?: Prisma.OperationsItemUpdateOneRequiredWithoutRecipeOutputsNestedInput
   lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateWithoutOutputUnitInput = {
@@ -994,6 +1225,8 @@ export type OperationsRecipeVersionUncheckedUpdateWithoutOutputUnitInput = {
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateManyWithoutOutputUnitInput = {
@@ -1029,6 +1262,8 @@ export type OperationsRecipeVersionUpdateWithoutOutputItemInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsRecipeVersionsNestedInput
   outputUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
   lines?: Prisma.OperationsRecipeLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateWithoutOutputItemInput = {
@@ -1041,6 +1276,8 @@ export type OperationsRecipeVersionUncheckedUpdateWithoutOutputItemInput = {
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRecipeVersionNestedInput
 }
 
 export type OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemInput = {
@@ -1061,10 +1298,14 @@ export type OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemInput = {
 
 export type OperationsRecipeVersionCountOutputType = {
   lines: number
+  internalRegistrationLines: number
+  internalRegistrationConsumptions: number
 }
 
 export type OperationsRecipeVersionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lines?: boolean | OperationsRecipeVersionCountOutputTypeCountLinesArgs
+  internalRegistrationLines?: boolean | OperationsRecipeVersionCountOutputTypeCountInternalRegistrationLinesArgs
+  internalRegistrationConsumptions?: boolean | OperationsRecipeVersionCountOutputTypeCountInternalRegistrationConsumptionsArgs
 }
 
 /**
@@ -1084,6 +1325,20 @@ export type OperationsRecipeVersionCountOutputTypeCountLinesArgs<ExtArgs extends
   where?: Prisma.OperationsRecipeLineWhereInput
 }
 
+/**
+ * OperationsRecipeVersionCountOutputType without action
+ */
+export type OperationsRecipeVersionCountOutputTypeCountInternalRegistrationLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationLineWhereInput
+}
+
+/**
+ * OperationsRecipeVersionCountOutputType without action
+ */
+export type OperationsRecipeVersionCountOutputTypeCountInternalRegistrationConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+}
+
 
 export type OperationsRecipeVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1101,6 +1356,8 @@ export type OperationsRecipeVersionSelect<ExtArgs extends runtime.Types.Extensio
   outputItem?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   outputUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.OperationsRecipeVersion$linesArgs<ExtArgs>
+  internalRegistrationLines?: boolean | Prisma.OperationsRecipeVersion$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptions?: boolean | Prisma.OperationsRecipeVersion$internalRegistrationConsumptionsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsRecipeVersionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsRecipeVersion"]>
 
@@ -1158,6 +1415,8 @@ export type OperationsRecipeVersionInclude<ExtArgs extends runtime.Types.Extensi
   outputItem?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   outputUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.OperationsRecipeVersion$linesArgs<ExtArgs>
+  internalRegistrationLines?: boolean | Prisma.OperationsRecipeVersion$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptions?: boolean | Prisma.OperationsRecipeVersion$internalRegistrationConsumptionsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsRecipeVersionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationsRecipeVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1178,6 +1437,8 @@ export type $OperationsRecipeVersionPayload<ExtArgs extends runtime.Types.Extens
     outputItem: Prisma.$OperationsItemPayload<ExtArgs>
     outputUnit: Prisma.$OperationsUnitPayload<ExtArgs>
     lines: Prisma.$OperationsRecipeLinePayload<ExtArgs>[]
+    internalRegistrationLines: Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>[]
+    internalRegistrationConsumptions: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1589,6 +1850,8 @@ export interface Prisma__OperationsRecipeVersionClient<T, Null = never, ExtArgs 
   outputItem<T extends Prisma.OperationsItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItemDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsItemClient<runtime.Types.Result.GetResult<Prisma.$OperationsItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   outputUnit<T extends Prisma.OperationsUnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnitDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsUnitClient<runtime.Types.Result.GetResult<Prisma.$OperationsUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lines<T extends Prisma.OperationsRecipeVersion$linesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsRecipeVersion$linesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsRecipeLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  internalRegistrationLines<T extends Prisma.OperationsRecipeVersion$internalRegistrationLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsRecipeVersion$internalRegistrationLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  internalRegistrationConsumptions<T extends Prisma.OperationsRecipeVersion$internalRegistrationConsumptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsRecipeVersion$internalRegistrationConsumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2051,6 +2314,54 @@ export type OperationsRecipeVersion$linesArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.OperationsRecipeLineScalarFieldEnum | Prisma.OperationsRecipeLineScalarFieldEnum[]
+}
+
+/**
+ * OperationsRecipeVersion.internalRegistrationLines
+ */
+export type OperationsRecipeVersion$internalRegistrationLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationLine
+   */
+  select?: Prisma.OperationsInternalRegistrationLineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationLine
+   */
+  omit?: Prisma.OperationsInternalRegistrationLineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationLineInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationLineWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationLineOrderByWithRelationInput | Prisma.OperationsInternalRegistrationLineOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationLineScalarFieldEnum | Prisma.OperationsInternalRegistrationLineScalarFieldEnum[]
+}
+
+/**
+ * OperationsRecipeVersion.internalRegistrationConsumptions
+ */
+export type OperationsRecipeVersion$internalRegistrationConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput | Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationConsumptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum | Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum[]
 }
 
 /**

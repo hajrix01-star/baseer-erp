@@ -97,6 +97,8 @@ export class FinanceAccountsService {
         description: line.description ?? line.journalEntry.description,
         debitAmount: line.debitAmount.toFixed(4),
         creditAmount: line.creditAmount.toFixed(4),
+        reversalOfEntryId: line.journalEntry.reversalOfEntryId,
+        reversalEntryId: line.journalEntry.reversalEntry?.id ?? null,
       }; });
       return {
         account: accountReceipt(account, amount),
@@ -158,6 +160,7 @@ export class FinanceAccountsService {
 const accountSelect = { id: true, code: true, nameAr: true, nameEn: true, type: true, status: true, isSystem: true } satisfies Prisma.FinanceAccountSelect;
 const journalPresentationSelect = {
   id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, status: true, postedAt: true, reversalOfEntryId: true,
+  reversalEntry: { select: { id: true } },
   hrPayrollAccrual: { select: { runNumber: true } },
   hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
   hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },

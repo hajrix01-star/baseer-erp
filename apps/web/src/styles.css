@@ -1270,7 +1270,7 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
   .baseer-batch-footer { align-items: stretch; flex-direction: column; margin-top: .85rem; padding-top: .85rem; background: transparent; box-shadow: none; }
   .baseer-batch-footer > div:last-child { display: grid; grid-template-columns: 1fr 1fr; }
   .baseer-batch-footer > div:last-child > .baseer-button { width: 100%; }
-  .purchase-invoice-history { margin: 1.25rem 1rem 0; }
+  .purchase-invoice-history { margin: 1.25rem 0 0; }
   .baseer-batch-entry-table { display: none; }
   .baseer-batch-entry-mobile { display: grid; gap: .75rem; }
   .baseer-batch-entry-mobile__card { overflow: clip; border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); box-shadow: 0 5px 16px rgb(20 44 33 / 5%); }

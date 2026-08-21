@@ -14,6 +14,8 @@ export const baseerLoginCopy = defineLocalizedCopy({
     noCompanies: "لا توجد شركة متاحة لهذا المستخدم.",
     other: "استخدام حساب آخر",
     failed: "تعذر تسجيل الدخول. تحقق من بياناتك ثم أعد المحاولة.",
+    sessionSetupFailed: "تم التحقق من بيانات الدخول، لكن تعذر فتح مساحة العمل. أعد المحاولة لاحقاً.",
+    serviceUnavailable: "الخدمة غير متاحة حالياً. أعد المحاولة لاحقاً.",
     switchLanguage: "English",
   },
   en: {
@@ -29,6 +31,8 @@ export const baseerLoginCopy = defineLocalizedCopy({
     noCompanies: "No company is available for this user.",
     other: "Use another account",
     failed: "Could not sign in. Check your details and try again.",
+    sessionSetupFailed: "Your sign-in was verified, but the workspace could not be opened. Please try again shortly.",
+    serviceUnavailable: "The service is temporarily unavailable. Please try again shortly.",
     switchLanguage: "العربية",
   },
 });

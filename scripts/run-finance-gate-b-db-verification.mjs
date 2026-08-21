@@ -356,7 +356,7 @@ async function loadServices() {
     recurring: new RecurringExpenseService(database, idempotency),
     documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates, new HrService(database, idempotency, businessDates), cashEvents),
     masterData: new FinanceMasterDataService(database, idempotency),
-    treasury: new TreasuryService(database, idempotency, journals, new FinanceVaultService(), businessDates),
+    treasury: new TreasuryService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
   };
 }
 

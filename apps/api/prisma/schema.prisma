@@ -234,7 +234,6 @@ enum FinanceCashPerformanceDirection {
   OUTFLOW
 }
 
-
 enum FinanceVatSettlementKind {
   PAYMENT
   REFUND
@@ -578,6 +577,7 @@ enum OperationsCustodyEventType {
 enum OperationsInventoryMovementType {
   RECEIPT
   REVERSAL
+  INTERNAL_CONSUMPTION
 }
 
 model Tenant {
@@ -613,17 +613,17 @@ model User {
   createdAt         DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
 
-  tenant                             Tenant                           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  tenant                             Tenant                                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   memberships                        CompanyMembership[]
   sessions                           AppSession[]
   auditEvents                        AuditEvent[]
   idempotencyReceipts                IdempotencyReceipt[]
-  createdFileMetadata                FileMetadata[]                   @relation("FileMetadataCreator")
+  createdFileMetadata                FileMetadata[]                           @relation("FileMetadataCreator")
   createdJournalEntries              FinanceJournalEntry[]
   outflowDocumentRevisions           FinanceOutflowDocumentRevision[]
   createdReportRuns                  ReportRun[]
-  createdReportDocuments             ReportDocument[] @relation("ReportDocumentCreator")
-  cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[] @relation("FinanceCashPerformanceCoverageActivator")
+  createdReportDocuments             ReportDocument[]                         @relation("ReportDocumentCreator")
+  cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[]         @relation("FinanceCashPerformanceCoverageActivator")
   cashPerformanceHistoricalImports   FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
   tenantAdministrationAssignments    TenantAdministrationAssignment[]
 
@@ -633,115 +633,116 @@ model User {
 }
 
 model Company {
-  id               String        @id @default(uuid()) @db.Uuid
-  tenantId         String        @db.Uuid
-  nameAr           String        @db.VarChar(160)
-  nameEn           String        @db.VarChar(160)
-  businessTimezone String        @default("Asia/Riyadh") @db.VarChar(64)
-  contextLocationCode String?    @db.VarChar(80)
-  contextLocationLabelAr String? @db.VarChar(160)
-  contextLatitude   Decimal?     @db.Decimal(9, 6)
-  contextLongitude  Decimal?     @db.Decimal(9, 6)
-  status           CompanyStatus @default(ACTIVE)
-  createdAt        DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime      @updatedAt @db.Timestamptz(6)
+  id                     String        @id @default(uuid()) @db.Uuid
+  tenantId               String        @db.Uuid
+  nameAr                 String        @db.VarChar(160)
+  nameEn                 String        @db.VarChar(160)
+  businessTimezone       String        @default("Asia/Riyadh") @db.VarChar(64)
+  contextLocationCode    String?       @db.VarChar(80)
+  contextLocationLabelAr String?       @db.VarChar(160)
+  contextLatitude        Decimal?      @db.Decimal(9, 6)
+  contextLongitude       Decimal?      @db.Decimal(9, 6)
+  status                 CompanyStatus @default(ACTIVE)
+  createdAt              DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime      @updatedAt @db.Timestamptz(6)
 
-  tenant                                   Tenant                                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  memberships                              CompanyMembership[]
-  audits                                   AuditEvent[]
-  idempotencyReceipts                      IdempotencyReceipt[]
-  documentSerialCounters                   DocumentSerialCounter[]
-  fileMetadata                             FileMetadata[]
-  financeProfile                           CompanyFinanceProfile?
-  financeAccounts                          FinanceAccount[]
-  financeCategories                        FinanceCategory[]
-  financeSuppliers                         FinanceSupplier[]
-  financeFiscalPeriods                     FinanceFiscalPeriod[]
-  financeVaults                            FinanceVault[]
-  financeVaultReconciliations              FinanceVaultReconciliation[]
-  financeSupplierDues                      FinanceSupplierDue[]
-  financeSupplierDuePayments               FinanceSupplierDuePayment[]
-  financeJournalEntries                    FinanceJournalEntry[]
-  financeJournalLines                      FinanceJournalLine[]
-  recurringExpenseProfiles                 FinanceRecurringExpenseProfile[]
-  recurringExpenseCoverages                FinanceRecurringExpenseCoverage[]
-  inclusiveLoans                           FinanceInclusiveLoan[]
-  inclusiveLoanPayments                    FinanceInclusiveLoanPayment[]
-  inclusiveLoanInstallments                FinanceInclusiveLoanInstallmentPlan[]
-  operationalDays                          FinanceOperationalDay[]
-  dailySalesClosings                       FinanceDailySalesClosing[]
-  dailySalesAllocations                    FinanceDailySalesAllocation[]
-  dailyFinancialSummaries                  FinanceDailyFinancialSummary[]
-  dailySalesChannelSummaries               FinanceDailySalesChannelSummary[]
-  outflowDocuments                         FinanceOutflowDocument[]
-  outflowDocumentRevisions                 FinanceOutflowDocumentRevision[]
-  outflowBatches                           FinanceOutflowBatch[]
-  pnlMappingVersions                       FinancePnlMappingVersion[]
-  pnlStatementLines                        FinancePnlStatementLine[]
-  pnlAccountMappings                       FinancePnlAccountMapping[]
-  ledgerRevision                           FinanceLedgerRevision?
-  reportRuns                               ReportRun[]
-  reportDocuments                          ReportDocument[]
-  cashPerformanceEvents                    FinanceCashPerformanceEvent[]
-  cashPerformanceCoverage                  FinanceCashPerformanceCoverage?
-  cashPerformanceHistoricalImports         FinanceCashPerformanceHistoricalImport[]
-  vatSettlements                           FinanceVatSettlement[]
-  hrEmployees                              HrEmployee[]
-  hrEmployeeServices                       HrEmployeeService[]
-  hrEmployeeFinancialMovements             HrEmployeeFinancialMovement[]
-  hrEmployeeAdvances                       HrEmployeeAdvance[]
-  hrEmployeeAdvanceAllocations             HrEmployeeAdvancePayoutAllocation[]
-  hrEmployeeAdvanceSettlements             HrEmployeeAdvanceSettlement[]
-  hrEmployeeAdvanceDeferrals               HrEmployeeAdvanceDeferral[]
-  hrEmployeeAdministrativeDeductions       HrEmployeeAdministrativeDeduction[]
-  hrEmployeeAdministrativeDeductionActions HrEmployeeAdministrativeDeductionAction[]
-  hrEmployeeCompensationProfiles           HrEmployeeCompensationProfile[]
-  hrEmployeePromotions                     HrEmployeePromotion[]
-  hrCompensationPolicies                   HrCompensationPolicy[]
-  hrCompensationPolicyVersions             HrCompensationPolicyVersion[]
-  hrEmployeeLeaves                         HrEmployeeLeave[]
-  hrPayrollRuns                            HrPayrollRun[]
-  hrPayrollLines                           HrPayrollLine[]
-  hrPayrollAdvanceApplications             HrPayrollAdvanceApplication[]
-  hrPayrollDeductionApplications           HrPayrollAdministrativeDeductionApplication[]
-  hrPayrollPayments                        HrPayrollPayment[]
-  hrPayrollPaymentAllocations              HrPayrollPaymentAllocation[]
-  hrEmployeeDocumentBlobs                  HrEmployeeDocumentBlob[]
-  hrEmployeeDocuments                      HrEmployeeDocument[]
-  hrEmployeeLetters                        HrEmployeeLetter[]
-  hrFinalSettlements                       HrFinalSettlement[]
-  aiCompanyIdentities                      AiCompanyIdentity[]
-  aiExecutionReceipts                      AiExecutionReceipt[]
-  decisionMetricDefinitions                DecisionMetricDefinition[]
-  decisionSalesChangePolicy                DecisionSalesChangePolicy?
-  decisionRuleDefinitions                  DecisionRuleDefinition[]
-  decisionCompanyContextEvents             DecisionCompanyContextEvent[]
-  decisionEvaluationRuns                   DecisionEvaluationRun[]
-  decisionEvidenceSnapshots                DecisionEvidenceSnapshot[]
-  decisionAlerts                           DecisionAlert[]
-  decisionAlertActions                     DecisionAlertAction[]
-  decisionFeedback                         DecisionFeedback[]
-  operationsSections                       OperationsSection[]
-  operationsUnits                          OperationsUnit[]
-  operationsItems                          OperationsItem[]
-  operationsItemUnits                      OperationsItemUnit[]
-  operationsConversionVersions             OperationsItemConversionVersion[]
-  operationsConversionEdges                OperationsItemConversionEdge[]
-  operationsRecipeVersions                 OperationsRecipeVersion[]
-  operationsRecipeLines                    OperationsRecipeLine[]
-  operationsPurchaseRequests               OperationsPurchaseRequest[]
-  operationsPurchaseRequestLines           OperationsPurchaseRequestLine[]
-  operationsPurchaseReceipts               OperationsPurchaseReceipt[]
-  operationsPurchaseReceiptLines           OperationsPurchaseReceiptLine[]
-  operationsCustodyProfile                 OperationsCustodyProfile?
-  operationsCustodyEvents                  OperationsCustodyEvent[]
-  operationsInventoryBalances              OperationsInventoryBalance[]
-  operationsInventoryMovements             OperationsInventoryMovement[]
-  operationsInternalRegistrations          OperationsInternalRegistration[]
-  operationsInternalRegistrationLines      OperationsInternalRegistrationLine[]
-  operationsAssetWarrantyAssets            OperationsAssetWarrantyAsset[]
-  operationsAssetWarrantyLines             OperationsAssetWarrantyLine[]
-  branding                                 CompanyBranding?
+  tenant                                     Tenant                                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  memberships                                CompanyMembership[]
+  audits                                     AuditEvent[]
+  idempotencyReceipts                        IdempotencyReceipt[]
+  documentSerialCounters                     DocumentSerialCounter[]
+  fileMetadata                               FileMetadata[]
+  financeProfile                             CompanyFinanceProfile?
+  financeAccounts                            FinanceAccount[]
+  financeCategories                          FinanceCategory[]
+  financeSuppliers                           FinanceSupplier[]
+  financeFiscalPeriods                       FinanceFiscalPeriod[]
+  financeVaults                              FinanceVault[]
+  financeVaultReconciliations                FinanceVaultReconciliation[]
+  financeSupplierDues                        FinanceSupplierDue[]
+  financeSupplierDuePayments                 FinanceSupplierDuePayment[]
+  financeJournalEntries                      FinanceJournalEntry[]
+  financeJournalLines                        FinanceJournalLine[]
+  recurringExpenseProfiles                   FinanceRecurringExpenseProfile[]
+  recurringExpenseCoverages                  FinanceRecurringExpenseCoverage[]
+  inclusiveLoans                             FinanceInclusiveLoan[]
+  inclusiveLoanPayments                      FinanceInclusiveLoanPayment[]
+  inclusiveLoanInstallments                  FinanceInclusiveLoanInstallmentPlan[]
+  operationalDays                            FinanceOperationalDay[]
+  dailySalesClosings                         FinanceDailySalesClosing[]
+  dailySalesAllocations                      FinanceDailySalesAllocation[]
+  dailyFinancialSummaries                    FinanceDailyFinancialSummary[]
+  dailySalesChannelSummaries                 FinanceDailySalesChannelSummary[]
+  outflowDocuments                           FinanceOutflowDocument[]
+  outflowDocumentRevisions                   FinanceOutflowDocumentRevision[]
+  outflowBatches                             FinanceOutflowBatch[]
+  pnlMappingVersions                         FinancePnlMappingVersion[]
+  pnlStatementLines                          FinancePnlStatementLine[]
+  pnlAccountMappings                         FinancePnlAccountMapping[]
+  ledgerRevision                             FinanceLedgerRevision?
+  reportRuns                                 ReportRun[]
+  reportDocuments                            ReportDocument[]
+  cashPerformanceEvents                      FinanceCashPerformanceEvent[]
+  cashPerformanceCoverage                    FinanceCashPerformanceCoverage?
+  cashPerformanceHistoricalImports           FinanceCashPerformanceHistoricalImport[]
+  vatSettlements                             FinanceVatSettlement[]
+  hrEmployees                                HrEmployee[]
+  hrEmployeeServices                         HrEmployeeService[]
+  hrEmployeeFinancialMovements               HrEmployeeFinancialMovement[]
+  hrEmployeeAdvances                         HrEmployeeAdvance[]
+  hrEmployeeAdvanceAllocations               HrEmployeeAdvancePayoutAllocation[]
+  hrEmployeeAdvanceSettlements               HrEmployeeAdvanceSettlement[]
+  hrEmployeeAdvanceDeferrals                 HrEmployeeAdvanceDeferral[]
+  hrEmployeeAdministrativeDeductions         HrEmployeeAdministrativeDeduction[]
+  hrEmployeeAdministrativeDeductionActions   HrEmployeeAdministrativeDeductionAction[]
+  hrEmployeeCompensationProfiles             HrEmployeeCompensationProfile[]
+  hrEmployeePromotions                       HrEmployeePromotion[]
+  hrCompensationPolicies                     HrCompensationPolicy[]
+  hrCompensationPolicyVersions               HrCompensationPolicyVersion[]
+  hrEmployeeLeaves                           HrEmployeeLeave[]
+  hrPayrollRuns                              HrPayrollRun[]
+  hrPayrollLines                             HrPayrollLine[]
+  hrPayrollAdvanceApplications               HrPayrollAdvanceApplication[]
+  hrPayrollDeductionApplications             HrPayrollAdministrativeDeductionApplication[]
+  hrPayrollPayments                          HrPayrollPayment[]
+  hrPayrollPaymentAllocations                HrPayrollPaymentAllocation[]
+  hrEmployeeDocumentBlobs                    HrEmployeeDocumentBlob[]
+  hrEmployeeDocuments                        HrEmployeeDocument[]
+  hrEmployeeLetters                          HrEmployeeLetter[]
+  hrFinalSettlements                         HrFinalSettlement[]
+  aiCompanyIdentities                        AiCompanyIdentity[]
+  aiExecutionReceipts                        AiExecutionReceipt[]
+  decisionMetricDefinitions                  DecisionMetricDefinition[]
+  decisionSalesChangePolicy                  DecisionSalesChangePolicy?
+  decisionRuleDefinitions                    DecisionRuleDefinition[]
+  decisionCompanyContextEvents               DecisionCompanyContextEvent[]
+  decisionEvaluationRuns                     DecisionEvaluationRun[]
+  decisionEvidenceSnapshots                  DecisionEvidenceSnapshot[]
+  decisionAlerts                             DecisionAlert[]
+  decisionAlertActions                       DecisionAlertAction[]
+  decisionFeedback                           DecisionFeedback[]
+  operationsSections                         OperationsSection[]
+  operationsUnits                            OperationsUnit[]
+  operationsItems                            OperationsItem[]
+  operationsItemUnits                        OperationsItemUnit[]
+  operationsConversionVersions               OperationsItemConversionVersion[]
+  operationsConversionEdges                  OperationsItemConversionEdge[]
+  operationsRecipeVersions                   OperationsRecipeVersion[]
+  operationsRecipeLines                      OperationsRecipeLine[]
+  operationsPurchaseRequests                 OperationsPurchaseRequest[]
+  operationsPurchaseRequestLines             OperationsPurchaseRequestLine[]
+  operationsPurchaseReceipts                 OperationsPurchaseReceipt[]
+  operationsPurchaseReceiptLines             OperationsPurchaseReceiptLine[]
+  operationsCustodyProfile                   OperationsCustodyProfile?
+  operationsCustodyEvents                    OperationsCustodyEvent[]
+  operationsInventoryBalances                OperationsInventoryBalance[]
+  operationsInventoryMovements               OperationsInventoryMovement[]
+  operationsInternalRegistrations            OperationsInternalRegistration[]
+  operationsInternalRegistrationLines        OperationsInternalRegistrationLine[]
+  operationsInternalRegistrationConsumptions OperationsInternalRegistrationConsumption[]
+  operationsAssetWarrantyAssets              OperationsAssetWarrantyAsset[]
+  operationsAssetWarrantyLines               OperationsAssetWarrantyLine[]
+  branding                                   CompanyBranding?
 
   @@unique([id, tenantId])
   @@index([tenantId, contextLocationCode])
@@ -1096,9 +1097,9 @@ model ReportRun {
   createdByUserId               String          @db.Uuid
   createdAt                     DateTime        @default(now()) @db.Timestamptz(6)
 
-  company   Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  createdBy User    @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  documents ReportDocument[]
+  company                   Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  createdBy                 User                       @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  documents                 ReportDocument[]
   decisionEvidenceSnapshots DecisionEvidenceSnapshot[]
 
   @@unique([id, tenantId, companyId])
@@ -1110,15 +1111,15 @@ model ReportRun {
 /// Code-owned definitions make an analytical number meaningful across time.
 /// Values remain in domain-specific projections; this is never a fact table.
 model DecisionMetricDefinition {
-  id                String                    @id @default(uuid()) @db.Uuid
-  tenantId          String                    @db.Uuid
-  companyId         String                    @db.Uuid
-  metricCode        String                    @db.VarChar(120)
-  definitionVersion String                    @db.VarChar(80)
-  comparisonCode    String                    @db.VarChar(80)
-  descriptionAr     String                    @db.VarChar(500)
+  id                String                     @id @default(uuid()) @db.Uuid
+  tenantId          String                     @db.Uuid
+  companyId         String                     @db.Uuid
+  metricCode        String                     @db.VarChar(120)
+  definitionVersion String                     @db.VarChar(80)
+  comparisonCode    String                     @db.VarChar(80)
+  descriptionAr     String                     @db.VarChar(500)
   status            DecisionContextEventStatus @default(PUBLISHED)
-  createdAt         DateTime                  @default(now()) @db.Timestamptz(6)
+  createdAt         DateTime                   @default(now()) @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1130,20 +1131,20 @@ model DecisionMetricDefinition {
 /// A company explicitly opts into commercial sales-change alerts. The policy
 /// is disabled by default so the platform never invents a business threshold.
 model DecisionSalesChangePolicy {
-  id                                String   @id @default(uuid()) @db.Uuid
-  tenantId                          String   @db.Uuid
-  companyId                         String   @db.Uuid
-  enabled                           Boolean  @default(false)
-  comparisonPolicyCode              String   @default("PREVIOUS_EQUAL_PERIOD") @db.VarChar(80)
-  comparisonPolicyVersion           String   @default("previous_equal_period.v1") @db.VarChar(80)
-  decreaseThresholdBasisPoints      Int?
-  increaseThresholdBasisPoints      Int?
-  minimumBaselineAmount             Decimal? @db.Decimal(18, 4)
-  minimumAbsoluteDifferenceAmount   Decimal? @db.Decimal(18, 4)
-  cooldownHours                     Int?
-  updatedByUserId                   String?  @db.Uuid
-  createdAt                         DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt                         DateTime @updatedAt @db.Timestamptz(6)
+  id                              String   @id @default(uuid()) @db.Uuid
+  tenantId                        String   @db.Uuid
+  companyId                       String   @db.Uuid
+  enabled                         Boolean  @default(false)
+  comparisonPolicyCode            String   @default("PREVIOUS_EQUAL_PERIOD") @db.VarChar(80)
+  comparisonPolicyVersion         String   @default("previous_equal_period.v1") @db.VarChar(80)
+  decreaseThresholdBasisPoints    Int?
+  increaseThresholdBasisPoints    Int?
+  minimumBaselineAmount           Decimal? @db.Decimal(18, 4)
+  minimumAbsoluteDifferenceAmount Decimal? @db.Decimal(18, 4)
+  cooldownHours                   Int?
+  updatedByUserId                 String?  @db.Uuid
+  createdAt                       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt                       DateTime @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1183,10 +1184,10 @@ model DecisionContextSource {
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime @updatedAt @db.Timestamptz(6)
 
-  importRuns       DecisionContextImportRun[]
-  researchRuns     DecisionContextResearchRun[]
+  importRuns         DecisionContextImportRun[]
+  researchRuns       DecisionContextResearchRun[]
   researchCandidates DecisionContextCandidate[]
-  globalEvents     DecisionGlobalContextEvent[]
+  globalEvents       DecisionGlobalContextEvent[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, sourceCode])
@@ -1195,17 +1196,17 @@ model DecisionContextSource {
 /// Every public-context pull has an immutable operational receipt. Failed or
 /// unverifiable source documents never replace the previously published event.
 model DecisionContextImportRun {
-  id               String   @id @default(uuid()) @db.Uuid
-  tenantId         String   @db.Uuid
-  sourceId         String   @db.Uuid
-  triggerCode      String   @db.VarChar(80)
-  status           String   @db.VarChar(40)
-  documentChecksum String?  @db.Char(64)
-  receivedEvents   Int      @default(0)
-  publishedEvents  Int      @default(0)
-  reviewEvents     Int      @default(0)
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @db.Uuid
+  sourceId         String    @db.Uuid
+  triggerCode      String    @db.VarChar(80)
+  status           String    @db.VarChar(40)
+  documentChecksum String?   @db.Char(64)
+  receivedEvents   Int       @default(0)
+  publishedEvents  Int       @default(0)
+  reviewEvents     Int       @default(0)
   diagnosticsJson  Json
-  startedAt        DateTime @default(now()) @db.Timestamptz(6)
+  startedAt        DateTime  @default(now()) @db.Timestamptz(6)
   finishedAt       DateTime? @db.Timestamptz(6)
 
   source DecisionContextSource @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -1218,17 +1219,17 @@ model DecisionContextImportRun {
 /// from an import run because research only proposes candidates; it does not
 /// publish a context event.
 model DecisionContextResearchRun {
-  id                  String   @id @default(uuid()) @db.Uuid
-  tenantId            String   @db.Uuid
-  sourceId            String   @db.Uuid
-  triggerCode         String   @db.VarChar(80)
-  status              String   @db.VarChar(40)
-  documentChecksum    String?  @db.Char(64)
-  receivedCandidates  Int      @default(0)
-  pendingCandidates   Int      @default(0)
-  duplicateCandidates Int      @default(0)
+  id                  String    @id @default(uuid()) @db.Uuid
+  tenantId            String    @db.Uuid
+  sourceId            String    @db.Uuid
+  triggerCode         String    @db.VarChar(80)
+  status              String    @db.VarChar(40)
+  documentChecksum    String?   @db.Char(64)
+  receivedCandidates  Int       @default(0)
+  pendingCandidates   Int       @default(0)
+  duplicateCandidates Int       @default(0)
   diagnosticsJson     Json
-  startedAt           DateTime @default(now()) @db.Timestamptz(6)
+  startedAt           DateTime  @default(now()) @db.Timestamptz(6)
   finishedAt          DateTime? @db.Timestamptz(6)
 
   source     DecisionContextSource      @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -1241,29 +1242,29 @@ model DecisionContextResearchRun {
 /// A source-backed event suggestion. Candidates cannot appear in the timeline
 /// or be read by Basira as context until they have been explicitly approved.
 model DecisionContextCandidate {
-  id                 String                         @id @default(uuid()) @db.Uuid
-  tenantId           String                         @db.Uuid
-  sourceId           String                         @db.Uuid
-  researchRunId      String                         @db.Uuid
-  externalKey        String                         @db.VarChar(240)
-  eventKind          String                         @db.VarChar(80)
-  titleAr            String                         @db.VarChar(240)
-  startsOn           DateTime                       @db.Date
-  endsOn             DateTime                       @db.Date
-  scope              DecisionContextScope           @default(TENANT_GLOBAL)
-  locationCode       String?                        @db.VarChar(80)
-  locationLabelAr    String?                        @db.VarChar(160)
-  relevanceReasonAr  String?                        @db.VarChar(500)
-  sourceUpdatedAt    DateTime?                      @db.Timestamptz(6)
-  sourceChecksum     String                         @db.Char(64)
-  payloadJson        Json
-  status             DecisionContextCandidateStatus @default(PENDING_REVIEW)
-  resolutionJson     Json?
-  publishedEventId   String?                        @db.Uuid
-  resolvedByUserId   String?                        @db.Uuid
-  resolvedAt         DateTime?                      @db.Timestamptz(6)
-  createdAt          DateTime                       @default(now()) @db.Timestamptz(6)
-  updatedAt          DateTime                       @updatedAt @db.Timestamptz(6)
+  id                String                         @id @default(uuid()) @db.Uuid
+  tenantId          String                         @db.Uuid
+  sourceId          String                         @db.Uuid
+  researchRunId     String                         @db.Uuid
+  externalKey       String                         @db.VarChar(240)
+  eventKind         String                         @db.VarChar(80)
+  titleAr           String                         @db.VarChar(240)
+  startsOn          DateTime                       @db.Date
+  endsOn            DateTime                       @db.Date
+  scope             DecisionContextScope           @default(TENANT_GLOBAL)
+  locationCode      String?                        @db.VarChar(80)
+  locationLabelAr   String?                        @db.VarChar(160)
+  relevanceReasonAr String?                        @db.VarChar(500)
+  sourceUpdatedAt   DateTime?                      @db.Timestamptz(6)
+  sourceChecksum    String                         @db.Char(64)
+  payloadJson       Json
+  status            DecisionContextCandidateStatus @default(PENDING_REVIEW)
+  resolutionJson    Json?
+  publishedEventId  String?                        @db.Uuid
+  resolvedByUserId  String?                        @db.Uuid
+  resolvedAt        DateTime?                      @db.Timestamptz(6)
+  createdAt         DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                       @updatedAt @db.Timestamptz(6)
 
   source         DecisionContextSource       @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
   researchRun    DecisionContextResearchRun  @relation(fields: [researchRunId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -1294,7 +1295,7 @@ model DecisionGlobalContextEvent {
   revisions          DecisionGlobalContextEventRevision[]
   reviewActions      DecisionGlobalContextReviewAction[]
   researchCandidates DecisionContextCandidate[]
-  source             DecisionContextSource @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  source             DecisionContextSource                @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId])
   @@unique([tenantId, sourceId, externalKey])
@@ -1303,19 +1304,19 @@ model DecisionGlobalContextEvent {
 }
 
 model DecisionGlobalContextEventRevision {
-  id             String                     @id @default(uuid()) @db.Uuid
-  tenantId       String                     @db.Uuid
-  eventId        String                     @db.Uuid
-  revision       Int
-  titleAr        String                     @db.VarChar(240)
-  startsOn       DateTime                   @db.Date
-  endsOn         DateTime                   @db.Date
-  sourceUpdatedAt DateTime?                 @db.Timestamptz(6)
-  sourceChecksum String                     @db.Char(64)
-  importReceipt  Json
+  id                 String                     @id @default(uuid()) @db.Uuid
+  tenantId           String                     @db.Uuid
+  eventId            String                     @db.Uuid
+  revision           Int
+  titleAr            String                     @db.VarChar(240)
+  startsOn           DateTime                   @db.Date
+  endsOn             DateTime                   @db.Date
+  sourceUpdatedAt    DateTime?                  @db.Timestamptz(6)
+  sourceChecksum     String                     @db.Char(64)
+  importReceipt      Json
   verificationStatus DecisionVerificationStatus @default(SYSTEM_RECONCILED)
-  status         DecisionContextEventStatus @default(PUBLISHED)
-  createdAt      DateTime                   @default(now()) @db.Timestamptz(6)
+  status             DecisionContextEventStatus @default(PUBLISHED)
+  createdAt          DateTime                   @default(now()) @db.Timestamptz(6)
 
   event DecisionGlobalContextEvent @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1346,19 +1347,19 @@ model DecisionGlobalContextReviewAction {
 
 /// Company events are recorded context, not a mutation of financial facts.
 model DecisionCompanyContextEvent {
-  id                   String                     @id @default(uuid()) @db.Uuid
-  tenantId             String                     @db.Uuid
-  companyId            String                     @db.Uuid
-  eventKind            String                     @db.VarChar(80)
-  titleAr              String                     @db.VarChar(240)
-  startsOn             DateTime                   @db.Date
-  endsOn               DateTime                   @db.Date
-  verificationStatus   DecisionVerificationStatus @default(HUMAN_CONFIRMED)
-  status               DecisionContextEventStatus @default(PUBLISHED)
-  sourceReference      String?                    @db.VarChar(500)
-  createdByUserId      String                     @db.Uuid
-  createdAt            DateTime                   @default(now()) @db.Timestamptz(6)
-  updatedAt            DateTime                   @updatedAt @db.Timestamptz(6)
+  id                 String                     @id @default(uuid()) @db.Uuid
+  tenantId           String                     @db.Uuid
+  companyId          String                     @db.Uuid
+  eventKind          String                     @db.VarChar(80)
+  titleAr            String                     @db.VarChar(240)
+  startsOn           DateTime                   @db.Date
+  endsOn             DateTime                   @db.Date
+  verificationStatus DecisionVerificationStatus @default(HUMAN_CONFIRMED)
+  status             DecisionContextEventStatus @default(PUBLISHED)
+  sourceReference    String?                    @db.VarChar(500)
+  createdByUserId    String                     @db.Uuid
+  createdAt          DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime                   @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1367,17 +1368,17 @@ model DecisionCompanyContextEvent {
 }
 
 model DecisionEvaluationRun {
-  id               String                    @id @default(uuid()) @db.Uuid
-  tenantId         String                    @db.Uuid
-  companyId        String                    @db.Uuid
-  ruleCode         String                    @db.VarChar(120)
-  ruleVersion      String                    @db.VarChar(80)
-  periodFrom       DateTime                  @db.Date
-  periodTo         DateTime                  @db.Date
-  dataQuality      DecisionDataQualityStatus
-  inputsChecksum   String                    @db.Char(64)
-  outcomeJson      Json
-  createdAt        DateTime                  @default(now()) @db.Timestamptz(6)
+  id             String                    @id @default(uuid()) @db.Uuid
+  tenantId       String                    @db.Uuid
+  companyId      String                    @db.Uuid
+  ruleCode       String                    @db.VarChar(120)
+  ruleVersion    String                    @db.VarChar(80)
+  periodFrom     DateTime                  @db.Date
+  periodTo       DateTime                  @db.Date
+  dataQuality    DecisionDataQualityStatus
+  inputsChecksum String                    @db.Char(64)
+  outcomeJson    Json
+  createdAt      DateTime                  @default(now()) @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1389,26 +1390,26 @@ model DecisionEvaluationRun {
 /// Immutable proof captured only for decisions, alerts, retained analyses and
 /// auditable AI answers. Corrections create a superseding snapshot.
 model DecisionEvidenceSnapshot {
-  id                   String                    @id @default(uuid()) @db.Uuid
-  tenantId             String                    @db.Uuid
-  companyId            String                    @db.Uuid
-  sourceReportRunId    String?                   @db.Uuid
-  supersedesSnapshotId String?                   @db.Uuid
+  id                   String                     @id @default(uuid()) @db.Uuid
+  tenantId             String                     @db.Uuid
+  companyId            String                     @db.Uuid
+  sourceReportRunId    String?                    @db.Uuid
+  supersedesSnapshotId String?                    @db.Uuid
   evidenceKind         DecisionEvidenceKind
   verificationStatus   DecisionVerificationStatus
-  periodFrom           DateTime                  @db.Date
-  periodTo             DateTime                  @db.Date
-  timezone             String                    @default("Asia/Riyadh") @db.VarChar(64)
+  periodFrom           DateTime                   @db.Date
+  periodTo             DateTime                   @db.Date
+  timezone             String                     @default("Asia/Riyadh") @db.VarChar(64)
   payloadJson          Json
-  checksum             String                    @db.Char(64)
-  createdByUserId      String?                   @db.Uuid
-  createdAt            DateTime                  @default(now()) @db.Timestamptz(6)
+  checksum             String                     @db.Char(64)
+  createdByUserId      String?                    @db.Uuid
+  createdAt            DateTime                   @default(now()) @db.Timestamptz(6)
 
-  company Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  sourceReportRun ReportRun?         @relation(fields: [sourceReportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  supersedes DecisionEvidenceSnapshot? @relation("DecisionEvidenceSupersedes", fields: [supersedesSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  replacements DecisionEvidenceSnapshot[] @relation("DecisionEvidenceSupersedes")
-  alerts DecisionAlert[]
+  company         Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  sourceReportRun ReportRun?                 @relation(fields: [sourceReportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supersedes      DecisionEvidenceSnapshot?  @relation("DecisionEvidenceSupersedes", fields: [supersedesSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  replacements    DecisionEvidenceSnapshot[] @relation("DecisionEvidenceSupersedes")
+  alerts          DecisionAlert[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
@@ -1429,10 +1430,10 @@ model DecisionAlert {
   acknowledgedAt     DateTime?           @db.Timestamptz(6)
   closedAt           DateTime?           @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company          Company                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   evidenceSnapshot DecisionEvidenceSnapshot @relation(fields: [evidenceSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  actions DecisionAlertAction[]
-  feedback DecisionFeedback[]
+  actions          DecisionAlertAction[]
+  feedback         DecisionFeedback[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status, createdAt])
@@ -1468,8 +1469,8 @@ model DecisionFeedback {
   createdByUserId String   @db.Uuid
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  alert DecisionAlert @relation(fields: [alertId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company Company       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  alert   DecisionAlert @relation(fields: [alertId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, alertId, createdAt])
@@ -1495,7 +1496,7 @@ model ReportDocument {
   tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   company   Company   @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   reportRun ReportRun @relation(fields: [reportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  createdBy User     @relation("ReportDocumentCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  createdBy User      @relation("ReportDocumentCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([reportRunId, createdByUserId, locale])
@@ -1878,29 +1879,29 @@ model FinanceJournalEntry {
   requestId         String                    @db.VarChar(120)
   postedAt          DateTime                  @default(now()) @db.Timestamptz(6)
 
-  company                      Company                       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  fiscalPeriod                 FinanceFiscalPeriod           @relation(fields: [fiscalPeriodId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  reversalOfEntry              FinanceJournalEntry?          @relation("FinanceJournalEntryReversal", fields: [reversalOfEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  reversalEntry                FinanceJournalEntry?          @relation("FinanceJournalEntryReversal")
-  createdBy                    User                          @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  lines                        FinanceJournalLine[]
-  supplierDue                  FinanceSupplierDue?           @relation("FinanceSupplierDueJournal")
-  supplierDuePayment           FinanceSupplierDuePayment?    @relation("FinanceSupplierDuePaymentJournal")
-  inclusiveLoan                FinanceInclusiveLoan?         @relation("FinanceInclusiveLoanOpeningJournal")
-  inclusiveLoanPayment         FinanceInclusiveLoanPayment?  @relation("FinanceInclusiveLoanPaymentJournal")
-  dailySalesClosing            FinanceDailySalesClosing?     @relation("FinanceDailySalesClosingJournal")
-  outflowDocument              FinanceOutflowDocument?       @relation("FinanceOutflowDocumentJournal")
+  company                          Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  fiscalPeriod                     FinanceFiscalPeriod              @relation(fields: [fiscalPeriodId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  reversalOfEntry                  FinanceJournalEntry?             @relation("FinanceJournalEntryReversal", fields: [reversalOfEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  reversalEntry                    FinanceJournalEntry?             @relation("FinanceJournalEntryReversal")
+  createdBy                        User                             @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  lines                            FinanceJournalLine[]
+  supplierDue                      FinanceSupplierDue?              @relation("FinanceSupplierDueJournal")
+  supplierDuePayment               FinanceSupplierDuePayment?       @relation("FinanceSupplierDuePaymentJournal")
+  inclusiveLoan                    FinanceInclusiveLoan?            @relation("FinanceInclusiveLoanOpeningJournal")
+  inclusiveLoanPayment             FinanceInclusiveLoanPayment?     @relation("FinanceInclusiveLoanPaymentJournal")
+  dailySalesClosing                FinanceDailySalesClosing?        @relation("FinanceDailySalesClosingJournal")
+  outflowDocument                  FinanceOutflowDocument?          @relation("FinanceOutflowDocumentJournal")
   outflowDocumentPreviousRevisions FinanceOutflowDocumentRevision[] @relation("FinanceOutflowDocumentRevisionPreviousJournal")
-  outflowDocumentRevisions     FinanceOutflowDocumentRevision[] @relation("FinanceOutflowDocumentRevisionJournal")
-  hrEmployeeMovements          HrEmployeeFinancialMovement[]
-  hrEmployeeAdvanceIssue       HrEmployeeAdvance?            @relation("HrEmployeeAdvanceIssueJournal")
-  hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
-  hrPayrollAccrual             HrPayrollRun?                 @relation("HrPayrollAccrualJournal")
-  hrPayrollPayment             HrPayrollPayment?             @relation("HrPayrollPaymentJournal")
-  hrFinalSettlementAccrual     HrFinalSettlement?            @relation("HrFinalSettlementAccrualJournal")
-  hrFinalSettlementPayment     HrFinalSettlementPayment?     @relation("HrFinalSettlementPaymentJournal")
-  cashPerformanceEvent         FinanceCashPerformanceEvent?  @relation("FinanceCashPerformanceEventJournal")
-  vatSettlement                FinanceVatSettlement?         @relation("FinanceVatSettlementJournal")
+  outflowDocumentRevisions         FinanceOutflowDocumentRevision[] @relation("FinanceOutflowDocumentRevisionJournal")
+  hrEmployeeMovements              HrEmployeeFinancialMovement[]
+  hrEmployeeAdvanceIssue           HrEmployeeAdvance?               @relation("HrEmployeeAdvanceIssueJournal")
+  hrEmployeeAdvanceSettlements     HrEmployeeAdvanceSettlement[]
+  hrPayrollAccrual                 HrPayrollRun?                    @relation("HrPayrollAccrualJournal")
+  hrPayrollPayment                 HrPayrollPayment?                @relation("HrPayrollPaymentJournal")
+  hrFinalSettlementAccrual         HrFinalSettlement?               @relation("HrFinalSettlementAccrualJournal")
+  hrFinalSettlementPayment         HrFinalSettlementPayment?        @relation("HrFinalSettlementPaymentJournal")
+  cashPerformanceEvent             FinanceCashPerformanceEvent?     @relation("FinanceCashPerformanceEventJournal")
+  vatSettlement                    FinanceVatSettlement?            @relation("FinanceVatSettlementJournal")
 
   @@unique([id, tenantId, companyId])
   @@unique([reversalOfEntryId, tenantId, companyId])
@@ -1969,23 +1970,23 @@ model FinanceOutflowDocument {
 /// document. The business document keeps its identity; the sealed journals do
 /// not get rewritten.
 model FinanceOutflowDocumentRevision {
-  id                     String                 @id @default(uuid()) @db.Uuid
-  tenantId               String                 @db.Uuid
-  companyId              String                 @db.Uuid
-  documentId             String                 @db.Uuid
+  id                     String   @id @default(uuid()) @db.Uuid
+  tenantId               String   @db.Uuid
+  companyId              String   @db.Uuid
+  documentId             String   @db.Uuid
   version                Int
-  previousJournalEntryId String                 @db.Uuid
-  journalEntryId         String                 @db.Uuid
+  previousJournalEntryId String   @db.Uuid
+  journalEntryId         String   @db.Uuid
   beforeJson             Json
   afterJson              Json
-  createdByUserId        String                 @db.Uuid
-  createdAt              DateTime               @default(now()) @db.Timestamptz(6)
+  createdByUserId        String   @db.Uuid
+  createdAt              DateTime @default(now()) @db.Timestamptz(6)
 
-  document       FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  company        Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  previousJournal FinanceJournalEntry   @relation("FinanceOutflowDocumentRevisionPreviousJournal", fields: [previousJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  journal        FinanceJournalEntry    @relation("FinanceOutflowDocumentRevisionJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  createdBy      User                   @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  document        FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company         Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  previousJournal FinanceJournalEntry    @relation("FinanceOutflowDocumentRevisionPreviousJournal", fields: [previousJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journal         FinanceJournalEntry    @relation("FinanceOutflowDocumentRevisionJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  createdBy       User                   @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([documentId, version])
@@ -2016,8 +2017,8 @@ model OperationsAssetWarrantyAsset {
   createdAt             DateTime                      @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime                      @updatedAt @db.Timestamptz(6)
 
-  company        Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  sourceDocument FinanceOutflowDocument      @relation(fields: [sourceDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company        Company                       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  sourceDocument FinanceOutflowDocument        @relation(fields: [sourceDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   lines          OperationsAssetWarrantyLine[]
 
   @@unique([id, tenantId, companyId])
@@ -2026,16 +2027,16 @@ model OperationsAssetWarrantyAsset {
 }
 
 model OperationsAssetWarrantyLine {
-  id          String                        @id @default(uuid()) @db.Uuid
-  tenantId    String                        @db.Uuid
-  companyId   String                        @db.Uuid
-  assetId     String                        @db.Uuid
-  description String                        @db.VarChar(500)
-  serialNumber String?                      @db.VarChar(160)
-  warrantyEndsAt DateTime?                  @db.Date
-  createdAt   DateTime                      @default(now()) @db.Timestamptz(6)
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @db.Uuid
+  companyId      String    @db.Uuid
+  assetId        String    @db.Uuid
+  description    String    @db.VarChar(500)
+  serialNumber   String?   @db.VarChar(160)
+  warrantyEndsAt DateTime? @db.Date
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
 
-  company Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   asset   OperationsAssetWarrantyAsset @relation(fields: [assetId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
@@ -3273,8 +3274,8 @@ model OperationsSection {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
-  company Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  items   OperationsItem[]
+  company               Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  items                 OperationsItem[]
   internalRegistrations OperationsInternalRegistration[]
 
   @@unique([id, tenantId, companyId])
@@ -3294,19 +3295,21 @@ model OperationsUnit {
   createdAt DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt DateTime                @updatedAt @db.Timestamptz(6)
 
-  company        Company                        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  baseForItems   OperationsItem[]               @relation("OperationsItemBaseUnit")
-  itemUnits      OperationsItemUnit[]           @relation("OperationsItemUnitUnit")
-  conversionFrom OperationsItemConversionEdge[] @relation("OperationsConversionFromUnit")
-  conversionTo   OperationsItemConversionEdge[] @relation("OperationsConversionToUnit")
-  recipeOutputs  OperationsRecipeVersion[]      @relation("OperationsRecipeOutputUnit")
-  recipeLines    OperationsRecipeLine[]         @relation("OperationsRecipeLineUnit")
-  recipeLineBases OperationsRecipeLine[]        @relation("OperationsRecipeLineBaseUnit")
-  requestLines   OperationsPurchaseRequestLine[] @relation("OperationsRequestLineUnit")
-  requestLineBases OperationsPurchaseRequestLine[] @relation("OperationsRequestLineBaseUnit")
-  receiptAsReceived OperationsPurchaseReceiptLine[] @relation("OperationsReceiptReceivedUnit")
-  receiptAsBase  OperationsPurchaseReceiptLine[] @relation("OperationsReceiptBaseUnit")
-  internalRegistrationLines OperationsInternalRegistrationLine[]
+  company                              Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  baseForItems                         OperationsItem[]                            @relation("OperationsItemBaseUnit")
+  itemUnits                            OperationsItemUnit[]                        @relation("OperationsItemUnitUnit")
+  conversionFrom                       OperationsItemConversionEdge[]              @relation("OperationsConversionFromUnit")
+  conversionTo                         OperationsItemConversionEdge[]              @relation("OperationsConversionToUnit")
+  recipeOutputs                        OperationsRecipeVersion[]                   @relation("OperationsRecipeOutputUnit")
+  recipeLines                          OperationsRecipeLine[]                      @relation("OperationsRecipeLineUnit")
+  recipeLineBases                      OperationsRecipeLine[]                      @relation("OperationsRecipeLineBaseUnit")
+  requestLines                         OperationsPurchaseRequestLine[]             @relation("OperationsRequestLineUnit")
+  requestLineBases                     OperationsPurchaseRequestLine[]             @relation("OperationsRequestLineBaseUnit")
+  receiptAsReceived                    OperationsPurchaseReceiptLine[]             @relation("OperationsReceiptReceivedUnit")
+  receiptAsBase                        OperationsPurchaseReceiptLine[]             @relation("OperationsReceiptBaseUnit")
+  internalRegistrationLines            OperationsInternalRegistrationLine[]
+  internalRegistrationConsumptionUnits OperationsInternalRegistrationConsumption[] @relation("OperationsInternalConsumptionUnit")
+  internalRegistrationConsumptionBases OperationsInternalRegistrationConsumption[] @relation("OperationsInternalConsumptionBaseUnit")
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, code])
@@ -3327,18 +3330,19 @@ model OperationsItem {
   createdAt  DateTime             @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime             @updatedAt @db.Timestamptz(6)
 
-  company            Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  section            OperationsSection?                @relation(fields: [sectionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  baseUnit           OperationsUnit                    @relation("OperationsItemBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  itemUnits          OperationsItemUnit[]
-  conversionVersions OperationsItemConversionVersion[]
-  recipeOutputs      OperationsRecipeVersion[]       @relation("OperationsRecipeOutput")
-  recipeIngredients  OperationsRecipeLine[]          @relation("OperationsRecipeIngredient")
-  requestLines       OperationsPurchaseRequestLine[]
-  receiptLines       OperationsPurchaseReceiptLine[]
-  inventoryBalance   OperationsInventoryBalance?
-  inventoryMovements OperationsInventoryMovement[]
-  internalRegistrationLines OperationsInternalRegistrationLine[] @relation("OperationsInternalRegistrationProduct")
+  company                          Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  section                          OperationsSection?                          @relation(fields: [sectionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  baseUnit                         OperationsUnit                              @relation("OperationsItemBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  itemUnits                        OperationsItemUnit[]
+  conversionVersions               OperationsItemConversionVersion[]
+  recipeOutputs                    OperationsRecipeVersion[]                   @relation("OperationsRecipeOutput")
+  recipeIngredients                OperationsRecipeLine[]                      @relation("OperationsRecipeIngredient")
+  requestLines                     OperationsPurchaseRequestLine[]
+  receiptLines                     OperationsPurchaseReceiptLine[]
+  inventoryBalance                 OperationsInventoryBalance?
+  inventoryMovements               OperationsInventoryMovement[]
+  internalRegistrationLines        OperationsInternalRegistrationLine[]        @relation("OperationsInternalRegistrationProduct")
+  internalRegistrationConsumptions OperationsInternalRegistrationConsumption[] @relation("OperationsInternalConsumptionMaterial")
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, code])
@@ -3347,19 +3351,19 @@ model OperationsItem {
 }
 
 model OperationsItemUnit {
-  id                    String   @id @default(uuid()) @db.Uuid
-  tenantId              String   @db.Uuid
-  companyId             String   @db.Uuid
-  itemId                String   @db.Uuid
-  unitId                String   @db.Uuid
-  isBase                Boolean  @default(false)
-  isOrderEnabled        Boolean  @default(true)
-  isActive              Boolean  @default(true)
-  lastPurchaseUnitPrice Decimal? @db.Decimal(18, 4)
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @db.Uuid
+  companyId             String    @db.Uuid
+  itemId                String    @db.Uuid
+  unitId                String    @db.Uuid
+  isBase                Boolean   @default(false)
+  isOrderEnabled        Boolean   @default(true)
+  isActive              Boolean   @default(true)
+  lastPurchaseUnitPrice Decimal?  @db.Decimal(18, 4)
   lastPurchasePriceAt   DateTime? @db.Timestamptz(6)
-  menuSaleUnitPrice     Decimal? @db.Decimal(18, 4)
-  createdAt             DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime @updatedAt @db.Timestamptz(6)
+  menuSaleUnitPrice     Decimal?  @db.Decimal(18, 4)
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @db.Timestamptz(6)
 
   company Company        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   item    OperationsItem @relation(fields: [itemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -3381,12 +3385,13 @@ model OperationsItemConversionVersion {
   publishedAt DateTime                          @default(now()) @db.Timestamptz(6)
   createdAt   DateTime                          @default(now()) @db.Timestamptz(6)
 
-  company Company                        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  item    OperationsItem                 @relation(fields: [itemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  edges   OperationsItemConversionEdge[]
-  recipeLines OperationsRecipeLine[] @relation("OperationsRecipeLineConversionVersion")
-  purchaseRequestLines OperationsPurchaseRequestLine[] @relation("OperationsPurchaseRequestLineConversionVersion")
-  purchaseReceiptLines OperationsPurchaseReceiptLine[] @relation("OperationsPurchaseReceiptLineConversionVersion")
+  company                          Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  item                             OperationsItem                              @relation(fields: [itemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  edges                            OperationsItemConversionEdge[]
+  recipeLines                      OperationsRecipeLine[]                      @relation("OperationsRecipeLineConversionVersion")
+  internalRegistrationConsumptions OperationsInternalRegistrationConsumption[]
+  purchaseRequestLines             OperationsPurchaseRequestLine[]             @relation("OperationsPurchaseRequestLineConversionVersion")
+  purchaseReceiptLines             OperationsPurchaseReceiptLine[]             @relation("OperationsPurchaseReceiptLineConversionVersion")
 
   @@unique([id, tenantId, companyId])
   @@unique([itemId, version])
@@ -3415,19 +3420,19 @@ model OperationsItemConversionEdge {
 // Price-free production/output log. It is intentionally separate from sales,
 // financial ledgers, and raw-material inventory movements.
 model OperationsInternalRegistration {
-  id              String   @id @default(uuid()) @db.Uuid
-  tenantId        String   @db.Uuid
-  companyId       String   @db.Uuid
-  registrationNumber String @db.VarChar(80)
-  sectionId       String   @db.Uuid
-  businessDate    DateTime @db.Date
-  notes           String?  @db.VarChar(1000)
-  createdByUserId String   @db.Uuid
-  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  id                 String   @id @default(uuid()) @db.Uuid
+  tenantId           String   @db.Uuid
+  companyId          String   @db.Uuid
+  registrationNumber String   @db.VarChar(80)
+  sectionId          String   @db.Uuid
+  businessDate       DateTime @db.Date
+  notes              String?  @db.VarChar(1000)
+  createdByUserId    String   @db.Uuid
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  section OperationsSection @relation(fields: [sectionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  lines OperationsInternalRegistrationLine[]
+  company Company                              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  section OperationsSection                    @relation(fields: [sectionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  lines   OperationsInternalRegistrationLine[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, registrationNumber])
@@ -3436,31 +3441,73 @@ model OperationsInternalRegistration {
 }
 
 model OperationsInternalRegistrationLine {
-  id              String   @id @default(uuid()) @db.Uuid
-  tenantId        String   @db.Uuid
-  companyId       String   @db.Uuid
-  registrationId  String   @db.Uuid
-  lineNumber      Int
-  menuProductItemId String @db.Uuid
-  unitId          String   @db.Uuid
-  quantity        Decimal  @db.Decimal(24, 8)
-  productNameArSnapshot String @db.VarChar(160)
-  productNameEnSnapshot String? @db.VarChar(160)
-  unitNameArSnapshot String @db.VarChar(80)
-  unitNameEnSnapshot String? @db.VarChar(80)
+  id                           String   @id @default(uuid()) @db.Uuid
+  tenantId                     String   @db.Uuid
+  companyId                    String   @db.Uuid
+  registrationId               String   @db.Uuid
+  lineNumber                   Int
+  menuProductItemId            String   @db.Uuid
+  unitId                       String   @db.Uuid
+  quantity                     Decimal  @db.Decimal(24, 8)
+  productNameArSnapshot        String   @db.VarChar(160)
+  productNameEnSnapshot        String?  @db.VarChar(160)
+  unitNameArSnapshot           String   @db.VarChar(80)
+  unitNameEnSnapshot           String?  @db.VarChar(80)
   // Financial snapshot is deliberately stored server-side only; the staff
   // workstation contract remains price-free.
-  menuSaleUnitPriceSnapshot Decimal? @db.Decimal(18, 4)
-  lineTotalSnapshot Decimal? @db.Decimal(18, 4)
+  menuSaleUnitPriceSnapshot    Decimal? @db.Decimal(18, 4)
+  lineTotalSnapshot            Decimal? @db.Decimal(18, 4)
+  recipeVersionId              String?  @db.Uuid
+  recipeOutputQuantitySnapshot Decimal? @db.Decimal(24, 8)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  registration OperationsInternalRegistration @relation(fields: [registrationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  menuProduct OperationsItem @relation("OperationsInternalRegistrationProduct", fields: [menuProductItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  unit OperationsUnit @relation(fields: [unitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company       Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  registration  OperationsInternalRegistration              @relation(fields: [registrationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  menuProduct   OperationsItem                              @relation("OperationsInternalRegistrationProduct", fields: [menuProductItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  unit          OperationsUnit                              @relation(fields: [unitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  recipeVersion OperationsRecipeVersion?                    @relation("OperationsInternalRegistrationLineRecipe", fields: [recipeVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  consumptions  OperationsInternalRegistrationConsumption[]
 
   @@unique([id, tenantId, companyId])
   @@unique([registrationId, lineNumber])
   @@index([tenantId, companyId, menuProductItemId])
+  @@index([tenantId, companyId, recipeVersionId])
+}
+
+// Immutable component-level consumption generated from a saved internal
+// registration. It makes recipe and conversion snapshots explicit without
+// exposing raw-material cost to the staff workstation.
+model OperationsInternalRegistrationConsumption {
+  id                                 String   @id @default(uuid()) @db.Uuid
+  tenantId                           String   @db.Uuid
+  companyId                          String   @db.Uuid
+  registrationLineId                 String   @db.Uuid
+  recipeVersionId                    String   @db.Uuid
+  recipeLineId                       String   @db.Uuid
+  rawMaterialItemId                  String   @db.Uuid
+  unitId                             String   @db.Uuid
+  baseUnitId                         String   @db.Uuid
+  conversionVersionId                String?  @db.Uuid
+  recipeQuantitySnapshot             Decimal  @db.Decimal(24, 8)
+  recipeResolvedBaseQuantitySnapshot Decimal  @db.Decimal(24, 8)
+  consumedBaseQuantity               Decimal  @db.Decimal(24, 8)
+  weightedUnitCostSnapshot           Decimal  @db.Decimal(26, 12)
+  consumedValue                      Decimal  @db.Decimal(18, 4)
+  createdAt                          DateTime @default(now()) @db.Timestamptz(6)
+
+  company           Company                            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  registrationLine  OperationsInternalRegistrationLine @relation(fields: [registrationLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  recipeVersion     OperationsRecipeVersion            @relation("OperationsInternalRegistrationConsumptionRecipe", fields: [recipeVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  recipeLine        OperationsRecipeLine               @relation(fields: [recipeLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  rawMaterial       OperationsItem                     @relation("OperationsInternalConsumptionMaterial", fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  unit              OperationsUnit                     @relation("OperationsInternalConsumptionUnit", fields: [unitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  baseUnit          OperationsUnit                     @relation("OperationsInternalConsumptionBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  conversionVersion OperationsItemConversionVersion?   @relation(fields: [conversionVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  inventoryMovement OperationsInventoryMovement?
+
+  @@unique([id, tenantId, companyId])
+  @@unique([registrationLineId, recipeLineId])
+  @@index([tenantId, companyId, rawMaterialItemId], map: "OperationsInternalConsumption_material_idx")
+  @@index([tenantId, companyId, recipeVersionId], map: "OperationsInternalConsumption_recipe_idx")
 }
 
 model OperationsRecipeVersion {
@@ -3476,10 +3523,12 @@ model OperationsRecipeVersion {
   publishedAt    DateTime                      @default(now()) @db.Timestamptz(6)
   createdAt      DateTime                      @default(now()) @db.Timestamptz(6)
 
-  company    Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  outputItem OperationsItem         @relation("OperationsRecipeOutput", fields: [outputItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  outputUnit OperationsUnit         @relation("OperationsRecipeOutputUnit", fields: [outputUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  lines      OperationsRecipeLine[]
+  company                          Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  outputItem                       OperationsItem                              @relation("OperationsRecipeOutput", fields: [outputItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  outputUnit                       OperationsUnit                              @relation("OperationsRecipeOutputUnit", fields: [outputUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  lines                            OperationsRecipeLine[]
+  internalRegistrationLines        OperationsInternalRegistrationLine[]        @relation("OperationsInternalRegistrationLineRecipe")
+  internalRegistrationConsumptions OperationsInternalRegistrationConsumption[] @relation("OperationsInternalRegistrationConsumptionRecipe")
 
   @@unique([id, tenantId, companyId])
   @@unique([outputItemId, version])
@@ -3487,49 +3536,51 @@ model OperationsRecipeVersion {
 }
 
 model OperationsRecipeLine {
-  id                String   @id @default(uuid()) @db.Uuid
-  tenantId          String   @db.Uuid
-  companyId         String   @db.Uuid
-  recipeVersionId   String   @db.Uuid
-  rawMaterialItemId String   @db.Uuid
-  unitId            String   @db.Uuid
-  baseUnitId        String   @db.Uuid
-  conversionVersionId String? @db.Uuid
-  quantity          Decimal  @db.Decimal(24, 8)
+  id                   String  @id @default(uuid()) @db.Uuid
+  tenantId             String  @db.Uuid
+  companyId            String  @db.Uuid
+  recipeVersionId      String  @db.Uuid
+  rawMaterialItemId    String  @db.Uuid
+  unitId               String  @db.Uuid
+  baseUnitId           String  @db.Uuid
+  conversionVersionId  String? @db.Uuid
+  quantity             Decimal @db.Decimal(24, 8)
   resolvedBaseQuantity Decimal @db.Decimal(24, 8)
-  sortOrder         Int      @default(0)
+  sortOrder            Int     @default(0)
 
-  company       Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  recipeVersion OperationsRecipeVersion @relation(fields: [recipeVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  rawMaterial   OperationsItem          @relation("OperationsRecipeIngredient", fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  unit          OperationsUnit          @relation("OperationsRecipeLineUnit", fields: [unitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  baseUnit      OperationsUnit          @relation("OperationsRecipeLineBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  conversionVersion OperationsItemConversionVersion? @relation("OperationsRecipeLineConversionVersion", fields: [conversionVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company                          Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  recipeVersion                    OperationsRecipeVersion                     @relation(fields: [recipeVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  rawMaterial                      OperationsItem                              @relation("OperationsRecipeIngredient", fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  unit                             OperationsUnit                              @relation("OperationsRecipeLineUnit", fields: [unitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  baseUnit                         OperationsUnit                              @relation("OperationsRecipeLineBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  conversionVersion                OperationsItemConversionVersion?            @relation("OperationsRecipeLineConversionVersion", fields: [conversionVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  internalRegistrationConsumptions OperationsInternalRegistrationConsumption[]
 
   @@unique([recipeVersionId, rawMaterialItemId, unitId])
+  @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, rawMaterialItemId])
 }
 
 model OperationsPurchaseRequest {
-  id                   String                          @id @default(uuid()) @db.Uuid
-  tenantId             String                          @db.Uuid
-  companyId            String                          @db.Uuid
-  requestNumber        String                          @db.VarChar(80)
-  executionKind        OperationsPurchaseExecutionKind
+  id                    String                           @id @default(uuid()) @db.Uuid
+  tenantId              String                           @db.Uuid
+  companyId             String                           @db.Uuid
+  requestNumber         String                           @db.VarChar(80)
+  executionKind         OperationsPurchaseExecutionKind
   plannedPaymentChannel OperationsPurchasePaymentChannel
-  status               OperationsPurchaseRequestStatus @default(PENDING_RECEIPT)
-  businessDate         DateTime                        @db.Date
-  custodyFundingAmount Decimal?                        @db.Decimal(18, 4)
-  representativeName   String?                         @db.VarChar(160)
-  notes                String?                         @db.VarChar(1000)
-  requestedByUserId    String                          @db.Uuid
-  requestedAt          DateTime                        @default(now()) @db.Timestamptz(6)
-  receivedAt           DateTime?                       @db.Timestamptz(6)
-  cancelledAt          DateTime?                       @db.Timestamptz(6)
-  cancelledByUserId    String?                         @db.Uuid
-  cancellationReason   String?                         @db.VarChar(1000)
-  createdAt            DateTime                        @default(now()) @db.Timestamptz(6)
-  updatedAt            DateTime                        @updatedAt @db.Timestamptz(6)
+  status                OperationsPurchaseRequestStatus  @default(PENDING_RECEIPT)
+  businessDate          DateTime                         @db.Date
+  custodyFundingAmount  Decimal?                         @db.Decimal(18, 4)
+  representativeName    String?                          @db.VarChar(160)
+  notes                 String?                          @db.VarChar(1000)
+  requestedByUserId     String                           @db.Uuid
+  requestedAt           DateTime                         @default(now()) @db.Timestamptz(6)
+  receivedAt            DateTime?                        @db.Timestamptz(6)
+  cancelledAt           DateTime?                        @db.Timestamptz(6)
+  cancelledByUserId     String?                          @db.Uuid
+  cancellationReason    String?                          @db.VarChar(1000)
+  createdAt             DateTime                         @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime                         @updatedAt @db.Timestamptz(6)
 
   company       Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   lines         OperationsPurchaseRequestLine[]
@@ -3542,27 +3593,27 @@ model OperationsPurchaseRequest {
 }
 
 model OperationsPurchaseRequestLine {
-  id                String                     @id @default(uuid()) @db.Uuid
-  tenantId          String                     @db.Uuid
-  companyId         String                     @db.Uuid
-  requestId         String                     @db.Uuid
-  lineNumber        Int
-  rawMaterialItemId String                     @db.Uuid
-  requestedUnitId   String                     @db.Uuid
-  requestedQuantity Decimal                    @db.Decimal(24, 8)
-  baseUnitId        String                     @db.Uuid
-  conversionVersionId String?                  @db.Uuid
-  requestedBaseQuantity Decimal                 @db.Decimal(24, 8)
-  quotedUnitPrice   Decimal?                   @db.Decimal(18, 4)
-  quotedLineTotal   Decimal?                   @db.Decimal(18, 4)
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @db.Uuid
+  companyId             String   @db.Uuid
+  requestId             String   @db.Uuid
+  lineNumber            Int
+  rawMaterialItemId     String   @db.Uuid
+  requestedUnitId       String   @db.Uuid
+  requestedQuantity     Decimal  @db.Decimal(24, 8)
+  baseUnitId            String   @db.Uuid
+  conversionVersionId   String?  @db.Uuid
+  requestedBaseQuantity Decimal  @db.Decimal(24, 8)
+  quotedUnitPrice       Decimal? @db.Decimal(18, 4)
+  quotedLineTotal       Decimal? @db.Decimal(18, 4)
 
-  company       Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  request       OperationsPurchaseRequest       @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  rawMaterial   OperationsItem                  @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  requestedUnit OperationsUnit                  @relation("OperationsRequestLineUnit", fields: [requestedUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  baseUnit      OperationsUnit                  @relation("OperationsRequestLineBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company           Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  request           OperationsPurchaseRequest        @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  rawMaterial       OperationsItem                   @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  requestedUnit     OperationsUnit                   @relation("OperationsRequestLineUnit", fields: [requestedUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  baseUnit          OperationsUnit                   @relation("OperationsRequestLineBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   conversionVersion OperationsItemConversionVersion? @relation("OperationsPurchaseRequestLineConversionVersion", fields: [conversionVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  receiptLines  OperationsPurchaseReceiptLine[]
+  receiptLines      OperationsPurchaseReceiptLine[]
 
   @@unique([requestId, lineNumber])
   @@unique([id, tenantId, companyId])
@@ -3570,28 +3621,28 @@ model OperationsPurchaseRequestLine {
 }
 
 model OperationsPurchaseReceipt {
-  id               String                          @id @default(uuid()) @db.Uuid
-  tenantId         String                          @db.Uuid
-  companyId        String                          @db.Uuid
-  requestId        String                          @db.Uuid
-  receiptNumber    String                          @db.VarChar(80)
-  receiptSequence  Int
+  id                   String                           @id @default(uuid()) @db.Uuid
+  tenantId             String                           @db.Uuid
+  companyId            String                           @db.Uuid
+  requestId            String                           @db.Uuid
+  receiptNumber        String                           @db.VarChar(80)
+  receiptSequence      Int
   actualPaymentChannel OperationsPurchasePaymentChannel
-  paymentReference String? @db.VarChar(160)
-  businessDate     DateTime                        @db.Date
-  status           OperationsPurchaseReceiptStatus @default(POSTED)
-  notes            String?                         @db.VarChar(1000)
-  receivedByUserId String                          @db.Uuid
-  receivedAt       DateTime                        @default(now()) @db.Timestamptz(6)
-  reversedAt       DateTime?                       @db.Timestamptz(6)
-  reversedByUserId String?                         @db.Uuid
-  reversalReason   String?                         @db.VarChar(1000)
-  createdAt        DateTime                        @default(now()) @db.Timestamptz(6)
+  paymentReference     String?                          @db.VarChar(160)
+  businessDate         DateTime                         @db.Date
+  status               OperationsPurchaseReceiptStatus  @default(POSTED)
+  notes                String?                          @db.VarChar(1000)
+  receivedByUserId     String                           @db.Uuid
+  receivedAt           DateTime                         @default(now()) @db.Timestamptz(6)
+  reversedAt           DateTime?                        @db.Timestamptz(6)
+  reversedByUserId     String?                          @db.Uuid
+  reversalReason       String?                          @db.VarChar(1000)
+  createdAt            DateTime                         @default(now()) @db.Timestamptz(6)
 
-  company       Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  request       OperationsPurchaseRequest       @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  lines         OperationsPurchaseReceiptLine[]
-  custodyEvents OperationsCustodyEvent[]
+  company            Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  request            OperationsPurchaseRequest       @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  lines              OperationsPurchaseReceiptLine[]
+  custodyEvents      OperationsCustodyEvent[]
   inventoryMovements OperationsInventoryMovement[]
 
   @@unique([id, tenantId, companyId])
@@ -3601,27 +3652,27 @@ model OperationsPurchaseReceipt {
 }
 
 model OperationsPurchaseReceiptLine {
-  id                String   @id @default(uuid()) @db.Uuid
-  tenantId          String   @db.Uuid
-  companyId         String   @db.Uuid
-  receiptId         String   @db.Uuid
-  requestLineId     String?  @db.Uuid
-  rawMaterialItemId String   @db.Uuid
-  receivedUnitId    String   @db.Uuid
-  receivedQuantity  Decimal  @db.Decimal(24, 8)
-  actualUnitPrice   Decimal  @db.Decimal(18, 4)
-  lineTotal         Decimal  @db.Decimal(18, 4)
-  baseUnitId        String   @db.Uuid
+  id                  String  @id @default(uuid()) @db.Uuid
+  tenantId            String  @db.Uuid
+  companyId           String  @db.Uuid
+  receiptId           String  @db.Uuid
+  requestLineId       String? @db.Uuid
+  rawMaterialItemId   String  @db.Uuid
+  receivedUnitId      String  @db.Uuid
+  receivedQuantity    Decimal @db.Decimal(24, 8)
+  actualUnitPrice     Decimal @db.Decimal(18, 4)
+  lineTotal           Decimal @db.Decimal(18, 4)
+  baseUnitId          String  @db.Uuid
   conversionVersionId String? @db.Uuid
-  baseQuantity      Decimal  @db.Decimal(24, 8)
-  baseUnitCost      Decimal  @db.Decimal(24, 12)
+  baseQuantity        Decimal @db.Decimal(24, 8)
+  baseUnitCost        Decimal @db.Decimal(24, 12)
 
-  company      Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  receipt      OperationsPurchaseReceipt       @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  requestLine  OperationsPurchaseRequestLine?  @relation(fields: [requestLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  rawMaterial  OperationsItem                  @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  receivedUnit OperationsUnit                  @relation("OperationsReceiptReceivedUnit", fields: [receivedUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  baseUnit     OperationsUnit                  @relation("OperationsReceiptBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company           Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  receipt           OperationsPurchaseReceipt        @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  requestLine       OperationsPurchaseRequestLine?   @relation(fields: [requestLineId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  rawMaterial       OperationsItem                   @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  receivedUnit      OperationsUnit                   @relation("OperationsReceiptReceivedUnit", fields: [receivedUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  baseUnit          OperationsUnit                   @relation("OperationsReceiptBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   conversionVersion OperationsItemConversionVersion? @relation("OperationsPurchaseReceiptLineConversionVersion", fields: [conversionVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@index([tenantId, companyId, rawMaterialItemId])
@@ -3644,23 +3695,23 @@ model OperationsCustodyProfile {
 }
 
 model OperationsCustodyEvent {
-  id              String                    @id @default(uuid()) @db.Uuid
-  tenantId        String                    @db.Uuid
-  companyId       String                    @db.Uuid
-  requestId       String?                   @db.Uuid
-  receiptId       String?                   @db.Uuid
-  eventNumber     String                    @db.VarChar(80)
+  id              String                     @id @default(uuid()) @db.Uuid
+  tenantId        String                     @db.Uuid
+  companyId       String                     @db.Uuid
+  requestId       String?                    @db.Uuid
+  receiptId       String?                    @db.Uuid
+  eventNumber     String                     @db.VarChar(80)
   eventType       OperationsCustodyEventType
-  amountDelta     Decimal                   @db.Decimal(18, 4)
-  balanceAfter    Decimal                   @db.Decimal(18, 4)
-  businessDate    DateTime                  @db.Date
-  effectiveAt     DateTime                  @default(now()) @db.Timestamptz(6)
-  notes           String?                   @db.VarChar(1000)
-  createdByUserId String                    @db.Uuid
+  amountDelta     Decimal                    @db.Decimal(18, 4)
+  balanceAfter    Decimal                    @db.Decimal(18, 4)
+  businessDate    DateTime                   @db.Date
+  effectiveAt     DateTime                   @default(now()) @db.Timestamptz(6)
+  notes           String?                    @db.VarChar(1000)
+  createdByUserId String                     @db.Uuid
 
-  company Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  request OperationsPurchaseRequest?  @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  receipt OperationsPurchaseReceipt?  @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  request OperationsPurchaseRequest? @relation(fields: [requestId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  receipt OperationsPurchaseReceipt? @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, eventNumber])
@@ -3677,8 +3728,8 @@ model OperationsInventoryBalance {
   weightedUnitCost  Decimal  @default(0) @db.Decimal(26, 12)
   updatedAt         DateTime @updatedAt @db.Timestamptz(6)
 
-  company     Company         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  rawMaterial OperationsItem  @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company     Company        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  rawMaterial OperationsItem @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, rawMaterialItemId])
@@ -3687,27 +3738,31 @@ model OperationsInventoryBalance {
 }
 
 model OperationsInventoryMovement {
-  id                    String                         @id @default(uuid()) @db.Uuid
-  tenantId              String                         @db.Uuid
-  companyId             String                         @db.Uuid
-  rawMaterialItemId     String                         @db.Uuid
-  receiptId             String?                        @db.Uuid
-  movementNumber        String                         @db.VarChar(80)
-  movementType          OperationsInventoryMovementType
-  baseQuantityDelta     Decimal                        @db.Decimal(24, 8)
-  valueDelta            Decimal                        @db.Decimal(18, 4)
-  quantityAfter         Decimal                        @db.Decimal(24, 8)
-  valueAfter            Decimal                        @db.Decimal(18, 4)
-  weightedUnitCostAfter Decimal                        @db.Decimal(26, 12)
-  businessDate          DateTime                       @db.Date
-  effectiveAt           DateTime                       @default(now()) @db.Timestamptz(6)
-  createdByUserId       String                         @db.Uuid
+  id                                String                          @id @default(uuid()) @db.Uuid
+  tenantId                          String                          @db.Uuid
+  companyId                         String                          @db.Uuid
+  rawMaterialItemId                 String                          @db.Uuid
+  receiptId                         String?                         @db.Uuid
+  internalRegistrationConsumptionId String?                         @db.Uuid
+  movementNumber                    String                          @db.VarChar(80)
+  movementType                      OperationsInventoryMovementType
+  baseQuantityDelta                 Decimal                         @db.Decimal(24, 8)
+  valueDelta                        Decimal                         @db.Decimal(18, 4)
+  quantityAfter                     Decimal                         @db.Decimal(24, 8)
+  valueAfter                        Decimal                         @db.Decimal(18, 4)
+  weightedUnitCostAfter             Decimal                         @db.Decimal(26, 12)
+  businessDate                      DateTime                        @db.Date
+  effectiveAt                       DateTime                        @default(now()) @db.Timestamptz(6)
+  createdByUserId                   String                          @db.Uuid
 
-  company     Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  rawMaterial OperationsItem             @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  receipt     OperationsPurchaseReceipt? @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company                         Company                                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  rawMaterial                     OperationsItem                             @relation(fields: [rawMaterialItemId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  receipt                         OperationsPurchaseReceipt?                 @relation(fields: [receiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  internalRegistrationConsumption OperationsInternalRegistrationConsumption? @relation(fields: [internalRegistrationConsumptionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, movementNumber])
+  @@unique([internalRegistrationConsumptionId], map: "OperationsInventoryMovement_internalConsumption_single_key")
+  @@unique([internalRegistrationConsumptionId, tenantId, companyId], map: "OperationsInventoryMovement_internalConsumption_tenant_key")
   @@index([tenantId, companyId, rawMaterialItemId, effectiveAt])
 }

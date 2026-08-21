@@ -1,4 +1,4 @@
-import { archiveOperationsItemRequestSchema, companyIdSchema, configureOperationsItemUnitsRequestSchema, createOperationsItemRequestSchema, createOperationsSectionRequestSchema, createOperationsUnitRequestSchema, operationsCatalogReceiptSchema, operationsEntityReceiptSchema, publishOperationsConversionsRequestSchema, updateOperationsItemRequestSchema, updateOperationsItemUnitPriceRequestSchema, updateOperationsSectionRequestSchema, updateOperationsUnitRequestSchema } from "@baseer-erp/contracts";
+import { archiveOperationsItemRequestSchema, companyIdSchema, configureOperationsItemUnitsRequestSchema, createOperationsItemRequestSchema, createOperationsSectionRequestSchema, createOperationsUnitRequestSchema, installOperationsRestaurantUnitPresetsRequestSchema, operationsCatalogReceiptSchema, operationsEntityReceiptSchema, publishOperationsConversionsRequestSchema, updateOperationsItemRequestSchema, updateOperationsItemUnitPriceRequestSchema, updateOperationsSectionRequestSchema, updateOperationsUnitRequestSchema } from "@baseer-erp/contracts";
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -18,6 +18,12 @@ export class OperationsCatalogController {
     const request = createOperationsUnitRequestSchema.safeParse(body); if (!request.success) throw new BadRequestException("Invalid operations unit request.");
     const { idempotencyKey, ...payload } = request.data;
     return operationsEntityReceiptSchema.parse(await this.catalog.createUnit(await this.authorize(authorization, companyId, "operations.catalog.manage"), payload, idempotencyKey));
+  }
+
+  @Post("units/restaurant-presets") @HttpCode(201)
+  async installRestaurantUnitPresets(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const request = installOperationsRestaurantUnitPresetsRequestSchema.safeParse(body); if (!request.success) throw new BadRequestException("Invalid restaurant unit preset request.");
+    return operationsEntityReceiptSchema.parse(await this.catalog.installRestaurantUnitPresets(await this.authorize(authorization, companyId, "operations.catalog.manage"), request.data.idempotencyKey));
   }
 
   @Post("units/update")
@@ -73,7 +79,7 @@ export class OperationsCatalogController {
   @Post("conversions/publish") @HttpCode(201)
   async publishConversions(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const request = publishOperationsConversionsRequestSchema.safeParse(body); if (!request.success) throw new BadRequestException("Invalid operations conversion request.");
-    return operationsEntityReceiptSchema.parse(await this.catalog.publishConversions(await this.authorize(authorization, companyId, "operations.conversions.publish"), request.data.itemId, request.data.edges, request.data.idempotencyKey));
+    return operationsEntityReceiptSchema.parse(await this.catalog.publishConversions(await this.authorize(authorization, companyId, "operations.conversions.publish"), request.data.itemId, request.data.edges, request.data.baseUnitId, request.data.idempotencyKey));
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined, capability: string) {

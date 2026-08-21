@@ -4,6 +4,7 @@ import { Prisma, FinanceVaultReconciliationKind, FinanceVaultReconciliationStatu
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
 import { IdempotencyPayloadMismatchError, IdempotencyService } from "../core-controls/idempotency.service.js";
+import { DocumentSerialService, type SqlDate } from "../core-controls/document-serial.service.js";
 import { JournalPostingService } from "./journal/journal-posting.service.js";
 import { FinanceVaultService } from "./finance-vault.service.js";
 import { RequestContext } from "../observability/request-context.js";
@@ -22,6 +23,7 @@ export class TreasuryService {
   constructor(
     private readonly db: DatabaseService,
     private readonly idem: IdempotencyService,
+    private readonly serials: DocumentSerialService,
     private readonly journals: JournalPostingService,
     private readonly vaults: FinanceVaultService,
     private readonly dates: BusinessDateService,
@@ -266,7 +268,14 @@ export class TreasuryService {
         this.vaults.assertActiveVault(tx, { tenantId: context.tenantId, companyId: context.companyId, vaultId: input.fromVaultId }),
         this.vaults.assertActiveVault(tx, { tenantId: context.tenantId, companyId: context.companyId, vaultId: input.toVaultId }),
       ]);
-      const transferReference = randomUUID();
+      // The journal keeps this immutable reference.  It must be a business
+      // document number, never the internal UUID used for tracing/auditing.
+      const businessDate = businessDateValue(input.businessDate) as SqlDate;
+      const sequence = await this.serials.reserveInTransaction(tx, context, {
+        series: "VAULT_TRANSFER",
+        businessDate,
+      });
+      const transferReference = `VTR-${businessDate.replaceAll("-", "")}-${sequence.toString().padStart(4, "0")}`;
       const requestId = RequestContext.correlationId() ?? randomUUID();
       const posted = await this.journals.postInTransaction(tx, {
         tenantId: context.tenantId,

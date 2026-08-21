@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
+import { BaseerSearchSelect } from "./baseer-search-select";
 import { activeSession, api, requestId } from "./daily-sales-client";
 import { hasActivePermission } from "./module-access";
 import "./operations-recipe-workspace.css";
@@ -37,7 +38,37 @@ export function OperationsRecipeEditor({ language, workspace, productId, onPubli
   const unitName = (id: string) => { const unit = workspace.units.find((entry) => entry.id === id); return ar ? unit?.nameAr ?? "—" : unit?.nameEn ?? unit?.nameAr ?? "—"; };
   const number = (value: string | null | undefined) => value === null || value === undefined || value === "" ? "—" : new Intl.NumberFormat("en-US", { maximumFractionDigits: 4, useGrouping: false }).format(Number(value));
   const material = (id: string) => workspace.rawMaterials.find((entry) => entry.id === id);
-  const unitChoices = (id: string) => { const selected = material(id); return selected?.itemUnits.filter((line) => line.isActive && (line.unitId === selected.baseUnitId || Boolean(selected.conversionVersion))) ?? []; };
+  const factorToBase = (selected: NonNullable<ReturnType<typeof material>>, unitId: string) => {
+    if (unitId === selected.baseUnitId) return 1;
+    // A material conversion is a connected relation, not a one-way recipe rule.
+    // If `1 piece = 200 grams` and the base is piece, recipes may still select
+    // grams: their factor to the base is 1 / 200.
+    const adjacent = new Map<string, Array<{ unitId: string; factor: number }>>();
+    for (const edge of selected.conversionVersion?.edges ?? []) {
+      const factor = Number(edge.factor);
+      if (!Number.isFinite(factor) || factor <= 0) return null;
+      adjacent.set(edge.fromUnitId, [...(adjacent.get(edge.fromUnitId) ?? []), { unitId: edge.toUnitId, factor }]);
+      adjacent.set(edge.toUnitId, [...(adjacent.get(edge.toUnitId) ?? []), { unitId: edge.fromUnitId, factor: 1 / factor }]);
+    }
+    const factors = new Map<string, number>([[unitId, 1]]);
+    const queue = [unitId];
+    while (queue.length) {
+      const current = queue.shift()!;
+      if (current === selected.baseUnitId) break;
+      for (const next of adjacent.get(current) ?? []) if (!factors.has(next.unitId)) {
+        factors.set(next.unitId, factors.get(current)! * next.factor);
+        queue.push(next.unitId);
+      }
+    }
+    const factor = factors.get(selected.baseUnitId);
+    return factor && Number.isFinite(factor) && factor > 0 ? factor : null;
+  };
+  const unitChoices = (id: string) => { const selected = material(id); return selected?.itemUnits.filter((line) => line.isActive && factorToBase(selected, line.unitId) !== null) ?? []; };
+  const liveEstimate = (selected: NonNullable<ReturnType<typeof material>>, line: RecipeLine) => {
+    const factor = factorToBase(selected, line.unitId); const quantity = Number(line.quantity); const baseCost = Number(selected.weightedUnitCost);
+    if (factor === null || !Number.isFinite(quantity) || quantity <= 0 || !Number.isFinite(baseCost) || baseCost <= 0) return null;
+    return { baseQuantity: factor * quantity, selectedUnitCost: factor * baseCost, lineCost: factor * quantity * baseCost };
+  };
   const currentCostPreview = (recipe: NonNullable<typeof currentRecipe>): Preview => {
     const nextLines = recipe.lines.map((line) => {
       const weightedUnitCost = material(line.rawMaterialItemId)?.weightedUnitCost ?? null;
@@ -79,27 +110,26 @@ export function OperationsRecipeEditor({ language, workspace, productId, onPubli
   if (!product) return null;
   return <section className="operations-recipe-editor" aria-label={t.title}>
     <header className="operations-recipe-editor__intro">
-      <div><p className="operations-recipe-editor__eyebrow">{t.title}</p><h4>{t.ingredients}</h4><p>{t.description}</p></div>
+      <div><p className="operations-recipe-editor__eyebrow">{t.title}</p><h4>{t.ingredients}</h4></div>
       {currentRecipe ? <span className="operations-recipe-editor__version">{t.version} <bdi dir="ltr">v{currentRecipe.version}</bdi></span> : null}
     </header>
     {message ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
     <div className="operations-recipe-editor__layout">
       <div className="operations-recipe-editor__main">
-        <section className="operations-recipe-editor__panel">
-          <div className="operations-recipe-editor__panel-heading"><div><h5>{t.outputQuantity}</h5><p>{t.recipeHelp}</p></div></div>
+        <section className="operations-recipe-editor__output-bar">
           <div className="operations-recipe-editor__output">
             <label>{t.outputQuantity}<input required inputMode="decimal" value={outputQuantity} onChange={(event) => { setOutputQuantity(event.target.value); setPreview(null); }} /></label>
-            <label>{t.unit}<select required value={outputUnitId} onChange={(event) => { setOutputUnitId(event.target.value); setPreview(null); }}>{product.itemUnits.filter((line) => line.isActive).map((line) => <option key={line.unitId} value={line.unitId}>{unitName(line.unitId)}</option>)}</select></label>
+            <label>{t.unit}<BaseerSearchSelect searchable={false} required id={`recipe-output-unit-${product.id}`} label={t.unit} value={outputUnitId} placeholder={t.select} options={product.itemUnits.filter((line) => line.isActive).map((line) => ({ id: line.unitId, label: unitName(line.unitId) }))} onChange={(unitId) => { setOutputUnitId(unitId); setPreview(null); }} /></label>
           </div>
         </section>
-        <section className="operations-recipe-editor__panel operations-recipe-editor__ingredients">
-          <div className="operations-recipe-editor__panel-heading"><div><h5>{t.ingredients}</h5><p>{t.recipeHelp}</p></div><BaseerButton type="button" variant="secondary" onClick={() => { setLines((current) => [...current, { rawMaterialItemId: "", unitId: "", quantity: "" }]); setPreview(null); }}>{t.add}</BaseerButton></div>
-          <div className="operations-recipe-editor__table-wrap"><table className="operations-recipe-editor__table"><thead><tr><th scope="col">{t.material}</th><th scope="col">{t.unit}</th><th scope="col">{t.quantity}</th><th scope="col">{t.lineCost}</th><th scope="col"><span className="visually-hidden">{t.remove}</span></th></tr></thead><tbody>{lines.map((line, index) => { const selected = material(line.rawMaterialItemId); const estimate = preview?.lines[index]; return <Fragment key={`${line.rawMaterialItemId}-${index}`}><tr><td><select aria-label={t.material} required value={line.rawMaterialItemId} onChange={(event) => { const id = event.target.value; changeLine(index, { rawMaterialItemId: id, unitId: material(id)?.baseUnitId ?? "" }); }}><option value="">{t.select}</option>{workspace.rawMaterials.filter((entry) => !lines.some((other, otherIndex) => otherIndex !== index && other.rawMaterialItemId === entry.id)).map((entry) => <option key={entry.id} value={entry.id}>{itemName(entry)}</option>)}</select></td><td><select aria-label={t.unit} required value={line.unitId} onChange={(event) => changeLine(index, { unitId: event.target.value })}>{unitChoices(line.rawMaterialItemId).map((choice) => <option key={choice.unitId} value={choice.unitId}>{unitName(choice.unitId)}</option>)}</select></td><td><input aria-label={t.quantity} required inputMode="decimal" value={line.quantity} onChange={(event) => changeLine(index, { quantity: event.target.value })} /></td><td><div className="operations-recipe-editor__line-cost" dir="ltr">{estimate ? <><small>{t.baseQuantity}: {number(estimate.resolvedBaseQuantity)}</small><strong>{number(estimate.estimatedLineCost)}</strong></> : selected ? <><small>{t.unitCost}</small><strong>{number(selected.weightedUnitCost)}</strong></> : <strong>—</strong>}</div></td><td><BaseerButton type="button" variant="quiet" onClick={() => { setLines((current) => current.filter((_line, lineIndex) => lineIndex !== index)); setPreview(null); }}>{t.remove}</BaseerButton></td></tr>{selected && line.unitId !== selected.baseUnitId && !selected.conversionVersion ? <tr className="operations-recipe-editor__table-warning"><td colSpan={5}>{t.noConversion}</td></tr> : null}</Fragment>; })}</tbody></table></div>
+        <section className="operations-recipe-editor__ingredients">
+          <div className="operations-recipe-editor__panel-heading"><div><h5>{t.ingredients}</h5></div><BaseerButton type="button" variant="secondary" onClick={() => { setLines((current) => [...current, { rawMaterialItemId: "", unitId: "", quantity: "" }]); setPreview(null); }}>{t.add}</BaseerButton></div>
+          <div className="operations-recipe-editor__table-wrap"><table className="operations-recipe-editor__table"><thead><tr><th scope="col">{t.material}</th><th scope="col">{t.unit}</th><th scope="col">{t.quantity}</th><th scope="col">{t.lineCost}</th><th scope="col"><span className="visually-hidden">{t.remove}</span></th></tr></thead><tbody>{lines.map((line, index) => { const selected = material(line.rawMaterialItemId); const estimate = preview?.lines[index]; const live = selected ? liveEstimate(selected, line) : null; return <Fragment key={`${line.rawMaterialItemId}-${index}`}><tr><td><BaseerSearchSelect required id={`recipe-material-${index}`} label={t.material} value={line.rawMaterialItemId} placeholder={t.select} options={workspace.rawMaterials.filter((entry) => !lines.some((other, otherIndex) => otherIndex !== index && other.rawMaterialItemId === entry.id)).map((entry) => ({ id: entry.id, label: itemName(entry) }))} onChange={(id) => changeLine(index, { rawMaterialItemId: id, unitId: material(id)?.baseUnitId ?? "" })} /></td><td><BaseerSearchSelect searchable={false} required id={`recipe-unit-${index}`} label={t.unit} value={line.unitId} placeholder={t.select} options={unitChoices(line.rawMaterialItemId).map((choice) => ({ id: choice.unitId, label: unitName(choice.unitId) }))} onChange={(unitId) => changeLine(index, { unitId })} /></td><td><input className="operations-recipe-editor__quantity" aria-label={t.quantity} required inputMode="decimal" value={line.quantity} onChange={(event) => changeLine(index, { quantity: event.target.value })} /></td><td><div className="operations-recipe-editor__line-cost" dir="ltr">{estimate ? <><small>{t.baseQuantity}: {number(estimate.resolvedBaseQuantity)}</small><strong>{number(estimate.estimatedLineCost)}</strong></> : live ? <><small>{number(String(live.selectedUnitCost))} / {unitName(line.unitId)}</small><strong>{number(String(live.lineCost))}</strong></> : selected ? <><small>{t.unitCost}</small><strong>{number(selected.weightedUnitCost)}</strong></> : <strong>—</strong>}</div></td><td><BaseerButton type="button" variant="quiet" onClick={() => { setLines((current) => current.filter((_line, lineIndex) => lineIndex !== index)); setPreview(null); }}>{t.remove}</BaseerButton></td></tr>{selected && line.unitId !== selected.baseUnitId && !factorToBase(selected, line.unitId) ? <tr className="operations-recipe-editor__table-warning"><td colSpan={5}>{t.noConversion}</td></tr> : null}</Fragment>; })}</tbody></table></div>
         </section>
         <div className="operations-recipe-editor__actions"><BaseerButton type="button" variant="secondary" disabled={busy || !outputUnitId || !lines.length} onClick={() => void calculate()}>{t.preview}</BaseerButton><BaseerButton type="button" disabled={busy || !preview?.estimatedCost || !canPublish} onClick={() => void publish()}>{t.publish}</BaseerButton></div>
         {!canPublish ? <p className="operations-recipe-editor__permission">{t.publishOnly}</p> : null}
       </div>
-      <aside className="operations-recipe-editor__summary"><p>{t.liveCost}</p><div className="operations-recipe-editor__metric"><span>{t.batchCost}</span><strong dir="ltr">{number(preview?.estimatedCost)}</strong></div><div className="operations-recipe-editor__metric"><span>{t.outputCost}</span><strong dir="ltr">{number(preview?.costPerOutputUnit)}</strong></div>{preview?.missingMaterialIds.length ? <div className="operations-recipe__warning"><strong>{t.missing}</strong><ul>{preview.missingMaterialIds.map((id) => <li key={id}>{material(id) ? itemName(material(id)!) : id}</li>)}</ul><p>{t.incomplete}</p></div> : null}</aside>
+      <aside className="operations-recipe-editor__summary"><strong className="operations-recipe-editor__calculator-title">{ar ? "حاسبة التكلفة" : "Cost calculator"}</strong><div className="operations-recipe-editor__metric"><span>{t.batchCost}</span><strong dir="ltr">{number(preview?.estimatedCost)}</strong></div><div className="operations-recipe-editor__metric"><span>{t.outputCost}</span><strong dir="ltr">{number(preview?.costPerOutputUnit)}</strong></div>{preview?.missingMaterialIds.length ? <div className="operations-recipe__warning"><strong>{t.missing}</strong><ul>{preview.missingMaterialIds.map((id) => <li key={id}>{material(id) ? itemName(material(id)!) : id}</li>)}</ul><p>{t.incomplete}</p></div> : null}</aside>
     </div>
   </section>;
 }

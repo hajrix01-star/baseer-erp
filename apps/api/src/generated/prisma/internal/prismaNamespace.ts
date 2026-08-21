@@ -506,6 +506,7 @@ export const ModelName = {
   OperationsItemConversionEdge: 'OperationsItemConversionEdge',
   OperationsInternalRegistration: 'OperationsInternalRegistration',
   OperationsInternalRegistrationLine: 'OperationsInternalRegistrationLine',
+  OperationsInternalRegistrationConsumption: 'OperationsInternalRegistrationConsumption',
   OperationsRecipeVersion: 'OperationsRecipeVersion',
   OperationsRecipeLine: 'OperationsRecipeLine',
   OperationsPurchaseRequest: 'OperationsPurchaseRequest',
@@ -531,7 +532,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -8601,6 +8602,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OperationsInternalRegistrationConsumption: {
+      payload: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>
+      fields: Prisma.OperationsInternalRegistrationConsumptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationsInternalRegistrationConsumptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationsInternalRegistrationConsumptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationsInternalRegistrationConsumptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationsInternalRegistrationConsumptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        findMany: {
+          args: Prisma.OperationsInternalRegistrationConsumptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>[]
+        }
+        create: {
+          args: Prisma.OperationsInternalRegistrationConsumptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        createMany: {
+          args: Prisma.OperationsInternalRegistrationConsumptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationsInternalRegistrationConsumptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationsInternalRegistrationConsumptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        update: {
+          args: Prisma.OperationsInternalRegistrationConsumptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationsInternalRegistrationConsumptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationsInternalRegistrationConsumptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationsInternalRegistrationConsumptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationsInternalRegistrationConsumptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsInternalRegistrationConsumptionPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationsInternalRegistrationConsumptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationsInternalRegistrationConsumption>
+        }
+        groupBy: {
+          args: Prisma.OperationsInternalRegistrationConsumptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationsInternalRegistrationConsumptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationsInternalRegistrationConsumptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationsInternalRegistrationConsumptionCountAggregateOutputType> | number
+        }
+      }
+    }
     OperationsRecipeVersion: {
       payload: Prisma.$OperationsRecipeVersionPayload<ExtArgs>
       fields: Prisma.OperationsRecipeVersionFieldRefs
@@ -11380,10 +11455,34 @@ export const OperationsInternalRegistrationLineScalarFieldEnum = {
   unitNameArSnapshot: 'unitNameArSnapshot',
   unitNameEnSnapshot: 'unitNameEnSnapshot',
   menuSaleUnitPriceSnapshot: 'menuSaleUnitPriceSnapshot',
-  lineTotalSnapshot: 'lineTotalSnapshot'
+  lineTotalSnapshot: 'lineTotalSnapshot',
+  recipeVersionId: 'recipeVersionId',
+  recipeOutputQuantitySnapshot: 'recipeOutputQuantitySnapshot'
 } as const
 
 export type OperationsInternalRegistrationLineScalarFieldEnum = (typeof OperationsInternalRegistrationLineScalarFieldEnum)[keyof typeof OperationsInternalRegistrationLineScalarFieldEnum]
+
+
+export const OperationsInternalRegistrationConsumptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  registrationLineId: 'registrationLineId',
+  recipeVersionId: 'recipeVersionId',
+  recipeLineId: 'recipeLineId',
+  rawMaterialItemId: 'rawMaterialItemId',
+  unitId: 'unitId',
+  baseUnitId: 'baseUnitId',
+  conversionVersionId: 'conversionVersionId',
+  recipeQuantitySnapshot: 'recipeQuantitySnapshot',
+  recipeResolvedBaseQuantitySnapshot: 'recipeResolvedBaseQuantitySnapshot',
+  consumedBaseQuantity: 'consumedBaseQuantity',
+  weightedUnitCostSnapshot: 'weightedUnitCostSnapshot',
+  consumedValue: 'consumedValue',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationsInternalRegistrationConsumptionScalarFieldEnum = (typeof OperationsInternalRegistrationConsumptionScalarFieldEnum)[keyof typeof OperationsInternalRegistrationConsumptionScalarFieldEnum]
 
 
 export const OperationsRecipeVersionScalarFieldEnum = {
@@ -11559,6 +11658,7 @@ export const OperationsInventoryMovementScalarFieldEnum = {
   companyId: 'companyId',
   rawMaterialItemId: 'rawMaterialItemId',
   receiptId: 'receiptId',
+  internalRegistrationConsumptionId: 'internalRegistrationConsumptionId',
   movementNumber: 'movementNumber',
   movementType: 'movementType',
   baseQuantityDelta: 'baseQuantityDelta',
@@ -13224,6 +13324,7 @@ export type GlobalOmitConfig = {
   operationsItemConversionEdge?: Prisma.OperationsItemConversionEdgeOmit
   operationsInternalRegistration?: Prisma.OperationsInternalRegistrationOmit
   operationsInternalRegistrationLine?: Prisma.OperationsInternalRegistrationLineOmit
+  operationsInternalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionOmit
   operationsRecipeVersion?: Prisma.OperationsRecipeVersionOmit
   operationsRecipeLine?: Prisma.OperationsRecipeLineOmit
   operationsPurchaseRequest?: Prisma.OperationsPurchaseRequestOmit

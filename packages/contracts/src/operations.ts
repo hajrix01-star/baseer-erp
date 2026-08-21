@@ -10,6 +10,7 @@ const operationsIdSchema = z.string().uuid();
 const quantitySchema = z.string().trim().regex(/^\d{1,16}(?:\.\d{1,8})?$/).refine((value) => Number(value) > 0, "Quantity must be positive.");
 const moneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).refine((value) => Number(value) > 0, "Amount must be positive.");
 const nullableAmountSchema = moneySchema.nullable();
+const nullableNonNegativeMoneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).nullable();
 
 export const operationsUnitSchema = z.object({
   id: operationsIdSchema,
@@ -64,6 +65,10 @@ export const operationsItemSchema = z.object({
   baseUnitId: operationsIdSchema,
   itemUnits: z.array(operationsItemUnitSchema).min(1).max(30),
   conversionVersion: operationsConversionVersionSchema.nullable(),
+  /** Current theoretical recipe cost per output unit. It is derived from the
+   * latest published recipe and current raw-material weighted costs. */
+  liveRecipeUnitCost: nullableNonNegativeMoneySchema,
+  liveRecipeCostStatus: z.enum(["NO_RECIPE", "INCOMPLETE", "AVAILABLE"]),
 }).strict();
 
 export const operationsCatalogReceiptSchema = z.object({
@@ -74,10 +79,15 @@ export const operationsCatalogReceiptSchema = z.object({
 }).strict();
 
 export const createOperationsUnitRequestSchema = z.object({
-  code: z.string().trim().min(1).max(40),
   nameAr: z.string().trim().min(1).max(80),
   nameEn: z.string().trim().max(80).optional(),
   dimension: operationsUnitDimensionSchema,
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
+/** Installs the standard restaurant unit library for the current company.
+ * Existing codes are retained; the operation only creates missing units. */
+export const installOperationsRestaurantUnitPresetsRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
@@ -117,7 +127,6 @@ export const updateOperationsItemUnitPriceRequestSchema = z.object({
 
 export const updateOperationsUnitRequestSchema = z.object({
   unitId: operationsIdSchema,
-  code: z.string().trim().min(1).max(40),
   nameAr: z.string().trim().min(1).max(80),
   nameEn: z.string().trim().max(80).optional(),
   isActive: z.boolean(),
@@ -160,6 +169,9 @@ export const configureOperationsItemUnitsRequestSchema = z.object({
 export const publishOperationsConversionsRequestSchema = z.object({
   itemId: operationsIdSchema,
   edges: z.array(operationsConversionEdgeSchema).min(1).max(100),
+  // A finer final unit may become the base only before this material has
+  // operational history. The API enforces that safety boundary.
+  baseUnitId: operationsIdSchema.optional(),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
@@ -274,7 +286,10 @@ export const receiveOperationsPurchaseRequestSchema = z.object({
   businessDate: z.string().date(),
   notes: z.string().trim().max(1000).optional(),
   paymentReference: z.string().trim().min(1).max(160).optional(),
-  lines: z.array(z.object({ requestLineId: operationsIdSchema, receivedQuantity: quantitySchema, receivedUnitId: operationsIdSchema, actualUnitPrice: moneySchema }).strict()).min(1).max(100),
+  // A confirmed purchase may include an emergency material that was not part
+  // of the original plan. Linked lines keep their request-line identity;
+  // unplanned lines carry their raw-material identity only.
+  lines: z.array(z.object({ requestLineId: operationsIdSchema.optional(), rawMaterialItemId: operationsIdSchema, receivedQuantity: quantitySchema, receivedUnitId: operationsIdSchema, actualUnitPrice: moneySchema }).strict()).min(1).max(100),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 

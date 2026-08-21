@@ -54,6 +54,15 @@ export function financeJournalPresentation(entry: Source): FinanceJournalPresent
       return { labelAr: "تحصيل مبيعات", labelEn: "Sales collection", reference: entry.dailySalesClosing?.documentNumber ?? dailySalesDocumentNumber(entry.description) ?? entry.sourceReference };
     case "finance_vat_settlement":
       return { labelAr: "سداد ضريبة", labelEn: "VAT settlement", reference: entry.vatSettlement?.referenceNumber ?? entry.sourceReference };
+    case "vault_transfer":
+      return {
+        labelAr: "تحويل بين الخزائن",
+        labelEn: "Vault transfer",
+        // Older posted journals used an internal UUID.  Do not mutate a
+        // sealed journal merely for presentation; show a stable, readable
+        // legacy reference instead.  New transfers persist VTR numbers.
+        reference: legacyVaultTransferReference(entry.sourceReference),
+      };
     default:
       return { labelAr: "قيد أو تسوية", labelEn: "Journal or adjustment", reference: entry.sourceReference };
   }
@@ -65,3 +74,11 @@ export function financeJournalPresentation(entry: Source): FinanceJournalPresent
 function dailySalesDocumentNumber(description: string | null | undefined) {
   return description?.match(/Daily sales closing\s+([A-Z]+-\d{8}-\d{4})/i)?.[1] ?? null;
 }
+
+function legacyVaultTransferReference(sourceReference: string) {
+  return UUID_REFERENCE.test(sourceReference)
+    ? `VTR-LEGACY-${sourceReference.slice(0, 8).toUpperCase()}`
+    : sourceReference;
+}
+
+const UUID_REFERENCE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

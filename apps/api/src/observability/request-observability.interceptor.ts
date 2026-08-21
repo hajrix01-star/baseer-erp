@@ -1,6 +1,7 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
@@ -24,9 +25,24 @@ export class RequestObservabilityInterceptor implements NestInterceptor {
     const startedAt = performance.now();
     response.header('x-request-id', correlationId);
 
+    let errorRecorded = false;
     return new Observable((subscriber) => RequestContext.run({ correlationId }, () => next.handle().pipe(
-      catchError((error: unknown) => throwError(() => error)),
+      catchError((error: unknown) => {
+        // Nest runs exception filters after an interceptor's finalize block.
+        // Record the status that will actually be returned instead of the
+        // response's pre-filter default (usually 200).
+        errorRecorded = true;
+        this.observability.recordRequest({
+          method: request.method,
+          route,
+          statusCode: error instanceof HttpException ? error.getStatus() : 500,
+          elapsedMilliseconds: performance.now() - startedAt,
+          correlationId,
+        });
+        return throwError(() => error);
+      }),
       finalize(() => {
+        if (errorRecorded) return;
         this.observability.recordRequest({
           method: request.method,
           route,

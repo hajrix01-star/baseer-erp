@@ -5,6 +5,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -15,6 +16,8 @@ type Retry = ApiErrorReceipt['error']['retry'];
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(ApiExceptionFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<FastifyReply>();
@@ -25,6 +28,13 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const correlationId = RequestContext.correlationId()
       ?? RequestContext.resolveCorrelationId(request.headers['x-request-id']);
     const [code, retry] = this.classify(status);
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      // Keep the response safe, but preserve a correlation-bound diagnosis in
+      // the server log. Without this, an interceptor can record its pre-filter
+      // status and turn a real 500 into an opaque client-side failure.
+      const summary = exception instanceof Error ? `${exception.name}: ${exception.message}` : "Unknown exception";
+      this.logger.error(`${request.method} ${request.url} failed [${correlationId}] ${summary}`);
+    }
 
     const receipt: ApiErrorReceipt = {
       error: {

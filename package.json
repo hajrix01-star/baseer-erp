@@ -24,6 +24,7 @@
                     "check:web-financial-boundaries":  "node scripts/check-web-financial-boundaries.mjs",
                     "check:web-dialog-conventions":  "node scripts/check-web-dialog-conventions.mjs",
                     "check:web-localization":  "node scripts/check-web-localization.mjs",
+                    "check:session-resilience": "node scripts/check-session-resilience.mjs",
                     "check:hr-rls":  "node scripts/check-hr-rls.mjs",
                     "verify:administration-lifecycle":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-administration-lifecycle-verification.mjs",
                     "verify:ai-gate-b-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-ai-gate-b-http-verification.mjs",
@@ -35,7 +36,7 @@
                     "verify:hr-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-http-verification.mjs",
                     "verify:operations-purchase-cycle": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-purchase-cycle-verification.mjs",
                     "verify:operations-assets-warranty": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-assets-warranty-verification.mjs",
-                    "verify:decision-intelligence-foundation": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node apps/api/dist/decision-intelligence/decision-context-import.policy-verification.js \u0026\u0026 node scripts/run-decision-intelligence-foundation-verification.mjs",
+                    "verify:decision-intelligence-foundation": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node apps/api/dist/decision-intelligence/decision-context-import.policy-verification.js \u0026\u0026 node apps/api/dist/decision-intelligence/basira-decision-alert-brief.policy-verification.js \u0026\u0026 node scripts/run-decision-intelligence-foundation-verification.mjs",
                     "seed:operations-demo": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/seed-operations-demo.mjs"
                 }
 }

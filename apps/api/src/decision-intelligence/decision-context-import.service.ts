@@ -1,25 +1,25 @@
-import { ConflictException, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { ConflictException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { createHash, randomUUID } from "node:crypto";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { IdempotencyService } from "../core-controls/idempotency.service.js";
 import { DatabaseService } from "../database/database.service.js";
 import { Prisma } from "../generated/prisma/client.js";
+import { buildSaudiContextCatalogDocument } from "./saudi-context-catalog.js";
 
-type ContextSourceDefinition = Readonly<{ sourceCode: string; displayNameAr: string; sourceUrl: string; scheduleCode: string; allowedHosts: readonly string[] }>;
+type ContextSourceDefinition = Readonly<{ sourceCode: string; displayNameAr: string; sourceUrl: string; scheduleCode: string; mode: "LOCAL_CATALOG" | "EXTERNAL_DOCUMENT"; allowedHosts: readonly string[] }>;
 type NormalizedEvent = Readonly<{ externalKey: string; eventKind: string; titleAr: string; startsOn: string; endsOn: string; sourceUpdatedAt: string | null; checksum: string }>;
 type NormalizationResult = Readonly<{ events: NormalizedEvent[]; duplicateCount: number; conflicts: Array<{ externalKey: string; reason: string }> }>;
 type OfficialDocument = Readonly<{ sourceUpdatedAt?: unknown; events?: unknown }>;
 
 /**
- * Only this code-owned registry may reach the public internet. A source never
- * accepts a URL from a browser or an AI response. The listed pages are the
- * official Saudi owners; an adapter is deliberately required to turn a page
- * into the strict JSON document shape below before auto-publication.
+ * The recurring Saudi calendar is local and deterministic, exactly as in the
+ * Noorix calendar. It never scrapes a government page at runtime. The Ministry
+ * URL is provenance for the reviewed academic catalogue, not a runtime feed.
  */
 export const APPROVED_CONTEXT_SOURCES: readonly ContextSourceDefinition[] = [
-  { sourceCode: "SA_MOE_ACADEMIC_CALENDAR", displayNameAr: "وزارة التعليم — التقويم الدراسي", sourceUrl: "https://www.moe.gov.sa/ar/education/generaleducation/Pages/AcademicCalendar.aspx", scheduleCode: "DAILY_0300_ASIA_RIYADH", allowedHosts: ["www.moe.gov.sa", "moe.gov.sa"] },
-  { sourceCode: "SA_GOV_PUBLIC_HOLIDAYS", displayNameAr: "المنصة الوطنية — الإجازات الرسمية", sourceUrl: "https://my.gov.sa/en/content/139", scheduleCode: "DAILY_0315_ASIA_RIYADH", allowedHosts: ["my.gov.sa", "www.my.gov.sa"] },
+  { sourceCode: "SA_UMM_AL_QURA_OCCASIONS", displayNameAr: "التقويم السعودي وأم القرى", sourceUrl: "baseer://local/umm-al-qura", scheduleCode: "DAILY_0300_ASIA_RIYADH", mode: "LOCAL_CATALOG", allowedHosts: [] },
+  { sourceCode: "SA_MOE_ACADEMIC_CALENDAR", displayNameAr: "وزارة التعليم — التقويم الدراسي", sourceUrl: "https://www.moe.gov.sa/ar/education/generaleducation/Pages/AcademicCalendar.aspx", scheduleCode: "DAILY_0315_ASIA_RIYADH", mode: "LOCAL_CATALOG", allowedHosts: [] },
 ];
 
 /** A transport-safe format emitted by a source-specific official adapter. */
@@ -32,17 +32,17 @@ export type OfficialContextDocumentV1 = Readonly<{
 export class DecisionContextImportService implements OnModuleInit, OnModuleDestroy {
   private scheduledTimer: ReturnType<typeof setInterval> | null = null;
   private bootstrapTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly logger = new Logger(DecisionContextImportService.name);
 
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
   onModuleInit() {
-    // Scheduling is opt-in: a deployment must explicitly enable it after it
-    // has a single worker or its own scheduler. This avoids surprise traffic
-    // in local development and repeated pulls in every test process.
+    // A scheduler is an explicit deployment concern, even for local catalogues.
+    // Interactive/API instances must never acquire background work by default.
     if (process.env.BASEER_CONTEXT_IMPORT_ENABLED !== "true") return;
     const intervalMs = safeInterval(process.env.BASEER_CONTEXT_IMPORT_INTERVAL_MS);
-    this.bootstrapTimer = setTimeout(() => { void this.runScheduledImports(); }, 5_000);
-    this.scheduledTimer = setInterval(() => { void this.runScheduledImports(); }, intervalMs);
+    this.bootstrapTimer = setTimeout(() => { void this.runScheduledImportsSafely(); }, 5_000);
+    this.scheduledTimer = setInterval(() => { void this.runScheduledImportsSafely(); }, intervalMs);
   }
 
   onModuleDestroy() {
@@ -54,7 +54,14 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => Promise.all(APPROVED_CONTEXT_SOURCES.map((definition) => transaction.decisionContextSource.upsert({
       where: { tenantId_sourceCode: { tenantId: context.tenantId, sourceCode: definition.sourceCode } },
       update: { displayNameAr: definition.displayNameAr, sourceUrl: definition.sourceUrl, scheduleCode: definition.scheduleCode },
-      create: { id: randomUUID(), tenantId: context.tenantId, ...definition },
+      create: {
+        id: randomUUID(),
+        tenantId: context.tenantId,
+        sourceCode: definition.sourceCode,
+        displayNameAr: definition.displayNameAr,
+        sourceUrl: definition.sourceUrl,
+        scheduleCode: definition.scheduleCode,
+      },
       select: { sourceCode: true, displayNameAr: true, sourceUrl: true, scheduleCode: true, enabled: true },
     }))));
   }
@@ -68,7 +75,10 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     }));
     const runId = await this.startRun(context.tenantId, source.id, triggerCode);
     try {
-      const response = await fetchOfficialDocument(source.sourceUrl, definition.allowedHosts);
+      const localDocument = definition.mode === "LOCAL_CATALOG" ? buildLocalCatalogDocument(definition.sourceCode) : null;
+      const response = localDocument
+        ? { document: localDocument, checksum: sha(localDocument) }
+        : await fetchOfficialDocument(source.sourceUrl, definition.allowedHosts);
       const parsed = parseOfficialDocument(response.document);
       const normalized = normalizeOfficialEvents(source.sourceCode, parsed);
       return await this.applyDocument(context, source, runId, response.checksum, normalized, triggerCode);
@@ -84,11 +94,6 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     }));
   }
 
-  /**
-   * Readiness is deliberately explicit: the registered government landing
-   * pages are provenance, not a machine-readable adapter. A source stays in
-   * this state until its approved, schema-checked connector is supplied.
-   */
   async sourceHealth(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => Promise.all(APPROVED_CONTEXT_SOURCES.map(async (definition) => {
       const source = await transaction.decisionContextSource.findUnique({
@@ -104,8 +109,10 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
         displayNameAr: definition.displayNameAr,
         sourceUrl: definition.sourceUrl,
         scheduleCode: definition.scheduleCode,
-        readiness: !source ? "NOT_REGISTERED" : !source.enabled ? "DISABLED" : "REQUIRES_APPROVED_ADAPTER",
-        readinessReason: "يتطلب موصلاً رسمياً منظماً ومعتمداً قبل أن يستورد النظام هذه الصفحة الحكومية.",
+        readiness: !source ? "NOT_REGISTERED" : !source.enabled ? "DISABLED" : "READY_LOCAL_CATALOG",
+        readinessReason: definition.sourceCode === "SA_UMM_AL_QURA_OCCASIONS"
+          ? "يُحسب محلياً من أم القرى؛ لا يستخدم API أو بحثاً في الويب. المناسبات الهجرية ظاهرة كتقديرية إلى تأكيد رسمي."
+          : "كتالوج دراسي موثق داخل النظام مع رابط وزارة التعليم؛ يُحدّث عند اعتماد التقويم الدراسي الجديد، ولا يكشط صفحة الويب وقت التشغيل.",
         lastRun: source?.importRuns[0] ?? null,
       };
     })));
@@ -190,6 +197,16 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     return locked.acquired ? locked.result : { status: "SKIPPED_LOCKED" as const };
   }
 
+  private async runScheduledImportsSafely() {
+    try {
+      await this.runScheduledImports();
+    } catch (error) {
+      // A failed optional job must never become an unhandled rejection that
+      // terminates the HTTP process. The next scheduled attempt can retry.
+      this.logger.error(`Decision-context import run failed: ${safeError(error)}`);
+    }
+  }
+
   private async runScheduledImportsUnlocked() {
     const tenantIds = await this.database.listTenantIdsForSystemScheduler();
     for (const tenantId of tenantIds) {
@@ -265,7 +282,8 @@ export function normalizeOfficialEvents(sourceCode: string, document: OfficialCo
 }
 
 function revisionData(tenantId: string, eventId: string, revision: number, event: NormalizedEvent, runId: string, sourceCode: string, documentChecksum: string, status: "PUBLISHED" | "NEEDS_REVIEW") {
-  return { id: randomUUID(), tenantId, eventId, revision, titleAr: event.titleAr, startsOn: new Date(`${event.startsOn}T00:00:00.000Z`), endsOn: new Date(`${event.endsOn}T00:00:00.000Z`), sourceUpdatedAt: event.sourceUpdatedAt ? new Date(event.sourceUpdatedAt) : null, sourceChecksum: event.checksum, importReceipt: { runId, sourceCode, documentChecksum }, status } as Prisma.DecisionGlobalContextEventRevisionUncheckedCreateInput;
+  const verificationStatus = sourceCode === "SA_MOE_ACADEMIC_CALENDAR" ? "HUMAN_CONFIRMED" : "NOT_APPLICABLE";
+  return { id: randomUUID(), tenantId, eventId, revision, titleAr: event.titleAr, startsOn: new Date(`${event.startsOn}T00:00:00.000Z`), endsOn: new Date(`${event.endsOn}T00:00:00.000Z`), sourceUpdatedAt: event.sourceUpdatedAt ? new Date(event.sourceUpdatedAt) : null, sourceChecksum: event.checksum, importReceipt: { runId, sourceCode, documentChecksum }, verificationStatus, status } as Prisma.DecisionGlobalContextEventRevisionUncheckedCreateInput;
 }
 async function fetchOfficialDocument(url: string, allowedHosts: readonly string[]) {
   const parsed = new URL(url); if (parsed.protocol !== "https:" || !allowedHosts.includes(parsed.hostname)) throw new ConflictException("The context source URL is not an approved HTTPS host.");
@@ -277,6 +295,10 @@ async function fetchOfficialDocument(url: string, allowedHosts: readonly string[
 }
 function parseOfficialDocument(value: unknown): OfficialContextDocumentV1 { if (!value || typeof value !== "object" || !Array.isArray((value as OfficialDocument).events)) throw new ConflictException("The approved source document has an unsupported schema."); return value as OfficialContextDocumentV1; }
 function approvedSource(sourceCode: string) { const source = APPROVED_CONTEXT_SOURCES.find((item) => item.sourceCode === sourceCode); if (!source) throw new ConflictException("The requested context source is not approved."); return source; }
+function buildLocalCatalogDocument(sourceCode: string): OfficialContextDocumentV1 {
+  if (sourceCode !== "SA_UMM_AL_QURA_OCCASIONS" && sourceCode !== "SA_MOE_ACADEMIC_CALENDAR") throw new ConflictException("The requested local catalogue is not supported.");
+  return buildSaudiContextCatalogDocument(sourceCode);
+}
 function requiredText(value: unknown, label: string, max: number) { if (typeof value !== "string" || !value.trim() || value.trim().length > max) throw new ConflictException(`A valid ${label} is required.`); return value.trim(); }
 function requiredToken(value: unknown, label: string, max: number) { const result = requiredText(value, label, max).replace(/\s+/g, "_").toUpperCase(); if (!/^[A-Z0-9:_-]+$/.test(result)) throw new ConflictException(`A valid ${label} is required.`); return result; }
 function dateValue(value: unknown) { if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new ConflictException("A valid official event date is required."); const parsed = new Date(`${value}T00:00:00.000Z`); if (Number.isNaN(parsed.valueOf()) || parsed.toISOString().slice(0, 10) !== value) throw new ConflictException("A valid official event date is required."); return value; }

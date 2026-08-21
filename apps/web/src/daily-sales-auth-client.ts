@@ -1,4 +1,4 @@
-import { baseerApiBaseUrl } from "./daily-sales-client";
+import { baseerApiBaseUrl, type AuthSessionReceipt } from "./daily-sales-client";
 import { parseBaseerApiResponse } from "./baseer-api-error";
 
 export type AuthenticatedCompany = {
@@ -6,7 +6,7 @@ export type AuthenticatedCompany = {
   nameAr: string;
   nameEn: string;
 };
-export type SignInSession = { accessToken: string };
+export type SignInSession = AuthSessionReceipt;
 
 export async function signInForDailySales(input: {
   login: string;

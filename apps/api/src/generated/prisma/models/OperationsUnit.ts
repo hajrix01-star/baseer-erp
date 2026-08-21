@@ -235,6 +235,8 @@ export type OperationsUnitWhereInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineListRelationFilter
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineListRelationFilter
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }
 
 export type OperationsUnitOrderByWithRelationInput = {
@@ -261,6 +263,8 @@ export type OperationsUnitOrderByWithRelationInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineOrderByRelationAggregateInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineOrderByRelationAggregateInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineOrderByRelationAggregateInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionOrderByRelationAggregateInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionOrderByRelationAggregateInput
 }
 
 export type OperationsUnitWhereUniqueInput = Prisma.AtLeast<{
@@ -292,6 +296,8 @@ export type OperationsUnitWhereUniqueInput = Prisma.AtLeast<{
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineListRelationFilter
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineListRelationFilter
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_code">
 
 export type OperationsUnitOrderByWithAggregationInput = {
@@ -348,6 +354,8 @@ export type OperationsUnitCreateInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateInput = {
@@ -373,6 +381,8 @@ export type OperationsUnitUncheckedCreateInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUpdateInput = {
@@ -397,6 +407,8 @@ export type OperationsUnitUpdateInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateInput = {
@@ -422,6 +434,8 @@ export type OperationsUnitUncheckedUpdateInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateManyInput = {
@@ -642,6 +656,34 @@ export type OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNeste
   update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsUnitUpdateToOneWithWhereWithoutInternalRegistrationLinesInput, Prisma.OperationsUnitUpdateWithoutInternalRegistrationLinesInput>, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationLinesInput>
 }
 
+export type OperationsUnitCreateNestedOneWithoutInternalRegistrationConsumptionUnitsInput = {
+  create?: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionUnitsInput>
+  connectOrCreate?: Prisma.OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionUnitsInput
+  connect?: Prisma.OperationsUnitWhereUniqueInput
+}
+
+export type OperationsUnitCreateNestedOneWithoutInternalRegistrationConsumptionBasesInput = {
+  create?: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionBasesInput>
+  connectOrCreate?: Prisma.OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionBasesInput
+  connect?: Prisma.OperationsUnitWhereUniqueInput
+}
+
+export type OperationsUnitUpdateOneRequiredWithoutInternalRegistrationConsumptionUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionUnitsInput>
+  connectOrCreate?: Prisma.OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionUnitsInput
+  upsert?: Prisma.OperationsUnitUpsertWithoutInternalRegistrationConsumptionUnitsInput
+  connect?: Prisma.OperationsUnitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsUnitUpdateToOneWithWhereWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionUnitsInput>, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionUnitsInput>
+}
+
+export type OperationsUnitUpdateOneRequiredWithoutInternalRegistrationConsumptionBasesNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionBasesInput>
+  connectOrCreate?: Prisma.OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionBasesInput
+  upsert?: Prisma.OperationsUnitUpsertWithoutInternalRegistrationConsumptionBasesInput
+  connect?: Prisma.OperationsUnitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsUnitUpdateToOneWithWhereWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionBasesInput>, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionBasesInput>
+}
+
 export type OperationsUnitCreateNestedOneWithoutRecipeOutputsInput = {
   create?: Prisma.XOR<Prisma.OperationsUnitCreateWithoutRecipeOutputsInput, Prisma.OperationsUnitUncheckedCreateWithoutRecipeOutputsInput>
   connectOrCreate?: Prisma.OperationsUnitCreateOrConnectWithoutRecipeOutputsInput
@@ -761,6 +803,8 @@ export type OperationsUnitCreateWithoutCompanyInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutCompanyInput = {
@@ -784,6 +828,8 @@ export type OperationsUnitUncheckedCreateWithoutCompanyInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutCompanyInput = {
@@ -849,6 +895,8 @@ export type OperationsUnitCreateWithoutBaseForItemsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutBaseForItemsInput = {
@@ -873,6 +921,8 @@ export type OperationsUnitUncheckedCreateWithoutBaseForItemsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutBaseForItemsInput = {
@@ -912,6 +962,8 @@ export type OperationsUnitUpdateWithoutBaseForItemsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutBaseForItemsInput = {
@@ -936,6 +988,8 @@ export type OperationsUnitUncheckedUpdateWithoutBaseForItemsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutItemUnitsInput = {
@@ -959,6 +1013,8 @@ export type OperationsUnitCreateWithoutItemUnitsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutItemUnitsInput = {
@@ -983,6 +1039,8 @@ export type OperationsUnitUncheckedCreateWithoutItemUnitsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutItemUnitsInput = {
@@ -1022,6 +1080,8 @@ export type OperationsUnitUpdateWithoutItemUnitsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutItemUnitsInput = {
@@ -1046,6 +1106,8 @@ export type OperationsUnitUncheckedUpdateWithoutItemUnitsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutConversionFromInput = {
@@ -1069,6 +1131,8 @@ export type OperationsUnitCreateWithoutConversionFromInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutConversionFromInput = {
@@ -1093,6 +1157,8 @@ export type OperationsUnitUncheckedCreateWithoutConversionFromInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutConversionFromInput = {
@@ -1121,6 +1187,8 @@ export type OperationsUnitCreateWithoutConversionToInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutConversionToInput = {
@@ -1145,6 +1213,8 @@ export type OperationsUnitUncheckedCreateWithoutConversionToInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutConversionToInput = {
@@ -1184,6 +1254,8 @@ export type OperationsUnitUpdateWithoutConversionFromInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutConversionFromInput = {
@@ -1208,6 +1280,8 @@ export type OperationsUnitUncheckedUpdateWithoutConversionFromInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUpsertWithoutConversionToInput = {
@@ -1242,6 +1316,8 @@ export type OperationsUnitUpdateWithoutConversionToInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutConversionToInput = {
@@ -1266,6 +1342,8 @@ export type OperationsUnitUncheckedUpdateWithoutConversionToInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutInternalRegistrationLinesInput = {
@@ -1289,6 +1367,8 @@ export type OperationsUnitCreateWithoutInternalRegistrationLinesInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutBaseUnitInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutInternalRegistrationLinesInput = {
@@ -1313,6 +1393,8 @@ export type OperationsUnitUncheckedCreateWithoutInternalRegistrationLinesInput =
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutBaseUnitInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutInternalRegistrationLinesInput = {
@@ -1352,6 +1434,8 @@ export type OperationsUnitUpdateWithoutInternalRegistrationLinesInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutBaseUnitNestedInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutInternalRegistrationLinesInput = {
@@ -1376,6 +1460,244 @@ export type OperationsUnitUncheckedUpdateWithoutInternalRegistrationLinesInput =
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
+}
+
+export type OperationsUnitCreateWithoutInternalRegistrationConsumptionUnitsInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  dimension: $Enums.OperationsUnitDimension
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsUnitsInput
+  baseForItems?: Prisma.OperationsItemCreateNestedManyWithoutBaseUnitInput
+  itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutUnitInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutFromUnitInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutToUnitInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputUnitInput
+  recipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutUnitInput
+  recipeLineBases?: Prisma.OperationsRecipeLineCreateNestedManyWithoutBaseUnitInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutRequestedUnitInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutBaseUnitInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
+}
+
+export type OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionUnitsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  dimension: $Enums.OperationsUnitDimension
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  baseForItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutBaseUnitInput
+  itemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutUnitInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutFromUnitInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutToUnitInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutOutputUnitInput
+  recipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutUnitInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutRequestedUnitInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
+}
+
+export type OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionUnitsInput = {
+  where: Prisma.OperationsUnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionUnitsInput>
+}
+
+export type OperationsUnitCreateWithoutInternalRegistrationConsumptionBasesInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  dimension: $Enums.OperationsUnitDimension
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsUnitsInput
+  baseForItems?: Prisma.OperationsItemCreateNestedManyWithoutBaseUnitInput
+  itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutUnitInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutFromUnitInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutToUnitInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputUnitInput
+  recipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutUnitInput
+  recipeLineBases?: Prisma.OperationsRecipeLineCreateNestedManyWithoutBaseUnitInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutRequestedUnitInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutBaseUnitInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+}
+
+export type OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionBasesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  dimension: $Enums.OperationsUnitDimension
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  baseForItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutBaseUnitInput
+  itemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutUnitInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutFromUnitInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutToUnitInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutOutputUnitInput
+  recipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutUnitInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutRequestedUnitInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+}
+
+export type OperationsUnitCreateOrConnectWithoutInternalRegistrationConsumptionBasesInput = {
+  where: Prisma.OperationsUnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionBasesInput>
+}
+
+export type OperationsUnitUpsertWithoutInternalRegistrationConsumptionUnitsInput = {
+  update: Prisma.XOR<Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionUnitsInput>
+  create: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionUnitsInput>
+  where?: Prisma.OperationsUnitWhereInput
+}
+
+export type OperationsUnitUpdateToOneWithWhereWithoutInternalRegistrationConsumptionUnitsInput = {
+  where?: Prisma.OperationsUnitWhereInput
+  data: Prisma.XOR<Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionUnitsInput, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionUnitsInput>
+}
+
+export type OperationsUnitUpdateWithoutInternalRegistrationConsumptionUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dimension?: Prisma.EnumOperationsUnitDimensionFieldUpdateOperationsInput | $Enums.OperationsUnitDimension
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsUnitsNestedInput
+  baseForItems?: Prisma.OperationsItemUpdateManyWithoutBaseUnitNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutUnitNestedInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutFromUnitNestedInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutToUnitNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputUnitNestedInput
+  recipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutUnitNestedInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUpdateManyWithoutBaseUnitNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutRequestedUnitNestedInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutBaseUnitNestedInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
+}
+
+export type OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dimension?: Prisma.EnumOperationsUnitDimensionFieldUpdateOperationsInput | $Enums.OperationsUnitDimension
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  baseForItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutBaseUnitNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutUnitNestedInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutFromUnitNestedInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutToUnitNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutOutputUnitNestedInput
+  recipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutUnitNestedInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutRequestedUnitNestedInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
+}
+
+export type OperationsUnitUpsertWithoutInternalRegistrationConsumptionBasesInput = {
+  update: Prisma.XOR<Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionBasesInput>
+  create: Prisma.XOR<Prisma.OperationsUnitCreateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedCreateWithoutInternalRegistrationConsumptionBasesInput>
+  where?: Prisma.OperationsUnitWhereInput
+}
+
+export type OperationsUnitUpdateToOneWithWhereWithoutInternalRegistrationConsumptionBasesInput = {
+  where?: Prisma.OperationsUnitWhereInput
+  data: Prisma.XOR<Prisma.OperationsUnitUpdateWithoutInternalRegistrationConsumptionBasesInput, Prisma.OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionBasesInput>
+}
+
+export type OperationsUnitUpdateWithoutInternalRegistrationConsumptionBasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dimension?: Prisma.EnumOperationsUnitDimensionFieldUpdateOperationsInput | $Enums.OperationsUnitDimension
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsUnitsNestedInput
+  baseForItems?: Prisma.OperationsItemUpdateManyWithoutBaseUnitNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutUnitNestedInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutFromUnitNestedInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutToUnitNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputUnitNestedInput
+  recipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutUnitNestedInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUpdateManyWithoutBaseUnitNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutRequestedUnitNestedInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutBaseUnitNestedInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+}
+
+export type OperationsUnitUncheckedUpdateWithoutInternalRegistrationConsumptionBasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dimension?: Prisma.EnumOperationsUnitDimensionFieldUpdateOperationsInput | $Enums.OperationsUnitDimension
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  baseForItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutBaseUnitNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutUnitNestedInput
+  conversionFrom?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutFromUnitNestedInput
+  conversionTo?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutToUnitNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutOutputUnitNestedInput
+  recipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutUnitNestedInput
+  recipeLineBases?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutRequestedUnitNestedInput
+  requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
+  receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutRecipeOutputsInput = {
@@ -1399,6 +1721,8 @@ export type OperationsUnitCreateWithoutRecipeOutputsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutRecipeOutputsInput = {
@@ -1423,6 +1747,8 @@ export type OperationsUnitUncheckedCreateWithoutRecipeOutputsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutRecipeOutputsInput = {
@@ -1462,6 +1788,8 @@ export type OperationsUnitUpdateWithoutRecipeOutputsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutRecipeOutputsInput = {
@@ -1486,6 +1814,8 @@ export type OperationsUnitUncheckedUpdateWithoutRecipeOutputsInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutRecipeLinesInput = {
@@ -1509,6 +1839,8 @@ export type OperationsUnitCreateWithoutRecipeLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutRecipeLinesInput = {
@@ -1533,6 +1865,8 @@ export type OperationsUnitUncheckedCreateWithoutRecipeLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutRecipeLinesInput = {
@@ -1561,6 +1895,8 @@ export type OperationsUnitCreateWithoutRecipeLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutRecipeLineBasesInput = {
@@ -1585,6 +1921,8 @@ export type OperationsUnitUncheckedCreateWithoutRecipeLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutRecipeLineBasesInput = {
@@ -1624,6 +1962,8 @@ export type OperationsUnitUpdateWithoutRecipeLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutRecipeLinesInput = {
@@ -1648,6 +1988,8 @@ export type OperationsUnitUncheckedUpdateWithoutRecipeLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUpsertWithoutRecipeLineBasesInput = {
@@ -1682,6 +2024,8 @@ export type OperationsUnitUpdateWithoutRecipeLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutRecipeLineBasesInput = {
@@ -1706,6 +2050,8 @@ export type OperationsUnitUncheckedUpdateWithoutRecipeLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutRequestLinesInput = {
@@ -1729,6 +2075,8 @@ export type OperationsUnitCreateWithoutRequestLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutRequestLinesInput = {
@@ -1753,6 +2101,8 @@ export type OperationsUnitUncheckedCreateWithoutRequestLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutRequestLinesInput = {
@@ -1781,6 +2131,8 @@ export type OperationsUnitCreateWithoutRequestLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutRequestLineBasesInput = {
@@ -1805,6 +2157,8 @@ export type OperationsUnitUncheckedCreateWithoutRequestLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutRequestLineBasesInput = {
@@ -1844,6 +2198,8 @@ export type OperationsUnitUpdateWithoutRequestLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutRequestLinesInput = {
@@ -1868,6 +2224,8 @@ export type OperationsUnitUncheckedUpdateWithoutRequestLinesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUpsertWithoutRequestLineBasesInput = {
@@ -1902,6 +2260,8 @@ export type OperationsUnitUpdateWithoutRequestLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutRequestLineBasesInput = {
@@ -1926,6 +2286,8 @@ export type OperationsUnitUncheckedUpdateWithoutRequestLineBasesInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateWithoutReceiptAsReceivedInput = {
@@ -1949,6 +2311,8 @@ export type OperationsUnitCreateWithoutReceiptAsReceivedInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutBaseUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutReceiptAsReceivedInput = {
@@ -1973,6 +2337,8 @@ export type OperationsUnitUncheckedCreateWithoutReceiptAsReceivedInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutBaseUnitInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutBaseUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutReceiptAsReceivedInput = {
@@ -2001,6 +2367,8 @@ export type OperationsUnitCreateWithoutReceiptAsBaseInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutBaseUnitInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutReceivedUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitUncheckedCreateWithoutReceiptAsBaseInput = {
@@ -2025,6 +2393,8 @@ export type OperationsUnitUncheckedCreateWithoutReceiptAsBaseInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutBaseUnitInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutReceivedUnitInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutUnitInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutBaseUnitInput
 }
 
 export type OperationsUnitCreateOrConnectWithoutReceiptAsBaseInput = {
@@ -2064,6 +2434,8 @@ export type OperationsUnitUpdateWithoutReceiptAsReceivedInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutBaseUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutReceiptAsReceivedInput = {
@@ -2088,6 +2460,8 @@ export type OperationsUnitUncheckedUpdateWithoutReceiptAsReceivedInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUpsertWithoutReceiptAsBaseInput = {
@@ -2122,6 +2496,8 @@ export type OperationsUnitUpdateWithoutReceiptAsBaseInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutBaseUnitNestedInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutReceiptAsBaseInput = {
@@ -2146,6 +2522,8 @@ export type OperationsUnitUncheckedUpdateWithoutReceiptAsBaseInput = {
   requestLineBases?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitCreateManyCompanyInput = {
@@ -2180,6 +2558,8 @@ export type OperationsUnitUpdateWithoutCompanyInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateWithoutCompanyInput = {
@@ -2203,6 +2583,8 @@ export type OperationsUnitUncheckedUpdateWithoutCompanyInput = {
   receiptAsReceived?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutReceivedUnitNestedInput
   receiptAsBase?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutBaseUnitNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionUnits?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutUnitNestedInput
+  internalRegistrationConsumptionBases?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutBaseUnitNestedInput
 }
 
 export type OperationsUnitUncheckedUpdateManyWithoutCompanyInput = {
@@ -2234,6 +2616,8 @@ export type OperationsUnitCountOutputType = {
   receiptAsReceived: number
   receiptAsBase: number
   internalRegistrationLines: number
+  internalRegistrationConsumptionUnits: number
+  internalRegistrationConsumptionBases: number
 }
 
 export type OperationsUnitCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2249,6 +2633,8 @@ export type OperationsUnitCountOutputTypeSelect<ExtArgs extends runtime.Types.Ex
   receiptAsReceived?: boolean | OperationsUnitCountOutputTypeCountReceiptAsReceivedArgs
   receiptAsBase?: boolean | OperationsUnitCountOutputTypeCountReceiptAsBaseArgs
   internalRegistrationLines?: boolean | OperationsUnitCountOutputTypeCountInternalRegistrationLinesArgs
+  internalRegistrationConsumptionUnits?: boolean | OperationsUnitCountOutputTypeCountInternalRegistrationConsumptionUnitsArgs
+  internalRegistrationConsumptionBases?: boolean | OperationsUnitCountOutputTypeCountInternalRegistrationConsumptionBasesArgs
 }
 
 /**
@@ -2345,6 +2731,20 @@ export type OperationsUnitCountOutputTypeCountInternalRegistrationLinesArgs<ExtA
   where?: Prisma.OperationsInternalRegistrationLineWhereInput
 }
 
+/**
+ * OperationsUnitCountOutputType without action
+ */
+export type OperationsUnitCountOutputTypeCountInternalRegistrationConsumptionUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+}
+
+/**
+ * OperationsUnitCountOutputType without action
+ */
+export type OperationsUnitCountOutputTypeCountInternalRegistrationConsumptionBasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+}
+
 
 export type OperationsUnitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2370,6 +2770,8 @@ export type OperationsUnitSelect<ExtArgs extends runtime.Types.Extensions.Intern
   receiptAsReceived?: boolean | Prisma.OperationsUnit$receiptAsReceivedArgs<ExtArgs>
   receiptAsBase?: boolean | Prisma.OperationsUnit$receiptAsBaseArgs<ExtArgs>
   internalRegistrationLines?: boolean | Prisma.OperationsUnit$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptionUnits?: boolean | Prisma.OperationsUnit$internalRegistrationConsumptionUnitsArgs<ExtArgs>
+  internalRegistrationConsumptionBases?: boolean | Prisma.OperationsUnit$internalRegistrationConsumptionBasesArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsUnitCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsUnit"]>
 
@@ -2429,6 +2831,8 @@ export type OperationsUnitInclude<ExtArgs extends runtime.Types.Extensions.Inter
   receiptAsReceived?: boolean | Prisma.OperationsUnit$receiptAsReceivedArgs<ExtArgs>
   receiptAsBase?: boolean | Prisma.OperationsUnit$receiptAsBaseArgs<ExtArgs>
   internalRegistrationLines?: boolean | Prisma.OperationsUnit$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptionUnits?: boolean | Prisma.OperationsUnit$internalRegistrationConsumptionUnitsArgs<ExtArgs>
+  internalRegistrationConsumptionBases?: boolean | Prisma.OperationsUnit$internalRegistrationConsumptionBasesArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsUnitCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationsUnitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2454,6 +2858,8 @@ export type $OperationsUnitPayload<ExtArgs extends runtime.Types.Extensions.Inte
     receiptAsReceived: Prisma.$OperationsPurchaseReceiptLinePayload<ExtArgs>[]
     receiptAsBase: Prisma.$OperationsPurchaseReceiptLinePayload<ExtArgs>[]
     internalRegistrationLines: Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>[]
+    internalRegistrationConsumptionUnits: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>[]
+    internalRegistrationConsumptionBases: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2873,6 +3279,8 @@ export interface Prisma__OperationsUnitClient<T, Null = never, ExtArgs extends r
   receiptAsReceived<T extends Prisma.OperationsUnit$receiptAsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnit$receiptAsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsPurchaseReceiptLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   receiptAsBase<T extends Prisma.OperationsUnit$receiptAsBaseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnit$receiptAsBaseArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsPurchaseReceiptLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   internalRegistrationLines<T extends Prisma.OperationsUnit$internalRegistrationLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnit$internalRegistrationLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  internalRegistrationConsumptionUnits<T extends Prisma.OperationsUnit$internalRegistrationConsumptionUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnit$internalRegistrationConsumptionUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  internalRegistrationConsumptionBases<T extends Prisma.OperationsUnit$internalRegistrationConsumptionBasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnit$internalRegistrationConsumptionBasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3598,6 +4006,54 @@ export type OperationsUnit$internalRegistrationLinesArgs<ExtArgs extends runtime
   take?: number
   skip?: number
   distinct?: Prisma.OperationsInternalRegistrationLineScalarFieldEnum | Prisma.OperationsInternalRegistrationLineScalarFieldEnum[]
+}
+
+/**
+ * OperationsUnit.internalRegistrationConsumptionUnits
+ */
+export type OperationsUnit$internalRegistrationConsumptionUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput | Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationConsumptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum | Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum[]
+}
+
+/**
+ * OperationsUnit.internalRegistrationConsumptionBases
+ */
+export type OperationsUnit$internalRegistrationConsumptionBasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput | Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationConsumptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum | Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum[]
 }
 
 /**

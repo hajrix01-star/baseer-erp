@@ -14,8 +14,10 @@ try {
   const rls = await client.query(`SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class WHERE relname = ANY($1::text[])`, [tables]);
   assert.equal(rls.rowCount, tables.length, "Every decision table must exist.");
   for (const row of rls.rows) assert.ok(row.relrowsecurity && row.relforcerowsecurity, `${row.relname} must have FORCE RLS.`);
-  const migration = await client.query(`SELECT migration_name FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[]) AND finished_at IS NOT NULL`, [["20260821170000_decision_intelligence_foundation", "20260821171000_decision_rule_definitions", "20260821173000_decision_context_import_runs", "20260821200000_decision_context_researcher", "20260821210000_company_context_location", "20260821220000_decision_sales_change_policy", "20260821230000_decision_alert_lifecycle", "20260821240000_decision_global_context_review_actions", "20260821250000_decision_sales_change_guardrails"]]);
-  assert.equal(migration.rowCount, 9, "Decision foundation migrations must be recorded.");
+  const migration = await client.query(`SELECT migration_name FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[]) AND finished_at IS NOT NULL`, [["20260821170000_decision_intelligence_foundation", "20260821171000_decision_rule_definitions", "20260821173000_decision_context_import_runs", "20260821200000_decision_context_researcher", "20260821210000_company_context_location", "20260821220000_decision_sales_change_policy", "20260821230000_decision_alert_lifecycle", "20260821240000_decision_global_context_review_actions", "20260821250000_decision_sales_change_guardrails", "20260821260000_system_scheduler_lease"]]);
+  assert.equal(migration.rowCount, 10, "Decision foundation and scheduler lease migrations must be recorded.");
+  const schedulerLease = await client.query(`SELECT to_regclass('public."SystemSchedulerLease"') AS table_name`);
+  assert.equal(schedulerLease.rows[0]?.table_name, '"SystemSchedulerLease"', "The durable scheduler lease table must exist.");
 
   const tenantId = randomUUID();
   const companyId = randomUUID();

@@ -130,6 +130,7 @@ export class OperationsExecutionService {
       if (!output || !output.itemUnits.length) throw new NotFoundException("The selected active menu product and output unit were not found.");
       const uniqueMaterials = new Set(payload.lines.map((line) => line.rawMaterialItemId));
       if (uniqueMaterials.size !== payload.lines.length) throw new BadRequestException("A material can appear only once in a recipe version.");
+      await this.lockInventoryItems(tx, context, [...uniqueMaterials]);
       const resolved = [] as Array<{ rawMaterialItemId: string; unitId: string; quantity: string; baseUnitId: string; conversionVersionId: string | null; resolvedBaseQuantity: Prisma.Decimal }>;
       for (const line of payload.lines) {
         const item = await this.rawMaterialForConversion(tx, context, line.rawMaterialItemId, line.unitId);
@@ -149,6 +150,7 @@ export class OperationsExecutionService {
     const payload = { businessDate: request.businessDate, paymentChannel: request.paymentChannel, executionKind: request.paymentChannel === "CUSTODY" ? OperationsPurchaseExecutionKind.DELEGATED : OperationsPurchaseExecutionKind.LOCAL, custodyFundingAmount: request.custodyFundingAmount ?? null, representativeName: trimOptional(request.representativeName, 160), notes: trimOptional(request.notes, 1000), lines: request.lines };
     return this.withIdempotency(context, "operations.purchase_request.create", request.idempotencyKey, payload, async (tx) => {
       if (new Set(payload.lines.map((line) => line.rawMaterialItemId)).size !== payload.lines.length) throw new BadRequestException("A raw material can appear only once in a purchase request.");
+      await this.lockInventoryItems(tx, context, payload.lines.map((line) => line.rawMaterialItemId));
       const prepared = [] as Array<CreateOperationsPurchaseRequest["lines"][number] & { baseUnitId: string; conversionVersionId: string | null; requestedBaseQuantity: Prisma.Decimal; quotedLineTotal: Prisma.Decimal | null }>;
       for (const line of payload.lines) {
         const item = await this.rawMaterialForConversion(tx, context, line.rawMaterialItemId, line.requestedUnitId, true);
@@ -172,31 +174,42 @@ export class OperationsExecutionService {
       if (!purchase) throw new NotFoundException("The pending purchase request was not found.");
       if (purchase.plannedPaymentChannel === OperationsPurchasePaymentChannel.BANK_TRANSFER && !payload.paymentReference) throw new BadRequestException("A bank transfer reference is required when completing a bank-transfer purchase request.");
       if (purchase.plannedPaymentChannel !== OperationsPurchasePaymentChannel.BANK_TRANSFER && payload.paymentReference) throw new BadRequestException("A payment reference is only allowed for a bank-transfer purchase request.");
-      if (new Set(payload.lines.map((line) => line.requestLineId)).size !== payload.lines.length) throw new BadRequestException("A request line can appear only once in one receipt.");
+      const linkedRequestLineIds = payload.lines.flatMap((line) => line.requestLineId ? [line.requestLineId] : []);
+      if (new Set(linkedRequestLineIds).size !== linkedRequestLineIds.length) throw new BadRequestException("A request line can appear only once in one receipt.");
       const requestLines = new Map(purchase.lines.map((line) => [line.id, line]));
-      const prepared = [] as Array<{ requestLine: typeof purchase.lines[number]; receivedQuantity: Prisma.Decimal; receivedUnitId: string; actualUnitPrice: Prisma.Decimal; lineTotal: Prisma.Decimal; baseUnitId: string; conversionVersionId: string | null; baseQuantity: Prisma.Decimal; baseUnitCost: Prisma.Decimal }>;
+      const plannedMaterialIds = new Set(purchase.lines.map((line) => line.rawMaterialItemId));
+      const unplannedMaterialIds = new Set<string>();
+      await this.lockInventoryItems(tx, context, payload.lines.map((line) => line.rawMaterialItemId));
+      const prepared = [] as Array<{ requestLine: typeof purchase.lines[number] | null; rawMaterialItemId: string; receivedQuantity: Prisma.Decimal; receivedUnitId: string; actualUnitPrice: Prisma.Decimal; lineTotal: Prisma.Decimal; baseUnitId: string; conversionVersionId: string | null; baseQuantity: Prisma.Decimal; baseUnitCost: Prisma.Decimal }>;
       for (const line of payload.lines) {
-        const requestLine = requestLines.get(line.requestLineId); if (!requestLine) throw new BadRequestException("A receipt line does not belong to this purchase request.");
-        const item = await this.rawMaterialForConversion(tx, context, requestLine.rawMaterialItemId, line.receivedUnitId, true);
+        const requestLine = line.requestLineId ? requestLines.get(line.requestLineId) ?? null : null;
+        if (line.requestLineId && !requestLine) throw new BadRequestException("A receipt line does not belong to this purchase request.");
+        if (requestLine && requestLine.rawMaterialItemId !== line.rawMaterialItemId) throw new BadRequestException("A linked receipt line must use the same material as its purchase request line.");
+        if (!requestLine) {
+          if (plannedMaterialIds.has(line.rawMaterialItemId)) throw new BadRequestException("A planned material must remain linked to its purchase request line.");
+          if (unplannedMaterialIds.has(line.rawMaterialItemId)) throw new BadRequestException("An unplanned material can appear only once in one receipt.");
+          unplannedMaterialIds.add(line.rawMaterialItemId);
+        }
+        const item = await this.rawMaterialForConversion(tx, context, line.rawMaterialItemId, line.receivedUnitId, true);
         const receivedQuantity = decimal(line.receivedQuantity); const actualUnitPrice = decimal(line.actualUnitPrice); const conversion = this.toBase(item, line.receivedUnitId, receivedQuantity);
         const lineTotal = money(receivedQuantity.mul(actualUnitPrice));
         if (lineTotal.lte(0)) throw new BadRequestException("The received quantity and price are too small to produce a valid monetary line total.");
-        prepared.push({ requestLine, receivedQuantity, receivedUnitId: line.receivedUnitId, actualUnitPrice, lineTotal, baseUnitId: conversion.baseUnitId, conversionVersionId: conversion.conversionVersionId, baseQuantity: conversion.resolvedBaseQuantity, baseUnitCost: weightedCost(lineTotal.div(conversion.resolvedBaseQuantity)) });
+        prepared.push({ requestLine, rawMaterialItemId: line.rawMaterialItemId, receivedQuantity, receivedUnitId: line.receivedUnitId, actualUnitPrice, lineTotal, baseUnitId: conversion.baseUnitId, conversionVersionId: conversion.conversionVersionId, baseQuantity: conversion.resolvedBaseQuantity, baseUnitCost: weightedCost(lineTotal.div(conversion.resolvedBaseQuantity)) });
       }
-      const hasMaterialVariance = prepared.some((line) => line.receivedUnitId !== line.requestLine.requestedUnitId || !line.receivedQuantity.eq(line.requestLine.requestedQuantity) || !line.actualUnitPrice.eq(line.requestLine.quotedUnitPrice ?? zero()));
+      const hasMaterialVariance = prepared.some((line) => !line.requestLine || line.receivedUnitId !== line.requestLine.requestedUnitId || !line.receivedQuantity.eq(line.requestLine.requestedQuantity) || !line.actualUnitPrice.eq(line.requestLine.quotedUnitPrice ?? zero()));
       if (hasMaterialVariance && !payload.notes) throw new BadRequestException("A receipt note is required when actual quantity, unit, or price differs from the purchase request.");
       const id = randomUUID(); const receiptNumber = await this.documentNumber(tx, context, "ORC", payload.businessDate); const receiptSequence = Math.max(0, ...purchase.receipts.map((receipt) => receipt.receiptSequence)) + 1;
       await tx.operationsPurchaseReceipt.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, requestId: purchase.id, receiptNumber, receiptSequence, businessDate: asDate(payload.businessDate), status: OperationsPurchaseReceiptStatus.POSTED, actualPaymentChannel: purchase.plannedPaymentChannel, paymentReference: payload.paymentReference, notes: payload.notes, receivedByUserId: context.actorUserId } });
       let receiptTotal = zero();
-      for (const line of prepared.sort((a, b) => a.requestLine.rawMaterialItemId.localeCompare(b.requestLine.rawMaterialItemId))) {
-        await this.lockInventoryItem(tx, context, line.requestLine.rawMaterialItemId);
-        const balance = await tx.operationsInventoryBalance.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.requestLine.rawMaterialItemId } });
+      for (const line of prepared.sort((a, b) => a.rawMaterialItemId.localeCompare(b.rawMaterialItemId))) {
+        await this.lockInventoryItem(tx, context, line.rawMaterialItemId);
+        const balance = await tx.operationsInventoryBalance.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.rawMaterialItemId } });
         const oldQuantity = balance?.baseQuantity ?? zero(); const oldValue = balance?.totalValue ?? zero(); const nextQuantity = operationalQuantity(oldQuantity.plus(line.baseQuantity)); const nextValue = money(oldValue.plus(line.lineTotal)); const nextCost = nextQuantity.gt(0) ? weightedCost(nextValue.div(nextQuantity)) : zero();
         if (balance) await tx.operationsInventoryBalance.update({ where: { id: balance.id }, data: { baseQuantity: nextQuantity, totalValue: nextValue, weightedUnitCost: nextCost } });
-        else await tx.operationsInventoryBalance.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.requestLine.rawMaterialItemId, baseQuantity: nextQuantity, totalValue: nextValue, weightedUnitCost: nextCost } });
-        await tx.operationsPurchaseReceiptLine.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, receiptId: id, requestLineId: line.requestLine.id, rawMaterialItemId: line.requestLine.rawMaterialItemId, receivedUnitId: line.receivedUnitId, receivedQuantity: line.receivedQuantity, actualUnitPrice: line.actualUnitPrice, lineTotal: line.lineTotal, baseUnitId: line.baseUnitId, conversionVersionId: line.conversionVersionId, baseQuantity: line.baseQuantity, baseUnitCost: line.baseUnitCost } });
-        await tx.operationsInventoryMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.requestLine.rawMaterialItemId, receiptId: id, movementNumber: await this.documentNumber(tx, context, "OIN", payload.businessDate), movementType: OperationsInventoryMovementType.RECEIPT, baseQuantityDelta: line.baseQuantity, valueDelta: line.lineTotal, quantityAfter: nextQuantity, valueAfter: nextValue, weightedUnitCostAfter: nextCost, businessDate: asDate(payload.businessDate), createdByUserId: context.actorUserId } });
-        await tx.operationsItemUnit.updateMany({ where: { tenantId: context.tenantId, companyId: context.companyId, itemId: line.requestLine.rawMaterialItemId, unitId: line.receivedUnitId }, data: { lastPurchaseUnitPrice: line.actualUnitPrice, lastPurchasePriceAt: new Date() } });
+        else await tx.operationsInventoryBalance.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.rawMaterialItemId, baseQuantity: nextQuantity, totalValue: nextValue, weightedUnitCost: nextCost } });
+        await tx.operationsPurchaseReceiptLine.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, receiptId: id, requestLineId: line.requestLine?.id ?? null, rawMaterialItemId: line.rawMaterialItemId, receivedUnitId: line.receivedUnitId, receivedQuantity: line.receivedQuantity, actualUnitPrice: line.actualUnitPrice, lineTotal: line.lineTotal, baseUnitId: line.baseUnitId, conversionVersionId: line.conversionVersionId, baseQuantity: line.baseQuantity, baseUnitCost: line.baseUnitCost } });
+        await tx.operationsInventoryMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: line.rawMaterialItemId, receiptId: id, movementNumber: await this.documentNumber(tx, context, "OIN", payload.businessDate), movementType: OperationsInventoryMovementType.RECEIPT, baseQuantityDelta: line.baseQuantity, valueDelta: line.lineTotal, quantityAfter: nextQuantity, valueAfter: nextValue, weightedUnitCostAfter: nextCost, businessDate: asDate(payload.businessDate), createdByUserId: context.actorUserId } });
+        await tx.operationsItemUnit.updateMany({ where: { tenantId: context.tenantId, companyId: context.companyId, itemId: line.rawMaterialItemId, unitId: line.receivedUnitId }, data: { lastPurchaseUnitPrice: line.actualUnitPrice, lastPurchasePriceAt: new Date() } });
         receiptTotal = receiptTotal.plus(line.lineTotal);
       }
       if (purchase.executionKind === OperationsPurchaseExecutionKind.DELEGATED) await this.appendCustodyEvent(tx, context, { eventType: OperationsCustodyEventType.PURCHASE, amountDelta: receiptTotal.neg(), businessDate: payload.businessDate, requestId: purchase.id, receiptId: id, notes: `Purchase receipt ${receiptNumber}` });
@@ -278,9 +291,28 @@ export class OperationsExecutionService {
   private toBase(item: { baseUnitId: string; conversionVersions: Array<{ id: string; edges: Array<{ fromUnitId: string; toUnitId: string; factor: Prisma.Decimal }> }> }, unitId: string, quantity: Prisma.Decimal) {
     if (unitId === item.baseUnitId) return { baseUnitId: item.baseUnitId, conversionVersionId: null, resolvedBaseQuantity: operationalQuantity(quantity) };
     const version = item.conversionVersions[0]; if (!version) throw new BadRequestException("A published unit conversion is required for this raw material unit.");
-    const path = new Map(version.edges.map((edge) => [edge.fromUnitId, edge])); let cursor = unitId; let result = quantity; const seen = new Set<string>();
-    while (cursor !== item.baseUnitId) { if (seen.has(cursor)) throw new BadRequestException("The published conversion path is invalid."); seen.add(cursor); const edge = path.get(cursor); if (!edge) throw new BadRequestException("This unit does not reach the material base unit in the published conversion."); result = result.mul(edge.factor); cursor = edge.toUnitId; }
-    const resolvedBaseQuantity = operationalQuantity(result);
+    // Relations are entered once, normally from the larger package to the
+    // smaller unit. Costing and stock can traverse the same material relation
+    // in either direction: moving backwards divides by the saved factor.
+    const adjacent = new Map<string, Array<{ unitId: string; multiplier: Prisma.Decimal }>>();
+    for (const edge of version.edges) {
+      adjacent.set(edge.fromUnitId, [...(adjacent.get(edge.fromUnitId) ?? []), { unitId: edge.toUnitId, multiplier: edge.factor }]);
+      adjacent.set(edge.toUnitId, [...(adjacent.get(edge.toUnitId) ?? []), { unitId: edge.fromUnitId, multiplier: new Prisma.Decimal(1).div(edge.factor) }]);
+    }
+    const factors = new Map<string, Prisma.Decimal>([[unitId, new Prisma.Decimal(1)]]);
+    const queue = [unitId];
+    while (queue.length) {
+      const cursor = queue.shift()!;
+      if (cursor === item.baseUnitId) break;
+      const currentFactor = factors.get(cursor)!;
+      for (const next of adjacent.get(cursor) ?? []) if (!factors.has(next.unitId)) {
+        factors.set(next.unitId, currentFactor.mul(next.multiplier));
+        queue.push(next.unitId);
+      }
+    }
+    const multiplier = factors.get(item.baseUnitId);
+    if (!multiplier) throw new BadRequestException("This unit does not connect to the material inventory base.");
+    const resolvedBaseQuantity = operationalQuantity(quantity.mul(multiplier));
     if (resolvedBaseQuantity.lte(0)) throw new BadRequestException("The converted base quantity is below the supported operational precision.");
     return { baseUnitId: item.baseUnitId, conversionVersionId: version.id, resolvedBaseQuantity };
   }
@@ -313,6 +345,7 @@ export class OperationsExecutionService {
     return status;
   }
 
+  private async lockInventoryItems(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, itemIds: Iterable<string>) { for (const itemId of [...new Set(itemIds)].sort()) await this.lockInventoryItem(tx, context, itemId); }
   private async lockInventoryItem(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, itemId: string) { await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`operations-inventory:${context.companyId}:${itemId}`}))`; }
   private async documentNumber(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, series: string, businessDate: string) { const value = await this.serials.reserveInTransaction(tx, context, { series, businessDate: businessDate as `${number}-${number}-${number}` }); return `${series}-${businessDate.replaceAll("-", "")}-${value.toString().padStart(5, "0")}`; }
   private async withIdempotency<T extends EntityReceipt>(context: TrustedCompanyActorContext, operation: string, key: string, payload: unknown, action: (tx: Prisma.TransactionClient) => Promise<T>, status: number): Promise<T> { return this.database.inTenantTransaction(context.tenantId, async (tx) => { let begun; try { begun = await this.idempotency.beginInTransaction(tx, context, { operation, key, request: payload as CanonicalJsonValue, expiresAt: new Date(Date.now() + 86_400_000) }); } catch (error) { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException("The idempotency key was already used with a different operations request."); throw error; } if (begun.kind === "replay") return { ...(begun.response.body as T), replayed: true }; if (begun.kind === "in-progress") throw new ConflictException("The operations request is still in progress."); const receipt = await action(tx); await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status, headers: null, body: receipt as CanonicalJsonValue } }); return receipt; }); }

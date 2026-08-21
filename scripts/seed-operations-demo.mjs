@@ -47,6 +47,17 @@ try {
   const orange = await raw(catalog, context, "ORANGE", "برتقال تجريبي", piece.id, [price(piece.id, "1.5000")]);
   const bread = await raw(catalog, context, "BREAD", "خبز تجريبي", piece.id, [price(piece.id, "1.0000")]);
 
+  // Purchase packaging is intentionally separate from the inventory base.
+  // The demo enables only the units it will actually request.
+  await Promise.all([
+    enablePurchaseUnits(catalog, context, tomato.id, [kilogram.id]),
+    enablePurchaseUnits(catalog, context, oil.id, [bottle.id]),
+    enablePurchaseUnits(catalog, context, milk.id, [bottle.id]),
+    enablePurchaseUnits(catalog, context, meat.id, [kilogram.id]),
+    enablePurchaseUnits(catalog, context, orange.id, [piece.id]),
+    enablePurchaseUnits(catalog, context, bread.id, [piece.id]),
+  ]);
+
   const shawarma = await menu(catalog, context, "SHAWARMA", "شاورما تجريبية", kitchen.id, piece.id, "14.0000");
   const orangeJuice = await menu(catalog, context, "ORANGE-JUICE", "عصير برتقال تجريبي", bar.id, piece.id, "9.0000");
   await execution.publishRecipe(context, {
@@ -104,6 +115,15 @@ async function menu(catalog, context, code, nameAr, sectionId, baseUnitId, menuS
 }
 async function conversion(catalog, context, itemId, edges) {
   await catalog.publishConversions(context, itemId, edges, randomUUID());
+}
+async function enablePurchaseUnits(catalog, context, itemId, purchaseUnitIds) {
+  const workspace = await catalog.catalog(context);
+  const item = workspace.items.find((entry) => entry.id === itemId);
+  assert.ok(item, "The raw material must exist before configuring its purchase units.");
+  await catalog.configureItemUnits(context, {
+    itemId,
+    units: item.itemUnits.map((line) => ({ unitId: line.unitId, isActive: line.isActive, isOrderEnabled: purchaseUnitIds.includes(line.unitId) })),
+  }, randomUUID());
 }
 async function complete(execution, context, requestId, actualLines, notes, paymentReference) {
   const workspace = await execution.workspace(context);

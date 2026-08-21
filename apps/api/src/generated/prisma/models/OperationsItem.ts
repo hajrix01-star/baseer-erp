@@ -250,6 +250,7 @@ export type OperationsItemWhereInput = {
   inventoryBalance?: Prisma.XOR<Prisma.OperationsInventoryBalanceNullableScalarRelationFilter, Prisma.OperationsInventoryBalanceWhereInput> | null
   inventoryMovements?: Prisma.OperationsInventoryMovementListRelationFilter
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }
 
 export type OperationsItemOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type OperationsItemOrderByWithRelationInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceOrderByWithRelationInput
   inventoryMovements?: Prisma.OperationsInventoryMovementOrderByRelationAggregateInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineOrderByRelationAggregateInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionOrderByRelationAggregateInput
 }
 
 export type OperationsItemWhereUniqueInput = Prisma.AtLeast<{
@@ -309,6 +311,7 @@ export type OperationsItemWhereUniqueInput = Prisma.AtLeast<{
   inventoryBalance?: Prisma.XOR<Prisma.OperationsInventoryBalanceNullableScalarRelationFilter, Prisma.OperationsInventoryBalanceWhereInput> | null
   inventoryMovements?: Prisma.OperationsInventoryMovementListRelationFilter
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineListRelationFilter
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_code">
 
 export type OperationsItemOrderByWithAggregationInput = {
@@ -368,6 +371,7 @@ export type OperationsItemCreateInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateInput = {
@@ -392,6 +396,7 @@ export type OperationsItemUncheckedCreateInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUpdateInput = {
@@ -415,6 +420,7 @@ export type OperationsItemUpdateInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateInput = {
@@ -439,6 +445,7 @@ export type OperationsItemUncheckedUpdateInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateManyInput = {
@@ -729,6 +736,20 @@ export type OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNeste
   update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsItemUpdateToOneWithWhereWithoutInternalRegistrationLinesInput, Prisma.OperationsItemUpdateWithoutInternalRegistrationLinesInput>, Prisma.OperationsItemUncheckedUpdateWithoutInternalRegistrationLinesInput>
 }
 
+export type OperationsItemCreateNestedOneWithoutInternalRegistrationConsumptionsInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutInternalRegistrationConsumptionsInput
+  connect?: Prisma.OperationsItemWhereUniqueInput
+}
+
+export type OperationsItemUpdateOneRequiredWithoutInternalRegistrationConsumptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutInternalRegistrationConsumptionsInput
+  upsert?: Prisma.OperationsItemUpsertWithoutInternalRegistrationConsumptionsInput
+  connect?: Prisma.OperationsItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsItemUpdateToOneWithWhereWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUpdateWithoutInternalRegistrationConsumptionsInput>, Prisma.OperationsItemUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+}
+
 export type OperationsItemCreateNestedOneWithoutRecipeOutputsInput = {
   create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutRecipeOutputsInput, Prisma.OperationsItemUncheckedCreateWithoutRecipeOutputsInput>
   connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutRecipeOutputsInput
@@ -833,6 +854,7 @@ export type OperationsItemCreateWithoutCompanyInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutCompanyInput = {
@@ -855,6 +877,7 @@ export type OperationsItemUncheckedCreateWithoutCompanyInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutCompanyInput = {
@@ -921,6 +944,7 @@ export type OperationsItemCreateWithoutSectionInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutSectionInput = {
@@ -942,6 +966,7 @@ export type OperationsItemUncheckedCreateWithoutSectionInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutSectionInput = {
@@ -990,6 +1015,7 @@ export type OperationsItemCreateWithoutBaseUnitInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutBaseUnitInput = {
@@ -1011,6 +1037,7 @@ export type OperationsItemUncheckedCreateWithoutBaseUnitInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutBaseUnitInput = {
@@ -1059,6 +1086,7 @@ export type OperationsItemCreateWithoutItemUnitsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutItemUnitsInput = {
@@ -1082,6 +1110,7 @@ export type OperationsItemUncheckedCreateWithoutItemUnitsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutItemUnitsInput = {
@@ -1120,6 +1149,7 @@ export type OperationsItemUpdateWithoutItemUnitsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutItemUnitsInput = {
@@ -1143,6 +1173,7 @@ export type OperationsItemUncheckedUpdateWithoutItemUnitsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutConversionVersionsInput = {
@@ -1165,6 +1196,7 @@ export type OperationsItemCreateWithoutConversionVersionsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutConversionVersionsInput = {
@@ -1188,6 +1220,7 @@ export type OperationsItemUncheckedCreateWithoutConversionVersionsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutConversionVersionsInput = {
@@ -1226,6 +1259,7 @@ export type OperationsItemUpdateWithoutConversionVersionsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutConversionVersionsInput = {
@@ -1249,6 +1283,7 @@ export type OperationsItemUncheckedUpdateWithoutConversionVersionsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutInternalRegistrationLinesInput = {
@@ -1271,6 +1306,7 @@ export type OperationsItemCreateWithoutInternalRegistrationLinesInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutRawMaterialInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutInternalRegistrationLinesInput = {
@@ -1294,6 +1330,7 @@ export type OperationsItemUncheckedCreateWithoutInternalRegistrationLinesInput =
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutRawMaterialInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutInternalRegistrationLinesInput = {
@@ -1332,6 +1369,7 @@ export type OperationsItemUpdateWithoutInternalRegistrationLinesInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutRawMaterialNestedInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutInternalRegistrationLinesInput = {
@@ -1355,6 +1393,117 @@ export type OperationsItemUncheckedUpdateWithoutInternalRegistrationLinesInput =
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutRawMaterialNestedInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
+}
+
+export type OperationsItemCreateWithoutInternalRegistrationConsumptionsInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  kind: $Enums.OperationsItemKind
+  status?: $Enums.OperationsItemStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
+  section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
+  itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputItemInput
+  recipeIngredients?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRawMaterialInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutRawMaterialInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutRawMaterialInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+}
+
+export type OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptionsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  sectionId?: string | null
+  baseUnitId: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  kind: $Enums.OperationsItemKind
+  status?: $Enums.OperationsItemStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  itemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutItemInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutItemInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutOutputItemInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+}
+
+export type OperationsItemCreateOrConnectWithoutInternalRegistrationConsumptionsInput = {
+  where: Prisma.OperationsItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsItemCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+}
+
+export type OperationsItemUpsertWithoutInternalRegistrationConsumptionsInput = {
+  update: Prisma.XOR<Prisma.OperationsItemUpdateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+  create: Prisma.XOR<Prisma.OperationsItemCreateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptionsInput>
+  where?: Prisma.OperationsItemWhereInput
+}
+
+export type OperationsItemUpdateToOneWithWhereWithoutInternalRegistrationConsumptionsInput = {
+  where?: Prisma.OperationsItemWhereInput
+  data: Prisma.XOR<Prisma.OperationsItemUpdateWithoutInternalRegistrationConsumptionsInput, Prisma.OperationsItemUncheckedUpdateWithoutInternalRegistrationConsumptionsInput>
+}
+
+export type OperationsItemUpdateWithoutInternalRegistrationConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumOperationsItemKindFieldUpdateOperationsInput | $Enums.OperationsItemKind
+  status?: Prisma.EnumOperationsItemStatusFieldUpdateOperationsInput | $Enums.OperationsItemStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
+  section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputItemNestedInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUpdateManyWithoutRawMaterialNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutRawMaterialNestedInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutRawMaterialNestedInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+}
+
+export type OperationsItemUncheckedUpdateWithoutInternalRegistrationConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumOperationsItemKindFieldUpdateOperationsInput | $Enums.OperationsItemKind
+  status?: Prisma.EnumOperationsItemStatusFieldUpdateOperationsInput | $Enums.OperationsItemStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutItemNestedInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutItemNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemNestedInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
 }
 
 export type OperationsItemCreateWithoutRecipeOutputsInput = {
@@ -1377,6 +1526,7 @@ export type OperationsItemCreateWithoutRecipeOutputsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutRecipeOutputsInput = {
@@ -1400,6 +1550,7 @@ export type OperationsItemUncheckedCreateWithoutRecipeOutputsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutRecipeOutputsInput = {
@@ -1438,6 +1589,7 @@ export type OperationsItemUpdateWithoutRecipeOutputsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutRecipeOutputsInput = {
@@ -1461,6 +1613,7 @@ export type OperationsItemUncheckedUpdateWithoutRecipeOutputsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutRecipeIngredientsInput = {
@@ -1483,6 +1636,7 @@ export type OperationsItemCreateWithoutRecipeIngredientsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutRecipeIngredientsInput = {
@@ -1506,6 +1660,7 @@ export type OperationsItemUncheckedCreateWithoutRecipeIngredientsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutRecipeIngredientsInput = {
@@ -1544,6 +1699,7 @@ export type OperationsItemUpdateWithoutRecipeIngredientsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutRecipeIngredientsInput = {
@@ -1567,6 +1723,7 @@ export type OperationsItemUncheckedUpdateWithoutRecipeIngredientsInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutRequestLinesInput = {
@@ -1589,6 +1746,7 @@ export type OperationsItemCreateWithoutRequestLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutRequestLinesInput = {
@@ -1612,6 +1770,7 @@ export type OperationsItemUncheckedCreateWithoutRequestLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutRequestLinesInput = {
@@ -1650,6 +1809,7 @@ export type OperationsItemUpdateWithoutRequestLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutRequestLinesInput = {
@@ -1673,6 +1833,7 @@ export type OperationsItemUncheckedUpdateWithoutRequestLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutReceiptLinesInput = {
@@ -1695,6 +1856,7 @@ export type OperationsItemCreateWithoutReceiptLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutReceiptLinesInput = {
@@ -1718,6 +1880,7 @@ export type OperationsItemUncheckedCreateWithoutReceiptLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutReceiptLinesInput = {
@@ -1756,6 +1919,7 @@ export type OperationsItemUpdateWithoutReceiptLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutReceiptLinesInput = {
@@ -1779,6 +1943,7 @@ export type OperationsItemUncheckedUpdateWithoutReceiptLinesInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutInventoryBalanceInput = {
@@ -1801,6 +1966,7 @@ export type OperationsItemCreateWithoutInventoryBalanceInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutInventoryBalanceInput = {
@@ -1824,6 +1990,7 @@ export type OperationsItemUncheckedCreateWithoutInventoryBalanceInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutRawMaterialInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutInventoryBalanceInput = {
@@ -1862,6 +2029,7 @@ export type OperationsItemUpdateWithoutInventoryBalanceInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutInventoryBalanceInput = {
@@ -1885,6 +2053,7 @@ export type OperationsItemUncheckedUpdateWithoutInventoryBalanceInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateWithoutInventoryMovementsInput = {
@@ -1907,6 +2076,7 @@ export type OperationsItemCreateWithoutInventoryMovementsInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutRawMaterialInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemUncheckedCreateWithoutInventoryMovementsInput = {
@@ -1930,6 +2100,7 @@ export type OperationsItemUncheckedCreateWithoutInventoryMovementsInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutRawMaterialInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
 }
 
 export type OperationsItemCreateOrConnectWithoutInventoryMovementsInput = {
@@ -1968,6 +2139,7 @@ export type OperationsItemUpdateWithoutInventoryMovementsInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutRawMaterialNestedInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -1991,6 +2163,7 @@ export type OperationsItemUncheckedUpdateWithoutInventoryMovementsInput = {
   receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutRawMaterialNestedInput
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemCreateManyCompanyInput = {
@@ -2026,6 +2199,7 @@ export type OperationsItemUpdateWithoutCompanyInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutCompanyInput = {
@@ -2048,6 +2222,7 @@ export type OperationsItemUncheckedUpdateWithoutCompanyInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateManyWithoutCompanyInput = {
@@ -2095,6 +2270,7 @@ export type OperationsItemUpdateWithoutSectionInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutSectionInput = {
@@ -2116,6 +2292,7 @@ export type OperationsItemUncheckedUpdateWithoutSectionInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateManyWithoutSectionInput = {
@@ -2162,6 +2339,7 @@ export type OperationsItemUpdateWithoutBaseUnitInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateWithoutBaseUnitInput = {
@@ -2183,6 +2361,7 @@ export type OperationsItemUncheckedUpdateWithoutBaseUnitInput = {
   inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
   inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
   internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
 }
 
 export type OperationsItemUncheckedUpdateManyWithoutBaseUnitInput = {
@@ -2211,6 +2390,7 @@ export type OperationsItemCountOutputType = {
   receiptLines: number
   inventoryMovements: number
   internalRegistrationLines: number
+  internalRegistrationConsumptions: number
 }
 
 export type OperationsItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2222,6 +2402,7 @@ export type OperationsItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Ex
   receiptLines?: boolean | OperationsItemCountOutputTypeCountReceiptLinesArgs
   inventoryMovements?: boolean | OperationsItemCountOutputTypeCountInventoryMovementsArgs
   internalRegistrationLines?: boolean | OperationsItemCountOutputTypeCountInternalRegistrationLinesArgs
+  internalRegistrationConsumptions?: boolean | OperationsItemCountOutputTypeCountInternalRegistrationConsumptionsArgs
 }
 
 /**
@@ -2290,6 +2471,13 @@ export type OperationsItemCountOutputTypeCountInternalRegistrationLinesArgs<ExtA
   where?: Prisma.OperationsInternalRegistrationLineWhereInput
 }
 
+/**
+ * OperationsItemCountOutputType without action
+ */
+export type OperationsItemCountOutputTypeCountInternalRegistrationConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+}
+
 
 export type OperationsItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2316,6 +2504,7 @@ export type OperationsItemSelect<ExtArgs extends runtime.Types.Extensions.Intern
   inventoryBalance?: boolean | Prisma.OperationsItem$inventoryBalanceArgs<ExtArgs>
   inventoryMovements?: boolean | Prisma.OperationsItem$inventoryMovementsArgs<ExtArgs>
   internalRegistrationLines?: boolean | Prisma.OperationsItem$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptions?: boolean | Prisma.OperationsItem$internalRegistrationConsumptionsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsItem"]>
 
@@ -2384,6 +2573,7 @@ export type OperationsItemInclude<ExtArgs extends runtime.Types.Extensions.Inter
   inventoryBalance?: boolean | Prisma.OperationsItem$inventoryBalanceArgs<ExtArgs>
   inventoryMovements?: boolean | Prisma.OperationsItem$inventoryMovementsArgs<ExtArgs>
   internalRegistrationLines?: boolean | Prisma.OperationsItem$internalRegistrationLinesArgs<ExtArgs>
+  internalRegistrationConsumptions?: boolean | Prisma.OperationsItem$internalRegistrationConsumptionsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationsItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationsItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2412,6 +2602,7 @@ export type $OperationsItemPayload<ExtArgs extends runtime.Types.Extensions.Inte
     inventoryBalance: Prisma.$OperationsInventoryBalancePayload<ExtArgs> | null
     inventoryMovements: Prisma.$OperationsInventoryMovementPayload<ExtArgs>[]
     internalRegistrationLines: Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>[]
+    internalRegistrationConsumptions: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2832,6 +3023,7 @@ export interface Prisma__OperationsItemClient<T, Null = never, ExtArgs extends r
   inventoryBalance<T extends Prisma.OperationsItem$inventoryBalanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$inventoryBalanceArgs<ExtArgs>>): Prisma.Prisma__OperationsInventoryBalanceClient<runtime.Types.Result.GetResult<Prisma.$OperationsInventoryBalancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   inventoryMovements<T extends Prisma.OperationsItem$inventoryMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInventoryMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   internalRegistrationLines<T extends Prisma.OperationsItem$internalRegistrationLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$internalRegistrationLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  internalRegistrationConsumptions<T extends Prisma.OperationsItem$internalRegistrationConsumptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$internalRegistrationConsumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3501,6 +3693,30 @@ export type OperationsItem$internalRegistrationLinesArgs<ExtArgs extends runtime
   take?: number
   skip?: number
   distinct?: Prisma.OperationsInternalRegistrationLineScalarFieldEnum | Prisma.OperationsInternalRegistrationLineScalarFieldEnum[]
+}
+
+/**
+ * OperationsItem.internalRegistrationConsumptions
+ */
+export type OperationsItem$internalRegistrationConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput | Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationConsumptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum | Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum[]
 }
 
 /**

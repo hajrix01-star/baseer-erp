@@ -48,6 +48,7 @@ export type OperationsInventoryMovementMinAggregateOutputType = {
   companyId: string | null
   rawMaterialItemId: string | null
   receiptId: string | null
+  internalRegistrationConsumptionId: string | null
   movementNumber: string | null
   movementType: $Enums.OperationsInventoryMovementType | null
   baseQuantityDelta: runtime.Decimal | null
@@ -66,6 +67,7 @@ export type OperationsInventoryMovementMaxAggregateOutputType = {
   companyId: string | null
   rawMaterialItemId: string | null
   receiptId: string | null
+  internalRegistrationConsumptionId: string | null
   movementNumber: string | null
   movementType: $Enums.OperationsInventoryMovementType | null
   baseQuantityDelta: runtime.Decimal | null
@@ -84,6 +86,7 @@ export type OperationsInventoryMovementCountAggregateOutputType = {
   companyId: number
   rawMaterialItemId: number
   receiptId: number
+  internalRegistrationConsumptionId: number
   movementNumber: number
   movementType: number
   baseQuantityDelta: number
@@ -120,6 +123,7 @@ export type OperationsInventoryMovementMinAggregateInputType = {
   companyId?: true
   rawMaterialItemId?: true
   receiptId?: true
+  internalRegistrationConsumptionId?: true
   movementNumber?: true
   movementType?: true
   baseQuantityDelta?: true
@@ -138,6 +142,7 @@ export type OperationsInventoryMovementMaxAggregateInputType = {
   companyId?: true
   rawMaterialItemId?: true
   receiptId?: true
+  internalRegistrationConsumptionId?: true
   movementNumber?: true
   movementType?: true
   baseQuantityDelta?: true
@@ -156,6 +161,7 @@ export type OperationsInventoryMovementCountAggregateInputType = {
   companyId?: true
   rawMaterialItemId?: true
   receiptId?: true
+  internalRegistrationConsumptionId?: true
   movementNumber?: true
   movementType?: true
   baseQuantityDelta?: true
@@ -261,6 +267,7 @@ export type OperationsInventoryMovementGroupByOutputType = {
   companyId: string
   rawMaterialItemId: string
   receiptId: string | null
+  internalRegistrationConsumptionId: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal
@@ -302,6 +309,7 @@ export type OperationsInventoryMovementWhereInput = {
   companyId?: Prisma.UuidFilter<"OperationsInventoryMovement"> | string
   rawMaterialItemId?: Prisma.UuidFilter<"OperationsInventoryMovement"> | string
   receiptId?: Prisma.UuidNullableFilter<"OperationsInventoryMovement"> | string | null
+  internalRegistrationConsumptionId?: Prisma.UuidNullableFilter<"OperationsInventoryMovement"> | string | null
   movementNumber?: Prisma.StringFilter<"OperationsInventoryMovement"> | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFilter<"OperationsInventoryMovement"> | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFilter<"OperationsInventoryMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -315,6 +323,7 @@ export type OperationsInventoryMovementWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   rawMaterial?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   receipt?: Prisma.XOR<Prisma.OperationsPurchaseReceiptNullableScalarRelationFilter, Prisma.OperationsPurchaseReceiptWhereInput> | null
+  internalRegistrationConsumption?: Prisma.XOR<Prisma.OperationsInternalRegistrationConsumptionNullableScalarRelationFilter, Prisma.OperationsInternalRegistrationConsumptionWhereInput> | null
 }
 
 export type OperationsInventoryMovementOrderByWithRelationInput = {
@@ -323,6 +332,7 @@ export type OperationsInventoryMovementOrderByWithRelationInput = {
   companyId?: Prisma.SortOrder
   rawMaterialItemId?: Prisma.SortOrder
   receiptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  internalRegistrationConsumptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   movementNumber?: Prisma.SortOrder
   movementType?: Prisma.SortOrder
   baseQuantityDelta?: Prisma.SortOrder
@@ -336,12 +346,15 @@ export type OperationsInventoryMovementOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   rawMaterial?: Prisma.OperationsItemOrderByWithRelationInput
   receipt?: Prisma.OperationsPurchaseReceiptOrderByWithRelationInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput
 }
 
 export type OperationsInventoryMovementWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  internalRegistrationConsumptionId?: string
   id_tenantId_companyId?: Prisma.OperationsInventoryMovementIdTenantIdCompanyIdCompoundUniqueInput
   companyId_movementNumber?: Prisma.OperationsInventoryMovementCompanyIdMovementNumberCompoundUniqueInput
+  internalRegistrationConsumptionId_tenantId_companyId?: Prisma.OperationsInventoryMovementInternalRegistrationConsumptionIdTenantIdCompanyIdCompoundUniqueInput
   AND?: Prisma.OperationsInventoryMovementWhereInput | Prisma.OperationsInventoryMovementWhereInput[]
   OR?: Prisma.OperationsInventoryMovementWhereInput[]
   NOT?: Prisma.OperationsInventoryMovementWhereInput | Prisma.OperationsInventoryMovementWhereInput[]
@@ -362,7 +375,8 @@ export type OperationsInventoryMovementWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   rawMaterial?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   receipt?: Prisma.XOR<Prisma.OperationsPurchaseReceiptNullableScalarRelationFilter, Prisma.OperationsPurchaseReceiptWhereInput> | null
-}, "id" | "id_tenantId_companyId" | "companyId_movementNumber">
+  internalRegistrationConsumption?: Prisma.XOR<Prisma.OperationsInternalRegistrationConsumptionNullableScalarRelationFilter, Prisma.OperationsInternalRegistrationConsumptionWhereInput> | null
+}, "id" | "id_tenantId_companyId" | "companyId_movementNumber" | "internalRegistrationConsumptionId" | "internalRegistrationConsumptionId_tenantId_companyId">
 
 export type OperationsInventoryMovementOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -370,6 +384,7 @@ export type OperationsInventoryMovementOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrder
   rawMaterialItemId?: Prisma.SortOrder
   receiptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  internalRegistrationConsumptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   movementNumber?: Prisma.SortOrder
   movementType?: Prisma.SortOrder
   baseQuantityDelta?: Prisma.SortOrder
@@ -396,6 +411,7 @@ export type OperationsInventoryMovementScalarWhereWithAggregatesInput = {
   companyId?: Prisma.UuidWithAggregatesFilter<"OperationsInventoryMovement"> | string
   rawMaterialItemId?: Prisma.UuidWithAggregatesFilter<"OperationsInventoryMovement"> | string
   receiptId?: Prisma.UuidNullableWithAggregatesFilter<"OperationsInventoryMovement"> | string | null
+  internalRegistrationConsumptionId?: Prisma.UuidNullableWithAggregatesFilter<"OperationsInventoryMovement"> | string | null
   movementNumber?: Prisma.StringWithAggregatesFilter<"OperationsInventoryMovement"> | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeWithAggregatesFilter<"OperationsInventoryMovement"> | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalWithAggregatesFilter<"OperationsInventoryMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -423,6 +439,7 @@ export type OperationsInventoryMovementCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInventoryMovementsInput
   rawMaterial: Prisma.OperationsItemCreateNestedOneWithoutInventoryMovementsInput
   receipt?: Prisma.OperationsPurchaseReceiptCreateNestedOneWithoutInventoryMovementsInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedOneWithoutInventoryMovementInput
 }
 
 export type OperationsInventoryMovementUncheckedCreateInput = {
@@ -431,6 +448,7 @@ export type OperationsInventoryMovementUncheckedCreateInput = {
   companyId: string
   rawMaterialItemId: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -458,6 +476,7 @@ export type OperationsInventoryMovementUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInventoryMovementsNestedInput
   rawMaterial?: Prisma.OperationsItemUpdateOneRequiredWithoutInventoryMovementsNestedInput
   receipt?: Prisma.OperationsPurchaseReceiptUpdateOneWithoutInventoryMovementsNestedInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionUpdateOneWithoutInventoryMovementNestedInput
 }
 
 export type OperationsInventoryMovementUncheckedUpdateInput = {
@@ -466,6 +485,7 @@ export type OperationsInventoryMovementUncheckedUpdateInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -484,6 +504,7 @@ export type OperationsInventoryMovementCreateManyInput = {
   companyId: string
   rawMaterialItemId: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -516,6 +537,7 @@ export type OperationsInventoryMovementUncheckedUpdateManyInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -538,6 +560,11 @@ export type OperationsInventoryMovementOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type OperationsInventoryMovementNullableScalarRelationFilter = {
+  is?: Prisma.OperationsInventoryMovementWhereInput | null
+  isNot?: Prisma.OperationsInventoryMovementWhereInput | null
+}
+
 export type OperationsInventoryMovementIdTenantIdCompanyIdCompoundUniqueInput = {
   id: string
   tenantId: string
@@ -549,12 +576,19 @@ export type OperationsInventoryMovementCompanyIdMovementNumberCompoundUniqueInpu
   movementNumber: string
 }
 
+export type OperationsInventoryMovementInternalRegistrationConsumptionIdTenantIdCompanyIdCompoundUniqueInput = {
+  internalRegistrationConsumptionId: string
+  tenantId: string
+  companyId: string
+}
+
 export type OperationsInventoryMovementCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   rawMaterialItemId?: Prisma.SortOrder
   receiptId?: Prisma.SortOrder
+  internalRegistrationConsumptionId?: Prisma.SortOrder
   movementNumber?: Prisma.SortOrder
   movementType?: Prisma.SortOrder
   baseQuantityDelta?: Prisma.SortOrder
@@ -581,6 +615,7 @@ export type OperationsInventoryMovementMaxOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   rawMaterialItemId?: Prisma.SortOrder
   receiptId?: Prisma.SortOrder
+  internalRegistrationConsumptionId?: Prisma.SortOrder
   movementNumber?: Prisma.SortOrder
   movementType?: Prisma.SortOrder
   baseQuantityDelta?: Prisma.SortOrder
@@ -599,6 +634,7 @@ export type OperationsInventoryMovementMinOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   rawMaterialItemId?: Prisma.SortOrder
   receiptId?: Prisma.SortOrder
+  internalRegistrationConsumptionId?: Prisma.SortOrder
   movementNumber?: Prisma.SortOrder
   movementType?: Prisma.SortOrder
   baseQuantityDelta?: Prisma.SortOrder
@@ -703,6 +739,38 @@ export type OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNest
   deleteMany?: Prisma.OperationsInventoryMovementScalarWhereInput | Prisma.OperationsInventoryMovementScalarWhereInput[]
 }
 
+export type OperationsInventoryMovementCreateNestedOneWithoutInternalRegistrationConsumptionInput = {
+  create?: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+  connectOrCreate?: Prisma.OperationsInventoryMovementCreateOrConnectWithoutInternalRegistrationConsumptionInput
+  connect?: Prisma.OperationsInventoryMovementWhereUniqueInput
+}
+
+export type OperationsInventoryMovementUncheckedCreateNestedOneWithoutInternalRegistrationConsumptionInput = {
+  create?: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+  connectOrCreate?: Prisma.OperationsInventoryMovementCreateOrConnectWithoutInternalRegistrationConsumptionInput
+  connect?: Prisma.OperationsInventoryMovementWhereUniqueInput
+}
+
+export type OperationsInventoryMovementUpdateOneWithoutInternalRegistrationConsumptionNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+  connectOrCreate?: Prisma.OperationsInventoryMovementCreateOrConnectWithoutInternalRegistrationConsumptionInput
+  upsert?: Prisma.OperationsInventoryMovementUpsertWithoutInternalRegistrationConsumptionInput
+  disconnect?: Prisma.OperationsInventoryMovementWhereInput | boolean
+  delete?: Prisma.OperationsInventoryMovementWhereInput | boolean
+  connect?: Prisma.OperationsInventoryMovementWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsInventoryMovementUpdateToOneWithWhereWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUpdateWithoutInternalRegistrationConsumptionInput>, Prisma.OperationsInventoryMovementUncheckedUpdateWithoutInternalRegistrationConsumptionInput>
+}
+
+export type OperationsInventoryMovementUncheckedUpdateOneWithoutInternalRegistrationConsumptionNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+  connectOrCreate?: Prisma.OperationsInventoryMovementCreateOrConnectWithoutInternalRegistrationConsumptionInput
+  upsert?: Prisma.OperationsInventoryMovementUpsertWithoutInternalRegistrationConsumptionInput
+  disconnect?: Prisma.OperationsInventoryMovementWhereInput | boolean
+  delete?: Prisma.OperationsInventoryMovementWhereInput | boolean
+  connect?: Prisma.OperationsInventoryMovementWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsInventoryMovementUpdateToOneWithWhereWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUpdateWithoutInternalRegistrationConsumptionInput>, Prisma.OperationsInventoryMovementUncheckedUpdateWithoutInternalRegistrationConsumptionInput>
+}
+
 export type OperationsInventoryMovementCreateNestedManyWithoutReceiptInput = {
   create?: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutReceiptInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutReceiptInput> | Prisma.OperationsInventoryMovementCreateWithoutReceiptInput[] | Prisma.OperationsInventoryMovementUncheckedCreateWithoutReceiptInput[]
   connectOrCreate?: Prisma.OperationsInventoryMovementCreateOrConnectWithoutReceiptInput | Prisma.OperationsInventoryMovementCreateOrConnectWithoutReceiptInput[]
@@ -763,12 +831,14 @@ export type OperationsInventoryMovementCreateWithoutCompanyInput = {
   createdByUserId: string
   rawMaterial: Prisma.OperationsItemCreateNestedOneWithoutInventoryMovementsInput
   receipt?: Prisma.OperationsPurchaseReceiptCreateNestedOneWithoutInventoryMovementsInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedOneWithoutInventoryMovementInput
 }
 
 export type OperationsInventoryMovementUncheckedCreateWithoutCompanyInput = {
   id?: string
   rawMaterialItemId: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -816,6 +886,7 @@ export type OperationsInventoryMovementScalarWhereInput = {
   companyId?: Prisma.UuidFilter<"OperationsInventoryMovement"> | string
   rawMaterialItemId?: Prisma.UuidFilter<"OperationsInventoryMovement"> | string
   receiptId?: Prisma.UuidNullableFilter<"OperationsInventoryMovement"> | string | null
+  internalRegistrationConsumptionId?: Prisma.UuidNullableFilter<"OperationsInventoryMovement"> | string | null
   movementNumber?: Prisma.StringFilter<"OperationsInventoryMovement"> | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFilter<"OperationsInventoryMovement"> | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFilter<"OperationsInventoryMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -842,11 +913,13 @@ export type OperationsInventoryMovementCreateWithoutRawMaterialInput = {
   createdByUserId: string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInventoryMovementsInput
   receipt?: Prisma.OperationsPurchaseReceiptCreateNestedOneWithoutInventoryMovementsInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedOneWithoutInventoryMovementInput
 }
 
 export type OperationsInventoryMovementUncheckedCreateWithoutRawMaterialInput = {
   id?: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -885,6 +958,88 @@ export type OperationsInventoryMovementUpdateManyWithWhereWithoutRawMaterialInpu
   data: Prisma.XOR<Prisma.OperationsInventoryMovementUpdateManyMutationInput, Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialInput>
 }
 
+export type OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput = {
+  id?: string
+  movementNumber: string
+  movementType: $Enums.OperationsInventoryMovementType
+  baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
+  quantityAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weightedUnitCostAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessDate: Date | string
+  effectiveAt?: Date | string
+  createdByUserId: string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsInventoryMovementsInput
+  rawMaterial: Prisma.OperationsItemCreateNestedOneWithoutInventoryMovementsInput
+  receipt?: Prisma.OperationsPurchaseReceiptCreateNestedOneWithoutInventoryMovementsInput
+}
+
+export type OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput = {
+  id?: string
+  rawMaterialItemId: string
+  receiptId?: string | null
+  movementNumber: string
+  movementType: $Enums.OperationsInventoryMovementType
+  baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
+  quantityAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weightedUnitCostAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessDate: Date | string
+  effectiveAt?: Date | string
+  createdByUserId: string
+}
+
+export type OperationsInventoryMovementCreateOrConnectWithoutInternalRegistrationConsumptionInput = {
+  where: Prisma.OperationsInventoryMovementWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+}
+
+export type OperationsInventoryMovementUpsertWithoutInternalRegistrationConsumptionInput = {
+  update: Prisma.XOR<Prisma.OperationsInventoryMovementUpdateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedUpdateWithoutInternalRegistrationConsumptionInput>
+  create: Prisma.XOR<Prisma.OperationsInventoryMovementCreateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedCreateWithoutInternalRegistrationConsumptionInput>
+  where?: Prisma.OperationsInventoryMovementWhereInput
+}
+
+export type OperationsInventoryMovementUpdateToOneWithWhereWithoutInternalRegistrationConsumptionInput = {
+  where?: Prisma.OperationsInventoryMovementWhereInput
+  data: Prisma.XOR<Prisma.OperationsInventoryMovementUpdateWithoutInternalRegistrationConsumptionInput, Prisma.OperationsInventoryMovementUncheckedUpdateWithoutInternalRegistrationConsumptionInput>
+}
+
+export type OperationsInventoryMovementUpdateWithoutInternalRegistrationConsumptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
+  baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  quantityAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weightedUnitCostAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInventoryMovementsNestedInput
+  rawMaterial?: Prisma.OperationsItemUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  receipt?: Prisma.OperationsPurchaseReceiptUpdateOneWithoutInventoryMovementsNestedInput
+}
+
+export type OperationsInventoryMovementUncheckedUpdateWithoutInternalRegistrationConsumptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
+  baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  quantityAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  valueAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weightedUnitCostAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type OperationsInventoryMovementCreateWithoutReceiptInput = {
   id?: string
   movementNumber: string
@@ -899,11 +1054,13 @@ export type OperationsInventoryMovementCreateWithoutReceiptInput = {
   createdByUserId: string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInventoryMovementsInput
   rawMaterial: Prisma.OperationsItemCreateNestedOneWithoutInventoryMovementsInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedOneWithoutInventoryMovementInput
 }
 
 export type OperationsInventoryMovementUncheckedCreateWithoutReceiptInput = {
   id?: string
   rawMaterialItemId: string
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -946,6 +1103,7 @@ export type OperationsInventoryMovementCreateManyCompanyInput = {
   id?: string
   rawMaterialItemId: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -972,12 +1130,14 @@ export type OperationsInventoryMovementUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterial?: Prisma.OperationsItemUpdateOneRequiredWithoutInventoryMovementsNestedInput
   receipt?: Prisma.OperationsPurchaseReceiptUpdateOneWithoutInventoryMovementsNestedInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionUpdateOneWithoutInventoryMovementNestedInput
 }
 
 export type OperationsInventoryMovementUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -994,6 +1154,7 @@ export type OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyInput = 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1009,6 +1170,7 @@ export type OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyInput = 
 export type OperationsInventoryMovementCreateManyRawMaterialInput = {
   id?: string
   receiptId?: string | null
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1035,11 +1197,13 @@ export type OperationsInventoryMovementUpdateWithoutRawMaterialInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInventoryMovementsNestedInput
   receipt?: Prisma.OperationsPurchaseReceiptUpdateOneWithoutInventoryMovementsNestedInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionUpdateOneWithoutInventoryMovementNestedInput
 }
 
 export type OperationsInventoryMovementUncheckedUpdateWithoutRawMaterialInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1055,6 +1219,7 @@ export type OperationsInventoryMovementUncheckedUpdateWithoutRawMaterialInput = 
 export type OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   receiptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1070,6 +1235,7 @@ export type OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialInpu
 export type OperationsInventoryMovementCreateManyReceiptInput = {
   id?: string
   rawMaterialItemId: string
+  internalRegistrationConsumptionId?: string | null
   movementNumber: string
   movementType: $Enums.OperationsInventoryMovementType
   baseQuantityDelta: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1096,11 +1262,13 @@ export type OperationsInventoryMovementUpdateWithoutReceiptInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInventoryMovementsNestedInput
   rawMaterial?: Prisma.OperationsItemUpdateOneRequiredWithoutInventoryMovementsNestedInput
+  internalRegistrationConsumption?: Prisma.OperationsInternalRegistrationConsumptionUpdateOneWithoutInventoryMovementNestedInput
 }
 
 export type OperationsInventoryMovementUncheckedUpdateWithoutReceiptInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1116,6 +1284,7 @@ export type OperationsInventoryMovementUncheckedUpdateWithoutReceiptInput = {
 export type OperationsInventoryMovementUncheckedUpdateManyWithoutReceiptInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rawMaterialItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  internalRegistrationConsumptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   movementNumber?: Prisma.StringFieldUpdateOperationsInput | string
   movementType?: Prisma.EnumOperationsInventoryMovementTypeFieldUpdateOperationsInput | $Enums.OperationsInventoryMovementType
   baseQuantityDelta?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1136,6 +1305,7 @@ export type OperationsInventoryMovementSelect<ExtArgs extends runtime.Types.Exte
   companyId?: boolean
   rawMaterialItemId?: boolean
   receiptId?: boolean
+  internalRegistrationConsumptionId?: boolean
   movementNumber?: boolean
   movementType?: boolean
   baseQuantityDelta?: boolean
@@ -1149,6 +1319,7 @@ export type OperationsInventoryMovementSelect<ExtArgs extends runtime.Types.Exte
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInventoryMovement"]>
 
 export type OperationsInventoryMovementSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1157,6 +1328,7 @@ export type OperationsInventoryMovementSelectCreateManyAndReturn<ExtArgs extends
   companyId?: boolean
   rawMaterialItemId?: boolean
   receiptId?: boolean
+  internalRegistrationConsumptionId?: boolean
   movementNumber?: boolean
   movementType?: boolean
   baseQuantityDelta?: boolean
@@ -1170,6 +1342,7 @@ export type OperationsInventoryMovementSelectCreateManyAndReturn<ExtArgs extends
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInventoryMovement"]>
 
 export type OperationsInventoryMovementSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1178,6 +1351,7 @@ export type OperationsInventoryMovementSelectUpdateManyAndReturn<ExtArgs extends
   companyId?: boolean
   rawMaterialItemId?: boolean
   receiptId?: boolean
+  internalRegistrationConsumptionId?: boolean
   movementNumber?: boolean
   movementType?: boolean
   baseQuantityDelta?: boolean
@@ -1191,6 +1365,7 @@ export type OperationsInventoryMovementSelectUpdateManyAndReturn<ExtArgs extends
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInventoryMovement"]>
 
 export type OperationsInventoryMovementSelectScalar = {
@@ -1199,6 +1374,7 @@ export type OperationsInventoryMovementSelectScalar = {
   companyId?: boolean
   rawMaterialItemId?: boolean
   receiptId?: boolean
+  internalRegistrationConsumptionId?: boolean
   movementNumber?: boolean
   movementType?: boolean
   baseQuantityDelta?: boolean
@@ -1211,21 +1387,24 @@ export type OperationsInventoryMovementSelectScalar = {
   createdByUserId?: boolean
 }
 
-export type OperationsInventoryMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "rawMaterialItemId" | "receiptId" | "movementNumber" | "movementType" | "baseQuantityDelta" | "valueDelta" | "quantityAfter" | "valueAfter" | "weightedUnitCostAfter" | "businessDate" | "effectiveAt" | "createdByUserId", ExtArgs["result"]["operationsInventoryMovement"]>
+export type OperationsInventoryMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "rawMaterialItemId" | "receiptId" | "internalRegistrationConsumptionId" | "movementNumber" | "movementType" | "baseQuantityDelta" | "valueDelta" | "quantityAfter" | "valueAfter" | "weightedUnitCostAfter" | "businessDate" | "effectiveAt" | "createdByUserId", ExtArgs["result"]["operationsInventoryMovement"]>
 export type OperationsInventoryMovementInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }
 export type OperationsInventoryMovementIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }
 export type OperationsInventoryMovementIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   rawMaterial?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   receipt?: boolean | Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>
+  internalRegistrationConsumption?: boolean | Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>
 }
 
 export type $OperationsInventoryMovementPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1234,6 +1413,7 @@ export type $OperationsInventoryMovementPayload<ExtArgs extends runtime.Types.Ex
     company: Prisma.$CompanyPayload<ExtArgs>
     rawMaterial: Prisma.$OperationsItemPayload<ExtArgs>
     receipt: Prisma.$OperationsPurchaseReceiptPayload<ExtArgs> | null
+    internalRegistrationConsumption: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1241,6 +1421,7 @@ export type $OperationsInventoryMovementPayload<ExtArgs extends runtime.Types.Ex
     companyId: string
     rawMaterialItemId: string
     receiptId: string | null
+    internalRegistrationConsumptionId: string | null
     movementNumber: string
     movementType: $Enums.OperationsInventoryMovementType
     baseQuantityDelta: runtime.Decimal
@@ -1648,6 +1829,7 @@ export interface Prisma__OperationsInventoryMovementClient<T, Null = never, ExtA
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   rawMaterial<T extends Prisma.OperationsItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItemDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsItemClient<runtime.Types.Result.GetResult<Prisma.$OperationsItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   receipt<T extends Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsInventoryMovement$receiptArgs<ExtArgs>>): Prisma.Prisma__OperationsPurchaseReceiptClient<runtime.Types.Result.GetResult<Prisma.$OperationsPurchaseReceiptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  internalRegistrationConsumption<T extends Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs>>): Prisma.Prisma__OperationsInternalRegistrationConsumptionClient<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1682,6 +1864,7 @@ export interface OperationsInventoryMovementFieldRefs {
   readonly companyId: Prisma.FieldRef<"OperationsInventoryMovement", 'String'>
   readonly rawMaterialItemId: Prisma.FieldRef<"OperationsInventoryMovement", 'String'>
   readonly receiptId: Prisma.FieldRef<"OperationsInventoryMovement", 'String'>
+  readonly internalRegistrationConsumptionId: Prisma.FieldRef<"OperationsInventoryMovement", 'String'>
   readonly movementNumber: Prisma.FieldRef<"OperationsInventoryMovement", 'String'>
   readonly movementType: Prisma.FieldRef<"OperationsInventoryMovement", 'OperationsInventoryMovementType'>
   readonly baseQuantityDelta: Prisma.FieldRef<"OperationsInventoryMovement", 'Decimal'>
@@ -2109,6 +2292,25 @@ export type OperationsInventoryMovement$receiptArgs<ExtArgs extends runtime.Type
    */
   include?: Prisma.OperationsPurchaseReceiptInclude<ExtArgs> | null
   where?: Prisma.OperationsPurchaseReceiptWhereInput
+}
+
+/**
+ * OperationsInventoryMovement.internalRegistrationConsumption
+ */
+export type OperationsInventoryMovement$internalRegistrationConsumptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
 }
 
 /**

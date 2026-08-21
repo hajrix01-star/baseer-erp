@@ -1,12 +1,12 @@
 import { useState, type ReactNode } from "react";
+import { BaseerApiError, parseBaseerApiResponse, presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBrand } from "./baseer-brand";
 import { baseerLoginCopy } from "./baseer-login-copy";
+import { baseerApiBaseUrl, persistActiveSession, type AuthSessionReceipt } from "./daily-sales-client";
 
 type Language = "ar" | "en";
 type Props = { language: Language; onLanguage: () => void; themeControl: ReactNode };
 type Company = { id: string; nameAr: string; nameEn: string };
-const api = (import.meta.env.VITE_BASEER_API_URL ?? "/v1").replace(/\/$/, "");
-const store = { token: "baseer.erp.access-token", company: "baseer.erp.company-id" };
 
 function LoginIcon({ name }: { name: "user" | "lock" | "eye" | "eyeOff" | "arrow" }) {
   const paths = {
@@ -23,20 +23,29 @@ export function BaseerLogin({ language, onLanguage, themeControl }: Props) {
   const text = baseerLoginCopy[language];
   const [login, setLogin] = useState(""); const [password, setPassword] = useState(""); const [visible, setVisible] = useState(false);
   const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
-  const choose = (accessToken: string, companyId: string) => { sessionStorage.setItem(store.token, accessToken); sessionStorage.setItem(store.company, companyId); window.location.reload(); };
+  const choose = (session: AuthSessionReceipt, companyId: string) => { persistActiveSession(session, companyId); window.location.reload(); };
   const submit = async (event: React.FormEvent) => {
     event.preventDefault(); setLoading(true); setError("");
     try {
-      const signIn = await fetch(`${api}/auth/sign-in`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ login: login.trim(), password }) });
-      if (!signIn.ok) throw new Error(text.failed);
-      const session = await signIn.json() as { accessToken: string };
-      const result = await fetch(`${api}/companies/available`, { headers: { Authorization: `Bearer ${session.accessToken}` } });
-      if (!result.ok) throw new Error();
-      const available = (await result.json() as { companies: Company[] }).companies;
+      const signIn = await fetch(`${baseerApiBaseUrl}/auth/sign-in`, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ login: login.trim(), password }) });
+      const session = await parseBaseerApiResponse<AuthSessionReceipt>(signIn);
+      let available: Company[];
+      try {
+        const result = await fetch(`${baseerApiBaseUrl}/companies/available`, { headers: { Accept: "application/json", Authorization: `Bearer ${session.accessToken}` } });
+        available = (await parseBaseerApiResponse<{ companies: Company[] }>(result)).companies;
+      } catch (failure) {
+        setError(presentBaseerApiError(failure, language, text.sessionSetupFailed));
+        return;
+      }
       const company = available[0];
       if (!company) { setError(text.noCompanies); return; }
-      choose(session.accessToken, company.id);
-    } catch (error) { setError(error instanceof Error && error.message ? error.message : text.failed); }
+      choose(session, company.id);
+    } catch (error) {
+      const fallback = error instanceof BaseerApiError && error.code === "AUTHENTICATION_FAILED"
+        ? text.failed
+        : text.serviceUnavailable;
+      setError(presentBaseerApiError(error, language, fallback));
+    }
     finally { setLoading(false); }
   };
   return <main className="launcher-page" style={{ minHeight: "100dvh" }}>

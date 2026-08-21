@@ -24,19 +24,25 @@ let app;
 
 try {
   await seedFixture();
-  const [{ AppModule }, { OperationsCatalogService }, { OperationsExecutionService }] = await Promise.all([
+  const [{ AppModule }, { OperationsCatalogService }, { OperationsExecutionService }, { OperationsInternalRegistrationService }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/operations/operations-catalog.service.js"),
     import("../apps/api/dist/operations/operations-execution.service.js"),
+    import("../apps/api/dist/operations/operations-internal-registration.service.js"),
   ]);
   app = await NestFactory.createApplicationContext(AppModule, { logger: false });
   const catalog = app.get(OperationsCatalogService);
   const execution = app.get(OperationsExecutionService);
+  const internalRegistration = app.get(OperationsInternalRegistrationService);
 
   const kilogram = await catalog.createUnit(context, { code: `KG-${suffix}`, nameAr: "كيلوغرام", nameEn: "Kilogram", dimension: "MASS" }, randomUUID());
   const tomato = await catalog.createItem(context, {
     code: `TOMATO-${suffix}`, nameAr: "طماطم تحقق", nameEn: "Verification tomato", kind: "RAW_MATERIAL", baseUnitId: kilogram.id,
     unitPrices: [{ unitId: kilogram.id, lastPurchaseUnitPrice: "10.0000" }],
+  }, randomUUID());
+  await catalog.configureItemUnits(context, {
+    itemId: tomato.id,
+    units: [{ unitId: kilogram.id, isActive: true, isOrderEnabled: true }],
   }, randomUUID());
 
   const custodyRequest = await execution.createPurchaseRequest(context, {
@@ -45,7 +51,7 @@ try {
   });
   const custodyLine = await requestLine(execution, custodyRequest.id);
   await execution.receivePurchaseRequest(context, {
-    requestId: custodyRequest.id, businessDate: "2026-08-21", notes: "فرق سعر التحقق", lines: [{ requestLineId: custodyLine.id, receivedQuantity: "3.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "11.0000" }], idempotencyKey: randomUUID(),
+    requestId: custodyRequest.id, businessDate: "2026-08-21", notes: "فرق سعر التحقق", lines: [{ requestLineId: custodyLine.id, rawMaterialItemId: tomato.id, receivedQuantity: "3.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "11.0000" }], idempotencyKey: randomUUID(),
   });
 
   const cashRequest = await execution.createPurchaseRequest(context, {
@@ -54,7 +60,7 @@ try {
   });
   const cashLine = await requestLine(execution, cashRequest.id);
   await execution.receivePurchaseRequest(context, {
-    requestId: cashRequest.id, businessDate: "2026-08-21", lines: [{ requestLineId: cashLine.id, receivedQuantity: "2.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "12.0000" }], idempotencyKey: randomUUID(),
+    requestId: cashRequest.id, businessDate: "2026-08-21", lines: [{ requestLineId: cashLine.id, rawMaterialItemId: tomato.id, receivedQuantity: "2.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "12.0000" }], idempotencyKey: randomUUID(),
   });
 
   const transferRequest = await execution.createPurchaseRequest(context, {
@@ -64,7 +70,7 @@ try {
   const transferLine = await requestLine(execution, transferRequest.id);
   await execution.receivePurchaseRequest(context, {
     requestId: transferRequest.id, businessDate: "2026-08-21", paymentReference: `TRX-${suffix}`,
-    lines: [{ requestLineId: transferLine.id, receivedQuantity: "1.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "13.0000" }], idempotencyKey: randomUUID(),
+    lines: [{ requestLineId: transferLine.id, rawMaterialItemId: tomato.id, receivedQuantity: "1.00000000", receivedUnitId: kilogram.id, actualUnitPrice: "13.0000" }], idempotencyKey: randomUUID(),
   });
 
   let workspace = await execution.workspace(context);
@@ -86,7 +92,29 @@ try {
   workspace = await execution.workspace(context);
   assert.equal(workspace.custody.balance, "0", "Returning custody must settle its visible balance.");
 
-  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction"] }));
+  const grillSection = await catalog.createSection(context, { code: `GRILL-${suffix}`, nameAr: "مشويات تحقق", nameEn: "Verification grill" }, randomUUID());
+  const grilledTomato = await catalog.createItem(context, {
+    code: `GRILLED-TOMATO-${suffix}`, nameAr: "طماطم مشوية تحقق", nameEn: "Verification grilled tomato", kind: "MENU_PRODUCT", sectionId: grillSection.id, baseUnitId: kilogram.id,
+    unitPrices: [{ unitId: kilogram.id, menuSaleUnitPrice: "20.0000" }],
+  }, randomUUID());
+  await execution.publishRecipe(context, {
+    outputItemId: grilledTomato.id, outputUnitId: kilogram.id, outputQuantity: "1.00000000",
+    lines: [{ rawMaterialItemId: tomato.id, unitId: kilogram.id, quantity: "2.00000000" }], idempotencyKey: randomUUID(),
+  });
+  const workstation = await internalRegistration.workstation(context);
+  assert.ok(workstation.sections.some((section) => section.id === grillSection.id), "The workstation must expose the active menu section.");
+  assert.ok(workstation.products.some((product) => product.id === grilledTomato.id), "The workstation must expose the active menu product without pricing.");
+  await internalRegistration.create(context, {
+    businessDate: "2026-08-21", sectionId: grillSection.id,
+    lines: [{ menuProductItemId: grilledTomato.id, unitId: kilogram.id, quantity: "1.00000000" }], idempotencyKey: randomUUID(),
+  });
+  const registrationReport = await internalRegistration.report(context, { from: "2026-08-01", to: "2026-08-31" });
+  assert.equal(registrationReport.totals.registrationCount, 1, "The internal registration report must include the saved registration.");
+  assert.equal(registrationReport.totals.amount, "20.0000", "The management report must preserve the menu price snapshot.");
+  workspace = await execution.workspace(context);
+  assert.equal(workspace.inventory.find((row) => row.rawMaterialItemId === tomato.id)?.baseQuantity, "1", "The published recipe must consume inventory exactly once on internal registration.");
+
+  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction", "recipe", "internal_registration", "inventory_consumption"] }));
 } finally {
   await app?.close();
   await pool.end();

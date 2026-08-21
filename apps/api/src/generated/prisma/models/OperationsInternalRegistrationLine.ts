@@ -31,6 +31,7 @@ export type OperationsInternalRegistrationLineAvgAggregateOutputType = {
   quantity: runtime.Decimal | null
   menuSaleUnitPriceSnapshot: runtime.Decimal | null
   lineTotalSnapshot: runtime.Decimal | null
+  recipeOutputQuantitySnapshot: runtime.Decimal | null
 }
 
 export type OperationsInternalRegistrationLineSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type OperationsInternalRegistrationLineSumAggregateOutputType = {
   quantity: runtime.Decimal | null
   menuSaleUnitPriceSnapshot: runtime.Decimal | null
   lineTotalSnapshot: runtime.Decimal | null
+  recipeOutputQuantitySnapshot: runtime.Decimal | null
 }
 
 export type OperationsInternalRegistrationLineMinAggregateOutputType = {
@@ -55,6 +57,8 @@ export type OperationsInternalRegistrationLineMinAggregateOutputType = {
   unitNameEnSnapshot: string | null
   menuSaleUnitPriceSnapshot: runtime.Decimal | null
   lineTotalSnapshot: runtime.Decimal | null
+  recipeVersionId: string | null
+  recipeOutputQuantitySnapshot: runtime.Decimal | null
 }
 
 export type OperationsInternalRegistrationLineMaxAggregateOutputType = {
@@ -72,6 +76,8 @@ export type OperationsInternalRegistrationLineMaxAggregateOutputType = {
   unitNameEnSnapshot: string | null
   menuSaleUnitPriceSnapshot: runtime.Decimal | null
   lineTotalSnapshot: runtime.Decimal | null
+  recipeVersionId: string | null
+  recipeOutputQuantitySnapshot: runtime.Decimal | null
 }
 
 export type OperationsInternalRegistrationLineCountAggregateOutputType = {
@@ -89,6 +95,8 @@ export type OperationsInternalRegistrationLineCountAggregateOutputType = {
   unitNameEnSnapshot: number
   menuSaleUnitPriceSnapshot: number
   lineTotalSnapshot: number
+  recipeVersionId: number
+  recipeOutputQuantitySnapshot: number
   _all: number
 }
 
@@ -98,6 +106,7 @@ export type OperationsInternalRegistrationLineAvgAggregateInputType = {
   quantity?: true
   menuSaleUnitPriceSnapshot?: true
   lineTotalSnapshot?: true
+  recipeOutputQuantitySnapshot?: true
 }
 
 export type OperationsInternalRegistrationLineSumAggregateInputType = {
@@ -105,6 +114,7 @@ export type OperationsInternalRegistrationLineSumAggregateInputType = {
   quantity?: true
   menuSaleUnitPriceSnapshot?: true
   lineTotalSnapshot?: true
+  recipeOutputQuantitySnapshot?: true
 }
 
 export type OperationsInternalRegistrationLineMinAggregateInputType = {
@@ -122,6 +132,8 @@ export type OperationsInternalRegistrationLineMinAggregateInputType = {
   unitNameEnSnapshot?: true
   menuSaleUnitPriceSnapshot?: true
   lineTotalSnapshot?: true
+  recipeVersionId?: true
+  recipeOutputQuantitySnapshot?: true
 }
 
 export type OperationsInternalRegistrationLineMaxAggregateInputType = {
@@ -139,6 +151,8 @@ export type OperationsInternalRegistrationLineMaxAggregateInputType = {
   unitNameEnSnapshot?: true
   menuSaleUnitPriceSnapshot?: true
   lineTotalSnapshot?: true
+  recipeVersionId?: true
+  recipeOutputQuantitySnapshot?: true
 }
 
 export type OperationsInternalRegistrationLineCountAggregateInputType = {
@@ -156,6 +170,8 @@ export type OperationsInternalRegistrationLineCountAggregateInputType = {
   unitNameEnSnapshot?: true
   menuSaleUnitPriceSnapshot?: true
   lineTotalSnapshot?: true
+  recipeVersionId?: true
+  recipeOutputQuantitySnapshot?: true
   _all?: true
 }
 
@@ -260,6 +276,8 @@ export type OperationsInternalRegistrationLineGroupByOutputType = {
   unitNameEnSnapshot: string | null
   menuSaleUnitPriceSnapshot: runtime.Decimal | null
   lineTotalSnapshot: runtime.Decimal | null
+  recipeVersionId: string | null
+  recipeOutputQuantitySnapshot: runtime.Decimal | null
   _count: OperationsInternalRegistrationLineCountAggregateOutputType | null
   _avg: OperationsInternalRegistrationLineAvgAggregateOutputType | null
   _sum: OperationsInternalRegistrationLineSumAggregateOutputType | null
@@ -300,10 +318,14 @@ export type OperationsInternalRegistrationLineWhereInput = {
   unitNameEnSnapshot?: Prisma.StringNullableFilter<"OperationsInternalRegistrationLine"> | string | null
   menuSaleUnitPriceSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.UuidNullableFilter<"OperationsInternalRegistrationLine"> | string | null
+  recipeOutputQuantitySnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   registration?: Prisma.XOR<Prisma.OperationsInternalRegistrationScalarRelationFilter, Prisma.OperationsInternalRegistrationWhereInput>
   menuProduct?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   unit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
+  recipeVersion?: Prisma.XOR<Prisma.OperationsRecipeVersionNullableScalarRelationFilter, Prisma.OperationsRecipeVersionWhereInput> | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }
 
 export type OperationsInternalRegistrationLineOrderByWithRelationInput = {
@@ -321,10 +343,14 @@ export type OperationsInternalRegistrationLineOrderByWithRelationInput = {
   unitNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipeVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   registration?: Prisma.OperationsInternalRegistrationOrderByWithRelationInput
   menuProduct?: Prisma.OperationsItemOrderByWithRelationInput
   unit?: Prisma.OperationsUnitOrderByWithRelationInput
+  recipeVersion?: Prisma.OperationsRecipeVersionOrderByWithRelationInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionOrderByRelationAggregateInput
 }
 
 export type OperationsInternalRegistrationLineWhereUniqueInput = Prisma.AtLeast<{
@@ -347,10 +373,14 @@ export type OperationsInternalRegistrationLineWhereUniqueInput = Prisma.AtLeast<
   unitNameEnSnapshot?: Prisma.StringNullableFilter<"OperationsInternalRegistrationLine"> | string | null
   menuSaleUnitPriceSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.UuidNullableFilter<"OperationsInternalRegistrationLine"> | string | null
+  recipeOutputQuantitySnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   registration?: Prisma.XOR<Prisma.OperationsInternalRegistrationScalarRelationFilter, Prisma.OperationsInternalRegistrationWhereInput>
   menuProduct?: Prisma.XOR<Prisma.OperationsItemScalarRelationFilter, Prisma.OperationsItemWhereInput>
   unit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
+  recipeVersion?: Prisma.XOR<Prisma.OperationsRecipeVersionNullableScalarRelationFilter, Prisma.OperationsRecipeVersionWhereInput> | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionListRelationFilter
 }, "id" | "id_tenantId_companyId" | "registrationId_lineNumber">
 
 export type OperationsInternalRegistrationLineOrderByWithAggregationInput = {
@@ -368,6 +398,8 @@ export type OperationsInternalRegistrationLineOrderByWithAggregationInput = {
   unitNameEnSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipeVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OperationsInternalRegistrationLineCountOrderByAggregateInput
   _avg?: Prisma.OperationsInternalRegistrationLineAvgOrderByAggregateInput
   _max?: Prisma.OperationsInternalRegistrationLineMaxOrderByAggregateInput
@@ -393,6 +425,8 @@ export type OperationsInternalRegistrationLineScalarWhereWithAggregatesInput = {
   unitNameEnSnapshot?: Prisma.StringNullableWithAggregatesFilter<"OperationsInternalRegistrationLine"> | string | null
   menuSaleUnitPriceSnapshot?: Prisma.DecimalNullableWithAggregatesFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.DecimalNullableWithAggregatesFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.UuidNullableWithAggregatesFilter<"OperationsInternalRegistrationLine"> | string | null
+  recipeOutputQuantitySnapshot?: Prisma.DecimalNullableWithAggregatesFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineCreateInput = {
@@ -405,10 +439,13 @@ export type OperationsInternalRegistrationLineCreateInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
   registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
   menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
   unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedCreateInput = {
@@ -426,6 +463,9 @@ export type OperationsInternalRegistrationLineUncheckedCreateInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUpdateInput = {
@@ -438,10 +478,13 @@ export type OperationsInternalRegistrationLineUpdateInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
   registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
   menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
   unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateInput = {
@@ -459,6 +502,9 @@ export type OperationsInternalRegistrationLineUncheckedUpdateInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineCreateManyInput = {
@@ -476,6 +522,8 @@ export type OperationsInternalRegistrationLineCreateManyInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUpdateManyMutationInput = {
@@ -488,6 +536,7 @@ export type OperationsInternalRegistrationLineUpdateManyMutationInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateManyInput = {
@@ -505,6 +554,8 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineListRelationFilter = {
@@ -543,6 +594,8 @@ export type OperationsInternalRegistrationLineCountOrderByAggregateInput = {
   unitNameEnSnapshot?: Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrder
+  recipeVersionId?: Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrder
 }
 
 export type OperationsInternalRegistrationLineAvgOrderByAggregateInput = {
@@ -550,6 +603,7 @@ export type OperationsInternalRegistrationLineAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrder
 }
 
 export type OperationsInternalRegistrationLineMaxOrderByAggregateInput = {
@@ -567,6 +621,8 @@ export type OperationsInternalRegistrationLineMaxOrderByAggregateInput = {
   unitNameEnSnapshot?: Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrder
+  recipeVersionId?: Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrder
 }
 
 export type OperationsInternalRegistrationLineMinOrderByAggregateInput = {
@@ -584,6 +640,8 @@ export type OperationsInternalRegistrationLineMinOrderByAggregateInput = {
   unitNameEnSnapshot?: Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrder
+  recipeVersionId?: Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrder
 }
 
 export type OperationsInternalRegistrationLineSumOrderByAggregateInput = {
@@ -591,6 +649,12 @@ export type OperationsInternalRegistrationLineSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   menuSaleUnitPriceSnapshot?: Prisma.SortOrder
   lineTotalSnapshot?: Prisma.SortOrder
+  recipeOutputQuantitySnapshot?: Prisma.SortOrder
+}
+
+export type OperationsInternalRegistrationLineScalarRelationFilter = {
+  is?: Prisma.OperationsInternalRegistrationLineWhereInput
+  isNot?: Prisma.OperationsInternalRegistrationLineWhereInput
 }
 
 export type OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput = {
@@ -761,6 +825,62 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRegistra
   deleteMany?: Prisma.OperationsInternalRegistrationLineScalarWhereInput | Prisma.OperationsInternalRegistrationLineScalarWhereInput[]
 }
 
+export type OperationsInternalRegistrationLineCreateNestedOneWithoutConsumptionsInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutConsumptionsInput
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+}
+
+export type OperationsInternalRegistrationLineUpdateOneRequiredWithoutConsumptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutConsumptionsInput>
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutConsumptionsInput
+  upsert?: Prisma.OperationsInternalRegistrationLineUpsertWithoutConsumptionsInput
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateToOneWithWhereWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUpdateWithoutConsumptionsInput>, Prisma.OperationsInternalRegistrationLineUncheckedUpdateWithoutConsumptionsInput>
+}
+
+export type OperationsInternalRegistrationLineCreateNestedManyWithoutRecipeVersionInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput> | Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput[] | Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput[]
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput[]
+  createMany?: Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInputEnvelope
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+}
+
+export type OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutRecipeVersionInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput> | Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput[] | Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput[]
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput[]
+  createMany?: Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInputEnvelope
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+}
+
+export type OperationsInternalRegistrationLineUpdateManyWithoutRecipeVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput> | Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput[] | Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput[]
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput[]
+  upsert?: Prisma.OperationsInternalRegistrationLineUpsertWithWhereUniqueWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpsertWithWhereUniqueWithoutRecipeVersionInput[]
+  createMany?: Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInputEnvelope
+  set?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  disconnect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  delete?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  update?: Prisma.OperationsInternalRegistrationLineUpdateWithWhereUniqueWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpdateWithWhereUniqueWithoutRecipeVersionInput[]
+  updateMany?: Prisma.OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRecipeVersionInput[]
+  deleteMany?: Prisma.OperationsInternalRegistrationLineScalarWhereInput | Prisma.OperationsInternalRegistrationLineScalarWhereInput[]
+}
+
+export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput> | Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput[] | Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput[]
+  connectOrCreate?: Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput[]
+  upsert?: Prisma.OperationsInternalRegistrationLineUpsertWithWhereUniqueWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpsertWithWhereUniqueWithoutRecipeVersionInput[]
+  createMany?: Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInputEnvelope
+  set?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  disconnect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  delete?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  connect?: Prisma.OperationsInternalRegistrationLineWhereUniqueInput | Prisma.OperationsInternalRegistrationLineWhereUniqueInput[]
+  update?: Prisma.OperationsInternalRegistrationLineUpdateWithWhereUniqueWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpdateWithWhereUniqueWithoutRecipeVersionInput[]
+  updateMany?: Prisma.OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRecipeVersionInput | Prisma.OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRecipeVersionInput[]
+  deleteMany?: Prisma.OperationsInternalRegistrationLineScalarWhereInput | Prisma.OperationsInternalRegistrationLineScalarWhereInput[]
+}
+
 export type OperationsInternalRegistrationLineCreateWithoutCompanyInput = {
   id?: string
   lineNumber: number
@@ -771,9 +891,12 @@ export type OperationsInternalRegistrationLineCreateWithoutCompanyInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
   menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
   unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedCreateWithoutCompanyInput = {
@@ -789,6 +912,9 @@ export type OperationsInternalRegistrationLineUncheckedCreateWithoutCompanyInput
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineCreateOrConnectWithoutCompanyInput = {
@@ -835,6 +961,8 @@ export type OperationsInternalRegistrationLineScalarWhereInput = {
   unitNameEnSnapshot?: Prisma.StringNullableFilter<"OperationsInternalRegistrationLine"> | string | null
   menuSaleUnitPriceSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.UuidNullableFilter<"OperationsInternalRegistrationLine"> | string | null
+  recipeOutputQuantitySnapshot?: Prisma.DecimalNullableFilter<"OperationsInternalRegistrationLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineCreateWithoutUnitInput = {
@@ -847,9 +975,12 @@ export type OperationsInternalRegistrationLineCreateWithoutUnitInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
   registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
   menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedCreateWithoutUnitInput = {
@@ -864,6 +995,9 @@ export type OperationsInternalRegistrationLineUncheckedCreateWithoutUnitInput = 
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineCreateOrConnectWithoutUnitInput = {
@@ -902,9 +1036,12 @@ export type OperationsInternalRegistrationLineCreateWithoutMenuProductInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
   registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
   unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedCreateWithoutMenuProductInput = {
@@ -919,6 +1056,9 @@ export type OperationsInternalRegistrationLineUncheckedCreateWithoutMenuProductI
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineCreateOrConnectWithoutMenuProductInput = {
@@ -957,9 +1097,12 @@ export type OperationsInternalRegistrationLineCreateWithoutRegistrationInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
   menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
   unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedCreateWithoutRegistrationInput = {
@@ -974,6 +1117,9 @@ export type OperationsInternalRegistrationLineUncheckedCreateWithoutRegistration
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
 }
 
 export type OperationsInternalRegistrationLineCreateOrConnectWithoutRegistrationInput = {
@@ -1002,6 +1148,157 @@ export type OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRegistra
   data: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateManyMutationInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRegistrationInput>
 }
 
+export type OperationsInternalRegistrationLineCreateWithoutConsumptionsInput = {
+  id?: string
+  lineNumber: number
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot: string
+  productNameEnSnapshot?: string | null
+  unitNameArSnapshot: string
+  unitNameEnSnapshot?: string | null
+  menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
+  registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
+  menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
+  unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  recipeVersion?: Prisma.OperationsRecipeVersionCreateNestedOneWithoutInternalRegistrationLinesInput
+}
+
+export type OperationsInternalRegistrationLineUncheckedCreateWithoutConsumptionsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  registrationId: string
+  lineNumber: number
+  menuProductItemId: string
+  unitId: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot: string
+  productNameEnSnapshot?: string | null
+  unitNameArSnapshot: string
+  unitNameEnSnapshot?: string | null
+  menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type OperationsInternalRegistrationLineCreateOrConnectWithoutConsumptionsInput = {
+  where: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutConsumptionsInput>
+}
+
+export type OperationsInternalRegistrationLineUpsertWithoutConsumptionsInput = {
+  update: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateWithoutConsumptionsInput>
+  create: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutConsumptionsInput>
+  where?: Prisma.OperationsInternalRegistrationLineWhereInput
+}
+
+export type OperationsInternalRegistrationLineUpdateToOneWithWhereWithoutConsumptionsInput = {
+  where?: Prisma.OperationsInternalRegistrationLineWhereInput
+  data: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateWithoutConsumptionsInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateWithoutConsumptionsInput>
+}
+
+export type OperationsInternalRegistrationLineUpdateWithoutConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  productNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
+  registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
+  menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+}
+
+export type OperationsInternalRegistrationLineUncheckedUpdateWithoutConsumptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  menuProductItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  productNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput = {
+  id?: string
+  lineNumber: number
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot: string
+  productNameEnSnapshot?: string | null
+  unitNameArSnapshot: string
+  unitNameEnSnapshot?: string | null
+  menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsInternalRegistrationLinesInput
+  registration: Prisma.OperationsInternalRegistrationCreateNestedOneWithoutLinesInput
+  menuProduct: Prisma.OperationsItemCreateNestedOneWithoutInternalRegistrationLinesInput
+  unit: Prisma.OperationsUnitCreateNestedOneWithoutInternalRegistrationLinesInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRegistrationLineInput
+}
+
+export type OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput = {
+  id?: string
+  registrationId: string
+  lineNumber: number
+  menuProductItemId: string
+  unitId: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot: string
+  productNameEnSnapshot?: string | null
+  unitNameArSnapshot: string
+  unitNameEnSnapshot?: string | null
+  menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRegistrationLineInput
+}
+
+export type OperationsInternalRegistrationLineCreateOrConnectWithoutRecipeVersionInput = {
+  where: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput>
+}
+
+export type OperationsInternalRegistrationLineCreateManyRecipeVersionInputEnvelope = {
+  data: Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInput | Prisma.OperationsInternalRegistrationLineCreateManyRecipeVersionInput[]
+  skipDuplicates?: boolean
+}
+
+export type OperationsInternalRegistrationLineUpsertWithWhereUniqueWithoutRecipeVersionInput = {
+  where: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  update: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateWithoutRecipeVersionInput>
+  create: Prisma.XOR<Prisma.OperationsInternalRegistrationLineCreateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedCreateWithoutRecipeVersionInput>
+}
+
+export type OperationsInternalRegistrationLineUpdateWithWhereUniqueWithoutRecipeVersionInput = {
+  where: Prisma.OperationsInternalRegistrationLineWhereUniqueInput
+  data: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateWithoutRecipeVersionInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateWithoutRecipeVersionInput>
+}
+
+export type OperationsInternalRegistrationLineUpdateManyWithWhereWithoutRecipeVersionInput = {
+  where: Prisma.OperationsInternalRegistrationLineScalarWhereInput
+  data: Prisma.XOR<Prisma.OperationsInternalRegistrationLineUpdateManyMutationInput, Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionInput>
+}
+
 export type OperationsInternalRegistrationLineCreateManyCompanyInput = {
   id?: string
   registrationId: string
@@ -1015,6 +1312,8 @@ export type OperationsInternalRegistrationLineCreateManyCompanyInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUpdateWithoutCompanyInput = {
@@ -1027,9 +1326,12 @@ export type OperationsInternalRegistrationLineUpdateWithoutCompanyInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
   menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
   unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateWithoutCompanyInput = {
@@ -1045,6 +1347,9 @@ export type OperationsInternalRegistrationLineUncheckedUpdateWithoutCompanyInput
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyInput = {
@@ -1060,6 +1365,8 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyI
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineCreateManyUnitInput = {
@@ -1074,6 +1381,8 @@ export type OperationsInternalRegistrationLineCreateManyUnitInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUpdateWithoutUnitInput = {
@@ -1086,9 +1395,12 @@ export type OperationsInternalRegistrationLineUpdateWithoutUnitInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
   registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
   menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateWithoutUnitInput = {
@@ -1103,6 +1415,9 @@ export type OperationsInternalRegistrationLineUncheckedUpdateWithoutUnitInput = 
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitInput = {
@@ -1117,6 +1432,8 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutUnitInpu
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineCreateManyMenuProductInput = {
@@ -1131,6 +1448,8 @@ export type OperationsInternalRegistrationLineCreateManyMenuProductInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUpdateWithoutMenuProductInput = {
@@ -1143,9 +1462,12 @@ export type OperationsInternalRegistrationLineUpdateWithoutMenuProductInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
   registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
   unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateWithoutMenuProductInput = {
@@ -1160,6 +1482,9 @@ export type OperationsInternalRegistrationLineUncheckedUpdateWithoutMenuProductI
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductInput = {
@@ -1174,6 +1499,8 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProd
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineCreateManyRegistrationInput = {
@@ -1188,6 +1515,8 @@ export type OperationsInternalRegistrationLineCreateManyRegistrationInput = {
   unitNameEnSnapshot?: string | null
   menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OperationsInternalRegistrationLineUpdateWithoutRegistrationInput = {
@@ -1200,9 +1529,12 @@ export type OperationsInternalRegistrationLineUpdateWithoutRegistrationInput = {
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
   menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
   unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  recipeVersion?: Prisma.OperationsRecipeVersionUpdateOneWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateWithoutRegistrationInput = {
@@ -1217,6 +1549,9 @@ export type OperationsInternalRegistrationLineUncheckedUpdateWithoutRegistration
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
 }
 
 export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRegistrationInput = {
@@ -1231,8 +1566,106 @@ export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRegistra
   unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
+export type OperationsInternalRegistrationLineCreateManyRecipeVersionInput = {
+  id?: string
+  registrationId: string
+  lineNumber: number
+  menuProductItemId: string
+  unitId: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot: string
+  productNameEnSnapshot?: string | null
+  unitNameArSnapshot: string
+  unitNameEnSnapshot?: string | null
+  menuSaleUnitPriceSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type OperationsInternalRegistrationLineUpdateWithoutRecipeVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  productNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsInternalRegistrationLinesNestedInput
+  registration?: Prisma.OperationsInternalRegistrationUpdateOneRequiredWithoutLinesNestedInput
+  menuProduct?: Prisma.OperationsItemUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  unit?: Prisma.OperationsUnitUpdateOneRequiredWithoutInternalRegistrationLinesNestedInput
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRegistrationLineNestedInput
+}
+
+export type OperationsInternalRegistrationLineUncheckedUpdateWithoutRecipeVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  menuProductItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  productNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  consumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRegistrationLineNestedInput
+}
+
+export type OperationsInternalRegistrationLineUncheckedUpdateManyWithoutRecipeVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  menuProductItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  productNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitNameArSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
+  unitNameEnSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuSaleUnitPriceSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lineTotalSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  recipeOutputQuantitySnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+
+/**
+ * Count Type OperationsInternalRegistrationLineCountOutputType
+ */
+
+export type OperationsInternalRegistrationLineCountOutputType = {
+  consumptions: number
+}
+
+export type OperationsInternalRegistrationLineCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  consumptions?: boolean | OperationsInternalRegistrationLineCountOutputTypeCountConsumptionsArgs
+}
+
+/**
+ * OperationsInternalRegistrationLineCountOutputType without action
+ */
+export type OperationsInternalRegistrationLineCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationLineCountOutputType
+   */
+  select?: Prisma.OperationsInternalRegistrationLineCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OperationsInternalRegistrationLineCountOutputType without action
+ */
+export type OperationsInternalRegistrationLineCountOutputTypeCountConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+}
 
 
 export type OperationsInternalRegistrationLineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1250,10 +1683,15 @@ export type OperationsInternalRegistrationLineSelect<ExtArgs extends runtime.Typ
   unitNameEnSnapshot?: boolean
   menuSaleUnitPriceSnapshot?: boolean
   lineTotalSnapshot?: boolean
+  recipeVersionId?: boolean
+  recipeOutputQuantitySnapshot?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
+  consumptions?: boolean | Prisma.OperationsInternalRegistrationLine$consumptionsArgs<ExtArgs>
+  _count?: boolean | Prisma.OperationsInternalRegistrationLineCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInternalRegistrationLine"]>
 
 export type OperationsInternalRegistrationLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1271,10 +1709,13 @@ export type OperationsInternalRegistrationLineSelectCreateManyAndReturn<ExtArgs 
   unitNameEnSnapshot?: boolean
   menuSaleUnitPriceSnapshot?: boolean
   lineTotalSnapshot?: boolean
+  recipeVersionId?: boolean
+  recipeOutputQuantitySnapshot?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInternalRegistrationLine"]>
 
 export type OperationsInternalRegistrationLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1292,10 +1733,13 @@ export type OperationsInternalRegistrationLineSelectUpdateManyAndReturn<ExtArgs 
   unitNameEnSnapshot?: boolean
   menuSaleUnitPriceSnapshot?: boolean
   lineTotalSnapshot?: boolean
+  recipeVersionId?: boolean
+  recipeOutputQuantitySnapshot?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
 }, ExtArgs["result"]["operationsInternalRegistrationLine"]>
 
 export type OperationsInternalRegistrationLineSelectScalar = {
@@ -1313,26 +1757,33 @@ export type OperationsInternalRegistrationLineSelectScalar = {
   unitNameEnSnapshot?: boolean
   menuSaleUnitPriceSnapshot?: boolean
   lineTotalSnapshot?: boolean
+  recipeVersionId?: boolean
+  recipeOutputQuantitySnapshot?: boolean
 }
 
-export type OperationsInternalRegistrationLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "registrationId" | "lineNumber" | "menuProductItemId" | "unitId" | "quantity" | "productNameArSnapshot" | "productNameEnSnapshot" | "unitNameArSnapshot" | "unitNameEnSnapshot" | "menuSaleUnitPriceSnapshot" | "lineTotalSnapshot", ExtArgs["result"]["operationsInternalRegistrationLine"]>
+export type OperationsInternalRegistrationLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "registrationId" | "lineNumber" | "menuProductItemId" | "unitId" | "quantity" | "productNameArSnapshot" | "productNameEnSnapshot" | "unitNameArSnapshot" | "unitNameEnSnapshot" | "menuSaleUnitPriceSnapshot" | "lineTotalSnapshot" | "recipeVersionId" | "recipeOutputQuantitySnapshot", ExtArgs["result"]["operationsInternalRegistrationLine"]>
 export type OperationsInternalRegistrationLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
+  consumptions?: boolean | Prisma.OperationsInternalRegistrationLine$consumptionsArgs<ExtArgs>
+  _count?: boolean | Prisma.OperationsInternalRegistrationLineCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationsInternalRegistrationLineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
 }
 export type OperationsInternalRegistrationLineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   registration?: boolean | Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>
   menuProduct?: boolean | Prisma.OperationsItemDefaultArgs<ExtArgs>
   unit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
+  recipeVersion?: boolean | Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>
 }
 
 export type $OperationsInternalRegistrationLinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1342,6 +1793,8 @@ export type $OperationsInternalRegistrationLinePayload<ExtArgs extends runtime.T
     registration: Prisma.$OperationsInternalRegistrationPayload<ExtArgs>
     menuProduct: Prisma.$OperationsItemPayload<ExtArgs>
     unit: Prisma.$OperationsUnitPayload<ExtArgs>
+    recipeVersion: Prisma.$OperationsRecipeVersionPayload<ExtArgs> | null
+    consumptions: Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1358,6 +1811,8 @@ export type $OperationsInternalRegistrationLinePayload<ExtArgs extends runtime.T
     unitNameEnSnapshot: string | null
     menuSaleUnitPriceSnapshot: runtime.Decimal | null
     lineTotalSnapshot: runtime.Decimal | null
+    recipeVersionId: string | null
+    recipeOutputQuantitySnapshot: runtime.Decimal | null
   }, ExtArgs["result"]["operationsInternalRegistrationLine"]>
   composites: {}
 }
@@ -1756,6 +2211,8 @@ export interface Prisma__OperationsInternalRegistrationLineClient<T, Null = neve
   registration<T extends Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsInternalRegistrationDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsInternalRegistrationClient<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   menuProduct<T extends Prisma.OperationsItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItemDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsItemClient<runtime.Types.Result.GetResult<Prisma.$OperationsItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   unit<T extends Prisma.OperationsUnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnitDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsUnitClient<runtime.Types.Result.GetResult<Prisma.$OperationsUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  recipeVersion<T extends Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs>>): Prisma.Prisma__OperationsRecipeVersionClient<runtime.Types.Result.GetResult<Prisma.$OperationsRecipeVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  consumptions<T extends Prisma.OperationsInternalRegistrationLine$consumptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsInternalRegistrationLine$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsInternalRegistrationConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1799,6 +2256,8 @@ export interface OperationsInternalRegistrationLineFieldRefs {
   readonly unitNameEnSnapshot: Prisma.FieldRef<"OperationsInternalRegistrationLine", 'String'>
   readonly menuSaleUnitPriceSnapshot: Prisma.FieldRef<"OperationsInternalRegistrationLine", 'Decimal'>
   readonly lineTotalSnapshot: Prisma.FieldRef<"OperationsInternalRegistrationLine", 'Decimal'>
+  readonly recipeVersionId: Prisma.FieldRef<"OperationsInternalRegistrationLine", 'String'>
+  readonly recipeOutputQuantitySnapshot: Prisma.FieldRef<"OperationsInternalRegistrationLine", 'Decimal'>
 }
     
 
@@ -2197,6 +2656,49 @@ export type OperationsInternalRegistrationLineDeleteManyArgs<ExtArgs extends run
    * Limit how many OperationsInternalRegistrationLines to delete.
    */
   limit?: number
+}
+
+/**
+ * OperationsInternalRegistrationLine.recipeVersion
+ */
+export type OperationsInternalRegistrationLine$recipeVersionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsRecipeVersion
+   */
+  select?: Prisma.OperationsRecipeVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsRecipeVersion
+   */
+  omit?: Prisma.OperationsRecipeVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsRecipeVersionInclude<ExtArgs> | null
+  where?: Prisma.OperationsRecipeVersionWhereInput
+}
+
+/**
+ * OperationsInternalRegistrationLine.consumptions
+ */
+export type OperationsInternalRegistrationLine$consumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsInternalRegistrationConsumption
+   */
+  select?: Prisma.OperationsInternalRegistrationConsumptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsInternalRegistrationConsumption
+   */
+  omit?: Prisma.OperationsInternalRegistrationConsumptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsInternalRegistrationConsumptionInclude<ExtArgs> | null
+  where?: Prisma.OperationsInternalRegistrationConsumptionWhereInput
+  orderBy?: Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput | Prisma.OperationsInternalRegistrationConsumptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationsInternalRegistrationConsumptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum | Prisma.OperationsInternalRegistrationConsumptionScalarFieldEnum[]
 }
 
 /**

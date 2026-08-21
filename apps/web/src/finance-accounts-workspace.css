@@ -1,0 +1,24 @@
+.finance-accounts-workspace {
+  --finance-debit: #17628d;
+  --finance-credit: #b42318;
+}
+
+.finance-account-column-heading,
+.finance-account-amount {
+  font-weight: 800;
+}
+
+.finance-account-column-heading--debit,
+.finance-account-amount--debit {
+  color: var(--finance-debit);
+}
+
+.finance-account-column-heading--credit,
+.finance-account-amount--credit {
+  color: var(--finance-credit);
+}
+
+.finance-account-amount--zero {
+  color: var(--muted);
+  font-weight: 700;
+}

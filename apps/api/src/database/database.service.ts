@@ -1,11 +1,13 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { randomUUID } from 'node:crypto';
 
 import { Prisma, PrismaClient } from '../generated/prisma/client.js';
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
   readonly client: PrismaClient;
+  private readonly schedulerOwnerId = randomUUID();
 
   constructor() {
     const connectionString = process.env.DATABASE_URL;
@@ -41,21 +43,37 @@ export class DatabaseService implements OnModuleDestroy {
   }
 
   /**
-   * Coordinates code-owned schedulers across API replicas. The callback may
-   * open normal tenant transactions; the lock-owning transaction deliberately
-   * spans that callback and never carries tenant data itself.
+   * Coordinates code-owned schedulers across API replicas without holding an
+   * interactive transaction over tenant work. The previous transaction-scoped
+   * advisory lock kept a Prisma transaction open while the callback opened
+   * additional tenant transactions; under the pg adapter this can invalidate
+   * the outer transaction and terminate the API process. A short durable lease
+   * separates lock acquisition from the callback and survives a crashed worker.
    */
   async withSystemSchedulerLock<T>(lockName: string, operation: () => Promise<T>): Promise<
     | { acquired: true; result: T }
     | { acquired: false }
   > {
-    return this.client.$transaction(async (transaction) => {
-      const rows = await transaction.$queryRaw<Array<{ acquired: boolean }>>`
-        SELECT pg_try_advisory_xact_lock(hashtext(${lockName})) AS "acquired"
-      `;
-      if (!rows[0]?.acquired) return { acquired: false };
+    const leaseDurationMs = 10 * 60 * 1_000;
+    const now = new Date();
+    const expiresAt = new Date(now.valueOf() + leaseDurationMs);
+    const rows = await this.client.$queryRaw<Array<{ lockName: string }>>`
+      INSERT INTO "SystemSchedulerLease" ("lockName", "ownerId", "leaseExpiresAt", "updatedAt")
+      VALUES (${lockName}, ${this.schedulerOwnerId}::uuid, ${expiresAt}, ${now})
+      ON CONFLICT ("lockName") DO UPDATE
+        SET "ownerId" = EXCLUDED."ownerId", "leaseExpiresAt" = EXCLUDED."leaseExpiresAt", "updatedAt" = EXCLUDED."updatedAt"
+        WHERE "SystemSchedulerLease"."leaseExpiresAt" <= ${now}
+      RETURNING "lockName"
+    `;
+    if (!rows[0]) return { acquired: false };
+    try {
       return { acquired: true, result: await operation() };
-    });
+    } finally {
+      await this.client.$executeRaw`
+        DELETE FROM "SystemSchedulerLease"
+        WHERE "lockName" = ${lockName} AND "ownerId" = ${this.schedulerOwnerId}::uuid
+      `;
+    }
   }
 
   async onModuleDestroy(): Promise<void> {

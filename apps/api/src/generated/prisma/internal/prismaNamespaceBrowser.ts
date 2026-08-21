@@ -160,6 +160,7 @@ export const ModelName = {
   OperationsItemConversionEdge: 'OperationsItemConversionEdge',
   OperationsInternalRegistration: 'OperationsInternalRegistration',
   OperationsInternalRegistrationLine: 'OperationsInternalRegistrationLine',
+  OperationsInternalRegistrationConsumption: 'OperationsInternalRegistrationConsumption',
   OperationsRecipeVersion: 'OperationsRecipeVersion',
   OperationsRecipeLine: 'OperationsRecipeLine',
   OperationsPurchaseRequest: 'OperationsPurchaseRequest',
@@ -2188,10 +2189,34 @@ export const OperationsInternalRegistrationLineScalarFieldEnum = {
   unitNameArSnapshot: 'unitNameArSnapshot',
   unitNameEnSnapshot: 'unitNameEnSnapshot',
   menuSaleUnitPriceSnapshot: 'menuSaleUnitPriceSnapshot',
-  lineTotalSnapshot: 'lineTotalSnapshot'
+  lineTotalSnapshot: 'lineTotalSnapshot',
+  recipeVersionId: 'recipeVersionId',
+  recipeOutputQuantitySnapshot: 'recipeOutputQuantitySnapshot'
 } as const
 
 export type OperationsInternalRegistrationLineScalarFieldEnum = (typeof OperationsInternalRegistrationLineScalarFieldEnum)[keyof typeof OperationsInternalRegistrationLineScalarFieldEnum]
+
+
+export const OperationsInternalRegistrationConsumptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  registrationLineId: 'registrationLineId',
+  recipeVersionId: 'recipeVersionId',
+  recipeLineId: 'recipeLineId',
+  rawMaterialItemId: 'rawMaterialItemId',
+  unitId: 'unitId',
+  baseUnitId: 'baseUnitId',
+  conversionVersionId: 'conversionVersionId',
+  recipeQuantitySnapshot: 'recipeQuantitySnapshot',
+  recipeResolvedBaseQuantitySnapshot: 'recipeResolvedBaseQuantitySnapshot',
+  consumedBaseQuantity: 'consumedBaseQuantity',
+  weightedUnitCostSnapshot: 'weightedUnitCostSnapshot',
+  consumedValue: 'consumedValue',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationsInternalRegistrationConsumptionScalarFieldEnum = (typeof OperationsInternalRegistrationConsumptionScalarFieldEnum)[keyof typeof OperationsInternalRegistrationConsumptionScalarFieldEnum]
 
 
 export const OperationsRecipeVersionScalarFieldEnum = {
@@ -2367,6 +2392,7 @@ export const OperationsInventoryMovementScalarFieldEnum = {
   companyId: 'companyId',
   rawMaterialItemId: 'rawMaterialItemId',
   receiptId: 'receiptId',
+  internalRegistrationConsumptionId: 'internalRegistrationConsumptionId',
   movementNumber: 'movementNumber',
   movementType: 'movementType',
   baseQuantityDelta: 'baseQuantityDelta',

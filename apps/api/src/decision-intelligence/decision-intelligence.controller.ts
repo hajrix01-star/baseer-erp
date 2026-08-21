@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Put, 
 import {
   archiveDecisionCompanyContextEventRequestSchema,
   archiveDecisionGlobalContextEventRequestSchema,
+  basiraDecisionAlertBriefSchema,
   createDecisionCompanyContextEventRequestSchema,
   createDecisionGlobalContextEventRequestSchema,
   decisionAlertFeedbackRequestSchema,
@@ -29,6 +30,7 @@ const ALERTS_MANAGE = "decision.alerts.manage";
 const FEEDBACK_WRITE = "decision.feedback.write";
 const CONTEXT_READ = "decision.context.read";
 const CONTEXT_COMPANY_MANAGE = "decision.context.company.manage";
+const AI_USE = "platform.ai.use";
 
 @Controller("decision-intelligence")
 export class DecisionIntelligenceController {
@@ -52,6 +54,11 @@ export class DecisionIntelligenceController {
   @Get("context/sources/health")
   async contextSourceHealth(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const context = await this.context(authorization, companyId, "decision.context.global.manage");
+    // Source registration is a deterministic, idempotent code-owned seed. Do
+    // it before reporting health so a new tenant sees "ready to scan" rather
+    // than a misleading "not registered" state until someone presses a
+    // separate bootstrap button.
+    await Promise.all([this.contextImports.ensureApprovedSources(context), this.contextResearch.ensureApprovedSources(context)]);
     const [publicContext, research] = await Promise.all([this.contextImports.sourceHealth(context), this.contextResearch.sourceHealth(context)]);
     return [...publicContext, ...research];
   }
@@ -174,6 +181,13 @@ export class DecisionIntelligenceController {
     return this.decisions.readAlertEvidence(await this.context(authorization, companyId, ALERTS_READ), alertId);
   }
 
+  /** Internal S2 Basira tool. It returns frozen, validated evidence only. */
+  @Get("basira/alerts/:alertId/brief")
+  async basiraAlertBrief(@Param("alertId") alertId: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const context = await this.context(authorization, companyId, [AI_USE, ALERTS_READ, METRICS_READ, CONTEXT_READ]);
+    return basiraDecisionAlertBriefSchema.parse(await this.decisions.readBasiraDecisionAlertBrief(context, alertId));
+  }
+
   @Post("alerts/:alertId/status")
   async updateAlertStatus(@Param("alertId") alertId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = updateDecisionAlertStatusRequestSchema.safeParse(body);
@@ -217,11 +231,11 @@ export class DecisionIntelligenceController {
     return this.decisions.feedback(await this.context(authorization, companyId, FEEDBACK_WRITE), input, idempotencyKey);
   }
 
-  private async context(authorization: string | undefined, companyId: string | undefined, capability: string) {
+  private async context(authorization: string | undefined, companyId: string | undefined, capability: string | readonly string[]) {
     const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1];
     if (!accessToken) throw new UnauthorizedException("Invalid authentication credentials.");
     if (!companyId) throw new UnauthorizedException("Company decision scope is required.");
-    const authorized = await this.contexts.authorize({ accessToken, companyId, requiredCapabilities: [capability] });
+    const authorized = await this.contexts.authorize({ accessToken, companyId, requiredCapabilities: Array.isArray(capability) ? capability : [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
   }
 }

@@ -643,6 +643,11 @@ export type OperationsInternalRegistration = Prisma.OperationsInternalRegistrati
  */
 export type OperationsInternalRegistrationLine = Prisma.OperationsInternalRegistrationLineModel
 /**
+ * Model OperationsInternalRegistrationConsumption
+ * 
+ */
+export type OperationsInternalRegistrationConsumption = Prisma.OperationsInternalRegistrationConsumptionModel
+/**
  * Model OperationsRecipeVersion
  * 
  */

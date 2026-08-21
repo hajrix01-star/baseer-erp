@@ -808,7 +808,8 @@ export type OperationsCustodyEventType = (typeof OperationsCustodyEventType)[key
 
 export const OperationsInventoryMovementType = {
   RECEIPT: 'RECEIPT',
-  REVERSAL: 'REVERSAL'
+  REVERSAL: 'REVERSAL',
+  INTERNAL_CONSUMPTION: 'INTERNAL_CONSUMPTION'
 } as const
 
 export type OperationsInventoryMovementType = (typeof OperationsInventoryMovementType)[keyof typeof OperationsInventoryMovementType]

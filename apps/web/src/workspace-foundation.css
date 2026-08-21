@@ -311,3 +311,13 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .report-documents__card { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .report-documents__card h3 { margin: 0; }.report-documents__card p { margin: .3rem 0 0; color: var(--baseer-ink-muted, #5c7067); font-size: .85rem; }
 @media (max-width: 42rem) { .report-documents__card { align-items: stretch; flex-direction: column; } }
+
+.decision-sales-policy { display: grid; gap: .9rem; }
+.decision-sales-policy__toggle { display: inline-flex; align-items: center; gap: .5rem; font-weight: 750; }
+.decision-sales-policy__toggle input { inline-size: 1rem; block-size: 1rem; accent-color: var(--brand); }
+.decision-sales-policy__thresholds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.decision-sales-policy__thresholds label { display: grid; gap: .35rem; color: var(--muted); font-size: var(--font-label); font-weight: 700; }
+.decision-sales-policy__thresholds span { display: flex; align-items: center; gap: .45rem; }
+.decision-sales-policy__thresholds input { min-inline-size: 0; inline-size: 100%; }
+.decision-sales-policy footer { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .55rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+@media (max-width: 760px) { .decision-sales-policy__thresholds { grid-template-columns: 1fr; }.decision-sales-policy footer { justify-content: stretch; }.decision-sales-policy footer .baseer-button { flex: 1; } }

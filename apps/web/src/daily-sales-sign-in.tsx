@@ -5,10 +5,8 @@ import {
   listAuthenticatedCompanies,
   signInForDailySales,
 } from "./daily-sales-auth-client";
+import { persistActiveSession } from "./daily-sales-client";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
-
-const tokenStorageKey = "baseer.erp.access-token";
-const companyStorageKey = "baseer.erp.company-id";
 
 export function DailySalesSignIn({
   language,
@@ -35,8 +33,7 @@ export function DailySalesSignIn({
     const available = await listAuthenticatedCompanies(session.accessToken);
     const company = available[0];
     if (!company) throw new Error("No company is available for this user.");
-    sessionStorage.setItem(tokenStorageKey, session.accessToken);
-    sessionStorage.setItem(companyStorageKey, company.id);
+    persistActiveSession(session, company.id);
     window.location.reload();
   };
   const signIn = async (event: React.FormEvent) => {

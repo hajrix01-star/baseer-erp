@@ -1237,7 +1237,9 @@ export const treasuryTransferRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 export const treasuryTransferReceiptSchema = z.object({
-  transferReference: z.string().uuid(),
+  // Legacy transfers stored a UUID; newly posted transfers use the visible,
+  // sequential vault-transfer document number (VTR-YYYYMMDD-NNNN).
+  transferReference: z.string().trim().regex(/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|VTR-\d{8}-\d{4,})$/i),
   journalEntryId: z.string().uuid(),
   fromVaultId: z.string().uuid(),
   toVaultId: z.string().uuid(),
@@ -1533,6 +1535,8 @@ export const financeAccountMovementReceiptSchema = z.object({
     description: z.string().max(1_000).nullable(),
     debitAmount: financeAmountSchema,
     creditAmount: financeAmountSchema,
+    reversalOfEntryId: z.string().uuid().nullable(),
+    reversalEntryId: z.string().uuid().nullable(),
   }).strict()).max(100),
   nextCursor: z.string().uuid().nullable(),
 }).strict();

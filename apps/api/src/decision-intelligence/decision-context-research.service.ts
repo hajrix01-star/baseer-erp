@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { ConflictException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { createHash, randomUUID } from "node:crypto";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
@@ -13,7 +13,8 @@ type ResearchSourceDefinition = Readonly<{
   sourceUrl: string;
   scheduleCode: string;
   allowedHosts: readonly string[];
-  documentUrlEnvironment: "BASEER_NCM_WEATHER_DOCUMENT_URL" | "BASEER_SPL_FIXTURES_DOCUMENT_URL";
+  adapter: "NCM_PUBLIC_WEB" | "CONFIGURED_JSON";
+  documentUrlEnvironment?: "BASEER_SPL_FIXTURES_DOCUMENT_URL";
 }>;
 type ResearchCandidate = Readonly<{
   externalKey: string;
@@ -32,19 +33,19 @@ type ResearchCandidate = Readonly<{
 type ResearchNormalization = Readonly<{ candidates: ResearchCandidate[]; duplicateCount: number; conflicts: Array<{ externalKey: string; reason: string }> }>;
 
 /**
- * The researcher has no open-web mode. Each source owns a structured document
- * URL in deployment configuration and may only point to its allow-listed
- * official host. A missing approved feed is visible as unavailable, never
- * replaced with scraped search results.
+ * The researcher has no open-web mode. Each source owns a code-reviewed
+ * adapter and may only point to its allow-listed official host. The NCM
+ * adapter reads four fixed public forecast pages; every other researcher
+ * source still requires its structured document URL in deployment settings.
  */
 export const APPROVED_CONTEXT_RESEARCH_SOURCES: readonly ResearchSourceDefinition[] = [
   {
     sourceCode: "SA_NCM_WEATHER_FORECAST",
     displayNameAr: "المركز الوطني للأرصاد — توقعات الطقس",
-    sourceUrl: "https://api-doc.ncm.gov.sa/",
-    scheduleCode: "WEEKLY_MON_0400_ASIA_RIYADH",
-    allowedHosts: ["api-mm.ncm.gov.sa"],
-    documentUrlEnvironment: "BASEER_NCM_WEATHER_DOCUMENT_URL",
+    sourceUrl: "https://www.ncm.gov.sa/ar",
+    scheduleCode: "DAILY_0430_ASIA_RIYADH",
+    allowedHosts: ["www.ncm.gov.sa"],
+    adapter: "NCM_PUBLIC_WEB",
   },
   {
     sourceCode: "SA_SPL_FIXTURES",
@@ -52,9 +53,18 @@ export const APPROVED_CONTEXT_RESEARCH_SOURCES: readonly ResearchSourceDefinitio
     sourceUrl: "https://www.spl.com.sa/ar/fixtures-results",
     scheduleCode: "WEEKLY_MON_0415_ASIA_RIYADH",
     allowedHosts: ["www.spl.com.sa", "spl.com.sa"],
+    adapter: "CONFIGURED_JSON",
     documentUrlEnvironment: "BASEER_SPL_FIXTURES_DOCUMENT_URL",
   },
 ];
+
+const NCM_FORECAST_LOCATIONS = [
+  { locationCode: "RIYADH", locationLabelAr: "الرياض", url: "https://www.ncm.gov.sa/ar/region/riyadh/governorates/Ar-Riyadh" },
+  { locationCode: "JEDDAH", locationLabelAr: "جدة", url: "https://www.ncm.gov.sa/ar/region/makkah/governorates/Jeddah" },
+  { locationCode: "DAMMAM", locationLabelAr: "الدمام", url: "https://www.ncm.gov.sa/ar/region/eastern/governorates/Ad-Dammam" },
+  { locationCode: "KHOBAR", locationLabelAr: "الخبر", url: "https://www.ncm.gov.sa/ar/region/eastern/governorates/Al-Khubar" },
+] as const;
+const NCM_HIGH_TEMPERATURE_CELSIUS = 42;
 
 /** Strict adapter output; source-specific connectors own their transformation. */
 export type ContextResearchDocumentV1 = Readonly<{
@@ -75,8 +85,9 @@ export type ContextResearchDocumentV1 = Readonly<{
 
 @Injectable()
 export class DecisionContextResearchService implements OnModuleInit, OnModuleDestroy {
-  private weeklyTimer: ReturnType<typeof setInterval> | null = null;
+  private scheduledTimer: ReturnType<typeof setInterval> | null = null;
   private bootstrapTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly logger = new Logger(DecisionContextResearchService.name);
 
   constructor(
     private readonly database: DatabaseService,
@@ -85,22 +96,32 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
 
   onModuleInit() {
     if (process.env.BASEER_CONTEXT_RESEARCH_ENABLED !== "true") return;
-    this.bootstrapTimer = setTimeout(() => { void this.runScheduledResearch(); }, 8_000);
-    this.weeklyTimer = setInterval(() => { void this.runScheduledResearch(); }, 7 * 24 * 60 * 60 * 1_000);
+    this.bootstrapTimer = setTimeout(() => { void this.runScheduledResearchSafely(); }, 8_000);
+    this.scheduledTimer = setInterval(() => { void this.runScheduledResearchSafely(); }, 24 * 60 * 60 * 1_000);
   }
 
   onModuleDestroy() {
     if (this.bootstrapTimer) clearTimeout(this.bootstrapTimer);
-    if (this.weeklyTimer) clearInterval(this.weeklyTimer);
+    if (this.scheduledTimer) clearInterval(this.scheduledTimer);
   }
 
   async ensureApprovedSources(context: TrustedCompanyActorContext) {
-    return this.database.inTenantTransaction(context.tenantId, (transaction) => Promise.all(APPROVED_CONTEXT_RESEARCH_SOURCES.map((definition) => transaction.decisionContextSource.upsert({
-      where: { tenantId_sourceCode: { tenantId: context.tenantId, sourceCode: definition.sourceCode } },
-      update: { displayNameAr: definition.displayNameAr, sourceUrl: definition.sourceUrl, scheduleCode: definition.scheduleCode },
-      create: { id: randomUUID(), tenantId: context.tenantId, ...definition },
-      select: { sourceCode: true, displayNameAr: true, sourceUrl: true, scheduleCode: true, enabled: true },
-    }))));
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const sources = [];
+      // The source definition deliberately includes runtime-only security and
+      // adapter settings. Persist only the audited source identity; spreading
+      // the full definition here lets a future code-only setting accidentally
+      // become a Prisma field and breaks the whole decision workspace.
+      for (const definition of APPROVED_CONTEXT_RESEARCH_SOURCES) {
+        sources.push(await transaction.decisionContextSource.upsert({
+          where: { tenantId_sourceCode: { tenantId: context.tenantId, sourceCode: definition.sourceCode } },
+          update: sourceRecord(definition),
+          create: { id: randomUUID(), tenantId: context.tenantId, ...sourceRecord(definition) },
+          select: { sourceCode: true, displayNameAr: true, sourceUrl: true, scheduleCode: true, enabled: true },
+        }));
+      }
+      return sources;
+    });
   }
 
   async syncSource(context: TrustedCompanyActorContext, sourceCode: string, triggerCode = "MANUAL") {
@@ -111,13 +132,16 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
       select: { id: true, sourceCode: true },
     }));
     const runId = await this.startRun(context.tenantId, source.id, triggerCode);
-    const documentUrl = process.env[definition.documentUrlEnvironment];
-    if (!documentUrl) return this.finishRun(context.tenantId, runId, "UNAVAILABLE", {
-      reason: "An approved structured source adapter has not been configured for this environment.",
-      documentUrlEnvironment: definition.documentUrlEnvironment,
-    });
+    if (definition.adapter === "CONFIGURED_JSON" && (!definition.documentUrlEnvironment || !process.env[definition.documentUrlEnvironment])) {
+      return this.finishRun(context.tenantId, runId, "UNAVAILABLE", {
+        reason: "An approved structured source adapter has not been configured for this environment.",
+        documentUrlEnvironment: definition.documentUrlEnvironment ?? null,
+      });
+    }
     try {
-      const response = await fetchResearchDocument(documentUrl, definition.allowedHosts);
+      const response = definition.adapter === "NCM_PUBLIC_WEB"
+        ? await fetchNcmWeatherResearchDocument()
+        : await this.fetchConfiguredResearchDocument(definition);
       const normalized = normalizeResearchCandidates(source.sourceCode, parseResearchDocument(response.document));
       return await this.applyDocument(context, source, runId, response.checksum, normalized, triggerCode);
     } catch (error) {
@@ -130,13 +154,23 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
     return locked.acquired ? locked.result : { status: "SKIPPED_LOCKED" as const };
   }
 
+  private async runScheduledResearchSafely() {
+    try {
+      await this.runScheduledResearch();
+    } catch (error) {
+      // Optional research must not create an unhandled rejection in the API.
+      this.logger.error(`Decision-context research run failed: ${safeError(error)}`);
+    }
+  }
+
   private async runScheduledResearchUnlocked() {
     const tenantIds = await this.database.listTenantIdsForSystemScheduler();
     for (const tenantId of tenantIds) {
       const systemContext: TrustedCompanyActorContext = { tenantId, companyId: "00000000-0000-0000-0000-000000000000", actorUserId: "00000000-0000-0000-0000-000000000000" };
       await this.ensureApprovedSources(systemContext);
       for (const source of APPROVED_CONTEXT_RESEARCH_SOURCES) {
-        if (process.env[source.documentUrlEnvironment]) await this.syncSource(systemContext, source.sourceCode, "SCHEDULED");
+        const isDue = source.adapter === "NCM_PUBLIC_WEB" || isRiyadhMonday();
+        if (isDue && (source.adapter === "NCM_PUBLIC_WEB" || (source.documentUrlEnvironment && process.env[source.documentUrlEnvironment]))) await this.syncSource(systemContext, source.sourceCode, "SCHEDULED");
       }
     }
     return { status: "COMPLETED" as const, tenantCount: tenantIds.length };
@@ -164,7 +198,7 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
           researchRuns: { orderBy: { startedAt: "desc" }, take: 1, select: { status: true, startedAt: true, finishedAt: true } },
         },
       });
-      const configured = Boolean(process.env[definition.documentUrlEnvironment]);
+      const configured = definition.adapter === "NCM_PUBLIC_WEB" || Boolean(definition.documentUrlEnvironment && process.env[definition.documentUrlEnvironment]);
       return {
         category: "RESEARCH" as const,
         sourceCode: definition.sourceCode,
@@ -172,7 +206,11 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
         sourceUrl: definition.sourceUrl,
         scheduleCode: definition.scheduleCode,
         readiness: !source ? "NOT_REGISTERED" : !source.enabled ? "DISABLED" : !configured ? "NOT_CONFIGURED" : "READY_TO_SYNC",
-        readinessReason: !configured ? `يتطلب إعداد الموصل المعتمد ${definition.documentUrlEnvironment} على الخادم.` : "الموصل مهيأ؛ تبقى النتائج مرشحات للمراجعة البشرية قبل النشر.",
+        readinessReason: !configured
+          ? `يتطلب إعداد الموصل المعتمد ${definition.documentUrlEnvironment} على الخادم.`
+          : definition.adapter === "NCM_PUBLIC_WEB"
+            ? "يقرأ الباحث صفحات المدن الرسمية الثابتة للمركز الوطني للأرصاد يومياً؛ النتائج مرشحات للمراجعة البشرية قبل النشر."
+            : "الموصل مهيأ؛ تبقى النتائج مرشحات للمراجعة البشرية قبل النشر.",
         lastRun: source?.researchRuns[0] ?? null,
       };
     })));
@@ -230,6 +268,12 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
     return id;
   }
 
+  private async fetchConfiguredResearchDocument(definition: ResearchSourceDefinition) {
+    const documentUrl = definition.documentUrlEnvironment ? process.env[definition.documentUrlEnvironment] : undefined;
+    if (!documentUrl) throw new ConflictException(`An approved structured source adapter has not been configured (${definition.documentUrlEnvironment ?? definition.sourceCode}).`);
+    return fetchResearchDocument(documentUrl, definition.allowedHosts);
+  }
+
   private async applyDocument(context: TrustedCompanyActorContext, source: Readonly<{ id: string; sourceCode: string }>, runId: string, documentChecksum: string, normalized: ResearchNormalization, triggerCode: string) {
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       let pendingCandidates = 0;
@@ -269,6 +313,16 @@ export class DecisionContextResearchService implements OnModuleInit, OnModuleDes
       requestId: RequestContext.correlationId() ?? randomUUID(), afterJson: body,
     } });
   }
+}
+
+/** Maps a code-owned connector definition to the durable source identity. */
+export function sourceRecord(definition: ResearchSourceDefinition) {
+  return {
+    sourceCode: definition.sourceCode,
+    displayNameAr: definition.displayNameAr,
+    sourceUrl: definition.sourceUrl,
+    scheduleCode: definition.scheduleCode,
+  };
 }
 
 export function normalizeResearchCandidates(sourceCode: string, document: ContextResearchDocumentV1): ResearchNormalization {
@@ -323,6 +377,131 @@ async function fetchResearchDocument(url: string, allowedHosts: readonly string[
   if (Buffer.byteLength(raw, "utf8") > 2 * 1024 * 1024) throw new ConflictException("The context researcher document exceeds the size limit.");
   return { document: JSON.parse(raw) as unknown, checksum: sha(raw) };
 }
+
+/**
+ * Public NCM pages are treated as an untrusted provider document, not as a
+ * general web-search result. Only these four code-owned city URLs are fetched;
+ * redirects, a different host, oversized pages and unknown page structures are
+ * rejected. The result is deliberately a review candidate, never a fact or a
+ * statement that weather caused a commercial outcome.
+ */
+async function fetchNcmWeatherResearchDocument() {
+  const pages = await Promise.all(NCM_FORECAST_LOCATIONS.map(async (location) => {
+    const document = await fetchNcmForecastPage(location.url);
+    return { location, document };
+  }));
+  const fetchedAt = new Date().toISOString();
+  const candidates = pages.flatMap(({ location, document }) => extractNcmWeatherCandidates(location, document, fetchedAt));
+  return {
+    document: { sourceUpdatedAt: fetchedAt, candidates },
+    checksum: sha({ fetchedAt: fetchedAt.slice(0, 10), pages: pages.map(({ location, document }) => ({ locationCode: location.locationCode, checksum: sha(document) })) }),
+  };
+}
+
+async function fetchNcmForecastPage(url: string) {
+  const parsed = new URL(url);
+  if (parsed.protocol !== "https:" || parsed.hostname !== "www.ncm.gov.sa") throw new ConflictException("The NCM forecast URL is not an approved HTTPS host.");
+  const response = await fetch(parsed, {
+    redirect: "error",
+    signal: AbortSignal.timeout(12_000),
+    headers: { Accept: "text/html", "User-Agent": "BaseerERP-ContextResearch/1.0" },
+  });
+  const contentType = response.headers.get("content-type") ?? "";
+  const contentLength = Number(response.headers.get("content-length") ?? "0");
+  if (!response.ok || !contentType.toLowerCase().includes("text/html")) throw new ConflictException("The NCM forecast page did not provide verified HTML.");
+  if (Number.isFinite(contentLength) && contentLength > 2 * 1024 * 1024) throw new ConflictException("The NCM forecast page exceeds the size limit.");
+  const raw = await response.text();
+  if (Buffer.byteLength(raw, "utf8") > 2 * 1024 * 1024) throw new ConflictException("The NCM forecast page exceeds the size limit.");
+  return raw;
+}
+
+type NcmForecastLocation = (typeof NCM_FORECAST_LOCATIONS)[number];
+
+export function extractNcmWeatherCandidates(location: NcmForecastLocation, html: string, fetchedAt: string): ContextResearchDocumentV1["candidates"][number][] {
+  const text = ncmPageText(html);
+  if (!text.includes(location.locationLabelAr)) throw new ConflictException(`The NCM forecast page does not identify ${location.locationLabelAr}.`);
+  const date = ncmDateFromText(text) ?? fetchedAt.slice(0, 10);
+  const sourceUpdatedAt = ncmInstantFromText(text) ?? fetchedAt;
+  const candidates: ContextResearchDocumentV1["candidates"][number][] = [];
+  const maxTemperature = ncmMaximumTemperature(text);
+  if (maxTemperature !== null && maxTemperature >= NCM_HIGH_TEMPERATURE_CELSIUS) {
+    candidates.push({
+      externalKey: `ncm:high_temperature:${location.locationCode}:${date}`,
+      eventKind: "NCM_HIGH_TEMPERATURE",
+      titleAr: `مؤشر حرارة مرتفعة في ${location.locationLabelAr} (${maxTemperature}°م)`,
+      startsOn: date,
+      endsOn: date,
+      locationCode: location.locationCode,
+      locationLabelAr: location.locationLabelAr,
+      relevanceReasonAr: `رصدت صفحة المركز الوطني للأرصاد درجة عظمى ${maxTemperature}°م. هذا سياق طقس للمراجعة، وليس حكماً على أثره التجاري.`,
+      sourceUpdatedAt,
+      payload: { sourceType: "NCM_PUBLIC_FORECAST_PAGE", sourceUrl: location.url, maximumTemperatureCelsius: maxTemperature, fetchedAt },
+    });
+  }
+  for (const alert of ncmEarlyWarnings(html, location, date, sourceUpdatedAt, fetchedAt)) candidates.push(alert);
+  return candidates;
+}
+
+function ncmPageText(html: string) {
+  return decodeNcmHtml(html)
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function decodeNcmHtml(value: string) { return normalizeArabicDigits(value.replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"').replace(/&#39;|&apos;/gi, "'").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")); }
+function normalizeArabicDigits(value: string) { return value.replace(/[٠-٩]/g, (digit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit))).replace(/[۰-۹]/g, (digit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))); }
+function ncmMaximumTemperature(text: string) {
+  const match = /العظمى\s*:?\s*(\d{1,2})\s*°?\s*م/.exec(text);
+  return match ? Number(match[1]) : null;
+}
+function ncmDateFromText(text: string) {
+  const match = /آخر تحديث\s*:?[^\d]{0,80}(\d{2})\s*\/\s*(\d{2})\s*\/\s*(\d{4})/.exec(text);
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : null;
+}
+function ncmInstantFromText(text: string) {
+  const date = ncmDateFromText(text);
+  return date ? `${date}T00:00:00.000Z` : null;
+}
+function ncmEarlyWarnings(html: string, location: NcmForecastLocation, fallbackDate: string, sourceUpdatedAt: string, fetchedAt: string) {
+  const warnings: ContextResearchDocumentV1["candidates"][number][] = [];
+  const source = normalizeArabicDigits(html);
+  const pattern = /href=["']([^"']*\/ar\/early-warning\/([^"'/?#]+)[^"']*)["']/gi;
+  for (const match of source.matchAll(pattern)) {
+    const href = match[1]; const warningId = match[2];
+    if (!href || !warningId) continue;
+    const url = new URL(href, "https://www.ncm.gov.sa");
+    if (url.hostname !== "www.ncm.gov.sa" || !/^\/ar\/early-warning\/[A-Za-z0-9_-]+$/.test(url.pathname)) continue;
+    const nearby = ncmPageText(source.slice(Math.max(0, (match.index ?? 0) - 2_000), Math.min(source.length, (match.index ?? 0) + 5_000)));
+    const startsOn = ncmLabeledDate(nearby, "تاريخ البداية") ?? fallbackDate;
+    const endsOn = ncmLabeledDate(nearby, "تاريخ النهاية") ?? startsOn;
+    const description = ncmWarningDescription(nearby) ?? "تحذير أرصادي";
+    warnings.push({
+      externalKey: `ncm:early_warning:${location.locationCode}:${warningId}`,
+      eventKind: "NCM_EARLY_WARNING",
+      titleAr: `${description} في ${location.locationLabelAr}`,
+      startsOn,
+      endsOn,
+      locationCode: location.locationCode,
+      locationLabelAr: location.locationLabelAr,
+      relevanceReasonAr: "تحذير منشور من المركز الوطني للأرصاد. يظل سياقاً قابلاً للمراجعة ولا يثبت أثراً تجارياً.",
+      sourceUpdatedAt,
+      payload: { sourceType: "NCM_EARLY_WARNING_PAGE", sourceUrl: url.toString(), warningId, fetchedAt },
+    });
+  }
+  return uniqueNcmWarnings(warnings);
+}
+function ncmLabeledDate(text: string, label: string) {
+  const index = text.indexOf(label);
+  if (index < 0) return null;
+  const match = /(\d{2})\s*\/\s*(\d{2})\s*\/\s*(\d{4})/.exec(text.slice(index, index + 180));
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : null;
+}
+function ncmWarningDescription(text: string) {
+  const match = /(موجة حارة|أمطار(?: متوسطة| غزيرة)?|رياح نشطة|أتربة مثارة|عوالق ترابية|ضباب|انخفاض في مدى الرؤية)/.exec(text);
+  return match?.[1] ?? null;
+}
+function uniqueNcmWarnings(items: ContextResearchDocumentV1["candidates"][number][]) { return [...new Map(items.map((item) => [item.externalKey, item])).values()]; }
 function parseResearchDocument(value: unknown): ContextResearchDocumentV1 { if (!value || typeof value !== "object" || !Array.isArray((value as { candidates?: unknown }).candidates)) throw new ConflictException("The context researcher document has an unsupported schema."); return value as ContextResearchDocumentV1; }
 function approvedResearchSource(sourceCode: string) { const source = APPROVED_CONTEXT_RESEARCH_SOURCES.find((item) => item.sourceCode === sourceCode); if (!source) throw new ConflictException("The requested context researcher source is not approved."); return source; }
 function requiredText(value: unknown, label: string, max: number) { if (typeof value !== "string" || !value.trim() || value.trim().length > max) throw new ConflictException(`A valid ${label} is required.`); return value.trim(); }
@@ -335,3 +514,4 @@ function optionalInstant(value: unknown) { if (value === undefined || value === 
 function jsonObject(value: unknown): Prisma.InputJsonValue { if (value === undefined) return {}; if (!value || typeof value !== "object" || Array.isArray(value)) throw new ConflictException("A context candidate payload must be an object."); return value as Prisma.InputJsonValue; }
 function sha(value: unknown) { return createHash("sha256").update(typeof value === "string" ? value : canonicalJson(value)).digest("hex"); }
 function safeError(error: unknown) { return error instanceof Error ? error.message.slice(0, 500) : "Unknown context researcher failure."; }
+function isRiyadhMonday(now = new Date()) { return new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Riyadh", weekday: "short" }).format(now) === "Mon"; }
