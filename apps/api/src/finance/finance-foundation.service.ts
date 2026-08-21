@@ -119,7 +119,7 @@ export class FinanceFoundationService {
     }
     if (!existingProfile) {
       await transaction.companyFinanceProfile.create({
-        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_FINANCE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true },
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, baseSeedVersion: BASE_FINANCE_SEED_VERSION, accountingMode: 'management_cash', vatAccountingEnabled: true, functionalCurrencyCode: 'SAR' },
       });
     } else if (existingProfile.baseSeedVersion < BASE_FINANCE_SEED_VERSION) {
       await transaction.companyFinanceProfile.update({ where: { id: existingProfile.id }, data: { baseSeedVersion: BASE_FINANCE_SEED_VERSION } });

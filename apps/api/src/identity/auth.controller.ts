@@ -16,14 +16,10 @@ import {
 } from "@nestjs/common";
 import { RequestContext } from "../observability/request-context.js";
 import { AuthService } from "./auth.service.js";
-import { SignInRateLimitService } from "./sign-in-rate-limit.service.js";
 
 @Controller("auth")
 export class AuthController {
-  constructor(
-    private readonly auth: AuthService,
-    private readonly signInRateLimit: SignInRateLimitService,
-  ) {}
+  constructor(private readonly auth: AuthService) {}
 
   @Post("sign-in")
   @HttpCode(200)
@@ -33,20 +29,10 @@ export class AuthController {
   ) {
     const request = legacyCompatibleSignInRequestSchema.safeParse(body);
     if (!request.success) throw this.unauthorized();
-    const key = this.signInRateLimit.key("global", request.data.login);
-    this.signInRateLimit.assertAllowed(key);
-    try {
-      const session = await this.auth.signIn({
-        ...request.data,
-        requestId: this.requestId(requestId),
-      });
-      this.signInRateLimit.recordSuccess(key);
-      return this.sessionReceipt(session);
-    } catch (error) {
-      if (error instanceof UnauthorizedException)
-        this.signInRateLimit.recordFailure(key);
-      throw error;
-    }
+    return this.sessionReceipt(await this.auth.signIn({
+      ...request.data,
+      requestId: this.requestId(requestId),
+    }));
   }
 
   @Post("owner/activate")
@@ -57,19 +43,10 @@ export class AuthController {
   ): Promise<void> {
     const request = activateOwnerRequestSchema.safeParse(body);
     if (!request.success) throw this.unauthorized();
-    const key = this.signInRateLimit.key("owner-bootstrap", request.data.email);
-    this.signInRateLimit.assertAllowed(key);
-    try {
-      await this.auth.activateOwner({
-        ...request.data,
-        requestId: this.requestId(requestId),
-      });
-      this.signInRateLimit.recordSuccess(key);
-    } catch (error) {
-      if (error instanceof UnauthorizedException)
-        this.signInRateLimit.recordFailure(key);
-      throw error;
-    }
+    await this.auth.activateOwner({
+      ...request.data,
+      requestId: this.requestId(requestId),
+    });
   }
 
   @Post("refresh")

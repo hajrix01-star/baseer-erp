@@ -35,7 +35,17 @@ export class FinanceConfigurationService {
         transaction.financeCategory.findMany({ where: { tenantId: authorized.principal.tenantId, companyId }, orderBy: { sortOrder: 'asc' }, take: 500, select: { id: true, code: true, nameAr: true, nameEn: true, kind: true, status: true, accountId: true, parentId: true, suggestedSupplierId: true, isPosting: true } }),
         transaction.financeSupplier.findMany({ where: { tenantId: authorized.principal.tenantId, companyId }, orderBy: [{ isFavorite: 'desc' }, { nameAr: 'asc' }], take: 1_000, select: { id: true, nameAr: true, nameEn: true, phone: true, taxNumber: true, isTaxRegistered: true, isFavorite: true, supplierType: true, status: true, categoryId: true } }),
       ]);
-      return { companyId, profile, periods, vaults, accounts, categories, suppliers, standardSuppliers: STANDARD_SUPPLIER_SEEDS.map((supplier) => ({ key: supplier.key, nameAr: supplier.nameAr, nameEn: supplier.nameEn })) };
+      return {
+        companyId,
+        requiredBaseSeedVersion: BASE_FINANCE_SEED_VERSION,
+        profile,
+        periods,
+        vaults,
+        accounts,
+        categories,
+        suppliers,
+        standardSuppliers: STANDARD_SUPPLIER_SEEDS.map((supplier) => ({ key: supplier.key, nameAr: supplier.nameAr, nameEn: supplier.nameEn })),
+      };
     });
   }
 

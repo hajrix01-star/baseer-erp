@@ -7,6 +7,8 @@ import type { TrustedCompanyActorContext } from "../core-controls/trusted-contex
 import {
   FinanceDailySalesClosingScope,
   FinanceDailySalesClosingStatus,
+  FinanceCashPerformanceDirection,
+  FinanceCashPerformanceEventKind,
   Prisma,
 } from "../generated/prisma/client.js";
 import { DailySalesProjectionService } from "./daily-sales-projection.service.js";
@@ -17,6 +19,7 @@ import {
 } from "./daily-sales-posting.service.js";
 import { JournalPostingService } from "./journal/journal-posting.service.js";
 import { DailySalesCommandSupportService } from "./daily-sales-command-support.service.js";
+import { FinanceCashPerformanceEventService } from './finance-cash-performance-event.service.js';
 import {
   DAILY_SALES_SERIAL_SERIES,
   type CreateDailySalesClosingRequest,
@@ -34,6 +37,7 @@ export class DailySalesWriteService {
     private readonly projections: DailySalesProjectionService,
     private readonly posting: DailySalesPostingService,
     private readonly support: DailySalesCommandSupportService,
+    private readonly cashEvents: FinanceCashPerformanceEventService,
   ) {}
   async createInTransaction(
     transaction: Prisma.TransactionClient,
@@ -136,6 +140,13 @@ export class DailySalesWriteService {
         grossAmount: allocation.grossAmount,
       })),
     });
+    await this.cashEvents.recordInTransaction(transaction, context, {
+      kind: FinanceCashPerformanceEventKind.SALES_COLLECTION,
+      direction: FinanceCashPerformanceDirection.INFLOW,
+      businessDate: fields.businessDate, grossAmount: fields.grossAmount, netAmount: accounting.netAmount, vatAmount: accounting.vatAmount,
+      sourceType: 'daily_sales_closing', sourceId: closingId, sourceJournalEntryId: journal.journalEntryId, ledgerRevision: journal.ledgerRevision,
+      destinations: fields.allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.grossAmount.toFixed(4), paymentMethod: allocation.paymentMethod })),
+    });
     await this.projections.rebuildInTransaction(transaction, context, {
       businessDate: fields.businessDate,
       requestId,
@@ -220,6 +231,11 @@ export class DailySalesWriteService {
       businessDate: closing.businessDate,
       reason: "Daily sales closing corrected while fiscal period is open.",
     });
+    await this.cashEvents.recordReversalForJournalInTransaction(transaction, context, {
+      originalJournalEntryId: closing.journalEntryId, reversalJournalEntryId: reversed.journalEntryId,
+      reversalLedgerRevision: reversed.ledgerRevision, businessDate: closing.businessDate,
+      sourceType: 'daily_sales_closing_reversal', sourceId: closing.id,
+    });
     const postingVersion = closing.postingVersion + 1;
     const journal = await this.posting.postJournal(transaction, context, {
       closingId,
@@ -261,6 +277,13 @@ export class DailySalesWriteService {
         vaultId: allocation.vaultId,
         grossAmount: allocation.grossAmount,
       })),
+    });
+    await this.cashEvents.recordInTransaction(transaction, context, {
+      kind: FinanceCashPerformanceEventKind.SALES_COLLECTION,
+      direction: FinanceCashPerformanceDirection.INFLOW,
+      businessDate: closing.businessDate, grossAmount: fields.grossAmount, netAmount: accounting.netAmount, vatAmount: accounting.vatAmount,
+      sourceType: 'daily_sales_closing', sourceId: closingId, sourceJournalEntryId: journal.journalEntryId, ledgerRevision: journal.ledgerRevision,
+      destinations: fields.allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.grossAmount.toFixed(4), paymentMethod: allocation.paymentMethod })),
     });
     await this.projections.rebuildInTransaction(transaction, context, {
       businessDate: closing.businessDate,
@@ -346,6 +369,11 @@ export class DailySalesWriteService {
       journalEntryId: closing.journalEntryId,
       businessDate,
       reason,
+    });
+    await this.cashEvents.recordReversalForJournalInTransaction(transaction, context, {
+      originalJournalEntryId: closing.journalEntryId, reversalJournalEntryId: journal.journalEntryId,
+      reversalLedgerRevision: journal.ledgerRevision, businessDate,
+      sourceType: 'daily_sales_closing_reversal', sourceId: closing.id,
     });
     const updated = await transaction.financeDailySalesClosing.updateMany({
       where: {

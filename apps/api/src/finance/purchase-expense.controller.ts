@@ -25,7 +25,7 @@ export class PurchaseExpenseController {
         ...(request.data.supplierInvoiceNumber ? { supplierInvoiceNumber: request.data.supplierInvoiceNumber } : {}),
         ...(request.data.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: request.data.supplierInvoiceMissingReason } : {}),
         businessDate: request.data.businessDate, ...(request.data.supplierInvoiceDate ? { supplierInvoiceDate: request.data.supplierInvoiceDate } : {}),
-        grossAmount: request.data.grossAmount, isTaxable: request.data.isTaxable, allocations: request.data.allocations,
+        grossAmount: request.data.grossAmount, isTaxable: request.data.isTaxable, assetWarrantyFollowUp: request.data.assetWarrantyFollowUp, allocations: request.data.allocations,
         ...(request.data.notes ? { notes: request.data.notes } : {}),
       },
     }));
@@ -45,7 +45,7 @@ export class PurchaseExpenseController {
         ...(item.supplierInvoiceNumber ? { supplierInvoiceNumber: item.supplierInvoiceNumber } : {}),
         ...(item.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: item.supplierInvoiceMissingReason } : {}),
         ...(item.supplierInvoiceDate ? { supplierInvoiceDate: item.supplierInvoiceDate } : {}),
-        grossAmount: item.grossAmount, isTaxable: item.isTaxable, allocations: item.allocations,
+        grossAmount: item.grossAmount, isTaxable: item.isTaxable, assetWarrantyFollowUp: item.assetWarrantyFollowUp, allocations: item.allocations,
         ...(item.notes ? { notes: item.notes } : {}),
       })) },
     }));

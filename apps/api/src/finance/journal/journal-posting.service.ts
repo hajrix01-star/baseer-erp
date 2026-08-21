@@ -49,6 +49,7 @@ export type ReverseJournalEntryInput = Readonly<{
 export type JournalPostingReceipt = Readonly<{
   journalEntryId: string;
   fiscalPeriodId: string;
+  ledgerRevision: string;
   totalDebit: string;
   totalCredit: string;
 }>;
@@ -84,6 +85,7 @@ export class JournalPostingService {
     await this.assertActiveAccounts(transaction, input.tenantId, input.companyId, normalizedLines.map((line) => line.accountId));
 
     const journalEntryId = randomUUID();
+    const ledgerRevision = await this.advanceLedgerRevision(transaction, input.tenantId, input.companyId);
     const totalDebit = normalizedLines.reduce((sum, line) => sum.plus(line.debitAmount), new Prisma.Decimal(0));
     const totalCredit = normalizedLines.reduce((sum, line) => sum.plus(line.creditAmount), new Prisma.Decimal(0));
     await transaction.financeJournalEntry.create({
@@ -96,6 +98,7 @@ export class JournalPostingService {
         sourceReference,
         businessDate: input.businessDate,
         description: this.optionalText(input.description, 1_000) ?? null,
+        ledgerRevision,
         createdByUserId: input.actorUserId,
         requestId,
       },
@@ -122,6 +125,7 @@ export class JournalPostingService {
     const receipt: JournalPostingReceipt = {
       journalEntryId,
       fiscalPeriodId,
+      ledgerRevision: ledgerRevision.toString(),
       totalDebit: totalDebit.toFixed(4),
       totalCredit: totalCredit.toFixed(4),
     };
@@ -167,9 +171,13 @@ export class JournalPostingService {
     if (!original) throw new NotFoundException('The posted original journal entry was not found.');
     if (original.reversalEntry) throw new ConflictException('This journal entry has already been reversed.');
 
-    await this.assertActiveAccounts(transaction, input.tenantId, input.companyId, original.lines.map((line) => line.accountId));
+    if (input.businessDate < original.businessDate) {
+      throw new BadRequestException('A journal reversal business date cannot precede the original business date.');
+    }
+    await this.assertReversibleAccounts(transaction, input.tenantId, input.companyId, original.lines.map((line) => line.accountId));
 
     const journalEntryId = randomUUID();
+    const ledgerRevision = await this.advanceLedgerRevision(transaction, input.tenantId, input.companyId);
     const totalDebit = original.lines.reduce((sum, line) => sum.plus(line.creditAmount), new Prisma.Decimal(0));
     const totalCredit = original.lines.reduce((sum, line) => sum.plus(line.debitAmount), new Prisma.Decimal(0));
     await transaction.financeJournalEntry.create({
@@ -184,6 +192,7 @@ export class JournalPostingService {
         description: `Reversal of journal ${original.id}`,
         reversalOfEntryId: original.id,
         reversalReason: reason,
+        ledgerRevision,
         createdByUserId: input.actorUserId,
         requestId,
       },
@@ -225,6 +234,7 @@ export class JournalPostingService {
     const receipt: JournalPostingReceipt = {
       journalEntryId,
       fiscalPeriodId,
+      ledgerRevision: ledgerRevision.toString(),
       totalDebit: totalDebit.toFixed(4),
       totalCredit: totalCredit.toFixed(4),
     };
@@ -288,6 +298,37 @@ export class JournalPostingService {
     if (accounts.length !== uniqueAccountIds.length) {
       throw new BadRequestException('Every journal line must use an active account from the selected company.');
     }
+  }
+
+  /** A historical correction must remain possible after an account is archived. */
+  private async assertReversibleAccounts(
+    transaction: Prisma.TransactionClient,
+    tenantId: string,
+    companyId: string,
+    accountIds: readonly string[],
+  ): Promise<void> {
+    const uniqueAccountIds = [...new Set(accountIds)];
+    const accounts = await transaction.financeAccount.findMany({
+      where: { tenantId, companyId, id: { in: uniqueAccountIds } },
+      select: { id: true },
+    });
+    if (accounts.length !== uniqueAccountIds.length) {
+      throw new BadRequestException('Every original journal account must still belong to the selected company.');
+    }
+  }
+
+  private async advanceLedgerRevision(
+    transaction: Prisma.TransactionClient,
+    tenantId: string,
+    companyId: string,
+  ): Promise<bigint> {
+    const revision = await transaction.financeLedgerRevision.upsert({
+      where: { tenantId_companyId: { tenantId, companyId } },
+      create: { tenantId, companyId, currentRevision: BigInt(1) },
+      update: { currentRevision: { increment: BigInt(1) } },
+      select: { currentRevision: true },
+    });
+    return revision.currentRevision;
   }
 
   /**

@@ -13,6 +13,7 @@ import {
   IdentityTokenError,
   IdentityTokenService,
 } from "../identity/identity-token.service.js";
+import { SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
 
 export interface CompanyContextAuthorizationInput {
   accessToken: string;
@@ -32,6 +33,7 @@ export interface CompanyContextReceipt {
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAX_PERMISSION_CODE_LENGTH = 120;
+const COMPANY_MANAGER_CAPABILITIES = SYSTEM_ROLE_TEMPLATES.find((role) => role.code === "BASEER_COMPANY_MANAGER")?.permissions ?? [];
 
 @Injectable()
 export class CompanyContextService {
@@ -134,6 +136,12 @@ export class CompanyContextService {
             capabilities: requestedCapabilities,
           };
         if (!membership) throw this.forbidden();
+        // Do not make an active Company Manager wait for a deployment operator
+        // to backfill newly released system capabilities. This only ever adds
+        // the current template's grants to the immutable system role; custom
+        // roles retain their explicit, narrower selection.
+        const systemManager = await transaction.role.findFirst({ where: { id: membership.roleId, tenantId: claims.tenantId, code: "BASEER_COMPANY_MANAGER", isSystem: true }, select: { id: true } });
+        if (systemManager && COMPANY_MANAGER_CAPABILITIES.length) await transaction.rolePermission.createMany({ data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({ tenantId: claims.tenantId, roleId: systemManager.id, permissionCode })), skipDuplicates: true });
         const grants = await transaction.rolePermission.findMany({
           where: {
             tenantId: claims.tenantId,

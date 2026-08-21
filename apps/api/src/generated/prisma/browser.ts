@@ -93,6 +93,70 @@ export type CompanyFinanceProfile = Prisma.CompanyFinanceProfileModel
  */
 export type FinanceAccount = Prisma.FinanceAccountModel
 /**
+ * Model FinancePnlMappingVersion
+ * Company-owned effective-dated P&L mapping policy. It is intentionally
+ * separate from FinanceCategory because categories can be operationally
+ * edited without restating accounting presentation.
+ */
+export type FinancePnlMappingVersion = Prisma.FinancePnlMappingVersionModel
+/**
+ * Model FinancePnlStatementLine
+ * A line is version-local, so renaming, ordering or changing its nature is a
+ * new policy version rather than a reinterpretation of an old P&L.
+ */
+export type FinancePnlStatementLine = Prisma.FinancePnlStatementLineModel
+/**
+ * Model FinancePnlAccountMapping
+ * Every included P&L account maps once to a line in the same immutable
+ * policy version. Control/balance-sheet accounts cannot enter this relation.
+ */
+export type FinancePnlAccountMapping = Prisma.FinancePnlAccountMappingModel
+/**
+ * Model FinanceLedgerRevision
+ * The company-local monotonically increasing boundary assigned in the same
+ * transaction that seals a journal entry or its reversal.
+ */
+export type FinanceLedgerRevision = Prisma.FinanceLedgerRevisionModel
+/**
+ * Model ReportRun
+ * Immutable server-side report snapshot metadata. R0-B stores the source
+ * boundary only; report rows and HTTP/UI delivery start in later gates.
+ */
+export type ReportRun = Prisma.ReportRunModel
+/**
+ * Model ReportDocument
+ * A user-retained, immutable rendering snapshot of a report run. A document
+ * is created only by an explicit action; merely viewing a report never writes
+ * one. Its JSON payload is the source for later print and Excel rendering.
+ */
+export type ReportDocument = Prisma.ReportDocumentModel
+/**
+ * Model FinanceCashPerformanceEvent
+ * Immutable event read-model written atomically with an actual external
+ * collection/payment and its sealed journal entry. Reversals append an
+ * opposite event; they never alter the original event.
+ */
+export type FinanceCashPerformanceEvent = Prisma.FinanceCashPerformanceEventModel
+/**
+ * Model FinanceCashPerformanceCoverage
+ * Immutable owner-approved boundary for the source-backed personal cash
+ * performance report. Historical data is never inferred or backfilled.
+ */
+export type FinanceCashPerformanceCoverage = Prisma.FinanceCashPerformanceCoverageModel
+/**
+ * Model FinanceCashPerformanceHistoricalImport
+ * A historical import is additional immutable evidence. It may extend the
+ * current report coverage earlier, but it never rewrites the original
+ * coverage declaration or a ReportRun created before the import.
+ */
+export type FinanceCashPerformanceHistoricalImport = Prisma.FinanceCashPerformanceHistoricalImportModel
+/**
+ * Model FinanceVatSettlement
+ * Explicit evidence of VAT cash paid to, or refunded from, the authority.
+ * It is separate from invoice VAT and never inferred from a control balance.
+ */
+export type FinanceVatSettlement = Prisma.FinanceVatSettlementModel
+/**
  * Model FinanceCategory
  * 
  */
@@ -144,6 +208,17 @@ export type FinanceJournalEntry = Prisma.FinanceJournalEntryModel
  * 
  */
 export type FinanceOutflowDocument = Prisma.FinanceOutflowDocumentModel
+/**
+ * Model OperationsAssetWarrantyAsset
+ * Operational register only. This does not capitalise, depreciate, or post
+ * an accounting entry; the source document remains the financial truth.
+ */
+export type OperationsAssetWarrantyAsset = Prisma.OperationsAssetWarrantyAssetModel
+/**
+ * Model OperationsAssetWarrantyLine
+ * 
+ */
+export type OperationsAssetWarrantyLine = Prisma.OperationsAssetWarrantyLineModel
 /**
  * Model FinanceOutflowBatch
  * 
@@ -403,3 +478,93 @@ export type AiExecutionReceipt = Prisma.AiExecutionReceiptModel
  * 
  */
 export type AiSystemIdentity = Prisma.AiSystemIdentityModel
+/**
+ * Model OperationsSection
+ * 
+ */
+export type OperationsSection = Prisma.OperationsSectionModel
+/**
+ * Model OperationsUnit
+ * 
+ */
+export type OperationsUnit = Prisma.OperationsUnitModel
+/**
+ * Model OperationsItem
+ * 
+ */
+export type OperationsItem = Prisma.OperationsItemModel
+/**
+ * Model OperationsItemUnit
+ * 
+ */
+export type OperationsItemUnit = Prisma.OperationsItemUnitModel
+/**
+ * Model OperationsItemConversionVersion
+ * 
+ */
+export type OperationsItemConversionVersion = Prisma.OperationsItemConversionVersionModel
+/**
+ * Model OperationsItemConversionEdge
+ * 
+ */
+export type OperationsItemConversionEdge = Prisma.OperationsItemConversionEdgeModel
+/**
+ * Model OperationsInternalRegistration
+ * 
+ */
+export type OperationsInternalRegistration = Prisma.OperationsInternalRegistrationModel
+/**
+ * Model OperationsInternalRegistrationLine
+ * 
+ */
+export type OperationsInternalRegistrationLine = Prisma.OperationsInternalRegistrationLineModel
+/**
+ * Model OperationsRecipeVersion
+ * 
+ */
+export type OperationsRecipeVersion = Prisma.OperationsRecipeVersionModel
+/**
+ * Model OperationsRecipeLine
+ * 
+ */
+export type OperationsRecipeLine = Prisma.OperationsRecipeLineModel
+/**
+ * Model OperationsPurchaseRequest
+ * 
+ */
+export type OperationsPurchaseRequest = Prisma.OperationsPurchaseRequestModel
+/**
+ * Model OperationsPurchaseRequestLine
+ * 
+ */
+export type OperationsPurchaseRequestLine = Prisma.OperationsPurchaseRequestLineModel
+/**
+ * Model OperationsPurchaseReceipt
+ * 
+ */
+export type OperationsPurchaseReceipt = Prisma.OperationsPurchaseReceiptModel
+/**
+ * Model OperationsPurchaseReceiptLine
+ * 
+ */
+export type OperationsPurchaseReceiptLine = Prisma.OperationsPurchaseReceiptLineModel
+/**
+ * Model OperationsCustodyProfile
+ * 
+ */
+export type OperationsCustodyProfile = Prisma.OperationsCustodyProfileModel
+/**
+ * Model OperationsCustodyEvent
+ * 
+ */
+export type OperationsCustodyEvent = Prisma.OperationsCustodyEventModel
+/**
+ * Model OperationsInventoryBalance
+ * 
+ */
+export type OperationsInventoryBalance = Prisma.OperationsInventoryBalanceModel
+/**
+ * Model OperationsInventoryMovement
+ * 
+ */
+export type OperationsInventoryMovement = Prisma.OperationsInventoryMovementModel

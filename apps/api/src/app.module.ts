@@ -51,6 +51,22 @@ import { InvoiceRegisterService } from './finance/invoice-register.service.js';
 import { FinanceAccountsController } from './finance/finance-accounts.controller.js';
 import { FinanceAccountsService } from './finance/finance-accounts.service.js';
 import { FinanceConfigurationService } from './finance/finance-configuration.service.js';
+import { FinancePnlMappingService } from './finance/finance-pnl-mapping.service.js';
+import { ReportRunService } from './reports/report-run.service.js';
+import { ReportCatalogService } from './reports/report-catalog.service.js';
+import { ReportCatalogController } from './reports/report-catalog.controller.js';
+import { ReportsController } from './reports/reports.controller.js';
+import { CashPerformanceCoverageService } from './reports/cash-performance-coverage.service.js';
+import { PersonalCashPerformanceReportService } from './reports/personal-cash-performance-report.service.js';
+import { CashPerformanceHistoricalImportService } from './reports/cash-performance-historical-import.service.js';
+import { LedgerTrialBalanceController } from './reports/ledger-trial-balance.controller.js';
+import { LedgerTrialBalanceReportService } from './reports/ledger-trial-balance-report.service.js';
+import { InternalVatReportController } from './reports/internal-vat-report.controller.js';
+import { InternalVatReportService } from './reports/internal-vat-report.service.js';
+import { ReportDocumentController } from './reports/report-document.controller.js';
+import { ReportDocumentService } from './reports/report-document.service.js';
+import { FinanceCashPerformanceEventService } from './finance/finance-cash-performance-event.service.js';
+import { FinanceVatSettlementService } from './finance/finance-vat-settlement.service.js';
 import { FinanceConfigurationController } from './finance/finance-configuration.controller.js';
 import { ExpensesObligationsReadController } from './finance/expenses-obligations-read.controller.js';
 import { ExpensesObligationsReadService } from './finance/expenses-obligations-read.service.js';
@@ -71,7 +87,6 @@ import { RequestObservabilityInterceptor } from './observability/request-observa
 import { AuthController } from './identity/auth.controller.js';
 import { AuthService } from './identity/auth.service.js';
 import { IdentityTokenService } from './identity/identity-token.service.js';
-import { SignInRateLimitService } from './identity/sign-in-rate-limit.service.js';
 import { OutputController } from './output/output.controller.js';
 import { OutputService } from './output/output.service.js';
 import { HrController } from './hr/hr.controller.js';
@@ -88,9 +103,17 @@ import { HrFinalSettlementController } from './hr/hr-final-settlement.controller
 import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
 import { HrOverviewController } from './hr/hr-overview.controller.js';
 import { HrOverviewService } from './hr/hr-overview.service.js';
+import { OperationsCatalogController } from './operations/operations-catalog.controller.js';
+import { OperationsCatalogService } from './operations/operations-catalog.service.js';
+import { OperationsExecutionController } from './operations/operations-execution.controller.js';
+import { OperationsExecutionService } from './operations/operations-execution.service.js';
+import { OperationsInternalRegistrationController } from './operations/operations-internal-registration.controller.js';
+import { OperationsInternalRegistrationService } from './operations/operations-internal-registration.service.js';
+import { OperationsAssetsWarrantyController } from './operations/operations-assets-warranty.controller.js';
+import { OperationsAssetsWarrantyService } from './operations/operations-assets-warranty.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -104,7 +127,6 @@ import { HrOverviewService } from './hr/hr-overview.service.js';
     BusinessDateService,
     AuthService,
     IdentityTokenService,
-    SignInRateLimitService,
     CompanyContextService,
     CompanyAccessService,
     IdempotencyService,
@@ -126,6 +148,17 @@ import { HrOverviewService } from './hr/hr-overview.service.js';
     CompanyFinanceSetupService,
     VaultManagementService, TreasuryService, InvoiceRegisterService, FinanceAccountsService,
     FinanceConfigurationService,
+    FinancePnlMappingService,
+    ReportRunService,
+    ReportCatalogService,
+    CashPerformanceCoverageService,
+    CashPerformanceHistoricalImportService,
+    PersonalCashPerformanceReportService,
+    LedgerTrialBalanceReportService,
+    InternalVatReportService,
+    ReportDocumentService,
+    FinanceCashPerformanceEventService,
+    FinanceVatSettlementService,
     ExpensesObligationsReadService,
     FinanceMasterDataService,
     DailySalesProjectionService,
@@ -147,6 +180,10 @@ import { HrOverviewService } from './hr/hr-overview.service.js';
     HrEmployeeLetterService,
     HrFinalSettlementService,
     HrOverviewService,
+    OperationsCatalogService,
+    OperationsExecutionService,
+    OperationsInternalRegistrationService,
+    OperationsAssetsWarrantyService,
   ],
 })
 export class AppModule {}

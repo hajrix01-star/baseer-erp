@@ -44,6 +44,7 @@ export type CompanyFinanceProfileMinAggregateOutputType = {
   accountingMode: string | null
   vatAccountingEnabled: boolean | null
   vatRateBasisPoints: number | null
+  functionalCurrencyCode: string | null
   initializedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,6 +58,7 @@ export type CompanyFinanceProfileMaxAggregateOutputType = {
   accountingMode: string | null
   vatAccountingEnabled: boolean | null
   vatRateBasisPoints: number | null
+  functionalCurrencyCode: string | null
   initializedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -70,6 +72,7 @@ export type CompanyFinanceProfileCountAggregateOutputType = {
   accountingMode: number
   vatAccountingEnabled: number
   vatRateBasisPoints: number
+  functionalCurrencyCode: number
   initializedAt: number
   createdAt: number
   updatedAt: number
@@ -95,6 +98,7 @@ export type CompanyFinanceProfileMinAggregateInputType = {
   accountingMode?: true
   vatAccountingEnabled?: true
   vatRateBasisPoints?: true
+  functionalCurrencyCode?: true
   initializedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -108,6 +112,7 @@ export type CompanyFinanceProfileMaxAggregateInputType = {
   accountingMode?: true
   vatAccountingEnabled?: true
   vatRateBasisPoints?: true
+  functionalCurrencyCode?: true
   initializedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -121,6 +126,7 @@ export type CompanyFinanceProfileCountAggregateInputType = {
   accountingMode?: true
   vatAccountingEnabled?: true
   vatRateBasisPoints?: true
+  functionalCurrencyCode?: true
   initializedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -221,6 +227,7 @@ export type CompanyFinanceProfileGroupByOutputType = {
   accountingMode: string
   vatAccountingEnabled: boolean
   vatRateBasisPoints: number
+  functionalCurrencyCode: string
   initializedAt: Date
   createdAt: Date
   updatedAt: Date
@@ -257,6 +264,7 @@ export type CompanyFinanceProfileWhereInput = {
   accountingMode?: Prisma.StringFilter<"CompanyFinanceProfile"> | string
   vatAccountingEnabled?: Prisma.BoolFilter<"CompanyFinanceProfile"> | boolean
   vatRateBasisPoints?: Prisma.IntFilter<"CompanyFinanceProfile"> | number
+  functionalCurrencyCode?: Prisma.StringFilter<"CompanyFinanceProfile"> | string
   initializedAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
@@ -271,6 +279,7 @@ export type CompanyFinanceProfileOrderByWithRelationInput = {
   accountingMode?: Prisma.SortOrder
   vatAccountingEnabled?: Prisma.SortOrder
   vatRateBasisPoints?: Prisma.SortOrder
+  functionalCurrencyCode?: Prisma.SortOrder
   initializedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -290,6 +299,7 @@ export type CompanyFinanceProfileWhereUniqueInput = Prisma.AtLeast<{
   accountingMode?: Prisma.StringFilter<"CompanyFinanceProfile"> | string
   vatAccountingEnabled?: Prisma.BoolFilter<"CompanyFinanceProfile"> | boolean
   vatRateBasisPoints?: Prisma.IntFilter<"CompanyFinanceProfile"> | number
+  functionalCurrencyCode?: Prisma.StringFilter<"CompanyFinanceProfile"> | string
   initializedAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyFinanceProfile"> | Date | string
@@ -304,6 +314,7 @@ export type CompanyFinanceProfileOrderByWithAggregationInput = {
   accountingMode?: Prisma.SortOrder
   vatAccountingEnabled?: Prisma.SortOrder
   vatRateBasisPoints?: Prisma.SortOrder
+  functionalCurrencyCode?: Prisma.SortOrder
   initializedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -325,6 +336,7 @@ export type CompanyFinanceProfileScalarWhereWithAggregatesInput = {
   accountingMode?: Prisma.StringWithAggregatesFilter<"CompanyFinanceProfile"> | string
   vatAccountingEnabled?: Prisma.BoolWithAggregatesFilter<"CompanyFinanceProfile"> | boolean
   vatRateBasisPoints?: Prisma.IntWithAggregatesFilter<"CompanyFinanceProfile"> | number
+  functionalCurrencyCode?: Prisma.StringWithAggregatesFilter<"CompanyFinanceProfile"> | string
   initializedAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyFinanceProfile"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyFinanceProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyFinanceProfile"> | Date | string
@@ -336,6 +348,7 @@ export type CompanyFinanceProfileCreateInput = {
   accountingMode?: string
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: number
+  functionalCurrencyCode?: string
   initializedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -350,6 +363,7 @@ export type CompanyFinanceProfileUncheckedCreateInput = {
   accountingMode?: string
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: number
+  functionalCurrencyCode?: string
   initializedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -361,6 +375,7 @@ export type CompanyFinanceProfileUpdateInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -375,6 +390,7 @@ export type CompanyFinanceProfileUncheckedUpdateInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +404,7 @@ export type CompanyFinanceProfileCreateManyInput = {
   accountingMode?: string
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: number
+  functionalCurrencyCode?: string
   initializedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -399,6 +416,7 @@ export type CompanyFinanceProfileUpdateManyMutationInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +430,7 @@ export type CompanyFinanceProfileUncheckedUpdateManyInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -441,6 +460,7 @@ export type CompanyFinanceProfileCountOrderByAggregateInput = {
   accountingMode?: Prisma.SortOrder
   vatAccountingEnabled?: Prisma.SortOrder
   vatRateBasisPoints?: Prisma.SortOrder
+  functionalCurrencyCode?: Prisma.SortOrder
   initializedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -459,6 +479,7 @@ export type CompanyFinanceProfileMaxOrderByAggregateInput = {
   accountingMode?: Prisma.SortOrder
   vatAccountingEnabled?: Prisma.SortOrder
   vatRateBasisPoints?: Prisma.SortOrder
+  functionalCurrencyCode?: Prisma.SortOrder
   initializedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -472,6 +493,7 @@ export type CompanyFinanceProfileMinOrderByAggregateInput = {
   accountingMode?: Prisma.SortOrder
   vatAccountingEnabled?: Prisma.SortOrder
   vatRateBasisPoints?: Prisma.SortOrder
+  functionalCurrencyCode?: Prisma.SortOrder
   initializedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -520,6 +542,7 @@ export type CompanyFinanceProfileCreateWithoutCompanyInput = {
   accountingMode?: string
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: number
+  functionalCurrencyCode?: string
   initializedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -531,6 +554,7 @@ export type CompanyFinanceProfileUncheckedCreateWithoutCompanyInput = {
   accountingMode?: string
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: number
+  functionalCurrencyCode?: string
   initializedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -558,6 +582,7 @@ export type CompanyFinanceProfileUpdateWithoutCompanyInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -569,6 +594,7 @@ export type CompanyFinanceProfileUncheckedUpdateWithoutCompanyInput = {
   accountingMode?: Prisma.StringFieldUpdateOperationsInput | string
   vatAccountingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  functionalCurrencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   initializedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -584,6 +610,7 @@ export type CompanyFinanceProfileSelect<ExtArgs extends runtime.Types.Extensions
   accountingMode?: boolean
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: boolean
+  functionalCurrencyCode?: boolean
   initializedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -598,6 +625,7 @@ export type CompanyFinanceProfileSelectCreateManyAndReturn<ExtArgs extends runti
   accountingMode?: boolean
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: boolean
+  functionalCurrencyCode?: boolean
   initializedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -612,6 +640,7 @@ export type CompanyFinanceProfileSelectUpdateManyAndReturn<ExtArgs extends runti
   accountingMode?: boolean
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: boolean
+  functionalCurrencyCode?: boolean
   initializedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -626,12 +655,13 @@ export type CompanyFinanceProfileSelectScalar = {
   accountingMode?: boolean
   vatAccountingEnabled?: boolean
   vatRateBasisPoints?: boolean
+  functionalCurrencyCode?: boolean
   initializedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyFinanceProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "baseSeedVersion" | "accountingMode" | "vatAccountingEnabled" | "vatRateBasisPoints" | "initializedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["companyFinanceProfile"]>
+export type CompanyFinanceProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "baseSeedVersion" | "accountingMode" | "vatAccountingEnabled" | "vatRateBasisPoints" | "functionalCurrencyCode" | "initializedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["companyFinanceProfile"]>
 export type CompanyFinanceProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
@@ -655,6 +685,12 @@ export type $CompanyFinanceProfilePayload<ExtArgs extends runtime.Types.Extensio
     accountingMode: string
     vatAccountingEnabled: boolean
     vatRateBasisPoints: number
+    /**
+     * All current finance amounts are implicitly in this single company
+     * currency. Foreign currency, FX revaluation and consolidation are not
+     * supported by the R0-A/R1 reporting policy.
+     */
+    functionalCurrencyCode: string
     initializedAt: Date
     createdAt: Date
     updatedAt: Date
@@ -1089,6 +1125,7 @@ export interface CompanyFinanceProfileFieldRefs {
   readonly accountingMode: Prisma.FieldRef<"CompanyFinanceProfile", 'String'>
   readonly vatAccountingEnabled: Prisma.FieldRef<"CompanyFinanceProfile", 'Boolean'>
   readonly vatRateBasisPoints: Prisma.FieldRef<"CompanyFinanceProfile", 'Int'>
+  readonly functionalCurrencyCode: Prisma.FieldRef<"CompanyFinanceProfile", 'String'>
   readonly initializedAt: Prisma.FieldRef<"CompanyFinanceProfile", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"CompanyFinanceProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CompanyFinanceProfile", 'DateTime'>

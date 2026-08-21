@@ -11,9 +11,11 @@ import {
   IdentityTokenService,
 } from "../identity/identity-token.service.js";
 
-const COMPANY_MANAGER_HR_CAPABILITIES = SYSTEM_ROLE_TEMPLATES.find(
+// System manager roles are a product promise: releases may add a capability,
+// but an existing manager must never lose access until a manual role edit.
+const COMPANY_MANAGER_CAPABILITIES = SYSTEM_ROLE_TEMPLATES.find(
   (role) => role.code === "BASEER_COMPANY_MANAGER",
-)?.permissions.filter((permission) => permission.startsWith("hr.")) ?? [];
+)?.permissions ?? [];
 
 @Injectable()
 export class CompanyAccessService {
@@ -60,11 +62,9 @@ export class CompanyAccessService {
           session.expiresAt <= now
         )
           throw this.unauthorized();
-        // Existing tenants can have a system manager role created before the
-        // HR capability catalogue grew. The paired SQL migration covers normal
-        // deployments; this idempotent guard also repairs a running local
-        // instance before its migration command is available. Custom roles are
-        // deliberately untouched.
+        // The paired SQL migrations cover normal deployments. This idempotent
+        // guard repairs existing system-manager roles as soon as they sign in;
+        // custom roles are deliberately untouched.
         const companyManager = await transaction.role.findFirst({
           where: {
             tenantId: claims.tenantId,
@@ -73,9 +73,9 @@ export class CompanyAccessService {
           },
           select: { id: true },
         });
-        if (companyManager && COMPANY_MANAGER_HR_CAPABILITIES.length) {
+        if (companyManager && COMPANY_MANAGER_CAPABILITIES.length) {
           await transaction.rolePermission.createMany({
-            data: COMPANY_MANAGER_HR_CAPABILITIES.map((permissionCode) => ({
+            data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({
               tenantId: claims.tenantId,
               roleId: companyManager.id,
               permissionCode,

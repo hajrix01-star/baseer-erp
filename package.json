@@ -14,6 +14,12 @@
                     "verify:ai-gate-b-db":  "node scripts/run-ai-gate-b-db-verification.mjs",
                     "verify:finance-gate-b-db":  "node scripts/run-finance-gate-b-db-verification.mjs",
                     "verify:finance-period-race":  "node scripts/run-finance-period-race-verification.mjs",
+                    "verify:reporting-r0-a-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/finance/finance-pnl-mapping.policy-verification.js",
+                    "verify:reporting-r0-b-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/reports/report-run.policy-verification.js",
+                    "verify:personal-cash-performance-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/finance/finance-cash-performance-event.policy-verification.js",
+                    "verify:personal-cash-performance-report-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/reports/personal-cash-performance-report.policy-verification.js",
+                    "verify:ledger-trial-balance-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/reports/ledger-trial-balance.policy-verification.js",
+                    "seed:personal-cash-performance-demo": "node scripts/seed-personal-cash-performance-demo.mjs",
                     "verify:web-budget":  "node scripts/check-web-release-budget.mjs",
                     "check:web-financial-boundaries":  "node scripts/check-web-financial-boundaries.mjs",
                     "check:web-dialog-conventions":  "node scripts/check-web-dialog-conventions.mjs",
@@ -26,6 +32,9 @@
                     "verify:hr-onboarding":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-onboarding-verification.mjs",
                     "verify:hr-financial-integrity":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node apps/api/dist/hr/hr-financial-concurrency.verification.js",
                     "verify:hr-lifecycle":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-lifecycle-verification.mjs",
-                    "verify:hr-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-http-verification.mjs"
+                    "verify:hr-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-http-verification.mjs",
+                    "verify:operations-purchase-cycle": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-purchase-cycle-verification.mjs",
+                    "verify:operations-assets-warranty": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-assets-warranty-verification.mjs",
+                    "seed:operations-demo": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/seed-operations-demo.mjs"
                 }
 }

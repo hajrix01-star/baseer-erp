@@ -7,6 +7,7 @@ import {
   FinanceAccountStatus,
   FinanceAccountType,
   FinanceDailySalesClosingScope,
+  FinanceVaultPaymentMethod,
   FinanceOperationalDayStatus,
   Prisma,
 } from '../generated/prisma/client.js';
@@ -23,7 +24,7 @@ export type ValidatedDailySalesFields = Readonly<{
   businessDate: Date;
   scope: FinanceDailySalesClosingScope;
   customerCount: number;
-  allocations: readonly Readonly<{ vaultId: string; grossAmount: Prisma.Decimal; accountId: string }>[];
+  allocations: readonly Readonly<{ vaultId: string; grossAmount: Prisma.Decimal; accountId: string; paymentMethod: FinanceVaultPaymentMethod }>[];
   cashHandoverAmount: Prisma.Decimal | null;
   cashHandoverVaultId: string | null;
   notes: string | null;
@@ -64,7 +65,7 @@ export class DailySalesPostingService {
       throw new BadRequestException('At least one and at most 25 sales-channel allocations are required.');
     }
     const seenVaults = new Set<string>();
-    const allocations: Array<{ vaultId: string; grossAmount: Prisma.Decimal; accountId: string }> = [];
+    const allocations: Array<{ vaultId: string; grossAmount: Prisma.Decimal; accountId: string; paymentMethod: FinanceVaultPaymentMethod }> = [];
     for (const input of request.allocations) {
       const vaultId = this.requiredText(input.vaultId, 'A sales-channel vault is required.', 36);
       if (seenVaults.has(vaultId)) throw new BadRequestException('Each sales-channel vault may appear only once.');
@@ -75,7 +76,7 @@ export class DailySalesPostingService {
         companyId: context.companyId,
         vaultId,
       });
-      allocations.push({ vaultId: vault.id, grossAmount, accountId: vault.accountId });
+      allocations.push({ vaultId: vault.id, grossAmount, accountId: vault.accountId, paymentMethod: vault.paymentMethod });
     }
     const grossAmount = allocations.reduce((total, allocation) => total.plus(allocation.grossAmount), new Prisma.Decimal(0));
     const cashHandoverAmount = request.cashHandoverAmount === undefined

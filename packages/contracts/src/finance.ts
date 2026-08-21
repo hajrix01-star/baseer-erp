@@ -588,6 +588,7 @@ export const financeConfigurationReceiptSchema = z
 export const financeConfigurationReadinessReceiptSchema = z
   .object({
     companyId: companyIdSchema,
+    requiredBaseSeedVersion: z.number().int().positive(),
     profile: financeConfigurationProfileSchema.nullable(),
     openPeriod: financeConfigurationPeriodSchema.nullable(),
     counts: z.object({ activeVaults: z.number().int().nonnegative(), activeAccounts: z.number().int().nonnegative(), activeCategories: z.number().int().nonnegative(), activeSuppliers: z.number().int().nonnegative() }).strict(),
@@ -741,7 +742,9 @@ export const setOperationalDayRequestSchema = z
   })
   .strict();
 
-const businessMonthsQuerySchema = z
+/** A comma-separated, explicitly selected set of calendar months.  Consumers
+ * must treat this as a union of months, never as the enclosing date range. */
+export const businessMonthsQuerySchema = z
   .string()
   .trim()
   .regex(/^\d{4}-(0[1-9]|1[0-2])(,\d{4}-(0[1-9]|1[0-2]))*$/)
@@ -983,6 +986,7 @@ export const createFinanceOutflowDocumentRequestSchema = z.object({
   supplierInvoiceDate: financeDateSchema.optional(),
   grossAmount: financeAmountSchema,
   isTaxable: z.boolean().default(false),
+  assetWarrantyFollowUp: z.boolean().default(false),
   allocations: z.array(financeOutflowAllocationSchema).max(20).default([]),
   notes: z.string().trim().max(2_000).optional(),
   idempotencyKey: idempotencyKeySchema,
@@ -998,6 +1002,7 @@ export const financeOutflowBatchItemSchema = z.object({
   supplierInvoiceDate: financeDateSchema.optional(),
   grossAmount: financeAmountSchema,
   isTaxable: z.boolean().default(false),
+  assetWarrantyFollowUp: z.boolean().default(false),
   allocations: z.array(financeOutflowAllocationSchema).max(20).default([]),
   notes: z.string().trim().max(2_000).optional(),
 }).strict();
@@ -1262,6 +1267,7 @@ export const treasuryReconciliationsReceiptSchema = z.object({
 export const treasuryWorkspaceQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),
   toBusinessDate: businessDateSchema.optional(),
+  businessMonths: businessMonthsQuerySchema,
   includeArchived: z.coerce.boolean().optional().default(false),
 }).strict();
 const treasuryVaultSchema = z.object({
@@ -1275,14 +1281,16 @@ const treasuryVaultSchema = z.object({
   isSalesChannel: z.boolean(),
   isPaymentDestination: z.boolean(),
   sortOrder: z.number().int().min(0).max(10_000),
-  balanceAsOf: financeAmountSchema,
+  // A cash or bank account can legitimately be overdrawn. Its position is
+  // therefore signed, while movement legs remain non-negative.
+  balanceAsOf: financeSignedAmountSchema,
   inflow: financeAmountSchema,
   outflow: financeAmountSchema,
 }).strict();
 const treasuryGroupSchema = z.object({
   key: z.enum(["COLLECTION_CHANNELS", "OTHER_VAULTS", "ARCHIVED"]),
   count: z.number().int().min(0).max(500),
-  balanceAsOf: financeAmountSchema,
+  balanceAsOf: financeSignedAmountSchema,
   inflow: financeAmountSchema,
   outflow: financeAmountSchema,
 }).strict();
@@ -1292,13 +1300,14 @@ export const treasuryWorkspaceReceiptSchema = z.object({
   asOfBusinessDate: businessDateSchema,
   fromBusinessDate: businessDateSchema.nullable(),
   toBusinessDate: businessDateSchema.nullable(),
-  summary: z.object({ balanceAsOf: financeAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeAmountSchema }).strict(),
+  summary: z.object({ balanceAsOf: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
   groups: z.array(treasuryGroupSchema).length(3),
   vaults: z.array(treasuryVaultSchema).max(500),
 }).strict();
 export const treasuryVaultActivityQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),
   toBusinessDate: businessDateSchema.optional(),
+  businessMonths: businessMonthsQuerySchema,
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
 }).strict();
@@ -1307,7 +1316,7 @@ export const treasuryVaultActivityReceiptSchema = z.object({
   asOfBusinessDate: businessDateSchema,
   fromBusinessDate: businessDateSchema.nullable(),
   toBusinessDate: businessDateSchema.nullable(),
-  summary: z.object({ balanceAsOf: financeAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeAmountSchema }).strict(),
+  summary: z.object({ balanceAsOf: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
   items: z.array(z.object({
     id: z.string().uuid(),
     journalEntryId: z.string().uuid(),
@@ -1445,11 +1454,13 @@ const financeAccountStatusSchema = z.enum(["ACTIVE", "ARCHIVED"]);
 export const financeAccountsWorkspaceQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),
   toBusinessDate: businessDateSchema.optional(),
+  businessMonths: businessMonthsQuerySchema,
   q: z.string().trim().min(1).max(160).optional(),
 }).strict();
 export const financeAccountMovementQuerySchema = z.object({
   fromBusinessDate: businessDateSchema.optional(),
   toBusinessDate: businessDateSchema.optional(),
+  businessMonths: businessMonthsQuerySchema,
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
 }).strict();

@@ -23,6 +23,9 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DatabaseService } from '../database/database.service.js';
 import {
   FinanceAccountStatus,
+  FinanceCashPerformanceDirection,
+  FinanceCashPerformanceEventKind,
+  FinanceCategoryKind,
   HrEmployeeAdministrativeDeductionActionType,
   HrEmployeeAdministrativeDeductionStatus,
   HrEmployeeAdvanceSettlementSource,
@@ -39,6 +42,7 @@ import {
 } from '../generated/prisma/client.js';
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { FinanceFoundationService } from '../finance/finance-foundation.service.js';
+import { FinanceCashPerformanceEventService } from '../finance/finance-cash-performance-event.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
 import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
@@ -91,6 +95,7 @@ export class HrPayrollService {
     private readonly vaults: FinanceVaultService,
     private readonly journals: JournalPostingService,
     private readonly foundation: FinanceFoundationService,
+    private readonly cashEvents: FinanceCashPerformanceEventService,
   ) {}
 
   async listCompensationPolicies(context: TrustedCompanyActorContext) {
@@ -694,6 +699,20 @@ export class HrPayrollService {
       const paymentId = randomUUID();
       await tx.hrPayrollPayment.create({ data: { id: paymentId, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: run.id, paymentNumber, businessDate: input.businessDate, amount: paymentAmount, journalEntryId: journal.journalEntryId, createdByUserId: context.actorUserId } });
       await tx.hrPayrollPaymentAllocation.createMany({ data: allocations.map((allocation) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, payrollPaymentId: paymentId, vaultId: allocation.vaultId, paymentMethod: allocation.paymentMethod, amount: allocation.amount })) });
+      await this.cashEvents.recordInTransaction(tx, context, {
+        kind: FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT,
+        direction: FinanceCashPerformanceDirection.OUTFLOW,
+        businessDate: input.businessDate,
+        grossAmount: paymentAmount,
+        netAmount: paymentAmount,
+        vatAmount: '0.0000',
+        sourceType: 'hr_payroll_payment',
+        sourceId: paymentId,
+        sourceJournalEntryId: journal.journalEntryId,
+        ledgerRevision: journal.ledgerRevision,
+        category: { code: 'PAYROLL', nameAr: 'الرواتب المدفوعة', nameEn: 'Paid payroll', kind: FinanceCategoryKind.EXPENSE },
+        destinations: allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.amount.toFixed(4), paymentMethod: allocation.paymentMethod })),
+      });
       let remainder = paymentAmount;
       for (const line of run.lines) {
         if (remainder.lte(0)) break;
@@ -742,6 +761,14 @@ export class HrPayrollService {
       const lineByEmployee = new Map(payment.payrollRun.lines.map((line) => [line.employeeId, line]));
       if (originalMovements.some((movement) => !lineByEmployee.has(movement.employeeId) || lineByEmployee.get(movement.employeeId)!.paidAmount.lt(movement.amount))) throw new ConflictException('A payroll line cannot safely accept this payment reversal.');
       const journal = await this.journals.reverseInTransaction(tx, { ...context, requestId: `payroll-payment-reversal:${payment.id}`, journalEntryId: payment.journalEntryId, businessDate: input.businessDate, reason: input.reason });
+      await this.cashEvents.recordReversalForJournalInTransaction(tx, context, {
+        originalJournalEntryId: payment.journalEntryId,
+        reversalJournalEntryId: journal.journalEntryId,
+        reversalLedgerRevision: journal.ledgerRevision,
+        businessDate: input.businessDate,
+        sourceType: 'hr_payroll_payment_reversal',
+        sourceId: payment.id,
+      });
       for (const movement of originalMovements) {
         const line = lineByEmployee.get(movement.employeeId)!;
         const updatedLine = await tx.hrPayrollLine.updateMany({ where: { id: line.id, tenantId: context.tenantId, companyId: context.companyId, paidAmount: { gte: movement.amount } }, data: { paidAmount: { decrement: movement.amount } } });

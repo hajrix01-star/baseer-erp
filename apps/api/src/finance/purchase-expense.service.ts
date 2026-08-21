@@ -4,10 +4,11 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DocumentSerialService } from '../core-controls/document-serial.service.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDuePaymentStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, FinanceVaultPaymentMethod, HrEmployeeFinancialMovementType, HrEmployeeServiceStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceCashPerformanceDirection, FinanceCashPerformanceEventKind, FinanceCategoryStatus, FinanceOutflowDocumentKind, FinanceOutflowDocumentStatus, FinanceOutflowSettlementKind, FinanceRecurringExpenseStatus, FinanceSupplierDuePaymentStatus, FinanceSupplierDueStatus, FinanceSupplierStatus, FinanceVaultPaymentMethod, HrEmployeeFinancialMovementType, HrEmployeeServiceStatus, Prisma } from '../generated/prisma/client.js';
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { JournalPostingService } from './journal/journal-posting.service.js';
 import { FinanceVaultService } from './finance-vault.service.js';
+import { FinanceCashPerformanceEventService } from './finance-cash-performance-event.service.js';
 import { HrService, type EmployeeServiceCreateInput } from '../hr/hr.service.js';
 import type { RecordHrEmployeeServiceAndIssueCostRequest } from '@baseer-erp/contracts';
 
@@ -17,7 +18,7 @@ const REVERSE_DOCUMENT_OPERATION = 'finance.purchase_expense.reverse';
 const RECURRING_PAYMENT_OPERATION = 'finance.recurring_expense.payment.create';
 const RECURRING_PAYMENT_BATCH_OPERATION = 'finance.recurring_expense.payment.batch.create';
 type PaymentAllocation = Readonly<{ vaultId: string; grossAmount: string; paymentMethod?: FinanceVaultPaymentMethod | undefined }>;
-export type PurchaseExpenseRequest = Readonly<{ kind: 'PURCHASE' | 'EXPENSE'; settlementKind: 'PAID' | 'PAYABLE'; categoryId: string; supplierId?: string; supplierInvoiceNumber?: string; supplierInvoiceMissingReason?: string; businessDate: Date; supplierInvoiceDate?: Date; grossAmount: string; isTaxable: boolean; allocations: readonly PaymentAllocation[]; notes?: string }>;
+export type PurchaseExpenseRequest = Readonly<{ kind: 'PURCHASE' | 'EXPENSE'; settlementKind: 'PAID' | 'PAYABLE'; categoryId: string; supplierId?: string; supplierInvoiceNumber?: string; supplierInvoiceMissingReason?: string; businessDate: Date; supplierInvoiceDate?: Date; grossAmount: string; isTaxable: boolean; assetWarrantyFollowUp?: boolean; allocations: readonly PaymentAllocation[]; notes?: string }>;
 export type PurchaseExpenseReceipt = Readonly<{ documentId: string; documentNumber: string; journalEntryId: string; kind: FinanceOutflowDocumentKind; settlementKind: FinanceOutflowSettlementKind; status: FinanceOutflowDocumentStatus; grossAmount: string; netAmount: string; vatAmount: string; supplierDueId: string | null }>;
 export type PurchaseExpenseBatchRequest = Readonly<{ businessDate: Date; notes?: string; items: readonly Omit<PurchaseExpenseRequest, 'businessDate'>[] }>;
 export type PurchaseExpenseBatchReceipt = Readonly<{ batchId: string; batchNumber: string; businessDate: Date; documentCount: number; grossAmount: string; netAmount: string; vatAmount: string; documents: readonly PurchaseExpenseReceipt[] }>;
@@ -37,7 +38,7 @@ export type ReverseEmployeeServiceCostReceipt = Readonly<{ serviceId: string; do
 
 @Injectable()
 export class PurchaseExpenseService {
-  constructor(private readonly db: DatabaseService, private readonly idem: IdempotencyService, private readonly serials: DocumentSerialService, private readonly journals: JournalPostingService, private readonly vaults: FinanceVaultService, private readonly dates: BusinessDateService, private readonly hr: HrService) {}
+  constructor(private readonly db: DatabaseService, private readonly idem: IdempotencyService, private readonly serials: DocumentSerialService, private readonly journals: JournalPostingService, private readonly vaults: FinanceVaultService, private readonly dates: BusinessDateService, private readonly hr: HrService, private readonly cashEvents: FinanceCashPerformanceEventService) {}
 
   async create(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: PurchaseExpenseRequest }): Promise<PurchaseExpenseReceipt> {
     return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
@@ -128,6 +129,11 @@ export class PurchaseExpenseService {
       }
       const requestId = `purchase-expense-reversal:${document.id}`;
       const journal = await this.journals.reverseInTransaction(tx, { ...input.context, requestId, journalEntryId: document.journalEntryId, businessDate: request.businessDate, reason: request.reason });
+      await this.cashEvents.recordReversalForJournalInTransaction(tx, input.context, {
+        originalJournalEntryId: document.journalEntryId, reversalJournalEntryId: journal.journalEntryId,
+        reversalLedgerRevision: journal.ledgerRevision, businessDate: request.businessDate,
+        sourceType: 'finance_outflow_document_reversal', sourceId: document.id,
+      });
       const cancelled = await tx.financeOutflowDocument.updateMany({
         where: { id: document.id, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceOutflowDocumentStatus.POSTED },
         data: { status: FinanceOutflowDocumentStatus.CANCELLED },
@@ -208,6 +214,11 @@ export class PurchaseExpenseService {
       if (document.createdByUserId === input.context.actorUserId) throw new ConflictException('The employee-service cost issuer cannot reverse the same cost.');
       if (request.businessDate < document.businessDate) throw new BadRequestException('The employee-service cost reversal cannot predate the issued cost.');
       const journal = await this.journals.reverseInTransaction(tx, { ...input.context, requestId: `hr-employee-service-cost-reversal:${service.id}`, journalEntryId: document.journalEntryId, businessDate: request.businessDate, reason: request.reason });
+      await this.cashEvents.recordReversalForJournalInTransaction(tx, input.context, {
+        originalJournalEntryId: document.journalEntryId, reversalJournalEntryId: journal.journalEntryId,
+        reversalLedgerRevision: journal.ledgerRevision, businessDate: request.businessDate,
+        sourceType: 'finance_outflow_document_reversal', sourceId: document.id,
+      });
       const cancelledDocument = await tx.financeOutflowDocument.updateMany({ where: { id: document.id, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceOutflowDocumentStatus.POSTED }, data: { status: FinanceOutflowDocumentStatus.CANCELLED } });
       if (cancelledDocument.count !== 1) throw new ConflictException('The employee-service cost changed while its reversal was being recorded.');
       await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, employeeId: service.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.SERVICE_COST, businessDate: request.businessDate, amount: document.grossAmount.negated(), sourceReference: `${document.documentNumber}-REV`, description: `Employee-service cost reversed: ${request.reason}` } });
@@ -422,7 +433,17 @@ export class PurchaseExpenseService {
     } else { lines.push({ accountId: await this.account(tx, context, 'SUPPLIER_DUES'), creditAmount: gross.toFixed(4), description: documentNumber }); supplierDueId = randomUUID(); }
     const journal = await this.journals.postInTransaction(tx, { ...context, requestId, sourceType: 'finance_outflow_document', sourceReference: documentNumber, businessDate: request.businessDate, description: request.notes ?? documentNumber, lines });
     const documentId = randomUUID();
-    await tx.financeOutflowDocument.create({ data: { id: documentId, tenantId: context.tenantId, companyId: context.companyId, ...(batchId ? { batchId } : {}), ...(recurring ? { recurringExpenseProfileId: recurring.profileId, coverageYear: recurring.coverageYear, coverageStartMonth: recurring.coverageStartMonth, coverageMonths: recurring.coverageMonths } : {}), kind: request.kind, settlementKind: request.settlementKind, documentNumber, supplierId: request.supplierId ?? null, categoryId: request.categoryId, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceNumberNormalized: request.supplierInvoiceNumber?.toLocaleUpperCase('en-US') ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate, supplierInvoiceDate: request.supplierInvoiceDate ?? null, grossAmount: gross, netAmount: net, vatAmount: vat, vatRateBasisPoints: rate, notes: request.notes ?? null, journalEntryId: journal.journalEntryId, createdByUserId: context.actorUserId } });
+    await tx.financeOutflowDocument.create({ data: { id: documentId, tenantId: context.tenantId, companyId: context.companyId, ...(batchId ? { batchId } : {}), ...(recurring ? { recurringExpenseProfileId: recurring.profileId, coverageYear: recurring.coverageYear, coverageStartMonth: recurring.coverageStartMonth, coverageMonths: recurring.coverageMonths } : {}), kind: request.kind, settlementKind: request.settlementKind, documentNumber, supplierId: request.supplierId ?? null, categoryId: request.categoryId, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceNumberNormalized: request.supplierInvoiceNumber?.toLocaleUpperCase('en-US') ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate, supplierInvoiceDate: request.supplierInvoiceDate ?? null, grossAmount: gross, netAmount: net, vatAmount: vat, vatRateBasisPoints: rate, assetWarrantyFollowUp: request.assetWarrantyFollowUp ?? false, notes: request.notes ?? null, journalEntryId: journal.journalEntryId, createdByUserId: context.actorUserId } });
+    if (request.settlementKind === 'PAID') {
+      await this.cashEvents.recordInTransaction(tx, context, {
+        kind: request.kind === 'PURCHASE' ? FinanceCashPerformanceEventKind.PURCHASE_PAYMENT : FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT,
+        direction: FinanceCashPerformanceDirection.OUTFLOW, businessDate: request.businessDate,
+        grossAmount: gross, netAmount: net, vatAmount: vat,
+        sourceType: 'finance_outflow_document', sourceId: documentId, sourceJournalEntryId: journal.journalEntryId, ledgerRevision: journal.ledgerRevision,
+        category: { code: category.code, nameAr: category.nameAr, nameEn: category.nameEn, kind: category.kind },
+        destinations: allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.grossAmount, paymentMethod: allocation.paymentMethod })),
+      });
+    }
     if (allocations.length) await tx.financeOutflowAllocation.createMany({ data: allocations.map((allocation) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, documentId, vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod })) });
     if (supplierDueId) await tx.financeSupplierDue.create({ data: { id: supplierDueId, tenantId: context.tenantId, companyId: context.companyId, supplierId: request.supplierId!, categoryId: request.categoryId, sourceDocumentNumber: documentNumber, originalBusinessDate: request.businessDate, originalAmount: gross, remainingAmount: gross, status: FinanceSupplierDueStatus.OPEN, notes: request.notes ?? null, journalEntryId: journal.journalEntryId } });
     const receipt: PurchaseExpenseReceipt = { documentId, documentNumber, journalEntryId: journal.journalEntryId, kind: request.kind, settlementKind: request.settlementKind, status: FinanceOutflowDocumentStatus.POSTED, grossAmount: gross.toFixed(4), netAmount: net.toFixed(4), vatAmount: vat.toFixed(4), supplierDueId };
@@ -443,7 +464,7 @@ export class PurchaseExpenseService {
   private normaliseBatch(request: PurchaseExpenseBatchRequest): PurchaseExpenseBatchRequest { if (!request.items.length || request.items.length > 25) throw new BadRequestException('A batch must contain from 1 to 25 invoices.'); const items = request.items.map((item) => { const { businessDate: _businessDate, ...normalised } = this.normalise({ ...item, businessDate: request.businessDate }); return normalised; }); const notes = request.notes?.trim(); return { businessDate: request.businessDate, items, ...(notes ? { notes } : {}) }; }
   private storeBatchReceipt(receipt: PurchaseExpenseBatchReceipt): StoredPurchaseExpenseBatchReceipt { return { ...receipt, businessDate: receipt.businessDate.toISOString() }; }
   private restoreBatchReceipt(value: unknown): PurchaseExpenseBatchReceipt { const stored = value as StoredPurchaseExpenseBatchReceipt; return { ...stored, businessDate: new Date(stored.businessDate) }; }
-  private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount, paymentMethod: item.paymentMethod ?? null })), notes: request.notes ?? null } as const; }
+  private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, assetWarrantyFollowUp: request.assetWarrantyFollowUp ?? false, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount, paymentMethod: item.paymentMethod ?? null })), notes: request.notes ?? null } as const; }
   private batchPayload(request: PurchaseExpenseBatchRequest) { return { businessDate: request.businessDate.toISOString(), notes: request.notes ?? null, items: request.items.map((item) => this.payload({ ...item, businessDate: request.businessDate })) } as const; }
   private employeeServiceCostPayload(request: IssueEmployeeServiceCostRequest) { return { serviceId: request.serviceId, businessDate: request.businessDate.toISOString(), grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod ?? null })), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }
   private recordedEmployeeServicePayload(request: RecordEmployeeServiceAndIssueCostRequest) { return { employeeId: request.employeeId, serviceType: request.serviceType, referenceNumber: request.referenceNumber ?? null, issueDate: request.issueDate?.toISOString() ?? null, expiryDate: request.expiryDate?.toISOString() ?? null, visaDurationMonths: request.visaDurationMonths ?? null, supplierId: request.supplierId, categoryId: request.categoryId, ...this.employeeServiceCostPayload({ serviceId: 'recorded-service', businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations, supplierInvoiceNumber: request.supplierInvoiceNumber, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason, supplierInvoiceDate: request.supplierInvoiceDate, notes: request.notes }) } as const; }

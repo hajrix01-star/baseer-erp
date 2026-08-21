@@ -773,10 +773,6 @@ export type EnumFinanceSupplierDuePaymentStatusFieldUpdateOperationsInput = {
   set?: $Enums.FinanceSupplierDuePaymentStatus
 }
 
-export type NullableEnumFinanceCategoryKindFieldUpdateOperationsInput = {
-  set?: $Enums.FinanceCategoryKind | null
-}
-
 export type FinanceSupplierDuePaymentUpdateOneWithoutReversalPaymentNestedInput = {
   create?: Prisma.XOR<Prisma.FinanceSupplierDuePaymentCreateWithoutReversalPaymentInput, Prisma.FinanceSupplierDuePaymentUncheckedCreateWithoutReversalPaymentInput>
   connectOrCreate?: Prisma.FinanceSupplierDuePaymentCreateOrConnectWithoutReversalPaymentInput

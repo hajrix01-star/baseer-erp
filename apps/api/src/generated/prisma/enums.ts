@@ -181,6 +181,80 @@ export const FinanceJournalEntryStatus = {
 export type FinanceJournalEntryStatus = (typeof FinanceJournalEntryStatus)[keyof typeof FinanceJournalEntryStatus]
 
 
+export const FinancePnlMappingVersionStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  SUPERSEDED: 'SUPERSEDED'
+} as const
+
+export type FinancePnlMappingVersionStatus = (typeof FinancePnlMappingVersionStatus)[keyof typeof FinancePnlMappingVersionStatus]
+
+
+export const FinancePnlPresentationNature = {
+  REVENUE: 'REVENUE',
+  COST_OF_SALES: 'COST_OF_SALES',
+  OPERATING_INCOME: 'OPERATING_INCOME',
+  OPERATING_EXPENSE: 'OPERATING_EXPENSE',
+  INVESTING: 'INVESTING',
+  FINANCING: 'FINANCING',
+  INCOME_TAX: 'INCOME_TAX',
+  DISCONTINUED_OPERATIONS: 'DISCONTINUED_OPERATIONS'
+} as const
+
+export type FinancePnlPresentationNature = (typeof FinancePnlPresentationNature)[keyof typeof FinancePnlPresentationNature]
+
+
+export const FinancePnlPresentationSign = {
+  CREDIT_NATURE: 'CREDIT_NATURE',
+  DEBIT_NATURE: 'DEBIT_NATURE'
+} as const
+
+export type FinancePnlPresentationSign = (typeof FinancePnlPresentationSign)[keyof typeof FinancePnlPresentationSign]
+
+
+export const ReportRunStatus = {
+  READY: 'READY',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type ReportRunStatus = (typeof ReportRunStatus)[keyof typeof ReportRunStatus]
+
+
+export const FinanceCashPerformanceEventKind = {
+  SALES_COLLECTION: 'SALES_COLLECTION',
+  PURCHASE_PAYMENT: 'PURCHASE_PAYMENT',
+  OPERATING_EXPENSE_PAYMENT: 'OPERATING_EXPENSE_PAYMENT',
+  VAT_PAYMENT: 'VAT_PAYMENT',
+  VAT_REFUND: 'VAT_REFUND'
+} as const
+
+export type FinanceCashPerformanceEventKind = (typeof FinanceCashPerformanceEventKind)[keyof typeof FinanceCashPerformanceEventKind]
+
+
+export const FinanceCashPerformanceDirection = {
+  INFLOW: 'INFLOW',
+  OUTFLOW: 'OUTFLOW'
+} as const
+
+export type FinanceCashPerformanceDirection = (typeof FinanceCashPerformanceDirection)[keyof typeof FinanceCashPerformanceDirection]
+
+
+export const FinanceVatSettlementKind = {
+  PAYMENT: 'PAYMENT',
+  REFUND: 'REFUND'
+} as const
+
+export type FinanceVatSettlementKind = (typeof FinanceVatSettlementKind)[keyof typeof FinanceVatSettlementKind]
+
+
+export const FinanceVatSettlementStatus = {
+  POSTED: 'POSTED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type FinanceVatSettlementStatus = (typeof FinanceVatSettlementStatus)[keyof typeof FinanceVatSettlementStatus]
+
+
 export const FinanceOperationalDayStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
@@ -548,3 +622,107 @@ export const AiExecutionOutcome = {
 } as const
 
 export type AiExecutionOutcome = (typeof AiExecutionOutcome)[keyof typeof AiExecutionOutcome]
+
+
+export const OperationsUnitDimension = {
+  COUNT: 'COUNT',
+  MASS: 'MASS',
+  VOLUME: 'VOLUME',
+  PACKAGE: 'PACKAGE'
+} as const
+
+export type OperationsUnitDimension = (typeof OperationsUnitDimension)[keyof typeof OperationsUnitDimension]
+
+
+export const OperationsItemKind = {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  MENU_PRODUCT: 'MENU_PRODUCT'
+} as const
+
+export type OperationsItemKind = (typeof OperationsItemKind)[keyof typeof OperationsItemKind]
+
+
+export const OperationsItemStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type OperationsItemStatus = (typeof OperationsItemStatus)[keyof typeof OperationsItemStatus]
+
+
+export const OperationsConversionVersionStatus = {
+  PUBLISHED: 'PUBLISHED',
+  SUPERSEDED: 'SUPERSEDED'
+} as const
+
+export type OperationsConversionVersionStatus = (typeof OperationsConversionVersionStatus)[keyof typeof OperationsConversionVersionStatus]
+
+
+export const OperationsAssetWarrantyStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type OperationsAssetWarrantyStatus = (typeof OperationsAssetWarrantyStatus)[keyof typeof OperationsAssetWarrantyStatus]
+
+
+export const OperationsRecipeVersionStatus = {
+  PUBLISHED: 'PUBLISHED',
+  SUPERSEDED: 'SUPERSEDED'
+} as const
+
+export type OperationsRecipeVersionStatus = (typeof OperationsRecipeVersionStatus)[keyof typeof OperationsRecipeVersionStatus]
+
+
+export const OperationsPurchaseExecutionKind = {
+  LOCAL: 'LOCAL',
+  DELEGATED: 'DELEGATED'
+} as const
+
+export type OperationsPurchaseExecutionKind = (typeof OperationsPurchaseExecutionKind)[keyof typeof OperationsPurchaseExecutionKind]
+
+
+export const OperationsPurchasePaymentChannel = {
+  CUSTODY: 'CUSTODY',
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER'
+} as const
+
+export type OperationsPurchasePaymentChannel = (typeof OperationsPurchasePaymentChannel)[keyof typeof OperationsPurchasePaymentChannel]
+
+
+export const OperationsPurchaseRequestStatus = {
+  PENDING_RECEIPT: 'PENDING_RECEIPT',
+  PARTIALLY_RECEIVED: 'PARTIALLY_RECEIVED',
+  RECEIVED: 'RECEIVED',
+  CANCELLED: 'CANCELLED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type OperationsPurchaseRequestStatus = (typeof OperationsPurchaseRequestStatus)[keyof typeof OperationsPurchaseRequestStatus]
+
+
+export const OperationsPurchaseReceiptStatus = {
+  POSTED: 'POSTED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type OperationsPurchaseReceiptStatus = (typeof OperationsPurchaseReceiptStatus)[keyof typeof OperationsPurchaseReceiptStatus]
+
+
+export const OperationsCustodyEventType = {
+  FUNDING: 'FUNDING',
+  PURCHASE: 'PURCHASE',
+  RETURN: 'RETURN',
+  REVERSAL: 'REVERSAL'
+} as const
+
+export type OperationsCustodyEventType = (typeof OperationsCustodyEventType)[keyof typeof OperationsCustodyEventType]
+
+
+export const OperationsInventoryMovementType = {
+  RECEIPT: 'RECEIPT',
+  REVERSAL: 'REVERSAL'
+} as const
+
+export type OperationsInventoryMovementType = (typeof OperationsInventoryMovementType)[keyof typeof OperationsInventoryMovementType]

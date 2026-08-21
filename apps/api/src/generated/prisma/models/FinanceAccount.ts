@@ -242,6 +242,7 @@ export type FinanceAccountWhereInput = {
   categories?: Prisma.FinanceCategoryListRelationFilter
   vaults?: Prisma.FinanceVaultListRelationFilter
   journalLines?: Prisma.FinanceJournalLineListRelationFilter
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingListRelationFilter
 }
 
 export type FinanceAccountOrderByWithRelationInput = {
@@ -261,6 +262,7 @@ export type FinanceAccountOrderByWithRelationInput = {
   categories?: Prisma.FinanceCategoryOrderByRelationAggregateInput
   vaults?: Prisma.FinanceVaultOrderByRelationAggregateInput
   journalLines?: Prisma.FinanceJournalLineOrderByRelationAggregateInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingOrderByRelationAggregateInput
 }
 
 export type FinanceAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -286,6 +288,7 @@ export type FinanceAccountWhereUniqueInput = Prisma.AtLeast<{
   categories?: Prisma.FinanceCategoryListRelationFilter
   vaults?: Prisma.FinanceVaultListRelationFilter
   journalLines?: Prisma.FinanceJournalLineListRelationFilter
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingListRelationFilter
 }, "id" | "id_tenantId_companyId" | "companyId_code" | "companyId_systemKey">
 
 export type FinanceAccountOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type FinanceAccountCreateInput = {
   categories?: Prisma.FinanceCategoryCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUncheckedCreateInput = {
@@ -357,6 +361,7 @@ export type FinanceAccountUncheckedCreateInput = {
   categories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUpdateInput = {
@@ -374,6 +379,7 @@ export type FinanceAccountUpdateInput = {
   categories?: Prisma.FinanceCategoryUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateInput = {
@@ -392,6 +398,7 @@ export type FinanceAccountUncheckedUpdateInput = {
   categories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountCreateManyInput = {
@@ -508,14 +515,14 @@ export type FinanceAccountMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type FinanceAccountNullableScalarRelationFilter = {
-  is?: Prisma.FinanceAccountWhereInput | null
-  isNot?: Prisma.FinanceAccountWhereInput | null
-}
-
 export type FinanceAccountScalarRelationFilter = {
   is?: Prisma.FinanceAccountWhereInput
   isNot?: Prisma.FinanceAccountWhereInput
+}
+
+export type FinanceAccountNullableScalarRelationFilter = {
+  is?: Prisma.FinanceAccountWhereInput | null
+  isNot?: Prisma.FinanceAccountWhereInput | null
 }
 
 export type FinanceAccountCreateNestedManyWithoutCompanyInput = {
@@ -566,6 +573,20 @@ export type EnumFinanceAccountTypeFieldUpdateOperationsInput = {
 
 export type EnumFinanceAccountStatusFieldUpdateOperationsInput = {
   set?: $Enums.FinanceAccountStatus
+}
+
+export type FinanceAccountCreateNestedOneWithoutPnlAccountMappingsInput = {
+  create?: Prisma.XOR<Prisma.FinanceAccountCreateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedCreateWithoutPnlAccountMappingsInput>
+  connectOrCreate?: Prisma.FinanceAccountCreateOrConnectWithoutPnlAccountMappingsInput
+  connect?: Prisma.FinanceAccountWhereUniqueInput
+}
+
+export type FinanceAccountUpdateOneRequiredWithoutPnlAccountMappingsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceAccountCreateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedCreateWithoutPnlAccountMappingsInput>
+  connectOrCreate?: Prisma.FinanceAccountCreateOrConnectWithoutPnlAccountMappingsInput
+  upsert?: Prisma.FinanceAccountUpsertWithoutPnlAccountMappingsInput
+  connect?: Prisma.FinanceAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceAccountUpdateToOneWithWhereWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUpdateWithoutPnlAccountMappingsInput>, Prisma.FinanceAccountUncheckedUpdateWithoutPnlAccountMappingsInput>
 }
 
 export type FinanceAccountCreateNestedOneWithoutCategoriesInput = {
@@ -626,6 +647,7 @@ export type FinanceAccountCreateWithoutCompanyInput = {
   categories?: Prisma.FinanceCategoryCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUncheckedCreateWithoutCompanyInput = {
@@ -642,6 +664,7 @@ export type FinanceAccountUncheckedCreateWithoutCompanyInput = {
   categories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountCreateOrConnectWithoutCompanyInput = {
@@ -688,6 +711,92 @@ export type FinanceAccountScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceAccount"> | Date | string
 }
 
+export type FinanceAccountCreateWithoutPnlAccountMappingsInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceAccountType
+  systemKey?: string | null
+  isSystem?: boolean
+  status?: $Enums.FinanceAccountStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceAccountsInput
+  categories?: Prisma.FinanceCategoryCreateNestedManyWithoutAccountInput
+  vaults?: Prisma.FinanceVaultCreateNestedManyWithoutAccountInput
+  journalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutAccountInput
+}
+
+export type FinanceAccountUncheckedCreateWithoutPnlAccountMappingsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  code: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceAccountType
+  systemKey?: string | null
+  isSystem?: boolean
+  status?: $Enums.FinanceAccountStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutAccountInput
+  vaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutAccountInput
+  journalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type FinanceAccountCreateOrConnectWithoutPnlAccountMappingsInput = {
+  where: Prisma.FinanceAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceAccountCreateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedCreateWithoutPnlAccountMappingsInput>
+}
+
+export type FinanceAccountUpsertWithoutPnlAccountMappingsInput = {
+  update: Prisma.XOR<Prisma.FinanceAccountUpdateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedUpdateWithoutPnlAccountMappingsInput>
+  create: Prisma.XOR<Prisma.FinanceAccountCreateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedCreateWithoutPnlAccountMappingsInput>
+  where?: Prisma.FinanceAccountWhereInput
+}
+
+export type FinanceAccountUpdateToOneWithWhereWithoutPnlAccountMappingsInput = {
+  where?: Prisma.FinanceAccountWhereInput
+  data: Prisma.XOR<Prisma.FinanceAccountUpdateWithoutPnlAccountMappingsInput, Prisma.FinanceAccountUncheckedUpdateWithoutPnlAccountMappingsInput>
+}
+
+export type FinanceAccountUpdateWithoutPnlAccountMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceAccountTypeFieldUpdateOperationsInput | $Enums.FinanceAccountType
+  systemKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceAccountStatusFieldUpdateOperationsInput | $Enums.FinanceAccountStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceAccountsNestedInput
+  categories?: Prisma.FinanceCategoryUpdateManyWithoutAccountNestedInput
+  vaults?: Prisma.FinanceVaultUpdateManyWithoutAccountNestedInput
+  journalLines?: Prisma.FinanceJournalLineUpdateManyWithoutAccountNestedInput
+}
+
+export type FinanceAccountUncheckedUpdateWithoutPnlAccountMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceAccountTypeFieldUpdateOperationsInput | $Enums.FinanceAccountType
+  systemKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceAccountStatusFieldUpdateOperationsInput | $Enums.FinanceAccountStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutAccountNestedInput
+  vaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput
+  journalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutAccountNestedInput
+}
+
 export type FinanceAccountCreateWithoutCategoriesInput = {
   id?: string
   code: string
@@ -702,6 +811,7 @@ export type FinanceAccountCreateWithoutCategoriesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceAccountsInput
   vaults?: Prisma.FinanceVaultCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUncheckedCreateWithoutCategoriesInput = {
@@ -719,6 +829,7 @@ export type FinanceAccountUncheckedCreateWithoutCategoriesInput = {
   updatedAt?: Date | string
   vaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountCreateOrConnectWithoutCategoriesInput = {
@@ -751,6 +862,7 @@ export type FinanceAccountUpdateWithoutCategoriesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceAccountsNestedInput
   vaults?: Prisma.FinanceVaultUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateWithoutCategoriesInput = {
@@ -768,6 +880,7 @@ export type FinanceAccountUncheckedUpdateWithoutCategoriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountCreateWithoutVaultsInput = {
@@ -784,6 +897,7 @@ export type FinanceAccountCreateWithoutVaultsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceAccountsInput
   categories?: Prisma.FinanceCategoryCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUncheckedCreateWithoutVaultsInput = {
@@ -801,6 +915,7 @@ export type FinanceAccountUncheckedCreateWithoutVaultsInput = {
   updatedAt?: Date | string
   categories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutAccountInput
   journalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountCreateOrConnectWithoutVaultsInput = {
@@ -833,6 +948,7 @@ export type FinanceAccountUpdateWithoutVaultsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceAccountsNestedInput
   categories?: Prisma.FinanceCategoryUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateWithoutVaultsInput = {
@@ -850,6 +966,7 @@ export type FinanceAccountUncheckedUpdateWithoutVaultsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountCreateWithoutJournalLinesInput = {
@@ -866,6 +983,7 @@ export type FinanceAccountCreateWithoutJournalLinesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceAccountsInput
   categories?: Prisma.FinanceCategoryCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountUncheckedCreateWithoutJournalLinesInput = {
@@ -883,6 +1001,7 @@ export type FinanceAccountUncheckedCreateWithoutJournalLinesInput = {
   updatedAt?: Date | string
   categories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutAccountInput
   vaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutAccountInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinanceAccountCreateOrConnectWithoutJournalLinesInput = {
@@ -915,6 +1034,7 @@ export type FinanceAccountUpdateWithoutJournalLinesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceAccountsNestedInput
   categories?: Prisma.FinanceCategoryUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateWithoutJournalLinesInput = {
@@ -932,6 +1052,7 @@ export type FinanceAccountUncheckedUpdateWithoutJournalLinesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountCreateManyCompanyInput = {
@@ -961,6 +1082,7 @@ export type FinanceAccountUpdateWithoutCompanyInput = {
   categories?: Prisma.FinanceCategoryUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateWithoutCompanyInput = {
@@ -977,6 +1099,7 @@ export type FinanceAccountUncheckedUpdateWithoutCompanyInput = {
   categories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutAccountNestedInput
   vaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput
   journalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutAccountNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinanceAccountUncheckedUpdateManyWithoutCompanyInput = {
@@ -1001,12 +1124,14 @@ export type FinanceAccountCountOutputType = {
   categories: number
   vaults: number
   journalLines: number
+  pnlAccountMappings: number
 }
 
 export type FinanceAccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | FinanceAccountCountOutputTypeCountCategoriesArgs
   vaults?: boolean | FinanceAccountCountOutputTypeCountVaultsArgs
   journalLines?: boolean | FinanceAccountCountOutputTypeCountJournalLinesArgs
+  pnlAccountMappings?: boolean | FinanceAccountCountOutputTypeCountPnlAccountMappingsArgs
 }
 
 /**
@@ -1040,6 +1165,13 @@ export type FinanceAccountCountOutputTypeCountJournalLinesArgs<ExtArgs extends r
   where?: Prisma.FinanceJournalLineWhereInput
 }
 
+/**
+ * FinanceAccountCountOutputType without action
+ */
+export type FinanceAccountCountOutputTypeCountPnlAccountMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinancePnlAccountMappingWhereInput
+}
+
 
 export type FinanceAccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1058,6 +1190,7 @@ export type FinanceAccountSelect<ExtArgs extends runtime.Types.Extensions.Intern
   categories?: boolean | Prisma.FinanceAccount$categoriesArgs<ExtArgs>
   vaults?: boolean | Prisma.FinanceAccount$vaultsArgs<ExtArgs>
   journalLines?: boolean | Prisma.FinanceAccount$journalLinesArgs<ExtArgs>
+  pnlAccountMappings?: boolean | Prisma.FinanceAccount$pnlAccountMappingsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceAccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeAccount"]>
 
@@ -1114,6 +1247,7 @@ export type FinanceAccountInclude<ExtArgs extends runtime.Types.Extensions.Inter
   categories?: boolean | Prisma.FinanceAccount$categoriesArgs<ExtArgs>
   vaults?: boolean | Prisma.FinanceAccount$vaultsArgs<ExtArgs>
   journalLines?: boolean | Prisma.FinanceAccount$journalLinesArgs<ExtArgs>
+  pnlAccountMappings?: boolean | Prisma.FinanceAccount$pnlAccountMappingsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceAccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1130,6 +1264,7 @@ export type $FinanceAccountPayload<ExtArgs extends runtime.Types.Extensions.Inte
     categories: Prisma.$FinanceCategoryPayload<ExtArgs>[]
     vaults: Prisma.$FinanceVaultPayload<ExtArgs>[]
     journalLines: Prisma.$FinanceJournalLinePayload<ExtArgs>[]
+    pnlAccountMappings: Prisma.$FinancePnlAccountMappingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1542,6 +1677,7 @@ export interface Prisma__FinanceAccountClient<T, Null = never, ExtArgs extends r
   categories<T extends Prisma.FinanceAccount$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceAccount$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vaults<T extends Prisma.FinanceAccount$vaultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceAccount$vaultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceVaultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   journalLines<T extends Prisma.FinanceAccount$journalLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceAccount$journalLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceJournalLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pnlAccountMappings<T extends Prisma.FinanceAccount$pnlAccountMappingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceAccount$pnlAccountMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinancePnlAccountMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2053,6 +2189,30 @@ export type FinanceAccount$journalLinesArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.FinanceJournalLineScalarFieldEnum | Prisma.FinanceJournalLineScalarFieldEnum[]
+}
+
+/**
+ * FinanceAccount.pnlAccountMappings
+ */
+export type FinanceAccount$pnlAccountMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinancePnlAccountMapping
+   */
+  select?: Prisma.FinancePnlAccountMappingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinancePnlAccountMapping
+   */
+  omit?: Prisma.FinancePnlAccountMappingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinancePnlAccountMappingInclude<ExtArgs> | null
+  where?: Prisma.FinancePnlAccountMappingWhereInput
+  orderBy?: Prisma.FinancePnlAccountMappingOrderByWithRelationInput | Prisma.FinancePnlAccountMappingOrderByWithRelationInput[]
+  cursor?: Prisma.FinancePnlAccountMappingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinancePnlAccountMappingScalarFieldEnum | Prisma.FinancePnlAccountMappingScalarFieldEnum[]
 }
 
 /**

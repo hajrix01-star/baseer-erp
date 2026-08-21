@@ -8,9 +8,10 @@ import { JournalPostingService } from "./journal/journal-posting.service.js";
 import { FinanceVaultService } from "./finance-vault.service.js";
 import { RequestContext } from "../observability/request-context.js";
 import { BusinessDateService } from "../business-date/business-date.service.js";
+import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
-type TreasuryInput = { from?: Date; to?: Date; includeArchived: boolean };
-type ActivityInput = { from?: Date; to?: Date; cursor?: string; pageSize: number };
+type TreasuryInput = { from?: Date; to?: Date; businessMonths?: readonly string[]; includeArchived: boolean };
+type ActivityInput = { from?: Date; to?: Date; businessMonths?: readonly string[]; cursor?: string; pageSize: number };
 type ReconciliationInput = { vaultId: string; kind: FinanceVaultReconciliationKind; asOfBusinessDate: Date; observedBalance: string; referenceNumber?: string; notes?: string; idempotencyKey: string };
 type ReconciliationsInput = { vaultId?: string; kind?: FinanceVaultReconciliationKind; cursor?: string; pageSize: number };
 type VaultRecord = { id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; paymentMethods: ("CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP")[]; status: FinanceVaultStatus; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number; accountId: string };
@@ -41,7 +42,7 @@ export class TreasuryService {
         orderBy: [{ sortOrder: "asc" }, { nameAr: "asc" }],
         select: { id: true, nameAr: true, nameEn: true, type: true, paymentMethod: true, paymentMethods: true, status: true, isSalesChannel: true, isPaymentDestination: true, sortOrder: true, accountId: true },
       });
-      const amounts = await this.amountsForVaults(tx, context, vaults, input.from, input.to, asOf);
+      const amounts = await this.amountsForVaults(tx, context, vaults, input.from, input.to, asOf, input.businessMonths);
       const mapped = vaults.map((vault) => this.vaultReceipt(vault, amounts.get(vault.id) ?? zeroAmounts()));
       const groupVaults = {
         COLLECTION_CHANNELS: mapped.filter((vault) => vault.status === "ACTIVE" && vault.isSalesChannel),
@@ -82,14 +83,14 @@ export class TreasuryService {
         select: { id: true, nameAr: true, nameEn: true, type: true, paymentMethod: true, paymentMethods: true, status: true, isSalesChannel: true, isPaymentDestination: true, sortOrder: true, accountId: true },
       });
       if (!vault) throw new NotFoundException("The company vault was not found.");
-      const amounts = await this.amountsForVaults(tx, context, [vault], input.from, input.to, asOf);
+      const amounts = await this.amountsForVaults(tx, context, [vault], input.from, input.to, asOf, input.businessMonths);
       const amount = amounts.get(vault.id) ?? zeroAmounts();
-      const periodDate = dateFilter(input.from, input.to);
+      const period = journalPeriodWhere(input.from, input.to, input.businessMonths);
       const baseWhere: Prisma.FinanceJournalLineWhereInput = {
           tenantId: context.tenantId,
           companyId: context.companyId,
           accountId: vault.accountId,
-          ...(periodDate ? { businessDate: periodDate } : {}),
+          ...(period ? { AND: [period] } : {}),
           journalEntry: { is: { status: { in: ["POSTED", "REVERSED"] } } },
         };
       const cursor = input.cursor
@@ -104,11 +105,14 @@ export class TreasuryService {
         where: cursor
           ? {
               ...baseWhere,
-              OR: [
+              AND: [
+                ...(period ? [period] : []),
+                { OR: [
                 { businessDate: { lt: cursor.businessDate } },
                 { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
                 { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
                 { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
+                ] },
               ],
             }
           : baseWhere,
@@ -125,9 +129,28 @@ export class TreasuryService {
               sourceType: true,
               sourceReference: true,
               description: true,
+              hrPayrollAccrual: { select: { runNumber: true } },
+              hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+              hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+              hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+              hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+              hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+              dailySalesClosing: { select: { documentNumber: true } },
+              vatSettlement: { select: { referenceNumber: true } },
+              reversalOfEntry: { select: {
+                sourceType: true, sourceReference: true, description: true,
+                hrPayrollAccrual: { select: { runNumber: true } },
+                hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+                hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+                hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+                hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+                hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+                dailySalesClosing: { select: { documentNumber: true } },
+                vatSettlement: { select: { referenceNumber: true } },
+              } },
               lines: {
                 where: { accountId: { not: vault.accountId } },
-                take: 1,
+                orderBy: { lineNumber: "asc" },
                 select: { account: { select: { nameAr: true, nameEn: true } } },
               },
             },
@@ -136,16 +159,17 @@ export class TreasuryService {
       });
       const hasMore = lines.length > input.pageSize;
       const items = lines.slice(0, input.pageSize).map((line) => {
-        const counterpart = line.journalEntry.lines[0]?.account;
+        const counterparts = line.journalEntry.lines.map((counterpart) => counterpart.account);
+        const display = financeJournalPresentation(line.journalEntry);
         return {
           id: line.id,
           journalEntryId: line.journalEntry.id,
           businessDate: businessDateValue(line.journalEntry.businessDate),
           sourceType: line.journalEntry.sourceType,
-          sourceReference: line.journalEntry.sourceReference,
+          sourceReference: display.reference,
           description: line.journalEntry.description,
-          counterpartNameAr: counterpart?.nameAr ?? null,
-          counterpartNameEn: counterpart?.nameEn ?? null,
+          counterpartNameAr: counterpartLabel(counterparts.map((account) => account.nameAr), "أخرى"),
+          counterpartNameEn: counterpartLabel(counterparts.map((account) => account.nameEn), "others"),
           inflow: line.debitAmount.toFixed(4),
           outflow: line.creditAmount.toFixed(4),
         };
@@ -169,6 +193,7 @@ export class TreasuryService {
     from: Date | undefined,
     to: Date | undefined,
     asOf: Date,
+    businessMonths: readonly string[] | undefined,
   ) {
     const results = new Map<string, Amounts>();
     for (const vault of vaults) results.set(vault.id, zeroAmounts());
@@ -177,6 +202,7 @@ export class TreasuryService {
     const accountToVault = new Map(vaults.map((vault) => [vault.accountId, vault.id]));
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
     const currentMonth = monthStart(asOf);
+    const period = dailyPeriodWhere(from, to, businessMonths);
     const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
       tx.financeAccountMonthlyBalance.groupBy({
         by: ["accountId"],
@@ -190,7 +216,7 @@ export class TreasuryService {
       }),
       tx.financeAccountDailyBalance.groupBy({
         by: ["accountId"],
-        where: { ...common, ...(dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : {}) },
+        where: { ...common, ...(period ? { AND: [period] } : {}) },
         _sum: { debitAmount: true, creditAmount: true },
       }),
     ]);
@@ -372,6 +398,13 @@ export class TreasuryService {
   }
 }
 
+function counterpartLabel(names: readonly string[], remainingLabel: string) {
+  const unique = [...new Set(names.filter(Boolean))];
+  if (!unique.length) return null;
+  if (unique.length <= 2) return unique.join(" + ");
+  return `${unique.slice(0, 2).join(" + ")} + ${unique.length - 2} ${remainingLabel}`;
+}
+
 type TreasuryReconciliationReceipt = { id: string; vaultId: string; vaultNameAr: string; vaultNameEn: string; kind: FinanceVaultReconciliationKind; asOfBusinessDate: string; ledgerBalance: string; observedBalance: string; differenceAmount: string; status: FinanceVaultReconciliationStatus; referenceNumber: string | null; notes: string | null; createdAt: Date };
 type StoredTreasuryReconciliationReceipt = Omit<TreasuryReconciliationReceipt, 'createdAt'> & { createdAt: string };
 
@@ -379,6 +412,9 @@ function dateFilter(from?: Date, to?: Date) {
   if (!from && !to) return undefined;
   return { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) };
 }
+function monthDateRanges(months: readonly string[] | undefined) { return (months ?? []).map((month) => { const [year, number] = month.split("-").map(Number); const start = new Date(Date.UTC(year!, number! - 1, 1)); return { gte: start, lte: new Date(Date.UTC(year!, number!, 0)) }; }); }
+function journalPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceJournalLineWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
+function dailyPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceAccountDailyBalanceWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
 function decimal(value: Prisma.Decimal | number | string | null | undefined) { return new Prisma.Decimal(value === null || value === undefined ? 0 : value); }
 function signedDecimal(value: string, message: string) { let amount: Prisma.Decimal; try { amount = new Prisma.Decimal(value); } catch { throw new BadRequestException(message); } if (!amount.isFinite() || (amount.decimalPlaces() ?? 0) > 4 || amount.abs().gt('99999999999999.9999')) throw new BadRequestException(message); return amount; }
 function storeReconciliation(value: TreasuryReconciliationReceipt): StoredTreasuryReconciliationReceipt { return { ...value, createdAt: value.createdAt.toISOString() }; }

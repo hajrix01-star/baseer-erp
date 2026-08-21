@@ -5,6 +5,7 @@ import { escapeHtml, formatDisplayNumber, formatReportCell } from './formatting.
 export function renderPrintPreviewDocument(snapshot: ReportSnapshot): string {
   if (snapshot.template === 'payroll-signature-slips') return renderPayrollSignatureSlips(snapshot);
   if (snapshot.template === 'payroll-run') return renderPayrollRun(snapshot);
+  if (snapshot.reportCode === 'personal_cash_performance') return renderFinancialPerformance(snapshot);
   const headers = snapshot.columns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join('');
   const rows = snapshot.rows.map((row) => `<tr>${snapshot.columns.map((column) => `<td>${escapeHtml(String(formatReportCell(row[column.key] ?? null, column, snapshot.locale)))}</td>`).join('')}</tr>`).join('');
   const companyNames = snapshot.companies.map((company) => company.name).join(snapshot.locale === 'ar' ? '، ' : ', ');
@@ -37,6 +38,74 @@ export function renderPrintPreviewDocument(snapshot: ReportSnapshot): string {
     .report-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 13px; padding-top: 8px; border-top: 1px solid #d9e4de; color: #63736c; font-size: 9px; }
     @media print { .report-header, .report-meta, tr { break-inside: avoid; } }
   </style></head><body><header class="report-header"><div class="brand">${logo}<div><p class="company-name">${escapeHtml(companyNames)}</p><p class="report-kind">Baseer ERP</p></div></div><h1>${escapeHtml(snapshot.title)}</h1></header><section class="report-meta"><div class="meta-item"><span class="meta-label">${periodLabel}</span><span class="meta-value">${escapeHtml(snapshot.periodLabel)}</span></div><div class="meta-item"><span class="meta-label">${sourceLabel}</span><span class="meta-value">${escapeHtml(snapshot.sourceLabel)}</span></div><div class="meta-item"><span class="meta-label">${generatedLabel}</span><span class="meta-value">${escapeHtml(snapshot.generatedAtRiyadh)}</span></div></section><table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table><footer class="report-footer"><span>${verified}</span><span>${escapeHtml(snapshot.reportCode)} · ${escapeHtml(snapshot.snapshotId)}</span></footer></body></html>`;
+}
+
+/**
+ * The owner's financial-performance report is intentionally compact. It is a
+ * printed form of the report canvas, not a stretched generic spreadsheet.
+ */
+/** A deliberately restrained paper version of the on-screen financial report. */
+function renderFinancialPerformance(snapshot: ReportSnapshot): string {
+  const ar = snapshot.locale === 'ar';
+  const company = snapshot.companies.map((item) => item.name).join(ar ? '، ' : ', ');
+  const itemColumn = snapshot.columns.find((column) => column.key === 'item')?.label ?? (ar ? 'البند' : 'Item');
+  const amountColumn = snapshot.columns.find((column) => column.key === 'amount')?.label ?? (ar ? 'المبلغ' : 'Amount');
+  const rows = snapshot.rows.map((row) => {
+    const kind = row['kind'] === 'total' ? 'total' : row['kind'] === 'section' ? 'section' : 'line';
+    const amount = formatReportCell(row['amount'] ?? null, { key: 'amount', label: amountColumn, kind: 'amount' }, snapshot.locale);
+    return `<div class="report-row ${kind}"><span>${escapeHtml(String(row['item'] ?? ''))}</span><b dir="ltr">${escapeHtml(String(amount))}</b></div>`;
+  }).join('');
+  return `<!doctype html><html lang="${snapshot.locale}" dir="${snapshot.direction}"><head><meta charset="utf-8"><title>${escapeHtml(snapshot.title)}</title><style>
+    @page { size: A4 portrait; margin: 20mm 28mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fff; color: #173428; font-family: Arial, "Noto Sans Arabic", sans-serif; font-size: 11px; line-height: 1.45; }
+    .document { width: 100%; max-width: 136mm; margin: 0 auto; }
+    .header { padding: 0 0 12px; border-bottom: 1px solid #a9c7b8; }
+    .company { margin: 0 0 4px; color: #087c53; font-size: 10px; font-weight: 800; }
+    h1 { margin: 0; color: #163326; font-size: 20px; line-height: 1.25; }
+    .period { margin: 5px 0 0; color: #66776e; font-size: 10px; }
+    .report-columns { display: grid; grid-template-columns: 1fr 31mm; gap: 12px; margin: 16px 0 4px; color: #6b7c72; font-size: 9px; font-weight: 800; }
+    .report-columns span:last-child { text-align: end; }
+    .report-list { border-top: 1px solid #d4e2da; }
+    .report-row { display: grid; grid-template-columns: 1fr 31mm; gap: 12px; align-items: center; min-height: 31px; padding: 7px 9px; border-bottom: 1px solid #dce7e1; }
+    .report-row b { text-align: end; color: #17392b; font-size: 11px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .report-row.section { margin-top: 4px; min-height: 32px; border-bottom: 0; background: #deeee7; color: #075f3f; font-weight: 800; }
+    .report-row.section b { color: #087653; font-weight: 800; }
+    .report-row.total { margin-top: 12px; min-height: 42px; padding: 9px 10px; border-top: 2px solid #087c53; border-bottom: 0; background: #f4faf7; color: #0b5038; font-size: 12px; font-weight: 900; }
+    .report-row.total b { color: #07563a; font-size: 14px; font-weight: 900; }
+    .footer { margin-top: 12px; color: #7a897f; font-size: 8px; text-align: center; }
+    @media print { .report-row { break-inside: avoid; } }
+  </style></head><body><main class="document"><header class="header"><p class="company">${escapeHtml(company)} · Baseer ERP</p><h1>${escapeHtml(snapshot.title)}</h1><p class="period">${escapeHtml(snapshot.periodLabel)}</p></header><div class="report-columns"><span>${escapeHtml(itemColumn)}</span><span>${escapeHtml(amountColumn)}</span></div><section class="report-list">${rows}</section><footer class="footer">${ar ? 'تقرير مُنشأ من بيانات النظام' : 'Report generated from system data'}</footer></main></body></html>`;
+}
+
+function renderFinancialPerformanceLegacy(snapshot: ReportSnapshot): string {
+  const ar = snapshot.locale === 'ar';
+  const company = snapshot.companies.map((item) => item.name).join(ar ? '، ' : ', ');
+  const logo = snapshot.companyLogoDataUri
+    ? `<img class="brand-logo" src="${escapeHtml(snapshot.companyLogoDataUri)}" alt="${escapeHtml(company)}">`
+    : '<div class="brand-mark" aria-hidden="true">B</div>';
+  const itemColumn = snapshot.columns.find((column) => column.key === 'item')?.label ?? (ar ? 'البند' : 'Item');
+  const amountColumn = snapshot.columns.find((column) => column.key === 'amount')?.label ?? (ar ? 'المبلغ' : 'Amount');
+  const rows = snapshot.rows.map((row) => {
+    const kind = row['kind'] === 'total' ? ' total' : row['kind'] === 'section' ? ' section' : '';
+    const amount = formatReportCell(row['amount'] ?? null, { key: 'amount', label: amountColumn, kind: 'amount' }, snapshot.locale);
+    return `<tr class="${kind.trim()}"><th scope="row">${escapeHtml(String(row['item'] ?? ''))}</th><td dir="ltr">${escapeHtml(String(amount))}</td></tr>`;
+  }).join('');
+  const period = ar ? 'الفترة' : 'Period';
+  const generated = ar ? 'وقت الإنشاء' : 'Generated at';
+  const source = ar ? 'أساس التقرير' : 'Report basis';
+  return `<!doctype html><html lang="${snapshot.locale}" dir="${snapshot.direction}"><head><meta charset="utf-8"><title>${escapeHtml(snapshot.title)}</title><style>
+    @page { size: A4 portrait; margin: 13mm 16mm 15mm; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:#fff; color:#173428; font-family:Arial,"Noto Sans Arabic",sans-serif; font-size:11px; line-height:1.45; }
+    .document { width:100%; max-width:182mm; margin:0 auto; }
+    .header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:0 0 10px; border-bottom:2px solid #087c53; }
+    .brand { display:flex; align-items:center; gap:9px; min-width:0; }.brand-logo,.brand-mark { width:34px; height:34px; object-fit:contain; }.brand-mark { display:grid; place-items:center; border-radius:8px; background:#087c53; color:#fff; font-weight:800; font-size:19px; }
+    .company { margin:0; color:#087c53; font-size:12px; font-weight:800; }.system { margin:2px 0 0; color:#708177; font-size:8px; }.title { text-align:end; }.title h1 { margin:0; font-size:19px; line-height:1.2; }.title p { margin:3px 0 0; color:#65766d; font-size:9px; }
+    .meta { display:grid; grid-template-columns:1fr 1fr; gap:6px 10px; margin:11px 0; }.meta div { min-width:0; padding:6px 8px; border:1px solid #d8e4de; border-radius:6px; background:#fafcfb; }.meta .source { grid-column:1 / -1; }.meta span { display:block; margin-bottom:1px; color:#718279; font-size:8px; }.meta b { display:block; color:#254237; font-size:9px; font-weight:700; overflow-wrap:anywhere; }
+    table { width:100%; border-collapse:collapse; border:1px solid #d5e1db; border-radius:7px; overflow:hidden; } thead { display:table-header-group; } th,td { padding:8px 10px; border-bottom:1px solid #dbe6e0; text-align:inherit; } thead th { background:#eef5f1; color:#65766d; font-size:9px; font-weight:800; } thead th:last-child, tbody td { width:30%; text-align:end; font-variant-numeric:tabular-nums; } tbody th { color:#18392c; font-weight:600; } tbody tr.section th, tbody tr.section td { background:#dfeee8; color:#075f3f; font-weight:800; } tbody tr.total th, tbody tr.total td { padding-top:10px; padding-bottom:10px; border-top:2px solid #087c53; border-bottom:0; background:#f5faf7; color:#0b5038; font-size:12px; font-weight:900; } tbody tr:last-child th, tbody tr:last-child td { border-bottom:0; }
+    .footer { display:flex; justify-content:space-between; gap:12px; margin-top:10px; padding-top:7px; border-top:1px solid #d8e4de; color:#718279; font-size:8px; } @media print { .header,.meta,tr { break-inside:avoid; } }
+  </style></head><body><main class="document"><header class="header"><div class="brand">${logo}<div><p class="company">${escapeHtml(company)}</p><p class="system">Baseer ERP</p></div></div><div class="title"><h1>${escapeHtml(snapshot.title)}</h1><p>${escapeHtml(snapshot.periodLabel)}</p></div></header><section class="meta"><div><span>${period}</span><b dir="ltr">${escapeHtml(snapshot.periodLabel)}</b></div><div><span>${generated}</span><b dir="ltr">${escapeHtml(snapshot.generatedAtRiyadh)}</b></div><div class="source"><span>${source}</span><b>${escapeHtml(snapshot.sourceLabel)}</b></div></section><table><thead><tr><th>${escapeHtml(itemColumn)}</th><th>${escapeHtml(amountColumn)}</th></tr></thead><tbody>${rows}</tbody></table><footer class="footer"><span>${ar ? 'مستند خادمي ثابت من لقطة التقرير' : 'Server-built immutable report snapshot'}</span><span dir="ltr">${escapeHtml(snapshot.snapshotId)}</span></footer></main></body></html>`;
 }
 
 /** Payroll is a formal A4 document, not a copy of the application data table. */

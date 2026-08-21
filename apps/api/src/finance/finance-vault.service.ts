@@ -24,7 +24,7 @@ export class FinanceVaultService {
   async assertActiveSalesChannel(
     transaction: Prisma.TransactionClient,
     input: { tenantId: string; companyId: string; vaultId: string },
-  ): Promise<{ id: string; accountId: string }> {
+  ): Promise<{ id: string; accountId: string; paymentMethod: FinanceVaultPaymentMethod }> {
     const vault = await transaction.financeVault.findFirst({
       where: {
         id: input.vaultId,
@@ -34,7 +34,7 @@ export class FinanceVaultService {
         isSalesChannel: true,
         account: { type: FinanceAccountType.ASSET, status: FinanceAccountStatus.ACTIVE },
       },
-      select: { id: true, accountId: true },
+      select: { id: true, accountId: true, paymentMethod: true },
     });
     if (!vault) throw new BadRequestException('The selected sales channel is not active for this company.');
     return vault;

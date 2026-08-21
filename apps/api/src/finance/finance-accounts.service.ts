@@ -5,7 +5,7 @@ import { DatabaseService } from "../database/database.service.js";
 import { BusinessDateService } from "../business-date/business-date.service.js";
 import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
-type AccountInput = { from?: Date; to?: Date; q?: string };
+type AccountInput = { from?: Date; to?: Date; businessMonths?: readonly string[]; q?: string };
 type MovementInput = AccountInput & { cursor?: string; pageSize: number };
 type Amounts = { balanceDebit: Prisma.Decimal; balanceCredit: Prisma.Decimal; periodDebit: Prisma.Decimal; periodCredit: Prisma.Decimal };
 
@@ -33,7 +33,7 @@ export class FinanceAccountsService {
         take: 500,
         select: accountSelect,
       });
-      const amounts = await this.amountsForAccounts(tx, context, accounts.map((account) => account.id), input.from, periodTo, asOf);
+      const amounts = await this.amountsForAccounts(tx, context, accounts.map((account) => account.id), input.from, periodTo, asOf, input.businessMonths);
       return {
         companyId: context.companyId,
         asOfBusinessDate: dateValue(asOf),
@@ -51,13 +51,13 @@ export class FinanceAccountsService {
       const periodTo = input.to ? capAsOf(input.to, asOf) : undefined;
       const account = await tx.financeAccount.findFirst({ where: { id: accountId, tenantId: context.tenantId, companyId: context.companyId }, select: accountSelect });
       if (!account) throw new NotFoundException("The financial account was not found for this company.");
-      const amount = (await this.amountsForAccounts(tx, context, [account.id], input.from, periodTo, asOf)).get(account.id) ?? zeroAmounts();
-      const period = dateFilter(input.from, periodTo);
+      const amount = (await this.amountsForAccounts(tx, context, [account.id], input.from, periodTo, asOf, input.businessMonths)).get(account.id) ?? zeroAmounts();
+      const period = journalPeriodWhere(input.from, periodTo, input.businessMonths);
       const baseWhere: Prisma.FinanceJournalLineWhereInput = {
         tenantId: context.tenantId,
         companyId: context.companyId,
         accountId,
-        ...(period ? { businessDate: period } : {}),
+        ...(period ? { AND: [period] } : {}),
         journalEntry: { is: { status: { in: ["POSTED", "REVERSED"] } } },
       };
       const cursor = input.cursor ? await tx.financeJournalLine.findFirst({
@@ -68,11 +68,14 @@ export class FinanceAccountsService {
       const lines = await tx.financeJournalLine.findMany({
         where: cursor ? {
           ...baseWhere,
-          OR: [
+          AND: [
+            ...(period ? [period] : []),
+            { OR: [
             { businessDate: { lt: cursor.businessDate } },
             { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
             { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: { lt: cursor.lineNumber } },
             { businessDate: cursor.businessDate, createdAt: cursor.createdAt, lineNumber: cursor.lineNumber, id: { lt: cursor.id } },
+            ] },
           ],
         } : baseWhere,
         orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }, { lineNumber: "desc" }, { id: "desc" }],
@@ -129,15 +132,16 @@ export class FinanceAccountsService {
     });
   }
 
-  private async amountsForAccounts(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, accountIds: string[], from: Date | undefined, to: Date | undefined, asOf: Date) {
+  private async amountsForAccounts(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, accountIds: string[], from: Date | undefined, to: Date | undefined, asOf: Date, businessMonths: readonly string[] | undefined) {
     const amounts = new Map<string, Amounts>(accountIds.map((id) => [id, zeroAmounts()]));
     if (!accountIds.length) return amounts;
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
     const currentMonth = monthStart(asOf);
+    const period = dailyPeriodWhere(from, to, businessMonths);
     const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
       tx.financeAccountMonthlyBalance.groupBy({ by: ["accountId"], where: { ...common, monthStart: { lt: currentMonth } }, _sum: { debitAmount: true, creditAmount: true } }),
       tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, businessDate: { gte: currentMonth, lte: asOf } }, _sum: { debitAmount: true, creditAmount: true } }),
-      tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, ...(dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : {}) }, _sum: { debitAmount: true, creditAmount: true } }),
+      tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, ...(period ? { AND: [period] } : {}) }, _sum: { debitAmount: true, creditAmount: true } }),
     ]);
     for (const group of [...monthlyBalanceGroups, ...currentMonthBalanceGroups]) {
       const value = amounts.get(group.accountId); if (!value) continue;
@@ -160,6 +164,8 @@ const journalPresentationSelect = {
   hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
   hrFinalSettlementAccrual: { select: { settlementNumber: true } },
   hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  dailySalesClosing: { select: { documentNumber: true } },
+  vatSettlement: { select: { referenceNumber: true } },
   reversalOfEntry: { select: {
     sourceType: true, sourceReference: true, description: true,
     hrPayrollAccrual: { select: { runNumber: true } },
@@ -168,6 +174,8 @@ const journalPresentationSelect = {
     hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
     hrFinalSettlementAccrual: { select: { settlementNumber: true } },
     hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+    dailySalesClosing: { select: { documentNumber: true } },
+    vatSettlement: { select: { referenceNumber: true } },
   } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 function accountReceipt(account: Prisma.FinanceAccountGetPayload<{ select: typeof accountSelect }>, amounts: Amounts) { return { ...account, ...amountReceipt(amounts) }; }
@@ -175,6 +183,9 @@ function amountReceipt(amounts: Amounts) { return { balanceDebit: amounts.balanc
 function zeroAmounts(): Amounts { return { balanceDebit: new Prisma.Decimal(0), balanceCredit: new Prisma.Decimal(0), periodDebit: new Prisma.Decimal(0), periodCredit: new Prisma.Decimal(0) }; }
 function decimal(value: Prisma.Decimal | number | string | null | undefined) { return new Prisma.Decimal(value ?? 0); }
 function dateFilter(from?: Date, to?: Date) { return !from && !to ? undefined : { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) }; }
+function monthDateRanges(months: readonly string[] | undefined) { return (months ?? []).map((month) => { const [year, number] = month.split("-").map(Number); const start = new Date(Date.UTC(year!, number! - 1, 1)); return { gte: start, lte: new Date(Date.UTC(year!, number!, 0)) }; }); }
+function journalPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceJournalLineWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
+function dailyPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceAccountDailyBalanceWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
 function dateForBusinessDate(value: string) { return new Date(`${value}T00:00:00.000Z`); }
 function capAsOf(requested: Date | undefined, current: Date) { return requested && requested < current ? requested : current; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }

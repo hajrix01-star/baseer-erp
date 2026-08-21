@@ -401,7 +401,6 @@ export type HrPayrollRunOrderByWithRelationInput = {
 export type HrPayrollRunWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   id_tenantId_companyId?: Prisma.HrPayrollRunIdTenantIdCompanyIdCompoundUniqueInput
-  companyId_payrollMonth?: Prisma.HrPayrollRunCompanyIdPayrollMonthCompoundUniqueInput
   companyId_runNumber?: Prisma.HrPayrollRunCompanyIdRunNumberCompoundUniqueInput
   accrualJournalEntryId_tenantId_companyId?: Prisma.HrPayrollRunAccrualJournalEntryIdTenantIdCompanyIdCompoundUniqueInput
   AND?: Prisma.HrPayrollRunWhereInput | Prisma.HrPayrollRunWhereInput[]
@@ -431,7 +430,7 @@ export type HrPayrollRunWhereUniqueInput = Prisma.AtLeast<{
   accrualJournal?: Prisma.XOR<Prisma.FinanceJournalEntryNullableScalarRelationFilter, Prisma.FinanceJournalEntryWhereInput> | null
   lines?: Prisma.HrPayrollLineListRelationFilter
   payments?: Prisma.HrPayrollPaymentListRelationFilter
-}, "id" | "id_tenantId_companyId" | "companyId_payrollMonth" | "companyId_runNumber" | "accrualJournalEntryId_tenantId_companyId">
+}, "id" | "id_tenantId_companyId" | "companyId_runNumber" | "accrualJournalEntryId_tenantId_companyId">
 
 export type HrPayrollRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -679,11 +678,6 @@ export type HrPayrollRunIdTenantIdCompanyIdCompoundUniqueInput = {
   id: string
   tenantId: string
   companyId: string
-}
-
-export type HrPayrollRunCompanyIdPayrollMonthCompoundUniqueInput = {
-  companyId: string
-  payrollMonth: Date | string
 }
 
 export type HrPayrollRunCompanyIdRunNumberCompoundUniqueInput = {

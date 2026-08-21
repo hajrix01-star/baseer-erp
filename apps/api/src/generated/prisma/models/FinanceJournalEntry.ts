@@ -20,8 +20,18 @@ export type FinanceJournalEntryModel = runtime.Types.Result.DefaultSelection<Pri
 
 export type AggregateFinanceJournalEntry = {
   _count: FinanceJournalEntryCountAggregateOutputType | null
+  _avg: FinanceJournalEntryAvgAggregateOutputType | null
+  _sum: FinanceJournalEntrySumAggregateOutputType | null
   _min: FinanceJournalEntryMinAggregateOutputType | null
   _max: FinanceJournalEntryMaxAggregateOutputType | null
+}
+
+export type FinanceJournalEntryAvgAggregateOutputType = {
+  ledgerRevision: number | null
+}
+
+export type FinanceJournalEntrySumAggregateOutputType = {
+  ledgerRevision: bigint | null
 }
 
 export type FinanceJournalEntryMinAggregateOutputType = {
@@ -36,6 +46,7 @@ export type FinanceJournalEntryMinAggregateOutputType = {
   status: $Enums.FinanceJournalEntryStatus | null
   isSealed: boolean | null
   sealedAt: Date | null
+  ledgerRevision: bigint | null
   reversalOfEntryId: string | null
   reversalReason: string | null
   createdByUserId: string | null
@@ -55,6 +66,7 @@ export type FinanceJournalEntryMaxAggregateOutputType = {
   status: $Enums.FinanceJournalEntryStatus | null
   isSealed: boolean | null
   sealedAt: Date | null
+  ledgerRevision: bigint | null
   reversalOfEntryId: string | null
   reversalReason: string | null
   createdByUserId: string | null
@@ -74,6 +86,7 @@ export type FinanceJournalEntryCountAggregateOutputType = {
   status: number
   isSealed: number
   sealedAt: number
+  ledgerRevision: number
   reversalOfEntryId: number
   reversalReason: number
   createdByUserId: number
@@ -82,6 +95,14 @@ export type FinanceJournalEntryCountAggregateOutputType = {
   _all: number
 }
 
+
+export type FinanceJournalEntryAvgAggregateInputType = {
+  ledgerRevision?: true
+}
+
+export type FinanceJournalEntrySumAggregateInputType = {
+  ledgerRevision?: true
+}
 
 export type FinanceJournalEntryMinAggregateInputType = {
   id?: true
@@ -95,6 +116,7 @@ export type FinanceJournalEntryMinAggregateInputType = {
   status?: true
   isSealed?: true
   sealedAt?: true
+  ledgerRevision?: true
   reversalOfEntryId?: true
   reversalReason?: true
   createdByUserId?: true
@@ -114,6 +136,7 @@ export type FinanceJournalEntryMaxAggregateInputType = {
   status?: true
   isSealed?: true
   sealedAt?: true
+  ledgerRevision?: true
   reversalOfEntryId?: true
   reversalReason?: true
   createdByUserId?: true
@@ -133,6 +156,7 @@ export type FinanceJournalEntryCountAggregateInputType = {
   status?: true
   isSealed?: true
   sealedAt?: true
+  ledgerRevision?: true
   reversalOfEntryId?: true
   reversalReason?: true
   createdByUserId?: true
@@ -179,6 +203,18 @@ export type FinanceJournalEntryAggregateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: FinanceJournalEntryAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: FinanceJournalEntrySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: FinanceJournalEntryMinAggregateInputType
@@ -209,6 +245,8 @@ export type FinanceJournalEntryGroupByArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   _count?: FinanceJournalEntryCountAggregateInputType | true
+  _avg?: FinanceJournalEntryAvgAggregateInputType
+  _sum?: FinanceJournalEntrySumAggregateInputType
   _min?: FinanceJournalEntryMinAggregateInputType
   _max?: FinanceJournalEntryMaxAggregateInputType
 }
@@ -225,12 +263,15 @@ export type FinanceJournalEntryGroupByOutputType = {
   status: $Enums.FinanceJournalEntryStatus
   isSealed: boolean
   sealedAt: Date | null
+  ledgerRevision: bigint
   reversalOfEntryId: string | null
   reversalReason: string | null
   createdByUserId: string
   requestId: string
   postedAt: Date
   _count: FinanceJournalEntryCountAggregateOutputType | null
+  _avg: FinanceJournalEntryAvgAggregateOutputType | null
+  _sum: FinanceJournalEntrySumAggregateOutputType | null
   _min: FinanceJournalEntryMinAggregateOutputType | null
   _max: FinanceJournalEntryMaxAggregateOutputType | null
 }
@@ -265,6 +306,7 @@ export type FinanceJournalEntryWhereInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFilter<"FinanceJournalEntry"> | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFilter<"FinanceJournalEntry"> | boolean
   sealedAt?: Prisma.DateTimeNullableFilter<"FinanceJournalEntry"> | Date | string | null
+  ledgerRevision?: Prisma.BigIntFilter<"FinanceJournalEntry"> | bigint | number
   reversalOfEntryId?: Prisma.UuidNullableFilter<"FinanceJournalEntry"> | string | null
   reversalReason?: Prisma.StringNullableFilter<"FinanceJournalEntry"> | string | null
   createdByUserId?: Prisma.UuidFilter<"FinanceJournalEntry"> | string
@@ -289,6 +331,8 @@ export type FinanceJournalEntryWhereInput = {
   hrPayrollPayment?: Prisma.XOR<Prisma.HrPayrollPaymentNullableScalarRelationFilter, Prisma.HrPayrollPaymentWhereInput> | null
   hrFinalSettlementAccrual?: Prisma.XOR<Prisma.HrFinalSettlementNullableScalarRelationFilter, Prisma.HrFinalSettlementWhereInput> | null
   hrFinalSettlementPayment?: Prisma.XOR<Prisma.HrFinalSettlementPaymentNullableScalarRelationFilter, Prisma.HrFinalSettlementPaymentWhereInput> | null
+  cashPerformanceEvent?: Prisma.XOR<Prisma.FinanceCashPerformanceEventNullableScalarRelationFilter, Prisma.FinanceCashPerformanceEventWhereInput> | null
+  vatSettlement?: Prisma.XOR<Prisma.FinanceVatSettlementNullableScalarRelationFilter, Prisma.FinanceVatSettlementWhereInput> | null
 }
 
 export type FinanceJournalEntryOrderByWithRelationInput = {
@@ -303,6 +347,7 @@ export type FinanceJournalEntryOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   isSealed?: Prisma.SortOrder
   sealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  ledgerRevision?: Prisma.SortOrder
   reversalOfEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   reversalReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -327,6 +372,8 @@ export type FinanceJournalEntryOrderByWithRelationInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentOrderByWithRelationInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementOrderByWithRelationInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentOrderByWithRelationInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOrderByWithRelationInput
+  vatSettlement?: Prisma.FinanceVatSettlementOrderByWithRelationInput
 }
 
 export type FinanceJournalEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -348,6 +395,7 @@ export type FinanceJournalEntryWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumFinanceJournalEntryStatusFilter<"FinanceJournalEntry"> | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFilter<"FinanceJournalEntry"> | boolean
   sealedAt?: Prisma.DateTimeNullableFilter<"FinanceJournalEntry"> | Date | string | null
+  ledgerRevision?: Prisma.BigIntFilter<"FinanceJournalEntry"> | bigint | number
   reversalReason?: Prisma.StringNullableFilter<"FinanceJournalEntry"> | string | null
   createdByUserId?: Prisma.UuidFilter<"FinanceJournalEntry"> | string
   requestId?: Prisma.StringFilter<"FinanceJournalEntry"> | string
@@ -371,6 +419,8 @@ export type FinanceJournalEntryWhereUniqueInput = Prisma.AtLeast<{
   hrPayrollPayment?: Prisma.XOR<Prisma.HrPayrollPaymentNullableScalarRelationFilter, Prisma.HrPayrollPaymentWhereInput> | null
   hrFinalSettlementAccrual?: Prisma.XOR<Prisma.HrFinalSettlementNullableScalarRelationFilter, Prisma.HrFinalSettlementWhereInput> | null
   hrFinalSettlementPayment?: Prisma.XOR<Prisma.HrFinalSettlementPaymentNullableScalarRelationFilter, Prisma.HrFinalSettlementPaymentWhereInput> | null
+  cashPerformanceEvent?: Prisma.XOR<Prisma.FinanceCashPerformanceEventNullableScalarRelationFilter, Prisma.FinanceCashPerformanceEventWhereInput> | null
+  vatSettlement?: Prisma.XOR<Prisma.FinanceVatSettlementNullableScalarRelationFilter, Prisma.FinanceVatSettlementWhereInput> | null
 }, "id" | "reversalOfEntryId" | "id_tenantId_companyId" | "reversalOfEntryId_tenantId_companyId" | "companyId_sourceType_sourceReference">
 
 export type FinanceJournalEntryOrderByWithAggregationInput = {
@@ -385,14 +435,17 @@ export type FinanceJournalEntryOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   isSealed?: Prisma.SortOrder
   sealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  ledgerRevision?: Prisma.SortOrder
   reversalOfEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   reversalReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
   postedAt?: Prisma.SortOrder
   _count?: Prisma.FinanceJournalEntryCountOrderByAggregateInput
+  _avg?: Prisma.FinanceJournalEntryAvgOrderByAggregateInput
   _max?: Prisma.FinanceJournalEntryMaxOrderByAggregateInput
   _min?: Prisma.FinanceJournalEntryMinOrderByAggregateInput
+  _sum?: Prisma.FinanceJournalEntrySumOrderByAggregateInput
 }
 
 export type FinanceJournalEntryScalarWhereWithAggregatesInput = {
@@ -410,6 +463,7 @@ export type FinanceJournalEntryScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusWithAggregatesFilter<"FinanceJournalEntry"> | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolWithAggregatesFilter<"FinanceJournalEntry"> | boolean
   sealedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FinanceJournalEntry"> | Date | string | null
+  ledgerRevision?: Prisma.BigIntWithAggregatesFilter<"FinanceJournalEntry"> | bigint | number
   reversalOfEntryId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceJournalEntry"> | string | null
   reversalReason?: Prisma.StringNullableWithAggregatesFilter<"FinanceJournalEntry"> | string | null
   createdByUserId?: Prisma.UuidWithAggregatesFilter<"FinanceJournalEntry"> | string
@@ -426,6 +480,7 @@ export type FinanceJournalEntryCreateInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -448,6 +503,8 @@ export type FinanceJournalEntryCreateInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateInput = {
@@ -462,6 +519,7 @@ export type FinanceJournalEntryUncheckedCreateInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -482,6 +540,8 @@ export type FinanceJournalEntryUncheckedCreateInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUpdateInput = {
@@ -493,6 +553,7 @@ export type FinanceJournalEntryUpdateInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -515,6 +576,8 @@ export type FinanceJournalEntryUpdateInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateInput = {
@@ -529,6 +592,7 @@ export type FinanceJournalEntryUncheckedUpdateInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -549,6 +613,8 @@ export type FinanceJournalEntryUncheckedUpdateInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateManyInput = {
@@ -563,6 +629,7 @@ export type FinanceJournalEntryCreateManyInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -579,6 +646,7 @@ export type FinanceJournalEntryUpdateManyMutationInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -596,6 +664,7 @@ export type FinanceJournalEntryUncheckedUpdateManyInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -611,6 +680,11 @@ export type FinanceJournalEntryListRelationFilter = {
 
 export type FinanceJournalEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FinanceJournalEntryScalarRelationFilter = {
+  is?: Prisma.FinanceJournalEntryWhereInput
+  isNot?: Prisma.FinanceJournalEntryWhereInput
 }
 
 export type FinanceJournalEntryNullableScalarRelationFilter = {
@@ -648,11 +722,16 @@ export type FinanceJournalEntryCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isSealed?: Prisma.SortOrder
   sealedAt?: Prisma.SortOrder
+  ledgerRevision?: Prisma.SortOrder
   reversalOfEntryId?: Prisma.SortOrder
   reversalReason?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
   postedAt?: Prisma.SortOrder
+}
+
+export type FinanceJournalEntryAvgOrderByAggregateInput = {
+  ledgerRevision?: Prisma.SortOrder
 }
 
 export type FinanceJournalEntryMaxOrderByAggregateInput = {
@@ -667,6 +746,7 @@ export type FinanceJournalEntryMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isSealed?: Prisma.SortOrder
   sealedAt?: Prisma.SortOrder
+  ledgerRevision?: Prisma.SortOrder
   reversalOfEntryId?: Prisma.SortOrder
   reversalReason?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -686,6 +766,7 @@ export type FinanceJournalEntryMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isSealed?: Prisma.SortOrder
   sealedAt?: Prisma.SortOrder
+  ledgerRevision?: Prisma.SortOrder
   reversalOfEntryId?: Prisma.SortOrder
   reversalReason?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
@@ -693,9 +774,8 @@ export type FinanceJournalEntryMinOrderByAggregateInput = {
   postedAt?: Prisma.SortOrder
 }
 
-export type FinanceJournalEntryScalarRelationFilter = {
-  is?: Prisma.FinanceJournalEntryWhereInput
-  isNot?: Prisma.FinanceJournalEntryWhereInput
+export type FinanceJournalEntrySumOrderByAggregateInput = {
+  ledgerRevision?: Prisma.SortOrder
 }
 
 export type FinanceJournalEntryCreateNestedManyWithoutCreatedByInput = {
@@ -780,6 +860,34 @@ export type FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput = {
   update?: Prisma.FinanceJournalEntryUpdateWithWhereUniqueWithoutCompanyInput | Prisma.FinanceJournalEntryUpdateWithWhereUniqueWithoutCompanyInput[]
   updateMany?: Prisma.FinanceJournalEntryUpdateManyWithWhereWithoutCompanyInput | Prisma.FinanceJournalEntryUpdateManyWithWhereWithoutCompanyInput[]
   deleteMany?: Prisma.FinanceJournalEntryScalarWhereInput | Prisma.FinanceJournalEntryScalarWhereInput[]
+}
+
+export type FinanceJournalEntryCreateNestedOneWithoutCashPerformanceEventInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutCashPerformanceEventInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutCashPerformanceEventInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+}
+
+export type FinanceJournalEntryUpdateOneRequiredWithoutCashPerformanceEventNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutCashPerformanceEventInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutCashPerformanceEventInput
+  upsert?: Prisma.FinanceJournalEntryUpsertWithoutCashPerformanceEventInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceJournalEntryUpdateToOneWithWhereWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUpdateWithoutCashPerformanceEventInput>, Prisma.FinanceJournalEntryUncheckedUpdateWithoutCashPerformanceEventInput>
+}
+
+export type FinanceJournalEntryCreateNestedOneWithoutVatSettlementInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutVatSettlementInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutVatSettlementInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+}
+
+export type FinanceJournalEntryUpdateOneRequiredWithoutVatSettlementNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutVatSettlementInput>
+  connectOrCreate?: Prisma.FinanceJournalEntryCreateOrConnectWithoutVatSettlementInput
+  upsert?: Prisma.FinanceJournalEntryUpsertWithoutVatSettlementInput
+  connect?: Prisma.FinanceJournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceJournalEntryUpdateToOneWithWhereWithoutVatSettlementInput, Prisma.FinanceJournalEntryUpdateWithoutVatSettlementInput>, Prisma.FinanceJournalEntryUncheckedUpdateWithoutVatSettlementInput>
 }
 
 export type FinanceJournalEntryCreateNestedManyWithoutFiscalPeriodInput = {
@@ -1095,6 +1203,7 @@ export type FinanceJournalEntryCreateWithoutCreatedByInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1116,6 +1225,8 @@ export type FinanceJournalEntryCreateWithoutCreatedByInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutCreatedByInput = {
@@ -1129,6 +1240,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutCreatedByInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   requestId: string
@@ -1148,6 +1260,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutCreatedByInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutCreatedByInput = {
@@ -1191,6 +1305,7 @@ export type FinanceJournalEntryScalarWhereInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFilter<"FinanceJournalEntry"> | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFilter<"FinanceJournalEntry"> | boolean
   sealedAt?: Prisma.DateTimeNullableFilter<"FinanceJournalEntry"> | Date | string | null
+  ledgerRevision?: Prisma.BigIntFilter<"FinanceJournalEntry"> | bigint | number
   reversalOfEntryId?: Prisma.UuidNullableFilter<"FinanceJournalEntry"> | string | null
   reversalReason?: Prisma.StringNullableFilter<"FinanceJournalEntry"> | string | null
   createdByUserId?: Prisma.UuidFilter<"FinanceJournalEntry"> | string
@@ -1207,6 +1322,7 @@ export type FinanceJournalEntryCreateWithoutCompanyInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1228,6 +1344,8 @@ export type FinanceJournalEntryCreateWithoutCompanyInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutCompanyInput = {
@@ -1240,6 +1358,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutCompanyInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -1260,6 +1379,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutCompanyInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutCompanyInput = {
@@ -1288,6 +1409,322 @@ export type FinanceJournalEntryUpdateManyWithWhereWithoutCompanyInput = {
   data: Prisma.XOR<Prisma.FinanceJournalEntryUpdateManyMutationInput, Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyInput>
 }
 
+export type FinanceJournalEntryCreateWithoutCashPerformanceEventInput = {
+  id?: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
+  reversalReason?: string | null
+  requestId: string
+  postedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceJournalEntriesInput
+  fiscalPeriod: Prisma.FinanceFiscalPeriodCreateNestedOneWithoutJournalEntriesInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalEntryInput
+  reversalEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalOfEntryInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedJournalEntriesInput
+  lines?: Prisma.FinanceJournalLineCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
+}
+
+export type FinanceJournalEntryUncheckedCreateWithoutCashPerformanceEventInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  fiscalPeriodId: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
+  reversalOfEntryId?: string | null
+  reversalReason?: string | null
+  createdByUserId: string
+  requestId: string
+  postedAt?: Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedCreateNestedOneWithoutReversalOfEntryInput
+  lines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
+}
+
+export type FinanceJournalEntryCreateOrConnectWithoutCashPerformanceEventInput = {
+  where: Prisma.FinanceJournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutCashPerformanceEventInput>
+}
+
+export type FinanceJournalEntryUpsertWithoutCashPerformanceEventInput = {
+  update: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutCashPerformanceEventInput>
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutCashPerformanceEventInput>
+  where?: Prisma.FinanceJournalEntryWhereInput
+}
+
+export type FinanceJournalEntryUpdateToOneWithWhereWithoutCashPerformanceEventInput = {
+  where?: Prisma.FinanceJournalEntryWhereInput
+  data: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutCashPerformanceEventInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutCashPerformanceEventInput>
+}
+
+export type FinanceJournalEntryUpdateWithoutCashPerformanceEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceJournalEntriesNestedInput
+  fiscalPeriod?: Prisma.FinanceFiscalPeriodUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalEntryNestedInput
+  reversalEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalOfEntryNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedJournalEntriesNestedInput
+  lines?: Prisma.FinanceJournalLineUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryUncheckedUpdateWithoutCashPerformanceEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscalPeriodId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedUpdateOneWithoutReversalOfEntryNestedInput
+  lines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryCreateWithoutVatSettlementInput = {
+  id?: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
+  reversalReason?: string | null
+  requestId: string
+  postedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceJournalEntriesInput
+  fiscalPeriod: Prisma.FinanceFiscalPeriodCreateNestedOneWithoutJournalEntriesInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalEntryInput
+  reversalEntry?: Prisma.FinanceJournalEntryCreateNestedOneWithoutReversalOfEntryInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedJournalEntriesInput
+  lines?: Prisma.FinanceJournalLineCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+}
+
+export type FinanceJournalEntryUncheckedCreateWithoutVatSettlementInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  fiscalPeriodId: string
+  sourceType: string
+  sourceReference: string
+  businessDate: Date | string
+  description?: string | null
+  status?: $Enums.FinanceJournalEntryStatus
+  isSealed?: boolean
+  sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
+  reversalOfEntryId?: string | null
+  reversalReason?: string | null
+  createdByUserId: string
+  requestId: string
+  postedAt?: Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedCreateNestedOneWithoutReversalOfEntryInput
+  lines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutJournalEntryInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedCreateNestedOneWithoutJournalEntryInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedOneWithoutOpeningJournalEntryInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedOneWithoutJournalEntryInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedOneWithoutIssueJournalEntryInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutJournalEntryInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+}
+
+export type FinanceJournalEntryCreateOrConnectWithoutVatSettlementInput = {
+  where: Prisma.FinanceJournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutVatSettlementInput>
+}
+
+export type FinanceJournalEntryUpsertWithoutVatSettlementInput = {
+  update: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutVatSettlementInput>
+  create: Prisma.XOR<Prisma.FinanceJournalEntryCreateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedCreateWithoutVatSettlementInput>
+  where?: Prisma.FinanceJournalEntryWhereInput
+}
+
+export type FinanceJournalEntryUpdateToOneWithWhereWithoutVatSettlementInput = {
+  where?: Prisma.FinanceJournalEntryWhereInput
+  data: Prisma.XOR<Prisma.FinanceJournalEntryUpdateWithoutVatSettlementInput, Prisma.FinanceJournalEntryUncheckedUpdateWithoutVatSettlementInput>
+}
+
+export type FinanceJournalEntryUpdateWithoutVatSettlementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceJournalEntriesNestedInput
+  fiscalPeriod?: Prisma.FinanceFiscalPeriodUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalEntryNestedInput
+  reversalEntry?: Prisma.FinanceJournalEntryUpdateOneWithoutReversalOfEntryNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedJournalEntriesNestedInput
+  lines?: Prisma.FinanceJournalLineUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+}
+
+export type FinanceJournalEntryUncheckedUpdateWithoutVatSettlementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscalPeriodId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReference?: Prisma.StringFieldUpdateOperationsInput | string
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
+  isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reversalEntry?: Prisma.FinanceJournalEntryUncheckedUpdateOneWithoutReversalOfEntryNestedInput
+  lines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutJournalEntryNestedInput
+  supplierDue?: Prisma.FinanceSupplierDueUncheckedUpdateOneWithoutJournalEntryNestedInput
+  supplierDuePayment?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  inclusiveLoan?: Prisma.FinanceInclusiveLoanUncheckedUpdateOneWithoutOpeningJournalEntryNestedInput
+  inclusiveLoanPayment?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  dailySalesClosing?: Prisma.FinanceDailySalesClosingUncheckedUpdateOneWithoutJournalEntryNestedInput
+  outflowDocument?: Prisma.FinanceOutflowDocumentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrEmployeeMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrEmployeeAdvanceIssue?: Prisma.HrEmployeeAdvanceUncheckedUpdateOneWithoutIssueJournalEntryNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutJournalEntryNestedInput
+  hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+}
+
 export type FinanceJournalEntryCreateWithoutFiscalPeriodInput = {
   id?: string
   sourceType: string
@@ -1297,6 +1734,7 @@ export type FinanceJournalEntryCreateWithoutFiscalPeriodInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1318,6 +1756,8 @@ export type FinanceJournalEntryCreateWithoutFiscalPeriodInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutFiscalPeriodInput = {
@@ -1329,6 +1769,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutFiscalPeriodInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -1349,6 +1790,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutFiscalPeriodInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutFiscalPeriodInput = {
@@ -1386,6 +1829,7 @@ export type FinanceJournalEntryCreateWithoutSupplierDueInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1407,6 +1851,8 @@ export type FinanceJournalEntryCreateWithoutSupplierDueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutSupplierDueInput = {
@@ -1421,6 +1867,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDueInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -1440,6 +1887,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutSupplierDueInput = {
@@ -1467,6 +1916,7 @@ export type FinanceJournalEntryUpdateWithoutSupplierDueInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1488,6 +1938,8 @@ export type FinanceJournalEntryUpdateWithoutSupplierDueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDueInput = {
@@ -1502,6 +1954,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDueInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1521,6 +1974,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutSupplierDuePaymentInput = {
@@ -1532,6 +1987,7 @@ export type FinanceJournalEntryCreateWithoutSupplierDuePaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1553,6 +2009,8 @@ export type FinanceJournalEntryCreateWithoutSupplierDuePaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutSupplierDuePaymentInput = {
@@ -1567,6 +2025,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDuePaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -1586,6 +2045,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutSupplierDuePaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutSupplierDuePaymentInput = {
@@ -1613,6 +2074,7 @@ export type FinanceJournalEntryUpdateWithoutSupplierDuePaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1634,6 +2096,8 @@ export type FinanceJournalEntryUpdateWithoutSupplierDuePaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDuePaymentInput = {
@@ -1648,6 +2112,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDuePaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1667,6 +2132,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutSupplierDuePaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutReversalEntryInput = {
@@ -1678,6 +2145,7 @@ export type FinanceJournalEntryCreateWithoutReversalEntryInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1699,6 +2167,8 @@ export type FinanceJournalEntryCreateWithoutReversalEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutReversalEntryInput = {
@@ -1713,6 +2183,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalEntryInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -1732,6 +2203,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutReversalEntryInput = {
@@ -1748,6 +2221,7 @@ export type FinanceJournalEntryCreateWithoutReversalOfEntryInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1769,6 +2243,8 @@ export type FinanceJournalEntryCreateWithoutReversalOfEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutReversalOfEntryInput = {
@@ -1781,6 +2257,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalOfEntryInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   createdByUserId: string
   requestId: string
@@ -1800,6 +2277,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutReversalOfEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutReversalOfEntryInput = {
@@ -1827,6 +2306,7 @@ export type FinanceJournalEntryUpdateWithoutReversalEntryInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1848,6 +2328,8 @@ export type FinanceJournalEntryUpdateWithoutReversalEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutReversalEntryInput = {
@@ -1862,6 +2344,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalEntryInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1881,6 +2364,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUpsertWithoutReversalOfEntryInput = {
@@ -1903,6 +2388,7 @@ export type FinanceJournalEntryUpdateWithoutReversalOfEntryInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1924,6 +2410,8 @@ export type FinanceJournalEntryUpdateWithoutReversalOfEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutReversalOfEntryInput = {
@@ -1936,6 +2424,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalOfEntryInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1955,6 +2444,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutReversalOfEntryInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutOutflowDocumentInput = {
@@ -1966,6 +2457,7 @@ export type FinanceJournalEntryCreateWithoutOutflowDocumentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -1987,6 +2479,8 @@ export type FinanceJournalEntryCreateWithoutOutflowDocumentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutOutflowDocumentInput = {
@@ -2001,6 +2495,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutOutflowDocumentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2020,6 +2515,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutOutflowDocumentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutOutflowDocumentInput = {
@@ -2047,6 +2544,7 @@ export type FinanceJournalEntryUpdateWithoutOutflowDocumentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2068,6 +2566,8 @@ export type FinanceJournalEntryUpdateWithoutOutflowDocumentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutOutflowDocumentInput = {
@@ -2082,6 +2582,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutOutflowDocumentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2101,6 +2602,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutOutflowDocumentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeMovementsInput = {
@@ -2112,6 +2615,7 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeMovementsInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2133,6 +2637,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeMovementsInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeMovementsInput = {
@@ -2147,6 +2653,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeMovementsInput = 
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2166,6 +2673,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeMovementsInput = 
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeMovementsInput = {
@@ -2193,6 +2702,7 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeMovementsInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2214,6 +2724,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeMovementsInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput = {
@@ -2228,6 +2740,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput = 
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2247,6 +2760,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeMovementsInput = 
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput = {
@@ -2258,6 +2773,7 @@ export type FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2279,6 +2795,8 @@ export type FinanceJournalEntryCreateWithoutHrFinalSettlementAccrualInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInput = {
@@ -2293,6 +2811,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInp
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2312,6 +2831,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementAccrualInp
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementAccrualInput = {
@@ -2339,6 +2860,7 @@ export type FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2360,6 +2882,8 @@ export type FinanceJournalEntryUpdateWithoutHrFinalSettlementAccrualInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInput = {
@@ -2374,6 +2898,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInp
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2393,6 +2918,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementAccrualInp
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput = {
@@ -2404,6 +2931,7 @@ export type FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2425,6 +2953,8 @@ export type FinanceJournalEntryCreateWithoutHrFinalSettlementPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInput = {
@@ -2439,6 +2969,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInp
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2458,6 +2989,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrFinalSettlementPaymentInp
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrFinalSettlementPaymentInput = {
@@ -2485,6 +3018,7 @@ export type FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2506,6 +3040,8 @@ export type FinanceJournalEntryUpdateWithoutHrFinalSettlementPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInput = {
@@ -2520,6 +3056,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInp
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2539,6 +3076,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrFinalSettlementPaymentInp
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2550,6 +3089,7 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2571,6 +3111,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceIssueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2585,6 +3127,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2604,6 +3147,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceIssueInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeAdvanceIssueInput = {
@@ -2631,6 +3176,7 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceIssueInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2652,6 +3198,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceIssueInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceIssueInput = {
@@ -2666,6 +3214,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceIssueInput
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2685,6 +3234,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceIssueInput
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2696,6 +3247,7 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceSettlementsInput = 
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2717,6 +3269,8 @@ export type FinanceJournalEntryCreateWithoutHrEmployeeAdvanceSettlementsInput = 
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2731,6 +3285,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceSettlement
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2750,6 +3305,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrEmployeeAdvanceSettlement
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2777,6 +3334,7 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceSettlementsInput = 
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2798,6 +3356,8 @@ export type FinanceJournalEntryUpdateWithoutHrEmployeeAdvanceSettlementsInput = 
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
@@ -2812,6 +3372,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceSettlement
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2831,6 +3392,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrEmployeeAdvanceSettlement
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrPayrollAccrualInput = {
@@ -2842,6 +3405,7 @@ export type FinanceJournalEntryCreateWithoutHrPayrollAccrualInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -2863,6 +3427,8 @@ export type FinanceJournalEntryCreateWithoutHrPayrollAccrualInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollAccrualInput = {
@@ -2877,6 +3443,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollAccrualInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -2896,6 +3463,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollAccrualInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrPayrollAccrualInput = {
@@ -2923,6 +3492,7 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollAccrualInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2944,6 +3514,8 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollAccrualInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollAccrualInput = {
@@ -2958,6 +3530,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollAccrualInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2977,6 +3550,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollAccrualInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutHrPayrollPaymentInput = {
@@ -2988,6 +3563,7 @@ export type FinanceJournalEntryCreateWithoutHrPayrollPaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -3009,6 +3585,8 @@ export type FinanceJournalEntryCreateWithoutHrPayrollPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollPaymentInput = {
@@ -3023,6 +3601,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollPaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3042,6 +3621,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutHrPayrollPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutHrPayrollPaymentInput = {
@@ -3069,6 +3650,7 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollPaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3090,6 +3672,8 @@ export type FinanceJournalEntryUpdateWithoutHrPayrollPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollPaymentInput = {
@@ -3104,6 +3688,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollPaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3123,6 +3708,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutHrPayrollPaymentInput = {
   hrPayrollAccrual?: Prisma.HrPayrollRunUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutLinesInput = {
@@ -3134,6 +3721,7 @@ export type FinanceJournalEntryCreateWithoutLinesInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -3155,6 +3743,8 @@ export type FinanceJournalEntryCreateWithoutLinesInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutLinesInput = {
@@ -3169,6 +3759,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutLinesInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3188,6 +3779,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutLinesInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutLinesInput = {
@@ -3215,6 +3808,7 @@ export type FinanceJournalEntryUpdateWithoutLinesInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3236,6 +3830,8 @@ export type FinanceJournalEntryUpdateWithoutLinesInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutLinesInput = {
@@ -3250,6 +3846,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutLinesInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3269,6 +3866,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutLinesInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutDailySalesClosingInput = {
@@ -3280,6 +3879,7 @@ export type FinanceJournalEntryCreateWithoutDailySalesClosingInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -3301,6 +3901,8 @@ export type FinanceJournalEntryCreateWithoutDailySalesClosingInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutDailySalesClosingInput = {
@@ -3315,6 +3917,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutDailySalesClosingInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3334,6 +3937,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutDailySalesClosingInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutDailySalesClosingInput = {
@@ -3361,6 +3966,7 @@ export type FinanceJournalEntryUpdateWithoutDailySalesClosingInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3382,6 +3988,8 @@ export type FinanceJournalEntryUpdateWithoutDailySalesClosingInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutDailySalesClosingInput = {
@@ -3396,6 +4004,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutDailySalesClosingInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3415,6 +4024,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutDailySalesClosingInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutInclusiveLoanInput = {
@@ -3426,6 +4037,7 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -3447,6 +4059,8 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanInput = {
@@ -3461,6 +4075,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3480,6 +4095,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutInclusiveLoanInput = {
@@ -3507,6 +4124,7 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3528,6 +4146,8 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanInput = {
@@ -3542,6 +4162,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3561,6 +4182,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateWithoutInclusiveLoanPaymentInput = {
@@ -3572,6 +4195,7 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanPaymentInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalReason?: string | null
   requestId: string
   postedAt?: Date | string
@@ -3593,6 +4217,8 @@ export type FinanceJournalEntryCreateWithoutInclusiveLoanPaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanPaymentInput = {
@@ -3607,6 +4233,7 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanPaymentInput =
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3626,6 +4253,8 @@ export type FinanceJournalEntryUncheckedCreateWithoutInclusiveLoanPaymentInput =
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedCreateNestedOneWithoutAccrualJournalInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedCreateNestedOneWithoutJournalEntryInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedOneWithoutSourceJournalEntryInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedCreateNestedOneWithoutJournalEntryInput
 }
 
 export type FinanceJournalEntryCreateOrConnectWithoutInclusiveLoanPaymentInput = {
@@ -3653,6 +4282,7 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanPaymentInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3674,6 +4304,8 @@ export type FinanceJournalEntryUpdateWithoutInclusiveLoanPaymentInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanPaymentInput = {
@@ -3688,6 +4320,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanPaymentInput =
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3707,6 +4340,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutInclusiveLoanPaymentInput =
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryCreateManyCreatedByInput = {
@@ -3720,6 +4355,7 @@ export type FinanceJournalEntryCreateManyCreatedByInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   requestId: string
@@ -3735,6 +4371,7 @@ export type FinanceJournalEntryUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3756,6 +4393,8 @@ export type FinanceJournalEntryUpdateWithoutCreatedByInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutCreatedByInput = {
@@ -3769,6 +4408,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3788,6 +4428,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCreatedByInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByInput = {
@@ -3801,6 +4443,7 @@ export type FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3817,6 +4460,7 @@ export type FinanceJournalEntryCreateManyCompanyInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3833,6 +4477,7 @@ export type FinanceJournalEntryUpdateWithoutCompanyInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3854,6 +4499,8 @@ export type FinanceJournalEntryUpdateWithoutCompanyInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutCompanyInput = {
@@ -3866,6 +4513,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCompanyInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3886,6 +4534,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutCompanyInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutCompanyInput = {
@@ -3898,6 +4548,7 @@ export type FinanceJournalEntryUncheckedUpdateManyWithoutCompanyInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3914,6 +4565,7 @@ export type FinanceJournalEntryCreateManyFiscalPeriodInput = {
   status?: $Enums.FinanceJournalEntryStatus
   isSealed?: boolean
   sealedAt?: Date | string | null
+  ledgerRevision: bigint | number
   reversalOfEntryId?: string | null
   reversalReason?: string | null
   createdByUserId: string
@@ -3930,6 +4582,7 @@ export type FinanceJournalEntryUpdateWithoutFiscalPeriodInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3951,6 +4604,8 @@ export type FinanceJournalEntryUpdateWithoutFiscalPeriodInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateWithoutFiscalPeriodInput = {
@@ -3962,6 +4617,7 @@ export type FinanceJournalEntryUncheckedUpdateWithoutFiscalPeriodInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3982,6 +4638,8 @@ export type FinanceJournalEntryUncheckedUpdateWithoutFiscalPeriodInput = {
   hrPayrollPayment?: Prisma.HrPayrollPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
   hrFinalSettlementAccrual?: Prisma.HrFinalSettlementUncheckedUpdateOneWithoutAccrualJournalNestedInput
   hrFinalSettlementPayment?: Prisma.HrFinalSettlementPaymentUncheckedUpdateOneWithoutJournalEntryNestedInput
+  cashPerformanceEvent?: Prisma.FinanceCashPerformanceEventUncheckedUpdateOneWithoutSourceJournalEntryNestedInput
+  vatSettlement?: Prisma.FinanceVatSettlementUncheckedUpdateOneWithoutJournalEntryNestedInput
 }
 
 export type FinanceJournalEntryUncheckedUpdateManyWithoutFiscalPeriodInput = {
@@ -3993,6 +4651,7 @@ export type FinanceJournalEntryUncheckedUpdateManyWithoutFiscalPeriodInput = {
   status?: Prisma.EnumFinanceJournalEntryStatusFieldUpdateOperationsInput | $Enums.FinanceJournalEntryStatus
   isSealed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reversalOfEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4061,6 +4720,7 @@ export type FinanceJournalEntrySelect<ExtArgs extends runtime.Types.Extensions.I
   status?: boolean
   isSealed?: boolean
   sealedAt?: boolean
+  ledgerRevision?: boolean
   reversalOfEntryId?: boolean
   reversalReason?: boolean
   createdByUserId?: boolean
@@ -4085,6 +4745,8 @@ export type FinanceJournalEntrySelect<ExtArgs extends runtime.Types.Extensions.I
   hrPayrollPayment?: boolean | Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>
   hrFinalSettlementAccrual?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>
   hrFinalSettlementPayment?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>
+  cashPerformanceEvent?: boolean | Prisma.FinanceJournalEntry$cashPerformanceEventArgs<ExtArgs>
+  vatSettlement?: boolean | Prisma.FinanceJournalEntry$vatSettlementArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceJournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeJournalEntry"]>
 
@@ -4100,6 +4762,7 @@ export type FinanceJournalEntrySelectCreateManyAndReturn<ExtArgs extends runtime
   status?: boolean
   isSealed?: boolean
   sealedAt?: boolean
+  ledgerRevision?: boolean
   reversalOfEntryId?: boolean
   reversalReason?: boolean
   createdByUserId?: boolean
@@ -4123,6 +4786,7 @@ export type FinanceJournalEntrySelectUpdateManyAndReturn<ExtArgs extends runtime
   status?: boolean
   isSealed?: boolean
   sealedAt?: boolean
+  ledgerRevision?: boolean
   reversalOfEntryId?: boolean
   reversalReason?: boolean
   createdByUserId?: boolean
@@ -4146,6 +4810,7 @@ export type FinanceJournalEntrySelectScalar = {
   status?: boolean
   isSealed?: boolean
   sealedAt?: boolean
+  ledgerRevision?: boolean
   reversalOfEntryId?: boolean
   reversalReason?: boolean
   createdByUserId?: boolean
@@ -4153,7 +4818,7 @@ export type FinanceJournalEntrySelectScalar = {
   postedAt?: boolean
 }
 
-export type FinanceJournalEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "fiscalPeriodId" | "sourceType" | "sourceReference" | "businessDate" | "description" | "status" | "isSealed" | "sealedAt" | "reversalOfEntryId" | "reversalReason" | "createdByUserId" | "requestId" | "postedAt", ExtArgs["result"]["financeJournalEntry"]>
+export type FinanceJournalEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "fiscalPeriodId" | "sourceType" | "sourceReference" | "businessDate" | "description" | "status" | "isSealed" | "sealedAt" | "ledgerRevision" | "reversalOfEntryId" | "reversalReason" | "createdByUserId" | "requestId" | "postedAt", ExtArgs["result"]["financeJournalEntry"]>
 export type FinanceJournalEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   fiscalPeriod?: boolean | Prisma.FinanceFiscalPeriodDefaultArgs<ExtArgs>
@@ -4174,6 +4839,8 @@ export type FinanceJournalEntryInclude<ExtArgs extends runtime.Types.Extensions.
   hrPayrollPayment?: boolean | Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>
   hrFinalSettlementAccrual?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>
   hrFinalSettlementPayment?: boolean | Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>
+  cashPerformanceEvent?: boolean | Prisma.FinanceJournalEntry$cashPerformanceEventArgs<ExtArgs>
+  vatSettlement?: boolean | Prisma.FinanceJournalEntry$vatSettlementArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceJournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceJournalEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4211,6 +4878,8 @@ export type $FinanceJournalEntryPayload<ExtArgs extends runtime.Types.Extensions
     hrPayrollPayment: Prisma.$HrPayrollPaymentPayload<ExtArgs> | null
     hrFinalSettlementAccrual: Prisma.$HrFinalSettlementPayload<ExtArgs> | null
     hrFinalSettlementPayment: Prisma.$HrFinalSettlementPaymentPayload<ExtArgs> | null
+    cashPerformanceEvent: Prisma.$FinanceCashPerformanceEventPayload<ExtArgs> | null
+    vatSettlement: Prisma.$FinanceVatSettlementPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4224,6 +4893,7 @@ export type $FinanceJournalEntryPayload<ExtArgs extends runtime.Types.Extensions
     status: $Enums.FinanceJournalEntryStatus
     isSealed: boolean
     sealedAt: Date | null
+    ledgerRevision: bigint
     reversalOfEntryId: string | null
     reversalReason: string | null
     createdByUserId: string
@@ -4642,6 +5312,8 @@ export interface Prisma__FinanceJournalEntryClient<T, Null = never, ExtArgs exte
   hrPayrollPayment<T extends Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrPayrollPaymentArgs<ExtArgs>>): Prisma.Prisma__HrPayrollPaymentClient<runtime.Types.Result.GetResult<Prisma.$HrPayrollPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   hrFinalSettlementAccrual<T extends Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrFinalSettlementAccrualArgs<ExtArgs>>): Prisma.Prisma__HrFinalSettlementClient<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   hrFinalSettlementPayment<T extends Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs>>): Prisma.Prisma__HrFinalSettlementPaymentClient<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  cashPerformanceEvent<T extends Prisma.FinanceJournalEntry$cashPerformanceEventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$cashPerformanceEventArgs<ExtArgs>>): Prisma.Prisma__FinanceCashPerformanceEventClient<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  vatSettlement<T extends Prisma.FinanceJournalEntry$vatSettlementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceJournalEntry$vatSettlementArgs<ExtArgs>>): Prisma.Prisma__FinanceVatSettlementClient<runtime.Types.Result.GetResult<Prisma.$FinanceVatSettlementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4682,6 +5354,7 @@ export interface FinanceJournalEntryFieldRefs {
   readonly status: Prisma.FieldRef<"FinanceJournalEntry", 'FinanceJournalEntryStatus'>
   readonly isSealed: Prisma.FieldRef<"FinanceJournalEntry", 'Boolean'>
   readonly sealedAt: Prisma.FieldRef<"FinanceJournalEntry", 'DateTime'>
+  readonly ledgerRevision: Prisma.FieldRef<"FinanceJournalEntry", 'BigInt'>
   readonly reversalOfEntryId: Prisma.FieldRef<"FinanceJournalEntry", 'String'>
   readonly reversalReason: Prisma.FieldRef<"FinanceJournalEntry", 'String'>
   readonly createdByUserId: Prisma.FieldRef<"FinanceJournalEntry", 'String'>
@@ -5404,6 +6077,44 @@ export type FinanceJournalEntry$hrFinalSettlementPaymentArgs<ExtArgs extends run
    */
   include?: Prisma.HrFinalSettlementPaymentInclude<ExtArgs> | null
   where?: Prisma.HrFinalSettlementPaymentWhereInput
+}
+
+/**
+ * FinanceJournalEntry.cashPerformanceEvent
+ */
+export type FinanceJournalEntry$cashPerformanceEventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceCashPerformanceEvent
+   */
+  select?: Prisma.FinanceCashPerformanceEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceCashPerformanceEvent
+   */
+  omit?: Prisma.FinanceCashPerformanceEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceCashPerformanceEventInclude<ExtArgs> | null
+  where?: Prisma.FinanceCashPerformanceEventWhereInput
+}
+
+/**
+ * FinanceJournalEntry.vatSettlement
+ */
+export type FinanceJournalEntry$vatSettlementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceVatSettlement
+   */
+  select?: Prisma.FinanceVatSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceVatSettlement
+   */
+  omit?: Prisma.FinanceVatSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceVatSettlementInclude<ExtArgs> | null
+  where?: Prisma.FinanceVatSettlementWhereInput
 }
 
 /**

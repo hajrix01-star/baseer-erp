@@ -295,6 +295,7 @@ export type FinanceVaultWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   account?: Prisma.XOR<Prisma.FinanceAccountScalarRelationFilter, Prisma.FinanceAccountWhereInput>
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentListRelationFilter
+  vatSettlements?: Prisma.FinanceVatSettlementListRelationFilter
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentListRelationFilter
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanListRelationFilter
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationListRelationFilter
@@ -328,6 +329,7 @@ export type FinanceVaultOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   account?: Prisma.FinanceAccountOrderByWithRelationInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentOrderByRelationAggregateInput
+  vatSettlements?: Prisma.FinanceVatSettlementOrderByRelationAggregateInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentOrderByRelationAggregateInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanOrderByRelationAggregateInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationOrderByRelationAggregateInput
@@ -367,6 +369,7 @@ export type FinanceVaultWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   account?: Prisma.XOR<Prisma.FinanceAccountScalarRelationFilter, Prisma.FinanceAccountWhereInput>
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentListRelationFilter
+  vatSettlements?: Prisma.FinanceVatSettlementListRelationFilter
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentListRelationFilter
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanListRelationFilter
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationListRelationFilter
@@ -441,6 +444,7 @@ export type FinanceVaultCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -472,6 +476,7 @@ export type FinanceVaultUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -502,6 +507,7 @@ export type FinanceVaultUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -533,6 +539,7 @@ export type FinanceVaultUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -606,6 +613,11 @@ export type FinanceVaultListRelationFilter = {
 
 export type FinanceVaultOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FinanceVaultScalarRelationFilter = {
+  is?: Prisma.FinanceVaultWhereInput
+  isNot?: Prisma.FinanceVaultWhereInput
 }
 
 export type EnumFinanceVaultPaymentMethodNullableListFilter<$PrismaModel = never> = {
@@ -690,11 +702,6 @@ export type FinanceVaultMinOrderByAggregateInput = {
 
 export type FinanceVaultSumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
-}
-
-export type FinanceVaultScalarRelationFilter = {
-  is?: Prisma.FinanceVaultWhereInput
-  isNot?: Prisma.FinanceVaultWhereInput
 }
 
 export type FinanceVaultNullableScalarRelationFilter = {
@@ -784,6 +791,20 @@ export type FinanceVaultUncheckedUpdateManyWithoutAccountNestedInput = {
   update?: Prisma.FinanceVaultUpdateWithWhereUniqueWithoutAccountInput | Prisma.FinanceVaultUpdateWithWhereUniqueWithoutAccountInput[]
   updateMany?: Prisma.FinanceVaultUpdateManyWithWhereWithoutAccountInput | Prisma.FinanceVaultUpdateManyWithWhereWithoutAccountInput[]
   deleteMany?: Prisma.FinanceVaultScalarWhereInput | Prisma.FinanceVaultScalarWhereInput[]
+}
+
+export type FinanceVaultCreateNestedOneWithoutVatSettlementsInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedCreateWithoutVatSettlementsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutVatSettlementsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+}
+
+export type FinanceVaultUpdateOneRequiredWithoutVatSettlementsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceVaultCreateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedCreateWithoutVatSettlementsInput>
+  connectOrCreate?: Prisma.FinanceVaultCreateOrConnectWithoutVatSettlementsInput
+  upsert?: Prisma.FinanceVaultUpsertWithoutVatSettlementsInput
+  connect?: Prisma.FinanceVaultWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceVaultUpdateToOneWithWhereWithoutVatSettlementsInput, Prisma.FinanceVaultUpdateWithoutVatSettlementsInput>, Prisma.FinanceVaultUncheckedUpdateWithoutVatSettlementsInput>
 }
 
 export type FinanceVaultCreatepaymentMethodsInput = {
@@ -1012,6 +1033,7 @@ export type FinanceVaultCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1041,6 +1063,7 @@ export type FinanceVaultUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1117,6 +1140,7 @@ export type FinanceVaultCreateWithoutAccountInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1145,6 +1169,7 @@ export type FinanceVaultUncheckedCreateWithoutAccountInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1185,6 +1210,144 @@ export type FinanceVaultUpdateManyWithWhereWithoutAccountInput = {
   data: Prisma.XOR<Prisma.FinanceVaultUpdateManyMutationInput, Prisma.FinanceVaultUncheckedUpdateManyWithoutAccountInput>
 }
 
+export type FinanceVaultCreateWithoutVatSettlementsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
+  account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutDefaultVaultInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutVaultInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationCreateNestedManyWithoutVaultInput
+  reconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultUncheckedCreateWithoutVatSettlementsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  accountId: string
+  nameAr: string
+  nameEn: string
+  type: $Enums.FinanceVaultType
+  paymentMethod: $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultCreatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: $Enums.FinanceVaultStatus
+  isSalesChannel?: boolean
+  isPaymentDestination?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashHandoverVaultInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutVaultInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutVaultInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutDefaultVaultInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutVaultInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedCreateNestedManyWithoutVaultInput
+  reconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutVaultInput
+}
+
+export type FinanceVaultCreateOrConnectWithoutVatSettlementsInput = {
+  where: Prisma.FinanceVaultWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedCreateWithoutVatSettlementsInput>
+}
+
+export type FinanceVaultUpsertWithoutVatSettlementsInput = {
+  update: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedUpdateWithoutVatSettlementsInput>
+  create: Prisma.XOR<Prisma.FinanceVaultCreateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedCreateWithoutVatSettlementsInput>
+  where?: Prisma.FinanceVaultWhereInput
+}
+
+export type FinanceVaultUpdateToOneWithWhereWithoutVatSettlementsInput = {
+  where?: Prisma.FinanceVaultWhereInput
+  data: Prisma.XOR<Prisma.FinanceVaultUpdateWithoutVatSettlementsInput, Prisma.FinanceVaultUncheckedUpdateWithoutVatSettlementsInput>
+}
+
+export type FinanceVaultUpdateWithoutVatSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
+  account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutDefaultVaultNestedInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutVaultNestedInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUpdateManyWithoutVaultNestedInput
+  reconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutVaultNestedInput
+}
+
+export type FinanceVaultUncheckedUpdateWithoutVatSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumFinanceVaultTypeFieldUpdateOperationsInput | $Enums.FinanceVaultType
+  paymentMethod?: Prisma.EnumFinanceVaultPaymentMethodFieldUpdateOperationsInput | $Enums.FinanceVaultPaymentMethod
+  paymentMethods?: Prisma.FinanceVaultUpdatepaymentMethodsInput | $Enums.FinanceVaultPaymentMethod[]
+  status?: Prisma.EnumFinanceVaultStatusFieldUpdateOperationsInput | $Enums.FinanceVaultStatus
+  isSalesChannel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPaymentDestination?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
+  dailyCashHandovers?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashHandoverVaultNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutVaultNestedInput
+  outflowAllocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  recurringExpenseDefaults?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutDefaultVaultNestedInput
+  employeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  payrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  finalSettlementPaymentAllocations?: Prisma.HrFinalSettlementPaymentAllocationUncheckedUpdateManyWithoutVaultNestedInput
+  reconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutVaultNestedInput
+}
+
 export type FinanceVaultCreateWithoutReconciliationsInput = {
   id?: string
   nameAr: string
@@ -1201,6 +1364,7 @@ export type FinanceVaultCreateWithoutReconciliationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1231,6 +1395,7 @@ export type FinanceVaultUncheckedCreateWithoutReconciliationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1276,6 +1441,7 @@ export type FinanceVaultUpdateWithoutReconciliationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1306,6 +1472,7 @@ export type FinanceVaultUncheckedUpdateWithoutReconciliationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1334,6 +1501,7 @@ export type FinanceVaultCreateWithoutSupplierDuePaymentsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1364,6 +1532,7 @@ export type FinanceVaultUncheckedCreateWithoutSupplierDuePaymentsInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1409,6 +1578,7 @@ export type FinanceVaultUpdateWithoutSupplierDuePaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1439,6 +1609,7 @@ export type FinanceVaultUncheckedUpdateWithoutSupplierDuePaymentsInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1469,6 +1640,7 @@ export type FinanceVaultCreateWithoutOutflowAllocationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1499,6 +1671,7 @@ export type FinanceVaultUncheckedCreateWithoutOutflowAllocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1544,6 +1717,7 @@ export type FinanceVaultUpdateWithoutOutflowAllocationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1574,6 +1748,7 @@ export type FinanceVaultUncheckedUpdateWithoutOutflowAllocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1603,6 +1778,7 @@ export type FinanceVaultCreateWithoutFinalSettlementPaymentAllocationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1633,6 +1809,7 @@ export type FinanceVaultUncheckedCreateWithoutFinalSettlementPaymentAllocationsI
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1678,6 +1855,7 @@ export type FinanceVaultUpdateWithoutFinalSettlementPaymentAllocationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1708,6 +1886,7 @@ export type FinanceVaultUncheckedUpdateWithoutFinalSettlementPaymentAllocationsI
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1737,6 +1916,7 @@ export type FinanceVaultCreateWithoutEmployeeAdvanceAllocationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1767,6 +1947,7 @@ export type FinanceVaultUncheckedCreateWithoutEmployeeAdvanceAllocationsInput = 
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1812,6 +1993,7 @@ export type FinanceVaultUpdateWithoutEmployeeAdvanceAllocationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1842,6 +2024,7 @@ export type FinanceVaultUncheckedUpdateWithoutEmployeeAdvanceAllocationsInput = 
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -1871,6 +2054,7 @@ export type FinanceVaultCreateWithoutPayrollPaymentAllocationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -1901,6 +2085,7 @@ export type FinanceVaultUncheckedCreateWithoutPayrollPaymentAllocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -1946,6 +2131,7 @@ export type FinanceVaultUpdateWithoutPayrollPaymentAllocationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -1976,6 +2162,7 @@ export type FinanceVaultUncheckedUpdateWithoutPayrollPaymentAllocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -2005,6 +2192,7 @@ export type FinanceVaultCreateWithoutDailyCashObservationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -2035,6 +2223,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashObservationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -2069,6 +2258,7 @@ export type FinanceVaultCreateWithoutDailyCashHandoversInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -2099,6 +2289,7 @@ export type FinanceVaultUncheckedCreateWithoutDailyCashHandoversInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -2144,6 +2335,7 @@ export type FinanceVaultUpdateWithoutDailyCashObservationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -2174,6 +2366,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashObservationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -2214,6 +2407,7 @@ export type FinanceVaultUpdateWithoutDailyCashHandoversInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -2244,6 +2438,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailyCashHandoversInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -2273,6 +2468,7 @@ export type FinanceVaultCreateWithoutDailySalesAllocationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
@@ -2303,6 +2499,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesAllocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
@@ -2348,6 +2545,7 @@ export type FinanceVaultUpdateWithoutDailySalesAllocationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
@@ -2378,6 +2576,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesAllocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
@@ -2407,6 +2606,7 @@ export type FinanceVaultCreateWithoutDailySalesChannelSummariesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -2437,6 +2637,7 @@ export type FinanceVaultUncheckedCreateWithoutDailySalesChannelSummariesInput = 
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -2482,6 +2683,7 @@ export type FinanceVaultUpdateWithoutDailySalesChannelSummariesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -2512,6 +2714,7 @@ export type FinanceVaultUncheckedUpdateWithoutDailySalesChannelSummariesInput = 
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -2541,6 +2744,7 @@ export type FinanceVaultCreateWithoutRecurringExpenseDefaultsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
@@ -2571,6 +2775,7 @@ export type FinanceVaultUncheckedCreateWithoutRecurringExpenseDefaultsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
@@ -2616,6 +2821,7 @@ export type FinanceVaultUpdateWithoutRecurringExpenseDefaultsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -2646,6 +2852,7 @@ export type FinanceVaultUncheckedUpdateWithoutRecurringExpenseDefaultsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -2675,6 +2882,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanPaymentsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
@@ -2705,6 +2913,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutFinanceVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
@@ -2750,6 +2959,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanPaymentsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
@@ -2780,6 +2990,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
@@ -2809,6 +3020,7 @@ export type FinanceVaultCreateWithoutInclusiveLoanInstallmentsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutFinanceVaultsInput
   account: Prisma.FinanceAccountCreateNestedOneWithoutVaultsInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCashObservationVaultInput
@@ -2839,6 +3051,7 @@ export type FinanceVaultUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutVaultInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutVaultInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutVaultInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutVaultInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCashObservationVaultInput
@@ -2884,6 +3097,7 @@ export type FinanceVaultUpdateWithoutInclusiveLoanInstallmentsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCashObservationVaultNestedInput
@@ -2914,6 +3128,7 @@ export type FinanceVaultUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
   dailyCashObservations?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCashObservationVaultNestedInput
@@ -2958,6 +3173,7 @@ export type FinanceVaultUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.FinanceAccountUpdateOneRequiredWithoutVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -2987,6 +3203,7 @@ export type FinanceVaultUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -3047,6 +3264,7 @@ export type FinanceVaultUpdateWithoutAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceVaultsNestedInput
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutVaultNestedInput
@@ -3075,6 +3293,7 @@ export type FinanceVaultUncheckedUpdateWithoutAccountInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutVaultNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutVaultNestedInput
   inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutFinanceVaultNestedInput
   dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutVaultNestedInput
@@ -3111,6 +3330,7 @@ export type FinanceVaultUncheckedUpdateManyWithoutAccountInput = {
 
 export type FinanceVaultCountOutputType = {
   supplierDuePayments: number
+  vatSettlements: number
   inclusiveLoanPayments: number
   inclusiveLoanInstallments: number
   dailySalesAllocations: number
@@ -3127,6 +3347,7 @@ export type FinanceVaultCountOutputType = {
 
 export type FinanceVaultCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   supplierDuePayments?: boolean | FinanceVaultCountOutputTypeCountSupplierDuePaymentsArgs
+  vatSettlements?: boolean | FinanceVaultCountOutputTypeCountVatSettlementsArgs
   inclusiveLoanPayments?: boolean | FinanceVaultCountOutputTypeCountInclusiveLoanPaymentsArgs
   inclusiveLoanInstallments?: boolean | FinanceVaultCountOutputTypeCountInclusiveLoanInstallmentsArgs
   dailySalesAllocations?: boolean | FinanceVaultCountOutputTypeCountDailySalesAllocationsArgs
@@ -3156,6 +3377,13 @@ export type FinanceVaultCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
  */
 export type FinanceVaultCountOutputTypeCountSupplierDuePaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FinanceSupplierDuePaymentWhereInput
+}
+
+/**
+ * FinanceVaultCountOutputType without action
+ */
+export type FinanceVaultCountOutputTypeCountVatSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceVatSettlementWhereInput
 }
 
 /**
@@ -3262,6 +3490,7 @@ export type FinanceVaultSelect<ExtArgs extends runtime.Types.Extensions.Internal
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   account?: boolean | Prisma.FinanceAccountDefaultArgs<ExtArgs>
   supplierDuePayments?: boolean | Prisma.FinanceVault$supplierDuePaymentsArgs<ExtArgs>
+  vatSettlements?: boolean | Prisma.FinanceVault$vatSettlementsArgs<ExtArgs>
   inclusiveLoanPayments?: boolean | Prisma.FinanceVault$inclusiveLoanPaymentsArgs<ExtArgs>
   inclusiveLoanInstallments?: boolean | Prisma.FinanceVault$inclusiveLoanInstallmentsArgs<ExtArgs>
   dailySalesAllocations?: boolean | Prisma.FinanceVault$dailySalesAllocationsArgs<ExtArgs>
@@ -3340,6 +3569,7 @@ export type FinanceVaultInclude<ExtArgs extends runtime.Types.Extensions.Interna
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   account?: boolean | Prisma.FinanceAccountDefaultArgs<ExtArgs>
   supplierDuePayments?: boolean | Prisma.FinanceVault$supplierDuePaymentsArgs<ExtArgs>
+  vatSettlements?: boolean | Prisma.FinanceVault$vatSettlementsArgs<ExtArgs>
   inclusiveLoanPayments?: boolean | Prisma.FinanceVault$inclusiveLoanPaymentsArgs<ExtArgs>
   inclusiveLoanInstallments?: boolean | Prisma.FinanceVault$inclusiveLoanInstallmentsArgs<ExtArgs>
   dailySalesAllocations?: boolean | Prisma.FinanceVault$dailySalesAllocationsArgs<ExtArgs>
@@ -3369,6 +3599,7 @@ export type $FinanceVaultPayload<ExtArgs extends runtime.Types.Extensions.Intern
     company: Prisma.$CompanyPayload<ExtArgs>
     account: Prisma.$FinanceAccountPayload<ExtArgs>
     supplierDuePayments: Prisma.$FinanceSupplierDuePaymentPayload<ExtArgs>[]
+    vatSettlements: Prisma.$FinanceVatSettlementPayload<ExtArgs>[]
     inclusiveLoanPayments: Prisma.$FinanceInclusiveLoanPaymentPayload<ExtArgs>[]
     inclusiveLoanInstallments: Prisma.$FinanceInclusiveLoanInstallmentPlanPayload<ExtArgs>[]
     dailySalesAllocations: Prisma.$FinanceDailySalesAllocationPayload<ExtArgs>[]
@@ -3795,6 +4026,7 @@ export interface Prisma__FinanceVaultClient<T, Null = never, ExtArgs extends run
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.FinanceAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__FinanceAccountClient<runtime.Types.Result.GetResult<Prisma.$FinanceAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   supplierDuePayments<T extends Prisma.FinanceVault$supplierDuePaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$supplierDuePaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceSupplierDuePaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vatSettlements<T extends Prisma.FinanceVault$vatSettlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$vatSettlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceVatSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inclusiveLoanPayments<T extends Prisma.FinanceVault$inclusiveLoanPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$inclusiveLoanPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceInclusiveLoanPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inclusiveLoanInstallments<T extends Prisma.FinanceVault$inclusiveLoanInstallmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$inclusiveLoanInstallmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceInclusiveLoanInstallmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dailySalesAllocations<T extends Prisma.FinanceVault$dailySalesAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceVault$dailySalesAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4273,6 +4505,30 @@ export type FinanceVault$supplierDuePaymentsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.FinanceSupplierDuePaymentScalarFieldEnum | Prisma.FinanceSupplierDuePaymentScalarFieldEnum[]
+}
+
+/**
+ * FinanceVault.vatSettlements
+ */
+export type FinanceVault$vatSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceVatSettlement
+   */
+  select?: Prisma.FinanceVatSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceVatSettlement
+   */
+  omit?: Prisma.FinanceVatSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceVatSettlementInclude<ExtArgs> | null
+  where?: Prisma.FinanceVatSettlementWhereInput
+  orderBy?: Prisma.FinanceVatSettlementOrderByWithRelationInput | Prisma.FinanceVatSettlementOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceVatSettlementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceVatSettlementScalarFieldEnum | Prisma.FinanceVatSettlementScalarFieldEnum[]
 }
 
 /**

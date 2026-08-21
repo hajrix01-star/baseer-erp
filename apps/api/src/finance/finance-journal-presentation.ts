@@ -16,6 +16,8 @@ type Source = {
   hrEmployeeAdvanceSettlements?: Array<{ source: string; advance: { advanceNumber: string } }>;
   hrFinalSettlementAccrual?: { settlementNumber: string } | null;
   hrFinalSettlementPayment?: { paymentNumber: string; settlement: { settlementNumber: string } } | null;
+  dailySalesClosing?: { documentNumber: string } | null;
+  vatSettlement?: { referenceNumber: string } | null;
   reversalOfEntry?: Source | null;
 };
 
@@ -49,7 +51,9 @@ export function financeJournalPresentation(entry: Source): FinanceJournalPresent
     case "hr_final_settlement_payment":
       return { labelAr: "دفع نهاية خدمة", labelEn: "Final settlement payment", reference: entry.hrFinalSettlementPayment?.settlement.settlementNumber ?? entry.hrFinalSettlementPayment?.paymentNumber ?? entry.sourceReference };
     case "daily_sales_closing":
-      return { labelAr: "تحصيل مبيعات", labelEn: "Sales collection", reference: dailySalesDocumentNumber(entry.description) ?? entry.sourceReference };
+      return { labelAr: "تحصيل مبيعات", labelEn: "Sales collection", reference: entry.dailySalesClosing?.documentNumber ?? dailySalesDocumentNumber(entry.description) ?? entry.sourceReference };
+    case "finance_vat_settlement":
+      return { labelAr: "سداد ضريبة", labelEn: "VAT settlement", reference: entry.vatSettlement?.referenceNumber ?? entry.sourceReference };
     default:
       return { labelAr: "قيد أو تسوية", labelEn: "Journal or adjustment", reference: entry.sourceReference };
   }

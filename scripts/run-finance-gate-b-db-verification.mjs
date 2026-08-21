@@ -316,7 +316,7 @@ try {
 }
 
 async function loadServices() {
-  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }, { FinanceMasterDataService }, { HrService }] = await Promise.all([
+  const [{ DatabaseService }, { FinanceFoundationService }, { FinancePeriodService }, { JournalPostingService }, { FinanceVaultService }, { IdempotencyService }, { DocumentSerialService }, { CompanyFinanceSetupService }, { SupplierDuesService }, { InclusiveLoanService }, { InclusiveLoanRepaymentService }, { RecurringExpenseService }, { PurchaseExpenseService }, { BusinessDateService }, { FinanceMasterDataService }, { HrService }, { FinanceCashPerformanceEventService }] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
     import('../apps/api/dist/finance/finance-period.service.js'),
@@ -333,6 +333,7 @@ async function loadServices() {
     import('../apps/api/dist/business-date/business-date.service.js'),
     import('../apps/api/dist/finance/finance-master-data.service.js'),
     import('../apps/api/dist/hr/hr.service.js'),
+    import('../apps/api/dist/finance/finance-cash-performance-event.service.js'),
   ]);
   const { TreasuryService } = await import('../apps/api/dist/finance/treasury.service.js');
   database = new DatabaseService();
@@ -341,6 +342,7 @@ async function loadServices() {
   const idempotency = new IdempotencyService(database);
   const serials = new DocumentSerialService();
   const foundation = new FinanceFoundationService(database);
+  const cashEvents = new FinanceCashPerformanceEventService();
   const businessDates = new BusinessDateService(
     database,
     {},
@@ -348,11 +350,11 @@ async function loadServices() {
   );
   return {
     setup: new CompanyFinanceSetupService(database, foundation, periods, idempotency),
-    dues: new SupplierDuesService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates),
+    dues: new SupplierDuesService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates, cashEvents),
     loans: new InclusiveLoanService(database, idempotency, journals, businessDates),
     repayments: new InclusiveLoanRepaymentService(database, idempotency, journals, businessDates),
     recurring: new RecurringExpenseService(database, idempotency),
-    documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates, new HrService(database, idempotency, businessDates)),
+    documents: new PurchaseExpenseService(database, idempotency, serials, journals, new FinanceVaultService(), businessDates, new HrService(database, idempotency, businessDates), cashEvents),
     masterData: new FinanceMasterDataService(database, idempotency),
     treasury: new TreasuryService(database, idempotency, journals, new FinanceVaultService(), businessDates),
   };

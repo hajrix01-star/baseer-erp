@@ -190,6 +190,7 @@ export type TenantWhereInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
   documentSerialCounters?: Prisma.DocumentSerialCounterListRelationFilter
   fileMetadata?: Prisma.FileMetadataListRelationFilter
+  reportDocuments?: Prisma.ReportDocumentListRelationFilter
   administrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
 }
 
@@ -207,6 +208,7 @@ export type TenantOrderByWithRelationInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptOrderByRelationAggregateInput
   documentSerialCounters?: Prisma.DocumentSerialCounterOrderByRelationAggregateInput
   fileMetadata?: Prisma.FileMetadataOrderByRelationAggregateInput
+  reportDocuments?: Prisma.ReportDocumentOrderByRelationAggregateInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentOrderByRelationAggregateInput
 }
 
@@ -227,6 +229,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
   documentSerialCounters?: Prisma.DocumentSerialCounterListRelationFilter
   fileMetadata?: Prisma.FileMetadataListRelationFilter
+  reportDocuments?: Prisma.ReportDocumentListRelationFilter
   administrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
 }, "id" | "code">
 
@@ -266,6 +269,7 @@ export type TenantCreateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -283,6 +287,7 @@ export type TenantUncheckedCreateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -300,6 +305,7 @@ export type TenantUpdateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -317,6 +323,7 @@ export type TenantUncheckedUpdateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -507,6 +514,20 @@ export type TenantUpdateOneRequiredWithoutFileMetadataNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFileMetadataInput, Prisma.TenantUpdateWithoutFileMetadataInput>, Prisma.TenantUncheckedUpdateWithoutFileMetadataInput>
 }
 
+export type TenantCreateNestedOneWithoutReportDocumentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutReportDocumentsInput, Prisma.TenantUncheckedCreateWithoutReportDocumentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutReportDocumentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutReportDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutReportDocumentsInput, Prisma.TenantUncheckedCreateWithoutReportDocumentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutReportDocumentsInput
+  upsert?: Prisma.TenantUpsertWithoutReportDocumentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutReportDocumentsInput, Prisma.TenantUpdateWithoutReportDocumentsInput>, Prisma.TenantUncheckedUpdateWithoutReportDocumentsInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   code: string
@@ -520,6 +541,7 @@ export type TenantCreateWithoutUsersInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -536,6 +558,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -568,6 +591,7 @@ export type TenantUpdateWithoutUsersInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -584,6 +608,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -600,6 +625,7 @@ export type TenantCreateWithoutCompaniesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -616,6 +642,7 @@ export type TenantUncheckedCreateWithoutCompaniesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -648,6 +675,7 @@ export type TenantUpdateWithoutCompaniesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -664,6 +692,7 @@ export type TenantUncheckedUpdateWithoutCompaniesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -681,6 +710,7 @@ export type TenantCreateWithoutAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
@@ -697,6 +727,7 @@ export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAdministrationAssignmentsInput = {
@@ -729,6 +760,7 @@ export type TenantUpdateWithoutAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
@@ -745,6 +777,7 @@ export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -760,6 +793,7 @@ export type TenantCreateWithoutRolesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -776,6 +810,7 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -808,6 +843,7 @@ export type TenantUpdateWithoutRolesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -824,6 +860,7 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -840,6 +877,7 @@ export type TenantCreateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -856,6 +894,7 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -888,6 +927,7 @@ export type TenantUpdateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -904,6 +944,7 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -920,6 +961,7 @@ export type TenantCreateWithoutAuditsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -936,6 +978,7 @@ export type TenantUncheckedCreateWithoutAuditsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -968,6 +1011,7 @@ export type TenantUpdateWithoutAuditsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -984,6 +1028,7 @@ export type TenantUncheckedUpdateWithoutAuditsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1000,6 +1045,7 @@ export type TenantCreateWithoutIdempotencyReceiptsInput = {
   audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -1016,6 +1062,7 @@ export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1048,6 +1095,7 @@ export type TenantUpdateWithoutIdempotencyReceiptsInput = {
   audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -1064,6 +1112,7 @@ export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1080,6 +1129,7 @@ export type TenantCreateWithoutDocumentSerialCountersInput = {
   audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -1096,6 +1146,7 @@ export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1128,6 +1179,7 @@ export type TenantUpdateWithoutDocumentSerialCountersInput = {
   audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -1144,6 +1196,7 @@ export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1160,6 +1213,7 @@ export type TenantCreateWithoutFileMetadataInput = {
   audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
 }
 
@@ -1176,6 +1230,7 @@ export type TenantUncheckedCreateWithoutFileMetadataInput = {
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1208,6 +1263,7 @@ export type TenantUpdateWithoutFileMetadataInput = {
   audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
 }
 
@@ -1224,6 +1280,91 @@ export type TenantUncheckedUpdateWithoutFileMetadataInput = {
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutReportDocumentsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutReportDocumentsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutReportDocumentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutReportDocumentsInput, Prisma.TenantUncheckedCreateWithoutReportDocumentsInput>
+}
+
+export type TenantUpsertWithoutReportDocumentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutReportDocumentsInput, Prisma.TenantUncheckedUpdateWithoutReportDocumentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutReportDocumentsInput, Prisma.TenantUncheckedCreateWithoutReportDocumentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutReportDocumentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutReportDocumentsInput, Prisma.TenantUncheckedUpdateWithoutReportDocumentsInput>
+}
+
+export type TenantUpdateWithoutReportDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1241,6 +1382,7 @@ export type TenantCountOutputType = {
   idempotencyReceipts: number
   documentSerialCounters: number
   fileMetadata: number
+  reportDocuments: number
   administrationAssignments: number
 }
 
@@ -1253,6 +1395,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   idempotencyReceipts?: boolean | TenantCountOutputTypeCountIdempotencyReceiptsArgs
   documentSerialCounters?: boolean | TenantCountOutputTypeCountDocumentSerialCountersArgs
   fileMetadata?: boolean | TenantCountOutputTypeCountFileMetadataArgs
+  reportDocuments?: boolean | TenantCountOutputTypeCountReportDocumentsArgs
   administrationAssignments?: boolean | TenantCountOutputTypeCountAdministrationAssignmentsArgs
 }
 
@@ -1325,6 +1468,13 @@ export type TenantCountOutputTypeCountFileMetadataArgs<ExtArgs extends runtime.T
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountReportDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportDocumentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountAdministrationAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TenantAdministrationAssignmentWhereInput
 }
@@ -1344,6 +1494,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   idempotencyReceipts?: boolean | Prisma.Tenant$idempotencyReceiptsArgs<ExtArgs>
   documentSerialCounters?: boolean | Prisma.Tenant$documentSerialCountersArgs<ExtArgs>
   fileMetadata?: boolean | Prisma.Tenant$fileMetadataArgs<ExtArgs>
+  reportDocuments?: boolean | Prisma.Tenant$reportDocumentsArgs<ExtArgs>
   administrationAssignments?: boolean | Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -1382,6 +1533,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   idempotencyReceipts?: boolean | Prisma.Tenant$idempotencyReceiptsArgs<ExtArgs>
   documentSerialCounters?: boolean | Prisma.Tenant$documentSerialCountersArgs<ExtArgs>
   fileMetadata?: boolean | Prisma.Tenant$fileMetadataArgs<ExtArgs>
+  reportDocuments?: boolean | Prisma.Tenant$reportDocumentsArgs<ExtArgs>
   administrationAssignments?: boolean | Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1399,6 +1551,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     idempotencyReceipts: Prisma.$IdempotencyReceiptPayload<ExtArgs>[]
     documentSerialCounters: Prisma.$DocumentSerialCounterPayload<ExtArgs>[]
     fileMetadata: Prisma.$FileMetadataPayload<ExtArgs>[]
+    reportDocuments: Prisma.$ReportDocumentPayload<ExtArgs>[]
     administrationAssignments: Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1809,6 +1962,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   idempotencyReceipts<T extends Prisma.Tenant$idempotencyReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$idempotencyReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IdempotencyReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentSerialCounters<T extends Prisma.Tenant$documentSerialCountersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$documentSerialCountersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentSerialCounterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fileMetadata<T extends Prisma.Tenant$fileMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fileMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportDocuments<T extends Prisma.Tenant$reportDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$reportDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   administrationAssignments<T extends Prisma.Tenant$administrationAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2426,6 +2580,30 @@ export type Tenant$fileMetadataArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.FileMetadataScalarFieldEnum | Prisma.FileMetadataScalarFieldEnum[]
+}
+
+/**
+ * Tenant.reportDocuments
+ */
+export type Tenant$reportDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReportDocument
+   */
+  select?: Prisma.ReportDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReportDocument
+   */
+  omit?: Prisma.ReportDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportDocumentInclude<ExtArgs> | null
+  where?: Prisma.ReportDocumentWhereInput
+  orderBy?: Prisma.ReportDocumentOrderByWithRelationInput | Prisma.ReportDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.ReportDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportDocumentScalarFieldEnum | Prisma.ReportDocumentScalarFieldEnum[]
 }
 
 /**

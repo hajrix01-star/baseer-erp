@@ -16,6 +16,7 @@ export class FinanceAccountsController {
     return financeAccountsWorkspaceReceiptSchema.parse(await this.accounts.workspace(context, {
       ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}),
       ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}),
+      ...(parsed.data.businessMonths.length ? { businessMonths: parsed.data.businessMonths } : {}),
       ...(parsed.data.q ? { q: parsed.data.q } : {}),
     }));
   }
@@ -35,6 +36,7 @@ export class FinanceAccountsController {
     return financeAccountMovementReceiptSchema.parse(await this.accounts.movements(context, id.data, {
       ...(parsed.data.fromBusinessDate ? { from: new Date(`${parsed.data.fromBusinessDate}T00:00:00.000Z`) } : {}),
       ...(parsed.data.toBusinessDate ? { to: new Date(`${parsed.data.toBusinessDate}T00:00:00.000Z`) } : {}),
+      ...(parsed.data.businessMonths.length ? { businessMonths: parsed.data.businessMonths } : {}),
       ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
       pageSize: parsed.data.pageSize,
     }));
