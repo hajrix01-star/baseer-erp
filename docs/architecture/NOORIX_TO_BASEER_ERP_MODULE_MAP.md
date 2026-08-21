@@ -31,10 +31,11 @@ Baseer ERP
 ├─ Operations & Inventory
 │  ├─ Item catalog and units
 │  ├─ Locations and inventory
-│  ├─ Requests and approvals
-│  ├─ Purchase requests and receipts
-│  ├─ Inventory counts and corrections
-│  └─ Operational documents and activity
+│  ├─ Internal registration
+│  ├─ Purchase requests and custody
+│  ├─ Receipts and operational documents
+│  ├─ Raw materials, menu products and recipes
+│  └─ Inventory, counts and operational activity
 ├─ People
 │  ├─ Employee directory and profiles
 │  ├─ Employment records and services
@@ -66,7 +67,7 @@ Platform kernel (not a user business module): authentication, sessions, companie
 | Suppliers, supplier profile, supplier import/export, supplier directory | **Finance & Accounting → Suppliers** | Supplier master; profile; classification; import/export; payable drill-down | Vendor master belongs with purchasing/payables. |
 | Accounting categories, accounts, ledger, financial core, accounting initialization, fiscal periods | **Finance & Accounting → Accounting core** | Chart of accounts; classifications; canonical ledger; periods/filter policy; posting/reversal; audit; central serials | New core honors approved policy: no automatic close, historical owner amendment/cancel, retained cancellation, gross management display. |
 | OrdersV4 catalog, items, units, locations, stock, documents, requests, purchase receipt, counts, operational reports | **Operations & Inventory** | Item catalog; units; locations; stock availability; requests; purchase receipt; cycle count; correction; operational activity | Rebuild by operational workflow. Ledger posting remains through Finance core; inventory never owns a parallel ledger. |
-| OrdersV4 purchase requests and approvals | **Operations & Inventory → Requests** | Request lifecycle; approval/denial; conversion to approved receipt/purchase workflow; audit | Keep operational approval distinct from supplier invoice/payment. |
+| OrdersV4 purchase requests and approvals | **Operations & Inventory → Purchase requests and custody** | Multi-line purchase request; local or delegated execution; custody, receipt, correction and audit | No approval or rejection workflow is part of the request. The request waits for factual receipt; keep it distinct from supplier invoice/payment. |
 | OrdersV4 inventory documents and operational reports | **Operations & Inventory → Operational documents & activity** | Stock documents; movement history; count/correction evidence; read-only activity reports | Documents remain linked to their operational source. |
 | HR main workspace, staff list, employee profile, salary/allowances, career movement | **People → Directory & employment** | Employee master; profile; employment record; compensation context; career events | Preserve business data after deeper workflow discovery; calculations move to server. |
 | Leave, return from leave, settlement | **People → Leave & return** | Leave request/record; history; return; approved settlement lifecycle and audit | Rebuild only after full financial/settlement parity; do not hand off silently. |
@@ -122,4 +123,3 @@ The portfolio does not currently establish a complete native equivalent for CRM,
 10. Administration and Smart Assistant capabilities not already delivered by the platform foundation.
 
 The delivery register may have only one active scope. This ordering is a roadmap, not permission to start multiple modules.
-

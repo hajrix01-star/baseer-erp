@@ -1,6 +1,6 @@
 # BASEER ERP Reporting Module — Product and Architecture Decision
 
-**Status:** Proposed for owner approval before implementation.  
+**Status:** R0-A policy, R0-B durable report-run, the first personal-cash-performance view, R1 Ledger Trial Balance, and bounded report-document print/Excel output are implemented locally. Later R1 accounting reports and large/asynchronous output jobs remain pending.
 **Date:** 2026-08-20  
 **Scope:** The `reports` module only. It reads governed facts; it never creates, edits, posts, cancels, or recalculates a financial source record in the browser.
 
@@ -22,7 +22,7 @@ The module has four jobs:
 | `ANALYTICS_READ_MODELS_GATE_A_DECISION.md` | Financial dashboard/report amounts are server-owned and reconcile to active sealed journal evidence. | Reports read projections and ledger facts; the browser never calculates money. |
 | `SUPPLIER_DUES_CASH_BASIS_REPORTING_GATE_A_DECISION.md` | Unpaid supplier dues are commitments, not ordinary paid-expense/cash totals. Partial settlement is reported on its payment date. | Supplier dues get a separate commitment report; they must not silently inflate profit/cash totals. |
 | Finance journal, documents and cancellation model | Posted source entries are immutable; an accounting cancellation preserves the original and creates the cancelling evidence. | Default commercial reports exclude cancelled economic effect while audit detail retains the original → cancellation trail. |
-| `FinanceDailyFinancialSummary` and `FinanceDailySalesChannelSummary` | Daily operational financial projections are server-maintained. | Overview trends and sales/channel analysis read these models rather than raw UI aggregation. |
+| `FinanceDailyFinancialSummary` and `FinanceDailySalesChannelSummary` | The currently implemented projection is server-maintained **for sales and sales channels**. | It can support explicitly labelled sales analysis only. It is not evidence for purchases, expenses, profit, P&L or cash flow until those facts exist and reconcile. |
 | `FinanceAccountDailyBalance` and `FinanceAccountMonthlyBalance` | Account balances are projected from journal evidence and rebuildable. | Balance, movement and statement-style reports can be fast for long ranges without inventing a second ledger. |
 | Output platform | Print/Excel are created from an authorised server snapshot with audit/idempotency. | The report module requests outputs; it does not print DOM or generate a client-side spreadsheet. |
 
@@ -32,7 +32,9 @@ The module has four jobs:
 | --- | --- | --- |
 | Accounting position and account movement | `FinanceJournalEntry` + `FinanceJournalLine`, sealed posting and cancellation linkage | Financial statements, account drill-down and audit detail |
 | Account balance at a date | Account daily/monthly balance projections, reconcilable to the journal | Fast balance and comparative reports |
-| Sales, paid purchases, paid expenses and channel mix | Daily financial and sales-channel summaries, reconciled to sources | Management overview and trend reports |
+| Sales and channel mix | Current daily sales and sales-channel summaries, reconciled to sales sources | Explicitly labelled operational sales analysis only |
+| Paid purchases, paid expenses and profit | Ledger or a future, purpose-built reconciled fact/rollup | Not available from the current daily sales summary; never inferred from a sales chart |
+| Personal cash performance (owner view) | Future cash-performance event model, populated atomically by actual collection/payment sources and reconciled to sealed ledger entries | A detailed, all-payment-methods inflow/outflow view. Its approved VAT-inclusive policy is separate from formal P&L and never inferred from balances. |
 | Payables/commitments | Supplier-due source and settlement history | Separate outstanding-commitment reports |
 | VAT/statutory amounts | Approved tax source rule and tax-bearing financial documents | Tax report only; never inferred from a chart or a management cash view |
 | Payroll/HR financial amounts | Approved payroll/final-settlement journal sources | Financial reports may classify their posted effect; HR retains operational ownership |
@@ -43,11 +45,11 @@ Settings stay with their owner: company and tax setup stay in Administration, ac
 
 | Section | Goal | What it contains | What it deliberately does not contain |
 | --- | --- | --- | --- |
-| **0. Reports overview** | Give a fast, honest entry point. | Period status, report catalogue, recently generated outputs, readiness/data-coverage notices and saved report views. | Financial input fields or a second dashboard total. |
-| **1. Financial reports** | Explain money, position and movement. | A catalogue separated into ledger statements, management-cash reports and supplier commitments; account balances/activity and drill-down to the unified register. | Editing of entries, suppliers, vaults or accounting settings. It does not claim a P&L until its account mapping and source facts are approved. |
+| **0. Reports overview** | Give a fast, honest entry point. | Report catalogue and readiness/data-coverage notices. Saved documents remain in their own section. | Financial input fields, a second dashboard total, or automatic output history. |
+| **1. Financial reports** | Explain money, position and movement. | A catalogue separated into **Ledger**, **Cash and Vaults**, **Supplier Commitments**, and later **Personal cash performance**; account balances/activity and drill-down to the unified register. | Editing of entries, suppliers, vaults or accounting settings. It does not claim a formal P&L until its account mapping and source facts are approved. |
 | **2. VAT report** | Provide a governed tax view. | Taxable net, VAT, document counts, exceptions and the approved return period when the company tax rule supports it. | Tax-rate configuration or an unapproved statutory filing claim. |
 | **3. Hajri Tax** | Host Hajri-specific approved tax/analysis products. | A catalogue entry and report only after its rule, authority, inputs and acceptance tests are approved. | Guessed tax logic, copied totals, or a placeholder that claims compliance. |
-| **4. Print & export** | Make a report shareable and reproducible. | Server preview, A4/PDF-compatible print, XLSX export, output history and applied-filter snapshot. | Browser `window.print()`, screenshots, or editable report numbers. |
+| **4. Report documents** | Let a user return to report documents they explicitly chose to retain. | Document history, status and the exact applied-filter snapshot. Nothing is added merely because a report was viewed: when creating an Excel or retained print output inside its originating report, the user may explicitly choose **Add to report documents**. This is not a print/export screen; those actions operate only on the originating report's frozen report run. | A second report catalogue, automatic history of every viewed report, printing the interactive application shell, screenshots, editable report numbers, or standalone export filters. |
 
 ## 5. User experience contract
 
@@ -63,7 +65,7 @@ The visual reference is the useful part of Odoo's reporting experience, not a li
 
 The central `BaseerFilterBar`, `BaseerPeriodFilter`, `DataTable`, `BaseerDialog`, `BaseerOutputActions` and lazy workspaces are mandatory. No report creates a local styling system. A filter bar is central in behaviour, not identical in every report: company context and period are always explicit, while comparison, search and view options appear only when the report definition supports them.
 
-Every report header and every exported output must disclose: accounting basis (ledger/accrual, management cash, commitment, or tax), source kind (ledger or named projection), company, business timezone/date basis, currency, rounding rule, selected period, `asOf`, data coverage, cancellation treatment and reconciliation/freshness status. A number that is clickable must explain why it is present through its bounded evidence rows and applied filters.
+Every report header and every exported output must disclose: accounting basis (ledger/accrual, personal-cash-performance, cash-and-vault, commitment, operational-sales-analysis, or tax), source kind (ledger or named projection), company, business timezone/date basis, currency, rounding rule, selected period, `asOf`, data coverage, cancellation treatment and reconciliation/freshness status. A number that is clickable must explain why it is present through its bounded evidence rows and applied filters.
 
 ## 6. Odoo reference — what Baseer adopts
 
@@ -74,7 +76,7 @@ Baseer adopts these principles:
 1. a **report definition** identifies supported filters, columns, hierarchy and drill-down capability;
 2. an **options/request contract** is validated on the server and includes company, period, comparison and view options;
 3. a **report result** contains snapshot metadata, columns, hierarchical rows, totals, notices and bounded drill-down cursors;
-4. statement/management/commitment/tax catalogues remain separate so users do not confuse cash management with tax or statutory reporting;
+4. ledger, cash-and-vault, supplier-commitment, operational-sales-analysis and tax catalogues remain separate so users do not confuse cash management, sales analysis, tax or statutory reporting;
 5. report output uses the central snapshot platform.
 
 Baseer deliberately differs where its policies require it: single authorised company context by default, only posted/cancelled accounting evidence in financial reports, no browser formula engine, no editable report expressions by ordinary users, and no claim of Saudi statutory compliance without an approved rule.
@@ -109,6 +111,8 @@ The report snapshot contract additionally requires `sourceCutoff`/watermark, pro
 
 ### Gate R0-A — approved accounting reporting policy (before API/UI)
 
+The detailed, versioned policy and its R0-A implementation boundary are in [Reporting R0-A — Accounting Policy and Versioned P&L Mapping](REPORTING_R0_A_ACCOUNTING_POLICY_2026-08-20.md). It is deliberately limited to policy storage and guardrails: no report API, catalogue, UI, durable report run or export begins here.
+
 No report contract is implemented before this policy is accepted and versioned. It defines:
 
 1. **Ledger Trial Balance** as opening debit/credit, period debit/credit movement and closing debit/credit, with equal debit and credit totals for every eligible scope.
@@ -117,8 +121,14 @@ No report contract is implemented before this policy is accepted and versioned. 
 4. Cancellation semantics: a ledger report includes the original effect until its cancellation business date and includes the cancellation entry from that date. The technical cancellation line may be hidden from the commercial table only when a complete audit trail remains available.
 5. Opening/closing policy, locked/reopened fiscal periods, retained-earnings policy and account-to-statement mapping versioning for any future statement.
 6. R1 functional-currency restriction. Current Finance models do not support foreign-currency/FX/revaluation or consolidation; R1 is a single authorised company in its functional currency only.
+7. **Formal P&L policy before formal P&L implementation:** a versioned account-to-statement-line mapping and presentation policy must identify revenue, cost of sales, operating income/expense, investing, financing, income tax and discontinued operations where applicable. The first formal P&L uses ledger/accrual evidence only; it does not use the sales summary as a proxy, count VAT as ordinary revenue/expense unless a specific approved policy requires it, or treat advances, due settlements or vault movement as operating expense merely because cash moved.
+8. **Personal cash-performance policy:** the owner-approved [personal cash-performance decision](PERSONAL_CASH_PERFORMANCE_REPORT_DECISION_2026-08-20.md) defines the same future P&L screen's `شامل الضريبة` basis: actual external receipts/payments across all payment methods, gross VAT-inclusive rows when enabled, and a separately disclosed actual VAT-payment/refund line. It uses its own immutable event source and may not reuse or relax the formal P&L mapping.
+
+The target P&L sequence is: revenue → cost of sales → gross profit → operating income/expense → operating profit → investing → profit before financing and income taxes → financing → income taxes → profit. It adopts the presentation direction of IFRS 18, but Baseer must not claim IFRS-compliant financial statements until its mapping, disclosure policy and coverage are formally approved.
 
 ### Gate R0-B — durable report-run consistency (before R1)
+
+The implemented boundary is documented in [Reporting R0-B — Durable Report-Run Boundary](REPORTING_R0_B_DURABLE_REPORT_RUN_DECISION_2026-08-20.md). It adds the tenant/company ledger revision, persists it on every sealed journal entry/reversal, and provides an immutable, RLS-protected service-only `ReportRun`. It does not expose a report endpoint or UI.
 
 `asOf` is a business meaning, not a concurrency mechanism. The platform must implement a durable `ReportRun`/snapshot with a company ledger revision or equivalent monotonically committed watermark allocated in the same transaction as every posting and accounting cancellation.
 
@@ -140,19 +150,43 @@ Every R1 report declares the exact comparison behaviour rather than using “whe
 
 ### Gate R0 — technical foundation
 
-After R0-A/R0-B/R0-C are accepted, create the report catalogue/definition contract, central options parser, durable report-run API, response contract, capability map, source-coverage metadata, report-output job registration and empty module shell. The shell explains the distinct states **no data**, **coverage incomplete** and **report not ready** honestly; it hides reports the current user is not authorised to read.
+The first R0 slice is implemented for the personal cash-performance definition: `GET /reports/catalogue` and `GET /reports/personal-cash-performance` require `reports.read`; `POST /reports/personal-cash-performance/coverage` requires the sensitive `reports.cash_performance.activate` capability. The API returns server-calculated rows/totals and a frozen `ReportRun` boundary only for a declared complete coverage interval. It returns the distinct states **no data**, **coverage incomplete** and **report not ready** without substituting zero, and the catalogue/API are company-scoped and capability-gated. UI, output jobs, common options/response schemas for all definitions, and R1 reports remain later work.
 
 ### Gate R1 — first safe accounting reports
 
-Implement, in this order: Ledger Trial Balance, Account Balance, Account Activity, Ledger Vault Balance/Activity and Supplier-Dues Commitment Schedule. Each must use its R0-C behaviour contract, bounded drill-down and authorised output. The catalogue labels the basis visibly: **Ledger**, **Cash and Vaults**, and **Supplier Commitments**.
+The first item, [Ledger Trial Balance](LEDGER_TRIAL_BALANCE_R1_DECISION_2026-08-20.md), is implemented locally with a frozen ledger run, direct sealed-journal calculation, bounded evidence and contextual print/Excel actions. Continue, in this order: Account Balance, Account Activity, Ledger Vault Balance/Activity and Supplier-Dues Commitment Schedule. Each must use its R0-C behaviour contract, bounded drill-down and authorised output. The catalogue labels the basis visibly: **Ledger**, **Cash and Vaults**, and **Supplier Commitments**.
 
 Do **not** implement a general financial overview, P&L, cash-flow statement or statutory VAT report in R1. They require approved account-to-statement mapping, normal-balance/opening/closing policy, retained-earnings treatment and correctly scoped fact/rollup sources. Supplier dues require their own source gate: no status/remaining-amount-at-read-time model may be used as a historical proof unless its due/payment/cancellation events reconcile to the control ledger at the report run revision.
 
-### Gate R2 — VAT report
+### Gate R1.5 — operational sales analysis
+
+Sales trend, channel mix and similar operating views may be delivered only from the current daily sales projections. They are visibly labelled **Operational sales analysis — not P&L, cash flow or VAT**. They may not be promoted to an all-finance overview until a purpose-built daily fact contains the named purchases, expenses, tax and profit measures and reconciles to the ledger.
+
+### Gate R1.6 — الربح والخسارة المالي
+
+The implemented [actual-financial-movements policy](PERSONAL_CASH_PERFORMANCE_EVENT_MODEL_DECISION_2026-08-20.md) reads the frozen sealed ledger directly: every line on a configured vault account is visible, including employee advances, payroll payments and final-settlement payments. Only an internal vault transfer is excluded. Source events enrich known VAT split information, but are no longer the completeness boundary; an unknown new financial source is shown under “other financial movements” rather than silently disappearing. The report is labelled **الربح والخسارة المالي** and exposes the owner-approved **شامل الضريبة** switch. The live view, bounded keyset evidence list, read-only source-journal dialog and contextual print/Excel actions are implemented.
+
+### Gate R1.7 — report documents
+
+Print and Excel are actions within the originating report, never a separate report type. Their rendering, download and document retention use one central report-document service/client; individual report screens supply only a `ReportRun` identifier and never render/export their own table data. An action renders only the selected `ReportRun` at its frozen ledger boundary. A user may explicitly choose **Add to report documents**; this stores an immutable server-built table snapshot under that user's Report Documents list. Viewing, filtering or drilling into a report never creates a document. The current bounded slice supports print preview and Excel only; it does not claim PDF generation, long-running jobs or multi-million-row exports.
+
+**Accepted prototype experience (2026-08-20):** the report is a compact, centred hierarchy that uses the shared `BaseerPeriodFilter` and the `شامل الضريبة` view option, with no comparison checkbox or report search. Each detail row sits directly under its principal heading; the report contains no “operating/non-operating” partition or explanatory rows. Every displayed monetary value opens a centred, read-only evidence dialog. The browser does not compute financial facts: rows, totals, source list and navigation permission are supplied by the frozen report run/API. Header styling inherits the active application header theme; currency and posting-state disclosure belong to server-provided report metadata rather than fixed prototype controls.
+
+### Gate R1.8 — internal VAT ledger analysis
+
+The implemented **التقرير الضريبي الداخلي** is a read-only, frozen-ledger analysis of the `VAT_OUTPUT` and `VAT_INPUT` control accounts for the selected business-date period. It displays output VAT, input VAT, their net period difference, and VAT paid/refunded as separate settlement rows. A VAT settlement is deliberately excluded from output/input period tax so payment or refund does not rewrite the VAT created by invoices and purchases. Every non-zero row can open its bounded ledger evidence and source journal; print, Excel and explicit saving use the same central `ReportRun` output path as the other reports.
+
+This is not a Saudi VAT return, a taxable-supplies calculation, a document-count/exceptions register, or an assertion of ZATCA/VAT compliance. Those remain Gate R3 and require an approved tax-source mapping, return-rule policy and acceptance tests.
+
+### Gate R2 — formal P&L, position and cash flow
+
+**مؤجل وغير مطلوب للاستخدام الشخصي الحالي** بموجب [قرار نطاق التقارير للاستخدام الشخصي](PERSONAL_REPORTING_SCOPE_DECISION_2026-08-20.md). لا يُبنى تقرير ربح وخسارة استحقاقي أو قائمة مركز مالي/ميزانية عمومية دفترّية أو واجهة أو مخرج لأي منها دون قرار مالك جديد. تبقى خريطة R0-A كقدرة مستقبلية محفوظة فقط. إذا تغيّر القرار، يطبق P&L بعد سياسة العرض/الخريطة ذات الإصدار، لقطة تاريخية، اختبارات التغطية والإلغاء، ومطابقة مباشرة للدفتر. وتحتاج قائمة المركز المالي إلى خريطة عرض حسابات ذات إصدار وسياسة صريحة للأصول والالتزامات وحقوق الملكية والأرباح المبقاة؛ كما تحتاج التدفقات النقدية إلى سياسة مستقلة، فرصيد الخزينة ليس قائمة تدفقات نقدية.
+
+### Gate R3 — VAT report
 
 Implement only after tax source mapping and Saudi return-rule acceptance are documented. The report remains read-only and must distinguish management cash reporting from statutory treatment.
 
-### Gate R3 — Hajri Tax
+### Gate R4 — Hajri Tax
 
 Begin only with a separately approved source/rule/ownership document. It is not inferred from the name or copied from a different product.
 
@@ -167,8 +201,20 @@ Begin only with a separately approved source/rule/ownership document. It is not 
 - Preview/A4/XLSX contain server snapshot metadata and exactly the applied filters.
 - Browser code has no financial write path or independently computed financial total.
 - A report has an approved source/index plan and measured acceptance: representative data at 100k then at least 1m journal entries/lines across five or more years, `EXPLAIN ANALYZE`, p95/timeout/lock-wait thresholds, RLS checks and reconciliation/rebuild checksum. Partitioning is not a substitute for this evidence.
+- A formal P&L is released only when every displayed line reconciles to the frozen ledger run through its approved mapping version, including a documented treatment for VAT, cancellations, opening/closing and accounts without activity.
+- Personal cash performance is released only when its gross/net rows, VAT paid/refund rows, partial settlements and cancellation dates reconcile to the same frozen cash-performance event run; source coverage must explicitly include every selected payment method.
 
-## 11. Explicit exclusions for the first release
+## 11. Independent review basis — 2026-08-20
+
+This revision was checked against the current Baseer schema/services and the following primary references:
+
+- [IFRS 18 — Presentation and Disclosure in Financial Statements](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-18-presentation-and-disclosure-in-financial-statements/) supports the future P&L categories and defined subtotals. IFRS 18 is effective for annual periods beginning on or after 1 January 2027; this document therefore adopts its presentation direction without claiming compliance.
+- [IAS 7 — Statement of Cash Flows](https://www.ifrs.org/issued-standards/list-of-standards/ias-7-statement-of-cash-flows/) confirms that cash flow is a separate operating/investing/financing statement, not a vault-balance report.
+- [Odoo accounting report model](https://github.com/odoo/odoo/blob/19.0/addons/account/models/account_report.py) supports report definitions with centrally controlled date, comparison and view options; it is a product reference, not Baseer source code.
+- [PostgreSQL transaction isolation documentation](https://www.postgresql.org/docs/current/transaction-iso.html) supports the need for a stable snapshot while reading; Baseer's durable ledger revision/ReportRun is the product-level extension needed for paged and long-running output.
+- [ZATCA VAT implementing regulations](https://zatca.gov.sa/ar/RulesRegulations/Taxes/Pages/VATImplementingRegulations.aspx) confirm that Saudi VAT requires its own governed rule path; it is not inferred from management views.
+
+## 12. Explicit exclusions for the first release
 
 - custom formula authoring by users;
 - a generic drag-and-drop BI tool;

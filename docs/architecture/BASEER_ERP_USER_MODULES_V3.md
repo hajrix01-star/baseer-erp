@@ -77,14 +77,19 @@ It is a read-only decision workspace. It links contextually to the responsible m
 ├─ المصروفات والالتزامات
 ├─ الأصناف والوحدات
 ├─ المستودعات والمخزون
-├─ الطلبات والموافقات
+├─ التسجيل الداخلي
+├─ طلبات المشتريات والعهدة
 ├─ الاستلام والوثائق التشغيلية
-├─ الجرد والتصحيحات
+├─ المواد الأولية والوحدات والتحويلات
+├─ منتجات المنيو والرسبي
+├─ المخزون والجرد والتكلفة
 ├─ الأصول والضمان
 └─ سجل النشاط التشغيلي
 ```
 
 Financial postings happen through the central Finance contract; Operations never creates a parallel financial truth.
+
+**طلبات العمليات:** ينشئ مدير المطعم طلب شراء متعدد البنود مباشرةً بلا موافقة أو رفض. يبقى الطلب بانتظار الاستلام، ثم يوثق الاستلام الفعلي الكميات والأسعار والمخزون والعهدة عند الحاجة. التسجيل الداخلي ومنتجات المنيو والرسبي والمواد الأولية والمخزون هي دورة تشغيلية مترابطة موثقة في [قرار الطلبات والرسبي والعهدة](OPERATIONS_ORDERS_RECIPE_AND_CUSTODY_DECISION_2026-08-20.md).
 
 ### 3.4 الأشخاص
 
@@ -186,4 +191,3 @@ It uses permission-filtered contracts from the other modules. It cannot bypass a
 ## 6. Delivery discipline remains unchanged
 
 This visual grouping does not permit building eight modules in parallel. The Single-Module Focus Policy remains mandatory. We build one selected module completely, while the other seven remain planned.
-

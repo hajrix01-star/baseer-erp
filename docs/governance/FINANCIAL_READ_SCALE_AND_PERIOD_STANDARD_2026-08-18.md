@@ -4,7 +4,7 @@
 
 ## Decision
 
-All period-aware financial workspaces open on the **current Riyadh business month**. The shared `defaultBaseerPeriodRange()` is the only default. Users can then select a day, month, multiple months, quarter, year, or custom range through `BaseerPeriodFilter`.
+All period-aware financial workspaces open on the **current Riyadh business month**. The shared `defaultBaseerPeriodRange()` is the only default. Users can then select a day, one or more explicit months under the single `MONTH` mode, quarter, year, or custom range through `BaseerPeriodFilter`. Multiple selected months are a union of those months, not the enclosing date range.
 
 This applies to Sales, operational dashboard views, the unified invoice register, Treasury, and future financial reports. Master data is timeless and must not receive a cosmetic period filter. Open credit is an **as-of** liability view: unpaid prior-month documents remain visible on the first day of a new month.
 

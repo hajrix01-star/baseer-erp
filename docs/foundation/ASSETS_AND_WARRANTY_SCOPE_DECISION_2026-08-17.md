@@ -1,7 +1,7 @@
 # BASEER ERP — Assets and Warranty Scope Decision
 
 **Decision date:** 2026-08-17
-**Status:** Planned; not an active build scope
+**Status:** Gate A implemented locally; owner acceptance and shared release gate remain open
 **Current delivery authority:** `../governance/CURRENT_DELIVERY_AUTHORITY.md`
 
 ## Decision
@@ -11,7 +11,7 @@ Baseer will adopt the useful Noorix workflow, but not its implementation details
 1. A purchase, expense, or recurring-expense payment may carry the optional marker **"Needs asset / warranty follow-up"**.
 2. The marker creates no asset, warranty, journal, depreciation, balance change, or automatic accounting classification. It only makes the source document visible in the Assets & Warranty queue.
 3. An authorized user later completes the queued item into an asset/warranty record. The record keeps the immutable source-document reference, supplier, invoice date and amount as copied context; the user supplies the asset name, serial number, location, warranty provider/terms, start/end date and optional line items.
-4. Completing the record marks the queue item done atomically and leaves the original financial document unchanged. One source document may later support one or more explicitly recorded assets only where the approved scope supports it; it must never be silently capitalized.
+4. Completing the record marks the queue item done atomically and leaves the original financial document unchanged. Gate A permits one operational asset record per source document; split assets require a separately approved expansion. It must never be silently capitalized.
 
 ## What Noorix does and what Baseer retains
 
@@ -38,7 +38,7 @@ Baseer retains this separation because it is simple for a small private company 
 
 ## Delivery order and prerequisites
 
-Assets & Warranty does **not** start now. It is scheduled after the current finance-source acceptance and reconciled finance read-model gate, and before a live Noorix migration/cutover. Its internal sequence is:
+Gate A is implemented locally as a bounded exception to the historical sequence; it remains pending owner acceptance and the shared web release-budget gate. Its delivered behavior is: a Purchase & Expense row can be marked for follow-up, the Operations workspace exposes its company-scoped queue and register, and authorized users can register or archive an operational asset with audit and idempotency. Migration `20260821130000_operations_assets_warranty_gate_a` adds the tenant-isolated storage. `npm run verify:operations-assets-warranty` proves the queue, completion, warranty lines, idempotency, audit, archive and absence of any new finance journal. Its remaining sequence is:
 
 1. Close Treasury and Purchase & Expense owner verification, including the correction/cancellation decision.
 2. Deliver reconciled finance read models so the source-document drill-down and print/export contract are stable.
