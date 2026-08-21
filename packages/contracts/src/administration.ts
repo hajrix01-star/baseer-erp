@@ -9,6 +9,14 @@ const password = z.string().min(6).max(256).refine((value) => value.trim().lengt
 const safeFileNameSchema = z.string().trim().min(1).max(160).refine((value) => !/[\\/\x00-\x1F]/.test(value));
 const userAvatarKind = z.enum(["INITIALS", "MALE", "FEMALE"]);
 const companyLogoContentBase64 = z.string().trim().min(4).max(700_000).regex(/^[A-Za-z0-9+/]+={0,2}$/);
+const contextLocationCode = z.string().trim().min(2).max(80).regex(/^[A-Za-z0-9_-]+$/).transform((value) => value.toUpperCase());
+const coordinate = z.number().finite();
+const companyContextLocationFields = {
+  contextLocationCode: contextLocationCode.nullable(),
+  contextLocationLabelAr: z.string().trim().min(2).max(160).nullable(),
+  contextLatitude: coordinate.min(-90).max(90).nullable(),
+  contextLongitude: coordinate.min(-180).max(180).nullable(),
+};
 
 export const administrationPermissionSchema = z.object({
   code: permissionCode, module: z.string().min(1).max(80), nameAr: text160, nameEn: text160, risk: z.enum(["standard", "sensitive"]),
@@ -17,7 +25,7 @@ export const administrationRoleSchema = z.object({
   id: z.string().uuid(), code: roleCode, nameAr: text160, nameEn: text160, isSystem: z.boolean(), permissionCodes: z.array(permissionCode).max(120),
 }).strict();
 export const administrationCompanySchema = z.object({
-  id: companyIdSchema, nameAr: text160, nameEn: text160, businessTimezone: z.string().min(1).max(64), status: z.enum(["ACTIVE", "ARCHIVED"]), logoFileMetadataId: z.string().uuid().nullable(),
+  id: companyIdSchema, nameAr: text160, nameEn: text160, businessTimezone: z.string().min(1).max(64), status: z.enum(["ACTIVE", "ARCHIVED"]), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields,
 }).strict();
 export const administrationUserSchema = z.object({
   id: userIdSchema, login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema, avatarKind: userAvatarKind, status: z.enum(["ACTIVE", "DISABLED"]), memberships: z.array(z.object({ companyId: companyIdSchema, companyNameAr: text160, companyNameEn: text160, roleId: z.string().uuid(), roleNameAr: text160, roleNameEn: text160 }).strict()).max(250),
@@ -28,7 +36,15 @@ export const createAdministrationRoleRequestSchema = z.object({ code: roleCode, 
 export const createAdministrationUserRequestSchema = z.object({ login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema.default("ar"), avatarKind: userAvatarKind.default("INITIALS"), password, companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), roleId: z.string().uuid() }).strict();
 export const assignAdministrationMembershipRequestSchema = z.object({ userId: userIdSchema, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
 export const replaceAdministrationUserAccessRequestSchema = z.object({ roleId: z.string().uuid(), companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), reason: z.string().trim().min(3).max(500) }).strict();
-export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable() }).strict();
+export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields }).strict().superRefine((value, context) => {
+  const hasCode = value.contextLocationCode !== null;
+  const hasLabel = value.contextLocationLabelAr !== null;
+  const hasLatitude = value.contextLatitude !== null;
+  const hasLongitude = value.contextLongitude !== null;
+  if (hasCode !== hasLabel) context.addIssue({ code: "custom", message: "Context location code and label must be supplied together." });
+  if (hasLatitude !== hasLongitude) context.addIssue({ code: "custom", message: "Context latitude and longitude must be supplied together." });
+  if (hasLatitude && !hasCode) context.addIssue({ code: "custom", message: "Coordinates require a context location." });
+});
 export const uploadAdministrationCompanyLogoRequestSchema = z.object({ fileName: safeFileNameSchema, contentBase64: companyLogoContentBase64 }).strict();
 export const updateAdministrationCompanyStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "ARCHIVED"]), reason: z.string().trim().min(3).max(500).optional() }).strict();
 export const updateAdministrationRoleRequestSchema = z.object({ nameAr: text160, nameEn: text160, permissionCodes: z.array(permissionCode).min(1).max(120) }).strict();

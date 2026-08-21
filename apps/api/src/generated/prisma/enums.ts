@@ -263,6 +263,24 @@ export const DecisionContextEventStatus = {
 export type DecisionContextEventStatus = (typeof DecisionContextEventStatus)[keyof typeof DecisionContextEventStatus]
 
 
+export const DecisionContextCandidateStatus = {
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  APPROVED: 'APPROVED',
+  DISMISSED: 'DISMISSED',
+  DUPLICATE: 'DUPLICATE'
+} as const
+
+export type DecisionContextCandidateStatus = (typeof DecisionContextCandidateStatus)[keyof typeof DecisionContextCandidateStatus]
+
+
+export const DecisionContextScope = {
+  TENANT_GLOBAL: 'TENANT_GLOBAL',
+  AREA: 'AREA'
+} as const
+
+export type DecisionContextScope = (typeof DecisionContextScope)[keyof typeof DecisionContextScope]
+
+
 export const DecisionAlertStatus = {
   OPEN: 'OPEN',
   ACKNOWLEDGED: 'ACKNOWLEDGED',
@@ -270,6 +288,22 @@ export const DecisionAlertStatus = {
 } as const
 
 export type DecisionAlertStatus = (typeof DecisionAlertStatus)[keyof typeof DecisionAlertStatus]
+
+
+export const DecisionAlertActionKind = {
+  ACKNOWLEDGED: 'ACKNOWLEDGED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type DecisionAlertActionKind = (typeof DecisionAlertActionKind)[keyof typeof DecisionAlertActionKind]
+
+
+export const DecisionContextReviewActionKind = {
+  APPROVED: 'APPROVED',
+  DISMISSED: 'DISMISSED'
+} as const
+
+export type DecisionContextReviewActionKind = (typeof DecisionContextReviewActionKind)[keyof typeof DecisionContextReviewActionKind]
 
 
 export const FinanceCashPerformanceEventKind = {

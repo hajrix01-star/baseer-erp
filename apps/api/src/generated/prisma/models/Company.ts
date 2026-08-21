@@ -20,8 +20,20 @@ export type CompanyModel = runtime.Types.Result.DefaultSelection<Prisma.$Company
 
 export type AggregateCompany = {
   _count: CompanyCountAggregateOutputType | null
+  _avg: CompanyAvgAggregateOutputType | null
+  _sum: CompanySumAggregateOutputType | null
   _min: CompanyMinAggregateOutputType | null
   _max: CompanyMaxAggregateOutputType | null
+}
+
+export type CompanyAvgAggregateOutputType = {
+  contextLatitude: runtime.Decimal | null
+  contextLongitude: runtime.Decimal | null
+}
+
+export type CompanySumAggregateOutputType = {
+  contextLatitude: runtime.Decimal | null
+  contextLongitude: runtime.Decimal | null
 }
 
 export type CompanyMinAggregateOutputType = {
@@ -30,6 +42,10 @@ export type CompanyMinAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   businessTimezone: string | null
+  contextLocationCode: string | null
+  contextLocationLabelAr: string | null
+  contextLatitude: runtime.Decimal | null
+  contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -41,6 +57,10 @@ export type CompanyMaxAggregateOutputType = {
   nameAr: string | null
   nameEn: string | null
   businessTimezone: string | null
+  contextLocationCode: string | null
+  contextLocationLabelAr: string | null
+  contextLatitude: runtime.Decimal | null
+  contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,6 +72,10 @@ export type CompanyCountAggregateOutputType = {
   nameAr: number
   nameEn: number
   businessTimezone: number
+  contextLocationCode: number
+  contextLocationLabelAr: number
+  contextLatitude: number
+  contextLongitude: number
   status: number
   createdAt: number
   updatedAt: number
@@ -59,12 +83,26 @@ export type CompanyCountAggregateOutputType = {
 }
 
 
+export type CompanyAvgAggregateInputType = {
+  contextLatitude?: true
+  contextLongitude?: true
+}
+
+export type CompanySumAggregateInputType = {
+  contextLatitude?: true
+  contextLongitude?: true
+}
+
 export type CompanyMinAggregateInputType = {
   id?: true
   tenantId?: true
   nameAr?: true
   nameEn?: true
   businessTimezone?: true
+  contextLocationCode?: true
+  contextLocationLabelAr?: true
+  contextLatitude?: true
+  contextLongitude?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -76,6 +114,10 @@ export type CompanyMaxAggregateInputType = {
   nameAr?: true
   nameEn?: true
   businessTimezone?: true
+  contextLocationCode?: true
+  contextLocationLabelAr?: true
+  contextLatitude?: true
+  contextLongitude?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +129,10 @@ export type CompanyCountAggregateInputType = {
   nameAr?: true
   nameEn?: true
   businessTimezone?: true
+  contextLocationCode?: true
+  contextLocationLabelAr?: true
+  contextLatitude?: true
+  contextLongitude?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -131,6 +177,18 @@ export type CompanyAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CompanyAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CompanySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CompanyMinAggregateInputType
@@ -161,6 +219,8 @@ export type CompanyGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: CompanyCountAggregateInputType | true
+  _avg?: CompanyAvgAggregateInputType
+  _sum?: CompanySumAggregateInputType
   _min?: CompanyMinAggregateInputType
   _max?: CompanyMaxAggregateInputType
 }
@@ -171,10 +231,16 @@ export type CompanyGroupByOutputType = {
   nameAr: string
   nameEn: string
   businessTimezone: string
+  contextLocationCode: string | null
+  contextLocationLabelAr: string | null
+  contextLatitude: runtime.Decimal | null
+  contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus
   createdAt: Date
   updatedAt: Date
   _count: CompanyCountAggregateOutputType | null
+  _avg: CompanyAvgAggregateOutputType | null
+  _sum: CompanySumAggregateOutputType | null
   _min: CompanyMinAggregateOutputType | null
   _max: CompanyMaxAggregateOutputType | null
 }
@@ -203,6 +269,10 @@ export type CompanyWhereInput = {
   nameAr?: Prisma.StringFilter<"Company"> | string
   nameEn?: Prisma.StringFilter<"Company"> | string
   businessTimezone?: Prisma.StringFilter<"Company"> | string
+  contextLocationCode?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLocationLabelAr?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLatitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -273,11 +343,13 @@ export type CompanyWhereInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionListRelationFilter
+  decisionSalesChangePolicy?: Prisma.XOR<Prisma.DecisionSalesChangePolicyNullableScalarRelationFilter, Prisma.DecisionSalesChangePolicyWhereInput> | null
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionListRelationFilter
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventListRelationFilter
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunListRelationFilter
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotListRelationFilter
   decisionAlerts?: Prisma.DecisionAlertListRelationFilter
+  decisionAlertActions?: Prisma.DecisionAlertActionListRelationFilter
   decisionFeedback?: Prisma.DecisionFeedbackListRelationFilter
   operationsSections?: Prisma.OperationsSectionListRelationFilter
   operationsUnits?: Prisma.OperationsUnitListRelationFilter
@@ -308,6 +380,10 @@ export type CompanyOrderByWithRelationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   businessTimezone?: Prisma.SortOrder
+  contextLocationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLocationLabelAr?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLatitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -378,11 +454,13 @@ export type CompanyOrderByWithRelationInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityOrderByRelationAggregateInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionOrderByRelationAggregateInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyOrderByWithRelationInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionOrderByRelationAggregateInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventOrderByRelationAggregateInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunOrderByRelationAggregateInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotOrderByRelationAggregateInput
   decisionAlerts?: Prisma.DecisionAlertOrderByRelationAggregateInput
+  decisionAlertActions?: Prisma.DecisionAlertActionOrderByRelationAggregateInput
   decisionFeedback?: Prisma.DecisionFeedbackOrderByRelationAggregateInput
   operationsSections?: Prisma.OperationsSectionOrderByRelationAggregateInput
   operationsUnits?: Prisma.OperationsUnitOrderByRelationAggregateInput
@@ -417,6 +495,10 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   nameAr?: Prisma.StringFilter<"Company"> | string
   nameEn?: Prisma.StringFilter<"Company"> | string
   businessTimezone?: Prisma.StringFilter<"Company"> | string
+  contextLocationCode?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLocationLabelAr?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLatitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -487,11 +569,13 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionListRelationFilter
+  decisionSalesChangePolicy?: Prisma.XOR<Prisma.DecisionSalesChangePolicyNullableScalarRelationFilter, Prisma.DecisionSalesChangePolicyWhereInput> | null
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionListRelationFilter
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventListRelationFilter
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunListRelationFilter
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotListRelationFilter
   decisionAlerts?: Prisma.DecisionAlertListRelationFilter
+  decisionAlertActions?: Prisma.DecisionAlertActionListRelationFilter
   decisionFeedback?: Prisma.DecisionFeedbackListRelationFilter
   operationsSections?: Prisma.OperationsSectionListRelationFilter
   operationsUnits?: Prisma.OperationsUnitListRelationFilter
@@ -522,12 +606,18 @@ export type CompanyOrderByWithAggregationInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   businessTimezone?: Prisma.SortOrder
+  contextLocationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLocationLabelAr?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLatitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CompanyCountOrderByAggregateInput
+  _avg?: Prisma.CompanyAvgOrderByAggregateInput
   _max?: Prisma.CompanyMaxOrderByAggregateInput
   _min?: Prisma.CompanyMinOrderByAggregateInput
+  _sum?: Prisma.CompanySumOrderByAggregateInput
 }
 
 export type CompanyScalarWhereWithAggregatesInput = {
@@ -539,6 +629,10 @@ export type CompanyScalarWhereWithAggregatesInput = {
   nameAr?: Prisma.StringWithAggregatesFilter<"Company"> | string
   nameEn?: Prisma.StringWithAggregatesFilter<"Company"> | string
   businessTimezone?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  contextLocationCode?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  contextLocationLabelAr?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  contextLatitude?: Prisma.DecimalNullableWithAggregatesFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.DecimalNullableWithAggregatesFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusWithAggregatesFilter<"Company"> | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
@@ -549,6 +643,10 @@ export type CompanyCreateInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -619,11 +717,13 @@ export type CompanyCreateInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -654,6 +754,10 @@ export type CompanyUncheckedCreateInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -723,11 +827,13 @@ export type CompanyUncheckedCreateInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -757,6 +863,10 @@ export type CompanyUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -827,11 +937,13 @@ export type CompanyUpdateInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -862,6 +974,10 @@ export type CompanyUncheckedUpdateInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -931,11 +1047,13 @@ export type CompanyUncheckedUpdateInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -966,6 +1084,10 @@ export type CompanyCreateManyInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -976,6 +1098,10 @@ export type CompanyUpdateManyMutationInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -987,6 +1113,10 @@ export type CompanyUncheckedUpdateManyInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,9 +1143,18 @@ export type CompanyCountOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   businessTimezone?: Prisma.SortOrder
+  contextLocationCode?: Prisma.SortOrder
+  contextLocationLabelAr?: Prisma.SortOrder
+  contextLatitude?: Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanyAvgOrderByAggregateInput = {
+  contextLatitude?: Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrder
 }
 
 export type CompanyMaxOrderByAggregateInput = {
@@ -1024,6 +1163,10 @@ export type CompanyMaxOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   businessTimezone?: Prisma.SortOrder
+  contextLocationCode?: Prisma.SortOrder
+  contextLocationLabelAr?: Prisma.SortOrder
+  contextLatitude?: Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -1035,9 +1178,18 @@ export type CompanyMinOrderByAggregateInput = {
   nameAr?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
   businessTimezone?: Prisma.SortOrder
+  contextLocationCode?: Prisma.SortOrder
+  contextLocationLabelAr?: Prisma.SortOrder
+  contextLatitude?: Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanySumOrderByAggregateInput = {
+  contextLatitude?: Prisma.SortOrder
+  contextLongitude?: Prisma.SortOrder
 }
 
 export type CompanyScalarRelationFilter = {
@@ -1090,6 +1242,18 @@ export type CompanyUncheckedUpdateManyWithoutTenantNestedInput = {
   update?: Prisma.CompanyUpdateWithWhereUniqueWithoutTenantInput | Prisma.CompanyUpdateWithWhereUniqueWithoutTenantInput[]
   updateMany?: Prisma.CompanyUpdateManyWithWhereWithoutTenantInput | Prisma.CompanyUpdateManyWithWhereWithoutTenantInput[]
   deleteMany?: Prisma.CompanyScalarWhereInput | Prisma.CompanyScalarWhereInput[]
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type EnumCompanyStatusFieldUpdateOperationsInput = {
@@ -1294,6 +1458,20 @@ export type CompanyUpdateOneRequiredWithoutDecisionMetricDefinitionsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutDecisionMetricDefinitionsInput, Prisma.CompanyUpdateWithoutDecisionMetricDefinitionsInput>, Prisma.CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput>
 }
 
+export type CompanyCreateNestedOneWithoutDecisionSalesChangePolicyInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutDecisionSalesChangePolicyInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutDecisionSalesChangePolicyNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutDecisionSalesChangePolicyInput
+  upsert?: Prisma.CompanyUpsertWithoutDecisionSalesChangePolicyInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUpdateWithoutDecisionSalesChangePolicyInput>, Prisma.CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput>
+}
+
 export type CompanyCreateNestedOneWithoutDecisionRuleDefinitionsInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionRuleDefinitionsInput, Prisma.CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutDecisionRuleDefinitionsInput
@@ -1362,6 +1540,20 @@ export type CompanyUpdateOneRequiredWithoutDecisionAlertsNestedInput = {
   upsert?: Prisma.CompanyUpsertWithoutDecisionAlertsInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutDecisionAlertsInput, Prisma.CompanyUpdateWithoutDecisionAlertsInput>, Prisma.CompanyUncheckedUpdateWithoutDecisionAlertsInput>
+}
+
+export type CompanyCreateNestedOneWithoutDecisionAlertActionsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedCreateWithoutDecisionAlertActionsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutDecisionAlertActionsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutDecisionAlertActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedCreateWithoutDecisionAlertActionsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutDecisionAlertActionsInput
+  upsert?: Prisma.CompanyUpsertWithoutDecisionAlertActionsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutDecisionAlertActionsInput, Prisma.CompanyUpdateWithoutDecisionAlertActionsInput>, Prisma.CompanyUncheckedUpdateWithoutDecisionAlertActionsInput>
 }
 
 export type CompanyCreateNestedOneWithoutDecisionFeedbackInput = {
@@ -2405,6 +2597,10 @@ export type CompanyCreateWithoutTenantInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2474,11 +2670,13 @@ export type CompanyCreateWithoutTenantInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -2508,6 +2706,10 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2577,11 +2779,13 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -2641,6 +2845,10 @@ export type CompanyScalarWhereInput = {
   nameAr?: Prisma.StringFilter<"Company"> | string
   nameEn?: Prisma.StringFilter<"Company"> | string
   businessTimezone?: Prisma.StringFilter<"Company"> | string
+  contextLocationCode?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLocationLabelAr?: Prisma.StringNullableFilter<"Company"> | string | null
+  contextLatitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -2651,6 +2859,10 @@ export type CompanyCreateWithoutBrandingInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2721,11 +2933,13 @@ export type CompanyCreateWithoutBrandingInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -2755,6 +2969,10 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2824,11 +3042,13 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -2873,6 +3093,10 @@ export type CompanyUpdateWithoutBrandingInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2943,11 +3167,13 @@ export type CompanyUpdateWithoutBrandingInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -2977,6 +3203,10 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3046,11 +3276,13 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3079,6 +3311,10 @@ export type CompanyCreateWithoutMembershipsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3148,11 +3384,13 @@ export type CompanyCreateWithoutMembershipsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -3183,6 +3421,10 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3251,11 +3493,13 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -3301,6 +3545,10 @@ export type CompanyUpdateWithoutMembershipsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3370,11 +3618,13 @@ export type CompanyUpdateWithoutMembershipsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -3405,6 +3655,10 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3473,11 +3727,13 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3507,6 +3763,10 @@ export type CompanyCreateWithoutAuditsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3576,11 +3836,13 @@ export type CompanyCreateWithoutAuditsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -3611,6 +3873,10 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3679,11 +3945,13 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -3729,6 +3997,10 @@ export type CompanyUpdateWithoutAuditsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3798,11 +4070,13 @@ export type CompanyUpdateWithoutAuditsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -3833,6 +4107,10 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3901,11 +4179,13 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3935,6 +4215,10 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4004,11 +4288,13 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -4039,6 +4325,10 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4107,11 +4397,13 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -4157,6 +4449,10 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4226,11 +4522,13 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -4261,6 +4559,10 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4329,11 +4631,13 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4363,6 +4667,10 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4432,11 +4740,13 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -4467,6 +4777,10 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4535,11 +4849,13 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -4585,6 +4901,10 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4654,11 +4974,13 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -4689,6 +5011,10 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4757,11 +5083,13 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4791,6 +5119,10 @@ export type CompanyCreateWithoutFileMetadataInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4860,11 +5192,13 @@ export type CompanyCreateWithoutFileMetadataInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -4895,6 +5229,10 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4963,11 +5301,13 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -5013,6 +5353,10 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5082,11 +5426,13 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -5117,6 +5463,10 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5185,11 +5535,13 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5219,6 +5571,10 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5288,11 +5644,13 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -5323,6 +5681,10 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5391,11 +5753,13 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -5441,6 +5805,10 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5510,11 +5878,13 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -5545,6 +5915,10 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5613,11 +5987,13 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5647,6 +6023,10 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5716,11 +6096,13 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -5751,6 +6133,10 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5819,11 +6205,13 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -5869,6 +6257,10 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5938,11 +6330,13 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -5973,6 +6367,10 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6041,11 +6439,13 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6075,6 +6475,10 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -6144,11 +6548,13 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -6179,6 +6585,10 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -6247,11 +6657,13 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -6297,6 +6709,10 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6366,11 +6782,13 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -6401,6 +6819,10 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6469,11 +6891,13 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6503,6 +6927,10 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -6572,11 +7000,13 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -6607,6 +7037,10 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -6675,11 +7109,13 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -6725,6 +7161,10 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6794,11 +7234,13 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -6829,6 +7271,10 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6897,11 +7343,13 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6931,6 +7379,10 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7000,11 +7452,13 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -7035,6 +7489,10 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7103,11 +7561,13 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -7153,6 +7613,10 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7222,11 +7686,13 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -7257,6 +7723,10 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7325,11 +7795,13 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7359,6 +7831,10 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7428,11 +7904,13 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -7463,6 +7941,10 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7531,11 +8013,13 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -7581,6 +8065,10 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7650,11 +8138,13 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -7685,6 +8175,10 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7753,11 +8247,13 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7787,6 +8283,10 @@ export type CompanyCreateWithoutReportRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7856,11 +8356,13 @@ export type CompanyCreateWithoutReportRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -7891,6 +8393,10 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -7959,11 +8465,13 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -8009,6 +8517,10 @@ export type CompanyUpdateWithoutReportRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8078,11 +8590,13 @@ export type CompanyUpdateWithoutReportRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -8113,6 +8627,10 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8181,11 +8699,13 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8215,6 +8735,10 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -8284,11 +8808,13 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -8319,6 +8845,10 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -8387,11 +8917,13 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -8437,6 +8969,10 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8506,11 +9042,13 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -8541,6 +9079,10 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8609,11 +9151,13 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8638,11 +9182,15 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
 
-export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
+export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   id?: string
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -8713,10 +9261,12 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -8741,12 +9291,16 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
 
-export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
+export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   id?: string
   tenantId: string
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -8816,10 +9370,464 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutDecisionSalesChangePolicyInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput>
+}
+
+export type CompanyUpsertWithoutDecisionSalesChangePolicyInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutDecisionSalesChangePolicyInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionSalesChangePolicyInput, Prisma.CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput>
+}
+
+export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -8865,6 +9873,10 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8935,10 +9947,12 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -8969,6 +9983,10 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -9038,10 +10056,12 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9071,6 +10091,10 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -9141,10 +10165,12 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -9175,6 +10201,10 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -9244,10 +10274,12 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -9293,6 +10325,10 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -9363,10 +10399,12 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -9397,6 +10435,10 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -9466,10 +10508,12 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9499,6 +10543,10 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -9569,10 +10617,12 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -9603,6 +10653,10 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -9672,10 +10726,12 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -9721,6 +10777,10 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -9791,10 +10851,12 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -9825,6 +10887,10 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -9894,10 +10960,12 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9927,6 +10995,10 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -9997,10 +11069,12 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -10031,6 +11105,10 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -10100,10 +11178,12 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -10149,6 +11229,10 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -10219,10 +11303,12 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -10253,6 +11339,10 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -10322,10 +11412,12 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10355,6 +11447,10 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -10425,10 +11521,12 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -10459,6 +11557,10 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -10528,10 +11630,12 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -10577,6 +11681,10 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -10647,10 +11755,12 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -10681,6 +11791,10 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -10750,10 +11864,12 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10778,11 +11894,15 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
 }
 
-export type CompanyCreateWithoutDecisionFeedbackInput = {
+export type CompanyCreateWithoutDecisionAlertActionsInput = {
   id?: string
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -10853,11 +11973,13 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -10881,12 +12003,16 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
 }
 
-export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
+export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   id?: string
   tenantId: string
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -10956,11 +12082,13 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -10984,27 +12112,31 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
 }
 
-export type CompanyCreateOrConnectWithoutDecisionFeedbackInput = {
+export type CompanyCreateOrConnectWithoutDecisionAlertActionsInput = {
   where: Prisma.CompanyWhereUniqueInput
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedCreateWithoutDecisionFeedbackInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedCreateWithoutDecisionAlertActionsInput>
 }
 
-export type CompanyUpsertWithoutDecisionFeedbackInput = {
-  update: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedUpdateWithoutDecisionFeedbackInput>
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedCreateWithoutDecisionFeedbackInput>
+export type CompanyUpsertWithoutDecisionAlertActionsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedUpdateWithoutDecisionAlertActionsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedCreateWithoutDecisionAlertActionsInput>
   where?: Prisma.CompanyWhereInput
 }
 
-export type CompanyUpdateToOneWithWhereWithoutDecisionFeedbackInput = {
+export type CompanyUpdateToOneWithWhereWithoutDecisionAlertActionsInput = {
   where?: Prisma.CompanyWhereInput
-  data: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedUpdateWithoutDecisionFeedbackInput>
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionAlertActionsInput, Prisma.CompanyUncheckedUpdateWithoutDecisionAlertActionsInput>
 }
 
-export type CompanyUpdateWithoutDecisionFeedbackInput = {
+export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -11075,11 +12207,13 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -11103,12 +12237,16 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
 }
 
-export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
+export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -11178,11 +12316,465 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutDecisionFeedbackInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutDecisionFeedbackInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedCreateWithoutDecisionFeedbackInput>
+}
+
+export type CompanyUpsertWithoutDecisionFeedbackInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedUpdateWithoutDecisionFeedbackInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedCreateWithoutDecisionFeedbackInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutDecisionFeedbackInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutDecisionFeedbackInput, Prisma.CompanyUncheckedUpdateWithoutDecisionFeedbackInput>
+}
+
+export type CompanyUpdateWithoutDecisionFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11211,6 +12803,10 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -11280,11 +12876,13 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -11315,6 +12913,10 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -11383,11 +12985,13 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -11433,6 +13037,10 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -11502,11 +13110,13 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -11537,6 +13147,10 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -11605,11 +13219,13 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11639,6 +13255,10 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -11708,11 +13328,13 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -11743,6 +13365,10 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -11811,11 +13437,13 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -11861,6 +13489,10 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -11930,11 +13562,13 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -11965,6 +13599,10 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -12033,11 +13671,13 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12067,6 +13707,10 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -12136,11 +13780,13 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -12171,6 +13817,10 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -12239,11 +13889,13 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -12289,6 +13941,10 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -12358,11 +14014,13 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -12393,6 +14051,10 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -12461,11 +14123,13 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12495,6 +14159,10 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -12564,11 +14232,13 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -12599,6 +14269,10 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -12667,11 +14341,13 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -12717,6 +14393,10 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -12786,11 +14466,13 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -12821,6 +14503,10 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -12889,11 +14575,13 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12923,6 +14611,10 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -12992,11 +14684,13 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -13027,6 +14721,10 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -13095,11 +14793,13 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -13145,6 +14845,10 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -13214,11 +14918,13 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -13249,6 +14955,10 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -13317,11 +15027,13 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13351,6 +15063,10 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -13420,11 +15136,13 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -13455,6 +15173,10 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -13523,11 +15245,13 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -13573,6 +15297,10 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -13642,11 +15370,13 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -13677,6 +15407,10 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -13745,11 +15479,13 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13779,6 +15515,10 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -13848,11 +15588,13 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -13883,6 +15625,10 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -13951,11 +15697,13 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -14001,6 +15749,10 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -14070,11 +15822,13 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -14105,6 +15859,10 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -14173,11 +15931,13 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14207,6 +15967,10 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -14276,11 +16040,13 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -14311,6 +16077,10 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -14379,11 +16149,13 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -14429,6 +16201,10 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -14498,11 +16274,13 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -14533,6 +16311,10 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -14601,11 +16383,13 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14635,6 +16419,10 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -14704,11 +16492,13 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -14739,6 +16529,10 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -14807,11 +16601,13 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -14857,6 +16653,10 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -14926,11 +16726,13 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -14961,6 +16763,10 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -15029,11 +16835,13 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15063,6 +16871,10 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -15132,11 +16944,13 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -15167,6 +16981,10 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -15235,11 +17053,13 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -15285,6 +17105,10 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -15354,11 +17178,13 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -15389,6 +17215,10 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -15457,11 +17287,13 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15491,6 +17323,10 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -15560,11 +17396,13 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -15595,6 +17433,10 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -15663,11 +17505,13 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -15713,6 +17557,10 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -15782,11 +17630,13 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -15817,6 +17667,10 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -15885,11 +17739,13 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15919,6 +17775,10 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -15988,11 +17848,13 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -16023,6 +17885,10 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -16091,11 +17957,13 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -16141,6 +18009,10 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -16210,11 +18082,13 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -16245,6 +18119,10 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -16313,11 +18191,13 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16347,6 +18227,10 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -16416,11 +18300,13 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -16451,6 +18337,10 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -16519,11 +18409,13 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -16569,6 +18461,10 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -16638,11 +18534,13 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -16673,6 +18571,10 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -16741,11 +18643,13 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16775,6 +18679,10 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -16844,11 +18752,13 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -16879,6 +18789,10 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -16947,11 +18861,13 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -16997,6 +18913,10 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -17066,11 +18986,13 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -17101,6 +19023,10 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -17169,11 +19095,13 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17203,6 +19131,10 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -17272,11 +19204,13 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -17307,6 +19241,10 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -17375,11 +19313,13 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -17425,6 +19365,10 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -17494,11 +19438,13 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -17529,6 +19475,10 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -17597,11 +19547,13 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17631,6 +19583,10 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -17701,11 +19657,13 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -17735,6 +19693,10 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -17804,11 +19766,13 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -17853,6 +19817,10 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -17923,11 +19891,13 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -17957,6 +19927,10 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -18026,11 +20000,13 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18059,6 +20035,10 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -18129,11 +20109,13 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -18163,6 +20145,10 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -18232,11 +20218,13 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -18281,6 +20269,10 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -18351,11 +20343,13 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -18385,6 +20379,10 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -18454,11 +20452,13 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18487,6 +20487,10 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -18556,11 +20560,13 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -18591,6 +20597,10 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -18659,11 +20669,13 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -18709,6 +20721,10 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -18778,11 +20794,13 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -18813,6 +20831,10 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -18881,11 +20903,13 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18915,6 +20939,10 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -18984,11 +21012,13 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -19019,6 +21049,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -19087,11 +21121,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -19137,6 +21173,10 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -19206,11 +21246,13 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -19241,6 +21283,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -19309,11 +21355,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19343,6 +21391,10 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -19412,11 +21464,13 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -19447,6 +21501,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -19515,11 +21573,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -19565,6 +21625,10 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -19634,11 +21698,13 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -19669,6 +21735,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -19737,11 +21807,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19771,6 +21843,10 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -19840,11 +21916,13 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -19875,6 +21953,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -19943,11 +22025,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -19993,6 +22077,10 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -20062,11 +22150,13 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -20097,6 +22187,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -20165,11 +22259,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20199,6 +22295,10 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -20268,11 +22368,13 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -20303,6 +22405,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -20371,11 +22477,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -20421,6 +22529,10 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -20490,11 +22602,13 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -20525,6 +22639,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -20593,11 +22711,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20627,6 +22747,10 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -20696,11 +22820,13 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -20731,6 +22857,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -20799,11 +22929,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -20849,6 +22981,10 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -20918,11 +23054,13 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -20953,6 +23091,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -21021,11 +23163,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21055,6 +23199,10 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -21124,11 +23272,13 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -21159,6 +23309,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -21227,11 +23381,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -21277,6 +23433,10 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -21346,11 +23506,13 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -21381,6 +23543,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -21449,11 +23615,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21483,6 +23651,10 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -21552,11 +23724,13 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -21587,6 +23761,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -21655,11 +23833,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -21705,6 +23885,10 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -21774,11 +23958,13 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -21809,6 +23995,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -21877,11 +24067,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21911,6 +24103,10 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -21980,11 +24176,13 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -22015,6 +24213,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -22083,11 +24285,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -22133,6 +24337,10 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -22202,11 +24410,13 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -22237,6 +24447,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -22305,11 +24519,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22339,6 +24555,10 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -22408,11 +24628,13 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -22443,6 +24665,10 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -22511,11 +24737,13 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -22561,6 +24789,10 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -22630,11 +24862,13 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -22665,6 +24899,10 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -22733,11 +24971,13 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22767,6 +25007,10 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -22836,11 +25080,13 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -22871,6 +25117,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -22939,11 +25189,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -22989,6 +25241,10 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -23058,11 +25314,13 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -23093,6 +25351,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -23161,11 +25423,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23195,6 +25459,10 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -23264,11 +25532,13 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -23299,6 +25569,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -23367,11 +25641,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -23417,6 +25693,10 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -23486,11 +25766,13 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -23521,6 +25803,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -23589,11 +25875,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23623,6 +25911,10 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -23692,11 +25984,13 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -23727,6 +26021,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -23795,11 +26093,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -23845,6 +26145,10 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -23914,11 +26218,13 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -23949,6 +26255,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -24017,11 +26327,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24051,6 +26363,10 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -24120,11 +26436,13 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -24155,6 +26473,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -24223,11 +26545,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -24273,6 +26597,10 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -24342,11 +26670,13 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -24377,6 +26707,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -24445,11 +26779,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24479,6 +26815,10 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -24548,11 +26888,13 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -24583,6 +26925,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -24651,11 +26997,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -24701,6 +27049,10 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -24770,11 +27122,13 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -24805,6 +27159,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -24873,11 +27231,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24907,6 +27267,10 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -24976,11 +27340,13 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -25011,6 +27377,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -25079,11 +27449,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -25129,6 +27501,10 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -25198,11 +27574,13 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -25233,6 +27611,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -25301,11 +27683,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25335,6 +27719,10 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -25404,11 +27792,13 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -25439,6 +27829,10 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -25507,11 +27901,13 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -25557,6 +27953,10 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -25626,11 +28026,13 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -25661,6 +28063,10 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -25729,11 +28135,13 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25763,6 +28171,10 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -25832,11 +28244,13 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -25867,6 +28281,10 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -25935,11 +28353,13 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -25985,6 +28405,10 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -26054,11 +28478,13 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -26089,6 +28515,10 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -26157,11 +28587,13 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26191,6 +28623,10 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -26260,11 +28696,13 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -26295,6 +28733,10 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -26363,11 +28805,13 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -26413,6 +28857,10 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -26482,11 +28930,13 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -26517,6 +28967,10 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -26585,11 +29039,13 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26619,6 +29075,10 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -26688,11 +29148,13 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -26723,6 +29185,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -26791,11 +29257,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -26841,6 +29309,10 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -26910,11 +29382,13 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -26945,6 +29419,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -27013,11 +29491,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27047,6 +29527,10 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -27116,11 +29600,13 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -27151,6 +29637,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -27219,11 +29709,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -27269,6 +29761,10 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -27338,11 +29834,13 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -27373,6 +29871,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -27441,11 +29943,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27475,6 +29979,10 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -27544,11 +30052,13 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -27579,6 +30089,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -27647,11 +30161,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -27697,6 +30213,10 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -27766,11 +30286,13 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -27801,6 +30323,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -27869,11 +30395,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27903,6 +30431,10 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -27972,11 +30504,13 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -28007,6 +30541,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -28075,11 +30613,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -28125,6 +30665,10 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -28194,11 +30738,13 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -28229,6 +30775,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -28297,11 +30847,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28331,6 +30883,10 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -28400,11 +30956,13 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -28435,6 +30993,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -28503,11 +31065,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -28553,6 +31117,10 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -28622,11 +31190,13 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -28657,6 +31227,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -28725,11 +31299,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28759,6 +31335,10 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -28828,11 +31408,13 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -28863,6 +31445,10 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -28931,11 +31517,13 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -28981,6 +31569,10 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -29050,11 +31642,13 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -29085,6 +31679,10 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -29153,11 +31751,13 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29187,6 +31787,10 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -29256,11 +31860,13 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -29291,6 +31897,10 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -29359,11 +31969,13 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -29409,6 +32021,10 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -29478,11 +32094,13 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -29513,6 +32131,10 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -29581,11 +32203,13 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29615,6 +32239,10 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -29684,11 +32312,13 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -29719,6 +32349,10 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -29787,11 +32421,13 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -29837,6 +32473,10 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -29906,11 +32546,13 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -29941,6 +32583,10 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -30009,11 +32655,13 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30043,6 +32691,10 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -30112,11 +32764,13 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -30147,6 +32801,10 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -30215,11 +32873,13 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -30265,6 +32925,10 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -30334,11 +32998,13 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -30369,6 +33035,10 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -30437,11 +33107,13 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30471,6 +33143,10 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -30540,11 +33216,13 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -30575,6 +33253,10 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -30643,11 +33325,13 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -30693,6 +33377,10 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -30762,11 +33450,13 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -30797,6 +33487,10 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -30865,11 +33559,13 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30899,6 +33595,10 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -30968,11 +33668,13 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -31003,6 +33705,10 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -31071,11 +33777,13 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -31121,6 +33829,10 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -31190,11 +33902,13 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -31225,6 +33939,10 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -31293,11 +34011,13 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31327,6 +34047,10 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -31396,11 +34120,13 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -31431,6 +34157,10 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -31499,11 +34229,13 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -31549,6 +34281,10 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -31618,11 +34354,13 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -31653,6 +34391,10 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -31721,11 +34463,13 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31755,6 +34499,10 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -31824,11 +34572,13 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -31859,6 +34609,10 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -31927,11 +34681,13 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -31977,6 +34733,10 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -32046,11 +34806,13 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -32081,6 +34843,10 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -32149,11 +34915,13 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32183,6 +34951,10 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -32252,11 +35024,13 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -32287,6 +35061,10 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -32355,11 +35133,13 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -32405,6 +35185,10 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -32474,11 +35258,13 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -32509,6 +35295,10 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -32577,11 +35367,13 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32611,6 +35403,10 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -32680,11 +35476,13 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -32715,6 +35513,10 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -32783,11 +35585,13 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -32833,6 +35637,10 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -32902,11 +35710,13 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -32937,6 +35747,10 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -33005,11 +35819,13 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33039,6 +35855,10 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -33108,11 +35928,13 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -33143,6 +35965,10 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -33211,11 +36037,13 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -33261,6 +36089,10 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -33330,11 +36162,13 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -33365,6 +36199,10 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -33433,11 +36271,13 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33467,6 +36307,10 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -33536,11 +36380,13 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -33571,6 +36417,10 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -33639,11 +36489,13 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -33689,6 +36541,10 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -33758,11 +36614,13 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -33793,6 +36651,10 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -33861,11 +36723,13 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33895,6 +36759,10 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -33964,11 +36832,13 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -33999,6 +36869,10 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34067,11 +36941,13 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -34117,6 +36993,10 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -34186,11 +37066,13 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -34221,6 +37103,10 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -34289,11 +37175,13 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34323,6 +37211,10 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34392,11 +37284,13 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -34427,6 +37321,10 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34495,11 +37393,13 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -34545,6 +37445,10 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -34614,11 +37518,13 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -34649,6 +37555,10 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -34717,11 +37627,13 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34751,6 +37663,10 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34821,11 +37737,13 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -34855,6 +37773,10 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34924,11 +37846,13 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -34973,6 +37897,10 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -35043,11 +37971,13 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -35077,6 +38007,10 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -35146,11 +38080,13 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35179,6 +38115,10 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -35249,11 +38189,13 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -35283,6 +38225,10 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -35352,11 +38298,13 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -35401,6 +38349,10 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -35471,11 +38423,13 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -35505,6 +38459,10 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -35574,11 +38532,13 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35607,6 +38567,10 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -35677,11 +38641,13 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -35711,6 +38677,10 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -35780,11 +38750,13 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -35829,6 +38801,10 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -35899,11 +38875,13 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -35933,6 +38911,10 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -36002,11 +38984,13 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36035,6 +39019,10 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -36105,11 +39093,13 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -36139,6 +39129,10 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -36208,11 +39202,13 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -36257,6 +39253,10 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -36327,11 +39327,13 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -36361,6 +39363,10 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -36430,11 +39436,13 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36463,6 +39471,10 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -36533,11 +39545,13 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -36567,6 +39581,10 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -36636,11 +39654,13 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -36685,6 +39705,10 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -36755,11 +39779,13 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -36789,6 +39815,10 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -36858,11 +39888,13 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36891,6 +39923,10 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -36961,11 +39997,13 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -36995,6 +40033,10 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -37064,11 +40106,13 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -37113,6 +40157,10 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -37183,11 +40231,13 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -37217,6 +40267,10 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -37286,11 +40340,13 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37319,6 +40375,10 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -37389,11 +40449,13 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -37423,6 +40485,10 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -37492,11 +40558,13 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -37541,6 +40609,10 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -37611,11 +40683,13 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -37645,6 +40719,10 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -37714,11 +40792,13 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37747,6 +40827,10 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -37817,11 +40901,13 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -37851,6 +40937,10 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -37920,11 +41010,13 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -37969,6 +41061,10 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38039,11 +41135,13 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -38073,6 +41171,10 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38142,11 +41244,13 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38175,6 +41279,10 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -38245,11 +41353,13 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -38279,6 +41389,10 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -38348,11 +41462,13 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -38397,6 +41513,10 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38467,11 +41587,13 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -38501,6 +41623,10 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38570,11 +41696,13 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38603,6 +41731,10 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -38673,11 +41805,13 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -38707,6 +41841,10 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -38776,11 +41914,13 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -38825,6 +41965,10 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38895,11 +42039,13 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -38929,6 +42075,10 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -38998,11 +42148,13 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39031,6 +42183,10 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -39101,11 +42257,13 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -39135,6 +42293,10 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -39204,11 +42366,13 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -39253,6 +42417,10 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -39323,11 +42491,13 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -39357,6 +42527,10 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -39426,11 +42600,13 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39459,6 +42635,10 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -39529,11 +42709,13 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -39563,6 +42745,10 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -39632,11 +42818,13 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -39681,6 +42869,10 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -39751,11 +42943,13 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -39785,6 +42979,10 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -39854,11 +43052,13 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39887,6 +43087,10 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -39957,11 +43161,13 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -39991,6 +43197,10 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -40060,11 +43270,13 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -40109,6 +43321,10 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -40179,11 +43395,13 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -40213,6 +43431,10 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -40282,11 +43504,13 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40315,6 +43539,10 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -40385,11 +43613,13 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -40419,6 +43649,10 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -40488,11 +43722,13 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -40537,6 +43773,10 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -40607,11 +43847,13 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -40641,6 +43883,10 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -40710,11 +43956,13 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40743,6 +43991,10 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -40813,11 +44065,13 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -40847,6 +44101,10 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -40916,11 +44174,13 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -40965,6 +44225,10 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41035,11 +44299,13 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -41069,6 +44335,10 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41138,11 +44408,13 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41171,6 +44443,10 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -41241,11 +44517,13 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -41275,6 +44553,10 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -41344,11 +44626,13 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -41393,6 +44677,10 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41463,11 +44751,13 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -41497,6 +44787,10 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41566,11 +44860,13 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41599,6 +44895,10 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -41669,11 +44969,13 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -41703,6 +45005,10 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -41772,11 +45078,13 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -41821,6 +45129,10 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41891,11 +45203,13 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -41925,6 +45239,10 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -41994,11 +45312,13 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42027,6 +45347,10 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -42097,11 +45421,13 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
@@ -42131,6 +45457,10 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -42200,11 +45530,13 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -42249,6 +45581,10 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -42319,11 +45655,13 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -42353,6 +45691,10 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -42422,11 +45764,13 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42455,6 +45799,10 @@ export type CompanyCreateManyTenantInput = {
   nameAr: string
   nameEn: string
   businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -42465,6 +45813,10 @@ export type CompanyUpdateWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -42534,11 +45886,13 @@ export type CompanyUpdateWithoutTenantInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
@@ -42568,6 +45922,10 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -42637,11 +45995,13 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
   decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42671,6 +46031,10 @@ export type CompanyUncheckedUpdateManyWithoutTenantInput = {
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
   businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -42750,6 +46114,7 @@ export type CompanyCountOutputType = {
   decisionEvaluationRuns: number
   decisionEvidenceSnapshots: number
   decisionAlerts: number
+  decisionAlertActions: number
   decisionFeedback: number
   operationsSections: number
   operationsUnits: number
@@ -42841,6 +46206,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   decisionEvaluationRuns?: boolean | CompanyCountOutputTypeCountDecisionEvaluationRunsArgs
   decisionEvidenceSnapshots?: boolean | CompanyCountOutputTypeCountDecisionEvidenceSnapshotsArgs
   decisionAlerts?: boolean | CompanyCountOutputTypeCountDecisionAlertsArgs
+  decisionAlertActions?: boolean | CompanyCountOutputTypeCountDecisionAlertActionsArgs
   decisionFeedback?: boolean | CompanyCountOutputTypeCountDecisionFeedbackArgs
   operationsSections?: boolean | CompanyCountOutputTypeCountOperationsSectionsArgs
   operationsUnits?: boolean | CompanyCountOutputTypeCountOperationsUnitsArgs
@@ -43352,6 +46718,13 @@ export type CompanyCountOutputTypeCountDecisionAlertsArgs<ExtArgs extends runtim
 /**
  * CompanyCountOutputType without action
  */
+export type CompanyCountOutputTypeCountDecisionAlertActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionAlertActionWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
 export type CompanyCountOutputTypeCountDecisionFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DecisionFeedbackWhereInput
 }
@@ -43496,6 +46869,10 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   nameAr?: boolean
   nameEn?: boolean
   businessTimezone?: boolean
+  contextLocationCode?: boolean
+  contextLocationLabelAr?: boolean
+  contextLatitude?: boolean
+  contextLongitude?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -43566,11 +46943,13 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   decisionMetricDefinitions?: boolean | Prisma.Company$decisionMetricDefinitionsArgs<ExtArgs>
+  decisionSalesChangePolicy?: boolean | Prisma.Company$decisionSalesChangePolicyArgs<ExtArgs>
   decisionRuleDefinitions?: boolean | Prisma.Company$decisionRuleDefinitionsArgs<ExtArgs>
   decisionCompanyContextEvents?: boolean | Prisma.Company$decisionCompanyContextEventsArgs<ExtArgs>
   decisionEvaluationRuns?: boolean | Prisma.Company$decisionEvaluationRunsArgs<ExtArgs>
   decisionEvidenceSnapshots?: boolean | Prisma.Company$decisionEvidenceSnapshotsArgs<ExtArgs>
   decisionAlerts?: boolean | Prisma.Company$decisionAlertsArgs<ExtArgs>
+  decisionAlertActions?: boolean | Prisma.Company$decisionAlertActionsArgs<ExtArgs>
   decisionFeedback?: boolean | Prisma.Company$decisionFeedbackArgs<ExtArgs>
   operationsSections?: boolean | Prisma.Company$operationsSectionsArgs<ExtArgs>
   operationsUnits?: boolean | Prisma.Company$operationsUnitsArgs<ExtArgs>
@@ -43602,6 +46981,10 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nameAr?: boolean
   nameEn?: boolean
   businessTimezone?: boolean
+  contextLocationCode?: boolean
+  contextLocationLabelAr?: boolean
+  contextLatitude?: boolean
+  contextLongitude?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -43614,6 +46997,10 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nameAr?: boolean
   nameEn?: boolean
   businessTimezone?: boolean
+  contextLocationCode?: boolean
+  contextLocationLabelAr?: boolean
+  contextLatitude?: boolean
+  contextLongitude?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -43626,12 +47013,16 @@ export type CompanySelectScalar = {
   nameAr?: boolean
   nameEn?: boolean
   businessTimezone?: boolean
+  contextLocationCode?: boolean
+  contextLocationLabelAr?: boolean
+  contextLatitude?: boolean
+  contextLongitude?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "nameAr" | "nameEn" | "businessTimezone" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "nameAr" | "nameEn" | "businessTimezone" | "contextLocationCode" | "contextLocationLabelAr" | "contextLatitude" | "contextLongitude" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   memberships?: boolean | Prisma.Company$membershipsArgs<ExtArgs>
@@ -43700,11 +47091,13 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   decisionMetricDefinitions?: boolean | Prisma.Company$decisionMetricDefinitionsArgs<ExtArgs>
+  decisionSalesChangePolicy?: boolean | Prisma.Company$decisionSalesChangePolicyArgs<ExtArgs>
   decisionRuleDefinitions?: boolean | Prisma.Company$decisionRuleDefinitionsArgs<ExtArgs>
   decisionCompanyContextEvents?: boolean | Prisma.Company$decisionCompanyContextEventsArgs<ExtArgs>
   decisionEvaluationRuns?: boolean | Prisma.Company$decisionEvaluationRunsArgs<ExtArgs>
   decisionEvidenceSnapshots?: boolean | Prisma.Company$decisionEvidenceSnapshotsArgs<ExtArgs>
   decisionAlerts?: boolean | Prisma.Company$decisionAlertsArgs<ExtArgs>
+  decisionAlertActions?: boolean | Prisma.Company$decisionAlertActionsArgs<ExtArgs>
   decisionFeedback?: boolean | Prisma.Company$decisionFeedbackArgs<ExtArgs>
   operationsSections?: boolean | Prisma.Company$operationsSectionsArgs<ExtArgs>
   operationsUnits?: boolean | Prisma.Company$operationsUnitsArgs<ExtArgs>
@@ -43806,11 +47199,13 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     aiCompanyIdentities: Prisma.$AiCompanyIdentityPayload<ExtArgs>[]
     aiExecutionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
     decisionMetricDefinitions: Prisma.$DecisionMetricDefinitionPayload<ExtArgs>[]
+    decisionSalesChangePolicy: Prisma.$DecisionSalesChangePolicyPayload<ExtArgs> | null
     decisionRuleDefinitions: Prisma.$DecisionRuleDefinitionPayload<ExtArgs>[]
     decisionCompanyContextEvents: Prisma.$DecisionCompanyContextEventPayload<ExtArgs>[]
     decisionEvaluationRuns: Prisma.$DecisionEvaluationRunPayload<ExtArgs>[]
     decisionEvidenceSnapshots: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>[]
     decisionAlerts: Prisma.$DecisionAlertPayload<ExtArgs>[]
+    decisionAlertActions: Prisma.$DecisionAlertActionPayload<ExtArgs>[]
     decisionFeedback: Prisma.$DecisionFeedbackPayload<ExtArgs>[]
     operationsSections: Prisma.$OperationsSectionPayload<ExtArgs>[]
     operationsUnits: Prisma.$OperationsUnitPayload<ExtArgs>[]
@@ -43840,6 +47235,10 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     nameAr: string
     nameEn: string
     businessTimezone: string
+    contextLocationCode: string | null
+    contextLocationLabelAr: string | null
+    contextLatitude: runtime.Decimal | null
+    contextLongitude: runtime.Decimal | null
     status: $Enums.CompanyStatus
     createdAt: Date
     updatedAt: Date
@@ -44304,11 +47703,13 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   aiCompanyIdentities<T extends Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiExecutionReceipts<T extends Prisma.Company$aiExecutionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionMetricDefinitions<T extends Prisma.Company$decisionMetricDefinitionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionMetricDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionMetricDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  decisionSalesChangePolicy<T extends Prisma.Company$decisionSalesChangePolicyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionSalesChangePolicyArgs<ExtArgs>>): Prisma.Prisma__DecisionSalesChangePolicyClient<runtime.Types.Result.GetResult<Prisma.$DecisionSalesChangePolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   decisionRuleDefinitions<T extends Prisma.Company$decisionRuleDefinitionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionRuleDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionRuleDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionCompanyContextEvents<T extends Prisma.Company$decisionCompanyContextEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionCompanyContextEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionCompanyContextEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionEvaluationRuns<T extends Prisma.Company$decisionEvaluationRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionEvaluationRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionEvaluationRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionEvidenceSnapshots<T extends Prisma.Company$decisionEvidenceSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionEvidenceSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionAlerts<T extends Prisma.Company$decisionAlertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionAlertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  decisionAlertActions<T extends Prisma.Company$decisionAlertActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionAlertActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionFeedback<T extends Prisma.Company$decisionFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   operationsSections<T extends Prisma.Company$operationsSectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$operationsSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   operationsUnits<T extends Prisma.Company$operationsUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$operationsUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -44365,6 +47766,10 @@ export interface CompanyFieldRefs {
   readonly nameAr: Prisma.FieldRef<"Company", 'String'>
   readonly nameEn: Prisma.FieldRef<"Company", 'String'>
   readonly businessTimezone: Prisma.FieldRef<"Company", 'String'>
+  readonly contextLocationCode: Prisma.FieldRef<"Company", 'String'>
+  readonly contextLocationLabelAr: Prisma.FieldRef<"Company", 'String'>
+  readonly contextLatitude: Prisma.FieldRef<"Company", 'Decimal'>
+  readonly contextLongitude: Prisma.FieldRef<"Company", 'Decimal'>
   readonly status: Prisma.FieldRef<"Company", 'CompanyStatus'>
   readonly createdAt: Prisma.FieldRef<"Company", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Company", 'DateTime'>
@@ -46338,6 +49743,25 @@ export type Company$decisionMetricDefinitionsArgs<ExtArgs extends runtime.Types.
 }
 
 /**
+ * Company.decisionSalesChangePolicy
+ */
+export type Company$decisionSalesChangePolicyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionSalesChangePolicy
+   */
+  select?: Prisma.DecisionSalesChangePolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionSalesChangePolicy
+   */
+  omit?: Prisma.DecisionSalesChangePolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionSalesChangePolicyInclude<ExtArgs> | null
+  where?: Prisma.DecisionSalesChangePolicyWhereInput
+}
+
+/**
  * Company.decisionRuleDefinitions
  */
 export type Company$decisionRuleDefinitionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -46455,6 +49879,30 @@ export type Company$decisionAlertsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.DecisionAlertScalarFieldEnum | Prisma.DecisionAlertScalarFieldEnum[]
+}
+
+/**
+ * Company.decisionAlertActions
+ */
+export type Company$decisionAlertActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionAlertAction
+   */
+  select?: Prisma.DecisionAlertActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionAlertAction
+   */
+  omit?: Prisma.DecisionAlertActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionAlertActionInclude<ExtArgs> | null
+  where?: Prisma.DecisionAlertActionWhereInput
+  orderBy?: Prisma.DecisionAlertActionOrderByWithRelationInput | Prisma.DecisionAlertActionOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionAlertActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionAlertActionScalarFieldEnum | Prisma.DecisionAlertActionScalarFieldEnum[]
 }
 
 /**

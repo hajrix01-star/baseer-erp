@@ -216,6 +216,9 @@ export type DecisionContextSourceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   importRuns?: Prisma.DecisionContextImportRunListRelationFilter
+  researchRuns?: Prisma.DecisionContextResearchRunListRelationFilter
+  researchCandidates?: Prisma.DecisionContextCandidateListRelationFilter
+  globalEvents?: Prisma.DecisionGlobalContextEventListRelationFilter
 }
 
 export type DecisionContextSourceOrderByWithRelationInput = {
@@ -229,6 +232,9 @@ export type DecisionContextSourceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   importRuns?: Prisma.DecisionContextImportRunOrderByRelationAggregateInput
+  researchRuns?: Prisma.DecisionContextResearchRunOrderByRelationAggregateInput
+  researchCandidates?: Prisma.DecisionContextCandidateOrderByRelationAggregateInput
+  globalEvents?: Prisma.DecisionGlobalContextEventOrderByRelationAggregateInput
 }
 
 export type DecisionContextSourceWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +253,9 @@ export type DecisionContextSourceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   importRuns?: Prisma.DecisionContextImportRunListRelationFilter
+  researchRuns?: Prisma.DecisionContextResearchRunListRelationFilter
+  researchCandidates?: Prisma.DecisionContextCandidateListRelationFilter
+  globalEvents?: Prisma.DecisionGlobalContextEventListRelationFilter
 }, "id" | "id_tenantId" | "tenantId_sourceCode">
 
 export type DecisionContextSourceOrderByWithAggregationInput = {
@@ -290,6 +299,9 @@ export type DecisionContextSourceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   importRuns?: Prisma.DecisionContextImportRunCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceUncheckedCreateInput = {
@@ -303,6 +315,9 @@ export type DecisionContextSourceUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   importRuns?: Prisma.DecisionContextImportRunUncheckedCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceUpdateInput = {
@@ -316,6 +331,9 @@ export type DecisionContextSourceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   importRuns?: Prisma.DecisionContextImportRunUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUpdateManyWithoutSourceNestedInput
 }
 
 export type DecisionContextSourceUncheckedUpdateInput = {
@@ -329,6 +347,9 @@ export type DecisionContextSourceUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   importRuns?: Prisma.DecisionContextImportRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceNestedInput
 }
 
 export type DecisionContextSourceCreateManyInput = {
@@ -432,6 +453,48 @@ export type DecisionContextSourceUpdateOneRequiredWithoutImportRunsNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionContextSourceUpdateToOneWithWhereWithoutImportRunsInput, Prisma.DecisionContextSourceUpdateWithoutImportRunsInput>, Prisma.DecisionContextSourceUncheckedUpdateWithoutImportRunsInput>
 }
 
+export type DecisionContextSourceCreateNestedOneWithoutResearchRunsInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchRunsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutResearchRunsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+}
+
+export type DecisionContextSourceUpdateOneRequiredWithoutResearchRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchRunsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutResearchRunsInput
+  upsert?: Prisma.DecisionContextSourceUpsertWithoutResearchRunsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionContextSourceUpdateToOneWithWhereWithoutResearchRunsInput, Prisma.DecisionContextSourceUpdateWithoutResearchRunsInput>, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchRunsInput>
+}
+
+export type DecisionContextSourceCreateNestedOneWithoutResearchCandidatesInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchCandidatesInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutResearchCandidatesInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+}
+
+export type DecisionContextSourceUpdateOneRequiredWithoutResearchCandidatesNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchCandidatesInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutResearchCandidatesInput
+  upsert?: Prisma.DecisionContextSourceUpsertWithoutResearchCandidatesInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionContextSourceUpdateToOneWithWhereWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUpdateWithoutResearchCandidatesInput>, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchCandidatesInput>
+}
+
+export type DecisionContextSourceCreateNestedOneWithoutGlobalEventsInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutGlobalEventsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutGlobalEventsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+}
+
+export type DecisionContextSourceUpdateOneRequiredWithoutGlobalEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutGlobalEventsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutGlobalEventsInput
+  upsert?: Prisma.DecisionContextSourceUpsertWithoutGlobalEventsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionContextSourceUpdateToOneWithWhereWithoutGlobalEventsInput, Prisma.DecisionContextSourceUpdateWithoutGlobalEventsInput>, Prisma.DecisionContextSourceUncheckedUpdateWithoutGlobalEventsInput>
+}
+
 export type DecisionContextSourceCreateWithoutImportRunsInput = {
   id?: string
   tenantId: string
@@ -442,6 +505,9 @@ export type DecisionContextSourceCreateWithoutImportRunsInput = {
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  researchRuns?: Prisma.DecisionContextResearchRunCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceUncheckedCreateWithoutImportRunsInput = {
@@ -454,6 +520,9 @@ export type DecisionContextSourceUncheckedCreateWithoutImportRunsInput = {
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceCreateOrConnectWithoutImportRunsInput = {
@@ -482,6 +551,9 @@ export type DecisionContextSourceUpdateWithoutImportRunsInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  researchRuns?: Prisma.DecisionContextResearchRunUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUpdateManyWithoutSourceNestedInput
 }
 
 export type DecisionContextSourceUncheckedUpdateWithoutImportRunsInput = {
@@ -494,6 +566,237 @@ export type DecisionContextSourceUncheckedUpdateWithoutImportRunsInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceCreateWithoutResearchRunsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceUncheckedCreateWithoutResearchRunsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceCreateOrConnectWithoutResearchRunsInput = {
+  where: Prisma.DecisionContextSourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchRunsInput>
+}
+
+export type DecisionContextSourceUpsertWithoutResearchRunsInput = {
+  update: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchRunsInput>
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchRunsInput>
+  where?: Prisma.DecisionContextSourceWhereInput
+}
+
+export type DecisionContextSourceUpdateToOneWithWhereWithoutResearchRunsInput = {
+  where?: Prisma.DecisionContextSourceWhereInput
+  data: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutResearchRunsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchRunsInput>
+}
+
+export type DecisionContextSourceUpdateWithoutResearchRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceUncheckedUpdateWithoutResearchRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceCreateWithoutResearchCandidatesInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceUncheckedCreateWithoutResearchCandidatesInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedCreateNestedManyWithoutSourceInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceCreateOrConnectWithoutResearchCandidatesInput = {
+  where: Prisma.DecisionContextSourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchCandidatesInput>
+}
+
+export type DecisionContextSourceUpsertWithoutResearchCandidatesInput = {
+  update: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchCandidatesInput>
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedCreateWithoutResearchCandidatesInput>
+  where?: Prisma.DecisionContextSourceWhereInput
+}
+
+export type DecisionContextSourceUpdateToOneWithWhereWithoutResearchCandidatesInput = {
+  where?: Prisma.DecisionContextSourceWhereInput
+  data: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutResearchCandidatesInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutResearchCandidatesInput>
+}
+
+export type DecisionContextSourceUpdateWithoutResearchCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceUncheckedUpdateWithoutResearchCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedUpdateManyWithoutSourceNestedInput
+  globalEvents?: Prisma.DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceCreateWithoutGlobalEventsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceUncheckedCreateWithoutGlobalEventsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedCreateNestedManyWithoutSourceInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedCreateNestedManyWithoutSourceInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutSourceInput
+}
+
+export type DecisionContextSourceCreateOrConnectWithoutGlobalEventsInput = {
+  where: Prisma.DecisionContextSourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutGlobalEventsInput>
+}
+
+export type DecisionContextSourceUpsertWithoutGlobalEventsInput = {
+  update: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutGlobalEventsInput>
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutGlobalEventsInput>
+  where?: Prisma.DecisionContextSourceWhereInput
+}
+
+export type DecisionContextSourceUpdateToOneWithWhereWithoutGlobalEventsInput = {
+  where?: Prisma.DecisionContextSourceWhereInput
+  data: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutGlobalEventsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutGlobalEventsInput>
+}
+
+export type DecisionContextSourceUpdateWithoutGlobalEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutSourceNestedInput
+}
+
+export type DecisionContextSourceUncheckedUpdateWithoutGlobalEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchRuns?: Prisma.DecisionContextResearchRunUncheckedUpdateManyWithoutSourceNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutSourceNestedInput
 }
 
 
@@ -503,10 +806,16 @@ export type DecisionContextSourceUncheckedUpdateWithoutImportRunsInput = {
 
 export type DecisionContextSourceCountOutputType = {
   importRuns: number
+  researchRuns: number
+  researchCandidates: number
+  globalEvents: number
 }
 
 export type DecisionContextSourceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   importRuns?: boolean | DecisionContextSourceCountOutputTypeCountImportRunsArgs
+  researchRuns?: boolean | DecisionContextSourceCountOutputTypeCountResearchRunsArgs
+  researchCandidates?: boolean | DecisionContextSourceCountOutputTypeCountResearchCandidatesArgs
+  globalEvents?: boolean | DecisionContextSourceCountOutputTypeCountGlobalEventsArgs
 }
 
 /**
@@ -526,6 +835,27 @@ export type DecisionContextSourceCountOutputTypeCountImportRunsArgs<ExtArgs exte
   where?: Prisma.DecisionContextImportRunWhereInput
 }
 
+/**
+ * DecisionContextSourceCountOutputType without action
+ */
+export type DecisionContextSourceCountOutputTypeCountResearchRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionContextResearchRunWhereInput
+}
+
+/**
+ * DecisionContextSourceCountOutputType without action
+ */
+export type DecisionContextSourceCountOutputTypeCountResearchCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionContextCandidateWhereInput
+}
+
+/**
+ * DecisionContextSourceCountOutputType without action
+ */
+export type DecisionContextSourceCountOutputTypeCountGlobalEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+}
+
 
 export type DecisionContextSourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -538,6 +868,9 @@ export type DecisionContextSourceSelect<ExtArgs extends runtime.Types.Extensions
   createdAt?: boolean
   updatedAt?: boolean
   importRuns?: boolean | Prisma.DecisionContextSource$importRunsArgs<ExtArgs>
+  researchRuns?: boolean | Prisma.DecisionContextSource$researchRunsArgs<ExtArgs>
+  researchCandidates?: boolean | Prisma.DecisionContextSource$researchCandidatesArgs<ExtArgs>
+  globalEvents?: boolean | Prisma.DecisionContextSource$globalEventsArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionContextSourceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionContextSource"]>
 
@@ -580,6 +913,9 @@ export type DecisionContextSourceSelectScalar = {
 export type DecisionContextSourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "sourceCode" | "displayNameAr" | "sourceUrl" | "scheduleCode" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["decisionContextSource"]>
 export type DecisionContextSourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   importRuns?: boolean | Prisma.DecisionContextSource$importRunsArgs<ExtArgs>
+  researchRuns?: boolean | Prisma.DecisionContextSource$researchRunsArgs<ExtArgs>
+  researchCandidates?: boolean | Prisma.DecisionContextSource$researchCandidatesArgs<ExtArgs>
+  globalEvents?: boolean | Prisma.DecisionContextSource$globalEventsArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionContextSourceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DecisionContextSourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -589,6 +925,9 @@ export type $DecisionContextSourcePayload<ExtArgs extends runtime.Types.Extensio
   name: "DecisionContextSource"
   objects: {
     importRuns: Prisma.$DecisionContextImportRunPayload<ExtArgs>[]
+    researchRuns: Prisma.$DecisionContextResearchRunPayload<ExtArgs>[]
+    researchCandidates: Prisma.$DecisionContextCandidatePayload<ExtArgs>[]
+    globalEvents: Prisma.$DecisionGlobalContextEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -995,6 +1334,9 @@ readonly fields: DecisionContextSourceFieldRefs;
 export interface Prisma__DecisionContextSourceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   importRuns<T extends Prisma.DecisionContextSource$importRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSource$importRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionContextImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  researchRuns<T extends Prisma.DecisionContextSource$researchRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSource$researchRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionContextResearchRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  researchCandidates<T extends Prisma.DecisionContextSource$researchCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSource$researchCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionContextCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  globalEvents<T extends Prisma.DecisionContextSource$globalEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSource$globalEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionGlobalContextEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1447,6 +1789,78 @@ export type DecisionContextSource$importRunsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.DecisionContextImportRunScalarFieldEnum | Prisma.DecisionContextImportRunScalarFieldEnum[]
+}
+
+/**
+ * DecisionContextSource.researchRuns
+ */
+export type DecisionContextSource$researchRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionContextResearchRun
+   */
+  select?: Prisma.DecisionContextResearchRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionContextResearchRun
+   */
+  omit?: Prisma.DecisionContextResearchRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextResearchRunInclude<ExtArgs> | null
+  where?: Prisma.DecisionContextResearchRunWhereInput
+  orderBy?: Prisma.DecisionContextResearchRunOrderByWithRelationInput | Prisma.DecisionContextResearchRunOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionContextResearchRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionContextResearchRunScalarFieldEnum | Prisma.DecisionContextResearchRunScalarFieldEnum[]
+}
+
+/**
+ * DecisionContextSource.researchCandidates
+ */
+export type DecisionContextSource$researchCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionContextCandidate
+   */
+  select?: Prisma.DecisionContextCandidateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionContextCandidate
+   */
+  omit?: Prisma.DecisionContextCandidateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextCandidateInclude<ExtArgs> | null
+  where?: Prisma.DecisionContextCandidateWhereInput
+  orderBy?: Prisma.DecisionContextCandidateOrderByWithRelationInput | Prisma.DecisionContextCandidateOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionContextCandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionContextCandidateScalarFieldEnum | Prisma.DecisionContextCandidateScalarFieldEnum[]
+}
+
+/**
+ * DecisionContextSource.globalEvents
+ */
+export type DecisionContextSource$globalEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionGlobalContextEvent
+   */
+  select?: Prisma.DecisionGlobalContextEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionGlobalContextEvent
+   */
+  omit?: Prisma.DecisionGlobalContextEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionGlobalContextEventInclude<ExtArgs> | null
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+  orderBy?: Prisma.DecisionGlobalContextEventOrderByWithRelationInput | Prisma.DecisionGlobalContextEventOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionGlobalContextEventScalarFieldEnum | Prisma.DecisionGlobalContextEventScalarFieldEnum[]
 }
 
 /**

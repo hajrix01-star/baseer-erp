@@ -187,10 +187,36 @@ enum DecisionContextEventStatus {
   ARCHIVED
 }
 
+/// A researcher result is deliberately not a context event. It stays outside
+/// analytical reads until a human accepts or dismisses it.
+enum DecisionContextCandidateStatus {
+  PENDING_REVIEW
+  APPROVED
+  DISMISSED
+  DUPLICATE
+}
+
+/// Tenant-wide events apply to every company in the tenant. Area events are
+/// visible only to companies configured with the same canonical location.
+enum DecisionContextScope {
+  TENANT_GLOBAL
+  AREA
+}
+
 enum DecisionAlertStatus {
   OPEN
   ACKNOWLEDGED
   CLOSED
+}
+
+enum DecisionAlertActionKind {
+  ACKNOWLEDGED
+  CLOSED
+}
+
+enum DecisionContextReviewActionKind {
+  APPROVED
+  DISMISSED
 }
 
 /// A cash-performance event is a source-backed management fact, never a
@@ -612,6 +638,10 @@ model Company {
   nameAr           String        @db.VarChar(160)
   nameEn           String        @db.VarChar(160)
   businessTimezone String        @default("Asia/Riyadh") @db.VarChar(64)
+  contextLocationCode String?    @db.VarChar(80)
+  contextLocationLabelAr String? @db.VarChar(160)
+  contextLatitude   Decimal?     @db.Decimal(9, 6)
+  contextLongitude  Decimal?     @db.Decimal(9, 6)
   status           CompanyStatus @default(ACTIVE)
   createdAt        DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime      @updatedAt @db.Timestamptz(6)
@@ -683,11 +713,13 @@ model Company {
   aiCompanyIdentities                      AiCompanyIdentity[]
   aiExecutionReceipts                      AiExecutionReceipt[]
   decisionMetricDefinitions                DecisionMetricDefinition[]
+  decisionSalesChangePolicy                DecisionSalesChangePolicy?
   decisionRuleDefinitions                  DecisionRuleDefinition[]
   decisionCompanyContextEvents             DecisionCompanyContextEvent[]
   decisionEvaluationRuns                   DecisionEvaluationRun[]
   decisionEvidenceSnapshots                DecisionEvidenceSnapshot[]
   decisionAlerts                           DecisionAlert[]
+  decisionAlertActions                     DecisionAlertAction[]
   decisionFeedback                         DecisionFeedback[]
   operationsSections                       OperationsSection[]
   operationsUnits                          OperationsUnit[]
@@ -712,6 +744,7 @@ model Company {
   branding                                 CompanyBranding?
 
   @@unique([id, tenantId])
+  @@index([tenantId, contextLocationCode])
   @@index([tenantId, status])
 }
 
@@ -1094,6 +1127,31 @@ model DecisionMetricDefinition {
   @@index([tenantId, companyId, metricCode, status])
 }
 
+/// A company explicitly opts into commercial sales-change alerts. The policy
+/// is disabled by default so the platform never invents a business threshold.
+model DecisionSalesChangePolicy {
+  id                                String   @id @default(uuid()) @db.Uuid
+  tenantId                          String   @db.Uuid
+  companyId                         String   @db.Uuid
+  enabled                           Boolean  @default(false)
+  comparisonPolicyCode              String   @default("PREVIOUS_EQUAL_PERIOD") @db.VarChar(80)
+  comparisonPolicyVersion           String   @default("previous_equal_period.v1") @db.VarChar(80)
+  decreaseThresholdBasisPoints      Int?
+  increaseThresholdBasisPoints      Int?
+  minimumBaselineAmount             Decimal? @db.Decimal(18, 4)
+  minimumAbsoluteDifferenceAmount   Decimal? @db.Decimal(18, 4)
+  cooldownHours                     Int?
+  updatedByUserId                   String?  @db.Uuid
+  createdAt                         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt                         DateTime @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, tenantId])
+  @@index([tenantId, companyId, enabled])
+}
+
 /// Rule identity is versioned and auditable. Its deterministic implementation
 /// remains code-owned; a tenant policy may only enable an approved version.
 model DecisionRuleDefinition {
@@ -1125,7 +1183,10 @@ model DecisionContextSource {
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime @updatedAt @db.Timestamptz(6)
 
-  importRuns DecisionContextImportRun[]
+  importRuns       DecisionContextImportRun[]
+  researchRuns     DecisionContextResearchRun[]
+  researchCandidates DecisionContextCandidate[]
+  globalEvents     DecisionGlobalContextEvent[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, sourceCode])
@@ -1153,6 +1214,67 @@ model DecisionContextImportRun {
   @@index([tenantId, sourceId, startedAt])
 }
 
+/// Operational receipt for a scheduled context-research pull. It is separate
+/// from an import run because research only proposes candidates; it does not
+/// publish a context event.
+model DecisionContextResearchRun {
+  id                  String   @id @default(uuid()) @db.Uuid
+  tenantId            String   @db.Uuid
+  sourceId            String   @db.Uuid
+  triggerCode         String   @db.VarChar(80)
+  status              String   @db.VarChar(40)
+  documentChecksum    String?  @db.Char(64)
+  receivedCandidates  Int      @default(0)
+  pendingCandidates   Int      @default(0)
+  duplicateCandidates Int      @default(0)
+  diagnosticsJson     Json
+  startedAt           DateTime @default(now()) @db.Timestamptz(6)
+  finishedAt          DateTime? @db.Timestamptz(6)
+
+  source     DecisionContextSource      @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  candidates DecisionContextCandidate[]
+
+  @@unique([id, tenantId])
+  @@index([tenantId, sourceId, startedAt])
+}
+
+/// A source-backed event suggestion. Candidates cannot appear in the timeline
+/// or be read by Basira as context until they have been explicitly approved.
+model DecisionContextCandidate {
+  id                 String                         @id @default(uuid()) @db.Uuid
+  tenantId           String                         @db.Uuid
+  sourceId           String                         @db.Uuid
+  researchRunId      String                         @db.Uuid
+  externalKey        String                         @db.VarChar(240)
+  eventKind          String                         @db.VarChar(80)
+  titleAr            String                         @db.VarChar(240)
+  startsOn           DateTime                       @db.Date
+  endsOn             DateTime                       @db.Date
+  scope              DecisionContextScope           @default(TENANT_GLOBAL)
+  locationCode       String?                        @db.VarChar(80)
+  locationLabelAr    String?                        @db.VarChar(160)
+  relevanceReasonAr  String?                        @db.VarChar(500)
+  sourceUpdatedAt    DateTime?                      @db.Timestamptz(6)
+  sourceChecksum     String                         @db.Char(64)
+  payloadJson        Json
+  status             DecisionContextCandidateStatus @default(PENDING_REVIEW)
+  resolutionJson     Json?
+  publishedEventId   String?                        @db.Uuid
+  resolvedByUserId   String?                        @db.Uuid
+  resolvedAt         DateTime?                      @db.Timestamptz(6)
+  createdAt          DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime                       @updatedAt @db.Timestamptz(6)
+
+  source         DecisionContextSource       @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  researchRun    DecisionContextResearchRun  @relation(fields: [researchRunId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  publishedEvent DecisionGlobalContextEvent? @relation(fields: [publishedEventId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, sourceId, externalKey])
+  @@index([tenantId, status, startsOn, endsOn])
+  @@index([tenantId, sourceId, researchRunId])
+}
+
 /// Global events are tenant-scoped catalog entries. A company never edits
 /// them; imports create immutable revisions and unresolved changes stay reviewable.
 model DecisionGlobalContextEvent {
@@ -1161,16 +1283,23 @@ model DecisionGlobalContextEvent {
   sourceId        String                     @db.Uuid
   externalKey     String                     @db.VarChar(240)
   eventKind       String                     @db.VarChar(80)
+  scope           DecisionContextScope       @default(TENANT_GLOBAL)
+  locationCode    String?                    @db.VarChar(80)
+  locationLabelAr String?                    @db.VarChar(160)
   status          DecisionContextEventStatus @default(PUBLISHED)
   currentRevision Int                        @default(1)
   createdAt       DateTime                   @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime                   @updatedAt @db.Timestamptz(6)
 
-  revisions DecisionGlobalContextEventRevision[]
+  revisions          DecisionGlobalContextEventRevision[]
+  reviewActions      DecisionGlobalContextReviewAction[]
+  researchCandidates DecisionContextCandidate[]
+  source             DecisionContextSource @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId])
   @@unique([tenantId, sourceId, externalKey])
   @@index([tenantId, status, eventKind])
+  @@index([tenantId, scope, locationCode, status])
 }
 
 model DecisionGlobalContextEventRevision {
@@ -1184,6 +1313,7 @@ model DecisionGlobalContextEventRevision {
   sourceUpdatedAt DateTime?                 @db.Timestamptz(6)
   sourceChecksum String                     @db.Char(64)
   importReceipt  Json
+  verificationStatus DecisionVerificationStatus @default(SYSTEM_RECONCILED)
   status         DecisionContextEventStatus @default(PUBLISHED)
   createdAt      DateTime                   @default(now()) @db.Timestamptz(6)
 
@@ -1192,6 +1322,26 @@ model DecisionGlobalContextEventRevision {
   @@unique([id, tenantId])
   @@unique([eventId, revision])
   @@index([tenantId, startsOn, endsOn, status])
+}
+
+/// A human decision about an imported change. The imported revision remains
+/// immutable; approval publishes an immutable successor and dismissal leaves
+/// the last published revision in force.
+model DecisionGlobalContextReviewAction {
+  id              String                          @id @default(uuid()) @db.Uuid
+  tenantId        String                          @db.Uuid
+  eventId         String                          @db.Uuid
+  revision        Int
+  action          DecisionContextReviewActionKind
+  reason          String                          @db.VarChar(500)
+  createdByUserId String                          @db.Uuid
+  createdAt       DateTime                        @default(now()) @db.Timestamptz(6)
+
+  event DecisionGlobalContextEvent @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([eventId, revision])
+  @@index([tenantId, createdAt])
 }
 
 /// Company events are recorded context, not a mutation of financial facts.
@@ -1281,11 +1431,31 @@ model DecisionAlert {
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   evidenceSnapshot DecisionEvidenceSnapshot @relation(fields: [evidenceSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  actions DecisionAlertAction[]
   feedback DecisionFeedback[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status, createdAt])
   @@index([tenantId, companyId, ruleCode, createdAt])
+}
+
+/// Append-only human lifecycle record. It preserves the reason behind an
+/// acknowledgement or closure without mutating the immutable evidence.
+model DecisionAlertAction {
+  id              String                  @id @default(uuid()) @db.Uuid
+  tenantId        String                  @db.Uuid
+  companyId       String                  @db.Uuid
+  alertId         String                  @db.Uuid
+  action          DecisionAlertActionKind
+  reason          String                  @db.VarChar(500)
+  createdByUserId String                  @db.Uuid
+  createdAt       DateTime                @default(now()) @db.Timestamptz(6)
+
+  company Company       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  alert   DecisionAlert @relation(fields: [alertId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, alertId, createdAt])
 }
 
 model DecisionFeedback {

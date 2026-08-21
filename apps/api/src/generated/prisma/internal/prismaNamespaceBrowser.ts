@@ -72,15 +72,20 @@ export const ModelName = {
   FinanceLedgerRevision: 'FinanceLedgerRevision',
   ReportRun: 'ReportRun',
   DecisionMetricDefinition: 'DecisionMetricDefinition',
+  DecisionSalesChangePolicy: 'DecisionSalesChangePolicy',
   DecisionRuleDefinition: 'DecisionRuleDefinition',
   DecisionContextSource: 'DecisionContextSource',
   DecisionContextImportRun: 'DecisionContextImportRun',
+  DecisionContextResearchRun: 'DecisionContextResearchRun',
+  DecisionContextCandidate: 'DecisionContextCandidate',
   DecisionGlobalContextEvent: 'DecisionGlobalContextEvent',
   DecisionGlobalContextEventRevision: 'DecisionGlobalContextEventRevision',
+  DecisionGlobalContextReviewAction: 'DecisionGlobalContextReviewAction',
   DecisionCompanyContextEvent: 'DecisionCompanyContextEvent',
   DecisionEvaluationRun: 'DecisionEvaluationRun',
   DecisionEvidenceSnapshot: 'DecisionEvidenceSnapshot',
   DecisionAlert: 'DecisionAlert',
+  DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -218,6 +223,10 @@ export const CompanyScalarFieldEnum = {
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   businessTimezone: 'businessTimezone',
+  contextLocationCode: 'contextLocationCode',
+  contextLocationLabelAr: 'contextLocationLabelAr',
+  contextLatitude: 'contextLatitude',
+  contextLongitude: 'contextLongitude',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -510,6 +519,26 @@ export const DecisionMetricDefinitionScalarFieldEnum = {
 export type DecisionMetricDefinitionScalarFieldEnum = (typeof DecisionMetricDefinitionScalarFieldEnum)[keyof typeof DecisionMetricDefinitionScalarFieldEnum]
 
 
+export const DecisionSalesChangePolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  enabled: 'enabled',
+  comparisonPolicyCode: 'comparisonPolicyCode',
+  comparisonPolicyVersion: 'comparisonPolicyVersion',
+  decreaseThresholdBasisPoints: 'decreaseThresholdBasisPoints',
+  increaseThresholdBasisPoints: 'increaseThresholdBasisPoints',
+  minimumBaselineAmount: 'minimumBaselineAmount',
+  minimumAbsoluteDifferenceAmount: 'minimumAbsoluteDifferenceAmount',
+  cooldownHours: 'cooldownHours',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DecisionSalesChangePolicyScalarFieldEnum = (typeof DecisionSalesChangePolicyScalarFieldEnum)[keyof typeof DecisionSalesChangePolicyScalarFieldEnum]
+
+
 export const DecisionRuleDefinitionScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -556,12 +585,62 @@ export const DecisionContextImportRunScalarFieldEnum = {
 export type DecisionContextImportRunScalarFieldEnum = (typeof DecisionContextImportRunScalarFieldEnum)[keyof typeof DecisionContextImportRunScalarFieldEnum]
 
 
+export const DecisionContextResearchRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  triggerCode: 'triggerCode',
+  status: 'status',
+  documentChecksum: 'documentChecksum',
+  receivedCandidates: 'receivedCandidates',
+  pendingCandidates: 'pendingCandidates',
+  duplicateCandidates: 'duplicateCandidates',
+  diagnosticsJson: 'diagnosticsJson',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+} as const
+
+export type DecisionContextResearchRunScalarFieldEnum = (typeof DecisionContextResearchRunScalarFieldEnum)[keyof typeof DecisionContextResearchRunScalarFieldEnum]
+
+
+export const DecisionContextCandidateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  researchRunId: 'researchRunId',
+  externalKey: 'externalKey',
+  eventKind: 'eventKind',
+  titleAr: 'titleAr',
+  startsOn: 'startsOn',
+  endsOn: 'endsOn',
+  scope: 'scope',
+  locationCode: 'locationCode',
+  locationLabelAr: 'locationLabelAr',
+  relevanceReasonAr: 'relevanceReasonAr',
+  sourceUpdatedAt: 'sourceUpdatedAt',
+  sourceChecksum: 'sourceChecksum',
+  payloadJson: 'payloadJson',
+  status: 'status',
+  resolutionJson: 'resolutionJson',
+  publishedEventId: 'publishedEventId',
+  resolvedByUserId: 'resolvedByUserId',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DecisionContextCandidateScalarFieldEnum = (typeof DecisionContextCandidateScalarFieldEnum)[keyof typeof DecisionContextCandidateScalarFieldEnum]
+
+
 export const DecisionGlobalContextEventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   sourceId: 'sourceId',
   externalKey: 'externalKey',
   eventKind: 'eventKind',
+  scope: 'scope',
+  locationCode: 'locationCode',
+  locationLabelAr: 'locationLabelAr',
   status: 'status',
   currentRevision: 'currentRevision',
   createdAt: 'createdAt',
@@ -582,11 +661,26 @@ export const DecisionGlobalContextEventRevisionScalarFieldEnum = {
   sourceUpdatedAt: 'sourceUpdatedAt',
   sourceChecksum: 'sourceChecksum',
   importReceipt: 'importReceipt',
+  verificationStatus: 'verificationStatus',
   status: 'status',
   createdAt: 'createdAt'
 } as const
 
 export type DecisionGlobalContextEventRevisionScalarFieldEnum = (typeof DecisionGlobalContextEventRevisionScalarFieldEnum)[keyof typeof DecisionGlobalContextEventRevisionScalarFieldEnum]
+
+
+export const DecisionGlobalContextReviewActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventId: 'eventId',
+  revision: 'revision',
+  action: 'action',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type DecisionGlobalContextReviewActionScalarFieldEnum = (typeof DecisionGlobalContextReviewActionScalarFieldEnum)[keyof typeof DecisionGlobalContextReviewActionScalarFieldEnum]
 
 
 export const DecisionCompanyContextEventScalarFieldEnum = {
@@ -661,6 +755,20 @@ export const DecisionAlertScalarFieldEnum = {
 } as const
 
 export type DecisionAlertScalarFieldEnum = (typeof DecisionAlertScalarFieldEnum)[keyof typeof DecisionAlertScalarFieldEnum]
+
+
+export const DecisionAlertActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  alertId: 'alertId',
+  action: 'action',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type DecisionAlertActionScalarFieldEnum = (typeof DecisionAlertActionScalarFieldEnum)[keyof typeof DecisionAlertActionScalarFieldEnum]
 
 
 export const DecisionFeedbackScalarFieldEnum = {

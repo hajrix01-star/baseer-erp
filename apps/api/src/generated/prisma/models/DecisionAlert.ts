@@ -240,6 +240,7 @@ export type DecisionAlertWhereInput = {
   closedAt?: Prisma.DateTimeNullableFilter<"DecisionAlert"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   evidenceSnapshot?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput>
+  actions?: Prisma.DecisionAlertActionListRelationFilter
   feedback?: Prisma.DecisionFeedbackListRelationFilter
 }
 
@@ -258,6 +259,7 @@ export type DecisionAlertOrderByWithRelationInput = {
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotOrderByWithRelationInput
+  actions?: Prisma.DecisionAlertActionOrderByRelationAggregateInput
   feedback?: Prisma.DecisionFeedbackOrderByRelationAggregateInput
 }
 
@@ -280,6 +282,7 @@ export type DecisionAlertWhereUniqueInput = Prisma.AtLeast<{
   closedAt?: Prisma.DateTimeNullableFilter<"DecisionAlert"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   evidenceSnapshot?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput>
+  actions?: Prisma.DecisionAlertActionListRelationFilter
   feedback?: Prisma.DecisionFeedbackListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
@@ -331,6 +334,7 @@ export type DecisionAlertCreateInput = {
   closedAt?: Date | string | null
   company: Prisma.CompanyCreateNestedOneWithoutDecisionAlertsInput
   evidenceSnapshot: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAlertsInput
+  actions?: Prisma.DecisionAlertActionCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutAlertInput
 }
 
@@ -347,6 +351,7 @@ export type DecisionAlertUncheckedCreateInput = {
   createdAt?: Date | string
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutAlertInput
 }
 
@@ -362,6 +367,7 @@ export type DecisionAlertUpdateInput = {
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionAlertsNestedInput
   evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneRequiredWithoutAlertsNestedInput
+  actions?: Prisma.DecisionAlertActionUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUpdateManyWithoutAlertNestedInput
 }
 
@@ -378,6 +384,7 @@ export type DecisionAlertUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutAlertNestedInput
 }
 
@@ -577,6 +584,20 @@ export type EnumDecisionAlertStatusFieldUpdateOperationsInput = {
   set?: $Enums.DecisionAlertStatus
 }
 
+export type DecisionAlertCreateNestedOneWithoutActionsInput = {
+  create?: Prisma.XOR<Prisma.DecisionAlertCreateWithoutActionsInput, Prisma.DecisionAlertUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.DecisionAlertCreateOrConnectWithoutActionsInput
+  connect?: Prisma.DecisionAlertWhereUniqueInput
+}
+
+export type DecisionAlertUpdateOneRequiredWithoutActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionAlertCreateWithoutActionsInput, Prisma.DecisionAlertUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.DecisionAlertCreateOrConnectWithoutActionsInput
+  upsert?: Prisma.DecisionAlertUpsertWithoutActionsInput
+  connect?: Prisma.DecisionAlertWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionAlertUpdateToOneWithWhereWithoutActionsInput, Prisma.DecisionAlertUpdateWithoutActionsInput>, Prisma.DecisionAlertUncheckedUpdateWithoutActionsInput>
+}
+
 export type DecisionAlertCreateNestedOneWithoutFeedbackInput = {
   create?: Prisma.XOR<Prisma.DecisionAlertCreateWithoutFeedbackInput, Prisma.DecisionAlertUncheckedCreateWithoutFeedbackInput>
   connectOrCreate?: Prisma.DecisionAlertCreateOrConnectWithoutFeedbackInput
@@ -602,6 +623,7 @@ export type DecisionAlertCreateWithoutCompanyInput = {
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
   evidenceSnapshot: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAlertsInput
+  actions?: Prisma.DecisionAlertActionCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutAlertInput
 }
 
@@ -616,6 +638,7 @@ export type DecisionAlertUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutAlertInput
 }
 
@@ -674,6 +697,7 @@ export type DecisionAlertCreateWithoutEvidenceSnapshotInput = {
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
   company: Prisma.CompanyCreateNestedOneWithoutDecisionAlertsInput
+  actions?: Prisma.DecisionAlertActionCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutAlertInput
 }
 
@@ -687,6 +711,7 @@ export type DecisionAlertUncheckedCreateWithoutEvidenceSnapshotInput = {
   createdAt?: Date | string
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutAlertInput
   feedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutAlertInput
 }
 
@@ -716,6 +741,84 @@ export type DecisionAlertUpdateManyWithWhereWithoutEvidenceSnapshotInput = {
   data: Prisma.XOR<Prisma.DecisionAlertUpdateManyMutationInput, Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotInput>
 }
 
+export type DecisionAlertCreateWithoutActionsInput = {
+  id?: string
+  evaluationRunId: string
+  ruleCode: string
+  ruleVersion: string
+  status?: $Enums.DecisionAlertStatus
+  titleAr: string
+  createdAt?: Date | string
+  acknowledgedAt?: Date | string | null
+  closedAt?: Date | string | null
+  company: Prisma.CompanyCreateNestedOneWithoutDecisionAlertsInput
+  evidenceSnapshot: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAlertsInput
+  feedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutAlertInput
+}
+
+export type DecisionAlertUncheckedCreateWithoutActionsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  evaluationRunId: string
+  evidenceSnapshotId: string
+  ruleCode: string
+  ruleVersion: string
+  status?: $Enums.DecisionAlertStatus
+  titleAr: string
+  createdAt?: Date | string
+  acknowledgedAt?: Date | string | null
+  closedAt?: Date | string | null
+  feedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutAlertInput
+}
+
+export type DecisionAlertCreateOrConnectWithoutActionsInput = {
+  where: Prisma.DecisionAlertWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionAlertCreateWithoutActionsInput, Prisma.DecisionAlertUncheckedCreateWithoutActionsInput>
+}
+
+export type DecisionAlertUpsertWithoutActionsInput = {
+  update: Prisma.XOR<Prisma.DecisionAlertUpdateWithoutActionsInput, Prisma.DecisionAlertUncheckedUpdateWithoutActionsInput>
+  create: Prisma.XOR<Prisma.DecisionAlertCreateWithoutActionsInput, Prisma.DecisionAlertUncheckedCreateWithoutActionsInput>
+  where?: Prisma.DecisionAlertWhereInput
+}
+
+export type DecisionAlertUpdateToOneWithWhereWithoutActionsInput = {
+  where?: Prisma.DecisionAlertWhereInput
+  data: Prisma.XOR<Prisma.DecisionAlertUpdateWithoutActionsInput, Prisma.DecisionAlertUncheckedUpdateWithoutActionsInput>
+}
+
+export type DecisionAlertUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  evaluationRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDecisionAlertStatusFieldUpdateOperationsInput | $Enums.DecisionAlertStatus
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionAlertsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneRequiredWithoutAlertsNestedInput
+  feedback?: Prisma.DecisionFeedbackUpdateManyWithoutAlertNestedInput
+}
+
+export type DecisionAlertUncheckedUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  evaluationRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  evidenceSnapshotId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDecisionAlertStatusFieldUpdateOperationsInput | $Enums.DecisionAlertStatus
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  feedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutAlertNestedInput
+}
+
 export type DecisionAlertCreateWithoutFeedbackInput = {
   id?: string
   evaluationRunId: string
@@ -728,6 +831,7 @@ export type DecisionAlertCreateWithoutFeedbackInput = {
   closedAt?: Date | string | null
   company: Prisma.CompanyCreateNestedOneWithoutDecisionAlertsInput
   evidenceSnapshot: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAlertsInput
+  actions?: Prisma.DecisionAlertActionCreateNestedManyWithoutAlertInput
 }
 
 export type DecisionAlertUncheckedCreateWithoutFeedbackInput = {
@@ -743,6 +847,7 @@ export type DecisionAlertUncheckedCreateWithoutFeedbackInput = {
   createdAt?: Date | string
   acknowledgedAt?: Date | string | null
   closedAt?: Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutAlertInput
 }
 
 export type DecisionAlertCreateOrConnectWithoutFeedbackInput = {
@@ -773,6 +878,7 @@ export type DecisionAlertUpdateWithoutFeedbackInput = {
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionAlertsNestedInput
   evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneRequiredWithoutAlertsNestedInput
+  actions?: Prisma.DecisionAlertActionUpdateManyWithoutAlertNestedInput
 }
 
 export type DecisionAlertUncheckedUpdateWithoutFeedbackInput = {
@@ -788,6 +894,7 @@ export type DecisionAlertUncheckedUpdateWithoutFeedbackInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutAlertNestedInput
 }
 
 export type DecisionAlertCreateManyCompanyInput = {
@@ -814,6 +921,7 @@ export type DecisionAlertUpdateWithoutCompanyInput = {
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneRequiredWithoutAlertsNestedInput
+  actions?: Prisma.DecisionAlertActionUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUpdateManyWithoutAlertNestedInput
 }
 
@@ -828,6 +936,7 @@ export type DecisionAlertUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutAlertNestedInput
 }
 
@@ -867,6 +976,7 @@ export type DecisionAlertUpdateWithoutEvidenceSnapshotInput = {
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionAlertsNestedInput
+  actions?: Prisma.DecisionAlertActionUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUpdateManyWithoutAlertNestedInput
 }
 
@@ -880,6 +990,7 @@ export type DecisionAlertUncheckedUpdateWithoutEvidenceSnapshotInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutAlertNestedInput
   feedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutAlertNestedInput
 }
 
@@ -901,10 +1012,12 @@ export type DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotInput = {
  */
 
 export type DecisionAlertCountOutputType = {
+  actions: number
   feedback: number
 }
 
 export type DecisionAlertCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  actions?: boolean | DecisionAlertCountOutputTypeCountActionsArgs
   feedback?: boolean | DecisionAlertCountOutputTypeCountFeedbackArgs
 }
 
@@ -916,6 +1029,13 @@ export type DecisionAlertCountOutputTypeDefaultArgs<ExtArgs extends runtime.Type
    * Select specific fields to fetch from the DecisionAlertCountOutputType
    */
   select?: Prisma.DecisionAlertCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DecisionAlertCountOutputType without action
+ */
+export type DecisionAlertCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionAlertActionWhereInput
 }
 
 /**
@@ -941,6 +1061,7 @@ export type DecisionAlertSelect<ExtArgs extends runtime.Types.Extensions.Interna
   closedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.DecisionEvidenceSnapshotDefaultArgs<ExtArgs>
+  actions?: boolean | Prisma.DecisionAlert$actionsArgs<ExtArgs>
   feedback?: boolean | Prisma.DecisionAlert$feedbackArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionAlertCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionAlert"]>
@@ -998,6 +1119,7 @@ export type DecisionAlertOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type DecisionAlertInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.DecisionEvidenceSnapshotDefaultArgs<ExtArgs>
+  actions?: boolean | Prisma.DecisionAlert$actionsArgs<ExtArgs>
   feedback?: boolean | Prisma.DecisionAlert$feedbackArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionAlertCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1015,6 +1137,7 @@ export type $DecisionAlertPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     evidenceSnapshot: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>
+    actions: Prisma.$DecisionAlertActionPayload<ExtArgs>[]
     feedback: Prisma.$DecisionFeedbackPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1426,6 +1549,7 @@ export interface Prisma__DecisionAlertClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   evidenceSnapshot<T extends Prisma.DecisionEvidenceSnapshotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshotDefaultArgs<ExtArgs>>): Prisma.Prisma__DecisionEvidenceSnapshotClient<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  actions<T extends Prisma.DecisionAlert$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionAlert$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   feedback<T extends Prisma.DecisionAlert$feedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionAlert$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1866,6 +1990,30 @@ export type DecisionAlertDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many DecisionAlerts to delete.
    */
   limit?: number
+}
+
+/**
+ * DecisionAlert.actions
+ */
+export type DecisionAlert$actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionAlertAction
+   */
+  select?: Prisma.DecisionAlertActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionAlertAction
+   */
+  omit?: Prisma.DecisionAlertActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionAlertActionInclude<ExtArgs> | null
+  where?: Prisma.DecisionAlertActionWhereInput
+  orderBy?: Prisma.DecisionAlertActionOrderByWithRelationInput | Prisma.DecisionAlertActionOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionAlertActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionAlertActionScalarFieldEnum | Prisma.DecisionAlertActionScalarFieldEnum[]
 }
 
 /**

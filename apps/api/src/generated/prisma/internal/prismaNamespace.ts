@@ -418,15 +418,20 @@ export const ModelName = {
   FinanceLedgerRevision: 'FinanceLedgerRevision',
   ReportRun: 'ReportRun',
   DecisionMetricDefinition: 'DecisionMetricDefinition',
+  DecisionSalesChangePolicy: 'DecisionSalesChangePolicy',
   DecisionRuleDefinition: 'DecisionRuleDefinition',
   DecisionContextSource: 'DecisionContextSource',
   DecisionContextImportRun: 'DecisionContextImportRun',
+  DecisionContextResearchRun: 'DecisionContextResearchRun',
+  DecisionContextCandidate: 'DecisionContextCandidate',
   DecisionGlobalContextEvent: 'DecisionGlobalContextEvent',
   DecisionGlobalContextEventRevision: 'DecisionGlobalContextEventRevision',
+  DecisionGlobalContextReviewAction: 'DecisionGlobalContextReviewAction',
   DecisionCompanyContextEvent: 'DecisionCompanyContextEvent',
   DecisionEvaluationRun: 'DecisionEvaluationRun',
   DecisionEvidenceSnapshot: 'DecisionEvidenceSnapshot',
   DecisionAlert: 'DecisionAlert',
+  DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -526,7 +531,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2084,6 +2089,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DecisionSalesChangePolicy: {
+      payload: Prisma.$DecisionSalesChangePolicyPayload<ExtArgs>
+      fields: Prisma.DecisionSalesChangePolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionSalesChangePolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionSalesChangePolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionSalesChangePolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionSalesChangePolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        findMany: {
+          args: Prisma.DecisionSalesChangePolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>[]
+        }
+        create: {
+          args: Prisma.DecisionSalesChangePolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        createMany: {
+          args: Prisma.DecisionSalesChangePolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionSalesChangePolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionSalesChangePolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        update: {
+          args: Prisma.DecisionSalesChangePolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionSalesChangePolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionSalesChangePolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionSalesChangePolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionSalesChangePolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionSalesChangePolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionSalesChangePolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionSalesChangePolicy>
+        }
+        groupBy: {
+          args: Prisma.DecisionSalesChangePolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionSalesChangePolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionSalesChangePolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionSalesChangePolicyCountAggregateOutputType> | number
+        }
+      }
+    }
     DecisionRuleDefinition: {
       payload: Prisma.$DecisionRuleDefinitionPayload<ExtArgs>
       fields: Prisma.DecisionRuleDefinitionFieldRefs
@@ -2306,6 +2385,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DecisionContextResearchRun: {
+      payload: Prisma.$DecisionContextResearchRunPayload<ExtArgs>
+      fields: Prisma.DecisionContextResearchRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionContextResearchRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionContextResearchRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionContextResearchRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionContextResearchRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        findMany: {
+          args: Prisma.DecisionContextResearchRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>[]
+        }
+        create: {
+          args: Prisma.DecisionContextResearchRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        createMany: {
+          args: Prisma.DecisionContextResearchRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionContextResearchRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionContextResearchRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        update: {
+          args: Prisma.DecisionContextResearchRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionContextResearchRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionContextResearchRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionContextResearchRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionContextResearchRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextResearchRunPayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionContextResearchRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionContextResearchRun>
+        }
+        groupBy: {
+          args: Prisma.DecisionContextResearchRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextResearchRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionContextResearchRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextResearchRunCountAggregateOutputType> | number
+        }
+      }
+    }
+    DecisionContextCandidate: {
+      payload: Prisma.$DecisionContextCandidatePayload<ExtArgs>
+      fields: Prisma.DecisionContextCandidateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionContextCandidateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionContextCandidateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionContextCandidateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionContextCandidateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        findMany: {
+          args: Prisma.DecisionContextCandidateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>[]
+        }
+        create: {
+          args: Prisma.DecisionContextCandidateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        createMany: {
+          args: Prisma.DecisionContextCandidateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionContextCandidateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionContextCandidateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        update: {
+          args: Prisma.DecisionContextCandidateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionContextCandidateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionContextCandidateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionContextCandidateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionContextCandidateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextCandidatePayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionContextCandidateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionContextCandidate>
+        }
+        groupBy: {
+          args: Prisma.DecisionContextCandidateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextCandidateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionContextCandidateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextCandidateCountAggregateOutputType> | number
+        }
+      }
+    }
     DecisionGlobalContextEvent: {
       payload: Prisma.$DecisionGlobalContextEventPayload<ExtArgs>
       fields: Prisma.DecisionGlobalContextEventFieldRefs
@@ -2451,6 +2678,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DecisionGlobalContextEventRevisionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DecisionGlobalContextEventRevisionCountAggregateOutputType> | number
+        }
+      }
+    }
+    DecisionGlobalContextReviewAction: {
+      payload: Prisma.$DecisionGlobalContextReviewActionPayload<ExtArgs>
+      fields: Prisma.DecisionGlobalContextReviewActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionGlobalContextReviewActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionGlobalContextReviewActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionGlobalContextReviewActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionGlobalContextReviewActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        findMany: {
+          args: Prisma.DecisionGlobalContextReviewActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>[]
+        }
+        create: {
+          args: Prisma.DecisionGlobalContextReviewActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        createMany: {
+          args: Prisma.DecisionGlobalContextReviewActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionGlobalContextReviewActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionGlobalContextReviewActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        update: {
+          args: Prisma.DecisionGlobalContextReviewActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionGlobalContextReviewActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionGlobalContextReviewActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionGlobalContextReviewActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionGlobalContextReviewActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionGlobalContextReviewActionPayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionGlobalContextReviewActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionGlobalContextReviewAction>
+        }
+        groupBy: {
+          args: Prisma.DecisionGlobalContextReviewActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionGlobalContextReviewActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionGlobalContextReviewActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionGlobalContextReviewActionCountAggregateOutputType> | number
         }
       }
     }
@@ -2747,6 +3048,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DecisionAlertCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DecisionAlertCountAggregateOutputType> | number
+        }
+      }
+    }
+    DecisionAlertAction: {
+      payload: Prisma.$DecisionAlertActionPayload<ExtArgs>
+      fields: Prisma.DecisionAlertActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionAlertActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionAlertActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionAlertActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionAlertActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        findMany: {
+          args: Prisma.DecisionAlertActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>[]
+        }
+        create: {
+          args: Prisma.DecisionAlertActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        createMany: {
+          args: Prisma.DecisionAlertActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionAlertActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionAlertActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        update: {
+          args: Prisma.DecisionAlertActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionAlertActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionAlertActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionAlertActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionAlertActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionAlertActionPayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionAlertActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionAlertAction>
+        }
+        groupBy: {
+          args: Prisma.DecisionAlertActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionAlertActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionAlertActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionAlertActionCountAggregateOutputType> | number
         }
       }
     }
@@ -9040,6 +9415,10 @@ export const CompanyScalarFieldEnum = {
   nameAr: 'nameAr',
   nameEn: 'nameEn',
   businessTimezone: 'businessTimezone',
+  contextLocationCode: 'contextLocationCode',
+  contextLocationLabelAr: 'contextLocationLabelAr',
+  contextLatitude: 'contextLatitude',
+  contextLongitude: 'contextLongitude',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -9332,6 +9711,26 @@ export const DecisionMetricDefinitionScalarFieldEnum = {
 export type DecisionMetricDefinitionScalarFieldEnum = (typeof DecisionMetricDefinitionScalarFieldEnum)[keyof typeof DecisionMetricDefinitionScalarFieldEnum]
 
 
+export const DecisionSalesChangePolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  enabled: 'enabled',
+  comparisonPolicyCode: 'comparisonPolicyCode',
+  comparisonPolicyVersion: 'comparisonPolicyVersion',
+  decreaseThresholdBasisPoints: 'decreaseThresholdBasisPoints',
+  increaseThresholdBasisPoints: 'increaseThresholdBasisPoints',
+  minimumBaselineAmount: 'minimumBaselineAmount',
+  minimumAbsoluteDifferenceAmount: 'minimumAbsoluteDifferenceAmount',
+  cooldownHours: 'cooldownHours',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DecisionSalesChangePolicyScalarFieldEnum = (typeof DecisionSalesChangePolicyScalarFieldEnum)[keyof typeof DecisionSalesChangePolicyScalarFieldEnum]
+
+
 export const DecisionRuleDefinitionScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -9378,12 +9777,62 @@ export const DecisionContextImportRunScalarFieldEnum = {
 export type DecisionContextImportRunScalarFieldEnum = (typeof DecisionContextImportRunScalarFieldEnum)[keyof typeof DecisionContextImportRunScalarFieldEnum]
 
 
+export const DecisionContextResearchRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  triggerCode: 'triggerCode',
+  status: 'status',
+  documentChecksum: 'documentChecksum',
+  receivedCandidates: 'receivedCandidates',
+  pendingCandidates: 'pendingCandidates',
+  duplicateCandidates: 'duplicateCandidates',
+  diagnosticsJson: 'diagnosticsJson',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+} as const
+
+export type DecisionContextResearchRunScalarFieldEnum = (typeof DecisionContextResearchRunScalarFieldEnum)[keyof typeof DecisionContextResearchRunScalarFieldEnum]
+
+
+export const DecisionContextCandidateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  researchRunId: 'researchRunId',
+  externalKey: 'externalKey',
+  eventKind: 'eventKind',
+  titleAr: 'titleAr',
+  startsOn: 'startsOn',
+  endsOn: 'endsOn',
+  scope: 'scope',
+  locationCode: 'locationCode',
+  locationLabelAr: 'locationLabelAr',
+  relevanceReasonAr: 'relevanceReasonAr',
+  sourceUpdatedAt: 'sourceUpdatedAt',
+  sourceChecksum: 'sourceChecksum',
+  payloadJson: 'payloadJson',
+  status: 'status',
+  resolutionJson: 'resolutionJson',
+  publishedEventId: 'publishedEventId',
+  resolvedByUserId: 'resolvedByUserId',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DecisionContextCandidateScalarFieldEnum = (typeof DecisionContextCandidateScalarFieldEnum)[keyof typeof DecisionContextCandidateScalarFieldEnum]
+
+
 export const DecisionGlobalContextEventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   sourceId: 'sourceId',
   externalKey: 'externalKey',
   eventKind: 'eventKind',
+  scope: 'scope',
+  locationCode: 'locationCode',
+  locationLabelAr: 'locationLabelAr',
   status: 'status',
   currentRevision: 'currentRevision',
   createdAt: 'createdAt',
@@ -9404,11 +9853,26 @@ export const DecisionGlobalContextEventRevisionScalarFieldEnum = {
   sourceUpdatedAt: 'sourceUpdatedAt',
   sourceChecksum: 'sourceChecksum',
   importReceipt: 'importReceipt',
+  verificationStatus: 'verificationStatus',
   status: 'status',
   createdAt: 'createdAt'
 } as const
 
 export type DecisionGlobalContextEventRevisionScalarFieldEnum = (typeof DecisionGlobalContextEventRevisionScalarFieldEnum)[keyof typeof DecisionGlobalContextEventRevisionScalarFieldEnum]
+
+
+export const DecisionGlobalContextReviewActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventId: 'eventId',
+  revision: 'revision',
+  action: 'action',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type DecisionGlobalContextReviewActionScalarFieldEnum = (typeof DecisionGlobalContextReviewActionScalarFieldEnum)[keyof typeof DecisionGlobalContextReviewActionScalarFieldEnum]
 
 
 export const DecisionCompanyContextEventScalarFieldEnum = {
@@ -9483,6 +9947,20 @@ export const DecisionAlertScalarFieldEnum = {
 } as const
 
 export type DecisionAlertScalarFieldEnum = (typeof DecisionAlertScalarFieldEnum)[keyof typeof DecisionAlertScalarFieldEnum]
+
+
+export const DecisionAlertActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  alertId: 'alertId',
+  action: 'action',
+  reason: 'reason',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type DecisionAlertActionScalarFieldEnum = (typeof DecisionAlertActionScalarFieldEnum)[keyof typeof DecisionAlertActionScalarFieldEnum]
 
 
 export const DecisionFeedbackScalarFieldEnum = {
@@ -11207,6 +11685,20 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
  * Reference to a field of type 'CompanyStatus'
  */
 export type EnumCompanyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanyStatus'>
@@ -11396,6 +11888,34 @@ export type ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel> = Fiel
 
 
 /**
+ * Reference to a field of type 'DecisionContextScope'
+ */
+export type EnumDecisionContextScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextScope'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionContextScope[]'
+ */
+export type ListEnumDecisionContextScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextScope[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionContextCandidateStatus'
+ */
+export type EnumDecisionContextCandidateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextCandidateStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionContextCandidateStatus[]'
+ */
+export type ListEnumDecisionContextCandidateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextCandidateStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'DecisionVerificationStatus'
  */
 export type EnumDecisionVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionVerificationStatus'>
@@ -11406,6 +11926,20 @@ export type EnumDecisionVerificationStatusFieldRefInput<$PrismaModel> = FieldRef
  * Reference to a field of type 'DecisionVerificationStatus[]'
  */
 export type ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionVerificationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionContextReviewActionKind'
+ */
+export type EnumDecisionContextReviewActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextReviewActionKind'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionContextReviewActionKind[]'
+ */
+export type ListEnumDecisionContextReviewActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionContextReviewActionKind[]'>
     
 
 
@@ -11452,6 +11986,20 @@ export type ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
+ * Reference to a field of type 'DecisionAlertActionKind'
+ */
+export type EnumDecisionAlertActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionAlertActionKind'>
+    
+
+
+/**
+ * Reference to a field of type 'DecisionAlertActionKind[]'
+ */
+export type ListEnumDecisionAlertActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionAlertActionKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'FinanceCashPerformanceEventKind'
  */
 export type EnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceCashPerformanceEventKind'>
@@ -11476,20 +12024,6 @@ export type EnumFinanceCashPerformanceDirectionFieldRefInput<$PrismaModel> = Fie
  * Reference to a field of type 'FinanceCashPerformanceDirection[]'
  */
 export type ListEnumFinanceCashPerformanceDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceCashPerformanceDirection[]'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -12602,15 +13136,20 @@ export type GlobalOmitConfig = {
   financeLedgerRevision?: Prisma.FinanceLedgerRevisionOmit
   reportRun?: Prisma.ReportRunOmit
   decisionMetricDefinition?: Prisma.DecisionMetricDefinitionOmit
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyOmit
   decisionRuleDefinition?: Prisma.DecisionRuleDefinitionOmit
   decisionContextSource?: Prisma.DecisionContextSourceOmit
   decisionContextImportRun?: Prisma.DecisionContextImportRunOmit
+  decisionContextResearchRun?: Prisma.DecisionContextResearchRunOmit
+  decisionContextCandidate?: Prisma.DecisionContextCandidateOmit
   decisionGlobalContextEvent?: Prisma.DecisionGlobalContextEventOmit
   decisionGlobalContextEventRevision?: Prisma.DecisionGlobalContextEventRevisionOmit
+  decisionGlobalContextReviewAction?: Prisma.DecisionGlobalContextReviewActionOmit
   decisionCompanyContextEvent?: Prisma.DecisionCompanyContextEventOmit
   decisionEvaluationRun?: Prisma.DecisionEvaluationRunOmit
   decisionEvidenceSnapshot?: Prisma.DecisionEvidenceSnapshotOmit
   decisionAlert?: Prisma.DecisionAlertOmit
+  decisionAlertAction?: Prisma.DecisionAlertActionOmit
   decisionFeedback?: Prisma.DecisionFeedbackOmit
   reportDocument?: Prisma.ReportDocumentOmit
   financeCashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOmit

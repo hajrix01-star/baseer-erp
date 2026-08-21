@@ -41,6 +41,9 @@ export type DecisionGlobalContextEventMinAggregateOutputType = {
   sourceId: string | null
   externalKey: string | null
   eventKind: string | null
+  scope: $Enums.DecisionContextScope | null
+  locationCode: string | null
+  locationLabelAr: string | null
   status: $Enums.DecisionContextEventStatus | null
   currentRevision: number | null
   createdAt: Date | null
@@ -53,6 +56,9 @@ export type DecisionGlobalContextEventMaxAggregateOutputType = {
   sourceId: string | null
   externalKey: string | null
   eventKind: string | null
+  scope: $Enums.DecisionContextScope | null
+  locationCode: string | null
+  locationLabelAr: string | null
   status: $Enums.DecisionContextEventStatus | null
   currentRevision: number | null
   createdAt: Date | null
@@ -65,6 +71,9 @@ export type DecisionGlobalContextEventCountAggregateOutputType = {
   sourceId: number
   externalKey: number
   eventKind: number
+  scope: number
+  locationCode: number
+  locationLabelAr: number
   status: number
   currentRevision: number
   createdAt: number
@@ -87,6 +96,9 @@ export type DecisionGlobalContextEventMinAggregateInputType = {
   sourceId?: true
   externalKey?: true
   eventKind?: true
+  scope?: true
+  locationCode?: true
+  locationLabelAr?: true
   status?: true
   currentRevision?: true
   createdAt?: true
@@ -99,6 +111,9 @@ export type DecisionGlobalContextEventMaxAggregateInputType = {
   sourceId?: true
   externalKey?: true
   eventKind?: true
+  scope?: true
+  locationCode?: true
+  locationLabelAr?: true
   status?: true
   currentRevision?: true
   createdAt?: true
@@ -111,6 +126,9 @@ export type DecisionGlobalContextEventCountAggregateInputType = {
   sourceId?: true
   externalKey?: true
   eventKind?: true
+  scope?: true
+  locationCode?: true
+  locationLabelAr?: true
   status?: true
   currentRevision?: true
   createdAt?: true
@@ -210,6 +228,9 @@ export type DecisionGlobalContextEventGroupByOutputType = {
   sourceId: string
   externalKey: string
   eventKind: string
+  scope: $Enums.DecisionContextScope
+  locationCode: string | null
+  locationLabelAr: string | null
   status: $Enums.DecisionContextEventStatus
   currentRevision: number
   createdAt: Date
@@ -245,11 +266,17 @@ export type DecisionGlobalContextEventWhereInput = {
   sourceId?: Prisma.UuidFilter<"DecisionGlobalContextEvent"> | string
   externalKey?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
   eventKind?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
+  scope?: Prisma.EnumDecisionContextScopeFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextScope
+  locationCode?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
+  locationLabelAr?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFilter<"DecisionGlobalContextEvent"> | number
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionListRelationFilter
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionListRelationFilter
+  researchCandidates?: Prisma.DecisionContextCandidateListRelationFilter
+  source?: Prisma.XOR<Prisma.DecisionContextSourceScalarRelationFilter, Prisma.DecisionContextSourceWhereInput>
 }
 
 export type DecisionGlobalContextEventOrderByWithRelationInput = {
@@ -258,11 +285,17 @@ export type DecisionGlobalContextEventOrderByWithRelationInput = {
   sourceId?: Prisma.SortOrder
   externalKey?: Prisma.SortOrder
   eventKind?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  locationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationLabelAr?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   currentRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revisions?: Prisma.DecisionGlobalContextEventRevisionOrderByRelationAggregateInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionOrderByRelationAggregateInput
+  researchCandidates?: Prisma.DecisionContextCandidateOrderByRelationAggregateInput
+  source?: Prisma.DecisionContextSourceOrderByWithRelationInput
 }
 
 export type DecisionGlobalContextEventWhereUniqueInput = Prisma.AtLeast<{
@@ -276,11 +309,17 @@ export type DecisionGlobalContextEventWhereUniqueInput = Prisma.AtLeast<{
   sourceId?: Prisma.UuidFilter<"DecisionGlobalContextEvent"> | string
   externalKey?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
   eventKind?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
+  scope?: Prisma.EnumDecisionContextScopeFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextScope
+  locationCode?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
+  locationLabelAr?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFilter<"DecisionGlobalContextEvent"> | number
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionListRelationFilter
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionListRelationFilter
+  researchCandidates?: Prisma.DecisionContextCandidateListRelationFilter
+  source?: Prisma.XOR<Prisma.DecisionContextSourceScalarRelationFilter, Prisma.DecisionContextSourceWhereInput>
 }, "id" | "id_tenantId" | "tenantId_sourceId_externalKey">
 
 export type DecisionGlobalContextEventOrderByWithAggregationInput = {
@@ -289,6 +328,9 @@ export type DecisionGlobalContextEventOrderByWithAggregationInput = {
   sourceId?: Prisma.SortOrder
   externalKey?: Prisma.SortOrder
   eventKind?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  locationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationLabelAr?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   currentRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -309,6 +351,9 @@ export type DecisionGlobalContextEventScalarWhereWithAggregatesInput = {
   sourceId?: Prisma.UuidWithAggregatesFilter<"DecisionGlobalContextEvent"> | string
   externalKey?: Prisma.StringWithAggregatesFilter<"DecisionGlobalContextEvent"> | string
   eventKind?: Prisma.StringWithAggregatesFilter<"DecisionGlobalContextEvent"> | string
+  scope?: Prisma.EnumDecisionContextScopeWithAggregatesFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextScope
+  locationCode?: Prisma.StringNullableWithAggregatesFilter<"DecisionGlobalContextEvent"> | string | null
+  locationLabelAr?: Prisma.StringNullableWithAggregatesFilter<"DecisionGlobalContextEvent"> | string | null
   status?: Prisma.EnumDecisionContextEventStatusWithAggregatesFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntWithAggregatesFilter<"DecisionGlobalContextEvent"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DecisionGlobalContextEvent"> | Date | string
@@ -317,15 +362,19 @@ export type DecisionGlobalContextEventScalarWhereWithAggregatesInput = {
 
 export type DecisionGlobalContextEventCreateInput = {
   id?: string
-  tenantId: string
-  sourceId: string
   externalKey: string
   eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
   status?: $Enums.DecisionContextEventStatus
   currentRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutPublishedEventInput
+  source: Prisma.DecisionContextSourceCreateNestedOneWithoutGlobalEventsInput
 }
 
 export type DecisionGlobalContextEventUncheckedCreateInput = {
@@ -334,24 +383,33 @@ export type DecisionGlobalContextEventUncheckedCreateInput = {
   sourceId: string
   externalKey: string
   eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
   status?: $Enums.DecisionContextEventStatus
   currentRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutPublishedEventInput
 }
 
 export type DecisionGlobalContextEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutPublishedEventNestedInput
+  source?: Prisma.DecisionContextSourceUpdateOneRequiredWithoutGlobalEventsNestedInput
 }
 
 export type DecisionGlobalContextEventUncheckedUpdateInput = {
@@ -360,11 +418,16 @@ export type DecisionGlobalContextEventUncheckedUpdateInput = {
   sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutPublishedEventNestedInput
 }
 
 export type DecisionGlobalContextEventCreateManyInput = {
@@ -373,6 +436,9 @@ export type DecisionGlobalContextEventCreateManyInput = {
   sourceId: string
   externalKey: string
   eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
   status?: $Enums.DecisionContextEventStatus
   currentRevision?: number
   createdAt?: Date | string
@@ -381,10 +447,11 @@ export type DecisionGlobalContextEventCreateManyInput = {
 
 export type DecisionGlobalContextEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -397,10 +464,28 @@ export type DecisionGlobalContextEventUncheckedUpdateManyInput = {
   sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DecisionGlobalContextEventListRelationFilter = {
+  every?: Prisma.DecisionGlobalContextEventWhereInput
+  some?: Prisma.DecisionGlobalContextEventWhereInput
+  none?: Prisma.DecisionGlobalContextEventWhereInput
+}
+
+export type DecisionGlobalContextEventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type DecisionGlobalContextEventNullableScalarRelationFilter = {
+  is?: Prisma.DecisionGlobalContextEventWhereInput | null
+  isNot?: Prisma.DecisionGlobalContextEventWhereInput | null
 }
 
 export type DecisionGlobalContextEventIdTenantIdCompoundUniqueInput = {
@@ -420,6 +505,9 @@ export type DecisionGlobalContextEventCountOrderByAggregateInput = {
   sourceId?: Prisma.SortOrder
   externalKey?: Prisma.SortOrder
   eventKind?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  locationCode?: Prisma.SortOrder
+  locationLabelAr?: Prisma.SortOrder
   status?: Prisma.SortOrder
   currentRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -436,6 +524,9 @@ export type DecisionGlobalContextEventMaxOrderByAggregateInput = {
   sourceId?: Prisma.SortOrder
   externalKey?: Prisma.SortOrder
   eventKind?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  locationCode?: Prisma.SortOrder
+  locationLabelAr?: Prisma.SortOrder
   status?: Prisma.SortOrder
   currentRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -448,6 +539,9 @@ export type DecisionGlobalContextEventMinOrderByAggregateInput = {
   sourceId?: Prisma.SortOrder
   externalKey?: Prisma.SortOrder
   eventKind?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  locationCode?: Prisma.SortOrder
+  locationLabelAr?: Prisma.SortOrder
   status?: Prisma.SortOrder
   currentRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -461,6 +555,64 @@ export type DecisionGlobalContextEventSumOrderByAggregateInput = {
 export type DecisionGlobalContextEventScalarRelationFilter = {
   is?: Prisma.DecisionGlobalContextEventWhereInput
   isNot?: Prisma.DecisionGlobalContextEventWhereInput
+}
+
+export type DecisionGlobalContextEventCreateNestedManyWithoutSourceInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput> | Prisma.DecisionGlobalContextEventCreateWithoutSourceInput[] | Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput[]
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput | Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput[]
+  createMany?: Prisma.DecisionGlobalContextEventCreateManySourceInputEnvelope
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+}
+
+export type DecisionGlobalContextEventUncheckedCreateNestedManyWithoutSourceInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput> | Prisma.DecisionGlobalContextEventCreateWithoutSourceInput[] | Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput[]
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput | Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput[]
+  createMany?: Prisma.DecisionGlobalContextEventCreateManySourceInputEnvelope
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+}
+
+export type DecisionGlobalContextEventUpdateManyWithoutSourceNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput> | Prisma.DecisionGlobalContextEventCreateWithoutSourceInput[] | Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput[]
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput | Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput[]
+  upsert?: Prisma.DecisionGlobalContextEventUpsertWithWhereUniqueWithoutSourceInput | Prisma.DecisionGlobalContextEventUpsertWithWhereUniqueWithoutSourceInput[]
+  createMany?: Prisma.DecisionGlobalContextEventCreateManySourceInputEnvelope
+  set?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  disconnect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  delete?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  update?: Prisma.DecisionGlobalContextEventUpdateWithWhereUniqueWithoutSourceInput | Prisma.DecisionGlobalContextEventUpdateWithWhereUniqueWithoutSourceInput[]
+  updateMany?: Prisma.DecisionGlobalContextEventUpdateManyWithWhereWithoutSourceInput | Prisma.DecisionGlobalContextEventUpdateManyWithWhereWithoutSourceInput[]
+  deleteMany?: Prisma.DecisionGlobalContextEventScalarWhereInput | Prisma.DecisionGlobalContextEventScalarWhereInput[]
+}
+
+export type DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput> | Prisma.DecisionGlobalContextEventCreateWithoutSourceInput[] | Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput[]
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput | Prisma.DecisionGlobalContextEventCreateOrConnectWithoutSourceInput[]
+  upsert?: Prisma.DecisionGlobalContextEventUpsertWithWhereUniqueWithoutSourceInput | Prisma.DecisionGlobalContextEventUpsertWithWhereUniqueWithoutSourceInput[]
+  createMany?: Prisma.DecisionGlobalContextEventCreateManySourceInputEnvelope
+  set?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  disconnect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  delete?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput | Prisma.DecisionGlobalContextEventWhereUniqueInput[]
+  update?: Prisma.DecisionGlobalContextEventUpdateWithWhereUniqueWithoutSourceInput | Prisma.DecisionGlobalContextEventUpdateWithWhereUniqueWithoutSourceInput[]
+  updateMany?: Prisma.DecisionGlobalContextEventUpdateManyWithWhereWithoutSourceInput | Prisma.DecisionGlobalContextEventUpdateManyWithWhereWithoutSourceInput[]
+  deleteMany?: Prisma.DecisionGlobalContextEventScalarWhereInput | Prisma.DecisionGlobalContextEventScalarWhereInput[]
+}
+
+export type DecisionGlobalContextEventCreateNestedOneWithoutResearchCandidatesInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutResearchCandidatesInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutResearchCandidatesInput
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput
+}
+
+export type DecisionGlobalContextEventUpdateOneWithoutResearchCandidatesNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutResearchCandidatesInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutResearchCandidatesInput
+  upsert?: Prisma.DecisionGlobalContextEventUpsertWithoutResearchCandidatesInput
+  disconnect?: Prisma.DecisionGlobalContextEventWhereInput | boolean
+  delete?: Prisma.DecisionGlobalContextEventWhereInput | boolean
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateToOneWithWhereWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUpdateWithoutResearchCandidatesInput>, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutResearchCandidatesInput>
 }
 
 export type DecisionGlobalContextEventCreateNestedOneWithoutRevisionsInput = {
@@ -477,16 +629,192 @@ export type DecisionGlobalContextEventUpdateOneRequiredWithoutRevisionsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateToOneWithWhereWithoutRevisionsInput, Prisma.DecisionGlobalContextEventUpdateWithoutRevisionsInput>, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutRevisionsInput>
 }
 
-export type DecisionGlobalContextEventCreateWithoutRevisionsInput = {
+export type DecisionGlobalContextEventCreateNestedOneWithoutReviewActionsInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutReviewActionsInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutReviewActionsInput
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput
+}
+
+export type DecisionGlobalContextEventUpdateOneRequiredWithoutReviewActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutReviewActionsInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventCreateOrConnectWithoutReviewActionsInput
+  upsert?: Prisma.DecisionGlobalContextEventUpsertWithoutReviewActionsInput
+  connect?: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateToOneWithWhereWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUpdateWithoutReviewActionsInput>, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutReviewActionsInput>
+}
+
+export type DecisionGlobalContextEventCreateWithoutSourceInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutPublishedEventInput
+}
+
+export type DecisionGlobalContextEventUncheckedCreateWithoutSourceInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutPublishedEventInput
+}
+
+export type DecisionGlobalContextEventCreateOrConnectWithoutSourceInput = {
+  where: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput>
+}
+
+export type DecisionGlobalContextEventCreateManySourceInputEnvelope = {
+  data: Prisma.DecisionGlobalContextEventCreateManySourceInput | Prisma.DecisionGlobalContextEventCreateManySourceInput[]
+  skipDuplicates?: boolean
+}
+
+export type DecisionGlobalContextEventUpsertWithWhereUniqueWithoutSourceInput = {
+  where: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  update: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutSourceInput>
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutSourceInput>
+}
+
+export type DecisionGlobalContextEventUpdateWithWhereUniqueWithoutSourceInput = {
+  where: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  data: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutSourceInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutSourceInput>
+}
+
+export type DecisionGlobalContextEventUpdateManyWithWhereWithoutSourceInput = {
+  where: Prisma.DecisionGlobalContextEventScalarWhereInput
+  data: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateManyMutationInput, Prisma.DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceInput>
+}
+
+export type DecisionGlobalContextEventScalarWhereInput = {
+  AND?: Prisma.DecisionGlobalContextEventScalarWhereInput | Prisma.DecisionGlobalContextEventScalarWhereInput[]
+  OR?: Prisma.DecisionGlobalContextEventScalarWhereInput[]
+  NOT?: Prisma.DecisionGlobalContextEventScalarWhereInput | Prisma.DecisionGlobalContextEventScalarWhereInput[]
+  id?: Prisma.UuidFilter<"DecisionGlobalContextEvent"> | string
+  tenantId?: Prisma.UuidFilter<"DecisionGlobalContextEvent"> | string
+  sourceId?: Prisma.UuidFilter<"DecisionGlobalContextEvent"> | string
+  externalKey?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
+  eventKind?: Prisma.StringFilter<"DecisionGlobalContextEvent"> | string
+  scope?: Prisma.EnumDecisionContextScopeFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextScope
+  locationCode?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
+  locationLabelAr?: Prisma.StringNullableFilter<"DecisionGlobalContextEvent"> | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEvent"> | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFilter<"DecisionGlobalContextEvent"> | number
+  createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEvent"> | Date | string
+}
+
+export type DecisionGlobalContextEventCreateWithoutResearchCandidatesInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionCreateNestedManyWithoutEventInput
+  source: Prisma.DecisionContextSourceCreateNestedOneWithoutGlobalEventsInput
+}
+
+export type DecisionGlobalContextEventUncheckedCreateWithoutResearchCandidatesInput = {
   id?: string
   tenantId: string
   sourceId: string
   externalKey: string
   eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
   status?: $Enums.DecisionContextEventStatus
   currentRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedCreateNestedManyWithoutEventInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type DecisionGlobalContextEventCreateOrConnectWithoutResearchCandidatesInput = {
+  where: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutResearchCandidatesInput>
+}
+
+export type DecisionGlobalContextEventUpsertWithoutResearchCandidatesInput = {
+  update: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutResearchCandidatesInput>
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutResearchCandidatesInput>
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+}
+
+export type DecisionGlobalContextEventUpdateToOneWithWhereWithoutResearchCandidatesInput = {
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+  data: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutResearchCandidatesInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutResearchCandidatesInput>
+}
+
+export type DecisionGlobalContextEventUpdateWithoutResearchCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUpdateManyWithoutEventNestedInput
+  source?: Prisma.DecisionContextSourceUpdateOneRequiredWithoutGlobalEventsNestedInput
+}
+
+export type DecisionGlobalContextEventUncheckedUpdateWithoutResearchCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type DecisionGlobalContextEventCreateWithoutRevisionsInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutPublishedEventInput
+  source: Prisma.DecisionContextSourceCreateNestedOneWithoutGlobalEventsInput
 }
 
 export type DecisionGlobalContextEventUncheckedCreateWithoutRevisionsInput = {
@@ -495,10 +823,15 @@ export type DecisionGlobalContextEventUncheckedCreateWithoutRevisionsInput = {
   sourceId: string
   externalKey: string
   eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
   status?: $Enums.DecisionContextEventStatus
   currentRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutPublishedEventInput
 }
 
 export type DecisionGlobalContextEventCreateOrConnectWithoutRevisionsInput = {
@@ -519,14 +852,18 @@ export type DecisionGlobalContextEventUpdateToOneWithWhereWithoutRevisionsInput 
 
 export type DecisionGlobalContextEventUpdateWithoutRevisionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutPublishedEventNestedInput
+  source?: Prisma.DecisionContextSourceUpdateOneRequiredWithoutGlobalEventsNestedInput
 }
 
 export type DecisionGlobalContextEventUncheckedUpdateWithoutRevisionsInput = {
@@ -535,6 +872,151 @@ export type DecisionGlobalContextEventUncheckedUpdateWithoutRevisionsInput = {
   sourceId?: Prisma.StringFieldUpdateOperationsInput | string
   externalKey?: Prisma.StringFieldUpdateOperationsInput | string
   eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutPublishedEventNestedInput
+}
+
+export type DecisionGlobalContextEventCreateWithoutReviewActionsInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateCreateNestedManyWithoutPublishedEventInput
+  source: Prisma.DecisionContextSourceCreateNestedOneWithoutGlobalEventsInput
+}
+
+export type DecisionGlobalContextEventUncheckedCreateWithoutReviewActionsInput = {
+  id?: string
+  tenantId: string
+  sourceId: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedCreateNestedManyWithoutEventInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedCreateNestedManyWithoutPublishedEventInput
+}
+
+export type DecisionGlobalContextEventCreateOrConnectWithoutReviewActionsInput = {
+  where: Prisma.DecisionGlobalContextEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutReviewActionsInput>
+}
+
+export type DecisionGlobalContextEventUpsertWithoutReviewActionsInput = {
+  update: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutReviewActionsInput>
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventCreateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedCreateWithoutReviewActionsInput>
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+}
+
+export type DecisionGlobalContextEventUpdateToOneWithWhereWithoutReviewActionsInput = {
+  where?: Prisma.DecisionGlobalContextEventWhereInput
+  data: Prisma.XOR<Prisma.DecisionGlobalContextEventUpdateWithoutReviewActionsInput, Prisma.DecisionGlobalContextEventUncheckedUpdateWithoutReviewActionsInput>
+}
+
+export type DecisionGlobalContextEventUpdateWithoutReviewActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutPublishedEventNestedInput
+  source?: Prisma.DecisionContextSourceUpdateOneRequiredWithoutGlobalEventsNestedInput
+}
+
+export type DecisionGlobalContextEventUncheckedUpdateWithoutReviewActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutPublishedEventNestedInput
+}
+
+export type DecisionGlobalContextEventCreateManySourceInput = {
+  id?: string
+  externalKey: string
+  eventKind: string
+  scope?: $Enums.DecisionContextScope
+  locationCode?: string | null
+  locationLabelAr?: string | null
+  status?: $Enums.DecisionContextEventStatus
+  currentRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DecisionGlobalContextEventUpdateWithoutSourceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUpdateManyWithoutPublishedEventNestedInput
+}
+
+export type DecisionGlobalContextEventUncheckedUpdateWithoutSourceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventNestedInput
+  reviewActions?: Prisma.DecisionGlobalContextReviewActionUncheckedUpdateManyWithoutEventNestedInput
+  researchCandidates?: Prisma.DecisionContextCandidateUncheckedUpdateManyWithoutPublishedEventNestedInput
+}
+
+export type DecisionGlobalContextEventUncheckedUpdateManyWithoutSourceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalKey?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumDecisionContextScopeFieldUpdateOperationsInput | $Enums.DecisionContextScope
+  locationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   currentRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -548,10 +1030,14 @@ export type DecisionGlobalContextEventUncheckedUpdateWithoutRevisionsInput = {
 
 export type DecisionGlobalContextEventCountOutputType = {
   revisions: number
+  reviewActions: number
+  researchCandidates: number
 }
 
 export type DecisionGlobalContextEventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   revisions?: boolean | DecisionGlobalContextEventCountOutputTypeCountRevisionsArgs
+  reviewActions?: boolean | DecisionGlobalContextEventCountOutputTypeCountReviewActionsArgs
+  researchCandidates?: boolean | DecisionGlobalContextEventCountOutputTypeCountResearchCandidatesArgs
 }
 
 /**
@@ -571,6 +1057,20 @@ export type DecisionGlobalContextEventCountOutputTypeCountRevisionsArgs<ExtArgs 
   where?: Prisma.DecisionGlobalContextEventRevisionWhereInput
 }
 
+/**
+ * DecisionGlobalContextEventCountOutputType without action
+ */
+export type DecisionGlobalContextEventCountOutputTypeCountReviewActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionGlobalContextReviewActionWhereInput
+}
+
+/**
+ * DecisionGlobalContextEventCountOutputType without action
+ */
+export type DecisionGlobalContextEventCountOutputTypeCountResearchCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionContextCandidateWhereInput
+}
+
 
 export type DecisionGlobalContextEventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -578,11 +1078,17 @@ export type DecisionGlobalContextEventSelect<ExtArgs extends runtime.Types.Exten
   sourceId?: boolean
   externalKey?: boolean
   eventKind?: boolean
+  scope?: boolean
+  locationCode?: boolean
+  locationLabelAr?: boolean
   status?: boolean
   currentRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   revisions?: boolean | Prisma.DecisionGlobalContextEvent$revisionsArgs<ExtArgs>
+  reviewActions?: boolean | Prisma.DecisionGlobalContextEvent$reviewActionsArgs<ExtArgs>
+  researchCandidates?: boolean | Prisma.DecisionGlobalContextEvent$researchCandidatesArgs<ExtArgs>
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionGlobalContextEventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionGlobalContextEvent"]>
 
@@ -592,10 +1098,14 @@ export type DecisionGlobalContextEventSelectCreateManyAndReturn<ExtArgs extends 
   sourceId?: boolean
   externalKey?: boolean
   eventKind?: boolean
+  scope?: boolean
+  locationCode?: boolean
+  locationLabelAr?: boolean
   status?: boolean
   currentRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionGlobalContextEvent"]>
 
 export type DecisionGlobalContextEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -604,10 +1114,14 @@ export type DecisionGlobalContextEventSelectUpdateManyAndReturn<ExtArgs extends 
   sourceId?: boolean
   externalKey?: boolean
   eventKind?: boolean
+  scope?: boolean
+  locationCode?: boolean
+  locationLabelAr?: boolean
   status?: boolean
   currentRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionGlobalContextEvent"]>
 
 export type DecisionGlobalContextEventSelectScalar = {
@@ -616,24 +1130,37 @@ export type DecisionGlobalContextEventSelectScalar = {
   sourceId?: boolean
   externalKey?: boolean
   eventKind?: boolean
+  scope?: boolean
+  locationCode?: boolean
+  locationLabelAr?: boolean
   status?: boolean
   currentRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DecisionGlobalContextEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "sourceId" | "externalKey" | "eventKind" | "status" | "currentRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["decisionGlobalContextEvent"]>
+export type DecisionGlobalContextEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "sourceId" | "externalKey" | "eventKind" | "scope" | "locationCode" | "locationLabelAr" | "status" | "currentRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["decisionGlobalContextEvent"]>
 export type DecisionGlobalContextEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   revisions?: boolean | Prisma.DecisionGlobalContextEvent$revisionsArgs<ExtArgs>
+  reviewActions?: boolean | Prisma.DecisionGlobalContextEvent$reviewActionsArgs<ExtArgs>
+  researchCandidates?: boolean | Prisma.DecisionGlobalContextEvent$researchCandidatesArgs<ExtArgs>
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionGlobalContextEventCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type DecisionGlobalContextEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type DecisionGlobalContextEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DecisionGlobalContextEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
+}
+export type DecisionGlobalContextEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  source?: boolean | Prisma.DecisionContextSourceDefaultArgs<ExtArgs>
+}
 
 export type $DecisionGlobalContextEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DecisionGlobalContextEvent"
   objects: {
     revisions: Prisma.$DecisionGlobalContextEventRevisionPayload<ExtArgs>[]
+    reviewActions: Prisma.$DecisionGlobalContextReviewActionPayload<ExtArgs>[]
+    researchCandidates: Prisma.$DecisionContextCandidatePayload<ExtArgs>[]
+    source: Prisma.$DecisionContextSourcePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -641,6 +1168,9 @@ export type $DecisionGlobalContextEventPayload<ExtArgs extends runtime.Types.Ext
     sourceId: string
     externalKey: string
     eventKind: string
+    scope: $Enums.DecisionContextScope
+    locationCode: string | null
+    locationLabelAr: string | null
     status: $Enums.DecisionContextEventStatus
     currentRevision: number
     createdAt: Date
@@ -1040,6 +1570,9 @@ readonly fields: DecisionGlobalContextEventFieldRefs;
 export interface Prisma__DecisionGlobalContextEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   revisions<T extends Prisma.DecisionGlobalContextEvent$revisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionGlobalContextEvent$revisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionGlobalContextEventRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewActions<T extends Prisma.DecisionGlobalContextEvent$reviewActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionGlobalContextEvent$reviewActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionGlobalContextReviewActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  researchCandidates<T extends Prisma.DecisionGlobalContextEvent$researchCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionGlobalContextEvent$researchCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionContextCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  source<T extends Prisma.DecisionContextSourceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSourceDefaultArgs<ExtArgs>>): Prisma.Prisma__DecisionContextSourceClient<runtime.Types.Result.GetResult<Prisma.$DecisionContextSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1074,6 +1607,9 @@ export interface DecisionGlobalContextEventFieldRefs {
   readonly sourceId: Prisma.FieldRef<"DecisionGlobalContextEvent", 'String'>
   readonly externalKey: Prisma.FieldRef<"DecisionGlobalContextEvent", 'String'>
   readonly eventKind: Prisma.FieldRef<"DecisionGlobalContextEvent", 'String'>
+  readonly scope: Prisma.FieldRef<"DecisionGlobalContextEvent", 'DecisionContextScope'>
+  readonly locationCode: Prisma.FieldRef<"DecisionGlobalContextEvent", 'String'>
+  readonly locationLabelAr: Prisma.FieldRef<"DecisionGlobalContextEvent", 'String'>
   readonly status: Prisma.FieldRef<"DecisionGlobalContextEvent", 'DecisionContextEventStatus'>
   readonly currentRevision: Prisma.FieldRef<"DecisionGlobalContextEvent", 'Int'>
   readonly createdAt: Prisma.FieldRef<"DecisionGlobalContextEvent", 'DateTime'>
@@ -1332,6 +1868,10 @@ export type DecisionGlobalContextEventCreateManyAndReturnArgs<ExtArgs extends ru
    */
   data: Prisma.DecisionGlobalContextEventCreateManyInput | Prisma.DecisionGlobalContextEventCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionGlobalContextEventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1402,6 +1942,10 @@ export type DecisionGlobalContextEventUpdateManyAndReturnArgs<ExtArgs extends ru
    * Limit how many DecisionGlobalContextEvents to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionGlobalContextEventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1492,6 +2036,54 @@ export type DecisionGlobalContextEvent$revisionsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.DecisionGlobalContextEventRevisionScalarFieldEnum | Prisma.DecisionGlobalContextEventRevisionScalarFieldEnum[]
+}
+
+/**
+ * DecisionGlobalContextEvent.reviewActions
+ */
+export type DecisionGlobalContextEvent$reviewActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionGlobalContextReviewAction
+   */
+  select?: Prisma.DecisionGlobalContextReviewActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionGlobalContextReviewAction
+   */
+  omit?: Prisma.DecisionGlobalContextReviewActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionGlobalContextReviewActionInclude<ExtArgs> | null
+  where?: Prisma.DecisionGlobalContextReviewActionWhereInput
+  orderBy?: Prisma.DecisionGlobalContextReviewActionOrderByWithRelationInput | Prisma.DecisionGlobalContextReviewActionOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionGlobalContextReviewActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionGlobalContextReviewActionScalarFieldEnum | Prisma.DecisionGlobalContextReviewActionScalarFieldEnum[]
+}
+
+/**
+ * DecisionGlobalContextEvent.researchCandidates
+ */
+export type DecisionGlobalContextEvent$researchCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionContextCandidate
+   */
+  select?: Prisma.DecisionContextCandidateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionContextCandidate
+   */
+  omit?: Prisma.DecisionContextCandidateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextCandidateInclude<ExtArgs> | null
+  where?: Prisma.DecisionContextCandidateWhereInput
+  orderBy?: Prisma.DecisionContextCandidateOrderByWithRelationInput | Prisma.DecisionContextCandidateOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionContextCandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionContextCandidateScalarFieldEnum | Prisma.DecisionContextCandidateScalarFieldEnum[]
 }
 
 /**

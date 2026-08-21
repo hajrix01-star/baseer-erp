@@ -44,6 +44,7 @@ export type DecisionGlobalContextEventRevisionMinAggregateOutputType = {
   endsOn: Date | null
   sourceUpdatedAt: Date | null
   sourceChecksum: string | null
+  verificationStatus: $Enums.DecisionVerificationStatus | null
   status: $Enums.DecisionContextEventStatus | null
   createdAt: Date | null
 }
@@ -58,6 +59,7 @@ export type DecisionGlobalContextEventRevisionMaxAggregateOutputType = {
   endsOn: Date | null
   sourceUpdatedAt: Date | null
   sourceChecksum: string | null
+  verificationStatus: $Enums.DecisionVerificationStatus | null
   status: $Enums.DecisionContextEventStatus | null
   createdAt: Date | null
 }
@@ -73,6 +75,7 @@ export type DecisionGlobalContextEventRevisionCountAggregateOutputType = {
   sourceUpdatedAt: number
   sourceChecksum: number
   importReceipt: number
+  verificationStatus: number
   status: number
   createdAt: number
   _all: number
@@ -97,6 +100,7 @@ export type DecisionGlobalContextEventRevisionMinAggregateInputType = {
   endsOn?: true
   sourceUpdatedAt?: true
   sourceChecksum?: true
+  verificationStatus?: true
   status?: true
   createdAt?: true
 }
@@ -111,6 +115,7 @@ export type DecisionGlobalContextEventRevisionMaxAggregateInputType = {
   endsOn?: true
   sourceUpdatedAt?: true
   sourceChecksum?: true
+  verificationStatus?: true
   status?: true
   createdAt?: true
 }
@@ -126,6 +131,7 @@ export type DecisionGlobalContextEventRevisionCountAggregateInputType = {
   sourceUpdatedAt?: true
   sourceChecksum?: true
   importReceipt?: true
+  verificationStatus?: true
   status?: true
   createdAt?: true
   _all?: true
@@ -228,6 +234,7 @@ export type DecisionGlobalContextEventRevisionGroupByOutputType = {
   sourceUpdatedAt: Date | null
   sourceChecksum: string
   importReceipt: runtime.JsonValue
+  verificationStatus: $Enums.DecisionVerificationStatus
   status: $Enums.DecisionContextEventStatus
   createdAt: Date
   _count: DecisionGlobalContextEventRevisionCountAggregateOutputType | null
@@ -266,6 +273,7 @@ export type DecisionGlobalContextEventRevisionWhereInput = {
   sourceUpdatedAt?: Prisma.DateTimeNullableFilter<"DecisionGlobalContextEventRevision"> | Date | string | null
   sourceChecksum?: Prisma.StringFilter<"DecisionGlobalContextEventRevision"> | string
   importReceipt?: Prisma.JsonFilter<"DecisionGlobalContextEventRevision">
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
   event?: Prisma.XOR<Prisma.DecisionGlobalContextEventScalarRelationFilter, Prisma.DecisionGlobalContextEventWhereInput>
@@ -282,6 +290,7 @@ export type DecisionGlobalContextEventRevisionOrderByWithRelationInput = {
   sourceUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   importReceipt?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   event?: Prisma.DecisionGlobalContextEventOrderByWithRelationInput
@@ -303,6 +312,7 @@ export type DecisionGlobalContextEventRevisionWhereUniqueInput = Prisma.AtLeast<
   sourceUpdatedAt?: Prisma.DateTimeNullableFilter<"DecisionGlobalContextEventRevision"> | Date | string | null
   sourceChecksum?: Prisma.StringFilter<"DecisionGlobalContextEventRevision"> | string
   importReceipt?: Prisma.JsonFilter<"DecisionGlobalContextEventRevision">
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
   event?: Prisma.XOR<Prisma.DecisionGlobalContextEventScalarRelationFilter, Prisma.DecisionGlobalContextEventWhereInput>
@@ -319,6 +329,7 @@ export type DecisionGlobalContextEventRevisionOrderByWithAggregationInput = {
   sourceUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   importReceipt?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.DecisionGlobalContextEventRevisionCountOrderByAggregateInput
@@ -342,6 +353,7 @@ export type DecisionGlobalContextEventRevisionScalarWhereWithAggregatesInput = {
   sourceUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DecisionGlobalContextEventRevision"> | Date | string | null
   sourceChecksum?: Prisma.StringWithAggregatesFilter<"DecisionGlobalContextEventRevision"> | string
   importReceipt?: Prisma.JsonWithAggregatesFilter<"DecisionGlobalContextEventRevision">
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusWithAggregatesFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusWithAggregatesFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DecisionGlobalContextEventRevision"> | Date | string
 }
@@ -355,6 +367,7 @@ export type DecisionGlobalContextEventRevisionCreateInput = {
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
   event: Prisma.DecisionGlobalContextEventCreateNestedOneWithoutRevisionsInput
@@ -371,6 +384,7 @@ export type DecisionGlobalContextEventRevisionUncheckedCreateInput = {
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
 }
@@ -384,6 +398,7 @@ export type DecisionGlobalContextEventRevisionUpdateInput = {
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.DecisionGlobalContextEventUpdateOneRequiredWithoutRevisionsNestedInput
@@ -400,6 +415,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateInput = {
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -415,6 +431,7 @@ export type DecisionGlobalContextEventRevisionCreateManyInput = {
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
 }
@@ -428,6 +445,7 @@ export type DecisionGlobalContextEventRevisionUpdateManyMutationInput = {
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -443,6 +461,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateManyInput = {
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -478,6 +497,7 @@ export type DecisionGlobalContextEventRevisionCountOrderByAggregateInput = {
   sourceUpdatedAt?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   importReceipt?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -496,6 +516,7 @@ export type DecisionGlobalContextEventRevisionMaxOrderByAggregateInput = {
   endsOn?: Prisma.SortOrder
   sourceUpdatedAt?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -510,6 +531,7 @@ export type DecisionGlobalContextEventRevisionMinOrderByAggregateInput = {
   endsOn?: Prisma.SortOrder
   sourceUpdatedAt?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -560,6 +582,10 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventNes
   deleteMany?: Prisma.DecisionGlobalContextEventRevisionScalarWhereInput | Prisma.DecisionGlobalContextEventRevisionScalarWhereInput[]
 }
 
+export type EnumDecisionVerificationStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DecisionVerificationStatus
+}
+
 export type DecisionGlobalContextEventRevisionCreateWithoutEventInput = {
   id?: string
   revision: number
@@ -569,6 +595,7 @@ export type DecisionGlobalContextEventRevisionCreateWithoutEventInput = {
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
 }
@@ -582,6 +609,7 @@ export type DecisionGlobalContextEventRevisionUncheckedCreateWithoutEventInput =
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
 }
@@ -626,6 +654,7 @@ export type DecisionGlobalContextEventRevisionScalarWhereInput = {
   sourceUpdatedAt?: Prisma.DateTimeNullableFilter<"DecisionGlobalContextEventRevision"> | Date | string | null
   sourceChecksum?: Prisma.StringFilter<"DecisionGlobalContextEventRevision"> | string
   importReceipt?: Prisma.JsonFilter<"DecisionGlobalContextEventRevision">
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
 }
@@ -639,6 +668,7 @@ export type DecisionGlobalContextEventRevisionCreateManyEventInput = {
   sourceUpdatedAt?: Date | string | null
   sourceChecksum: string
   importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
 }
@@ -652,6 +682,7 @@ export type DecisionGlobalContextEventRevisionUpdateWithoutEventInput = {
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -665,6 +696,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateWithoutEventInput =
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -678,6 +710,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventInp
   sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
   importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +728,7 @@ export type DecisionGlobalContextEventRevisionSelect<ExtArgs extends runtime.Typ
   sourceUpdatedAt?: boolean
   sourceChecksum?: boolean
   importReceipt?: boolean
+  verificationStatus?: boolean
   status?: boolean
   createdAt?: boolean
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
@@ -711,6 +745,7 @@ export type DecisionGlobalContextEventRevisionSelectCreateManyAndReturn<ExtArgs 
   sourceUpdatedAt?: boolean
   sourceChecksum?: boolean
   importReceipt?: boolean
+  verificationStatus?: boolean
   status?: boolean
   createdAt?: boolean
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
@@ -727,6 +762,7 @@ export type DecisionGlobalContextEventRevisionSelectUpdateManyAndReturn<ExtArgs 
   sourceUpdatedAt?: boolean
   sourceChecksum?: boolean
   importReceipt?: boolean
+  verificationStatus?: boolean
   status?: boolean
   createdAt?: boolean
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
@@ -743,11 +779,12 @@ export type DecisionGlobalContextEventRevisionSelectScalar = {
   sourceUpdatedAt?: boolean
   sourceChecksum?: boolean
   importReceipt?: boolean
+  verificationStatus?: boolean
   status?: boolean
   createdAt?: boolean
 }
 
-export type DecisionGlobalContextEventRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "eventId" | "revision" | "titleAr" | "startsOn" | "endsOn" | "sourceUpdatedAt" | "sourceChecksum" | "importReceipt" | "status" | "createdAt", ExtArgs["result"]["decisionGlobalContextEventRevision"]>
+export type DecisionGlobalContextEventRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "eventId" | "revision" | "titleAr" | "startsOn" | "endsOn" | "sourceUpdatedAt" | "sourceChecksum" | "importReceipt" | "verificationStatus" | "status" | "createdAt", ExtArgs["result"]["decisionGlobalContextEventRevision"]>
 export type DecisionGlobalContextEventRevisionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
 }
@@ -774,6 +811,7 @@ export type $DecisionGlobalContextEventRevisionPayload<ExtArgs extends runtime.T
     sourceUpdatedAt: Date | null
     sourceChecksum: string
     importReceipt: runtime.JsonValue
+    verificationStatus: $Enums.DecisionVerificationStatus
     status: $Enums.DecisionContextEventStatus
     createdAt: Date
   }, ExtArgs["result"]["decisionGlobalContextEventRevision"]>
@@ -1210,6 +1248,7 @@ export interface DecisionGlobalContextEventRevisionFieldRefs {
   readonly sourceUpdatedAt: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'DateTime'>
   readonly sourceChecksum: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'String'>
   readonly importReceipt: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'Json'>
+  readonly verificationStatus: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'DecisionVerificationStatus'>
   readonly status: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'DecisionContextEventStatus'>
   readonly createdAt: Prisma.FieldRef<"DecisionGlobalContextEventRevision", 'DateTime'>
 }

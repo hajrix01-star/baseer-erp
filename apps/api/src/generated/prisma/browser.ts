@@ -130,6 +130,12 @@ export type ReportRun = Prisma.ReportRunModel
  */
 export type DecisionMetricDefinition = Prisma.DecisionMetricDefinitionModel
 /**
+ * Model DecisionSalesChangePolicy
+ * A company explicitly opts into commercial sales-change alerts. The policy
+ * is disabled by default so the platform never invents a business threshold.
+ */
+export type DecisionSalesChangePolicy = Prisma.DecisionSalesChangePolicyModel
+/**
  * Model DecisionRuleDefinition
  * Rule identity is versioned and auditable. Its deterministic implementation
  * remains code-owned; a tenant policy may only enable an approved version.
@@ -148,6 +154,19 @@ export type DecisionContextSource = Prisma.DecisionContextSourceModel
  */
 export type DecisionContextImportRun = Prisma.DecisionContextImportRunModel
 /**
+ * Model DecisionContextResearchRun
+ * Operational receipt for a scheduled context-research pull. It is separate
+ * from an import run because research only proposes candidates; it does not
+ * publish a context event.
+ */
+export type DecisionContextResearchRun = Prisma.DecisionContextResearchRunModel
+/**
+ * Model DecisionContextCandidate
+ * A source-backed event suggestion. Candidates cannot appear in the timeline
+ * or be read by Basira as context until they have been explicitly approved.
+ */
+export type DecisionContextCandidate = Prisma.DecisionContextCandidateModel
+/**
  * Model DecisionGlobalContextEvent
  * Global events are tenant-scoped catalog entries. A company never edits
  * them; imports create immutable revisions and unresolved changes stay reviewable.
@@ -158,6 +177,13 @@ export type DecisionGlobalContextEvent = Prisma.DecisionGlobalContextEventModel
  * 
  */
 export type DecisionGlobalContextEventRevision = Prisma.DecisionGlobalContextEventRevisionModel
+/**
+ * Model DecisionGlobalContextReviewAction
+ * A human decision about an imported change. The imported revision remains
+ * immutable; approval publishes an immutable successor and dismissal leaves
+ * the last published revision in force.
+ */
+export type DecisionGlobalContextReviewAction = Prisma.DecisionGlobalContextReviewActionModel
 /**
  * Model DecisionCompanyContextEvent
  * Company events are recorded context, not a mutation of financial facts.
@@ -179,6 +205,12 @@ export type DecisionEvidenceSnapshot = Prisma.DecisionEvidenceSnapshotModel
  * 
  */
 export type DecisionAlert = Prisma.DecisionAlertModel
+/**
+ * Model DecisionAlertAction
+ * Append-only human lifecycle record. It preserves the reason behind an
+ * acknowledgement or closure without mutating the immutable evidence.
+ */
+export type DecisionAlertAction = Prisma.DecisionAlertActionModel
 /**
  * Model DecisionFeedback
  * 

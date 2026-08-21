@@ -40,6 +40,24 @@ export class DatabaseService implements OnModuleDestroy {
     return tenants.map((tenant) => tenant.id);
   }
 
+  /**
+   * Coordinates code-owned schedulers across API replicas. The callback may
+   * open normal tenant transactions; the lock-owning transaction deliberately
+   * spans that callback and never carries tenant data itself.
+   */
+  async withSystemSchedulerLock<T>(lockName: string, operation: () => Promise<T>): Promise<
+    | { acquired: true; result: T }
+    | { acquired: false }
+  > {
+    return this.client.$transaction(async (transaction) => {
+      const rows = await transaction.$queryRaw<Array<{ acquired: boolean }>>`
+        SELECT pg_try_advisory_xact_lock(hashtext(${lockName})) AS "acquired"
+      `;
+      if (!rows[0]?.acquired) return { acquired: false };
+      return { acquired: true, result: await operation() };
+    });
+  }
+
   async onModuleDestroy(): Promise<void> {
     await this.client.$disconnect();
   }

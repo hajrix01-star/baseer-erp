@@ -78,6 +78,30 @@ export const decisionSalesMetricReadSchema = decisionMetricReadEnvelopeSchema.ex
 });
 export type DecisionSalesMetricRead = z.infer<typeof decisionSalesMetricReadSchema>;
 
+/**
+ * A read-only comparison: it explains the two reconciled periods and never
+ * turns their difference into an alert or a causal claim by itself.
+ */
+export const decisionSalesComparisonReadSchema = z.object({
+  metricCode: z.enum(["finance.sales.net.period_comparison", "finance.sales.net.weekday_comparison"]),
+  metricDefinitionVersion: z.enum(["finance.sales.net.period_comparison.v1", "finance.sales.net.weekday_comparison.v1"]),
+  comparisonPolicyCode: z.enum(["PREVIOUS_EQUAL_PERIOD", "MATCHED_WEEKDAYS"]),
+  comparisonPolicyVersion: z.enum(["previous_equal_period.v1", "matched_weekdays.v1"]),
+  dataQuality: decisionDataQualityStatusSchema,
+  current: decisionSalesMetricReadSchema,
+  comparison: decisionSalesMetricReadSchema,
+  payload: z.object({
+    currencyCode: z.literal("SAR"),
+    currentNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
+    comparisonNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
+    differenceNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
+    percentDifference: z.string().regex(/^-?\d+(\.\d{1,2})?$/).nullable(),
+    currentCustomerCount: z.number().int().nonnegative(),
+    comparisonCustomerCount: z.number().int().nonnegative(),
+  }).strict(),
+}).strict();
+export type DecisionSalesComparisonRead = z.infer<typeof decisionSalesComparisonReadSchema>;
+
 export const decisionAlertFeedbackRequestSchema = z.object({
   alertId: z.string().uuid(),
   kind: z.enum([
@@ -100,7 +124,35 @@ export const decisionAlertListQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).default(50),
 }).strict();
 
+export const updateDecisionAlertStatusRequestSchema = z.object({
+  status: z.enum(["ACKNOWLEDGED", "CLOSED"]),
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
 export const runDecisionSalesQualityEvaluationRequestSchema = z.object({
+  from: z.string().date(),
+  to: z.string().date(),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+const salesChangeThresholdBasisPointsSchema = z.number().int().min(1).max(10_000);
+const salesChangeMoneyGuardrailSchema = z.string().regex(/^\d+(\.\d{1,4})?$/).refine((value) => Number(value) > 0, "Amount must be positive.");
+export const updateDecisionSalesChangePolicyRequestSchema = z.object({
+  enabled: z.boolean(),
+  decreaseThresholdBasisPoints: salesChangeThresholdBasisPointsSchema.nullable(),
+  increaseThresholdBasisPoints: salesChangeThresholdBasisPointsSchema.nullable(),
+  minimumBaselineAmount: salesChangeMoneyGuardrailSchema.nullable(),
+  minimumAbsoluteDifferenceAmount: salesChangeMoneyGuardrailSchema.nullable(),
+  cooldownHours: z.number().int().min(1).max(720).nullable(),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict().superRefine((value, context) => {
+  if (value.enabled && (value.decreaseThresholdBasisPoints === null || value.increaseThresholdBasisPoints === null || value.minimumBaselineAmount === null || value.minimumAbsoluteDifferenceAmount === null || value.cooldownHours === null)) {
+    context.addIssue({ code: "custom", message: "Enabled sales-change alerts require approved thresholds, materiality and cooldown." });
+  }
+});
+
+export const runDecisionSalesChangeEvaluationRequestSchema = z.object({
   from: z.string().date(),
   to: z.string().date(),
   idempotencyKey: z.string().min(8).max(255),
@@ -115,9 +167,33 @@ export const createDecisionCompanyContextEventRequestSchema = z.object({
   idempotencyKey: z.string().min(8).max(255),
 }).strict();
 
+export const archiveDecisionCompanyContextEventRequestSchema = z.object({
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
 export const decisionContextTimelineQuerySchema = z.object({
   from: z.string().date(),
   to: z.string().date(),
+}).strict();
+
+export const decisionContextCandidateListQuerySchema = z.object({
+  status: z.enum(["PENDING_REVIEW", "APPROVED", "DISMISSED", "DUPLICATE"]).optional(),
+}).strict();
+
+export const resolveDecisionContextCandidateRequestSchema = z.object({
+  candidateId: z.string().uuid(),
+  action: z.enum(["APPROVE", "DISMISS"]),
+  note: z.string().trim().max(1_000).optional(),
+  idempotencyKey: z.string().min(8).max(255),
+}).strict();
+
+export const resolveDecisionGlobalContextReviewRequestSchema = z.object({
+  eventId: z.string().uuid(),
+  revision: z.number().int().positive(),
+  action: z.enum(["APPROVE", "DISMISS"]),
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: z.string().min(8).max(255),
 }).strict();
 
 export const googleCapabilityPolicySchema = z.object({

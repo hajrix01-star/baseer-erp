@@ -1,25 +1,34 @@
-import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Query, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
 import {
+  archiveDecisionCompanyContextEventRequestSchema,
   createDecisionCompanyContextEventRequestSchema,
   decisionAlertFeedbackRequestSchema,
   decisionAlertListQuerySchema,
+  decisionContextCandidateListQuerySchema,
   decisionContextTimelineQuerySchema,
+  resolveDecisionContextCandidateRequestSchema,
+  resolveDecisionGlobalContextReviewRequestSchema,
+  runDecisionSalesChangeEvaluationRequestSchema,
   runDecisionSalesQualityEvaluationRequestSchema,
+  updateDecisionAlertStatusRequestSchema,
+  updateDecisionSalesChangePolicyRequestSchema,
 } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { DecisionIntelligenceService } from "./decision-intelligence.service.js";
 import { DecisionContextImportService } from "./decision-context-import.service.js";
+import { DecisionContextResearchService } from "./decision-context-research.service.js";
 
 const METRICS_READ = "decision.metrics.read";
 const ALERTS_READ = "decision.alerts.read";
+const ALERTS_MANAGE = "decision.alerts.manage";
 const FEEDBACK_WRITE = "decision.feedback.write";
 const CONTEXT_READ = "decision.context.read";
 const CONTEXT_COMPANY_MANAGE = "decision.context.company.manage";
 
 @Controller("decision-intelligence")
 export class DecisionIntelligenceController {
-  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService, private readonly contextImports: DecisionContextImportService) {}
+  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService, private readonly contextImports: DecisionContextImportService, private readonly contextResearch: DecisionContextResearchService) {}
 
   @Post("context/sources/bootstrap")
   async bootstrapContextSources(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -36,9 +45,57 @@ export class DecisionIntelligenceController {
     return this.contextImports.latestRuns(await this.context(authorization, companyId, "decision.context.global.manage"));
   }
 
+  @Get("context/reviews")
+  async contextReviews(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextImports.listPendingReviews(await this.context(authorization, companyId, "decision.context.global.manage"));
+  }
+
+  @Post("context/reviews/resolve")
+  async resolveContextReview(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = resolveDecisionGlobalContextReviewRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid global context-review resolution.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.contextImports.resolveReview(await this.context(authorization, companyId, "decision.context.global.manage"), input, idempotencyKey);
+  }
+
+  @Post("context/research/sources/bootstrap")
+  async bootstrapContextResearchSources(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextResearch.ensureApprovedSources(await this.context(authorization, companyId, "decision.context.global.manage"));
+  }
+
+  @Post("context/research/sources/:sourceCode/sync")
+  async syncContextResearchSource(@Param("sourceCode") sourceCode: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextResearch.syncSource(await this.context(authorization, companyId, "decision.context.global.manage"), sourceCode, "MANUAL");
+  }
+
+  @Get("context/research/candidates")
+  async contextResearchCandidates(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = decisionContextCandidateListQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException("Invalid context-research candidate query.");
+    return this.contextResearch.listCandidates(await this.context(authorization, companyId, "decision.context.global.manage"), parsed.data.status);
+  }
+
+  @Post("context/research/candidates/resolve")
+  async resolveContextResearchCandidate(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = resolveDecisionContextCandidateRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid context-research candidate resolution.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.contextResearch.resolveCandidate(await this.context(authorization, companyId, "decision.context.global.manage"), input, idempotencyKey);
+  }
+
   @Get("metrics/sales-daily")
   async salesMetric(@Query("from") from: string | undefined, @Query("to") to: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     return this.decisions.readSalesMetric(await this.context(authorization, companyId, METRICS_READ), { from: date(from), to: date(to) });
+  }
+
+  @Get("metrics/sales-comparison")
+  async salesComparison(@Query("from") from: string | undefined, @Query("to") to: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.decisions.readSalesComparison(await this.context(authorization, companyId, METRICS_READ), { from: date(from), to: date(to) });
+  }
+
+  @Get("metrics/sales-matched-weekday")
+  async salesMatchedWeekday(@Query("date") businessDate: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.decisions.readSalesMatchedWeekdayComparison(await this.context(authorization, companyId, METRICS_READ), date(businessDate));
   }
 
   @Get("context/timeline")
@@ -56,6 +113,13 @@ export class DecisionIntelligenceController {
     return this.decisions.createCompanyEvent(await this.context(authorization, companyId, CONTEXT_COMPANY_MANAGE), input, idempotencyKey);
   }
 
+  @Post("context/company-events/:eventId/archive")
+  async archiveCompanyEvent(@Param("eventId") eventId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = archiveDecisionCompanyContextEventRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid company context-event archive request.");
+    return this.decisions.archiveCompanyEvent(await this.context(authorization, companyId, CONTEXT_COMPANY_MANAGE), eventId, parsed.data.reason, parsed.data.idempotencyKey);
+  }
+
   @Get("alerts")
   async alerts(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = decisionAlertListQuerySchema.safeParse(query);
@@ -63,11 +127,44 @@ export class DecisionIntelligenceController {
     return this.decisions.listAlerts(await this.context(authorization, companyId, ALERTS_READ), parsed.data.status, parsed.data.pageSize);
   }
 
+  @Get("alerts/:alertId/evidence")
+  async alertEvidence(@Param("alertId") alertId: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.decisions.readAlertEvidence(await this.context(authorization, companyId, ALERTS_READ), alertId);
+  }
+
+  @Post("alerts/:alertId/status")
+  async updateAlertStatus(@Param("alertId") alertId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = updateDecisionAlertStatusRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid decision-alert status request.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.decisions.updateAlertStatus(await this.context(authorization, companyId, ALERTS_MANAGE), alertId, input, idempotencyKey);
+  }
+
   @Post("evaluations/sales-quality")
   async evaluateSalesQuality(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = runDecisionSalesQualityEvaluationRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException("Invalid sales-quality evaluation request.");
     return this.decisions.evaluateSalesQuality(await this.context(authorization, companyId, "decision.policy.manage"), { from: date(parsed.data.from), to: date(parsed.data.to) }, parsed.data.idempotencyKey);
+  }
+
+  @Get("policies/sales-change")
+  async salesChangePolicy(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.decisions.salesChangePolicy(await this.context(authorization, companyId, "decision.policy.manage"));
+  }
+
+  @Put("policies/sales-change")
+  async updateSalesChangePolicy(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = updateDecisionSalesChangePolicyRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid sales-change policy.");
+    const { idempotencyKey, ...input } = parsed.data;
+    return this.decisions.updateSalesChangePolicy(await this.context(authorization, companyId, "decision.policy.manage"), input, idempotencyKey);
+  }
+
+  @Post("evaluations/sales-change")
+  async evaluateSalesChange(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = runDecisionSalesChangeEvaluationRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid sales-change evaluation request.");
+    return this.decisions.evaluateSalesChange(await this.context(authorization, companyId, "decision.policy.manage"), { from: date(parsed.data.from), to: date(parsed.data.to) }, parsed.data.idempotencyKey);
   }
 
   @Post("alerts/feedback")

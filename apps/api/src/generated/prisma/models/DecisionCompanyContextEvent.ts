@@ -539,10 +539,6 @@ export type DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedIn
   deleteMany?: Prisma.DecisionCompanyContextEventScalarWhereInput | Prisma.DecisionCompanyContextEventScalarWhereInput[]
 }
 
-export type EnumDecisionVerificationStatusFieldUpdateOperationsInput = {
-  set?: $Enums.DecisionVerificationStatus
-}
-
 export type DecisionCompanyContextEventCreateWithoutCompanyInput = {
   id?: string
   eventKind: string

@@ -2,6 +2,7 @@ import { ConflictException, Injectable, OnModuleDestroy, OnModuleInit } from "@n
 import { createHash, randomUUID } from "node:crypto";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
+import { IdempotencyService } from "../core-controls/idempotency.service.js";
 import { DatabaseService } from "../database/database.service.js";
 import { Prisma } from "../generated/prisma/client.js";
 
@@ -32,7 +33,7 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
   private scheduledTimer: ReturnType<typeof setInterval> | null = null;
   private bootstrapTimer: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
   onModuleInit() {
     // Scheduling is opt-in: a deployment must explicitly enable it after it
@@ -83,14 +84,93 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     }));
   }
 
-  /** Called by exactly one opt-in deployment worker. Import data remains tenant-isolated. */
+  async listPendingReviews(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const [events, actions] = await Promise.all([
+        transaction.decisionGlobalContextEvent.findMany({
+          where: { tenantId: context.tenantId, revisions: { some: { status: "NEEDS_REVIEW" } } },
+          orderBy: { updatedAt: "desc" }, take: 100,
+          select: {
+            id: true, eventKind: true, scope: true, locationLabelAr: true, currentRevision: true,
+            source: { select: { sourceCode: true, displayNameAr: true } },
+            revisions: { where: { status: "NEEDS_REVIEW" }, orderBy: { revision: "asc" }, select: { revision: true, titleAr: true, startsOn: true, endsOn: true, sourceUpdatedAt: true, sourceChecksum: true } },
+          },
+        }),
+        transaction.decisionGlobalContextReviewAction.findMany({ where: { tenantId: context.tenantId }, select: { eventId: true, revision: true } }),
+      ]);
+      const resolved = new Set(actions.map((action) => `${action.eventId}:${action.revision}`));
+      return events.map((event) => ({ ...event, revisions: event.revisions.filter((revision) => !resolved.has(`${event.id}:${revision.revision}`)) })).filter((event) => event.revisions.length > 0);
+    });
+  }
+
+  async resolveReview(
+    context: TrustedCompanyActorContext,
+    input: Readonly<{ eventId: string; revision: number; action: "APPROVE" | "DISMISS"; reason: string }>,
+    idempotencyKey: string,
+  ) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const receipt = await this.idempotency.beginInTransaction(transaction, context, {
+        operation: "decision.context.global_review.resolve",
+        key: idempotencyKey,
+        request: input,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1_000),
+      });
+      if (receipt.kind === "replay") return receipt.response.body;
+      if (receipt.kind === "in-progress") throw new ConflictException("The global context-review request is already in progress.");
+      const event = await transaction.decisionGlobalContextEvent.findFirst({
+        where: { id: input.eventId, tenantId: context.tenantId },
+        select: {
+          id: true, currentRevision: true,
+          revisions: { where: { revision: input.revision }, select: { revision: true, titleAr: true, startsOn: true, endsOn: true, sourceUpdatedAt: true, sourceChecksum: true, importReceipt: true, verificationStatus: true, status: true } },
+        },
+      });
+      const candidate = event?.revisions[0];
+      if (!event || !candidate) throw new ConflictException("The global context revision was not found.");
+      if (candidate.status !== "NEEDS_REVIEW") throw new ConflictException("Only a pending global context revision can be resolved.");
+      const existingAction = await transaction.decisionGlobalContextReviewAction.findUnique({ where: { eventId_revision: { eventId: event.id, revision: candidate.revision } }, select: { id: true } });
+      if (existingAction) throw new ConflictException("This global context revision has already been resolved.");
+      const action = input.action === "APPROVE" ? "APPROVED" : "DISMISSED" as const;
+      const actionId = randomUUID();
+      await transaction.decisionGlobalContextReviewAction.create({ data: { id: actionId, tenantId: context.tenantId, eventId: event.id, revision: candidate.revision, action, reason: input.reason, createdByUserId: context.actorUserId } });
+      let publishedRevision: number | null = null;
+      if (input.action === "APPROVE") {
+        publishedRevision = candidate.revision + 1;
+        await transaction.decisionGlobalContextEventRevision.create({
+          data: {
+            id: randomUUID(), tenantId: context.tenantId, eventId: event.id, revision: publishedRevision,
+            titleAr: candidate.titleAr, startsOn: candidate.startsOn, endsOn: candidate.endsOn, sourceUpdatedAt: candidate.sourceUpdatedAt,
+            sourceChecksum: candidate.sourceChecksum, importReceipt: { candidateRevision: candidate.revision, actionId, reason: input.reason, originalReceipt: candidate.importReceipt } as Prisma.InputJsonValue,
+            verificationStatus: "HUMAN_CONFIRMED", status: "PUBLISHED",
+          },
+        });
+        await transaction.decisionGlobalContextEvent.update({ where: { id_tenantId: { id: event.id, tenantId: context.tenantId } }, data: { currentRevision: publishedRevision, status: "PUBLISHED" } });
+      }
+      const body = { eventId: event.id, revision: candidate.revision, action, publishedRevision };
+      await transaction.auditEvent.create({
+        data: { id: randomUUID(), tenantId: context.tenantId, companyId: null, actorUserId: context.actorUserId, action: "decision.context.global_review.resolved", entityType: "DecisionGlobalContextEventRevision", entityId: `${event.id}:${candidate.revision}`, requestId: randomUUID(), afterJson: { ...body, reason: input.reason } },
+      });
+      await this.idempotency.completeInTransaction(transaction, context, { receiptId: receipt.receiptId, response: { status: 200, headers: null, body } });
+      return body;
+    });
+  }
+
+  /**
+   * An advisory lock prevents every API replica from fetching the same source.
+   * Import data remains tenant-isolated inside the fan-out transactions.
+   */
   async runScheduledImports() {
+    const locked = await this.database.withSystemSchedulerLock("decision-context-imports-v1", () => this.runScheduledImportsUnlocked());
+    return locked.acquired ? locked.result : { status: "SKIPPED_LOCKED" as const };
+  }
+
+  private async runScheduledImportsUnlocked() {
     const tenantIds = await this.database.listTenantIdsForSystemScheduler();
     for (const tenantId of tenantIds) {
       const context = { tenantId, companyId: "00000000-0000-0000-0000-000000000000", actorUserId: "00000000-0000-0000-0000-000000000000" };
       await this.ensureApprovedSources(context);
       for (const source of APPROVED_CONTEXT_SOURCES) await this.syncSource(context, source.sourceCode, "SCHEDULED");
     }
+    return { status: "COMPLETED" as const, tenantCount: tenantIds.length };
   }
 
   private async startRun(tenantId: string, sourceId: string, triggerCode: string) {

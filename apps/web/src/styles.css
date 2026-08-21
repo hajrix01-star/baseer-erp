@@ -1201,7 +1201,18 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 .administration-company-card__footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 0.65rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--font-caption); }
 .administration-company-card__footer b { color: var(--brand); font-weight: 750; }
 .administration-company-empty { padding: var(--card-padding); border: 1px dashed var(--line); border-radius: var(--card-radius); color: var(--muted); text-align: center; }
-.administration-company-dialog { width: min(42rem, calc(100vw - 2rem)); overflow-x: hidden; }
+.administration-company-dialog { width: min(42rem, calc(100vw - 2rem)); max-block-size: min(43rem, calc(100dvh - 2rem)); display: flex; flex-direction: column; overflow: hidden; }
+.administration-company-dialog .daily-sales-dialog__header { flex: 0 0 auto; padding: 1rem 1.25rem .75rem; }
+.administration-company-dialog .administration-dialog-form { min-block-size: 0; flex: 1 1 auto; overflow: auto; padding: .75rem 1.25rem 1.25rem; }
+.administration-company-dialog__save { position: sticky; inset-block-start: 0; z-index: 1; margin: -.75rem -1.25rem 0; padding: .7rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+.administration-company-location { gap: .65rem; padding: .8rem .9rem; background: color-mix(in srgb, var(--surface) 97%, var(--brand) 3%); }
+.administration-company-location__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .8rem; }
+.administration-company-location__grid label,
+.administration-company-tax label { display: grid; gap: .32rem; color: var(--muted); font-size: var(--font-caption); font-weight: 800; }
+.administration-company-location > small { line-height: 1.45; }
+.administration-company-tax { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) auto; align-items: end; gap: .65rem .8rem; padding: .8rem .9rem; }
+.administration-company-tax legend { grid-column: 1 / -1; }
+.administration-company-tax > footer { display: flex; justify-content: flex-end; }
 .dialog-icon-button { display: grid; inline-size: 2.25rem; block-size: 2.25rem; place-items: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 0.65rem; color: var(--muted); background: var(--surface); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .dialog-icon-button:hover { color: var(--ink); border-color: #b5cdbd; }
 .administration-company-editor-profile { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
@@ -1210,7 +1221,7 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 .administration-company-status-action { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 28rem) auto; align-items: end; gap: 0.75rem; margin: 0; padding: 0.85rem; border: 1px solid #efd3cc; border-radius: 0.8rem; }
 .administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
 .administration-company-status-action label { display: grid; gap: 0.35rem; }
-@media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }
+@media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-location__grid, .administration-company-tax { grid-template-columns: 1fr; } .administration-company-tax legend { grid-column: auto; } .administration-company-tax > footer { justify-content: stretch; } .administration-company-tax > footer button { width: 100%; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }
 /* Application-shell scrolling: navigation is an independent rail; only the work area scrolls. */
 .administration-loading { margin: 28px auto; max-width: 480px; padding: 14px 18px; border: 1px solid #dbe8e0; border-radius: 12px; background: #f7fbf8; color: var(--muted); text-align: center; }
 .administration-table-user { display: inline-flex; align-items: center; gap: 10px; border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; text-align: right; }

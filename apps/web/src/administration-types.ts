@@ -9,7 +9,7 @@ export type AdministrationMembership = {
 
 export type AdministrationOverview = {
   owner: boolean;
-  companies: Array<{ id: string; nameAr: string; nameEn: string; businessTimezone: string; status: "ACTIVE" | "ARCHIVED"; logoFileMetadataId: string | null }>;
+  companies: Array<{ id: string; nameAr: string; nameEn: string; businessTimezone: string; status: "ACTIVE" | "ARCHIVED"; logoFileMetadataId: string | null; contextLocationCode: string | null; contextLocationLabelAr: string | null; contextLatitude: number | null; contextLongitude: number | null }>;
   users: Array<{ id: string; login: string; nameAr: string; nameEn: string; preferredLanguage: "ar" | "en"; avatarKind: "INITIALS" | "MALE" | "FEMALE"; status: "ACTIVE" | "DISABLED"; memberships: AdministrationMembership[] }>;
   roles: Array<{ id: string; code: string; nameAr: string; nameEn: string; isSystem: boolean; permissionCodes: string[] }>;
   permissions: Array<{ code: string; module: string; nameAr: string; nameEn: string; risk: "standard" | "sensitive" }>;
