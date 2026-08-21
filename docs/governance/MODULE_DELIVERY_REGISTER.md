@@ -1,13 +1,13 @@
 # BASEER ERP Module Delivery Register
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 **Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
 
 | Field | Value |
 | --- | --- |
-| Active work | Local stabilization of financial read scale and owner verification of existing Finance journeys. |
+| Active work | Local stabilization of financial read scale and owner verification of existing Finance journeys; current uncommitted Reports/Operations candidate is blocked in verification. |
 | Open owner acceptance | Purchase & Expense, Expenses & Obligations, Treasury, Suppliers, Categories, and Invoice Register in AR/EN, RTL/LTR, desktop and mobile. |
 | Next decision gate | Record owner acceptance and the correction/cancellation policy before official financial reporting. |
 | Explicitly deferred | Noorix import/cutover, production release, bank reconciliation, cash count/handover accounting, transfer reversal, official reports/P&L, assets accounting, external marketing/AI work. |
@@ -26,8 +26,9 @@
 | Daily Sales Closing | Ready for owner acceptance | Aggregated operating-day close, bounded history and read-only operational calendar. | Owner UI acceptance; it is not a POS or formal reporting replacement. |
 | Human Resources | **Closed — Go on local test database** | Employee file, compensation, leave, services, advances/deductions, payroll drafts through payment/cancellation, final settlements, print/output controls, RLS and HR browser coverage. | For another database: apply HR RLS as table owner and re-run the HR lifecycle, HTTP, integrity and browser gates. Production/cutover acceptance remains a separate decision. |
 | Administration and access | Foundation enhanced | Company/user/role management, session revocation, audit redaction and last-owner protection. | Invitations, MFA and production file lifecycle. |
-| Reports and Command Center | Not started as official reporting | Operational cards/calendar exist where stated by the source module. | Reconciled reports, P&L, exports and official report read models. |
-| Assets & Warranty | Planned | Purchase follow-up marker only. | Dedicated asset/warranty register and separate capitalization/depreciation policy. |
+| Reports and Command Center | **Candidate in current working tree — local verification passed** | Report-run policy, personal cash-performance view, Ledger Trial Balance, VAT view, report documents and bounded output paths compile and their targeted policy verifiers pass; Finance Gate B and `verify:web-budget` pass after the fixture and route-splitting updates. | Owner/governance acceptance remains required. Formal accrual P&L remains deferred. |
+| Operations (catalogue, purchasing, inventory and custody) | **Candidate in current working tree — local verification passed** | Items, units, recipe/conversion data, purchase request/receipt, inventory movement, custody, internal registration and operation reports; purchase-cycle, Finance Gate B and `verify:web-budget` pass on the local test database. | Obtain bounded scope and owner acceptance; this row does not activate an additional delivery scope. |
+| Assets & Warranty | **Candidate in current working tree — local verification passed** | Operations section: Purchase & Expense follow-up marker, company-scoped queue, operational register, warranty dates/lines, archive, permissions, audit and idempotency. `verify:operations-assets-warranty` confirms no financial journal is created or changed; the shared web budget passes. | Obtain owner acceptance. Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes. |
 | Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
 | Marketing, inbound, AI provider, remaining modules | Not started or deferred | AI platform guardrails only; no provider execution. | Separate authorized scopes after core finance gates. |
 

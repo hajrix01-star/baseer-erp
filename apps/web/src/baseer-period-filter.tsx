@@ -1,20 +1,22 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import "./baseer-calendar.css";
 import { BaseerCalendarIcon } from "./baseer-calendar-icon";
+import { baseerPeriodRange, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodPreset, type BaseerPeriodRange } from "./baseer-period-values";
 
-export type BaseerPeriodPreset = "DAY" | "MONTH" | "MULTI_MONTH" | "QUARTER" | "YEAR" | "RANGE";
-export type BaseerPeriodRange = { preset: BaseerPeriodPreset; from: string; to: string; months: readonly string[] };
+export { baseerPeriodRange, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodPreset, type BaseerPeriodRange } from "./baseer-period-values";
+
+/** "Month" deliberately covers one or more discrete months.  Keeping that
+ * choice in one control prevents every workspace from inventing its own
+ * multi-month mode (and, importantly, preserves non-contiguous selections). */
 type Language = "ar" | "en";
-type Props = { language: Language; value: BaseerPeriodRange; onChange: (range: BaseerPeriodRange) => void; presets?: readonly BaseerPeriodPreset[]; className?: string };
+type Props = { language: Language; value: BaseerPeriodRange; onChange: (range: BaseerPeriodRange) => void; presets?: readonly BaseerPeriodPreset[]; /** Some accounting statements require a continuous [from, to] period. */ allowNonContiguousMonths?: boolean; className?: string };
 
 const labels: Record<Language, Record<BaseerPeriodPreset, string>> = {
-  ar: { DAY: "يوم", MONTH: "شهر", MULTI_MONTH: "أشهر متعددة", QUARTER: "ربع سنة", YEAR: "سنة", RANGE: "نطاق" },
-  en: { DAY: "Day", MONTH: "Month", MULTI_MONTH: "Multiple months", QUARTER: "Quarter", YEAR: "Year", RANGE: "Range" },
+  ar: { DAY: "يوم", MONTH: "شهر", QUARTER: "ربع سنة", YEAR: "سنة", RANGE: "نطاق" },
+  en: { DAY: "Day", MONTH: "Month", QUARTER: "Quarter", YEAR: "Year", RANGE: "Range" },
 };
 const weekdays: Record<Language, readonly string[]> = { ar: ["ح", "ن", "ث", "ر", "خ", "ج", "س"], en: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] };
 
-export function riyadhToday() { const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()); const get = (type: Intl.DateTimeFormatPartTypes) => Number(parts.find((part) => part.type === type)?.value); return { year: get("year"), month: get("month"), day: get("day") }; }
-export function iso(year: number, month: number, day: number) { return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`; }
 function monthEnd(year: number, month: number) { return new Date(Date.UTC(year, month, 0)).getUTCDate(); }
 function dateFromMonth(value: string) { return { year: Number(value.slice(0, 4)), month: Number(value.slice(5, 7)) }; }
 function rangeFromMonth(value: string) { const { year, month } = dateFromMonth(value); return { from: iso(year, month, 1), to: iso(year, month, monthEnd(year, month)) }; }
@@ -24,13 +26,20 @@ export function cursorFor(date: string) { if (date) return date.slice(0, 7); con
 export function shiftCursor(cursor: string, delta: number) { const { year, month } = dateFromMonth(cursor); const next = new Date(Date.UTC(year, month - 1 + delta, 1)); return `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, "0")}`; }
 export function daysForCalendar(cursor: string) { const { year, month } = dateFromMonth(cursor); const first = new Date(Date.UTC(year, month - 1, 1)); const leading = first.getUTCDay(); return Array.from({ length: 42 }, (_, index) => { const date = new Date(Date.UTC(year, month - 1, index - leading + 1)); return { iso: iso(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()), day: date.getUTCDate(), inMonth: date.getUTCMonth() + 1 === month }; }); }
 /** Dates stay in the compact English calendar format across both Arabic and English UI. */
-export function baseerPeriodLabel(value: BaseerPeriodRange, _language: Language) { if (value.preset === "DAY") return value.from; if (value.preset === "MONTH") return monthName("en", value.from.slice(0, 7), "short"); if (value.preset === "MULTI_MONTH") return value.months.map((month) => monthName("en", month, "short")).join(", "); if (value.preset === "YEAR") return value.from.slice(0, 4); if (value.preset === "QUARTER") return `Q${Math.floor((Number(value.from.slice(5, 7)) - 1) / 3) + 1} · ${value.from.slice(0, 4)}`; return `${value.from} — ${value.to}`; }
+export function baseerPeriodLabel(value: BaseerPeriodRange, _language: Language) {
+  if (value.preset === "DAY") return value.from;
+  if (value.preset === "MONTH") {
+    const showYear = value.months.length > 1 && new Set(value.months.map((month) => month.slice(0, 4))).size > 1;
+    return value.months.map((month) => monthName("en", month, showYear ? "long" : "short")).join(", ");
+  }
+  if (value.preset === "YEAR") return value.from.slice(0, 4);
+  if (value.preset === "QUARTER") return `Q${Math.floor((Number(value.from.slice(5, 7)) - 1) / 3) + 1} · ${value.from.slice(0, 4)}`;
+  return `${value.from} — ${value.to}`;
+}
 
-export function baseerPeriodRange(preset: Exclude<BaseerPeriodPreset, "RANGE">): BaseerPeriodRange { const today = riyadhToday(); const month = `${today.year}-${String(today.month).padStart(2, "0")}`; if (preset === "DAY") { const day = iso(today.year, today.month, today.day); return { preset, from: day, to: day, months: [] }; } if (preset === "MONTH" || preset === "MULTI_MONTH") return { preset, ...rangeFromMonth(month), months: [month] }; if (preset === "YEAR") return { preset, from: iso(today.year, 1, 1), to: iso(today.year, 12, 31), months: [] }; const start = Math.floor((today.month - 1) / 3) * 3 + 1; return { preset, from: iso(today.year, start, 1), to: iso(today.year, start + 2, monthEnd(today.year, start + 2)), months: [] }; }
-export function defaultBaseerPeriodRange() { return baseerPeriodRange("MONTH"); }
-export function baseerPeriodQuery(range: BaseerPeriodRange) { const query = new URLSearchParams({ fromBusinessDate: range.from, toBusinessDate: range.to }); if (range.preset === "MULTI_MONTH" && range.months.length) query.set("businessMonths", range.months.join(",")); return query.toString(); }
+export function baseerPeriodQuery(range: BaseerPeriodRange) { const query = new URLSearchParams({ fromBusinessDate: range.from, toBusinessDate: range.to }); if (range.preset === "MONTH" && range.months.length > 1) query.set("businessMonths", range.months.join(",")); return query.toString(); }
 
-export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY", "MONTH", "MULTI_MONTH", "QUARTER", "YEAR", "RANGE"], className }: Props) {
+export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"], allowNonContiguousMonths = true, className }: Props) {
   const rootRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverId = useId();
@@ -42,7 +51,7 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
   useEffect(() => { if (!open) return; const closeWhenOutside = (event: MouseEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false); }; const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { event.preventDefault(); setOpen(false); triggerRef.current?.focus(); } }; document.addEventListener("mousedown", closeWhenOutside); document.addEventListener("keydown", closeOnEscape); return () => { document.removeEventListener("mousedown", closeWhenOutside); document.removeEventListener("keydown", closeOnEscape); }; }, [open]);
   const openPicker = () => { setDraft(value); setCursor(cursorFor(value.from)); setRangeStart(null); setOpen(true); };
   const setPreset = (preset: BaseerPeriodPreset) => { const next = preset === "RANGE" ? { ...draft, preset, months: [] } : baseerPeriodRange(preset); setDraft(next); setCursor(cursorFor(next.from)); setRangeStart(null); };
-  const selectMonth = (month: number) => { const token = `${cursor.slice(0, 4)}-${String(month).padStart(2, "0")}`; if (draft.preset === "MULTI_MONTH") { const next = draft.months.includes(token) ? envelope(draft.months.filter((item) => item !== token)) : envelope([...draft.months, token]); setDraft(next ? { preset: "MULTI_MONTH", ...next } : { ...baseerPeriodRange("MULTI_MONTH"), months: [] }); return; } setDraft({ preset: "MONTH", ...rangeFromMonth(token), months: [token] }); };
+  const selectMonth = (month: number) => { const token = `${cursor.slice(0, 4)}-${String(month).padStart(2, "0")}`; if (!allowNonContiguousMonths) { setDraft({ preset: "MONTH", ...rangeFromMonth(token), months: [token] }); return; } const months = draft.preset === "MONTH" ? draft.months : []; const next = envelope(months.includes(token) ? months.filter((item) => item !== token) : [...months, token]); if (next) setDraft({ preset: "MONTH", ...next }); };
   const selectDay = (day: string) => { if (draft.preset === "DAY") { setDraft({ preset: "DAY", from: day, to: day, months: [] }); return; } if (!rangeStart) { setRangeStart(day); setDraft({ preset: "RANGE", from: day, to: day, months: [] }); return; } const from = rangeStart < day ? rangeStart : day; const to = rangeStart < day ? day : rangeStart; setDraft({ preset: "RANGE", from, to, months: [] }); setRangeStart(null); };
   const selectQuarter = (quarter: number) => { const year = Number(cursor.slice(0, 4)); const month = (quarter - 1) * 3 + 1; setDraft({ preset: "QUARTER", from: iso(year, month, 1), to: iso(year, month + 2, monthEnd(year, month + 2)), months: [] }); };
   const selectYear = (year: number) => { setDraft({ preset: "YEAR", from: iso(year, 1, 1), to: iso(year, 12, 31), months: [] }); setCursor(`${year}-01`); };
@@ -58,9 +67,9 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
       {hasCustomPeriod && <button className="baseer-period-filter__clear" type="button" onClick={clearPeriod} aria-label={language === "ar" ? "إلغاء الفلترة" : "Clear filter"} title={language === "ar" ? "إلغاء الفلترة" : "Clear filter"}>×</button>}
     </div>
     {open && <section id={popoverId} className="baseer-period-filter__popover" role="dialog" aria-label={language === "ar" ? "اختيار الفترة" : "Choose period"}>
-      <header><select value={draft.preset} onChange={(event) => setPreset(event.target.value as BaseerPeriodPreset)}>{presets.map((preset) => <option key={preset} value={preset}>{labels[language][preset]}</option>)}</select>{(draft.preset === "MONTH" || draft.preset === "MULTI_MONTH" || draft.preset === "QUARTER") && <input type="number" inputMode="numeric" min="1" max="9999" value={cursor.slice(0, 4)} aria-label={language === "ar" ? "السنة" : "Year"} onChange={(event) => { const year = Number(event.target.value); if (Number.isInteger(year) && year >= 1 && year <= 9999) setCursor(`${String(year).padStart(4, "0")}-01`); }} />}<div className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "السابق" : "Previous"}>‹</button><strong>{monthName("en", cursor, "short")}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "التالي" : "Next"}>›</button></div></header>
+      <header><select value={draft.preset} onChange={(event) => setPreset(event.target.value as BaseerPeriodPreset)}>{presets.map((preset) => <option key={preset} value={preset}>{labels[language][preset]}</option>)}</select>{(draft.preset === "MONTH" || draft.preset === "QUARTER") && <input type="number" inputMode="numeric" min="1" max="9999" value={cursor.slice(0, 4)} aria-label={language === "ar" ? "السنة" : "Year"} onChange={(event) => { const year = Number(event.target.value); if (Number.isInteger(year) && year >= 1 && year <= 9999) setCursor(`${String(year).padStart(4, "0")}-01`); }} />}<div className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "السابق" : "Previous"}>‹</button><strong>{monthName("en", cursor, "short")}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "التالي" : "Next"}>›</button></div></header>
       {(draft.preset === "DAY" || draft.preset === "RANGE") && <><div className="baseer-period-filter__weekdays">{weekdays.en.map((day) => <span key={day}>{day}</span>)}</div><div className="baseer-period-filter__days">{days.map((day) => <button key={day.iso} className={[!day.inMonth ? "is-outside" : "", day.iso === draft.from || day.iso === draft.to ? "is-selected" : "", day.iso > draft.from && day.iso < draft.to ? "is-between" : "", day.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} type="button" onClick={() => selectDay(day.iso)}>{day.day}</button>)}</div></>}
-      {(draft.preset === "MONTH" || draft.preset === "MULTI_MONTH") && <div className="baseer-period-filter__months">{Array.from({ length: 12 }, (_, index) => { const token = `${cursor.slice(0, 4)}-${String(index + 1).padStart(2, "0")}`; const selected = draft.preset === "MULTI_MONTH" ? draft.months.includes(token) : draft.from.slice(0, 7) === token; return <button className={selected ? "is-selected" : ""} key={token} type="button" onClick={() => selectMonth(index + 1)}>{monthName("en", token, "short")}</button>; })}</div>}
+      {draft.preset === "MONTH" && <div className="baseer-period-filter__months">{Array.from({ length: 12 }, (_, index) => { const token = `${cursor.slice(0, 4)}-${String(index + 1).padStart(2, "0")}`; const selected = draft.months.includes(token); return <button className={selected ? "is-selected" : ""} key={token} type="button" onClick={() => selectMonth(index + 1)}>{monthName("en", token, "short")}</button>; })}</div>}
       {draft.preset === "QUARTER" && <div className="baseer-period-filter__quarters">{[1, 2, 3, 4].map((quarter) => <button key={quarter} type="button" onClick={() => selectQuarter(quarter)}>{language === "ar" ? `الربع ${quarter}` : `Q${quarter}`}</button>)}</div>}
       {draft.preset === "YEAR" && <div className="baseer-period-filter__years">{years.map((year) => <button className={Number(draft.from.slice(0, 4)) === year ? "is-selected" : ""} key={year} type="button" onClick={() => selectYear(year)}>{year}</button>)}</div>}
       <footer><span>{draft.preset === "RANGE" && rangeStart ? (language === "ar" ? "اختر تاريخ النهاية" : "Choose the end date") : baseerPeriodLabel(draft, language)}</span><div><button type="button" onClick={() => setOpen(false)}>{language === "ar" ? "إلغاء" : "Cancel"}</button><button className="baseer-period-filter__apply" type="button" onClick={applyPeriod}>{language === "ar" ? "تطبيق" : "Apply"}</button></div></footer>

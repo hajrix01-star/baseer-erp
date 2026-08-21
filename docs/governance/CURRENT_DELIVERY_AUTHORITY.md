@@ -1,6 +1,6 @@
 # BASEER ERP — Current Delivery Authority
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-21
 **Purpose:** single authority for the active delivery order, local acceptance status, and production boundaries.
 
 ## Read order
@@ -27,6 +27,14 @@ The owner-verification scopes remain:
 
 No current implementation closes owner acceptance for those journeys. No new business module begins until the active owner-acceptance and correction/cancellation decisions are recorded.
 
+## 2026-08-21 current working-tree verification
+
+The current working tree contains uncommitted candidate additions for Reports and Operations. They do not alter the active delivery order or grant owner acceptance. Type checks, API/web builds, report-policy verifiers, the Operations purchase-cycle verifier, Finance Gate B, and the web release budget passed on the local test database. The budget result is 83,636/85,000 bytes for the largest JavaScript journey and 14,161/16,000 bytes for the largest CSS journey.
+
+Finance Gate B was restored by updating its direct fixture to inject `FinanceCashPerformanceEventService` into both supplier-due and purchase-expense services. The candidate must still be explicitly accepted before it is recorded as a delivered Reports or Operations scope.
+
+Assets & Warranty Gate A is now a local, bounded candidate within Operations: the Purchase & Expense entry row can mark follow-up; Operations contains the company-scoped queue and operational asset/warranty register; archive, audit, idempotency and no-finance-posting behavior are verified by `npm run verify:operations-assets-warranty`. It does not grant acceptance, financial asset accounting, attachment upload, claims, disposal, or Noorix import. Owner acceptance remains required.
+
 ## 2026-08-18 read-scale status
 
 Commits `7d962d5`, `2c9edfe`, `ff0afe4`, and `bca5d87` delivered local, bounded-read corrections:
@@ -36,7 +44,7 @@ Commits `7d962d5`, `2c9edfe`, `ff0afe4`, and `bca5d87` delivered local, bounded-
 - period-aware views default to the current Riyadh business month;
 - `FinanceAccountDailyBalance`, a rebuildable daily read projection updated in the journal-posting transaction and sourced only from posted journal lines.
 
-These changes improve safe operational scale but do **not** prove multi-year or million-row production performance. The owner deferred volume benchmarks; benchmark data, query plans, and p95 targets remain a future gate. Official reporting/P&L read models are also not yet delivered.
+These changes improve safe operational scale but do **not** prove multi-year or million-row production performance. The owner deferred volume benchmarks; benchmark data, query plans, and p95 targets remain a future gate. The current working tree includes candidate report read models, but no official-report or formal accrual-P&L acceptance has been granted.
 
 ## Production and migration boundary
 

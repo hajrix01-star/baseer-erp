@@ -15,6 +15,7 @@
 
 | Date | Scope | Result | Evidence | Open condition |
 | --- | --- | --- | --- | --- |
+| 2026-08-21 | Current working-tree Reports/Operations candidate and Finance regression | **Local verification pass — owner acceptance open** | Contracts/API/Web type checks; API/Web builds; architecture, permissions (97), financial-boundary, dialog and localization checks; reporting R0-A/R0-B, personal-cash-performance and Ledger Trial Balance policy verifiers; Operations purchase-cycle verifier; Finance Gate B and period-race all passed. Finance Gate B was repaired by injecting `FinanceCashPerformanceEventService` into its direct supplier-due and purchase-expense fixtures. `verify:web-budget` passes: largest journey JS 83,636/85,000 B and CSS 14,161/16,000 B. | No acceptance or release claim. |
 | 2026-08-20 | HR 360° operational re-verification | **Go on local test database; section closed** | [HR closure decision](HR_360_REVIEW_AND_RELEASE_DECISION_2026-08-19.md); `check:hr-rls` 28/28; HR lifecycle/HTTP/financial-integrity; web build/budget; Playwright 33 passed, 1 intentional skip | Any new database must apply HR RLS as table owner and repeat the same gates. Production/cutover remains separately governed. |
 | 2026-08-16 | 360° platform, Daily Sales, administration, AI Gate B and web stabilization | **Conditional pass for local development** | [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Private/production release remains blocked by Hostinger backup coverage and an isolated restore rehearsal. |
 | 2026-08-17 | Purchase & Expense / Expenses & Obligations verification package | **Conditional pass for local development** | [360 review addendum](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md); finance DB verifier; Daily Sales HTTP verifier | Bilingual/RTL owner acceptance and a separately scoped correction/cancellation path remain open; no production or Noorix-import claim. |
@@ -30,9 +31,10 @@
 | Area | Last result | Evidence / command | Status |
 | --- | --- | --- | --- |
 | Architecture and request-budget policy | Pass | `npm run check:architecture` | Current local gate |
-| TypeScript contracts, API and web | Pass | Recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Current local gate |
-| Web release budget, financial boundaries and dialog conventions | Pass | Recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Current local gate |
-| Restricted-role RLS and Finance verification | Pass | Finance Gate B and period-race verifiers, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
+| TypeScript contracts, API and web | Pass on current working tree | `npm run check --workspace @baseer-erp/contracts`; `@baseer-erp/api`; `@baseer-erp/web`; API/Web builds | Current local gate |
+| Web release budget, financial boundaries and dialog conventions | Pass on current working tree | `check:web-financial-boundaries`, `check:web-dialog-conventions` and `verify:web-budget` pass; largest journey JS 83,636/85,000 B and CSS 14,161/16,000 B | Continue to re-run the gates for web-changing work |
+| Restricted-role RLS and Finance verification | Pass on current working tree | `verify:finance-period-race` and `verify:finance-gate-b-db` pass after the verifier fixture injects `FinanceCashPerformanceEventService` into supplier-due and purchase-expense services | Continue to rerun both for finance-changing work; this is local-test evidence, not production acceptance |
+| Reports and Operations candidate | Targeted checks and web-budget release gate pass | Reporting R0-A/R0-B, cash-performance, Ledger Trial Balance policy verifiers, Operations purchase-cycle verifier, Finance Gate B and `verify:web-budget` | Collect acceptance evidence |
 | Administration lifecycle | Pass | Administration lifecycle verifier, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
 | Daily Sales database and HTTP flows | Pass | Daily Sales DB and HTTP verifiers, recorded in the [360 review](COMMITTEE_360_REVIEW_AND_BUILD_CONFIRMATION_2026-08-16.md) | Mandatory CI gate |
 | Human Resources | **Go on local test database** | [HR closure decision](HR_360_REVIEW_AND_RELEASE_DECISION_2026-08-19.md); RLS 28/28; lifecycle, HTTP and financial-integrity verifiers; web budget; browser E2E | Re-run under table-owner RLS migration before enabling on any different database; production/cutover is not implied. |
@@ -135,6 +137,13 @@ Every future committee report uses this compact structure:
 - Baseer recorded the planned target and explicit boundaries in docs/foundation/ASSETS_AND_WARRANTY_SCOPE_DECISION_2026-08-17.md.
 - Result: no business scope was activated. Assets & Warranty Gate A is sequenced after reconciled finance read models; asset accounting, attachments and Noorix Import Run remain separate gates.
 
+## 2026-08-21 — Assets & Warranty Gate A local candidate
+
+- Implemented the company-scoped operational register and queue in Operations. Purchase & Expense can set the follow-up marker; registration snapshots the source document context and supports optional warranty lines. The source record remains the financial truth.
+- Permission boundary: `operations.assets.read` and `operations.assets.manage`; mutation endpoints use idempotency and audit events. Migration: `20260821130000_operations_assets_warranty_gate_a`.
+- Local evidence PASS: contracts/API/web build, `npm run verify:operations-assets-warranty`, permission catalogue, web localization/boundaries/dialog conventions, architecture, and the existing Operations purchase-cycle verifier.
+- Safety assertion: the focused verifier confirms that creating, replaying, archiving and tracing an asset does not add or modify a finance journal. Shared `verify:web-budget` passes at 83,636/85,000 bytes for JavaScript and 14,161/16,000 bytes for CSS; owner acceptance is not complete.
+
 ## 2026-08-17 — Treasury read-model and native card experience refinement
 
 **Status:** Implemented and verified locally; owner visual acceptance remains required.
@@ -172,7 +181,7 @@ Every future committee report uses this compact structure:
 
 - The unified invoice register now applies its financial filters and summaries in PostgreSQL, then returns a stable keyset page (default 50, maximum 100). It no longer reads the first 500 journal entries and filters them in the browser/service memory.
 - The open-credit workspace now returns its full server-owned summary across every open due while the visible dues load in bounded, cursorized pages.
-- `BaseerPeriodFilter` remains the central source of a current-Riyadh-month default for all period-aware financial views, with multi-month and explicit range choices. The credit view intentionally remains an as-of open-liability view.
+- `BaseerPeriodFilter` remains the central source of a current-Riyadh-month default for all period-aware financial views, with one-or-more explicit months under its single month choice and an explicit range choice. The credit view intentionally remains an as-of open-liability view.
 - Local evidence: contracts build, API check, web check, Prisma client generation, and `npm run verify:daily-sales-http` PASS. The HTTP verifier asserts bounded register and credit pages with full-scope summary values.
 - Governing record: `FINANCIAL_READ_SCALE_AND_PERIOD_STANDARD_2026-08-18.md`. Before production-scale acceptance, add seeded multi-year volume tests and database query-plan evidence.
 
