@@ -1,26 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerBatchFooter, BaseerBatchHeader, BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
-import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
-import { DataTable } from "./data-table";
-import { OutflowBatchEntryTable } from "./outflow-batch-entry-table";
 import { formatMoney } from "./number-format";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
-import { useDialogFocusTrap } from "./use-dialog-focus-trap";
+import type { PurchaseCreditWorkspace } from "./purchase-expense-credit-panel";
+
+// The entry grid contains the search controls and mobile presentation. It is
+// deferred until company configuration has arrived, avoiding a second large
+// parsing task during navigation into purchases.
+const LazyOutflowBatchEntryTable = lazy(async () => ({ default: (await import("./outflow-batch-entry-table")).OutflowBatchEntryTable }));
+const OutflowBatchEntryTable = LazyOutflowBatchEntryTable as unknown as typeof import("./outflow-batch-entry-table").OutflowBatchEntryTable;
+const PurchaseExpenseCreditPanel = lazy(async () => ({ default: (await import("./purchase-expense-credit-panel")).PurchaseExpenseCreditPanel }));
 
 type Configuration = { profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null; vaults: Array<{ id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; status: "ACTIVE" | "ARCHIVED"; isPaymentDestination: boolean }>; categories: Array<{ id: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE"; status: "ACTIVE"; isPosting?: boolean }>; suppliers: Array<{ id: string; nameAr: string; nameEn: string | null; status: "ACTIVE"; categoryId: string | null; isFavorite: boolean }> };
 type Document = { id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; status: "POSTED" | "CANCELLED"; businessDate: string; grossAmount: string; batchNumber: string | null; supplierNameAr: string | null; supplierNameEn: string | null; supplierId: string | null; categoryId: string; categoryNameAr: string; categoryNameEn: string; supplierInvoiceNumber: string | null; supplierInvoiceMissingReason: string | null; supplierInvoiceDate: string | null; vatRateBasisPoints: number; assetWarrantyFollowUp: boolean; notes: string | null; postingVersion: number; allocations: Array<{ vaultId: string; grossAmount: string; paymentMethod: string }> };
-type CreditWorkspace = { companyId: string; asOfBusinessDate: string; openSupplierCount: number; openInvoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; suppliers: Array<{ supplierId: string; supplierNameAr: string; supplierNameEn: string | null; invoiceCount: number; originalAmount: string; paidAmount: string; remainingAmount: string; dues: Array<{ id: string; documentNumber: string; kind: "PURCHASE" | "EXPENSE"; businessDate: string; dueDate: string | null; categoryNameAr: string | null; categoryNameEn: string | null; originalAmount: string; paidAmount: string; remainingAmount: string }> }>; hasMore: boolean; nextCursor: string | null };
+type CreditWorkspace = PurchaseCreditWorkspace;
 type BatchRow = { id: string; kind: "" | "PURCHASE" | "EXPENSE"; settlementKind: "PAID" | "PAYABLE"; categoryId: string; supplierId: string; invoiceNumber: string; missingReason: string; supplierInvoiceDate: string; grossAmount: string; isTaxable: boolean; assetWarrantyFollowUp: boolean; vaultId: string; notes: string };
 
 const newRow = (): BatchRow => ({ id: requestId(), kind: "", settlementKind: "PAID", categoryId: "", supplierId: "", invoiceNumber: "", missingReason: "", supplierInvoiceDate: "", grossAmount: "", isTaxable: true, assetWarrantyFollowUp: false, vaultId: "", notes: "" });
@@ -159,7 +163,7 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
               <label>{text.batchDate}<BaseerDatePicker plain presentation="popover" language={language} label={text.batchDate} value={businessDate} onChange={setBusinessDate} /></label>
               <label>{text.batchNotes}<input value={batchNotes} placeholder={text.optional} onChange={(event) => setBatchNotes(event.target.value)} /></label>
             </BaseerBatchHeader>
-            <OutflowBatchEntryTable language={language} text={text} ariaLabel={text.batchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={paymentVaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["PURCHASE", "EXPENSE"]} maxInvoiceDate={businessDate || undefined} showAssetWarrantyFollowUp onChange={change} onSupplierChange={chooseSupplier} remoteSupplierSearch={remoteSupplierSearch} remoteCategorySearch={remoteCategorySearch} renderSupplierAction={renderSupplierAction} onRemove={remove} />
+            <Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><OutflowBatchEntryTable language={language} text={text} ariaLabel={text.batchEntry} rows={rows} categories={categories} suppliers={suppliers} vaults={paymentVaults} vatEnabled={Boolean(configuration.profile?.vatAccountingEnabled)} vatRateBasisPoints={configuration.profile?.vatRateBasisPoints ?? 1500} allowedKinds={["PURCHASE", "EXPENSE"]} maxInvoiceDate={businessDate || undefined} showAssetWarrantyFollowUp onChange={change} onSupplierChange={chooseSupplier} remoteSupplierSearch={remoteSupplierSearch} remoteCategorySearch={remoteCategorySearch} renderSupplierAction={renderSupplierAction} onRemove={remove} /></Suspense>
             <BaseerBatchFooter summary={lastReceipt ? <><span>{text.net} <strong>{formatMoney(lastReceipt.netAmount)}</strong></span><span>{text.tax} <strong>{formatMoney(lastReceipt.vatAmount)}</strong></span><span>{text.lastBatchTotal} <strong>{formatMoney(lastReceipt.grossAmount)}</strong></span></> : null}><BaseerButton aria-label={text.addRow} type="button" variant="icon" className="baseer-batch-add-row" onClick={() => setRows((current) => [...current, newRow()])}>+</BaseerButton><BaseerButton variant="primary" className="baseer-batch-save" disabled={saving || !configuration.profile}>{saving ? text.saving : text.saveInvoiceCount(enteredRows.length)}</BaseerButton></BaseerBatchFooter>
           </form>
         </BaseerBatchPanel>
@@ -170,7 +174,7 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
               {historyByDay.length ? <div className="purchase-history-by-day">{historyByDay.map(([day, dayDocuments]) => <section key={day} className="purchase-history-day"><header><time dateTime={day} dir="ltr">{day}</time><span>{dayDocuments.length} {language === "ar" ? "فاتورة" : dayDocuments.length === 1 ? "invoice" : "invoices"}</span></header><div className="purchase-history-day__documents">{dayDocuments.map((document) => <article key={document.id}><div className="purchase-history-document__number"><strong dir="ltr">{document.documentNumber}</strong>{document.postingVersion > 1 ? <small>v{document.postingVersion}</small> : null}</div><span>{document.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {document.status === "POSTED" ? text.posted : text.cancelled}</span><span>{displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}{document.supplierNameAr ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}` : ""}</span><strong>{formatMoney(document.grossAmount)}</strong><BaseerButton type="button" variant="secondary" onClick={() => openView(document)}>{language === "ar" ? "عرض" : "View"}</BaseerButton></article>)}</div></section>)}</div> : <p className="empty-results">{text.noInvoices}</p>}
             </BaseerCard>
           </section>
-        </> : <BaseerBatchPanel id="purchase-tab-panel-credit" labelledBy="purchase-tab-credit"><CreditPanel credit={credit} language={language} vaults={paymentVaults} reload={loadCredit} /></BaseerBatchPanel>}
+        </> : <BaseerBatchPanel id="purchase-tab-panel-credit" labelledBy="purchase-tab-credit"><Suspense fallback={<BaseerCard><p>{text.loading}</p></BaseerCard>}><PurchaseExpenseCreditPanel credit={credit} language={language} vaults={paymentVaults} reload={loadCredit} /></Suspense></BaseerBatchPanel>}
     </section>}
     <BaseerDialog open={reverseTarget !== null} language={language} busy={saving} title={text.reverseDocument} onClose={() => setReverseTarget(null)} footer={<><BaseerButton type="button" onClick={() => setReverseTarget(null)}>{text.cancel}</BaseerButton><BaseerButton type="submit" variant="danger" form="reverse-purchase-document" disabled={saving || !reversalBusinessDate || !reversalReason.trim()}>{saving ? text.saving : text.confirmReversal}</BaseerButton></>}><form id="reverse-purchase-document" className="administration-form" onSubmit={(event) => void reverseDocument(event)}><p>{text.reverseDocumentDescription}</p><BaseerDatePicker language={language} label={text.documentDate} min={reverseTarget?.businessDate.slice(0, 10)} max={businessDate || undefined} value={reversalBusinessDate} onChange={setReversalBusinessDate} /><label>{text.reversalReason}<textarea required value={reversalReason} onChange={(event) => setReversalReason(event.target.value)} /></label></form></BaseerDialog>
     <BaseerDialog open={viewTarget !== null} language={language} className="purchase-document-dialog" title={viewTarget?.documentNumber ?? ""} onClose={() => setViewTarget(null)} footer={<div className="purchase-document-view__actions">{viewTarget?.status === "POSTED" && ownerCanAmend ? <BaseerButton type="button" variant="primary" onClick={() => { const target = viewTarget; setViewTarget(null); openAmendment(target); }}>{language === "ar" ? "تعديل" : "Edit"}</BaseerButton> : null}{viewTarget?.status === "POSTED" ? <BaseerButton type="button" variant="danger" onClick={() => { const target = viewTarget; setViewTarget(null); openReverse(target); }}>{language === "ar" ? "حذف" : "Delete"}</BaseerButton> : null}<BaseerButton type="button" variant="secondary" onClick={() => setViewTarget(null)}>{language === "ar" ? "إغلاق" : "Close"}</BaseerButton></div>}>
@@ -182,37 +186,6 @@ export function PurchaseExpenseWorkspace({ language, activeTab = "entry", onTabC
   </section>;
 }
 
-function CreditPanel({ credit, language, vaults, reload }: { credit: CreditWorkspace | null; language: "ar" | "en"; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; reload: (cursor?: string) => Promise<void> }) {
-  const text = financeText(language);
-  const [target, setTarget] = useState<CreditWorkspace["suppliers"][number]["dues"][number] | null>(null);
-  const [message, setMessage] = useState("");
-  if (!credit) return <BaseerCard><p>{text.loading}</p></BaseerCard>;
-
-  const invoices = credit.suppliers.flatMap((supplier) => supplier.dues.map((due) => ({ ...due, supplierNameAr: supplier.supplierNameAr, supplierNameEn: supplier.supplierNameEn })));
-  return <>
-    <BaseerSummaryMetricGrid ariaLabel={text.credit} role="list">
-      <BaseerSummaryMetric role="listitem" label={text.openCreditSuppliers} value={credit.openSupplierCount} />
-      <BaseerSummaryMetric role="listitem" label={text.openCreditInvoices} value={credit.openInvoiceCount} />
-      <BaseerSummaryMetric role="listitem" label={text.creditOutstanding} value={formatMoney(credit.remainingAmount)} />
-    </BaseerSummaryMetricGrid>
-    {message ? <p className="daily-sales-message success">{message}</p> : null}
-    <section style={{ marginTop: "var(--section-gap)", paddingTop: "var(--section-gap)", borderTop: "1px solid var(--line)" }}>
-      <div className="administration-section-heading"><div><h3>{text.openCreditInvoices}</h3><p>{text.creditAsOf} {credit.asOfBusinessDate.slice(0, 10)}</p></div></div>
-      {invoices.length ? <DataTable ariaLabel={text.openCreditInvoices} caption={text.openCreditInvoices} rowKey={(invoice) => invoice.id} columns={[
-        { id: "supplier", header: text.supplier, width: "15rem", cell: (invoice) => displayName(language, { nameAr: invoice.supplierNameAr, nameEn: invoice.supplierNameEn }) },
-        { id: "number", header: text.invoiceNumber, width: "10rem", cell: (invoice) => invoice.documentNumber },
-        { id: "kind", header: text.invoiceType, width: "8rem", cell: (invoice) => invoice.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice },
-        { id: "category", header: text.financialCategory, width: "13rem", cell: (invoice) => displayName(language, { nameAr: invoice.categoryNameAr ?? "—", nameEn: invoice.categoryNameEn ?? "—" }) },
-        { id: "date", header: text.supplierInvoiceDate, width: "9rem", cell: (invoice) => invoice.businessDate.slice(0, 10) },
-        { id: "remaining", header: text.outstanding, width: "9rem", numeric: true, cell: (invoice) => formatMoney(invoice.remainingAmount) },
-        { id: "action", header: "", width: "10rem", cell: (invoice) => <BaseerButton type="button" variant="secondary" onClick={() => setTarget(invoice)}>{text.recordSettlement}</BaseerButton> },
-      ]} rows={invoices} /> : <p className="empty-results">{text.noCreditInvoices}</p>}
-      {credit.hasMore && credit.nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void reload(credit.nextCursor ?? undefined)}>{text.loadMore}</BaseerButton> : null}
-    </section>
-    <CreditPaymentDialog language={language} due={target} vaults={vaults} defaultBusinessDate={credit.asOfBusinessDate.slice(0, 10)} onClose={() => setTarget(null)} onSaved={async () => { setTarget(null); setMessage(text.repaymentSaved); await reload(); }} />
-  </>;
-}
-
 function mergeCreditSupplierPages(current: CreditWorkspace["suppliers"], next: CreditWorkspace["suppliers"]) {
   const groups = new Map(current.map((supplier) => [supplier.supplierId, { ...supplier, dues: [...supplier.dues] }]));
   for (const supplier of next) {
@@ -221,12 +194,4 @@ function mergeCreditSupplierPages(current: CreditWorkspace["suppliers"], next: C
     else groups.set(supplier.supplierId, supplier);
   }
   return [...groups.values()];
-}
-
-function CreditPaymentDialog({ language, due, vaults, defaultBusinessDate, onClose, onSaved }: { language: "ar" | "en"; due: CreditWorkspace["suppliers"][number]["dues"][number] | null; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; defaultBusinessDate: string; onClose: () => void; onSaved: () => Promise<void> }) {
-  const text = financeText(language); const [vaultId, setVaultId] = useState(""); const [amount, setAmount] = useState(""); const [businessDate, setBusinessDate] = useState(defaultBusinessDate); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const dialogRef = useDialogFocusTrap({ open: due !== null, saving, onClose });
-  useEffect(() => { if (due) { setVaultId(""); setAmount(due.remainingAmount); setBusinessDate(defaultBusinessDate); setError(""); } }, [defaultBusinessDate, due]);
-  if (!due) return null;
-  const submit = async (event: React.FormEvent) => { event.preventDefault(); const current = activeSession(); if (!current || saving) return; if (!vaultId || !amount || Number(amount) <= 0 || Number(amount) > Number(due.remainingAmount) || !businessDate) { setError(text.paymentValidation(1)); return; } setSaving(true); setError(""); try { await api(current, "/finance/supplier-dues/payments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dueId: due.id, vaultId, businessDate, amount, idempotencyKey: requestId() }) }); await onSaved(); } catch (requestError) { setError(presentBaseerApiError(requestError, language, text.recordSettlement)); } finally { setSaving(false); } };
-  return <div className="daily-sales-dialog-backdrop" role="presentation" onMouseDown={() => !saving && onClose()}><section ref={dialogRef} className="daily-sales-dialog" role="dialog" aria-modal="true" aria-labelledby="credit-payment-dialog-title" onMouseDown={(event) => event.stopPropagation()}><header className="daily-sales-dialog__header"><div><h3 id="credit-payment-dialog-title">{text.recordSettlement}</h3><p>{due.documentNumber} · {formatMoney(due.remainingAmount)}</p></div><button className="dialog-icon-button" type="button" aria-label={text.cancel} disabled={saving} onClick={onClose}>×</button></header><form className="daily-sales-dialog__form" onSubmit={(event) => void submit(event)}><label>{text.paymentDate}<BaseerDatePicker language={language} label={text.paymentDate} max={defaultBusinessDate} value={businessDate} onChange={setBusinessDate} /></label><label>{text.paymentChannel}<select required value={vaultId} onChange={(event) => setVaultId(event.target.value)}><option value="">{text.selectVault}</option>{vaults.map((vault) => <option key={vault.id} value={vault.id}>{displayName(language, vault)}</option>)}</select></label><label>{text.repaymentAmount} (SAR)<input required inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} /></label>{error ? <p className="daily-sales-message error">{error}</p> : null}<footer className="daily-sales-dialog__actions"><BaseerButton variant="primary" disabled={saving}>{saving ? text.saving : text.recordSettlement}</BaseerButton></footer></form></section></div>;
 }

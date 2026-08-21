@@ -1,15 +1,19 @@
-import { useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 
 import { loadAdministrationOverview } from "./administration-client";
 import { presentBaseerApiError } from "./baseer-api-error";
-import { AdministrationCompaniesPanel } from "./administration-companies-panel";
-import { AdministrationOverviewPanel } from "./administration-overview-panel";
-import { AdministrationRolesPanel } from "./administration-roles-panel";
 import type { AdministrationOverview } from "./administration-types";
-import { AdministrationUsersPanel } from "./administration-users-panel";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
 import { administrationText } from "./administration-copy";
+
+// The administration route has four independently used workspaces. Loading
+// them only when their section is opened keeps the primary route under the
+// release journey budget, particularly for the company and user dialogs.
+const AdministrationCompaniesPanel = lazy(async () => ({ default: (await import("./administration-companies-panel")).AdministrationCompaniesPanel }));
+const AdministrationOverviewPanel = lazy(async () => ({ default: (await import("./administration-overview-panel")).AdministrationOverviewPanel }));
+const AdministrationRolesPanel = lazy(async () => ({ default: (await import("./administration-roles-panel")).AdministrationRolesPanel }));
+const AdministrationUsersPanel = lazy(async () => ({ default: (await import("./administration-users-panel")).AdministrationUsersPanel }));
 
 export function AdministrationWorkspace({ language, section }: { language: "ar" | "en"; section: number }) {
   const text = administrationText(language);
@@ -32,6 +36,7 @@ export function AdministrationWorkspace({ language, section }: { language: "ar" 
   if (!overview) return <section className="administration-shell"><p className={message ? "daily-sales-message error" : "administration-loading"}>{message || (text.loadingAdministration)}</p></section>;
 
   const shared = { session, owner: overview.owner, onDone: load, onError: reportError };
+  const panel = section === 1 ? <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} /> : section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : <AdministrationOverviewPanel overview={overview} session={session} language={language} />;
   return <section className="administration-shell">
     <header className="administration-heading">
       <div><p className="eyebrow">Baseer ERP / Administration</p><h2>{text.companiesAndAccess}</h2></div>
@@ -39,6 +44,6 @@ export function AdministrationWorkspace({ language, section }: { language: "ar" 
     </header>
     {message && <p className="daily-sales-message error">{message}</p>}
     {!overview.owner && <p className="daily-sales-message error">{text.ownerOnly}</p>}
-    {section === 1 ? <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} /> : section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : <AdministrationOverviewPanel overview={overview} session={session} language={language} />}
+    <Suspense fallback={<p className="administration-loading">{text.loadingAdministration}</p>}>{panel}</Suspense>
   </section>;
 }

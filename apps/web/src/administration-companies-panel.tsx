@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts";
+import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts/administration";
 
 import {
   createAdministrationCompany,

@@ -339,10 +339,6 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
   font-size: var(--font-label);
   line-height: 1.5;
 }
-.module-arrow {
-  color: var(--module);
-  font-size: var(--font-title-sm);
-}
 .empty-results {
   margin: 20px 0;
   color: var(--muted);
@@ -434,13 +430,6 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
 }
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.08);
-}
-.nav-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.8;
 }
 
 /* Module launcher visual system: large icons, colored section navigation, and selectable backgrounds. */
@@ -750,9 +739,6 @@ html[dir="ltr"] .mobile-drawer__panel {
     width: 45px;
     height: 45px;
   }
-  .module-arrow {
-    display: none;
-  }
   .launcher-page__content {
     padding-top: 42px;
   }
@@ -766,9 +752,6 @@ html[dir="ltr"] .mobile-drawer__panel {
   }
   .launcher-page__grid .module-card {
     min-height: 100px;
-  }
-  .launcher-page__grid .module-arrow {
-    display: block;
   }
   .launcher-topbar .theme-button {
     display: none;
@@ -924,15 +907,6 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 .daily-sales-sign-in .daily-sales-message,
 .daily-sales-sign-in button {
   grid-column: 1/-1;
-}
-.daily-sales-company-picker {
-  display: grid;
-  gap: 10px;
-  max-width: 430px;
-  margin-top: 20px;
-}
-.daily-sales-company-picker h3 {
-  margin: 0;
 }
 @media (max-width: 600px) {
   .daily-sales-sign-in {
