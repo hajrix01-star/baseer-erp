@@ -30,6 +30,16 @@ export class DatabaseService implements OnModuleDestroy {
     });
   }
 
+  /**
+   * Reserved for code-owned host schedulers that need to fan out into the
+   * tenant-isolated transaction method above. It exposes IDs only; every
+   * tenant data operation must still use inTenantTransaction().
+   */
+  async listTenantIdsForSystemScheduler(): Promise<string[]> {
+    const tenants = await this.client.tenant.findMany({ select: { id: true } });
+    return tenants.map((tenant) => tenant.id);
+  }
+
   async onModuleDestroy(): Promise<void> {
     await this.client.$disconnect();
   }

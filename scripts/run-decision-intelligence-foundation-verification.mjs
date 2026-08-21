@@ -10,12 +10,12 @@ if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required for dec
 const client = new Client({ connectionString: process.env.DATABASE_URL });
 await client.connect();
 try {
-  const tables = ["DecisionMetricDefinition", "DecisionRuleDefinition", "DecisionContextSource", "DecisionGlobalContextEvent", "DecisionGlobalContextEventRevision", "DecisionCompanyContextEvent", "DecisionEvaluationRun", "DecisionEvidenceSnapshot", "DecisionAlert", "DecisionFeedback"];
+  const tables = ["DecisionMetricDefinition", "DecisionRuleDefinition", "DecisionContextSource", "DecisionContextImportRun", "DecisionGlobalContextEvent", "DecisionGlobalContextEventRevision", "DecisionCompanyContextEvent", "DecisionEvaluationRun", "DecisionEvidenceSnapshot", "DecisionAlert", "DecisionFeedback"];
   const rls = await client.query(`SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class WHERE relname = ANY($1::text[])`, [tables]);
   assert.equal(rls.rowCount, tables.length, "Every decision table must exist.");
   for (const row of rls.rows) assert.ok(row.relrowsecurity && row.relforcerowsecurity, `${row.relname} must have FORCE RLS.`);
-  const migration = await client.query(`SELECT migration_name FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[]) AND finished_at IS NOT NULL`, [["20260821170000_decision_intelligence_foundation", "20260821171000_decision_rule_definitions"]]);
-  assert.equal(migration.rowCount, 2, "Decision foundation migrations must be recorded.");
+  const migration = await client.query(`SELECT migration_name FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[]) AND finished_at IS NOT NULL`, [["20260821170000_decision_intelligence_foundation", "20260821171000_decision_rule_definitions", "20260821173000_decision_context_import_runs"]]);
+  assert.equal(migration.rowCount, 3, "Decision foundation migrations must be recorded.");
 
   const tenantId = randomUUID();
   const companyId = randomUUID();

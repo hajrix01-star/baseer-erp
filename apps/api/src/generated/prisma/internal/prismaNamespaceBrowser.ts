@@ -74,6 +74,7 @@ export const ModelName = {
   DecisionMetricDefinition: 'DecisionMetricDefinition',
   DecisionRuleDefinition: 'DecisionRuleDefinition',
   DecisionContextSource: 'DecisionContextSource',
+  DecisionContextImportRun: 'DecisionContextImportRun',
   DecisionGlobalContextEvent: 'DecisionGlobalContextEvent',
   DecisionGlobalContextEventRevision: 'DecisionGlobalContextEventRevision',
   DecisionCompanyContextEvent: 'DecisionCompanyContextEvent',
@@ -535,6 +536,24 @@ export const DecisionContextSourceScalarFieldEnum = {
 } as const
 
 export type DecisionContextSourceScalarFieldEnum = (typeof DecisionContextSourceScalarFieldEnum)[keyof typeof DecisionContextSourceScalarFieldEnum]
+
+
+export const DecisionContextImportRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  triggerCode: 'triggerCode',
+  status: 'status',
+  documentChecksum: 'documentChecksum',
+  receivedEvents: 'receivedEvents',
+  publishedEvents: 'publishedEvents',
+  reviewEvents: 'reviewEvents',
+  diagnosticsJson: 'diagnosticsJson',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+} as const
+
+export type DecisionContextImportRunScalarFieldEnum = (typeof DecisionContextImportRunScalarFieldEnum)[keyof typeof DecisionContextImportRunScalarFieldEnum]
 
 
 export const DecisionGlobalContextEventScalarFieldEnum = {

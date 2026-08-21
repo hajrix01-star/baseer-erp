@@ -420,6 +420,7 @@ export const ModelName = {
   DecisionMetricDefinition: 'DecisionMetricDefinition',
   DecisionRuleDefinition: 'DecisionRuleDefinition',
   DecisionContextSource: 'DecisionContextSource',
+  DecisionContextImportRun: 'DecisionContextImportRun',
   DecisionGlobalContextEvent: 'DecisionGlobalContextEvent',
   DecisionGlobalContextEventRevision: 'DecisionGlobalContextEventRevision',
   DecisionCompanyContextEvent: 'DecisionCompanyContextEvent',
@@ -525,7 +526,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionRuleDefinition" | "decisionContextSource" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionFeedback" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2228,6 +2229,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DecisionContextSourceCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DecisionContextSourceCountAggregateOutputType> | number
+        }
+      }
+    }
+    DecisionContextImportRun: {
+      payload: Prisma.$DecisionContextImportRunPayload<ExtArgs>
+      fields: Prisma.DecisionContextImportRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DecisionContextImportRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DecisionContextImportRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        findFirst: {
+          args: Prisma.DecisionContextImportRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DecisionContextImportRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        findMany: {
+          args: Prisma.DecisionContextImportRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>[]
+        }
+        create: {
+          args: Prisma.DecisionContextImportRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        createMany: {
+          args: Prisma.DecisionContextImportRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DecisionContextImportRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>[]
+        }
+        delete: {
+          args: Prisma.DecisionContextImportRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        update: {
+          args: Prisma.DecisionContextImportRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.DecisionContextImportRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DecisionContextImportRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DecisionContextImportRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.DecisionContextImportRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DecisionContextImportRunPayload>
+        }
+        aggregate: {
+          args: Prisma.DecisionContextImportRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDecisionContextImportRun>
+        }
+        groupBy: {
+          args: Prisma.DecisionContextImportRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextImportRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DecisionContextImportRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DecisionContextImportRunCountAggregateOutputType> | number
         }
       }
     }
@@ -9285,6 +9360,24 @@ export const DecisionContextSourceScalarFieldEnum = {
 export type DecisionContextSourceScalarFieldEnum = (typeof DecisionContextSourceScalarFieldEnum)[keyof typeof DecisionContextSourceScalarFieldEnum]
 
 
+export const DecisionContextImportRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceId: 'sourceId',
+  triggerCode: 'triggerCode',
+  status: 'status',
+  documentChecksum: 'documentChecksum',
+  receivedEvents: 'receivedEvents',
+  publishedEvents: 'publishedEvents',
+  reviewEvents: 'reviewEvents',
+  diagnosticsJson: 'diagnosticsJson',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+} as const
+
+export type DecisionContextImportRunScalarFieldEnum = (typeof DecisionContextImportRunScalarFieldEnum)[keyof typeof DecisionContextImportRunScalarFieldEnum]
+
+
 export const DecisionGlobalContextEventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -12511,6 +12604,7 @@ export type GlobalOmitConfig = {
   decisionMetricDefinition?: Prisma.DecisionMetricDefinitionOmit
   decisionRuleDefinition?: Prisma.DecisionRuleDefinitionOmit
   decisionContextSource?: Prisma.DecisionContextSourceOmit
+  decisionContextImportRun?: Prisma.DecisionContextImportRunOmit
   decisionGlobalContextEvent?: Prisma.DecisionGlobalContextEventOmit
   decisionGlobalContextEventRevision?: Prisma.DecisionGlobalContextEventRevisionOmit
   decisionCompanyContextEvent?: Prisma.DecisionCompanyContextEventOmit

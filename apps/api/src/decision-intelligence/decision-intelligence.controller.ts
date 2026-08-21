@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Headers, Post, Query, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Query, UnauthorizedException } from "@nestjs/common";
 import {
   createDecisionCompanyContextEventRequestSchema,
   decisionAlertFeedbackRequestSchema,
@@ -9,6 +9,7 @@ import {
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { DecisionIntelligenceService } from "./decision-intelligence.service.js";
+import { DecisionContextImportService } from "./decision-context-import.service.js";
 
 const METRICS_READ = "decision.metrics.read";
 const ALERTS_READ = "decision.alerts.read";
@@ -18,7 +19,22 @@ const CONTEXT_COMPANY_MANAGE = "decision.context.company.manage";
 
 @Controller("decision-intelligence")
 export class DecisionIntelligenceController {
-  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService) {}
+  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService, private readonly contextImports: DecisionContextImportService) {}
+
+  @Post("context/sources/bootstrap")
+  async bootstrapContextSources(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextImports.ensureApprovedSources(await this.context(authorization, companyId, "decision.context.global.manage"));
+  }
+
+  @Post("context/sources/:sourceCode/sync")
+  async syncContextSource(@Param("sourceCode") sourceCode: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextImports.syncSource(await this.context(authorization, companyId, "decision.context.global.manage"), sourceCode, "MANUAL");
+  }
+
+  @Get("context/sources/import-runs")
+  async contextImportRuns(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.contextImports.latestRuns(await this.context(authorization, companyId, "decision.context.global.manage"));
+  }
 
   @Get("metrics/sales-daily")
   async salesMetric(@Query("from") from: string | undefined, @Query("to") to: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {

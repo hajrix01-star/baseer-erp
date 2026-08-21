@@ -166,6 +166,12 @@ export type DecisionRuleDefinition = Prisma.DecisionRuleDefinitionModel
  */
 export type DecisionContextSource = Prisma.DecisionContextSourceModel
 /**
+ * Model DecisionContextImportRun
+ * Every public-context pull has an immutable operational receipt. Failed or
+ * unverifiable source documents never replace the previously published event.
+ */
+export type DecisionContextImportRun = Prisma.DecisionContextImportRunModel
+/**
  * Model DecisionGlobalContextEvent
  * Global events are tenant-scoped catalog entries. A company never edits
  * them; imports create immutable revisions and unresolved changes stay reviewable.

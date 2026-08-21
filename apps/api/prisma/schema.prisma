@@ -1125,8 +1125,32 @@ model DecisionContextSource {
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime @updatedAt @db.Timestamptz(6)
 
+  importRuns DecisionContextImportRun[]
+
   @@unique([id, tenantId])
   @@unique([tenantId, sourceCode])
+}
+
+/// Every public-context pull has an immutable operational receipt. Failed or
+/// unverifiable source documents never replace the previously published event.
+model DecisionContextImportRun {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @db.Uuid
+  sourceId         String   @db.Uuid
+  triggerCode      String   @db.VarChar(80)
+  status           String   @db.VarChar(40)
+  documentChecksum String?  @db.Char(64)
+  receivedEvents   Int      @default(0)
+  publishedEvents  Int      @default(0)
+  reviewEvents     Int      @default(0)
+  diagnosticsJson  Json
+  startedAt        DateTime @default(now()) @db.Timestamptz(6)
+  finishedAt       DateTime? @db.Timestamptz(6)
+
+  source DecisionContextSource @relation(fields: [sourceId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@index([tenantId, sourceId, startedAt])
 }
 
 /// Global events are tenant-scoped catalog entries. A company never edits

@@ -215,6 +215,7 @@ export type DecisionContextSourceWhereInput = {
   enabled?: Prisma.BoolFilter<"DecisionContextSource"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
+  importRuns?: Prisma.DecisionContextImportRunListRelationFilter
 }
 
 export type DecisionContextSourceOrderByWithRelationInput = {
@@ -227,6 +228,7 @@ export type DecisionContextSourceOrderByWithRelationInput = {
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  importRuns?: Prisma.DecisionContextImportRunOrderByRelationAggregateInput
 }
 
 export type DecisionContextSourceWhereUniqueInput = Prisma.AtLeast<{
@@ -244,6 +246,7 @@ export type DecisionContextSourceWhereUniqueInput = Prisma.AtLeast<{
   enabled?: Prisma.BoolFilter<"DecisionContextSource"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionContextSource"> | Date | string
+  importRuns?: Prisma.DecisionContextImportRunListRelationFilter
 }, "id" | "id_tenantId" | "tenantId_sourceCode">
 
 export type DecisionContextSourceOrderByWithAggregationInput = {
@@ -286,6 +289,7 @@ export type DecisionContextSourceCreateInput = {
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceUncheckedCreateInput = {
@@ -298,6 +302,7 @@ export type DecisionContextSourceUncheckedCreateInput = {
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedCreateNestedManyWithoutSourceInput
 }
 
 export type DecisionContextSourceUpdateInput = {
@@ -310,6 +315,7 @@ export type DecisionContextSourceUpdateInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUpdateManyWithoutSourceNestedInput
 }
 
 export type DecisionContextSourceUncheckedUpdateInput = {
@@ -322,6 +328,7 @@ export type DecisionContextSourceUncheckedUpdateInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  importRuns?: Prisma.DecisionContextImportRunUncheckedUpdateManyWithoutSourceNestedInput
 }
 
 export type DecisionContextSourceCreateManyInput = {
@@ -406,6 +413,118 @@ export type DecisionContextSourceMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type DecisionContextSourceScalarRelationFilter = {
+  is?: Prisma.DecisionContextSourceWhereInput
+  isNot?: Prisma.DecisionContextSourceWhereInput
+}
+
+export type DecisionContextSourceCreateNestedOneWithoutImportRunsInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutImportRunsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutImportRunsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+}
+
+export type DecisionContextSourceUpdateOneRequiredWithoutImportRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutImportRunsInput>
+  connectOrCreate?: Prisma.DecisionContextSourceCreateOrConnectWithoutImportRunsInput
+  upsert?: Prisma.DecisionContextSourceUpsertWithoutImportRunsInput
+  connect?: Prisma.DecisionContextSourceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionContextSourceUpdateToOneWithWhereWithoutImportRunsInput, Prisma.DecisionContextSourceUpdateWithoutImportRunsInput>, Prisma.DecisionContextSourceUncheckedUpdateWithoutImportRunsInput>
+}
+
+export type DecisionContextSourceCreateWithoutImportRunsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DecisionContextSourceUncheckedCreateWithoutImportRunsInput = {
+  id?: string
+  tenantId: string
+  sourceCode: string
+  displayNameAr: string
+  sourceUrl: string
+  scheduleCode: string
+  enabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DecisionContextSourceCreateOrConnectWithoutImportRunsInput = {
+  where: Prisma.DecisionContextSourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutImportRunsInput>
+}
+
+export type DecisionContextSourceUpsertWithoutImportRunsInput = {
+  update: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutImportRunsInput>
+  create: Prisma.XOR<Prisma.DecisionContextSourceCreateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedCreateWithoutImportRunsInput>
+  where?: Prisma.DecisionContextSourceWhereInput
+}
+
+export type DecisionContextSourceUpdateToOneWithWhereWithoutImportRunsInput = {
+  where?: Prisma.DecisionContextSourceWhereInput
+  data: Prisma.XOR<Prisma.DecisionContextSourceUpdateWithoutImportRunsInput, Prisma.DecisionContextSourceUncheckedUpdateWithoutImportRunsInput>
+}
+
+export type DecisionContextSourceUpdateWithoutImportRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DecisionContextSourceUncheckedUpdateWithoutImportRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceCode?: Prisma.StringFieldUpdateOperationsInput | string
+  displayNameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type DecisionContextSourceCountOutputType
+ */
+
+export type DecisionContextSourceCountOutputType = {
+  importRuns: number
+}
+
+export type DecisionContextSourceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  importRuns?: boolean | DecisionContextSourceCountOutputTypeCountImportRunsArgs
+}
+
+/**
+ * DecisionContextSourceCountOutputType without action
+ */
+export type DecisionContextSourceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionContextSourceCountOutputType
+   */
+  select?: Prisma.DecisionContextSourceCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DecisionContextSourceCountOutputType without action
+ */
+export type DecisionContextSourceCountOutputTypeCountImportRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionContextImportRunWhereInput
+}
 
 
 export type DecisionContextSourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -418,6 +537,8 @@ export type DecisionContextSourceSelect<ExtArgs extends runtime.Types.Extensions
   enabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  importRuns?: boolean | Prisma.DecisionContextSource$importRunsArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionContextSourceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionContextSource"]>
 
 export type DecisionContextSourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -457,10 +578,18 @@ export type DecisionContextSourceSelectScalar = {
 }
 
 export type DecisionContextSourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "sourceCode" | "displayNameAr" | "sourceUrl" | "scheduleCode" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["decisionContextSource"]>
+export type DecisionContextSourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  importRuns?: boolean | Prisma.DecisionContextSource$importRunsArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionContextSourceCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type DecisionContextSourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DecisionContextSourceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $DecisionContextSourcePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DecisionContextSource"
-  objects: {}
+  objects: {
+    importRuns: Prisma.$DecisionContextImportRunPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tenantId: string
@@ -865,6 +994,7 @@ readonly fields: DecisionContextSourceFieldRefs;
  */
 export interface Prisma__DecisionContextSourceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  importRuns<T extends Prisma.DecisionContextSource$importRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionContextSource$importRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionContextImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -920,6 +1050,10 @@ export type DecisionContextSourceFindUniqueArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * Filter, which DecisionContextSource to fetch.
    */
   where: Prisma.DecisionContextSourceWhereUniqueInput
@@ -938,6 +1072,10 @@ export type DecisionContextSourceFindUniqueOrThrowArgs<ExtArgs extends runtime.T
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * Filter, which DecisionContextSource to fetch.
    */
   where: Prisma.DecisionContextSourceWhereUniqueInput
@@ -955,6 +1093,10 @@ export type DecisionContextSourceFindFirstArgs<ExtArgs extends runtime.Types.Ext
    * Omit specific fields from the DecisionContextSource
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
   /**
    * Filter, which DecisionContextSource to fetch.
    */
@@ -1004,6 +1146,10 @@ export type DecisionContextSourceFindFirstOrThrowArgs<ExtArgs extends runtime.Ty
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * Filter, which DecisionContextSource to fetch.
    */
   where?: Prisma.DecisionContextSourceWhereInput
@@ -1051,6 +1197,10 @@ export type DecisionContextSourceFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Omit specific fields from the DecisionContextSource
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
   /**
    * Filter, which DecisionContextSources to fetch.
    */
@@ -1100,6 +1250,10 @@ export type DecisionContextSourceCreateArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * The data needed to create a DecisionContextSource.
    */
   data: Prisma.XOR<Prisma.DecisionContextSourceCreateInput, Prisma.DecisionContextSourceUncheckedCreateInput>
@@ -1147,6 +1301,10 @@ export type DecisionContextSourceUpdateArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the DecisionContextSource
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
   /**
    * The data needed to update a DecisionContextSource.
    */
@@ -1214,6 +1372,10 @@ export type DecisionContextSourceUpsertArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * The filter to search for the DecisionContextSource to update in case it exists.
    */
   where: Prisma.DecisionContextSourceWhereUniqueInput
@@ -1240,6 +1402,10 @@ export type DecisionContextSourceDeleteArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
+  /**
    * Filter which DecisionContextSource to delete.
    */
   where: Prisma.DecisionContextSourceWhereUniqueInput
@@ -1260,6 +1426,30 @@ export type DecisionContextSourceDeleteManyArgs<ExtArgs extends runtime.Types.Ex
 }
 
 /**
+ * DecisionContextSource.importRuns
+ */
+export type DecisionContextSource$importRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionContextImportRun
+   */
+  select?: Prisma.DecisionContextImportRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionContextImportRun
+   */
+  omit?: Prisma.DecisionContextImportRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextImportRunInclude<ExtArgs> | null
+  where?: Prisma.DecisionContextImportRunWhereInput
+  orderBy?: Prisma.DecisionContextImportRunOrderByWithRelationInput | Prisma.DecisionContextImportRunOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionContextImportRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionContextImportRunScalarFieldEnum | Prisma.DecisionContextImportRunScalarFieldEnum[]
+}
+
+/**
  * DecisionContextSource without action
  */
 export type DecisionContextSourceDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1271,4 +1461,8 @@ export type DecisionContextSourceDefaultArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the DecisionContextSource
    */
   omit?: Prisma.DecisionContextSourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionContextSourceInclude<ExtArgs> | null
 }

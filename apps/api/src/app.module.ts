@@ -113,6 +113,7 @@ import { OperationsAssetsWarrantyController } from './operations/operations-asse
 import { OperationsAssetsWarrantyService } from './operations/operations-assets-warranty.service.js';
 import { DecisionIntelligenceController } from './decision-intelligence/decision-intelligence.controller.js';
 import { DecisionIntelligenceService } from './decision-intelligence/decision-intelligence.service.js';
+import { DecisionContextImportService } from './decision-intelligence/decision-context-import.service.js';
 
 @Module({
   controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController],
@@ -187,6 +188,7 @@ import { DecisionIntelligenceService } from './decision-intelligence/decision-in
     OperationsInternalRegistrationService,
     OperationsAssetsWarrantyService,
     DecisionIntelligenceService,
+    DecisionContextImportService,
   ],
 })
 export class AppModule {}
