@@ -84,6 +84,33 @@ export class DecisionContextImportService implements OnModuleInit, OnModuleDestr
     }));
   }
 
+  /**
+   * Readiness is deliberately explicit: the registered government landing
+   * pages are provenance, not a machine-readable adapter. A source stays in
+   * this state until its approved, schema-checked connector is supplied.
+   */
+  async sourceHealth(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => Promise.all(APPROVED_CONTEXT_SOURCES.map(async (definition) => {
+      const source = await transaction.decisionContextSource.findUnique({
+        where: { tenantId_sourceCode: { tenantId: context.tenantId, sourceCode: definition.sourceCode } },
+        select: {
+          enabled: true,
+          importRuns: { orderBy: { startedAt: "desc" }, take: 1, select: { status: true, startedAt: true, finishedAt: true } },
+        },
+      });
+      return {
+        category: "PUBLIC_CONTEXT" as const,
+        sourceCode: definition.sourceCode,
+        displayNameAr: definition.displayNameAr,
+        sourceUrl: definition.sourceUrl,
+        scheduleCode: definition.scheduleCode,
+        readiness: !source ? "NOT_REGISTERED" : !source.enabled ? "DISABLED" : "REQUIRES_APPROVED_ADAPTER",
+        readinessReason: "يتطلب موصلاً رسمياً منظماً ومعتمداً قبل أن يستورد النظام هذه الصفحة الحكومية.",
+        lastRun: source?.importRuns[0] ?? null,
+      };
+    })));
+  }
+
   async listPendingReviews(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       const [events, actions] = await Promise.all([

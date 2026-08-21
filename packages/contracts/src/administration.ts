@@ -11,6 +11,21 @@ const userAvatarKind = z.enum(["INITIALS", "MALE", "FEMALE"]);
 const companyLogoContentBase64 = z.string().trim().min(4).max(700_000).regex(/^[A-Za-z0-9+/]+={0,2}$/);
 const contextLocationCode = z.string().trim().min(2).max(80).regex(/^[A-Za-z0-9_-]+$/).transform((value) => value.toUpperCase());
 const coordinate = z.number().finite();
+
+/**
+ * The canonical locations available to a company in the first decision-context
+ * rollout. Coordinates are controlled by the server; clients select a city,
+ * rather than submitting an arbitrary point that could misclassify local context.
+ */
+export const COMPANY_CONTEXT_LOCATIONS = [
+  { code: "RIYADH", labelAr: "الرياض", labelEn: "Riyadh", latitude: 24.7136, longitude: 46.6753 },
+  { code: "JEDDAH", labelAr: "جدة", labelEn: "Jeddah", latitude: 21.4858, longitude: 39.1925 },
+  { code: "DAMMAM", labelAr: "الدمام", labelEn: "Dammam", latitude: 26.4207, longitude: 50.0888 },
+  { code: "KHOBAR", labelAr: "الخبر", labelEn: "Al Khobar", latitude: 26.2172, longitude: 50.1971 },
+] as const;
+
+export const companyContextLocationByCode = (code: string | null) => COMPANY_CONTEXT_LOCATIONS.find((location) => location.code === code) ?? null;
+
 const companyContextLocationFields = {
   contextLocationCode: contextLocationCode.nullable(),
   contextLocationLabelAr: z.string().trim().min(2).max(160).nullable(),
@@ -44,6 +59,15 @@ export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text1
   if (hasCode !== hasLabel) context.addIssue({ code: "custom", message: "Context location code and label must be supplied together." });
   if (hasLatitude !== hasLongitude) context.addIssue({ code: "custom", message: "Context latitude and longitude must be supplied together." });
   if (hasLatitude && !hasCode) context.addIssue({ code: "custom", message: "Coordinates require a context location." });
+  if (!hasCode) return;
+  const location = companyContextLocationByCode(value.contextLocationCode);
+  if (!location) {
+    context.addIssue({ code: "custom", message: "Context location is not in the approved catalog." });
+    return;
+  }
+  if (value.contextLocationLabelAr !== location.labelAr || value.contextLatitude !== location.latitude || value.contextLongitude !== location.longitude) {
+    context.addIssue({ code: "custom", message: "Context location metadata must match the approved catalog." });
+  }
 });
 export const uploadAdministrationCompanyLogoRequestSchema = z.object({ fileName: safeFileNameSchema, contentBase64: companyLogoContentBase64 }).strict();
 export const updateAdministrationCompanyStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "ARCHIVED"]), reason: z.string().trim().min(3).max(500).optional() }).strict();

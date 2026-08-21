@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts";
 
 import {
   createAdministrationCompany,
@@ -17,12 +18,6 @@ import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 
 type Company = AdministrationOverview["companies"][number];
 type DialogMode = "create" | "manage" | null;
-const COMPANY_CONTEXT_LOCATIONS = [
-  { code: "RIYADH", labelAr: "الرياض", labelEn: "Riyadh", latitude: 24.7136, longitude: 46.6753 },
-  { code: "JEDDAH", labelAr: "جدة", labelEn: "Jeddah", latitude: 21.4858, longitude: 39.1925 },
-  { code: "DAMMAM", labelAr: "الدمام", labelEn: "Dammam", latitude: 26.4207, longitude: 50.0888 },
-  { code: "KHOBAR", labelAr: "الخبر", labelEn: "Al Khobar", latitude: 26.2172, longitude: 50.1971 },
-] as const;
 type Props = {
   language: "ar" | "en";
   session: ActiveSession;

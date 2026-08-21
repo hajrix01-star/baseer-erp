@@ -45,6 +45,13 @@ export class DecisionIntelligenceController {
     return this.contextImports.latestRuns(await this.context(authorization, companyId, "decision.context.global.manage"));
   }
 
+  @Get("context/sources/health")
+  async contextSourceHealth(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const context = await this.context(authorization, companyId, "decision.context.global.manage");
+    const [publicContext, research] = await Promise.all([this.contextImports.sourceHealth(context), this.contextResearch.sourceHealth(context)]);
+    return [...publicContext, ...research];
+  }
+
   @Get("context/reviews")
   async contextReviews(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     return this.contextImports.listPendingReviews(await this.context(authorization, companyId, "decision.context.global.manage"));

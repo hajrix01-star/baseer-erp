@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import type { AssignAdministrationMembershipRequest, CreateAdministrationCompanyRequest, CreateAdministrationRoleRequest, CreateAdministrationUserRequest, ResetAdministrationUserPasswordRequest, ReplaceAdministrationUserAccessRequest, UpdateAdministrationCompanyRequest, UpdateAdministrationCompanyStatusRequest, UpdateAdministrationRoleRequest, UpdateAdministrationUserLoginRequest, UpdateAdministrationUserDisplayNameRequest, UploadAdministrationCompanyLogoRequest, UpdateAdministrationUserStatusRequest, WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import { companyContextLocationByCode, type AssignAdministrationMembershipRequest, type CreateAdministrationCompanyRequest, type CreateAdministrationRoleRequest, type CreateAdministrationUserRequest, type ResetAdministrationUserPasswordRequest, type ReplaceAdministrationUserAccessRequest, type UpdateAdministrationCompanyRequest, type UpdateAdministrationCompanyStatusRequest, type UpdateAdministrationRoleRequest, type UpdateAdministrationUserLoginRequest, type UpdateAdministrationUserDisplayNameRequest, type UploadAdministrationCompanyLogoRequest, type UpdateAdministrationUserStatusRequest, type WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -205,11 +205,33 @@ export class AdministrationService {
   async updateCompany(context: TrustedTenantAdministratorContext, companyId: string, request: UpdateAdministrationCompanyRequest) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId } }); if (!company) throw new NotFoundException("Company was not found.");
+      const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, include: { branding: { select: { logoFileMetadataId: true } } } }); if (!company) throw new NotFoundException("Company was not found.");
       if (request.logoFileMetadataId) { const logo = await tx.fileMetadata.findFirst({ where: { id: request.logoFileMetadataId, tenantId: context.tenantId, companyId, status: FileMetadataStatus.RESERVED, sourceType: "company.branding", sourceId: companyId, purpose: "logo" } }); if (!logo || !logo.declaredMimeType.startsWith("image/")) throw new ForbiddenException("Company logo file is not permitted."); }
-      await tx.company.update({ where: { id: companyId }, data: { nameAr: request.nameAr, nameEn: request.nameEn, businessTimezone: request.businessTimezone, contextLocationCode: request.contextLocationCode, contextLocationLabelAr: request.contextLocationLabelAr, contextLatitude: request.contextLatitude === null ? null : new Prisma.Decimal(request.contextLatitude), contextLongitude: request.contextLongitude === null ? null : new Prisma.Decimal(request.contextLongitude) } });
+      const location = companyContextLocationByCode(request.contextLocationCode);
+      if (request.contextLocationCode && !location) throw new ForbiddenException("Company context location is not approved.");
+      const next = {
+        nameAr: request.nameAr,
+        nameEn: request.nameEn,
+        businessTimezone: request.businessTimezone,
+        logoFileMetadataId: request.logoFileMetadataId,
+        contextLocationCode: location?.code ?? null,
+        contextLocationLabelAr: location?.labelAr ?? null,
+        contextLatitude: location?.latitude ?? null,
+        contextLongitude: location?.longitude ?? null,
+      };
+      await tx.company.update({ where: { id: companyId }, data: { nameAr: next.nameAr, nameEn: next.nameEn, businessTimezone: next.businessTimezone, contextLocationCode: next.contextLocationCode, contextLocationLabelAr: next.contextLocationLabelAr, contextLatitude: next.contextLatitude === null ? null : new Prisma.Decimal(next.contextLatitude), contextLongitude: next.contextLongitude === null ? null : new Prisma.Decimal(next.contextLongitude) } });
       await tx.companyBranding.upsert({ where: { tenantId_companyId: { tenantId: context.tenantId, companyId } }, create: { tenantId: context.tenantId, companyId, logoFileMetadataId: request.logoFileMetadataId }, update: { logoFileMetadataId: request.logoFileMetadataId } });
-      await this.audit(tx, context, "administration.company.settings_updated", "Company", companyId, { nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone }, request); return { updated: true };
+      await this.audit(tx, context, "administration.company.settings_updated", "Company", companyId, {
+        nameAr: company.nameAr,
+        nameEn: company.nameEn,
+        businessTimezone: company.businessTimezone,
+        logoFileMetadataId: company.branding?.logoFileMetadataId ?? null,
+        contextLocationCode: company.contextLocationCode,
+        contextLocationLabelAr: company.contextLocationLabelAr,
+        contextLatitude: company.contextLatitude?.toString() ?? null,
+        contextLongitude: company.contextLongitude?.toString() ?? null,
+      }, next);
+      return { updated: true };
     });
   }
 
