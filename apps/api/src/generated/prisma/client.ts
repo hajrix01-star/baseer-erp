@@ -148,6 +148,61 @@ export type FinanceLedgerRevision = Prisma.FinanceLedgerRevisionModel
  */
 export type ReportRun = Prisma.ReportRunModel
 /**
+ * Model DecisionMetricDefinition
+ * Code-owned definitions make an analytical number meaningful across time.
+ * Values remain in domain-specific projections; this is never a fact table.
+ */
+export type DecisionMetricDefinition = Prisma.DecisionMetricDefinitionModel
+/**
+ * Model DecisionRuleDefinition
+ * Rule identity is versioned and auditable. Its deterministic implementation
+ * remains code-owned; a tenant policy may only enable an approved version.
+ */
+export type DecisionRuleDefinition = Prisma.DecisionRuleDefinitionModel
+/**
+ * Model DecisionContextSource
+ * Approved source configuration for automated public context imports. The
+ * source itself never makes a financial or operational fact.
+ */
+export type DecisionContextSource = Prisma.DecisionContextSourceModel
+/**
+ * Model DecisionGlobalContextEvent
+ * Global events are tenant-scoped catalog entries. A company never edits
+ * them; imports create immutable revisions and unresolved changes stay reviewable.
+ */
+export type DecisionGlobalContextEvent = Prisma.DecisionGlobalContextEventModel
+/**
+ * Model DecisionGlobalContextEventRevision
+ * 
+ */
+export type DecisionGlobalContextEventRevision = Prisma.DecisionGlobalContextEventRevisionModel
+/**
+ * Model DecisionCompanyContextEvent
+ * Company events are recorded context, not a mutation of financial facts.
+ */
+export type DecisionCompanyContextEvent = Prisma.DecisionCompanyContextEventModel
+/**
+ * Model DecisionEvaluationRun
+ * 
+ */
+export type DecisionEvaluationRun = Prisma.DecisionEvaluationRunModel
+/**
+ * Model DecisionEvidenceSnapshot
+ * Immutable proof captured only for decisions, alerts, retained analyses and
+ * auditable AI answers. Corrections create a superseding snapshot.
+ */
+export type DecisionEvidenceSnapshot = Prisma.DecisionEvidenceSnapshotModel
+/**
+ * Model DecisionAlert
+ * 
+ */
+export type DecisionAlert = Prisma.DecisionAlertModel
+/**
+ * Model DecisionFeedback
+ * 
+ */
+export type DecisionFeedback = Prisma.DecisionFeedbackModel
+/**
  * Model ReportDocument
  * A user-retained, immutable rendering snapshot of a report run. A document
  * is created only by an explicit action; merely viewing a report never writes
@@ -232,6 +287,13 @@ export type FinanceJournalEntry = Prisma.FinanceJournalEntryModel
  * 
  */
 export type FinanceOutflowDocument = Prisma.FinanceOutflowDocumentModel
+/**
+ * Model FinanceOutflowDocumentRevision
+ * Immutable amendment history for an owner-corrected purchase or expense
+ * document. The business document keeps its identity; the sealed journals do
+ * not get rewritten.
+ */
+export type FinanceOutflowDocumentRevision = Prisma.FinanceOutflowDocumentRevisionModel
 /**
  * Model OperationsAssetWarrantyAsset
  * Operational register only. This does not capitalise, depreciate, or post

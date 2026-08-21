@@ -1,7 +1,8 @@
-import { createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsQuerySchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema, reverseFinanceOutflowDocumentRequestSchema, reverseFinanceOutflowDocumentReceiptSchema } from '@baseer-erp/contracts';
+import { correctFinanceOutflowDocumentRequestSchema, createFinanceOutflowBatchRequestSchema, createFinanceOutflowDocumentRequestSchema, companyIdSchema, financeOutflowBatchReceiptSchema, financeOutflowDocumentReceiptSchema, financeOutflowDocumentsQuerySchema, financeOutflowDocumentsReceiptSchema, financeCreditWorkspaceQuerySchema, financeCreditWorkspaceReceiptSchema, reverseFinanceOutflowDocumentRequestSchema, reverseFinanceOutflowDocumentReceiptSchema } from '@baseer-erp/contracts';
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from '@nestjs/common';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
+import { TenantAdministrationContextService } from '../administration/tenant-administration-context.service.js';
 import { PurchaseExpenseService } from './purchase-expense.service.js';
 
 const CREATE_CAPABILITY = 'finance.purchase_expense.create';
@@ -9,7 +10,7 @@ const READ_CAPABILITY = 'finance.purchase_expense.read';
 
 @Controller('finance/purchase-expense-documents')
 export class PurchaseExpenseController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly documents: PurchaseExpenseService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly tenantAdministration: TenantAdministrationContextService, private readonly documents: PurchaseExpenseService) {}
 
   @Post()
   @HttpCode(201)
@@ -50,6 +51,26 @@ export class PurchaseExpenseController {
       })) },
     }));
   }
+  @Post('correct')
+  @HttpCode(200)
+  async correct(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const request = correctFinanceOutflowDocumentRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException('Invalid purchase or expense amendment request.');
+    const context = await this.authorizeOwner(authorization, companyId);
+    return financeOutflowDocumentReceiptSchema.parse(await this.documents.correct({
+      context, idempotencyKey: request.data.idempotencyKey,
+      documentId: request.data.documentId,
+      request: {
+        kind: request.data.kind, settlementKind: request.data.settlementKind, categoryId: request.data.categoryId,
+        ...(request.data.supplierId ? { supplierId: request.data.supplierId } : {}),
+        ...(request.data.supplierInvoiceNumber ? { supplierInvoiceNumber: request.data.supplierInvoiceNumber } : {}),
+        ...(request.data.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: request.data.supplierInvoiceMissingReason } : {}),
+        businessDate: request.data.businessDate, ...(request.data.supplierInvoiceDate ? { supplierInvoiceDate: request.data.supplierInvoiceDate } : {}),
+        grossAmount: request.data.grossAmount, isTaxable: request.data.isTaxable, assetWarrantyFollowUp: request.data.assetWarrantyFollowUp, allocations: request.data.allocations,
+        ...(request.data.notes ? { notes: request.data.notes } : {}),
+      },
+    }));
+  }
   @Post('reverse')
   async reverse(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const request = reverseFinanceOutflowDocumentRequestSchema.safeParse(body);
@@ -76,6 +97,7 @@ export class PurchaseExpenseController {
     const page = await this.documents.list(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) });
     return financeOutflowDocumentsReceiptSchema.parse({
       companyId: context.companyId,
+      ownerCanAmend: await this.isOwner(authorization, context),
       documents: page.documents,
       hasMore: page.hasMore,
       nextCursor: page.nextCursor,
@@ -88,5 +110,24 @@ export class PurchaseExpenseController {
     if (!parsedCompanyId.success) throw new ForbiddenException('Company finance scope is not permitted.');
     const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
+  }
+  private async authorizeOwner(authorization: string | undefined, companyId: string | undefined) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
+    if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
+    const owner = await this.tenantAdministration.authorizeOwner(accessToken);
+    const context = await this.authorize(authorization, companyId, 'finance.purchase_expense.correct');
+    if (context.tenantId !== owner.tenantId || context.actorUserId !== owner.actorUserId) throw new ForbiddenException('Tenant owner access is not permitted.');
+    return context;
+  }
+  private async isOwner(authorization: string | undefined, context: { tenantId: string; actorUserId: string }) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
+    if (!accessToken) return false;
+    try {
+      const owner = await this.tenantAdministration.authorizeOwner(accessToken);
+      return owner.tenantId === context.tenantId && owner.actorUserId === context.actorUserId;
+    } catch (error) {
+      if (error instanceof ForbiddenException) return false;
+      throw error;
+    }
   }
 }

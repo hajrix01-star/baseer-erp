@@ -716,7 +716,7 @@ export const createDailySalesClosingBatchRequestSchema = z
   });
 export const correctDailySalesClosingRequestSchema =
   dailySalesClosingFieldsSchema
-    .omit({ businessDate: true, scope: true })
+    .omit({ scope: true })
     .extend({
       closingId: z.string().uuid(),
       idempotencyKey: idempotencyKeySchema,
@@ -938,6 +938,7 @@ export const dailySalesWorkspaceReceiptSchema = z
     fromBusinessDate: z.date(),
     toBusinessDate: z.date(),
     permissionCodes: z.array(z.string().min(3).max(120)).max(250),
+    ownerCanCorrect: z.boolean(),
     entryDate: dailySalesEntryDateReceiptSchema.omit({ companyId: true }),
     vaults: z.array(dailySalesChannelVaultSchema).max(100),
     historyLimit: z.number().int().min(1).max(100),
@@ -992,6 +993,19 @@ export const createFinanceOutflowDocumentRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/**
+ * Owner-only amendment of a posted purchase/expense document.  The document
+ * number and identity remain stable; the API appends a corrected posting
+ * version instead of mutating the sealed journal.
+ */
+export const correctFinanceOutflowDocumentRequestSchema = createFinanceOutflowDocumentRequestSchema
+  .omit({ idempotencyKey: true })
+  .extend({
+    documentId: z.string().uuid(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
 export const financeOutflowBatchItemSchema = z.object({
   kind: financeOutflowKindSchema,
   settlementKind: financeOutflowSettlementSchema,
@@ -1042,6 +1056,7 @@ export const reverseFinanceOutflowDocumentReceiptSchema = z.object({
 }).strict();
 
 export type CreateFinanceOutflowDocumentRequest = z.infer<typeof createFinanceOutflowDocumentRequestSchema>;
+export type CorrectFinanceOutflowDocumentRequest = z.infer<typeof correctFinanceOutflowDocumentRequestSchema>;
 export type ReverseFinanceOutflowDocumentRequest = z.infer<typeof reverseFinanceOutflowDocumentRequestSchema>;
 export const financeOutflowBatchReceiptSchema = z.object({
   batchId: z.string().uuid(),
@@ -1066,8 +1081,18 @@ export const financeOutflowDocumentHistoryItemSchema = z.object({
   batchNumber: z.string().min(1).max(80).nullable(),
   supplierNameAr: z.string().nullable(),
   supplierNameEn: z.string().max(160).nullable(),
+  supplierId: z.string().uuid().nullable(),
+  categoryId: z.string().uuid(),
   categoryNameAr: z.string().min(1).max(160),
   categoryNameEn: z.string().max(160).nullable(),
+  supplierInvoiceNumber: z.string().max(160).nullable(),
+  supplierInvoiceMissingReason: z.string().max(500).nullable(),
+  supplierInvoiceDate: z.date().nullable(),
+  vatRateBasisPoints: z.number().int().min(0).max(10_000),
+  assetWarrantyFollowUp: z.boolean(),
+  notes: z.string().max(2_000).nullable(),
+  postingVersion: z.number().int().positive(),
+  allocations: z.array(financeOutflowAllocationSchema).max(20),
 }).strict();
 
 export const financeCreditDueItemSchema = z.object({
@@ -1085,6 +1110,7 @@ export const financeCreditWorkspaceReceiptSchema = z.object({
 }).strict();
 export const financeOutflowDocumentsReceiptSchema = z.object({
   companyId: companyIdSchema,
+  ownerCanAmend: z.boolean(),
   documents: z.array(financeOutflowDocumentHistoryItemSchema).max(100),
   hasMore: z.boolean(),
   nextCursor: z.string().uuid().nullable(),

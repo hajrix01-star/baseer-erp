@@ -36,6 +36,7 @@ import {
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { CompanyAccessService } from "../company-context/company-access.service.js";
+import { TenantAdministrationContextService } from "../administration/tenant-administration-context.service.js";
 import { BusinessDateService } from "../business-date/business-date.service.js";
 import {
   CASHIER_CLOSING_HISTORY_LIMIT,
@@ -63,6 +64,7 @@ const OPERATIONAL_CALENDAR_MANAGE_CAPABILITY =
 export class DailySalesController {
   constructor(
     private readonly companyContext: CompanyContextService,
+    private readonly tenantAdministration: TenantAdministrationContextService,
     private readonly companyAccess: CompanyAccessService,
     private readonly dailySales: DailySalesService,
     private readonly reads: DailySalesReadService,
@@ -116,6 +118,7 @@ export class DailySalesController {
       fromBusinessDate: parsed.data.fromBusinessDate,
       toBusinessDate: parsed.data.toBusinessDate,
       permissionCodes: activeCompany.permissionCodes,
+      ownerCanCorrect: await this.isOwner(authorization, context),
       entryDate: {
         businessDate: entryDate.businessDate,
         timezone: entryDate.timezone,
@@ -355,19 +358,19 @@ export class DailySalesController {
     @Headers("authorization") authorization?: string,
     @Headers("x-baseer-company-id") companyId?: string,
   ) {
+    // Authorize first so an untrusted caller cannot distinguish command-shape
+    // details from a privileged correction endpoint.
+    const context = await this.authorizeOwner(authorization, companyId);
     const request = correctDailySalesClosingRequestSchema.safeParse(body);
     if (!request.success)
       throw new BadRequestException("Invalid daily-sales correction request.");
-    const context = await this.authorize(authorization, companyId, [
-      DAILY_SALES_CORRECT_CAPABILITY,
-      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
-    ]);
     return dailySalesClosingReceiptSchema.parse(
       await this.dailySales.correct({
         context,
         idempotencyKey: request.data.idempotencyKey,
         request: {
           closingId: request.data.closingId,
+          businessDate: request.data.businessDate,
           customerCount: request.data.customerCount,
           allocations: request.data.allocations,
           ...(request.data.cashHandoverAmount === undefined
@@ -476,6 +479,25 @@ export class DailySalesController {
         requiredCapabilities: [DAILY_SALES_FULL_HISTORY_CAPABILITY],
       });
       return true;
+    } catch (error) {
+      if (error instanceof ForbiddenException) return false;
+      throw error;
+    }
+  }
+
+  private async authorizeOwner(authorization: string | undefined, companyId: string | undefined) {
+    const accessToken = this.accessToken(authorization);
+    const owner = await this.tenantAdministration.authorizeOwner(accessToken);
+    const context = await this.authorize(authorization, companyId, DAILY_SALES_CORRECT_CAPABILITY);
+    if (owner.tenantId !== context.tenantId || owner.actorUserId !== context.actorUserId)
+      throw new ForbiddenException("Tenant owner access is not permitted.");
+    return context;
+  }
+
+  private async isOwner(authorization: string | undefined, context: { tenantId: string; actorUserId: string }) {
+    try {
+      const owner = await this.tenantAdministration.authorizeOwner(this.accessToken(authorization));
+      return owner.tenantId === context.tenantId && owner.actorUserId === context.actorUserId;
     } catch (error) {
       if (error instanceof ForbiddenException) return false;
       throw error;

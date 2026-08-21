@@ -24,7 +24,7 @@ export type CreateDailySalesClosingBatchRequest = Readonly<{
 }>;
 export type CorrectDailySalesClosingRequest = Omit<
   DailySalesFields,
-  "businessDate" | "scope"
+  "scope"
 > &
   Readonly<{ closingId: string }>;
 export type ReverseDailySalesClosingRequest = Readonly<{

@@ -180,6 +180,7 @@ export class DailySalesCommandSupportService {
   ): CanonicalJsonValue {
     return {
       closingId: request.closingId,
+      businessDate: this.dateValue(request.businessDate),
       customerCount: request.customerCount,
       allocations: request.allocations,
       cashHandoverAmount: request.cashHandoverAmount ?? null,
@@ -190,6 +191,7 @@ export class DailySalesCommandSupportService {
   closingSnapshot(closing: {
     id: string;
     documentNumber: string;
+    businessDate: Date;
     postingVersion: number;
     grossAmount: Prisma.Decimal;
     netAmount: Prisma.Decimal;
@@ -204,6 +206,7 @@ export class DailySalesCommandSupportService {
     return {
       closingId: closing.id,
       documentNumber: closing.documentNumber,
+      businessDate: this.dateValue(closing.businessDate),
       postingVersion: closing.postingVersion,
       grossAmount: closing.grossAmount.toFixed(4),
       netAmount: closing.netAmount.toFixed(4),

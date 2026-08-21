@@ -572,6 +572,91 @@ export type EnumReportRunStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumReportRunStatusFilter<$PrismaModel>
 }
 
+export type EnumDecisionContextEventStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionContextEventStatus | Prisma.EnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel> | $Enums.DecisionContextEventStatus
+}
+
+export type EnumDecisionContextEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionContextEventStatus | Prisma.EnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionContextEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionContextEventStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel>
+}
+
+export type EnumDecisionVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionVerificationStatus | Prisma.EnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel> | $Enums.DecisionVerificationStatus
+}
+
+export type EnumDecisionVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionVerificationStatus | Prisma.EnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel>
+}
+
+export type EnumDecisionDataQualityStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionDataQualityStatus | Prisma.EnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel> | $Enums.DecisionDataQualityStatus
+}
+
+export type EnumDecisionDataQualityStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionDataQualityStatus | Prisma.EnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionDataQualityStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionDataQualityStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel>
+}
+
+export type EnumDecisionEvidenceKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionEvidenceKind | Prisma.EnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel> | $Enums.DecisionEvidenceKind
+}
+
+export type EnumDecisionEvidenceKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionEvidenceKind | Prisma.EnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionEvidenceKindWithAggregatesFilter<$PrismaModel> | $Enums.DecisionEvidenceKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel>
+}
+
+export type EnumDecisionAlertStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionAlertStatus | Prisma.EnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel> | $Enums.DecisionAlertStatus
+}
+
+export type EnumDecisionAlertStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionAlertStatus | Prisma.EnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionAlertStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionAlertStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel>
+}
+
 export type EnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceCashPerformanceEventKind | Prisma.EnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceCashPerformanceEventKind[] | Prisma.ListEnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
@@ -2327,6 +2412,91 @@ export type NestedEnumReportRunStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumReportRunStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumReportRunStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDecisionContextEventStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionContextEventStatus | Prisma.EnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel> | $Enums.DecisionContextEventStatus
+}
+
+export type NestedEnumDecisionContextEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionContextEventStatus | Prisma.EnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionContextEventStatus[] | Prisma.ListEnumDecisionContextEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionContextEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionContextEventStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionContextEventStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDecisionVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionVerificationStatus | Prisma.EnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel> | $Enums.DecisionVerificationStatus
+}
+
+export type NestedEnumDecisionVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionVerificationStatus | Prisma.EnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionVerificationStatus[] | Prisma.ListEnumDecisionVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionVerificationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDecisionDataQualityStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionDataQualityStatus | Prisma.EnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel> | $Enums.DecisionDataQualityStatus
+}
+
+export type NestedEnumDecisionDataQualityStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionDataQualityStatus | Prisma.EnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionDataQualityStatus[] | Prisma.ListEnumDecisionDataQualityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionDataQualityStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionDataQualityStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionDataQualityStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDecisionEvidenceKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionEvidenceKind | Prisma.EnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel> | $Enums.DecisionEvidenceKind
+}
+
+export type NestedEnumDecisionEvidenceKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionEvidenceKind | Prisma.EnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionEvidenceKind[] | Prisma.ListEnumDecisionEvidenceKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionEvidenceKindWithAggregatesFilter<$PrismaModel> | $Enums.DecisionEvidenceKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionEvidenceKindFilter<$PrismaModel>
+}
+
+export type NestedEnumDecisionAlertStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionAlertStatus | Prisma.EnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel> | $Enums.DecisionAlertStatus
+}
+
+export type NestedEnumDecisionAlertStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DecisionAlertStatus | Prisma.EnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DecisionAlertStatus[] | Prisma.ListEnumDecisionAlertStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDecisionAlertStatusWithAggregatesFilter<$PrismaModel> | $Enums.DecisionAlertStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDecisionAlertStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {

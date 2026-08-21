@@ -156,6 +156,43 @@ enum ReportRunStatus {
   EXPIRED
 }
 
+enum DecisionDataQualityStatus {
+  READY
+  NO_DATA
+  INCOMPLETE
+  STALE
+  UNAVAILABLE
+  CONFLICTED
+}
+
+enum DecisionEvidenceKind {
+  OFFICIAL_FACT
+  PROVIDER_FACT
+  RECORDED_CONTEXT
+  EXTRACTED_CLAIM
+  HYPOTHESIS
+}
+
+enum DecisionVerificationStatus {
+  UNVERIFIED
+  HUMAN_CONFIRMED
+  SYSTEM_RECONCILED
+  REJECTED
+  NOT_APPLICABLE
+}
+
+enum DecisionContextEventStatus {
+  PUBLISHED
+  NEEDS_REVIEW
+  ARCHIVED
+}
+
+enum DecisionAlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  CLOSED
+}
+
 /// A cash-performance event is a source-backed management fact, never a
 /// substitute for the ledger or the formal P&L account mapping.
 enum FinanceCashPerformanceEventKind {
@@ -557,6 +594,7 @@ model User {
   idempotencyReceipts                IdempotencyReceipt[]
   createdFileMetadata                FileMetadata[]                   @relation("FileMetadataCreator")
   createdJournalEntries              FinanceJournalEntry[]
+  outflowDocumentRevisions           FinanceOutflowDocumentRevision[]
   createdReportRuns                  ReportRun[]
   createdReportDocuments             ReportDocument[] @relation("ReportDocumentCreator")
   cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[] @relation("FinanceCashPerformanceCoverageActivator")
@@ -606,6 +644,7 @@ model Company {
   dailyFinancialSummaries                  FinanceDailyFinancialSummary[]
   dailySalesChannelSummaries               FinanceDailySalesChannelSummary[]
   outflowDocuments                         FinanceOutflowDocument[]
+  outflowDocumentRevisions                 FinanceOutflowDocumentRevision[]
   outflowBatches                           FinanceOutflowBatch[]
   pnlMappingVersions                       FinancePnlMappingVersion[]
   pnlStatementLines                        FinancePnlStatementLine[]
@@ -643,6 +682,13 @@ model Company {
   hrFinalSettlements                       HrFinalSettlement[]
   aiCompanyIdentities                      AiCompanyIdentity[]
   aiExecutionReceipts                      AiExecutionReceipt[]
+  decisionMetricDefinitions                DecisionMetricDefinition[]
+  decisionRuleDefinitions                  DecisionRuleDefinition[]
+  decisionCompanyContextEvents             DecisionCompanyContextEvent[]
+  decisionEvaluationRuns                   DecisionEvaluationRun[]
+  decisionEvidenceSnapshots                DecisionEvidenceSnapshot[]
+  decisionAlerts                           DecisionAlert[]
+  decisionFeedback                         DecisionFeedback[]
   operationsSections                       OperationsSection[]
   operationsUnits                          OperationsUnit[]
   operationsItems                          OperationsItem[]
@@ -1020,11 +1066,219 @@ model ReportRun {
   company   Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   createdBy User    @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
   documents ReportDocument[]
+  decisionEvidenceSnapshots DecisionEvidenceSnapshot[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, reportCode, createdAt])
   @@index([tenantId, companyId, status, expiresAt])
   @@index([tenantId, companyId, ledgerRevision])
+}
+
+/// Code-owned definitions make an analytical number meaningful across time.
+/// Values remain in domain-specific projections; this is never a fact table.
+model DecisionMetricDefinition {
+  id                String                    @id @default(uuid()) @db.Uuid
+  tenantId          String                    @db.Uuid
+  companyId         String                    @db.Uuid
+  metricCode        String                    @db.VarChar(120)
+  definitionVersion String                    @db.VarChar(80)
+  comparisonCode    String                    @db.VarChar(80)
+  descriptionAr     String                    @db.VarChar(500)
+  status            DecisionContextEventStatus @default(PUBLISHED)
+  createdAt         DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, metricCode, definitionVersion])
+  @@index([tenantId, companyId, metricCode, status])
+}
+
+/// Rule identity is versioned and auditable. Its deterministic implementation
+/// remains code-owned; a tenant policy may only enable an approved version.
+model DecisionRuleDefinition {
+  id          String                     @id @default(uuid()) @db.Uuid
+  tenantId    String                     @db.Uuid
+  companyId   String                     @db.Uuid
+  ruleCode    String                     @db.VarChar(120)
+  ruleVersion String                     @db.VarChar(80)
+  status      DecisionContextEventStatus @default(PUBLISHED)
+  createdAt   DateTime                   @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, ruleCode, ruleVersion])
+  @@index([tenantId, companyId, ruleCode, status])
+}
+
+/// Approved source configuration for automated public context imports. The
+/// source itself never makes a financial or operational fact.
+model DecisionContextSource {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  sourceCode    String   @db.VarChar(80)
+  displayNameAr String   @db.VarChar(160)
+  sourceUrl     String   @db.VarChar(1000)
+  scheduleCode  String   @db.VarChar(80)
+  enabled       Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, sourceCode])
+}
+
+/// Global events are tenant-scoped catalog entries. A company never edits
+/// them; imports create immutable revisions and unresolved changes stay reviewable.
+model DecisionGlobalContextEvent {
+  id              String                     @id @default(uuid()) @db.Uuid
+  tenantId        String                     @db.Uuid
+  sourceId        String                     @db.Uuid
+  externalKey     String                     @db.VarChar(240)
+  eventKind       String                     @db.VarChar(80)
+  status          DecisionContextEventStatus @default(PUBLISHED)
+  currentRevision Int                        @default(1)
+  createdAt       DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                   @updatedAt @db.Timestamptz(6)
+
+  revisions DecisionGlobalContextEventRevision[]
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, sourceId, externalKey])
+  @@index([tenantId, status, eventKind])
+}
+
+model DecisionGlobalContextEventRevision {
+  id             String                     @id @default(uuid()) @db.Uuid
+  tenantId       String                     @db.Uuid
+  eventId        String                     @db.Uuid
+  revision       Int
+  titleAr        String                     @db.VarChar(240)
+  startsOn       DateTime                   @db.Date
+  endsOn         DateTime                   @db.Date
+  sourceUpdatedAt DateTime?                 @db.Timestamptz(6)
+  sourceChecksum String                     @db.Char(64)
+  importReceipt  Json
+  status         DecisionContextEventStatus @default(PUBLISHED)
+  createdAt      DateTime                   @default(now()) @db.Timestamptz(6)
+
+  event DecisionGlobalContextEvent @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([eventId, revision])
+  @@index([tenantId, startsOn, endsOn, status])
+}
+
+/// Company events are recorded context, not a mutation of financial facts.
+model DecisionCompanyContextEvent {
+  id                   String                     @id @default(uuid()) @db.Uuid
+  tenantId             String                     @db.Uuid
+  companyId            String                     @db.Uuid
+  eventKind            String                     @db.VarChar(80)
+  titleAr              String                     @db.VarChar(240)
+  startsOn             DateTime                   @db.Date
+  endsOn               DateTime                   @db.Date
+  verificationStatus   DecisionVerificationStatus @default(HUMAN_CONFIRMED)
+  status               DecisionContextEventStatus @default(PUBLISHED)
+  sourceReference      String?                    @db.VarChar(500)
+  createdByUserId      String                     @db.Uuid
+  createdAt            DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime                   @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, startsOn, endsOn, status])
+}
+
+model DecisionEvaluationRun {
+  id               String                    @id @default(uuid()) @db.Uuid
+  tenantId         String                    @db.Uuid
+  companyId        String                    @db.Uuid
+  ruleCode         String                    @db.VarChar(120)
+  ruleVersion      String                    @db.VarChar(80)
+  periodFrom       DateTime                  @db.Date
+  periodTo         DateTime                  @db.Date
+  dataQuality      DecisionDataQualityStatus
+  inputsChecksum   String                    @db.Char(64)
+  outcomeJson      Json
+  createdAt        DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, ruleCode, ruleVersion, periodFrom, periodTo, inputsChecksum])
+  @@index([tenantId, companyId, createdAt])
+}
+
+/// Immutable proof captured only for decisions, alerts, retained analyses and
+/// auditable AI answers. Corrections create a superseding snapshot.
+model DecisionEvidenceSnapshot {
+  id                   String                    @id @default(uuid()) @db.Uuid
+  tenantId             String                    @db.Uuid
+  companyId            String                    @db.Uuid
+  sourceReportRunId    String?                   @db.Uuid
+  supersedesSnapshotId String?                   @db.Uuid
+  evidenceKind         DecisionEvidenceKind
+  verificationStatus   DecisionVerificationStatus
+  periodFrom           DateTime                  @db.Date
+  periodTo             DateTime                  @db.Date
+  timezone             String                    @default("Asia/Riyadh") @db.VarChar(64)
+  payloadJson          Json
+  checksum             String                    @db.Char(64)
+  createdByUserId      String?                   @db.Uuid
+  createdAt            DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  sourceReportRun ReportRun?         @relation(fields: [sourceReportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supersedes DecisionEvidenceSnapshot? @relation("DecisionEvidenceSupersedes", fields: [supersedesSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  replacements DecisionEvidenceSnapshot[] @relation("DecisionEvidenceSupersedes")
+  alerts DecisionAlert[]
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, createdAt])
+  @@index([tenantId, companyId, sourceReportRunId])
+}
+
+model DecisionAlert {
+  id                 String              @id @default(uuid()) @db.Uuid
+  tenantId           String              @db.Uuid
+  companyId          String              @db.Uuid
+  evaluationRunId    String              @db.Uuid
+  evidenceSnapshotId String              @db.Uuid
+  ruleCode           String              @db.VarChar(120)
+  ruleVersion        String              @db.VarChar(80)
+  status             DecisionAlertStatus @default(OPEN)
+  titleAr            String              @db.VarChar(240)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(6)
+  acknowledgedAt     DateTime?           @db.Timestamptz(6)
+  closedAt           DateTime?           @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  evidenceSnapshot DecisionEvidenceSnapshot @relation(fields: [evidenceSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  feedback DecisionFeedback[]
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, status, createdAt])
+  @@index([tenantId, companyId, ruleCode, createdAt])
+}
+
+model DecisionFeedback {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  alertId         String   @db.Uuid
+  kind            String   @db.VarChar(80)
+  note            String?  @db.VarChar(2000)
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  alert DecisionAlert @relation(fields: [alertId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, alertId, createdAt])
 }
 
 /// A user-retained, immutable rendering snapshot of a report run. A document
@@ -1442,6 +1696,8 @@ model FinanceJournalEntry {
   inclusiveLoanPayment         FinanceInclusiveLoanPayment?  @relation("FinanceInclusiveLoanPaymentJournal")
   dailySalesClosing            FinanceDailySalesClosing?     @relation("FinanceDailySalesClosingJournal")
   outflowDocument              FinanceOutflowDocument?       @relation("FinanceOutflowDocumentJournal")
+  outflowDocumentPreviousRevisions FinanceOutflowDocumentRevision[] @relation("FinanceOutflowDocumentRevisionPreviousJournal")
+  outflowDocumentRevisions     FinanceOutflowDocumentRevision[] @relation("FinanceOutflowDocumentRevisionJournal")
   hrEmployeeMovements          HrEmployeeFinancialMovement[]
   hrEmployeeAdvanceIssue       HrEmployeeAdvance?            @relation("HrEmployeeAdvanceIssueJournal")
   hrEmployeeAdvanceSettlements HrEmployeeAdvanceSettlement[]
@@ -1488,6 +1744,7 @@ model FinanceOutflowDocument {
   assetWarrantyFollowUp           Boolean                      @default(false)
   notes                           String?                      @db.VarChar(2000)
   journalEntryId                  String                       @db.Uuid
+  postingVersion                  Int                          @default(1)
   createdByUserId                 String                       @db.Uuid
   createdAt                       DateTime                     @default(now()) @db.Timestamptz(6)
   updatedAt                       DateTime                     @updatedAt @db.Timestamptz(6)
@@ -1499,6 +1756,7 @@ model FinanceOutflowDocument {
   category                FinanceCategory                   @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   journalEntry            FinanceJournalEntry               @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   allocations             FinanceOutflowAllocation[]
+  revisions               FinanceOutflowDocumentRevision[]
   recurringCoverage       FinanceRecurringExpenseCoverage[]
   hrEmployeeService       HrEmployeeService?                @relation("HrEmployeeServiceOutflowDocument")
   assetWarrantyAssets     OperationsAssetWarrantyAsset[]
@@ -1511,6 +1769,33 @@ model FinanceOutflowDocument {
   @@index([tenantId, companyId, batchId])
   @@index([tenantId, companyId, recurringExpenseProfileId, coverageYear])
   @@index([tenantId, companyId, businessDate, createdAt, id], map: "FinanceOutflowDocument_tenant_company_date_created_id_idx")
+}
+
+/// Immutable amendment history for an owner-corrected purchase or expense
+/// document. The business document keeps its identity; the sealed journals do
+/// not get rewritten.
+model FinanceOutflowDocumentRevision {
+  id                     String                 @id @default(uuid()) @db.Uuid
+  tenantId               String                 @db.Uuid
+  companyId              String                 @db.Uuid
+  documentId             String                 @db.Uuid
+  version                Int
+  previousJournalEntryId String                 @db.Uuid
+  journalEntryId         String                 @db.Uuid
+  beforeJson             Json
+  afterJson              Json
+  createdByUserId        String                 @db.Uuid
+  createdAt              DateTime               @default(now()) @db.Timestamptz(6)
+
+  document       FinanceOutflowDocument @relation(fields: [documentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company        Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  previousJournal FinanceJournalEntry   @relation("FinanceOutflowDocumentRevisionPreviousJournal", fields: [previousJournalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journal        FinanceJournalEntry    @relation("FinanceOutflowDocumentRevisionJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  createdBy      User                   @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([documentId, version])
+  @@index([tenantId, companyId, documentId, version(sort: Desc)])
 }
 
 /// Operational register only. This does not capitalise, depreciate, or post

@@ -111,9 +111,11 @@ import { OperationsInternalRegistrationController } from './operations/operation
 import { OperationsInternalRegistrationService } from './operations/operations-internal-registration.service.js';
 import { OperationsAssetsWarrantyController } from './operations/operations-assets-warranty.controller.js';
 import { OperationsAssetsWarrantyService } from './operations/operations-assets-warranty.service.js';
+import { DecisionIntelligenceController } from './decision-intelligence/decision-intelligence.controller.js';
+import { DecisionIntelligenceService } from './decision-intelligence/decision-intelligence.service.js';
 
 @Module({
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -184,6 +186,7 @@ import { OperationsAssetsWarrantyService } from './operations/operations-assets-
     OperationsExecutionService,
     OperationsInternalRegistrationService,
     OperationsAssetsWarrantyService,
+    DecisionIntelligenceService,
   ],
 })
 export class AppModule {}

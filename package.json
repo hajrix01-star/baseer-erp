@@ -35,6 +35,7 @@
                     "verify:hr-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-hr-http-verification.mjs",
                     "verify:operations-purchase-cycle": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-purchase-cycle-verification.mjs",
                     "verify:operations-assets-warranty": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-assets-warranty-verification.mjs",
+                    "verify:decision-intelligence-foundation": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-decision-intelligence-foundation-verification.mjs",
                     "seed:operations-demo": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/seed-operations-demo.mjs"
                 }
 }

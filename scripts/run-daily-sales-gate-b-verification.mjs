@@ -99,6 +99,7 @@ try {
     idempotencyKey: randomUUID(),
     request: {
       closingId: first.closingId,
+      businessDate: date('2026-08-15'),
       customerCount: 5,
       allocations: [{ vaultId: master.cashVaultId, grossAmount: '230.0000' }],
       cashHandoverAmount: '130.0000',
@@ -218,6 +219,7 @@ async function loadServices() {
     { DailySalesService },
     { DailySalesCommandSupportService },
     { DailySalesWriteService },
+    { FinanceCashPerformanceEventService },
   ] = await Promise.all([
     import('../apps/api/dist/database/database.service.js'),
     import('../apps/api/dist/finance/finance-foundation.service.js'),
@@ -234,6 +236,7 @@ async function loadServices() {
     import('../apps/api/dist/finance/daily-sales.service.js'),
     import('../apps/api/dist/finance/daily-sales-command-support.service.js'),
     import('../apps/api/dist/finance/daily-sales-write.service.js'),
+    import('../apps/api/dist/finance/finance-cash-performance-event.service.js'),
   ]);
   database = new DatabaseService();
   const periods = new FinancePeriodService();
@@ -245,7 +248,8 @@ async function loadServices() {
   const projections = new DailySalesProjectionService();
   const posting = new DailySalesPostingService(journals, periods, vaults, businessDates);
   const support = new DailySalesCommandSupportService(idempotency);
-  const writes = new DailySalesWriteService(new DocumentSerialService(database), journals, projections, posting, support);
+  const cashEvents = new FinanceCashPerformanceEventService();
+  const writes = new DailySalesWriteService(new DocumentSerialService(database), journals, projections, posting, support, cashEvents);
   return {
     setup: new CompanyFinanceSetupService(database, foundation, periods),
     calendar: new OperationalCalendarService(database, idempotency, projections),

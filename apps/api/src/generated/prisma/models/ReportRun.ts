@@ -320,6 +320,7 @@ export type ReportRunWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   documents?: Prisma.ReportDocumentListRelationFilter
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotListRelationFilter
 }
 
 export type ReportRunOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type ReportRunOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   documents?: Prisma.ReportDocumentOrderByRelationAggregateInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotOrderByRelationAggregateInput
 }
 
 export type ReportRunWhereUniqueInput = Prisma.AtLeast<{
@@ -374,6 +376,7 @@ export type ReportRunWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   documents?: Prisma.ReportDocumentListRelationFilter
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type ReportRunOrderByWithAggregationInput = {
@@ -448,6 +451,7 @@ export type ReportRunCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutReportRunsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedReportRunsInput
   documents?: Prisma.ReportDocumentCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunUncheckedCreateInput = {
@@ -471,6 +475,7 @@ export type ReportRunUncheckedCreateInput = {
   createdByUserId: string
   createdAt?: Date | string
   documents?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunUpdateInput = {
@@ -493,6 +498,7 @@ export type ReportRunUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutReportRunsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedReportRunsNestedInput
   documents?: Prisma.ReportDocumentUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateInput = {
@@ -516,6 +522,7 @@ export type ReportRunUncheckedUpdateInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.ReportDocumentUncheckedUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunCreateManyInput = {
@@ -665,6 +672,11 @@ export type ReportRunSumOrderByAggregateInput = {
   ledgerRevision?: Prisma.SortOrder
 }
 
+export type ReportRunNullableScalarRelationFilter = {
+  is?: Prisma.ReportRunWhereInput | null
+  isNot?: Prisma.ReportRunWhereInput | null
+}
+
 export type ReportRunScalarRelationFilter = {
   is?: Prisma.ReportRunWhereInput
   isNot?: Prisma.ReportRunWhereInput
@@ -758,6 +770,22 @@ export type EnumReportRunStatusFieldUpdateOperationsInput = {
   set?: $Enums.ReportRunStatus
 }
 
+export type ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.ReportRunCreateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedCreateWithoutDecisionEvidenceSnapshotsInput>
+  connectOrCreate?: Prisma.ReportRunCreateOrConnectWithoutDecisionEvidenceSnapshotsInput
+  connect?: Prisma.ReportRunWhereUniqueInput
+}
+
+export type ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.ReportRunCreateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedCreateWithoutDecisionEvidenceSnapshotsInput>
+  connectOrCreate?: Prisma.ReportRunCreateOrConnectWithoutDecisionEvidenceSnapshotsInput
+  upsert?: Prisma.ReportRunUpsertWithoutDecisionEvidenceSnapshotsInput
+  disconnect?: Prisma.ReportRunWhereInput | boolean
+  delete?: Prisma.ReportRunWhereInput | boolean
+  connect?: Prisma.ReportRunWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ReportRunUpdateToOneWithWhereWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUpdateWithoutDecisionEvidenceSnapshotsInput>, Prisma.ReportRunUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput>
+}
+
 export type ReportRunCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.ReportRunCreateWithoutDocumentsInput, Prisma.ReportRunUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.ReportRunCreateOrConnectWithoutDocumentsInput
@@ -791,6 +819,7 @@ export type ReportRunCreateWithoutCreatedByInput = {
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutReportRunsInput
   documents?: Prisma.ReportDocumentCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunUncheckedCreateWithoutCreatedByInput = {
@@ -812,6 +841,7 @@ export type ReportRunUncheckedCreateWithoutCreatedByInput = {
   outputJobId?: string | null
   createdAt?: Date | string
   documents?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunCreateOrConnectWithoutCreatedByInput = {
@@ -884,6 +914,7 @@ export type ReportRunCreateWithoutCompanyInput = {
   createdAt?: Date | string
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedReportRunsInput
   documents?: Prisma.ReportDocumentCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunUncheckedCreateWithoutCompanyInput = {
@@ -905,6 +936,7 @@ export type ReportRunUncheckedCreateWithoutCompanyInput = {
   createdByUserId: string
   createdAt?: Date | string
   documents?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutReportRunInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunCreateOrConnectWithoutCompanyInput = {
@@ -933,6 +965,112 @@ export type ReportRunUpdateManyWithWhereWithoutCompanyInput = {
   data: Prisma.XOR<Prisma.ReportRunUpdateManyMutationInput, Prisma.ReportRunUncheckedUpdateManyWithoutCompanyInput>
 }
 
+export type ReportRunCreateWithoutDecisionEvidenceSnapshotsInput = {
+  id?: string
+  reportCode: string
+  definitionVersion: string
+  canonicalOptionsJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  economicAsOfDate: Date | string
+  ledgerRevision: bigint | number
+  eligibleEntryPredicateVersion: string
+  projectionWatermarkJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceCoverageJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  accountMappingVersionId?: string | null
+  accountMappingChecksum?: string | null
+  checksum: string
+  status?: $Enums.ReportRunStatus
+  expiresAt: Date | string
+  outputJobId?: string | null
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutReportRunsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedReportRunsInput
+  documents?: Prisma.ReportDocumentCreateNestedManyWithoutReportRunInput
+}
+
+export type ReportRunUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  reportCode: string
+  definitionVersion: string
+  canonicalOptionsJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  economicAsOfDate: Date | string
+  ledgerRevision: bigint | number
+  eligibleEntryPredicateVersion: string
+  projectionWatermarkJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceCoverageJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  accountMappingVersionId?: string | null
+  accountMappingChecksum?: string | null
+  checksum: string
+  status?: $Enums.ReportRunStatus
+  expiresAt: Date | string
+  outputJobId?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  documents?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutReportRunInput
+}
+
+export type ReportRunCreateOrConnectWithoutDecisionEvidenceSnapshotsInput = {
+  where: Prisma.ReportRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReportRunCreateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedCreateWithoutDecisionEvidenceSnapshotsInput>
+}
+
+export type ReportRunUpsertWithoutDecisionEvidenceSnapshotsInput = {
+  update: Prisma.XOR<Prisma.ReportRunUpdateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput>
+  create: Prisma.XOR<Prisma.ReportRunCreateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedCreateWithoutDecisionEvidenceSnapshotsInput>
+  where?: Prisma.ReportRunWhereInput
+}
+
+export type ReportRunUpdateToOneWithWhereWithoutDecisionEvidenceSnapshotsInput = {
+  where?: Prisma.ReportRunWhereInput
+  data: Prisma.XOR<Prisma.ReportRunUpdateWithoutDecisionEvidenceSnapshotsInput, Prisma.ReportRunUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput>
+}
+
+export type ReportRunUpdateWithoutDecisionEvidenceSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reportCode?: Prisma.StringFieldUpdateOperationsInput | string
+  definitionVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  canonicalOptionsJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  economicAsOfDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  eligibleEntryPredicateVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  projectionWatermarkJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceCoverageJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  accountMappingVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMappingChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumReportRunStatusFieldUpdateOperationsInput | $Enums.ReportRunStatus
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  outputJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutReportRunsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedReportRunsNestedInput
+  documents?: Prisma.ReportDocumentUpdateManyWithoutReportRunNestedInput
+}
+
+export type ReportRunUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  reportCode?: Prisma.StringFieldUpdateOperationsInput | string
+  definitionVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  canonicalOptionsJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  economicAsOfDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ledgerRevision?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  eligibleEntryPredicateVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  projectionWatermarkJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceCoverageJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  accountMappingVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMappingChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumReportRunStatusFieldUpdateOperationsInput | $Enums.ReportRunStatus
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  outputJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.ReportDocumentUncheckedUpdateManyWithoutReportRunNestedInput
+}
+
 export type ReportRunCreateWithoutDocumentsInput = {
   id?: string
   reportCode: string
@@ -952,6 +1090,7 @@ export type ReportRunCreateWithoutDocumentsInput = {
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutReportRunsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedReportRunsInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunUncheckedCreateWithoutDocumentsInput = {
@@ -974,6 +1113,7 @@ export type ReportRunUncheckedCreateWithoutDocumentsInput = {
   outputJobId?: string | null
   createdByUserId: string
   createdAt?: Date | string
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSourceReportRunInput
 }
 
 export type ReportRunCreateOrConnectWithoutDocumentsInput = {
@@ -1011,6 +1151,7 @@ export type ReportRunUpdateWithoutDocumentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutReportRunsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedReportRunsNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateWithoutDocumentsInput = {
@@ -1033,6 +1174,7 @@ export type ReportRunUncheckedUpdateWithoutDocumentsInput = {
   outputJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunCreateManyCreatedByInput = {
@@ -1074,6 +1216,7 @@ export type ReportRunUpdateWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutReportRunsNestedInput
   documents?: Prisma.ReportDocumentUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateWithoutCreatedByInput = {
@@ -1095,6 +1238,7 @@ export type ReportRunUncheckedUpdateWithoutCreatedByInput = {
   outputJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.ReportDocumentUncheckedUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1156,6 +1300,7 @@ export type ReportRunUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedReportRunsNestedInput
   documents?: Prisma.ReportDocumentUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateWithoutCompanyInput = {
@@ -1177,6 +1322,7 @@ export type ReportRunUncheckedUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.ReportDocumentUncheckedUpdateManyWithoutReportRunNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSourceReportRunNestedInput
 }
 
 export type ReportRunUncheckedUpdateManyWithoutCompanyInput = {
@@ -1206,10 +1352,12 @@ export type ReportRunUncheckedUpdateManyWithoutCompanyInput = {
 
 export type ReportRunCountOutputType = {
   documents: number
+  decisionEvidenceSnapshots: number
 }
 
 export type ReportRunCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | ReportRunCountOutputTypeCountDocumentsArgs
+  decisionEvidenceSnapshots?: boolean | ReportRunCountOutputTypeCountDecisionEvidenceSnapshotsArgs
 }
 
 /**
@@ -1227,6 +1375,13 @@ export type ReportRunCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  */
 export type ReportRunCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReportDocumentWhereInput
+}
+
+/**
+ * ReportRunCountOutputType without action
+ */
+export type ReportRunCountOutputTypeCountDecisionEvidenceSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
 }
 
 
@@ -1253,6 +1408,7 @@ export type ReportRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.ReportRun$documentsArgs<ExtArgs>
+  decisionEvidenceSnapshots?: boolean | Prisma.ReportRun$decisionEvidenceSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.ReportRunCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reportRun"]>
 
@@ -1331,6 +1487,7 @@ export type ReportRunInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.ReportRun$documentsArgs<ExtArgs>
+  decisionEvidenceSnapshots?: boolean | Prisma.ReportRun$decisionEvidenceSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.ReportRunCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReportRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1348,6 +1505,7 @@ export type $ReportRunPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     company: Prisma.$CompanyPayload<ExtArgs>
     createdBy: Prisma.$UserPayload<ExtArgs>
     documents: Prisma.$ReportDocumentPayload<ExtArgs>[]
+    decisionEvidenceSnapshots: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1766,6 +1924,7 @@ export interface Prisma__ReportRunClient<T, Null = never, ExtArgs extends runtim
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.ReportRun$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ReportRun$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  decisionEvidenceSnapshots<T extends Prisma.ReportRun$decisionEvidenceSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ReportRun$decisionEvidenceSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2236,6 +2395,30 @@ export type ReportRun$documentsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ReportDocumentScalarFieldEnum | Prisma.ReportDocumentScalarFieldEnum[]
+}
+
+/**
+ * ReportRun.decisionEvidenceSnapshots
+ */
+export type ReportRun$decisionEvidenceSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionEvidenceSnapshot
+   */
+  select?: Prisma.DecisionEvidenceSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionEvidenceSnapshot
+   */
+  omit?: Prisma.DecisionEvidenceSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionEvidenceSnapshotInclude<ExtArgs> | null
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+  orderBy?: Prisma.DecisionEvidenceSnapshotOrderByWithRelationInput | Prisma.DecisionEvidenceSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DecisionEvidenceSnapshotScalarFieldEnum | Prisma.DecisionEvidenceSnapshotScalarFieldEnum[]
 }
 
 /**

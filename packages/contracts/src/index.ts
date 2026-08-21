@@ -9,6 +9,7 @@ export * from './observability.js';
 export * from './finance.js';
 
 export * from './ai-platform.js';
+export * from './decision-intelligence.js';
 
 export * from './administration.js';
 export * from './hr.js';

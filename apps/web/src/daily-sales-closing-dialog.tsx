@@ -318,6 +318,11 @@ export function DailySalesClosingDialog({
               )}
             </>
           )}
+          {editing && (
+            <div className="daily-sales-dialog__date">
+              <BaseerDatePicker language={language} label={copy.date} min={editing.businessDate.slice(0, 10)} max={maximumEntryDate} value={businessDate} onChange={setDate} disabled={saving} />
+            </div>
+          )}
           {isDayOff ? (
             <section className="daily-sales-dialog__day-off">
               <strong>{copy.dayOffNoMoney}</strong>

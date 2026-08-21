@@ -13,6 +13,7 @@ import { HrService, type EmployeeServiceCreateInput } from '../hr/hr.service.js'
 import type { RecordHrEmployeeServiceAndIssueCostRequest } from '@baseer-erp/contracts';
 
 const DOCUMENT_OPERATION = 'finance.purchase_expense.create';
+const CORRECT_DOCUMENT_OPERATION = 'finance.purchase_expense.correct';
 const BATCH_OPERATION = 'finance.purchase_expense.batch.create';
 const REVERSE_DOCUMENT_OPERATION = 'finance.purchase_expense.reverse';
 const RECURRING_PAYMENT_OPERATION = 'finance.recurring_expense.payment.create';
@@ -48,6 +49,111 @@ export class PurchaseExpenseService {
       if (begun.kind === 'in-progress') throw new ConflictException('This purchase request is already being processed.');
       const receipt = await this.postDocument(tx, input.context, request, `purchase-expense:${input.idempotencyKey}`);
       await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different request.'); throw error; });
+  }
+
+  /**
+   * An owner sees this as editing one commercial document.  The old journal is
+   * nevertheless reversed and a new sealed version is posted atomically; the
+   * document id/number remain stable and the revision snapshot is append-only.
+   */
+  async correct(input: { context: TrustedCompanyActorContext; idempotencyKey: string; documentId: string; request: PurchaseExpenseRequest }): Promise<PurchaseExpenseReceipt> {
+    return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
+      const request = this.normalise(input.request);
+      const payload = { documentId: input.documentId, request: this.payload(request) };
+      const begun = await this.idem.beginInTransaction(tx, input.context, { operation: CORRECT_DOCUMENT_OPERATION, key: input.idempotencyKey, request: payload, expiresAt: new Date(Date.now() + 86_400_000) });
+      if (begun.kind === 'replay') return begun.response.body as unknown as PurchaseExpenseReceipt;
+      if (begun.kind === 'in-progress') throw new ConflictException('This purchase amendment is already being processed.');
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`finance-outflow-document:${input.context.companyId}:${input.documentId}`}))`;
+      const document = await tx.financeOutflowDocument.findFirst({
+        where: { id: input.documentId, tenantId: input.context.tenantId, companyId: input.context.companyId },
+        include: {
+          allocations: { orderBy: [{ vaultId: 'asc' }, { paymentMethod: 'asc' }] },
+          batch: { select: { id: true, businessDate: true } },
+          assetWarrantyAssets: { select: { id: true }, take: 1 },
+          hrEmployeeService: { select: { id: true } },
+          journalEntry: { include: { reversalEntry: { select: { id: true } }, supplierDue: { include: { payments: { select: { id: true }, take: 1 } } } } },
+        },
+      });
+      if (!document || document.status !== FinanceOutflowDocumentStatus.POSTED || document.journalEntry.reversalEntry) throw new ConflictException('Only an active posted purchase or expense document can be amended.');
+      if (document.recurringExpenseProfileId || document.hrEmployeeService || document.assetWarrantyAssets.length) throw new ConflictException('This document has protected downstream records and cannot be amended.');
+      if (document.batch && document.batch.businessDate.getTime() !== request.businessDate.getTime()) throw new BadRequestException('A document in a purchase batch must keep the batch business date.');
+      if (request.businessDate < document.businessDate) throw new BadRequestException('An amended business date cannot precede the original posting date.');
+      const oldDue = document.journalEntry.supplierDue;
+      if (oldDue && (oldDue.status !== FinanceSupplierDueStatus.OPEN || !oldDue.paidAmount.isZero() || oldDue.payments.length)) throw new ConflictException('A payable document with supplier payments must have those payments reversed before it can be amended.');
+      await this.dates.assertNotFutureInTransaction(tx, input.context, request.businessDate);
+
+      const category = await tx.financeCategory.findFirst({ where: { id: request.categoryId, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, kind: request.kind }, include: { account: { select: { id: true, type: true, status: true } } } });
+      if (!category?.account || category.account.status !== FinanceAccountStatus.ACTIVE || (category.account.type !== FinanceAccountType.ASSET && category.account.type !== FinanceAccountType.EXPENSE)) throw new BadRequestException('The selected category is not ready for financial posting.');
+      if (request.supplierId) {
+        const supplier = await tx.financeSupplier.findFirst({ where: { id: request.supplierId, tenantId: input.context.tenantId, companyId: input.context.companyId, status: FinanceSupplierStatus.ACTIVE }, select: { id: true } });
+        if (!supplier) throw new BadRequestException('The selected supplier is not active.');
+      }
+      if (request.settlementKind === 'PAYABLE' && !request.supplierId) throw new BadRequestException('A supplier is required for a payable document.');
+      if (request.settlementKind === 'PAID' && !request.allocations.length) throw new BadRequestException('Choose at least one payment destination.');
+      const gross = new Prisma.Decimal(request.grossAmount); if (!gross.isFinite() || gross.lte(0)) throw new BadRequestException('The gross amount is invalid.');
+      const profile = await tx.companyFinanceProfile.findFirst({ where: { tenantId: input.context.tenantId, companyId: input.context.companyId }, select: { accountingMode: true, vatAccountingEnabled: true, vatRateBasisPoints: true } });
+      if (!profile) throw new BadRequestException('The company financial setup is incomplete.');
+      const rate = request.isTaxable && profile.vatAccountingEnabled ? profile.vatRateBasisPoints : 0;
+      const net = rate ? gross.mul(10_000).div(10_000 + rate).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP) : gross;
+      const vat = gross.minus(net).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+      const debitAccountId = request.settlementKind === 'PAYABLE' && profile.accountingMode === 'management_cash' ? await this.account(tx, input.context, 'CASH_BASIS_PENDING_OUTFLOWS') : category.account.id;
+      const lines: { accountId: string; debitAmount?: string; creditAmount?: string; description?: string }[] = [{ accountId: debitAccountId, debitAmount: net.toFixed(4), description: document.documentNumber }];
+      if (!vat.isZero()) lines.push({ accountId: await this.account(tx, input.context, 'VAT_INPUT'), debitAmount: vat.toFixed(4), description: document.documentNumber });
+      const allocations: { vaultId: string; grossAmount: string; paymentMethod: FinanceVaultPaymentMethod }[] = [];
+      if (request.settlementKind === 'PAID') {
+        const grouped = new Map<string, { vaultId: string; paymentMethod: FinanceVaultPaymentMethod | undefined; grossAmount: Prisma.Decimal }>();
+        for (const allocation of request.allocations) {
+          const key = `${allocation.vaultId}:${allocation.paymentMethod ?? ''}`;
+          const prior = grouped.get(key);
+          grouped.set(key, { vaultId: allocation.vaultId, paymentMethod: allocation.paymentMethod, grossAmount: (prior?.grossAmount ?? new Prisma.Decimal(0)).plus(allocation.grossAmount) });
+        }
+        const allocated = [...grouped.values()].reduce((sum, item) => sum.plus(item.grossAmount), new Prisma.Decimal(0));
+        if (!allocated.equals(gross)) throw new BadRequestException('Payment allocations must equal the gross amount.');
+        for (const allocation of grouped.values()) {
+          const vault = await this.vaults.assertActivePaymentDestination(tx, { ...input.context, vaultId: allocation.vaultId });
+          const paymentMethod = allocation.paymentMethod ?? vault.paymentMethod;
+          if (!vault.paymentMethods.includes(paymentMethod)) throw new BadRequestException('The selected payment method is not enabled for this vault.');
+          const grossAmount = allocation.grossAmount.toFixed(4);
+          allocations.push({ vaultId: allocation.vaultId, grossAmount, paymentMethod });
+          lines.push({ accountId: vault.accountId, creditAmount: grossAmount, description: document.documentNumber });
+        }
+      } else {
+        lines.push({ accountId: await this.account(tx, input.context, 'SUPPLIER_DUES'), creditAmount: gross.toFixed(4), description: document.documentNumber });
+      }
+
+      const before = this.amendmentSnapshot(document);
+      const requestId = `purchase-expense-amendment:${document.id}:v${document.postingVersion + 1}`;
+      const reversed = await this.journals.reverseInTransaction(tx, { ...input.context, requestId, journalEntryId: document.journalEntryId, businessDate: request.businessDate, reason: 'Owner amended the purchase or expense document.' });
+      await this.cashEvents.recordReversalForJournalInTransaction(tx, input.context, { originalJournalEntryId: document.journalEntryId, reversalJournalEntryId: reversed.journalEntryId, reversalLedgerRevision: reversed.ledgerRevision, businessDate: request.businessDate, sourceType: 'finance_outflow_document_amendment_reversal', sourceId: document.id });
+      const version = document.postingVersion + 1;
+      const journal = await this.journals.postInTransaction(tx, { ...input.context, requestId, sourceType: 'finance_outflow_document_amendment', sourceReference: `${document.id}:v${version}`, businessDate: request.businessDate, description: request.notes ?? document.documentNumber, lines });
+      await tx.financeOutflowAllocation.deleteMany({ where: { tenantId: input.context.tenantId, companyId: input.context.companyId, documentId: document.id } });
+      await tx.financeOutflowDocument.update({ where: { id: document.id }, data: { kind: request.kind, settlementKind: request.settlementKind, supplierId: request.supplierId ?? null, categoryId: request.categoryId, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceNumberNormalized: request.supplierInvoiceNumber?.toLocaleUpperCase('en-US') ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate, supplierInvoiceDate: request.supplierInvoiceDate ?? null, grossAmount: gross, netAmount: net, vatAmount: vat, vatRateBasisPoints: rate, assetWarrantyFollowUp: request.assetWarrantyFollowUp ?? false, notes: request.notes ?? null, journalEntryId: journal.journalEntryId, postingVersion: version } });
+      if (allocations.length) await tx.financeOutflowAllocation.createMany({ data: allocations.map((allocation) => ({ id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, documentId: document.id, vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod })) });
+      let supplierDueId: string | null = null;
+      if (request.settlementKind === 'PAYABLE') {
+        if (oldDue) {
+          await tx.financeSupplierDue.update({ where: { id: oldDue.id }, data: { supplierId: request.supplierId!, categoryId: request.categoryId, originalBusinessDate: request.businessDate, originalAmount: gross, paidAmount: new Prisma.Decimal(0), remainingAmount: gross, status: FinanceSupplierDueStatus.OPEN, notes: request.notes ?? null, journalEntryId: journal.journalEntryId } });
+          supplierDueId = oldDue.id;
+        } else {
+          supplierDueId = randomUUID();
+          await tx.financeSupplierDue.create({ data: { id: supplierDueId, tenantId: input.context.tenantId, companyId: input.context.companyId, supplierId: request.supplierId!, categoryId: request.categoryId, sourceDocumentNumber: document.documentNumber, originalBusinessDate: request.businessDate, originalAmount: gross, remainingAmount: gross, status: FinanceSupplierDueStatus.OPEN, notes: request.notes ?? null, journalEntryId: journal.journalEntryId } });
+        }
+      } else if (oldDue) {
+        await tx.financeSupplierDue.update({ where: { id: oldDue.id }, data: { status: FinanceSupplierDueStatus.CANCELLED, remainingAmount: new Prisma.Decimal(0), journalEntryId: document.journalEntryId } });
+      }
+      if (request.settlementKind === 'PAID') await this.cashEvents.recordInTransaction(tx, input.context, { kind: request.kind === 'PURCHASE' ? FinanceCashPerformanceEventKind.PURCHASE_PAYMENT : FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT, direction: FinanceCashPerformanceDirection.OUTFLOW, businessDate: request.businessDate, grossAmount: gross, netAmount: net, vatAmount: vat, sourceType: 'finance_outflow_document_amendment', sourceId: document.id, sourceJournalEntryId: journal.journalEntryId, ledgerRevision: journal.ledgerRevision, category: { code: category.code, nameAr: category.nameAr, nameEn: category.nameEn, kind: category.kind }, destinations: allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.grossAmount, paymentMethod: allocation.paymentMethod })) });
+      if (document.batchId) {
+        const totals = await tx.financeOutflowDocument.aggregate({ where: { tenantId: input.context.tenantId, companyId: input.context.companyId, batchId: document.batchId, status: FinanceOutflowDocumentStatus.POSTED }, _sum: { grossAmount: true, netAmount: true, vatAmount: true } });
+        await tx.financeOutflowBatch.update({ where: { id: document.batchId }, data: { grossAmount: totals._sum.grossAmount ?? new Prisma.Decimal(0), netAmount: totals._sum.netAmount ?? new Prisma.Decimal(0), vatAmount: totals._sum.vatAmount ?? new Prisma.Decimal(0) } });
+      }
+      const after = { ...this.payload(request), documentNumber: document.documentNumber, postingVersion: version, journalEntryId: journal.journalEntryId, allocations };
+      await tx.financeOutflowDocumentRevision.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, documentId: document.id, version, previousJournalEntryId: document.journalEntryId, journalEntryId: journal.journalEntryId, beforeJson: before as Prisma.InputJsonValue, afterJson: after as Prisma.InputJsonValue, createdByUserId: input.context.actorUserId } });
+      const receipt: PurchaseExpenseReceipt = { documentId: document.id, documentNumber: document.documentNumber, journalEntryId: journal.journalEntryId, kind: request.kind as FinanceOutflowDocumentKind, settlementKind: request.settlementKind as FinanceOutflowSettlementKind, status: FinanceOutflowDocumentStatus.POSTED, grossAmount: gross.toFixed(4), netAmount: net.toFixed(4), vatAmount: vat.toFixed(4), supplierDueId };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, actorUserId: input.context.actorUserId, action: 'finance.purchase_expense.amended', entityType: 'FinanceOutflowDocument', entityId: document.id, requestId, beforeJson: before as Prisma.InputJsonValue, afterJson: { receipt, version } as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
       return receipt;
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different request.'); throw error; });
   }
@@ -380,11 +486,11 @@ export class PurchaseExpenseService {
           { businessDate: cursor.businessDate, createdAt: cursor.createdAt, id: { lt: cursor.id } },
         ] } : baseWhere,
         orderBy: [{ businessDate: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }], take: input.pageSize + 1,
-        select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, businessDate: true, grossAmount: true, batch: { select: { batchNumber: true } }, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } } },
+        select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, businessDate: true, grossAmount: true, supplierId: true, categoryId: true, supplierInvoiceNumber: true, supplierInvoiceMissingReason: true, supplierInvoiceDate: true, vatRateBasisPoints: true, assetWarrantyFollowUp: true, notes: true, postingVersion: true, allocations: { select: { vaultId: true, grossAmount: true, paymentMethod: true }, orderBy: [{ vaultId: 'asc' }, { paymentMethod: 'asc' }] }, batch: { select: { batchNumber: true } }, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } } },
       });
       const hasMore = rows.length > input.pageSize;
       const documents = hasMore ? rows.slice(0, input.pageSize) : rows;
-      return { documents: documents.map((document) => ({ id: document.id, documentNumber: document.documentNumber, kind: document.kind, settlementKind: document.settlementKind, status: document.status, businessDate: document.businessDate, grossAmount: document.grossAmount.toFixed(4), batchNumber: document.batch?.batchNumber ?? null, supplierNameAr: document.supplier?.nameAr ?? null, supplierNameEn: document.supplier?.nameEn ?? null, categoryNameAr: document.category.nameAr, categoryNameEn: document.category.nameEn })), hasMore, nextCursor: hasMore ? documents.at(-1)?.id ?? null : null };
+      return { documents: documents.map((document) => ({ id: document.id, documentNumber: document.documentNumber, kind: document.kind, settlementKind: document.settlementKind, status: document.status, businessDate: document.businessDate, grossAmount: document.grossAmount.toFixed(4), batchNumber: document.batch?.batchNumber ?? null, supplierNameAr: document.supplier?.nameAr ?? null, supplierNameEn: document.supplier?.nameEn ?? null, supplierId: document.supplierId, categoryId: document.categoryId, categoryNameAr: document.category.nameAr, categoryNameEn: document.category.nameEn, supplierInvoiceNumber: document.supplierInvoiceNumber, supplierInvoiceMissingReason: document.supplierInvoiceMissingReason, supplierInvoiceDate: document.supplierInvoiceDate, vatRateBasisPoints: document.vatRateBasisPoints, assetWarrantyFollowUp: document.assetWarrantyFollowUp, notes: document.notes, postingVersion: document.postingVersion, allocations: document.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount.toFixed(4), paymentMethod: allocation.paymentMethod })) })), hasMore, nextCursor: hasMore ? documents.at(-1)?.id ?? null : null };
     });
   }
 
@@ -465,6 +571,9 @@ export class PurchaseExpenseService {
   private storeBatchReceipt(receipt: PurchaseExpenseBatchReceipt): StoredPurchaseExpenseBatchReceipt { return { ...receipt, businessDate: receipt.businessDate.toISOString() }; }
   private restoreBatchReceipt(value: unknown): PurchaseExpenseBatchReceipt { const stored = value as StoredPurchaseExpenseBatchReceipt; return { ...stored, businessDate: new Date(stored.businessDate) }; }
   private payload(request: PurchaseExpenseRequest) { return { kind: request.kind, settlementKind: request.settlementKind, categoryId: request.categoryId, supplierId: request.supplierId ?? null, supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, businessDate: request.businessDate.toISOString(), supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, grossAmount: request.grossAmount, isTaxable: request.isTaxable, assetWarrantyFollowUp: request.assetWarrantyFollowUp ?? false, allocations: request.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount, paymentMethod: item.paymentMethod ?? null })), notes: request.notes ?? null } as const; }
+  private amendmentSnapshot(document: { id: string; documentNumber: string; kind: FinanceOutflowDocumentKind; settlementKind: FinanceOutflowSettlementKind; supplierId: string | null; categoryId: string; supplierInvoiceNumber: string | null; supplierInvoiceMissingReason: string | null; businessDate: Date; supplierInvoiceDate: Date | null; grossAmount: Prisma.Decimal; netAmount: Prisma.Decimal; vatAmount: Prisma.Decimal; vatRateBasisPoints: number; assetWarrantyFollowUp: boolean; notes: string | null; journalEntryId: string; postingVersion: number; allocations: readonly { vaultId: string; grossAmount: Prisma.Decimal; paymentMethod: FinanceVaultPaymentMethod }[] }) {
+    return { documentId: document.id, documentNumber: document.documentNumber, kind: document.kind, settlementKind: document.settlementKind, supplierId: document.supplierId, categoryId: document.categoryId, supplierInvoiceNumber: document.supplierInvoiceNumber, supplierInvoiceMissingReason: document.supplierInvoiceMissingReason, businessDate: document.businessDate.toISOString(), supplierInvoiceDate: document.supplierInvoiceDate?.toISOString() ?? null, grossAmount: document.grossAmount.toFixed(4), netAmount: document.netAmount.toFixed(4), vatAmount: document.vatAmount.toFixed(4), vatRateBasisPoints: document.vatRateBasisPoints, assetWarrantyFollowUp: document.assetWarrantyFollowUp, notes: document.notes, journalEntryId: document.journalEntryId, postingVersion: document.postingVersion, allocations: document.allocations.map((item) => ({ vaultId: item.vaultId, grossAmount: item.grossAmount.toFixed(4), paymentMethod: item.paymentMethod })) } as const;
+  }
   private batchPayload(request: PurchaseExpenseBatchRequest) { return { businessDate: request.businessDate.toISOString(), notes: request.notes ?? null, items: request.items.map((item) => this.payload({ ...item, businessDate: request.businessDate })) } as const; }
   private employeeServiceCostPayload(request: IssueEmployeeServiceCostRequest) { return { serviceId: request.serviceId, businessDate: request.businessDate.toISOString(), grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations.map((allocation) => ({ vaultId: allocation.vaultId, grossAmount: allocation.grossAmount, paymentMethod: allocation.paymentMethod ?? null })), supplierInvoiceNumber: request.supplierInvoiceNumber ?? null, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason ?? null, supplierInvoiceDate: request.supplierInvoiceDate?.toISOString() ?? null, notes: request.notes ?? null } as const; }
   private recordedEmployeeServicePayload(request: RecordEmployeeServiceAndIssueCostRequest) { return { employeeId: request.employeeId, serviceType: request.serviceType, referenceNumber: request.referenceNumber ?? null, issueDate: request.issueDate?.toISOString() ?? null, expiryDate: request.expiryDate?.toISOString() ?? null, visaDurationMonths: request.visaDurationMonths ?? null, supplierId: request.supplierId, categoryId: request.categoryId, ...this.employeeServiceCostPayload({ serviceId: 'recorded-service', businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations, supplierInvoiceNumber: request.supplierInvoiceNumber, supplierInvoiceMissingReason: request.supplierInvoiceMissingReason, supplierInvoiceDate: request.supplierInvoiceDate, notes: request.notes }) } as const; }

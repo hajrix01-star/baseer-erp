@@ -41,6 +41,7 @@ export function DailySalesWorkspace({
   const [range, setRange] = useState(defaultBaseerPeriodRange);
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [permissionCodes, setPermissionCodes] = useState<string[]>([]);
+  const [ownerCanCorrect, setOwnerCanCorrect] = useState(false);
   const [closings, setClosings] = useState<Closing[]>([]);
   const [historyLimit, setHistoryLimit] = useState<number | null>(null);
   const [closingsHasMore, setClosingsHasMore] = useState(false);
@@ -85,6 +86,7 @@ export function DailySalesWorkspace({
     );
     setVaults(workspace.vaults);
     setPermissionCodes(workspace.permissionCodes);
+    setOwnerCanCorrect(workspace.ownerCanCorrect);
     setEntryDate(workspace.entryDate.businessDate);
     setClosings((currentClosings) => cursor ? [...currentClosings, ...workspace.closings] : workspace.closings);
     setHistoryLimit(workspace.historyLimit);
@@ -185,6 +187,7 @@ export function DailySalesWorkspace({
           body: JSON.stringify({
             ...entries[0],
             closingId: editing.closingId,
+            businessDate: form.businessDate,
             idempotencyKey: requestId(),
           }),
         });
@@ -244,9 +247,7 @@ export function DailySalesWorkspace({
   const canCreate =
     hasPermission("finance.daily_sales.create") ||
     hasPermission("finance.daily_sales.write");
-  const canCorrect =
-    hasPermission("finance.daily_sales.correct") ||
-    hasPermission("finance.daily_sales.write");
+  const canCorrect = ownerCanCorrect;
   const canReverse =
     hasPermission("finance.daily_sales.reverse") ||
     hasPermission("finance.daily_sales.write");

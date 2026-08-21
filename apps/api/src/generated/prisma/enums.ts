@@ -220,6 +220,58 @@ export const ReportRunStatus = {
 export type ReportRunStatus = (typeof ReportRunStatus)[keyof typeof ReportRunStatus]
 
 
+export const DecisionDataQualityStatus = {
+  READY: 'READY',
+  NO_DATA: 'NO_DATA',
+  INCOMPLETE: 'INCOMPLETE',
+  STALE: 'STALE',
+  UNAVAILABLE: 'UNAVAILABLE',
+  CONFLICTED: 'CONFLICTED'
+} as const
+
+export type DecisionDataQualityStatus = (typeof DecisionDataQualityStatus)[keyof typeof DecisionDataQualityStatus]
+
+
+export const DecisionEvidenceKind = {
+  OFFICIAL_FACT: 'OFFICIAL_FACT',
+  PROVIDER_FACT: 'PROVIDER_FACT',
+  RECORDED_CONTEXT: 'RECORDED_CONTEXT',
+  EXTRACTED_CLAIM: 'EXTRACTED_CLAIM',
+  HYPOTHESIS: 'HYPOTHESIS'
+} as const
+
+export type DecisionEvidenceKind = (typeof DecisionEvidenceKind)[keyof typeof DecisionEvidenceKind]
+
+
+export const DecisionVerificationStatus = {
+  UNVERIFIED: 'UNVERIFIED',
+  HUMAN_CONFIRMED: 'HUMAN_CONFIRMED',
+  SYSTEM_RECONCILED: 'SYSTEM_RECONCILED',
+  REJECTED: 'REJECTED',
+  NOT_APPLICABLE: 'NOT_APPLICABLE'
+} as const
+
+export type DecisionVerificationStatus = (typeof DecisionVerificationStatus)[keyof typeof DecisionVerificationStatus]
+
+
+export const DecisionContextEventStatus = {
+  PUBLISHED: 'PUBLISHED',
+  NEEDS_REVIEW: 'NEEDS_REVIEW',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type DecisionContextEventStatus = (typeof DecisionContextEventStatus)[keyof typeof DecisionContextEventStatus]
+
+
+export const DecisionAlertStatus = {
+  OPEN: 'OPEN',
+  ACKNOWLEDGED: 'ACKNOWLEDGED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type DecisionAlertStatus = (typeof DecisionAlertStatus)[keyof typeof DecisionAlertStatus]
+
+
 export const FinanceCashPerformanceEventKind = {
   SALES_COLLECTION: 'SALES_COLLECTION',
   PURCHASE_PAYMENT: 'PURCHASE_PAYMENT',

@@ -279,6 +279,7 @@ export type UserWhereInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
   createdFileMetadata?: Prisma.FileMetadataListRelationFilter
   createdJournalEntries?: Prisma.FinanceJournalEntryListRelationFilter
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionListRelationFilter
   createdReportRuns?: Prisma.ReportRunListRelationFilter
   createdReportDocuments?: Prisma.ReportDocumentListRelationFilter
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageListRelationFilter
@@ -306,6 +307,7 @@ export type UserOrderByWithRelationInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptOrderByRelationAggregateInput
   createdFileMetadata?: Prisma.FileMetadataOrderByRelationAggregateInput
   createdJournalEntries?: Prisma.FinanceJournalEntryOrderByRelationAggregateInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionOrderByRelationAggregateInput
   createdReportRuns?: Prisma.ReportRunOrderByRelationAggregateInput
   createdReportDocuments?: Prisma.ReportDocumentOrderByRelationAggregateInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageOrderByRelationAggregateInput
@@ -338,6 +340,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
   createdFileMetadata?: Prisma.FileMetadataListRelationFilter
   createdJournalEntries?: Prisma.FinanceJournalEntryListRelationFilter
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionListRelationFilter
   createdReportRuns?: Prisma.ReportRunListRelationFilter
   createdReportDocuments?: Prisma.ReportDocumentListRelationFilter
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageListRelationFilter
@@ -402,6 +405,7 @@ export type UserCreateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -428,6 +432,7 @@ export type UserUncheckedCreateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -454,6 +459,7 @@ export type UserUpdateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -480,6 +486,7 @@ export type UserUncheckedUpdateInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -824,6 +831,20 @@ export type UserUpdateOneRequiredWithoutCreatedJournalEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedJournalEntriesInput, Prisma.UserUpdateWithoutCreatedJournalEntriesInput>, Prisma.UserUncheckedUpdateWithoutCreatedJournalEntriesInput>
 }
 
+export type UserCreateNestedOneWithoutOutflowDocumentRevisionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedCreateWithoutOutflowDocumentRevisionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOutflowDocumentRevisionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOutflowDocumentRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedCreateWithoutOutflowDocumentRevisionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOutflowDocumentRevisionsInput
+  upsert?: Prisma.UserUpsertWithoutOutflowDocumentRevisionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOutflowDocumentRevisionsInput, Prisma.UserUpdateWithoutOutflowDocumentRevisionsInput>, Prisma.UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput>
+}
+
 export type UserCreateWithoutTenantInput = {
   id?: string
   loginNormalized: string
@@ -842,6 +863,7 @@ export type UserCreateWithoutTenantInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -867,6 +889,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -937,6 +960,7 @@ export type UserCreateWithoutTenantAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -962,6 +986,7 @@ export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1003,6 +1028,7 @@ export type UserUpdateWithoutTenantAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1028,6 +1054,7 @@ export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1052,6 +1079,7 @@ export type UserCreateWithoutMembershipsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -1077,6 +1105,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1118,6 +1147,7 @@ export type UserUpdateWithoutMembershipsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1143,6 +1173,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1168,6 +1199,7 @@ export type UserCreateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -1193,6 +1225,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1234,6 +1267,7 @@ export type UserUpdateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1259,6 +1293,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1284,6 +1319,7 @@ export type UserCreateWithoutAuditEventsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -1309,6 +1345,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1350,6 +1387,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1375,6 +1413,7 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1400,6 +1439,7 @@ export type UserCreateWithoutIdempotencyReceiptsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -1425,6 +1465,7 @@ export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1466,6 +1507,7 @@ export type UserUpdateWithoutIdempotencyReceiptsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1491,6 +1533,7 @@ export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1516,6 +1559,7 @@ export type UserCreateWithoutCreatedFileMetadataInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -1541,6 +1585,7 @@ export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -1582,6 +1627,7 @@ export type UserUpdateWithoutCreatedFileMetadataInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -1607,6 +1653,7 @@ export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -1633,6 +1680,7 @@ export type UserCreateWithoutCreatedReportRunsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
@@ -1658,6 +1706,7 @@ export type UserUncheckedCreateWithoutCreatedReportRunsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
@@ -1699,6 +1748,7 @@ export type UserUpdateWithoutCreatedReportRunsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
@@ -1724,6 +1774,7 @@ export type UserUncheckedUpdateWithoutCreatedReportRunsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
@@ -1749,6 +1800,7 @@ export type UserCreateWithoutCreatedReportDocumentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
@@ -1774,6 +1826,7 @@ export type UserUncheckedCreateWithoutCreatedReportDocumentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
@@ -1815,6 +1868,7 @@ export type UserUpdateWithoutCreatedReportDocumentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
@@ -1840,6 +1894,7 @@ export type UserUncheckedUpdateWithoutCreatedReportDocumentsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
@@ -1865,6 +1920,7 @@ export type UserCreateWithoutCashPerformanceCoverageActivationsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
@@ -1890,6 +1946,7 @@ export type UserUncheckedCreateWithoutCashPerformanceCoverageActivationsInput = 
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
@@ -1931,6 +1988,7 @@ export type UserUpdateWithoutCashPerformanceCoverageActivationsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
@@ -1956,6 +2014,7 @@ export type UserUncheckedUpdateWithoutCashPerformanceCoverageActivationsInput = 
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
@@ -1981,6 +2040,7 @@ export type UserCreateWithoutCashPerformanceHistoricalImportsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -2006,6 +2066,7 @@ export type UserUncheckedCreateWithoutCashPerformanceHistoricalImportsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -2047,6 +2108,7 @@ export type UserUpdateWithoutCashPerformanceHistoricalImportsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -2072,6 +2134,7 @@ export type UserUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -2096,6 +2159,7 @@ export type UserCreateWithoutCreatedJournalEntriesInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
@@ -2121,6 +2185,7 @@ export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
@@ -2162,6 +2227,7 @@ export type UserUpdateWithoutCreatedJournalEntriesInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -2187,6 +2253,127 @@ export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOutflowDocumentRevisionsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOutflowDocumentRevisionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedCreateWithoutOutflowDocumentRevisionsInput>
+}
+
+export type UserUpsertWithoutOutflowDocumentRevisionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedCreateWithoutOutflowDocumentRevisionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOutflowDocumentRevisionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOutflowDocumentRevisionsInput, Prisma.UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput>
+}
+
+export type UserUpdateWithoutOutflowDocumentRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -2226,6 +2413,7 @@ export type UserUpdateWithoutTenantInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
@@ -2251,6 +2439,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
   createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
   createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
@@ -2284,6 +2473,7 @@ export type UserCountOutputType = {
   idempotencyReceipts: number
   createdFileMetadata: number
   createdJournalEntries: number
+  outflowDocumentRevisions: number
   createdReportRuns: number
   createdReportDocuments: number
   cashPerformanceCoverageActivations: number
@@ -2298,6 +2488,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   idempotencyReceipts?: boolean | UserCountOutputTypeCountIdempotencyReceiptsArgs
   createdFileMetadata?: boolean | UserCountOutputTypeCountCreatedFileMetadataArgs
   createdJournalEntries?: boolean | UserCountOutputTypeCountCreatedJournalEntriesArgs
+  outflowDocumentRevisions?: boolean | UserCountOutputTypeCountOutflowDocumentRevisionsArgs
   createdReportRuns?: boolean | UserCountOutputTypeCountCreatedReportRunsArgs
   createdReportDocuments?: boolean | UserCountOutputTypeCountCreatedReportDocumentsArgs
   cashPerformanceCoverageActivations?: boolean | UserCountOutputTypeCountCashPerformanceCoverageActivationsArgs
@@ -2360,6 +2551,13 @@ export type UserCountOutputTypeCountCreatedJournalEntriesArgs<ExtArgs extends ru
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountOutflowDocumentRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceOutflowDocumentRevisionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountCreatedReportRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReportRunWhereInput
 }
@@ -2413,6 +2611,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   idempotencyReceipts?: boolean | Prisma.User$idempotencyReceiptsArgs<ExtArgs>
   createdFileMetadata?: boolean | Prisma.User$createdFileMetadataArgs<ExtArgs>
   createdJournalEntries?: boolean | Prisma.User$createdJournalEntriesArgs<ExtArgs>
+  outflowDocumentRevisions?: boolean | Prisma.User$outflowDocumentRevisionsArgs<ExtArgs>
   createdReportRuns?: boolean | Prisma.User$createdReportRunsArgs<ExtArgs>
   createdReportDocuments?: boolean | Prisma.User$createdReportDocumentsArgs<ExtArgs>
   cashPerformanceCoverageActivations?: boolean | Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>
@@ -2477,6 +2676,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   idempotencyReceipts?: boolean | Prisma.User$idempotencyReceiptsArgs<ExtArgs>
   createdFileMetadata?: boolean | Prisma.User$createdFileMetadataArgs<ExtArgs>
   createdJournalEntries?: boolean | Prisma.User$createdJournalEntriesArgs<ExtArgs>
+  outflowDocumentRevisions?: boolean | Prisma.User$outflowDocumentRevisionsArgs<ExtArgs>
   createdReportRuns?: boolean | Prisma.User$createdReportRunsArgs<ExtArgs>
   createdReportDocuments?: boolean | Prisma.User$createdReportDocumentsArgs<ExtArgs>
   cashPerformanceCoverageActivations?: boolean | Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>
@@ -2501,6 +2701,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     idempotencyReceipts: Prisma.$IdempotencyReceiptPayload<ExtArgs>[]
     createdFileMetadata: Prisma.$FileMetadataPayload<ExtArgs>[]
     createdJournalEntries: Prisma.$FinanceJournalEntryPayload<ExtArgs>[]
+    outflowDocumentRevisions: Prisma.$FinanceOutflowDocumentRevisionPayload<ExtArgs>[]
     createdReportRuns: Prisma.$ReportRunPayload<ExtArgs>[]
     createdReportDocuments: Prisma.$ReportDocumentPayload<ExtArgs>[]
     cashPerformanceCoverageActivations: Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs>[]
@@ -2921,6 +3122,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   idempotencyReceipts<T extends Prisma.User$idempotencyReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$idempotencyReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IdempotencyReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdFileMetadata<T extends Prisma.User$createdFileMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdFileMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdJournalEntries<T extends Prisma.User$createdJournalEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdJournalEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceJournalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  outflowDocumentRevisions<T extends Prisma.User$outflowDocumentRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$outflowDocumentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdReportRuns<T extends Prisma.User$createdReportRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdReportRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdReportDocuments<T extends Prisma.User$createdReportDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdReportDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cashPerformanceCoverageActivations<T extends Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3509,6 +3711,30 @@ export type User$createdJournalEntriesArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.FinanceJournalEntryScalarFieldEnum | Prisma.FinanceJournalEntryScalarFieldEnum[]
+}
+
+/**
+ * User.outflowDocumentRevisions
+ */
+export type User$outflowDocumentRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceOutflowDocumentRevision
+   */
+  select?: Prisma.FinanceOutflowDocumentRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceOutflowDocumentRevision
+   */
+  omit?: Prisma.FinanceOutflowDocumentRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceOutflowDocumentRevisionInclude<ExtArgs> | null
+  where?: Prisma.FinanceOutflowDocumentRevisionWhereInput
+  orderBy?: Prisma.FinanceOutflowDocumentRevisionOrderByWithRelationInput | Prisma.FinanceOutflowDocumentRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceOutflowDocumentRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceOutflowDocumentRevisionScalarFieldEnum | Prisma.FinanceOutflowDocumentRevisionScalarFieldEnum[]
 }
 
 /**

@@ -200,21 +200,30 @@ export class DailySalesWriteService {
       throw new ConflictException(
         "Only an active daily sales closing can be corrected.",
       );
-    await this.posting.assertOpenPeriodAndNotFuture(
-      transaction,
-      context,
-      closing.businessDate,
-    );
+    if (request.businessDate < closing.businessDate)
+      throw new ConflictException("A sales correction cannot move a posted closing backwards in time.");
+    await this.posting.assertOpenPeriodAndNotFuture(transaction, context, closing.businessDate);
+    await this.posting.assertOpenPeriodAndNotFuture(transaction, context, request.businessDate);
+    await this.support.lockBusinessDate(transaction, context, request.businessDate);
+    await this.support.lockScope(transaction, context, request.businessDate, closing.scope);
+    await this.support.assertScopeCombination(transaction, context, request.businessDate, closing.scope);
+    if (request.businessDate.getTime() !== closing.businessDate.getTime()) {
+      const occupied = await transaction.financeDailySalesClosing.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: request.businessDate, scope: closing.scope, status: FinanceDailySalesClosingStatus.POSTED },
+        select: { id: true },
+      });
+      if (occupied) throw new ConflictException("A sales closing already exists for the selected date and scope.");
+    }
 
     const fields = await this.posting.validateFields(transaction, context, {
       ...request,
-      businessDate: closing.businessDate,
+      businessDate: request.businessDate,
       scope: closing.scope,
     });
     await this.posting.assertOperationalDayAllowsClosing(
       transaction,
       context,
-      closing.businessDate,
+      request.businessDate,
     );
     const accounting = await this.posting.resolveAccounting(
       transaction,
@@ -255,6 +264,7 @@ export class DailySalesWriteService {
     await transaction.financeDailySalesClosing.update({
       where: { id: closing.id },
       data: {
+        businessDate: request.businessDate,
         postingVersion,
         grossAmount: fields.grossAmount,
         netAmount: accounting.netAmount,
@@ -281,14 +291,20 @@ export class DailySalesWriteService {
     await this.cashEvents.recordInTransaction(transaction, context, {
       kind: FinanceCashPerformanceEventKind.SALES_COLLECTION,
       direction: FinanceCashPerformanceDirection.INFLOW,
-      businessDate: closing.businessDate, grossAmount: fields.grossAmount, netAmount: accounting.netAmount, vatAmount: accounting.vatAmount,
+      businessDate: request.businessDate, grossAmount: fields.grossAmount, netAmount: accounting.netAmount, vatAmount: accounting.vatAmount,
       sourceType: 'daily_sales_closing', sourceId: closingId, sourceJournalEntryId: journal.journalEntryId, ledgerRevision: journal.ledgerRevision,
       destinations: fields.allocations.map((allocation) => ({ vaultId: allocation.vaultId, amount: allocation.grossAmount.toFixed(4), paymentMethod: allocation.paymentMethod })),
     });
     await this.projections.rebuildInTransaction(transaction, context, {
-      businessDate: closing.businessDate,
+      businessDate: request.businessDate,
       requestId,
     });
+    if (request.businessDate.getTime() !== closing.businessDate.getTime()) {
+      await this.projections.rebuildInTransaction(transaction, context, {
+        businessDate: closing.businessDate,
+        requestId,
+      });
+    }
     const receipt = this.support.receipt({
       closingId,
       documentNumber: closing.documentNumber,

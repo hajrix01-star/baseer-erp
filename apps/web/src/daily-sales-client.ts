@@ -66,6 +66,7 @@ export type DailySalesWorkspaceReceipt = {
   fromBusinessDate: string;
   toBusinessDate: string;
   permissionCodes: string[];
+  ownerCanCorrect: boolean;
   entryDate: DailySalesEntryDate;
   vaults: Vault[];
   historyLimit: number;
