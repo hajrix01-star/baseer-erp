@@ -80,6 +80,8 @@ button {
 }
 .topbar,
 .launcher-topbar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -227,6 +229,8 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
     radial-gradient(circle at 88% 8%, #e4f4eb 0, transparent 27%), var(--canvas);
 }
 .launcher-page__content {
+  position: relative;
+  z-index: 1;
   width: min(1060px, 100%);
   margin: 0 auto;
   padding: clamp(44px, 7vw, 88px) clamp(20px, 4vw, 48px) 34px;
@@ -458,14 +462,15 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
 .launcher-background-picker button:hover,.launcher-background-picker button:focus-visible,.launcher-background-picker button.is-selected { background: #edf6f0; outline: 0; }
 .launcher-background-picker b { color: var(--brand); opacity: 0; }.launcher-background-picker .is-selected b { opacity: 1; }
 .launcher-background-swatch { width: 30px; height: 30px; border: 1px solid rgb(16 40 29 / 12%); border-radius: 8px; background-position: center; background-size: cover; }
-.launcher-background-swatch--emerald-light { background-image: url('/launcher-backgrounds/emerald-light.png'); }.launcher-background-swatch--emerald-dark { background-image: url('/launcher-backgrounds/emerald-dark.png'); }.launcher-background-swatch--architectural-light { background-image: url('/launcher-backgrounds/architectural-light.png'); }.launcher-background-swatch--desert-night { background-image: url('/launcher-backgrounds/desert-night.png'); }.launcher-background-swatch--saudi-heritage { background-image: url('/launcher-backgrounds/saudi-heritage.png'); }.launcher-background-swatch--emerald-glass { background-image: url('/launcher-backgrounds/emerald-glass.png'); }
+.launcher-background-swatch--emerald-light { background-image: url('/launcher-backgrounds/emerald-light.png?v=emerald-redesign-3'); }.launcher-background-swatch--emerald-dark { background-image: url('/launcher-backgrounds/emerald-dark.png?v=clean-logo-2'); }.launcher-background-swatch--architectural-light { background-image: url('/launcher-backgrounds/architectural-light.png?v=clean-logo-2'); }.launcher-background-swatch--desert-night { background-image: url('/launcher-backgrounds/desert-night.png?v=clean-logo-2'); }.launcher-background-swatch--saudi-heritage { background-image: url('/launcher-backgrounds/saudi-heritage.png?v=clean-logo-2'); }.launcher-background-swatch--saudi-heritage-burned { background-image: url('/launcher-backgrounds/saudi-heritage-burned.png?v=clean-logo-2'); }.launcher-background-swatch--emerald-glass { background-image: url('/launcher-backgrounds/emerald-glass.png?v=clean-logo-2'); }
 
-body[data-launcher-background="emerald-light"] .launcher-page { background: url('/launcher-backgrounds/emerald-light.png') center / cover fixed; }
-body[data-launcher-background="emerald-dark"] .launcher-page { background: url('/launcher-backgrounds/emerald-dark.png') center / cover fixed; }
-body[data-launcher-background="architectural-light"] .launcher-page { background: url('/launcher-backgrounds/architectural-light.png') center / cover fixed; }
-body[data-launcher-background="desert-night"] .launcher-page { background: url('/launcher-backgrounds/desert-night.png') center / cover fixed; }
-body[data-launcher-background="saudi-heritage"] .launcher-page { background: url('/launcher-backgrounds/saudi-heritage.png') center / cover fixed; }
-body[data-launcher-background="emerald-glass"] .launcher-page { background: url('/launcher-backgrounds/emerald-glass.png') center / cover fixed; }
+body[data-launcher-background="emerald-light"] .launcher-page { background: url('/launcher-backgrounds/emerald-light.png?v=emerald-redesign-3') center / cover fixed; }
+body[data-launcher-background="emerald-dark"] .launcher-page { background: url('/launcher-backgrounds/emerald-dark.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="architectural-light"] .launcher-page { background: url('/launcher-backgrounds/architectural-light.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="desert-night"] .launcher-page { background: url('/launcher-backgrounds/desert-night.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="saudi-heritage"] .launcher-page { background: url('/launcher-backgrounds/saudi-heritage.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="saudi-heritage-burned"] .launcher-page { background: url('/launcher-backgrounds/saudi-heritage-burned.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="emerald-glass"] .launcher-page { background: url('/launcher-backgrounds/emerald-glass.png?v=clean-logo-2') center / cover fixed; }
 body[data-launcher-background="emerald-dark"] .launcher-page__content { margin-top: 28px; margin-bottom: 28px; border: 1px solid rgb(121 223 167 / 24%); border-radius: 28px; background: rgb(5 31 22 / 76%); box-shadow: 0 25px 70px rgb(0 0 0 / 30%); backdrop-filter: blur(14px); }
 body[data-launcher-background="emerald-dark"] .launcher-page__heading h1,body[data-launcher-background="emerald-dark"] .launcher-page__heading > p:last-child,body[data-launcher-background="emerald-dark"] .recent h2 { color: #edf8f1; }
 body[data-launcher-background="desert-night"] .launcher-page__content { margin-top: 28px; margin-bottom: 28px; border: 1px solid rgb(116 191 224 / 25%); border-radius: 28px; background: rgb(4 23 53 / 72%); box-shadow: 0 25px 70px rgb(0 0 0 / 34%); backdrop-filter: blur(14px); }body[data-launcher-background="desert-night"] .launcher-page__heading h1,body[data-launcher-background="desert-night"] .launcher-page__heading > p:last-child,body[data-launcher-background="desert-night"] .recent h2 { color: #f2f8ff; }
@@ -473,12 +478,13 @@ body[data-launcher-background="desert-night"] .launcher-page__content { margin-t
 @media (max-width: 800px) { .module-card { grid-template-columns: 58px minmax(0, 1fr); min-height: 124px; }.module-icon { width: 56px; height: 56px; border-radius: 16px; }.module-icon svg { width: 31px; height: 31px; } }
 
 /* Continue the selected launcher background into the active module workspace. */
-body[data-launcher-background="emerald-light"] .workspace { background: linear-gradient(rgb(246 251 248 / 68%), rgb(246 251 248 / 72%)), url('/launcher-backgrounds/emerald-light.png') center / cover fixed; }
-body[data-launcher-background="emerald-dark"] .workspace { background: linear-gradient(rgb(3 24 17 / 42%), rgb(3 24 17 / 52%)), url('/launcher-backgrounds/emerald-dark.png') center / cover fixed; }
-body[data-launcher-background="architectural-light"] .workspace { background: linear-gradient(rgb(251 252 251 / 66%), rgb(251 252 251 / 70%)), url('/launcher-backgrounds/architectural-light.png') center / cover fixed; }
-body[data-launcher-background="desert-night"] .workspace { background: linear-gradient(rgb(3 20 49 / 40%), rgb(3 20 49 / 52%)), url('/launcher-backgrounds/desert-night.png') center / cover fixed; }
-body[data-launcher-background="saudi-heritage"] .workspace { background: linear-gradient(rgb(255 247 232 / 58%), rgb(255 247 232 / 62%)), url('/launcher-backgrounds/saudi-heritage.png') center / cover fixed; }
-body[data-launcher-background="emerald-glass"] .workspace { background: linear-gradient(rgb(252 254 252 / 58%), rgb(252 254 252 / 62%)), url('/launcher-backgrounds/emerald-glass.png') center / cover fixed; }
+body[data-launcher-background="emerald-light"] .workspace { background: linear-gradient(rgb(246 251 248 / 68%), rgb(246 251 248 / 72%)), url('/launcher-backgrounds/emerald-light.png?v=emerald-redesign-3') center / cover fixed; }
+body[data-launcher-background="emerald-dark"] .workspace { background: linear-gradient(rgb(3 24 17 / 42%), rgb(3 24 17 / 52%)), url('/launcher-backgrounds/emerald-dark.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="architectural-light"] .workspace { background: linear-gradient(rgb(251 252 251 / 66%), rgb(251 252 251 / 70%)), url('/launcher-backgrounds/architectural-light.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="desert-night"] .workspace { background: linear-gradient(rgb(3 20 49 / 40%), rgb(3 20 49 / 52%)), url('/launcher-backgrounds/desert-night.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="saudi-heritage"] .workspace { background: linear-gradient(rgb(255 247 232 / 58%), rgb(255 247 232 / 62%)), url('/launcher-backgrounds/saudi-heritage.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="saudi-heritage-burned"] .workspace { background: linear-gradient(rgb(255 247 232 / 58%), rgb(255 247 232 / 62%)), url('/launcher-backgrounds/saudi-heritage-burned.png?v=clean-logo-2') center / cover fixed; }
+body[data-launcher-background="emerald-glass"] .workspace { background: linear-gradient(rgb(252 254 252 / 58%), rgb(252 254 252 / 62%)), url('/launcher-backgrounds/emerald-glass.png?v=clean-logo-2') center / cover fixed; }
 body[data-launcher-background] .module-page { background: transparent; }
 body[data-launcher-background="emerald-dark"] .module-page,body[data-launcher-background="emerald-dark"] .module-page .page-heading h1 { color: #f4fbf6; }
 body[data-launcher-background="emerald-dark"] .module-page .page-breadcrumb { color: #aee8c9; }
@@ -486,12 +492,13 @@ body[data-launcher-background="desert-night"] .module-page,body[data-launcher-ba
 body[data-launcher-background="desert-night"] .module-page .page-breadcrumb { color: #82d7f5; }
 
 /* The header uses the same fixed background image as the active view, so it reads as one continuous surface. */
-body[data-launcher-background="emerald-light"] { --active-shell-image: url('/launcher-backgrounds/emerald-light.png'); --active-shell-tint: rgb(255 255 255 / 82%); }
-body[data-launcher-background="emerald-dark"] { --active-shell-image: url('/launcher-backgrounds/emerald-dark.png'); --active-shell-tint: rgb(3 27 19 / 82%); }
-body[data-launcher-background="architectural-light"] { --active-shell-image: url('/launcher-backgrounds/architectural-light.png'); --active-shell-tint: rgb(255 255 255 / 84%); }
-body[data-launcher-background="desert-night"] { --active-shell-image: url('/launcher-backgrounds/desert-night.png'); --active-shell-tint: rgb(3 20 49 / 82%); }
-body[data-launcher-background="saudi-heritage"] { --active-shell-image: url('/launcher-backgrounds/saudi-heritage.png'); --active-shell-tint: rgb(255 246 227 / 84%); }
-body[data-launcher-background="emerald-glass"] { --active-shell-image: url('/launcher-backgrounds/emerald-glass.png'); --active-shell-tint: rgb(255 255 255 / 82%); }
+body[data-launcher-background="emerald-light"] { --active-shell-image: url('/launcher-backgrounds/emerald-light.png?v=emerald-redesign-3'); --active-shell-tint: rgb(255 255 255 / 82%); }
+body[data-launcher-background="emerald-dark"] { --active-shell-image: url('/launcher-backgrounds/emerald-dark.png?v=clean-logo-2'); --active-shell-tint: rgb(3 27 19 / 82%); }
+body[data-launcher-background="architectural-light"] { --active-shell-image: url('/launcher-backgrounds/architectural-light.png?v=clean-logo-2'); --active-shell-tint: rgb(255 255 255 / 84%); }
+body[data-launcher-background="desert-night"] { --active-shell-image: url('/launcher-backgrounds/desert-night.png?v=clean-logo-2'); --active-shell-tint: rgb(3 20 49 / 82%); }
+body[data-launcher-background="saudi-heritage"] { --active-shell-image: url('/launcher-backgrounds/saudi-heritage.png?v=clean-logo-2'); --active-shell-tint: rgb(255 246 227 / 84%); }
+body[data-launcher-background="saudi-heritage-burned"] { --active-shell-image: url('/launcher-backgrounds/saudi-heritage-burned.png?v=clean-logo-2'); --active-shell-tint: rgb(255 246 227 / 84%); }
+body[data-launcher-background="emerald-glass"] { --active-shell-image: url('/launcher-backgrounds/emerald-glass.png?v=clean-logo-2'); --active-shell-tint: rgb(255 255 255 / 82%); }
 body[data-launcher-background] :is(.topbar, .launcher-topbar) { border-top: 1px solid rgb(255 255 255 / 40%); border-bottom-color: rgb(255 255 255 / 26%); background-image: linear-gradient(var(--active-shell-tint), var(--active-shell-tint)), var(--active-shell-image); background-position: center, center; background-size: cover, cover; background-attachment: fixed, fixed; box-shadow: inset 0 1px 0 rgb(255 255 255 / 34%), 0 10px 28px rgb(5 25 19 / 10%); backdrop-filter: blur(26px) saturate(1.22); }
 body[data-launcher-background="emerald-dark"] :is(.topbar, .launcher-topbar),body[data-launcher-background="desert-night"] :is(.topbar, .launcher-topbar) { color: #f5fbf7; }
 body[data-launcher-background="emerald-dark"] :is(.topbar, .launcher-topbar) :is(.text-button, .theme-button),body[data-launcher-background="desert-night"] :is(.topbar, .launcher-topbar) :is(.text-button, .theme-button) { color: #f5fbf7; }

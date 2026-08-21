@@ -28,7 +28,7 @@ export function BaseerLogin({ language, onLanguage, themeControl }: Props) {
     event.preventDefault(); setLoading(true); setError("");
     try {
       const signIn = await fetch(`${api}/auth/sign-in`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ login: login.trim(), password }) });
-      if (!signIn.ok) throw new Error();
+      if (!signIn.ok) throw new Error(text.failed);
       const session = await signIn.json() as { accessToken: string };
       const result = await fetch(`${api}/companies/available`, { headers: { Authorization: `Bearer ${session.accessToken}` } });
       if (!result.ok) throw new Error();
@@ -36,7 +36,7 @@ export function BaseerLogin({ language, onLanguage, themeControl }: Props) {
       const company = available[0];
       if (!company) { setError(text.noCompanies); return; }
       choose(session.accessToken, company.id);
-    } catch { setError(text.failed); }
+    } catch (error) { setError(error instanceof Error && error.message ? error.message : text.failed); }
     finally { setLoading(false); }
   };
   return <main className="launcher-page" style={{ minHeight: "100dvh" }}>

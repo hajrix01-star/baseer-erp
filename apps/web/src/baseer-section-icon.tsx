@@ -4,7 +4,7 @@ type Glyph = "dashboard" | "target" | "bell" | "activity" | "trend" | "cart" | "
 
 const sections: Record<ModuleId, readonly Glyph[]> = {
   command: ["dashboard", "target", "bell", "activity"],
-  operations: ["dashboard", "trend", "cart", "truck", "boxes", "clipboard"],
+  operations: ["dashboard", "trend", "cart", "truck", "boxes", "clipboard", "receipt", "clipboard", "chart"],
   finance: ["dashboard", "receipt", "bank", "wallet", "ledger", "ledger"],
   hr: ["dashboard", "users", "calendar", "wallet", "hand", "badge"],
   reports: ["dashboard", "chart", "tax", "tax", "print"],

@@ -1,0 +1,9 @@
+.operations-purchase-summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.operations-purchase-summary h3, .operations-purchase-summary p { margin: 0; }
+.operations-purchase-request-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .75rem; }
+.operations-purchase-receipt-line { display: grid; grid-template-columns: minmax(12rem, 2fr) repeat(3, minmax(6rem, 1fr)) minmax(8rem, 1fr); align-items: end; gap: .6rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.operations-purchase-receipt-line > div { display: grid; gap: .25rem; }.operations-purchase-receipt-line small { color: var(--muted); }
+@media (max-width: 780px) { .operations-purchase-receipt-line { grid-template-columns: 1fr 1fr; } .operations-purchase-receipt-line > div { grid-column: 1 / -1; } }
+.operations-row-link { display: grid; gap: .15rem; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: inherit; }
+.operations-row-link:hover strong { color: #08744d; text-decoration: underline; text-underline-offset: .18rem; }
+.operations-row-link:focus-visible { outline: 2px solid #08744d; outline-offset: .25rem; border-radius: .25rem; }

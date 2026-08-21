@@ -28,3 +28,12 @@ export const financeCopy = defineLocalizedCopy({
 export function financeText(language: BaseerLanguage) {
   return financeCopy[language];
 }
+
+const outflowBatchEntryCopy = defineLocalizedCopy({
+  ar: { assetWarrantyFollowUp: "متابعة أصل أو ضمان" },
+  en: { assetWarrantyFollowUp: "Asset or warranty follow-up" },
+});
+
+export function outflowBatchEntryText(language: BaseerLanguage) {
+  return outflowBatchEntryCopy[language];
+}

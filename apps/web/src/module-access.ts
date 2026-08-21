@@ -25,6 +25,14 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     2: ["finance.purchase_expense.read", "finance.purchase_expense.create"],
     3: ["finance.purchase_expense.read", "finance.purchase_expense.create", "finance.loans.read", "finance.loans.write"],
     4: ["finance.suppliers.read"],
+    5: ["operations.catalog.manage"],
+    6: ["operations.catalog.manage"],
+    7: ["operations.internal_registration.create", "operations.internal_registration.read"],
+    // Catalog managers already own the operational management area. Keep this
+    // discoverability rule aligned with section 6 while the API remains the
+    // authority for the individual materials/custody report projections.
+    8: ["operations.catalog.manage", "operations.purchase_request.read", "operations.custody.read"],
+    9: ["operations.assets.read"],
   },
   finance: {
     0: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
@@ -32,6 +40,11 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     2: ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"],
     3: ["finance.configuration.read"],
     4: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
+  },
+  reports: {
+    1: ["reports.read"],
+    2: ["reports.read"],
+    4: ["reports.read"],
   },
   hr: {
     // System company-manager roles are upgraded by the paired data migration.
