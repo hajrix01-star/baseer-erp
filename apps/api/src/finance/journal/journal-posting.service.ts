@@ -13,16 +13,14 @@ import {
   Prisma,
 } from '../../generated/prisma/client.js';
 import { FinancePeriodService } from '../finance-period.service.js';
+import {
+  normalizeJournalLines,
+  type JournalPostingLine,
+} from './journal-line-normalization.js';
+
+export type { JournalPostingLine } from './journal-line-normalization.js';
 
 const JOURNAL_REVERSAL_SOURCE_TYPE = 'journal_reversal';
-const MAX_DECIMAL_18_4 = new Prisma.Decimal('99999999999999.9999');
-
-export type JournalPostingLine = Readonly<{
-  accountId: string;
-  debitAmount?: string;
-  creditAmount?: string;
-  description?: string;
-}>;
 
 export type PostJournalEntryInput = Readonly<{
   tenantId: string;
@@ -65,7 +63,7 @@ export class JournalPostingService {
     const sourceType = this.requiredText(input.sourceType, 'A journal source type is required.', 80);
     const sourceReference = this.requiredText(input.sourceReference, 'A journal source reference is required.', 160);
     const requestId = this.requiredText(input.requestId, 'A request identifier is required.', 120);
-    const normalizedLines = this.normalizeLines(input.lines);
+    const normalizedLines = normalizeJournalLines(input.lines);
     const fiscalPeriodId = await this.periods.assertExactlyOneOpenPeriodForDate(transaction, input);
 
     await transaction.$executeRaw`
@@ -254,31 +252,6 @@ export class JournalPostingService {
     return receipt;
   }
 
-  private normalizeLines(lines: readonly JournalPostingLine[]): Array<{
-    accountId: string;
-    debitAmount: Prisma.Decimal;
-    creditAmount: Prisma.Decimal;
-    description?: string;
-  }> {
-    if (lines.length < 2) throw new BadRequestException('A journal entry must contain at least two lines.');
-    const normalized = lines.map((line) => {
-      const accountId = this.requiredText(line.accountId, 'Every journal line needs an account.', 36);
-      const debitAmount = this.decimalAmount(line.debitAmount);
-      const creditAmount = this.decimalAmount(line.creditAmount);
-      if ((debitAmount.gt(0) && creditAmount.gt(0)) || (debitAmount.eq(0) && creditAmount.eq(0))) {
-        throw new BadRequestException('Every journal line must contain exactly one positive debit or credit amount.');
-      }
-      const description = this.optionalText(line.description, 1_000);
-      return { accountId, debitAmount, creditAmount, ...(description ? { description } : {}) };
-    });
-    const totalDebit = normalized.reduce((sum, line) => sum.plus(line.debitAmount), new Prisma.Decimal(0));
-    const totalCredit = normalized.reduce((sum, line) => sum.plus(line.creditAmount), new Prisma.Decimal(0));
-    if (!totalDebit.eq(totalCredit) || totalDebit.lte(0)) {
-      throw new BadRequestException('Journal debits and credits must balance to a positive amount.');
-    }
-    return normalized;
-  }
-
   private async assertActiveAccounts(
     transaction: Prisma.TransactionClient,
     tenantId: string,
@@ -357,19 +330,6 @@ export class JournalPostingService {
         update: { debitAmount: { increment: amount.debitAmount }, creditAmount: { increment: amount.creditAmount } },
       }),
     ]));
-  }
-
-  private decimalAmount(value: string | undefined): Prisma.Decimal {
-    let amount: Prisma.Decimal;
-    try {
-      amount = new Prisma.Decimal(value ?? '0');
-    } catch {
-      throw new BadRequestException('Journal amounts must be valid decimal values.');
-    }
-    if (!amount.isFinite() || amount.isNegative() || (amount.decimalPlaces() ?? 0) > 4 || amount.gt(MAX_DECIMAL_18_4)) {
-      throw new BadRequestException('Journal amounts must be non-negative decimal values with at most four places.');
-    }
-    return amount;
   }
 
   private requiredText(value: string, message: string, maximumLength: number): string {

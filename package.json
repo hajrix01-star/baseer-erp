@@ -11,6 +11,7 @@
                     "check:architecture":  "node scripts/check-architecture.mjs",
                     "verify:local-database": "node scripts/verify-local-database.mjs",
                     "verify:auth-throttling": "npm run build --workspace @baseer-erp/api && node scripts/run-auth-throttling-verification.mjs",
+                    "verify:journal-properties": "npm run build --workspace @baseer-erp/api && node apps/api/dist/finance/journal/journal-line-normalization.property-verification.js",
                     "check:prisma-advisory-status": "node scripts/check-prisma-advisory-status.mjs",
                     "check:permissions":  "node scripts/check-permission-catalog.mjs",
                     "check:ai-gate-b":  "node scripts/check-ai-gate-b.mjs",
