@@ -89,6 +89,37 @@
 | تقارير العمليات | التقارير التشغيلية ومصادرها |
 | الأصول والضمان | التسجيل، الضمان، المتابعة |
 
+#### سجل إغلاق العمليات
+
+**الحالة:** `Closed` — 2026-08-22، بقبول المالك.
+
+**مرجع التنفيذ القابل لإعادة التشغيل:** `c53ba7d`، ويشمل سلسلة التنفيذ
+`260c78f` و`d62c775` و`69f91db` وما قبلها من تحويلات العمليات المسجلة في
+الـmanifest. سجل الإغلاق نفسه محفوظ في commit التوثيق الذي يحتوي هذه الفقرة.
+
+- الجرد المركزي: `unclassified=0` و`staleManifestTargets=0`؛ كل Forms وSelectors
+  وDates وTables وQueries الخاصة بالعمليات تحمل قراراً نهائياً.
+- المتصفح: مجموعة Playwright الكاملة نجحت `71 passed` مع `1 intentional skip`
+  على desktop وmobile، وتشمل العربية/الإنجليزية، RTL/LTR، النماذج، التواريخ،
+  paging الخادمي وعزل طلبات التقارير والكتالوج.
+- قاعدة البيانات: `verify:operations-purchase-cycle` نجح في 12 نطاقاً:
+  cash، custody، bank transfer، inventory، materials report، custody report،
+  owner correction، recipe، internal registration، inventory consumption،
+  catalog filtering وcatalog cursor scope.
+- بوابات الإصدار: typecheck/build وarchitecture وlocalization وdialog وfinancial
+  boundaries وproduction dependency audit ناجحة. الميزانية: startup JS
+  `243,994/250,000 B`، أكبر route JS `81,264/85,000 B`، startup CSS
+  `54,162/58,000 B`، أكبر route CSS `12,908/16,000 B`، وDataGrid interaction
+  `31,593/50,000 B`.
+- جداول الكتالوج والتنفيذ وتقرير المواد تستخدم paging/filters خادمية وعقود cursor
+  مقيدة بالشركة وبسياق المرشح/الفترة. لا يوجد تجميع مالي من صفحات جزئية في
+  المتصفح.
+- تبقى جداول الوحدات، تقرير التسجيل الداخلي، وشهور العهدة القصيرة (حد العقد
+  240 شهراً) `DataTable` بقرار **خفيف مقصود**؛ ليست legacy ولا عملاً مؤجلاً.
+- لا يفتح هذا الإغلاق رسملة الأصول أو الإهلاك أو التكاملات الخارجية أو Noorix أو
+  التقارير المالية الرسمية؛ هذه نطاقات مستقلة وليست بقايا من تحول مكتبات
+  العمليات.
+
 ### 5.2 الموارد البشرية
 
 | القسم | التبويبات/المسارات التي تدخل الجرد |

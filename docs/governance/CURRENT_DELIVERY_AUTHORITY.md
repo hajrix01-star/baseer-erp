@@ -15,8 +15,9 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer is in **Operations Core verification and owner-acceptance**, not final
-delivery or general production readiness.
+Baseer has **closed Operations Core locally, including its library migration**,
+and the next active transformation scope is Human Resources library-migration
+closure. This is not final delivery or general production readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
 Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
@@ -34,11 +35,16 @@ permissions, audit and acceptance evidence.
 It excludes asset capitalization/depreciation/disposal, automatic financial
 posting, public attachments, bank connectivity, external providers, Noorix
 import/cutover, formal reports/P&L and any unapproved financial policy. Reports
-remain a separate candidate until Operations is accepted or returned.
+remain a separately governed candidate after Operations closure.
 
-Technical verification for this scope passed on 2026-08-22; the commands and
-remaining owner browser acceptance are recorded in
+Technical verification, consolidated browser evidence and owner acceptance for
+this scope passed on 2026-08-22 and are recorded in
 [Operations Core verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md).
+The reproducible implementation reference is `c53ba7d`: full Playwright reports
+`71 passed` and `1 intentional skip`; the Operations DB verifier covers 12
+scopes; the migration inventory reports zero unclassified and stale targets.
+The intentional bounded tables documented in the closure plan are final light
+primitives, not pending migration.
 
 ## Active cross-cutting enablement — 2026-08-22
 

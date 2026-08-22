@@ -1,15 +1,15 @@
 # BASEER ERP Module Delivery Register
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-22
 **Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
 
 | Field | Value |
 | --- | --- |
-| Active work | **Operations Core — verification and owner acceptance**: catalogue, recipes/conversions, purchase request/receipt, inventory/custody, internal registration and operational Assets & Warranty Gate A. UI Platform Enablement remains an ongoing cross-cutting authority, not a competing business scope. |
-| Open owner acceptance | Operations Core requires its consolidated browser and data-integrity acceptance. Reports remains a separate candidate. |
-| Next decision gate | تشغيل بوابات Operations من revision محدد، ثم قبول المالك لتدفقات المستخدم. الإنتاج وNoorix والتقارير الرسمية تبقى بوابات منفصلة. |
+| Active work | **Human Resources — library-migration closure** is the next module in the approved centralized sequence. Operations Core and its library migration are closed locally. UI Platform Enablement remains an ongoing cross-cutting authority, not a competing business scope. |
+| Open owner acceptance | No Operations library-migration acceptance remains. Production, Noorix and official reporting keep their independent gates. |
+| Next decision gate | جرد HR من الـmanifest، ثم تنفيذ مراحله الثلاث وإغلاق كل أقسامه عبر المتصفح قبل الانتقال إلى المالية. |
 | Explicitly deferred | Noorix import/cutover, production release, bank reconciliation, cash count/handover accounting, transfer reversal, official reports/P&L, assets accounting, external marketing/AI work. |
 
 ## Portfolio state
@@ -28,8 +28,8 @@
 | Human Resources | **Closed — Go on local test database** | Employee file, compensation, leave, services, advances/deductions, payroll drafts through payment/cancellation, final settlements, print/output controls, RLS and HR browser coverage. | For another database: apply HR RLS as table owner and re-run the HR lifecycle, HTTP, integrity and browser gates. Production/cutover acceptance remains a separate decision. |
 | Administration and access | Foundation enhanced | Company/user/role management, session revocation, audit redaction and last-owner protection. | Invitations, MFA and production file lifecycle. |
 | Reports and Command Center | **Candidate in current working tree — local verification passed** | Report-run policy, personal cash-performance view, Ledger Trial Balance, VAT view, report documents and bounded output paths compile and their targeted policy verifiers pass; Finance Gate B and `verify:web-budget` pass after the fixture and route-splitting updates. | Owner/governance acceptance remains required. Formal accrual P&L remains deferred. |
-| Operations (catalogue, purchasing, inventory and custody) | **Active — technical verification passed; owner acceptance pending** | Items, units, recipe/conversion data, purchase request/receipt, inventory movement, custody, internal registration and operation reports; purchase-cycle, Finance Gate B and `verify:web-budget` passed on the local test database. | Complete the recorded owner browser flow in [Operations verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md). No financial policy or external integration is activated. |
-| Assets & Warranty | **Active inside Operations Core — Gate A technically verified** | Operations section: Purchase & Expense follow-up marker, company-scoped queue, operational register, warranty dates/lines, archive, permissions, audit and idempotency. `verify:operations-assets-warranty` confirms no financial journal is created or changed; the shared web budget passes. | Gate A owner acceptance is part of Operations. Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes. |
+| Operations (catalogue, purchasing, inventory and custody) | **Closed — local owner acceptance and library migration** | Items, units, recipes/conversions, purchase request/receipt, inventory movement, custody, internal registration and operation reports. Browser E2E, 12-scope DB verifier, migration inventory and release budgets pass from `c53ba7d`; server paging/filtering covers the large catalogue and report surfaces. | No financial policy, formal financial report, Noorix or external integration is activated. Intentional bounded `DataTable` surfaces are final lightweight decisions, not legacy. |
+| Assets & Warranty | **Closed locally inside Operations Core — Gate A** | Operations section: Purchase & Expense follow-up marker, company-scoped queue and operational asset/warranty register; archive, permissions, audit, idempotency and no-finance-posting behavior are verified. | Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes rather than unfinished Gate A work. |
 | Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
 | Marketing, inbound, AI provider, remaining modules | Not started or deferred | AI platform guardrails only; no provider execution. | Separate authorized scopes after core finance gates. |
 
