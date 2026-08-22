@@ -15,9 +15,10 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer has **closed Operations Core locally, including its library migration**,
-and the next active transformation scope is Human Resources library-migration
-closure. This is not final delivery or general production readiness.
+Baseer has **closed Operations Core and Human Resources locally, including both
+library migrations**. The next active transformation scope in the centralized
+sequence is **Finance and Accounting library-migration closure**. This is not
+final delivery or general production readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
 Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
@@ -25,26 +26,23 @@ Categories, and the read-only Invoice Register. The correction/cancellation
 policy is also recorded in
 [FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md](FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md).
 
-The owner has selected and authorized one active business scope:
-**Operations Core**. It includes catalogue and units, conversions and recipes,
-purchase requests and receipts, inventory/custody, internal registration and
-the existing operational Assets & Warranty Gate A. The work is limited to the
-already implemented company-scoped workflows, their contracts, UI, RLS,
-permissions, audit and acceptance evidence.
+The active scope is limited to converting already implemented Finance and
+Accounting UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
+approved central Baseer adapters. It does not authorize an API, schema, RLS,
+RBAC, accounting-policy, business-date or report-definition change.
 
 It excludes asset capitalization/depreciation/disposal, automatic financial
 posting, public attachments, bank connectivity, external providers, Noorix
 import/cutover, formal reports/P&L and any unapproved financial policy. Reports
 remain a separately governed candidate after Operations closure.
 
-Technical verification, consolidated browser evidence and owner acceptance for
-this scope passed on 2026-08-22 and are recorded in
-[Operations Core verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md).
-The reproducible implementation reference is `c53ba7d`: full Playwright reports
-`71 passed` and `1 intentional skip`; the Operations DB verifier covers 12
-scopes; the migration inventory reports zero unclassified and stale targets.
-The intentional bounded tables documented in the closure plan are final light
-primitives, not pending migration.
+Operations evidence remains in
+[Operations Core verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md),
+and HR evidence is recorded in
+[HR library-migration verification](HR_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+The HR implementation reference is `6942b50`: Playwright reports `73 passed`
+and `1 intentional skip`; inventory has zero unclassified/stale targets; HR
+HTTP/RLS/lifecycle/onboarding/financial-integrity and Finance period gates pass.
 
 ## Active cross-cutting enablement — 2026-08-22
 
@@ -93,8 +91,16 @@ It also covers the local ECharts HR operational visualisation over the existing
 server overview, with its matching HTML summary/table and dedicated lazy-size
 gate. It is not a financial dashboard, reporting surface, or production claim.
 
-Outside these logged eligible pilots, no additional pilot, release, or
-production claim is authorized. The durable remedy remains an official Prisma
+**Closed HR scope / active Finance scope:** HR migration is closed at `6942b50`.
+The same gated operating authority now applies only to Finance and Accounting
+files recorded in the manifest. It permits central-adapter migration in
+homogeneous batches after contract, HTTP/RLS, Decimal-string, accounting,
+period, browser, accessibility and budget gates pass. It does not authorize a
+new library class, another module, a financial-policy change, or release/public
+production acceptance. The Prisma P1 and its private-deployment risk acceptance
+remain unchanged.
+
+The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.
 Automatic `npm audit fix --force` is explicitly forbidden here because its
 proposed Prisma change is breaking.

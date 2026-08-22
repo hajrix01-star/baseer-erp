@@ -133,6 +133,32 @@
 | أدوات الراتب | salary adjustment، calculations وread models |
 | نهاية الخدمة | verification، approval، payment، reversal وallocations |
 
+#### سجل إغلاق الموارد البشرية
+
+**الحالة:** `Closed` — 2026-08-22، بقبول المالك ضمن خطة التحول المركزية.
+
+**مرجع التنفيذ:** `6942b50`، مع دفعات الأساس `bda49d2` و`71d2351`، وسجل
+الإثبات الكامل في
+[HR library-migration verification](governance/HR_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+
+- كل target خاص بـHR في الـmanifest يحمل قراراً نهائياً، والجرد يثبت
+  `unclassified=0` و`staleManifestTargets=0`.
+- لا يبقى في ملفات HR `BaseerSearchSelect` أو `DataTable` أو
+  `input[type=date]` أو استيراد مباشر لـRHF/Zod/React Aria/TanStack/ECharts.
+- النماذج والجداول الثقيلة ومسارات الخدمات والسجل الأساسي تحمل كسولاً؛ لا
+  تدخل المكتبات الثقيلة إلى route/startup بلا تفاعل.
+- القيم المالية تبقى Decimal strings، واختبار الدقة يغطي القيم الأكبر من حد
+  الدقة الآمنة في JavaScript و`0.0001` والoverflow.
+- Playwright الكامل: `73 passed` و`1 intentional skip` على desktop/mobile؛
+  HTTP/RLS/lifecycle/onboarding/financial-integrity/finance-period gates كلها
+  Pass.
+- ميزانية الإصدار ناجحة: startup JS `243,994/250,000 B`، أكبر route JS
+  `81,264/85,000 B`، Form-state `106,523/110,000 B` وDataGrid
+  `32,188/50,000 B`.
+
+لا يفتح الإغلاق سياسة مالية أو صلاحية أو schema جديدة، ولا يعد قبول إنتاج أو
+Noorix. الموديول التالي في التسلسل هو المالية والمحاسبة.
+
 ### 5.3 المالية والمحاسبة
 
 | القسم | التبويبات/المسارات التي تدخل الجرد |
