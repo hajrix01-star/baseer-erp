@@ -572,6 +572,28 @@ test("leave date picker remains labeled and usable in English LTR", async ({ pag
   await expect(page.getByRole("grid")).toHaveCount(0);
 });
 
+test("service cancellation validates its required reason before sending a request", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=5");
+  const serviceRow = page.getByRole("row").filter({ hasText: service.referenceNumber! });
+  await serviceRow.getByRole("button", { name: new RegExp(employee.employeeNumber) }).click();
+  const serviceDetail = await expectTopmostDialog(page, "تجديد إقامة");
+  await serviceDetail.getByRole("button", { name: "إلغاء الخدمة" }).click();
+  const dialog = await expectTopmostDialog(page, "إلغاء الخدمة");
+  await expect(dialog.locator('[data-baseer-rhf-form="true"]')).toBeVisible();
+  await dialog.getByRole("button", { name: "تأكيد الإلغاء" }).click();
+  const alert = dialog.getByRole("alert");
+  await expect(alert).toHaveText("أدخل سبب الإلغاء قبل التأكيد.");
+  await expect(dialog.getByRole("textbox", { name: "سبب الإلغاء" })).toBeFocused();
+  expect(requested.some((request) => request.startsWith("POST /v1/hr/services/cancel"))).toBeFalsy();
+
+  await dialog.getByRole("textbox", { name: "سبب الإلغاء" }).fill("سبب اختباري");
+  await dialog.getByRole("button", { name: "تأكيد الإلغاء" }).click();
+  await expect.poll(() => requested.some((request) => request.startsWith("POST /v1/hr/services/cancel"))).toBe(true);
+});
+
 test("leave employee filter uses the Baseer Combobox adapter with keyboard search", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested);

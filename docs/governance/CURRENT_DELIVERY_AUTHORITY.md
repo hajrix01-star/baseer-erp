@@ -66,9 +66,14 @@ AR/EN RTL/LTR, keyboard/mobile, E2E and web-budget gates locally. The deployable
 dependency graph is also clean when development and optional Prisma CLI peers
 are omitted; the full build/migration graph is still tracked as P1.
 
-Outside that narrow exception, no additional pilot, release, or production
-claim is authorized. The durable remedy remains an official Prisma patch,
-followed by a matched Prisma-stack upgrade and re-verification.
+Under the standing library-adoption authority, the same source-merge and local
+verification boundary also covers the isolated non-financial RHF/Zod adapter
+for a draft HR service cancellation reason. It has no financial values, API,
+RLS or permission change, and it does not authorize release or production.
+
+Outside these logged eligible pilots, no additional pilot, release, or
+production claim is authorized. The durable remedy remains an official Prisma
+patch, followed by a matched Prisma-stack upgrade and re-verification.
 Automatic `npm audit fix --force` is explicitly forbidden here because its
 proposed Prisma change is breaking.
 
