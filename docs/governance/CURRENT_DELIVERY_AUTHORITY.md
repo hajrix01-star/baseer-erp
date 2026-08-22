@@ -30,19 +30,18 @@ Noorix cutover.
 
 ## Active cross-cutting enablement — 2026-08-22
 
-The owner has authorized exactly one bounded cross-cutting scope:
-**Baseer UI Platform Enablement — Phase 0 baseline and one React Aria
-Combobox pilot**. It is not a business-module activation and it excludes
-production, Noorix, external providers, broad UI migration, a dashboard, and
-any financial-policy change.
+The owner has authorized the **Baseer Library Adoption operating authority**:
+an ongoing, gated path for adopting eligible libraries without a separate
+owner decision for each one. It is not a business-module activation and it
+does not authorize production, Noorix, external providers, financial-policy
+changes, or the excluded categories defined in the
+[Library Adoption Operating Authority](LIBRARY_ADOPTION_OPERATING_AUTHORITY.md).
 
-The permitted order is: establish an auditable baseline; resolve a failing
-web-release budget if it is reproduced from the approved tree; record the
-dependency decision; then implement one non-financial `BaseerCombobox` pilot
-behind the Baseer adapter. The scope stops at the Phase 1 acceptance gate.
+Every library remains a small, evidence-led phase behind a Baseer adapter.
 The [quality and delivery monitor model](QUALITY_AND_DELIVERY_MONITOR_OPERATING_MODEL.md)
 and [platform transformation plan](UI_PLATFORM_ADOPTION_AND_DASHBOARD_IMPLEMENTATION_PLAN_2026-08-22.md)
-govern its evidence. Any later phase requires a new owner decision.
+govern its evidence. A failed gate blocks only that library unless it reveals
+a shared risk.
 
 ### Security gate recorded after the validation install
 
