@@ -529,7 +529,7 @@ export class HrController {
     const parsed = hrEmployeeLeavesQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-leave query.');
     const context = await this.authorize(authorization, companyId, 'hr.leaves.read');
-    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.leaveType ? { leaveType: parsed.data.leaveType } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+    return hrEmployeeLeavesReceiptSchema.parse({ companyId: context.companyId, ...(await this.leaves.list(context, { pageSize: parsed.data.pageSize, sortDirection: parsed.data.sortDirection, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.leaveType ? { leaveType: parsed.data.leaveType } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
   @Post('leaves')

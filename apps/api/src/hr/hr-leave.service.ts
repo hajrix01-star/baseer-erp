@@ -11,7 +11,7 @@ import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type CreateInput = Omit<CreateHrEmployeeLeaveRequest, 'idempotencyKey'>;
 type ReturnInput = Omit<ReturnHrEmployeeLeaveRequest, 'idempotencyKey'>;
-type LeaveListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeLeaveStatus; leaveType?: HrEmployeeLeaveType; periodFrom?: Date; periodTo?: Date; search?: string; cursor?: string; pageSize: number }>;
+type LeaveListQuery = Readonly<{ employeeId?: string; status?: HrEmployeeLeaveStatus; leaveType?: HrEmployeeLeaveType; periodFrom?: Date; periodTo?: Date; search?: string; cursor?: string; pageSize: number; sortDirection: 'asc' | 'desc' }>;
 
 @Injectable()
 export class HrLeaveService {
@@ -42,8 +42,8 @@ export class HrLeaveService {
       if (query.cursor && !cursor) throw new BadRequestException('The employee-leave cursor is invalid.');
       const [rows, count, onLeaveNow, upcoming, returned] = await Promise.all([
         tx.hrEmployeeLeave.findMany({
-          where: cursor ? { AND: [leaveScope, { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] }] } : leaveScope,
-          orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
+          where: cursor ? { AND: [leaveScope, query.sortDirection === 'asc' ? { OR: [{ startDate: { gt: cursor.startDate } }, { startDate: cursor.startDate, id: { gt: cursor.id } }] } : { OR: [{ startDate: { lt: cursor.startDate } }, { startDate: cursor.startDate, id: { lt: cursor.id } }] }] } : leaveScope,
+          orderBy: [{ startDate: query.sortDirection }, { id: query.sortDirection }],
           take: query.pageSize + 1,
           include: { employee: { select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } } },
         }),
