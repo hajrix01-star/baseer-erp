@@ -332,6 +332,11 @@
       "file": "hr-overview-workspace.tsx",
       "decision": "pending-module-closure"
     },
+    "query:operations-reports-workspace.tsx": {
+      "kind": "query",
+      "file": "operations-reports-workspace.tsx",
+      "decision": "migrated-operations-report-read-boundary"
+    },
     "searchable-selector:baseer-combobox.tsx": {
       "kind": "searchable-selector",
       "file": "baseer-combobox.tsx",

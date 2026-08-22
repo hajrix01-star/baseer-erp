@@ -56,6 +56,8 @@ async function mockInternalRegistration(page: Page) {
     if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/configure" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/conversions/publish" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
+    if (url.pathname === "/v1/operations/reports/materials-received") return fulfill(route, { totals: { materialCount: 1, quantity: "12.0000", amount: "96.0000" }, materials: [{ rawMaterialItemId: "item-1", materialNameAr: "مادة الاختبار", materialNameEn: "Test material", unitId: "unit-1", unitNameAr: "حبة", unitNameEn: "Each", quantity: "12.0000", amount: "96.0000", weightedActualUnitPrice: "8.0000" }] });
+    if (url.pathname === "/v1/operations/reports/custody-monthly") return fulfill(route, { representativeName: "مندوب الاختبار", months: [{ month: "2026-08", openingBalance: "50.0000", funding: "0", purchases: "8.0000", returns: "0", reversals: "0", closingBalance: "42.0000" }] });
     if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
     if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
@@ -142,6 +144,20 @@ test("catalog conversion uses the lazy Baseer form adapter without changing the 
   });
   const accessibility = await new AxeBuilder({ page }).include(".operations-inline-conversion").analyze();
   expect(accessibility.violations).toEqual([]);
+});
+
+test("operations reports keep their read-only data inside the company and period query boundary", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=8");
+
+  await expect(page.getByRole("heading", { name: "تقارير المشتريات والعهدة" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "96.0000" })).toBeVisible();
+  await expect(page.getByText("مندوب الاختبار")).toBeVisible();
+  const reportRequests = requested.filter((request) => request.path.startsWith("/v1/operations/reports/")).map((request) => request.path);
+  expect(reportRequests).toEqual(expect.arrayContaining([
+    expect.stringMatching(/^\/v1\/operations\/reports\/materials-received\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}$/),
+    expect.stringMatching(/^\/v1\/operations\/reports\/custody-monthly\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}$/),
+  ]));
 });
 
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
