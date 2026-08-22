@@ -65,7 +65,7 @@
     "editable-date:operations-asset-register-dialog.tsx": {
       "kind": "editable-date",
       "file": "operations-asset-register-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-wave-1"
     },
     "editable-date:operations-internal-registration-entry.tsx": {
       "kind": "editable-date",
@@ -230,12 +230,12 @@
     "form:operations-asset-register-dialog.tsx": {
       "kind": "form",
       "file": "operations-asset-register-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-wave-1"
     },
     "form:operations-catalog-item-create-dialog.tsx": {
       "kind": "form",
       "file": "operations-catalog-item-create-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-wave-1"
     },
     "form:operations-catalog-workspace.tsx": {
       "kind": "form",
@@ -265,7 +265,7 @@
     "form:operations-unit-form-dialog.tsx": {
       "kind": "form",
       "file": "operations-unit-form-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-wave-1"
     },
     "form:purchase-expense-credit-panel.tsx": {
       "kind": "form",
@@ -490,7 +490,7 @@
     "table:operations-internal-registration-workspace.tsx": {
       "kind": "table",
       "file": "operations-internal-registration-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "retained-lightweight-table-bounded-report"
     },
     "table:operations-reports-workspace.tsx": {
       "kind": "table",
