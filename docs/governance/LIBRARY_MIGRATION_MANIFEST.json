@@ -362,6 +362,11 @@
       "file": "baseer-company-read-query.tsx",
       "decision": "central-adapter"
     },
+    "query:command-center-sales-calendar.tsx": {
+      "kind": "query",
+      "file": "command-center-sales-calendar.tsx",
+      "decision": "migrated-command-center-company-session-period-query"
+    },
     "query:decision-intelligence-workspace-content.tsx": {
       "kind": "query",
       "file": "decision-intelligence-workspace-content.tsx",

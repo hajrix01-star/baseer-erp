@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
+import { BaseerButton } from "./baseer-button";
+import { presentBaseerApiError } from "./baseer-api-error";
+import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
-import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import {
   activeSession,
   api,
@@ -9,7 +12,8 @@ import {
   type CalendarDay,
 } from "./daily-sales-client";
 import type { DailySalesLanguage } from "./daily-sales-copy";
-import { formatMoney } from "./number-format";
+
+type OperationalCalendarReceipt = { companyId: string; fromBusinessDate: string; toBusinessDate: string; days: CalendarDay[] };
 
 const statusCopy = {
   ar: {
@@ -24,6 +28,9 @@ const statusCopy = {
     amount: "مبيعات مثبتة",
     refresh: "تحديث",
     error: "تعذر تحميل التقويم من الخادم.",
+    accessDenied: "لا تملك صلاحية قراءة تقويم التشغيل والمبيعات.",
+    receiptMismatch: "تعذر التحقق من نطاق قراءة التقويم. أعد المحاولة.",
+    currency: "SAR",
   },
   en: {
     title: "Operations and sales calendar",
@@ -37,58 +44,49 @@ const statusCopy = {
     amount: "Posted sales",
     refresh: "Refresh",
     error: "The calendar could not be loaded from the server.",
+    accessDenied: "You do not have permission to read the operations and sales calendar.",
+    receiptMismatch: "The calendar read scope could not be verified. Please refresh.",
+    currency: "SAR",
   },
 } as const;
 
 export function CommandCenterSalesCalendar({
   language,
+  permissionCodes,
 }: {
   language: DailySalesLanguage;
+  permissionCodes: readonly string[] | null;
 }) {
   const copy = statusCopy[language];
   const [range, setRange] = useState(defaultBaseerPeriodRange);
-  const [session, setSession] = useState<ActiveSession | null>(activeSession);
-  const [days, setDays] = useState<CalendarDay[]>([]);
-  const [error, setError] = useState("");
-
-  const load = useCallback(async () => {
-    const current = activeSession();
-    setSession(current);
-    if (!current) return;
-    try {
-      const query = baseerPeriodQuery(range);
-      const result = await api<{ days: CalendarDay[] }>(
-        current,
-        `/finance/operational-calendar?${query}`,
-      );
-      setDays(result.days);
-      setError("");
-    } catch {
-      setError(copy.error);
-    }
-  }, [copy.error, range.from, range.to, range.months.join(",")]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const session = activeSession();
   if (!session) return <DailySalesSignIn language={language} />;
+  if (permissionCodes === null) return <CommandCenterSalesCalendarContent language={language} copy={copy} range={range} onRangeChange={setRange} days={[]} loading error="" onRefresh={() => undefined} />;
+  const canReadCalendar = permissionCodes?.includes("finance.daily_sales.read") ?? false;
+  if (!canReadCalendar) return <CommandCenterSalesCalendarContent language={language} copy={copy} range={range} onRangeChange={setRange} days={[]} loading={false} error={copy.accessDenied} onRefresh={() => undefined} />;
 
+  const scope = [language, range.preset, range.from, range.to, range.months.join(",")];
+  return <BaseerCompanyReadQuery session={session} resource="command-center.operational-calendar" scope={scope} load={(current, signal) => api<OperationalCalendarReceipt>(current, `/finance/operational-calendar?${baseerPeriodQuery(range)}`, { signal })}>
+    {({ data, loading, error, refetch }) => {
+      const receiptMatchesScope = data?.companyId === session.companyId && data.fromBusinessDate.slice(0, 10) === range.from && data.toBusinessDate.slice(0, 10) === range.to;
+      return <CommandCenterSalesCalendarContent language={language} copy={copy} range={range} onRangeChange={setRange} days={receiptMatchesScope ? data.days : []} loading={loading} error={error ? presentBaseerApiError(error, language, copy.error) : data && !receiptMatchesScope ? copy.receiptMismatch : ""} onRefresh={() => void refetch().catch(() => undefined)} />;
+    }}
+  </BaseerCompanyReadQuery>;
+}
+
+function CommandCenterSalesCalendarContent({ language, copy, range, onRangeChange, days, loading, error, onRefresh }: { language: DailySalesLanguage; copy: typeof statusCopy[DailySalesLanguage]; range: BaseerPeriodRange; onRangeChange: (range: BaseerPeriodRange) => void; days: CalendarDay[]; loading: boolean; error: string; onRefresh: () => void }) {
   return (
-    <section className="command-sales-calendar">
+    <section className="command-sales-calendar" aria-busy={loading}>
       <header>
         <div>
           <p className="eyebrow">Baseer ERP</p>
           <h2>{copy.title}</h2>
         </div>
-        <button
-          className="daily-sales-secondary"
-          type="button"
-          onClick={() => void load()}
-        >
+        <BaseerButton type="button" variant="secondary" disabled={loading} onClick={onRefresh}>
           {copy.refresh}
-        </button>
+        </BaseerButton>
       </header>
-      <BaseerPeriodFilter language={language} value={range} onChange={setRange} />
+      <BaseerPeriodFilter language={language} value={range} onChange={onRangeChange} />
       {error && <p className="daily-sales-message error">{error}</p>}
       <div className="command-sales-calendar__grid">
         {days.map((day) => {
@@ -110,7 +108,7 @@ export function CommandCenterSalesCalendar({
               <strong>{day.businessDate.slice(8, 10)}</strong>
               <span>{label}</span>
               <small>
-                {copy.amount}: {formatMoney(day.salesGrossAmount)}
+                {copy.amount}: <bdi dir="ltr">{copy.currency} {day.salesGrossAmount}</bdi>
               </small>
             </article>
           );
