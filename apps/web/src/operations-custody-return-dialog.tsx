@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
 
@@ -30,7 +28,7 @@ export function OperationsCustodyReturnDialog({ open, language, busy, requests, 
   const ar = language === "ar";
   const text = ar ? { title: "تسجيل مرتجع عهدة", request: "ربط بالطلب", date: "التاريخ", amount: "الإجمالي", reason: "سبب المرتجع", select: "اختر", save: "حفظ" } : { title: "Record custody return", request: "Linked request", date: "Date", amount: "Total", reason: "Return reason", select: "Select", save: "Save" };
   const validation = useMemo(() => returnSchema(ar), [ar]);
-  const form = useForm<CustodyReturnDraft>({ defaultValues: { requestId: "", businessDate: new Date().toISOString().slice(0, 10), amount: "", notes: "" }, resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<CustodyReturnDraft>({ defaultValues: { requestId: "", businessDate: new Date().toISOString().slice(0, 10), amount: "", notes: "" }, schema: validation, shouldFocusError: true });
   useEffect(() => { if (open) form.reset({ requestId: "", businessDate: new Date().toISOString().slice(0, 10), amount: "", notes: "" }); }, [form, open]);
   return <BaseerFormDialog open={open} title={text.title} language={language} formId="custody-return" submitLabel={text.save} busy={busy} onClose={onClose}>
     <form id="custody-return" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((value) => void onSubmit(value))}>

@@ -1,0 +1,506 @@
+{
+  "manifestVersion": 1,
+  "generatedBy": "scripts/check-library-migration-inventory.mjs",
+  "targets": {
+    "chart:baseer-chart.tsx": {
+      "kind": "chart",
+      "file": "baseer-chart.tsx",
+      "decision": "central-adapter"
+    },
+    "chart:hr-overview-workspace.tsx": {
+      "kind": "chart",
+      "file": "hr-overview-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:baseer-aria-date-picker.tsx": {
+      "kind": "editable-date",
+      "file": "baseer-aria-date-picker.tsx",
+      "decision": "central-adapter"
+    },
+    "editable-date:baseer-date-picker.tsx": {
+      "kind": "editable-date",
+      "file": "baseer-date-picker.tsx",
+      "decision": "central-adapter"
+    },
+    "editable-date:daily-sales-closing-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "daily-sales-closing-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:expenses-obligations-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "expenses-obligations-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:finance-setup-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "finance-setup-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:hr-employee-documents-panel.tsx": {
+      "kind": "editable-date",
+      "file": "hr-employee-documents-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:hr-final-settlement-panel.tsx": {
+      "kind": "editable-date",
+      "file": "hr-final-settlement-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:hr-leave-forms.tsx": {
+      "kind": "editable-date",
+      "file": "hr-leave-forms.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:hr-payroll-detail-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "hr-payroll-detail-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:hr-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "hr-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:operations-asset-register-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "operations-asset-register-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:purchase-expense-credit-panel.tsx": {
+      "kind": "editable-date",
+      "file": "purchase-expense-credit-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:purchase-expense-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "purchase-expense-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:recurring-expense-profile-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "recurring-expense-profile-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:recurring-expense-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "recurring-expense-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "editable-date:treasury-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "treasury-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:administration-companies-panel.tsx": {
+      "kind": "form",
+      "file": "administration-companies-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:administration-roles-panel.tsx": {
+      "kind": "form",
+      "file": "administration-roles-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:administration-users-panel.tsx": {
+      "kind": "form",
+      "file": "administration-users-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:baseer-login.tsx": {
+      "kind": "form",
+      "file": "baseer-login.tsx",
+      "decision": "central-adapter"
+    },
+    "form:baseer-required-textarea-form.tsx": {
+      "kind": "form",
+      "file": "baseer-required-textarea-form.tsx",
+      "decision": "central-adapter"
+    },
+    "form:daily-sales-closing-dialog.tsx": {
+      "kind": "form",
+      "file": "daily-sales-closing-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:daily-sales-sign-in.tsx": {
+      "kind": "form",
+      "file": "daily-sales-sign-in.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:decision-intelligence-workspace.tsx": {
+      "kind": "form",
+      "file": "decision-intelligence-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:expenses-obligations-workspace.tsx": {
+      "kind": "form",
+      "file": "expenses-obligations-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:finance-category-form-dialog.tsx": {
+      "kind": "form",
+      "file": "finance-category-form-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:finance-setup-workspace.tsx": {
+      "kind": "form",
+      "file": "finance-setup-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:finance-supplier-form-dialog.tsx": {
+      "kind": "form",
+      "file": "finance-supplier-form-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-compensation-agreement-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-compensation-agreement-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-compensation-policies-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-compensation-policies-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-employee-documents-panel.tsx": {
+      "kind": "form",
+      "file": "hr-employee-documents-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-employee-letter-forms.tsx": {
+      "kind": "form",
+      "file": "hr-employee-letter-forms.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-employee-onboarding-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-employee-onboarding-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-employee-promotions-panel.tsx": {
+      "kind": "form",
+      "file": "hr-employee-promotions-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-final-settlement-panel.tsx": {
+      "kind": "form",
+      "file": "hr-final-settlement-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-leave-forms.tsx": {
+      "kind": "form",
+      "file": "hr-leave-forms.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-payroll-create-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-payroll-create-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-payroll-detail-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-payroll-detail-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-salary-adjustment-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-salary-adjustment-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-services-workspace.tsx": {
+      "kind": "form",
+      "file": "hr-services-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:hr-workspace.tsx": {
+      "kind": "form",
+      "file": "hr-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-asset-register-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-asset-register-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-catalog-item-create-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-catalog-item-create-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-catalog-workspace.tsx": {
+      "kind": "form",
+      "file": "operations-catalog-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-custody-return-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-custody-return-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-purchase-cancel-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-purchase-cancel-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-purchase-completion-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-purchase-completion-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-purchase-request-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-purchase-request-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:operations-unit-form-dialog.tsx": {
+      "kind": "form",
+      "file": "operations-unit-form-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:purchase-expense-credit-panel.tsx": {
+      "kind": "form",
+      "file": "purchase-expense-credit-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:purchase-expense-workspace.tsx": {
+      "kind": "form",
+      "file": "purchase-expense-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:recurring-expense-profile-dialog.tsx": {
+      "kind": "form",
+      "file": "recurring-expense-profile-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:recurring-expense-workspace.tsx": {
+      "kind": "form",
+      "file": "recurring-expense-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:treasury-vault-form-dialog.tsx": {
+      "kind": "form",
+      "file": "treasury-vault-form-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "form:treasury-workspace.tsx": {
+      "kind": "form",
+      "file": "treasury-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "query:baseer-company-read-query.tsx": {
+      "kind": "query",
+      "file": "baseer-company-read-query.tsx",
+      "decision": "central-adapter"
+    },
+    "query:hr-overview-workspace.tsx": {
+      "kind": "query",
+      "file": "hr-overview-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:baseer-combobox.tsx": {
+      "kind": "searchable-selector",
+      "file": "baseer-combobox.tsx",
+      "decision": "central-adapter"
+    },
+    "searchable-selector:baseer-search-select.tsx": {
+      "kind": "searchable-selector",
+      "file": "baseer-search-select.tsx",
+      "decision": "central-adapter"
+    },
+    "searchable-selector:hr-compensation-agreement-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-compensation-agreement-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-final-settlement-panel.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-final-settlement-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-job-titles.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-job-titles.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-leave-forms.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-leave-forms.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-leave-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-leave-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-payroll-detail-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-payroll-detail-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-salary-tools-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-salary-tools-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-services-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-services-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:hr-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:operations-catalog-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-catalog-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:operations-recipe-editor.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-recipe-editor.tsx",
+      "decision": "pending-module-closure"
+    },
+    "searchable-selector:outflow-batch-entry-table.tsx": {
+      "kind": "searchable-selector",
+      "file": "outflow-batch-entry-table.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:administration-users-panel.tsx": {
+      "kind": "table",
+      "file": "administration-users-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:baseer-data-grid.tsx": {
+      "kind": "table",
+      "file": "baseer-data-grid.tsx",
+      "decision": "central-adapter"
+    },
+    "table:daily-sales-history.tsx": {
+      "kind": "table",
+      "file": "daily-sales-history.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:data-table.tsx": {
+      "kind": "table",
+      "file": "data-table.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:expenses-obligations-workspace.tsx": {
+      "kind": "table",
+      "file": "expenses-obligations-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:finance-accounts-workspace.tsx": {
+      "kind": "table",
+      "file": "finance-accounts-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:finance-setup-workspace.tsx": {
+      "kind": "table",
+      "file": "finance-setup-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-compensation-policies-dialog.tsx": {
+      "kind": "table",
+      "file": "hr-compensation-policies-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-employee-documents-panel.tsx": {
+      "kind": "table",
+      "file": "hr-employee-documents-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-employee-letters-panel.tsx": {
+      "kind": "table",
+      "file": "hr-employee-letters-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-employee-profile-dialog.tsx": {
+      "kind": "table",
+      "file": "hr-employee-profile-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-employee-promotions-panel.tsx": {
+      "kind": "table",
+      "file": "hr-employee-promotions-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-final-settlement-panel.tsx": {
+      "kind": "table",
+      "file": "hr-final-settlement-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-leave-workspace.tsx": {
+      "kind": "table",
+      "file": "hr-leave-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-payroll-detail-dialog.tsx": {
+      "kind": "table",
+      "file": "hr-payroll-detail-dialog.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-payroll-workspace.tsx": {
+      "kind": "table",
+      "file": "hr-payroll-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-services-workspace.tsx": {
+      "kind": "table",
+      "file": "hr-services-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:hr-workspace.tsx": {
+      "kind": "table",
+      "file": "hr-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:invoice-register-workspace.tsx": {
+      "kind": "table",
+      "file": "invoice-register-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:operations-catalog-workspace.tsx": {
+      "kind": "table",
+      "file": "operations-catalog-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:operations-execution-workspace.tsx": {
+      "kind": "table",
+      "file": "operations-execution-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:operations-internal-registration-workspace.tsx": {
+      "kind": "table",
+      "file": "operations-internal-registration-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:operations-reports-workspace.tsx": {
+      "kind": "table",
+      "file": "operations-reports-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:outflow-batch-entry-table.tsx": {
+      "kind": "table",
+      "file": "outflow-batch-entry-table.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:purchase-expense-credit-panel.tsx": {
+      "kind": "table",
+      "file": "purchase-expense-credit-panel.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:recurring-expense-workspace.tsx": {
+      "kind": "table",
+      "file": "recurring-expense-workspace.tsx",
+      "decision": "pending-module-closure"
+    },
+    "table:treasury-workspace.tsx": {
+      "kind": "table",
+      "file": "treasury-workspace.tsx",
+      "decision": "pending-module-closure"
+    }
+  }
+}

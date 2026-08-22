@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -52,7 +50,7 @@ export function PurchaseExpenseCreditPanel({ credit, language, vaults, reload }:
 function CreditPaymentDialog({ language, due, vaults, defaultBusinessDate, onClose, onSaved }: { language: "ar" | "en"; due: PurchaseCreditWorkspace["suppliers"][number]["dues"][number] | null; vaults: ReadonlyArray<{ id: string; nameAr: string; nameEn: string }>; defaultBusinessDate: string; onClose: () => void; onSaved: () => Promise<void> }) {
   const text = financeText(language); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const dialogRef = useDialogFocusTrap({ open: due !== null, saving, onClose });
   const validation = useMemo(() => z.object({ vaultId: z.string().min(1, language === "ar" ? "اختر قناة الدفع." : "Choose a payment channel."), amount: z.string().trim().regex(/^\d+(?:\.\d{1,4})?$/, language === "ar" ? "أدخل مبلغاً صحيحاً." : "Enter a valid amount."), businessDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).refine((value) => !due || (Number(value.amount) > 0 && Number(value.amount) <= Number(due.remainingAmount)), { path: ["amount"], message: language === "ar" ? "المبلغ يجب أن يكون ضمن الرصيد المتبقي." : "Amount must not exceed the outstanding balance." }), [due, language]);
-  const form = useForm<CreditPaymentForm>({ defaultValues: { vaultId: "", amount: due?.remainingAmount ?? "", businessDate: defaultBusinessDate }, resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<CreditPaymentForm>({ defaultValues: { vaultId: "", amount: due?.remainingAmount ?? "", businessDate: defaultBusinessDate }, schema: validation, shouldFocusError: true });
   const businessDate = form.watch("businessDate");
   useEffect(() => { if (due) { form.reset({ vaultId: "", amount: due.remainingAmount, businessDate: defaultBusinessDate }); setError(""); } }, [defaultBusinessDate, due, form]);
   if (!due) return null;

@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -47,7 +45,7 @@ function onboardingSchema(ar: boolean) {
 export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, onError }: { open: boolean; language: Language; onClose: () => void; onSaved: () => Promise<boolean>; onError: (message: string) => void }) {
   const ar = language === "ar";
   const schema = useMemo(() => onboardingSchema(ar), [ar]);
-  const { formState: { errors }, handleSubmit, register, reset, setValue, watch } = useForm<Draft>({ defaultValues: empty(), resolver: zodResolver(schema), shouldFocusError: true });
+  const { formState: { errors }, handleSubmit, register, reset, setValue, watch } = useBaseerForm<Draft>({ defaultValues: empty(), schema: schema, shouldFocusError: true });
   const draft = watch();
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState("");

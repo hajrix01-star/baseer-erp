@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
 
@@ -31,7 +29,7 @@ export function OperationsUnitFormDialog({ open, language, busy, value, editingC
   const ar = language === "ar";
   const text = ar ? { add: "إضافة وحدة", edit: "تعديل وحدة", save: "حفظ", nameAr: "الاسم بالعربية", nameEn: "الاسم بالإنجليزية", dimension: "البعد", active: "نشط", COUNT: "عدد", MASS: "وزن", VOLUME: "حجم", PACKAGE: "تغليف" } : { add: "Add unit", edit: "Edit unit", save: "Save", nameAr: "Arabic name", nameEn: "English name", dimension: "Dimension", active: "Active", COUNT: "Count", MASS: "Mass", VOLUME: "Volume", PACKAGE: "Package" };
   const validation = useMemo(() => unitSchema(ar), [ar]);
-  const form = useForm<OperationsUnitForm>({ defaultValues: value, resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<OperationsUnitForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
   useEffect(() => { if (open) form.reset(value); }, [form, open, value]);
   const editing = editingCode !== null;
   return <BaseerFormDialog open={open} title={editing ? text.edit : text.add} language={language} formId="operations-unit" submitLabel={text.save} busy={busy} onClose={onClose}>

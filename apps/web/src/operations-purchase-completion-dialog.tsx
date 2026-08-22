@@ -1,7 +1,5 @@
+import { useBaseerForm, z } from "./baseer-form-state";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -45,7 +43,7 @@ export function OperationsPurchaseCompletionDialog({ open, language, busy, reque
 }) {
   const ar = language === "ar";
   const text = ar ? { title: "اعتماد الشراء الفعلي", submit: "اعتماد", date: "التاريخ", channel: "قناة الدفع التشغيلية", custody: "عهدة المندوب", cash: "نقدي محلي", transfer: "تحويل بنكي", reference: "مرجع التحويل الفعلي", request: "الطلب", select: "اختر", notes: "ملاحظات", loading: "جارٍ تحميل البنود…", noLines: "أضف بند شراء واحداً على الأقل قبل الاعتماد.", total: "الإجمالي", confirmation: "سيتم تحديث المخزون والتكلفة والعهدة مرة واحدة عند الاعتماد." } : { title: "Confirm actual purchase", submit: "Confirm", date: "Date", channel: "Operational payment channel", custody: "Representative custody", cash: "Local cash", transfer: "Bank transfer", reference: "Actual transfer reference", request: "Request", select: "Select", notes: "Notes", loading: "Loading lines…", noLines: "Add at least one purchase line before confirming.", total: "Total", confirmation: "Inventory, cost, and custody will update once when confirmed." };
-  const form = useForm<FormValues>({ resolver: zodResolver(formSchema(language)), defaultValues: { businessDate: today(), requestId: "", notes: "", paymentReference: "" } });
+  const form = useBaseerForm<FormValues>({ schema: formSchema(language), defaultValues: { businessDate: today(), requestId: "", notes: "", paymentReference: "" } });
   const [lines, setLines] = useState<ReceiptInput[]>([]);
   const requestId = form.watch("requestId");
   const selectedRequest = requests.find((request) => request.id === requestId);

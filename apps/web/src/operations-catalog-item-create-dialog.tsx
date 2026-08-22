@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import type { ItemForm } from "./operations-catalog-workspace";
@@ -13,7 +11,7 @@ function schema(ar: boolean) { return z.object({ code: z.string().trim().min(1, 
 
 export function OperationsCatalogItemCreateDialog({ open, language, busy, value, units, sections, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; value: ItemForm; units: readonly Unit[]; sections: readonly Section[]; onClose: () => void; onSubmit: (value: ItemForm) => Promise<void> | void }) {
   const ar = language === "ar"; const t = ar ? { title: "إضافة مادة أولية", save: "حفظ", code: "الرمز", nameAr: "الاسم بالعربية", nameEn: "الاسم بالإنجليزية", kind: "نوع الصنف", raw: "مادة أولية", menu: "منتج منيو", section: "قسم التسجيل", base: "الوحدة الأساسية", sale: "سعر بيع المنيو", units: "وحدات الصنف" } : { title: "Add raw material", save: "Save", code: "Code", nameAr: "Arabic name", nameEn: "English name", kind: "Item type", raw: "Raw material", menu: "Menu product", section: "Registration section", base: "Base unit", sale: "Menu sale price", units: "Item units" };
-  const validation = useMemo(() => schema(ar), [ar]); const form = useForm<ItemForm>({ defaultValues: value, resolver: zodResolver(validation), shouldFocusError: true });
+  const validation = useMemo(() => schema(ar), [ar]); const form = useBaseerForm<ItemForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
   const kind = form.watch("kind"); const baseUnitId = form.watch("baseUnitId"); const unitIds = form.watch("unitIds");
   useEffect(() => { if (open) form.reset(value.code || value.nameAr || value.baseUnitId ? value : empty()); }, [form, open, value]);
   const name = (item: { nameAr: string; nameEn: string | null }) => ar ? item.nameAr : item.nameEn ?? item.nameAr;

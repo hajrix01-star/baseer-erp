@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useState, type ReactNode, type RefObject } from "react";
-import { z } from "zod";
 
 import { createAdministrationUser, replaceAdministrationUserAccess, resetAdministrationUserPassword, updateAdministrationUserDisplayName, updateAdministrationUserLogin, updateAdministrationUserStatus } from "./administration-client";
 import { AdministrationUserAvatar, type UserAvatarKind } from "./administration-user-avatar";
@@ -113,7 +111,7 @@ function PasswordField({ language, label, value, onChange, autoComplete, require
 
 function CreateUserDialog({ language, session, overview, onDone, onError, onClose }: { language: "ar" | "en"; session: ActiveSession; overview: AdministrationOverview; onDone: () => Promise<void>; onError: (error: unknown) => void; onClose: () => void }) { const text = administrationText(language);
   const companies = activeCompanies(overview);
-  const form = useForm<CreateUserForm>({ defaultValues: { loginLocal: "", loginDomain: "hajrix.com", nameAr: "", nameEn: "", password: "", preferredLanguage: "ar", companyIds: companies[0] ? [companies[0].id] : [], roleId: overview.roles[0]?.id ?? "", avatarKind: "INITIALS" }, resolver: zodResolver(createUserSchema(language === "ar")), shouldFocusError: true });
+  const form = useBaseerForm<CreateUserForm>({ defaultValues: { loginLocal: "", loginDomain: "hajrix.com", nameAr: "", nameEn: "", password: "", preferredLanguage: "ar", companyIds: companies[0] ? [companies[0].id] : [], roleId: overview.roles[0]?.id ?? "", avatarKind: "INITIALS" }, schema: createUserSchema(language === "ar"), shouldFocusError: true });
   const values = form.watch();
   const [busy, setBusy] = useState(false);
   const dialogRef = useDialogFocusTrap({ open: true, saving: busy, onClose });

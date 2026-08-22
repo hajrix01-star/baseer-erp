@@ -1,7 +1,5 @@
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -27,7 +25,7 @@ export function OperationsInternalRegistrationEntry({ language, onSaved }: { lan
   const [lines, setLines] = useState<Line[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const form = useForm<FormValues>({ resolver: zodResolver(schema(language)), defaultValues: { businessDate: today(), sectionId: "" } });
+  const form = useBaseerForm<FormValues>({ schema: schema(language), defaultValues: { businessDate: today(), sectionId: "" } });
   const sectionId = form.watch("sectionId");
   const businessDate = form.watch("businessDate");
   const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) return; try { const data = await api<Workstation>(current, "/operations/internal-registration/workstation"); setWorkstation(data); if (!form.getValues("sectionId")) form.setValue("sectionId", data.sections[0]?.id || "", { shouldValidate: true }); } catch (error) { setMessage(presentBaseerApiError(error, language, t.failed)); } }, [form, language, t.failed]);

@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDialog } from "./baseer-dialog";
@@ -16,7 +14,7 @@ function schema(ar: boolean) { return z.object({ nameAr: z.string().trim().min(1
 export function TreasuryVaultFormDialog({ open, language, busy, value, editing, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; value: VaultForm; editing: boolean; onClose: () => void; onSubmit: (value: VaultForm) => Promise<void> | void }) {
   const text = financeText(language);
   const validation = useMemo(() => schema(language === "ar"), [language]);
-  const form = useForm<VaultForm>({ defaultValues: value, resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<VaultForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
   const type = form.watch("type"); const isPaymentDestination = form.watch("isPaymentDestination"); const paymentMethods = form.watch("paymentMethods");
   useEffect(() => { if (open) form.reset(value); }, [form, open, value]);
   const options = methodsFor(type);

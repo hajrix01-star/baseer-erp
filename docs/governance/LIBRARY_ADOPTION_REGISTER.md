@@ -9,12 +9,12 @@
 | --- | --- | --- | --- | --- | --- |
 | `react-aria-components` | `1.20.0` | Apache-2.0 | Active pilots | فلتر موظف الإجازات والعودة، ومنتقي تاريخ الإجازة والعودة فقط | خلف `BaseerCombobox` و`BaseerAriaDatePicker`؛ لا API أو صلاحيات أو منطق مالي. |
 | `@internationalized/date` | `3.12.3` | Apache-2.0 | Active pilot dependency | مع `BaseerAriaDatePicker` في الإجازات والعودة فقط | تاريخ أعمال Gregorian بصيغة `YYYY-MM-DD`؛ لا تحويل بحسب المتصفح أو التقويم الهجري. |
-| `react-hook-form` | `7.86.0` | MIT | Active pilot | سبب إلغاء خدمة HR المسودة فقط | خلف `BaseerRequiredTextareaForm`؛ التحقق الخادمي يبقى حتمياً. |
-| `@hookform/resolvers` | `5.9.1` | MIT | Active pilot dependency | مع RHF وZod في النموذج نفسه | لا schema ثانية كمصدر حقيقة. |
-| `zod` | `4.4.3` | MIT | Active pilot dependency | تحقق تجربة المستخدم لسبب الإلغاء | لا قيم مالية أو JS float؛ يعاد تقييمه قبل نموذج مالي. |
-| `@tanstack/react-query` | `5.101.4` | MIT | Active pilot | ملخص HR للقراءة مع cache معزول بالشركة والجلسة | key يتضمن company/principal؛ instance يعاد تركيبه عند company/session change؛ لا mutation أو حساب مالي. |
+| `react-hook-form` | `7.86.0` | MIT | Active foundation | كل نموذج محول عبر `BaseerFormState` | التحقق الخادمي يبقى حتمياً. |
+| `@hookform/resolvers` | `5.9.1` | MIT | Active foundation dependency | مع RHF وZod داخل `BaseerFormState` | لا schema ثانية كمصدر حقيقة. |
+| `zod` | `4.4.3` | MIT | Active foundation dependency | تحقق تجربة المستخدم عبر `BaseerFormState` | لا قيم مالية أو JS float؛ يعاد تقييمه قبل نموذج مالي. |
+| `@tanstack/react-query` | `5.101.4` | MIT | Active foundation | قراءات Baseer عبر `BaseerSessionQueryProvider` | cache boundary يعاد عند company/session/token؛ لا mutation أو حساب مالي. |
 | `echarts` | `6.1.0` | Apache-2.0 | Active pilot | لوحة HR تشغيلية من `/hr/overview` | `BaseerChart` lazy، HTML summary/table بديل، ولا حساب أو تفويض في المتصفح؛ سقف التفاعل 500 KB. |
-| `@tanstack/react-table` | غير مثبت | MIT | Deferred | جدول كثيف بعد قياس الحاجة | لا يثبت قبل server-side pagination/filter/sort وقياس الحجم. |
+| `@tanstack/react-table` | `9.1.2` | MIT | Installed / display pilot | `BaseerDataGrid` لسجل HR مقاس فقط | لا يوسع قبل server-side pagination/filter/sort وقياس الحجم. |
 | `@tanstack/react-virtual` | غير مثبت | MIT | Deferred | مع جدول مثبت البطء | لا يثبت استباقياً. |
 
 ## بوابة تفعيل مكتبة dormant

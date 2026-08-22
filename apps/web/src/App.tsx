@@ -279,7 +279,8 @@ export function App() {
     if (replacement) open(replacement); else clear();
   }, [permissionCodes, route]);
 
-  if (!activeSession()) {
+  const session = activeSession();
+  if (!session) {
     return <BaseerLogin language={language} onLanguage={toggleLanguage} themeControl={<ThemePicker language={language} theme={theme} onTheme={setTheme} />} />;
   }
   return route

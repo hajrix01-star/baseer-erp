@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -24,7 +22,7 @@ function schema(ar: boolean) {
 export function RecurringExpenseProfileDialog({ open, language, busy, configuration, businessDate, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; configuration: RecurringExpenseConfiguration; businessDate: string; onClose: () => void; onSubmit: (value: ProfileForm) => Promise<void> | void }) {
   const text = financeText(language);
   const validation = useMemo(() => schema(language === "ar"), [language]);
-  const form = useForm<ProfileForm>({ defaultValues: emptyProfile(businessDate), resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<ProfileForm>({ defaultValues: emptyProfile(businessDate), schema: validation, shouldFocusError: true });
   const selectedCategory = form.watch("categoryId");
   const nextReminderDate = form.watch("nextReminderDate");
   const allowAmountOverride = form.watch("allowAmountOverride");

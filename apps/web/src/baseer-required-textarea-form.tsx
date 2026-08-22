@@ -1,7 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import { useBaseerForm, z } from "./baseer-form-state";
 
 type BaseerRequiredTextareaFormProps = {
   formId: string;
@@ -19,10 +18,9 @@ type BaseerRequiredTextareaFormProps = {
 export function BaseerRequiredTextareaForm({ formId, open, label, requiredMessage, busy = false, onSubmit }: BaseerRequiredTextareaFormProps) {
   const schema = useMemo(() => z.object({ value: z.string().trim().min(1, requiredMessage) }), [requiredMessage]);
   type Values = z.infer<typeof schema>;
-  const { formState: { errors }, handleSubmit, register, reset } = useForm<Values>({
+  const { formState: { errors }, handleSubmit, register, reset } = useBaseerForm<Values>({
     defaultValues: { value: "" },
-    resolver: zodResolver(schema),
-    shouldFocusError: true,
+    schema,
   });
 
   useEffect(() => { if (open) reset({ value: "" }); }, [open, reset]);

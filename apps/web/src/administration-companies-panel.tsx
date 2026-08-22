@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useState, type ChangeEvent } from "react";
-import { z } from "zod";
 import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts/administration";
 
 import {
@@ -81,7 +79,7 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
 function CompanyDialog({ language, session, company, owner, onDone, onError, onClose }: { language: "ar" | "en"; session: ActiveSession; company?: Company; owner: boolean; onDone: () => Promise<void>; onError: (error: unknown) => void; onClose: () => void }) {
   const text = administrationText(language);
   const isCreate = !company;
-  const form = useForm<CompanyForm>({ defaultValues: { nameAr: company?.nameAr ?? "", nameEn: company?.nameEn ?? "", businessTimezone: company?.businessTimezone ?? "Asia/Riyadh", contextLocationCode: company?.contextLocationCode ?? "" }, resolver: zodResolver(companySchema(language === "ar")), shouldFocusError: true });
+  const form = useBaseerForm<CompanyForm>({ defaultValues: { nameAr: company?.nameAr ?? "", nameEn: company?.nameEn ?? "", businessTimezone: company?.businessTimezone ?? "Asia/Riyadh", contextLocationCode: company?.contextLocationCode ?? "" }, schema: companySchema(language === "ar"), shouldFocusError: true });
   const values = form.watch();
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);

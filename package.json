@@ -9,6 +9,7 @@
                    ],
     "scripts":  {
                     "check:architecture":  "node scripts/check-architecture.mjs",
+                    "check:library-migration-inventory": "node scripts/check-library-migration-inventory.mjs",
                     "verify:local-database": "node scripts/verify-local-database.mjs",
                     "verify:auth-throttling": "npm run build --workspace @baseer-erp/api && node scripts/run-auth-throttling-verification.mjs",
                     "verify:journal-properties": "npm run build --workspace @baseer-erp/api && node apps/api/dist/finance/journal/journal-line-normalization.property-verification.js",

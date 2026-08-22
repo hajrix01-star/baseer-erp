@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -18,7 +16,7 @@ function schema(ar: boolean) {
 export function OperationsAssetRegisterDialog({ open, language, busy, sourceDocumentNumber, onClose, onSubmit }: { open: boolean; language: Language; busy: boolean; sourceDocumentNumber: string; onClose: () => void; onSubmit: (value: AssetRegistrationForm) => Promise<void> | void }) {
   const ar = language === "ar";
   const validation = useMemo(() => schema(ar), [ar]);
-  const form = useForm<AssetRegistrationForm>({ defaultValues: empty(), resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<AssetRegistrationForm>({ defaultValues: empty(), schema: validation, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset(empty()); }, [form, open]);
   const t = ar ? { title: "تسجيل أصل", name: "اسم الأصل", serial: "الرقم التسلسلي", location: "الموقع", provider: "مزود الضمان", start: "بداية الضمان", end: "نهاية الضمان", terms: "شروط الضمان", lines: "بنود الضمان", hint: "بند واحد في كل سطر", save: "حفظ السجل", cancel: "إلغاء" } : { title: "Register asset", name: "Asset name", serial: "Serial number", location: "Location", provider: "Warranty provider", start: "Warranty start", end: "Warranty end", terms: "Warranty terms", lines: "Warranty items", hint: "One item per line", save: "Save record", cancel: "Cancel" };

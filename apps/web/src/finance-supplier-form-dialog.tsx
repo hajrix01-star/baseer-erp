@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDialog } from "./baseer-dialog";
@@ -40,7 +38,7 @@ export function FinanceSupplierFormDialog({ open, language, busy, value, editing
   const ar = language === "ar";
   const text = financeText(language);
   const validation = useMemo(() => supplierSchema(ar), [ar]);
-  const form = useForm<SupplierForm>({ defaultValues: value, resolver: zodResolver(validation), shouldFocusError: true });
+  const form = useBaseerForm<SupplierForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
   const type = form.watch("supplierType");
   const categoriesForType = categories.filter((category) => category.status === "ACTIVE" && category.isPosting && category.kind === type);
 

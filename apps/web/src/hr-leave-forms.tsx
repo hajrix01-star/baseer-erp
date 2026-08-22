@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -43,7 +41,7 @@ function returnSchema(ar: boolean) {
 export function HrLeaveCreateDialog({ open, language, busy, employees, remoteSearch, onClose, onSubmit }: { open: boolean; language: Language; busy: boolean; employees: readonly HrEmployee[]; remoteSearch: RemoteEmployeeSearch; onClose: () => void; onSubmit: (value: LeaveForm) => Promise<void> | void }) {
   const ar = language === "ar";
   const schema = useMemo(() => leaveSchema(ar), [ar]);
-  const form = useForm<LeaveForm>({ defaultValues: emptyLeave(), resolver: zodResolver(schema), shouldFocusError: true });
+  const form = useBaseerForm<LeaveForm>({ defaultValues: emptyLeave(), schema: schema, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset(emptyLeave()); }, [form, open]);
   const typeLabel = (type: HrEmployeeLeave["leaveType"]) => ({ ANNUAL: ar ? "سنوية" : "Annual", SICK: ar ? "مرضية" : "Sick", UNPAID: ar ? "بدون راتب" : "Unpaid", OTHER: ar ? "أخرى" : "Other" })[type];
@@ -63,7 +61,7 @@ export function HrLeaveCreateDialog({ open, language, busy, employees, remoteSea
 export function HrLeaveReturnDialog({ open, language, busy, leaveId, onClose, onSubmit }: { open: boolean; language: Language; busy: boolean; leaveId: string; onClose: () => void; onSubmit: (value: ReturnForm) => Promise<void> | void }) {
   const ar = language === "ar";
   const schema = useMemo(() => returnSchema(ar), [ar]);
-  const form = useForm<ReturnForm>({ defaultValues: { leaveId: "", returnDate: today(), notes: "" }, resolver: zodResolver(schema), shouldFocusError: true });
+  const form = useBaseerForm<ReturnForm>({ defaultValues: { leaveId: "", returnDate: today(), notes: "" }, schema: schema, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset({ leaveId, returnDate: today(), notes: "" }); }, [form, leaveId, open]);
 

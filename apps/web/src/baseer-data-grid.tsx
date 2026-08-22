@@ -12,7 +12,10 @@ export type BaseerDataGridColumn<Row extends Record<string, unknown>> = Readonly
 
 const features = tableFeatures({});
 
-/** Headless table model behind Baseer's existing semantic table and tokens. */
+/**
+ * Display-grid adapter for an already bounded result set. It must not receive
+ * a partial page and then sort, filter or aggregate it in the browser.
+ */
 export function BaseerDataGrid<Row extends Record<string, unknown>>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: {
   ariaLabel: string;
   caption: string;
@@ -42,4 +45,18 @@ export function BaseerDataGrid<Row extends Record<string, unknown>>({ ariaLabel,
       <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => <td key={cell.id} className={`baseer-data-table__${columns.find((column) => column.id === cell.column.id)?.align ?? 'start'}`}>{<table.FlexRender cell={cell} />}</td>)}</tr>)}</tbody>
     </table>
   </div>;
+}
+
+export type BaseerServerGridPage<Row extends Record<string, unknown>> = Readonly<{
+  rows: readonly Row[];
+  nextCursor: string | null;
+  asOf: string;
+}>;
+
+/**
+ * Controlled server-grid contract. The caller sends filter/sort/cursor intent
+ * to a server allow-list; this adapter only renders the returned page.
+ */
+export function BaseerServerDataGrid<Row extends Record<string, unknown>>({ page, loadMoreControl, ...props }: Omit<Parameters<typeof BaseerDataGrid<Row>>[0], "rows"> & { page: BaseerServerGridPage<Row>; loadMoreControl?: ReactNode }) {
+  return <><BaseerDataGrid {...props} rows={page.rows} />{page.nextCursor ? loadMoreControl : null}</>;
 }

@@ -27,15 +27,11 @@
 
 ## 2. خط الأساس والجرد الحالي
 
-الجرد الأولي في `apps/web/src` بتاريخ 2026-08-22:
-
-- 39 ملفاً يحتوي على نماذج.
-- 20 ملفاً يستخدم React Hook Form/Zod بالفعل.
-- 12 ملفاً يحتوي على بحث/اختيار مخصص.
-- 15 ملفاً يحتوي على تاريخ قابل للتحرير.
-- 27 ملفاً يحتوي على جدول؛ لا يعني ذلك أن 27 جدولاً يحتاج TanStack.
-
-هذه أرقام جرد، لا إعلان إنجاز. تتحول إلى manifest مولد آلياً من المصدر؛ لا يعتمد الإقفال على عدّ يدوي.
+الجرد الأولي مصدره [manifest التحول المولد](governance/LIBRARY_MIGRATION_MANIFEST.json) وحارسه
+`npm run check:library-migration-inventory`، لا العد اليدوي. عند تثبيت هذه
+الخطة كان: 39 نموذجاً، 14 اختياراً قابلاً للبحث، 16 تاريخاً قابلاً للتحرير،
+و27 جدولاً. لا يعني ذلك أن كل جدول يحتاج TanStack؛ يسجل قرار كل target في
+الـmanifest قبل انتقال موديوله.
 
 ## 3. تعريف «مغلق» لكل واجهة
 
@@ -68,7 +64,7 @@
 تشمل الموجة المركزية أيضاً قشرة التطبيق: App routing، تسجيل الدخول والجلسة، Company switch، اللغة/الاتجاه، CSS tokens، وحراس E2E. مخرجها الإلزامي قبل فتح العمليات:
 
 1. adapter contracts الموثقة لكل مكتبة، وإصدار واحد دقيق في lockfile.
-2. script يولد manifest من المصدر، وarchitecture gate يمنع direct import أو legacy import جديد.
+2. script يولد ويقارن manifest من المصدر، وarchitecture gate يمنع direct/subpath import أو target غير مصنف أو legacy import جديد.
 3. baseline ثابت من SHA: check/build/budget/audit، واختبار sign-in وcompany switch وRTL/LTR.
 4. حارس للـlazy chunks الخاصة بالمكتبات، وليس startup budget فقط.
 5. قائمة primitives القديمة ومالكها ومسار إزالتها.

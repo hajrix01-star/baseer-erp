@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerTextArea } from "./baseer-form-fields";
@@ -25,7 +23,7 @@ function revokeSchema(ar: boolean) {
 export function HrEmployeeLetterIssueDialog({ open, language, busy, hasCurrentCompensation, onClose, onManageCompensation, onSubmit }: { open: boolean; language: Language; busy: boolean; hasCurrentCompensation: boolean; onClose: () => void; onManageCompensation: () => void; onSubmit: (value: IssueLetterForm) => Promise<void> | void }) {
   const ar = language === "ar";
   const schema = useMemo(() => issueSchema(), []);
-  const form = useForm<IssueLetterForm>({ defaultValues: { letterType: "SALARY_CERTIFICATE", locale: language, recipient: "" }, resolver: zodResolver(schema), shouldFocusError: true });
+  const form = useBaseerForm<IssueLetterForm>({ defaultValues: { letterType: "SALARY_CERTIFICATE", locale: language, recipient: "" }, schema: schema, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset({ letterType: hasCurrentCompensation ? "SALARY_CERTIFICATE" : "SERVICE_CERTIFICATE", locale: language, recipient: "" }); }, [form, hasCurrentCompensation, language, open]);
   const typeLabel = (type: HrEmployeeLetterType) => type === "SALARY_CERTIFICATE" ? (ar ? "خطاب تعريف بالراتب" : "Salary certificate") : (ar ? "شهادة خدمة" : "Service certificate");
@@ -42,7 +40,7 @@ export function HrEmployeeLetterIssueDialog({ open, language, busy, hasCurrentCo
 export function HrEmployeeLetterRevokeDialog({ open, language, busy, onClose, onSubmit }: { open: boolean; language: Language; busy: boolean; onClose: () => void; onSubmit: (value: RevokeLetterForm) => Promise<void> | void }) {
   const ar = language === "ar";
   const schema = useMemo(() => revokeSchema(ar), [ar]);
-  const form = useForm<RevokeLetterForm>({ defaultValues: { reason: "" }, resolver: zodResolver(schema), shouldFocusError: true });
+  const form = useBaseerForm<RevokeLetterForm>({ defaultValues: { reason: "" }, schema: schema, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset({ reason: "" }); }, [form, open]);
 
