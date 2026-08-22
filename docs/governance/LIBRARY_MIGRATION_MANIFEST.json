@@ -272,11 +272,6 @@
       "file": "operations-custody-return-dialog.tsx",
       "decision": "migrated-operations-custody-command"
     },
-    "form:operations-purchase-cancel-dialog.tsx": {
-      "kind": "form",
-      "file": "operations-purchase-cancel-dialog.tsx",
-      "decision": "pending-module-closure"
-    },
     "form:operations-purchase-completion-dialog.tsx": {
       "kind": "form",
       "file": "operations-purchase-completion-dialog.tsx",
