@@ -21,6 +21,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "^1.57.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
