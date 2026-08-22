@@ -1,7 +1,8 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import { loadAdministrationOverview } from "./administration-client";
 import { presentBaseerApiError } from "./baseer-api-error";
+import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import type { AdministrationOverview } from "./administration-types";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
@@ -16,26 +17,23 @@ const AdministrationRolesPanel = lazy(async () => ({ default: (await import("./a
 const AdministrationUsersPanel = lazy(async () => ({ default: (await import("./administration-users-panel")).AdministrationUsersPanel }));
 
 export function AdministrationWorkspace({ language, section }: { language: "ar" | "en"; section: number }) {
-  const text = administrationText(language);
-  const [session, setSession] = useState<ActiveSession | null>(activeSession);
-  const [overview, setOverview] = useState<AdministrationOverview | null>(null);
-  const [message, setMessage] = useState("");
-  const load = useCallback(async () => {
-    const current = activeSession();
-    setSession(current);
-    if (!current) return;
-    setOverview(await loadAdministrationOverview(current));
-  }, []);
-  const reportError = (error: unknown) => setMessage(presentBaseerApiError(error, language, text.administrationCommandFailed));
-
-  useEffect(() => {
-    void load().catch((error) => setMessage(presentBaseerApiError(error, language, text.noAdministrationAccess)));
-  }, [language, load]);
-
+  const [session] = useState<ActiveSession | null>(activeSession);
   if (!session) return <DailySalesSignIn language={language} />;
-  if (!overview) return <section className="administration-shell"><p className={message ? "daily-sales-message error" : "administration-loading"}>{message || (text.loadingAdministration)}</p></section>;
+  return <BaseerCompanyReadQuery session={session} resource="administration.overview" load={loadAdministrationOverview}>
+    {({ data, loading, error, refetch }) => <AdministrationContent language={language} section={section} session={session} overview={data} loading={loading} loadError={error} refetch={refetch} />}
+  </BaseerCompanyReadQuery>;
+}
 
-  const shared = { session, owner: overview.owner, onDone: load, onError: reportError };
+function AdministrationContent({ language, section, session, overview, loading, loadError, refetch }: { language: "ar" | "en"; section: number; session: ActiveSession; overview: AdministrationOverview | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
+  const text = administrationText(language);
+  const [message, setMessage] = useState("");
+  const reportError = (error: unknown) => setMessage(presentBaseerApiError(error, language, text.administrationCommandFailed));
+  const reload = async () => { setMessage(""); await refetch(); };
+  if (loading || !overview) {
+    const errorMessage = loadError ? presentBaseerApiError(loadError, language, text.noAdministrationAccess) : "";
+    return <section className="administration-shell"><p className={errorMessage ? "daily-sales-message error" : "administration-loading"}>{errorMessage || text.loadingAdministration}</p></section>;
+  }
+  const shared = { session, owner: overview.owner, onDone: reload, onError: reportError };
   const panel = section === 1 ? <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} /> : section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : <AdministrationOverviewPanel overview={overview} session={session} language={language} />;
   return <section className="administration-shell">
     <header className="administration-heading">

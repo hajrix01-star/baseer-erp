@@ -429,11 +429,11 @@
   justify-content: space-between;
   gap: 12px;
 }
-.administration-permission-module h5,
-.administration-permission-section h6 {
+.administration-permission-module h4,
+.administration-permission-section h5 {
   margin: 0;
 }
-.administration-permission-module h5 {
+.administration-permission-module h4 {
   font-size: var(--font-body);
 }
 .administration-permission-sections {
@@ -449,7 +449,7 @@
   border-radius: 10px;
   background: #fff;
 }
-.administration-permission-section h6 {
+.administration-permission-section h5 {
   color: var(--brand-deep);
   font-size: var(--font-label);
 }

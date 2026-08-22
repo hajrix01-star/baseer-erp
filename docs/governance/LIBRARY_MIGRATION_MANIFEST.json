@@ -140,17 +140,17 @@
     "form:administration-companies-panel.tsx": {
       "kind": "form",
       "file": "administration-companies-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-administration-central-validated-form"
     },
     "form:administration-roles-panel.tsx": {
       "kind": "form",
       "file": "administration-roles-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-administration-central-validated-form"
     },
     "form:administration-users-panel.tsx": {
       "kind": "form",
       "file": "administration-users-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-administration-central-validated-form"
     },
     "form:baseer-login.tsx": {
       "kind": "form",
@@ -352,6 +352,11 @@
       "file": "baseer-company-read-query.tsx",
       "decision": "central-adapter"
     },
+    "query:administration-workspace.tsx": {
+      "kind": "query",
+      "file": "administration-workspace.tsx",
+      "decision": "migrated-administration-company-session-query"
+    },
     "query:hr-overview-workspace.tsx": {
       "kind": "query",
       "file": "hr-overview-workspace.tsx",
@@ -445,7 +450,7 @@
     "table:administration-users-panel.tsx": {
       "kind": "table",
       "file": "administration-users-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "intentional-bounded-administration-overview-snapshot"
     },
     "table:baseer-data-grid-field.tsx": {
       "kind": "table",

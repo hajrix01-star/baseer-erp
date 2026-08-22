@@ -1,5 +1,4 @@
-import { useBaseerForm, z } from "./baseer-form-state";
-import { useEffect, useState, type ChangeEvent } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState, type ChangeEvent, type ComponentType } from "react";
 import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts/administration";
 
 import {
@@ -16,10 +15,22 @@ import { BaseerFilterToggle } from "./baseer-filter-controls";
 import { displayName } from "./baseer-localization";
 import { api, requestId, type ActiveSession } from "./daily-sales-client";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
+import type { BaseerValidatedFormFieldProps, BaseerValidatedFormSchemaFactory } from "./baseer-validated-form-field";
 
 type Company = AdministrationOverview["companies"][number];
 type DialogMode = "create" | "manage" | null;
 type CompanyForm = { nameAr: string; nameEn: string; businessTimezone: string; contextLocationCode: string };
+const formatVatBasisPoints = (basisPoints: number) => {
+  const whole = Math.trunc(basisPoints / 100);
+  const fraction = String(basisPoints % 100).padStart(2, "0").replace(/0+$/, "");
+  return fraction ? `${whole}.${fraction}` : String(whole);
+};
+const parseVatBasisPoints = (value: string): number | null => {
+  const match = /^(0|[1-9]\d{0,2})(?:\.(\d{1,2}))?$/.exec(value.trim());
+  if (!match) return null;
+  const basisPoints = Number(match[1]) * 100 + Number((match[2] ?? "").padEnd(2, "0"));
+  return basisPoints <= 10_000 ? basisPoints : null;
+};
 type Props = {
   language: "ar" | "en";
   session: ActiveSession;
@@ -28,12 +39,11 @@ type Props = {
   onDone: () => Promise<void>;
   onError: (error: unknown) => void;
 };
-const companySchema = (ar: boolean) => z.object({
-  nameAr: z.string().trim().min(1, ar ? "أدخل اسم الشركة بالعربية." : "Enter the company name in Arabic."),
-  nameEn: z.string().trim().min(1, ar ? "أدخل اسم الشركة بالإنجليزية." : "Enter the company name in English."),
-  businessTimezone: z.string().trim().min(1),
-  contextLocationCode: z.string(),
-});
+const LazyBaseerValidatedFormField = lazy(async () => ({ default: (await import("./baseer-validated-form-field")).BaseerValidatedFormField }));
+function BaseerValidatedFormField<Values extends Record<string, unknown>>(props: BaseerValidatedFormFieldProps<Values>) {
+  const Form = LazyBaseerValidatedFormField as unknown as ComponentType<BaseerValidatedFormFieldProps<Values>>;
+  return <Suspense fallback={<form id={props.id} className={props.className} data-baseer-rhf-form aria-busy="true" onSubmit={(event) => event.preventDefault()} />}><Form {...props} /></Suspense>;
+}
 
 export function AdministrationCompaniesPanel({ language, session, companies, owner, onDone, onError }: Props) {
   const text = administrationText(language);
@@ -79,14 +89,20 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
 function CompanyDialog({ language, session, company, owner, onDone, onError, onClose }: { language: "ar" | "en"; session: ActiveSession; company?: Company; owner: boolean; onDone: () => Promise<void>; onError: (error: unknown) => void; onClose: () => void }) {
   const text = administrationText(language);
   const isCreate = !company;
-  const form = useBaseerForm<CompanyForm>({ defaultValues: { nameAr: company?.nameAr ?? "", nameEn: company?.nameEn ?? "", businessTimezone: company?.businessTimezone ?? "Asia/Riyadh", contextLocationCode: company?.contextLocationCode ?? "" }, schema: companySchema(language === "ar"), shouldFocusError: true });
-  const values = form.watch();
+  const [values, setValues] = useState<CompanyForm>({ nameAr: company?.nameAr ?? "", nameEn: company?.nameEn ?? "", businessTimezone: company?.businessTimezone ?? "Asia/Riyadh", contextLocationCode: company?.contextLocationCode ?? "" });
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoFileMetadataId, setLogoFileMetadataId] = useState<string | null>(company?.logoFileMetadataId ?? null);
   const [vatRate, setVatRate] = useState("15");
+  const [vatError, setVatError] = useState("");
   const [vatBusy, setVatBusy] = useState(false);
+  const companySchemaFactory = useCallback<BaseerValidatedFormSchemaFactory>(({ z }) => z.object({
+    nameAr: z.string().trim().min(1, language === "ar" ? "أدخل اسم الشركة بالعربية." : "Enter the company name in Arabic."),
+    nameEn: z.string().trim().min(1, language === "ar" ? "أدخل اسم الشركة بالإنجليزية." : "Enter the company name in English."),
+    businessTimezone: z.string().trim().min(1, language === "ar" ? "هذا الحقل مطلوب." : "This field is required."),
+    contextLocationCode: z.string(),
+  }), [language]);
 
   useEffect(() => {
     if (!company?.logoFileMetadataId) return;
@@ -103,7 +119,7 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
     if (!company) return;
     let active = true;
     void api<{ profile: { vatRateBasisPoints: number } | null }>({ ...session, companyId: company.id }, "/finance/configuration")
-      .then((receipt) => { if (active) setVatRate(String((receipt.profile?.vatRateBasisPoints ?? 1500) / 100)); })
+      .then((receipt) => { if (active) setVatRate(formatVatBasisPoints(receipt.profile?.vatRateBasisPoints ?? 1500)); })
       .catch(onError);
     return () => { active = false; };
   }, [company, onError, session]);
@@ -149,8 +165,9 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   };
   const saveVatRate = async () => {
     if (!company || !owner) return;
-    const vatRateBasisPoints = Math.round(Number(vatRate) * 100);
-    if (!Number.isFinite(vatRateBasisPoints) || vatRateBasisPoints < 0 || vatRateBasisPoints > 10_000) return;
+    const vatRateBasisPoints = parseVatBasisPoints(vatRate);
+    if (vatRateBasisPoints === null) { setVatError(text.invalidVatRate); return; }
+    setVatError("");
     setVatBusy(true);
     try {
       await api({ ...session, companyId: company.id }, "/finance/configuration/vat-rate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ vatRateBasisPoints, idempotencyKey: requestId() }) });
@@ -164,32 +181,34 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
         <div><p className="eyebrow">{text.companyManagement}</p><h3>{title}</h3></div>
         <button className="dialog-icon-button" type="button" aria-label={text.close} disabled={busy || vatBusy} onClick={onClose}>×</button>
       </header>
-      <form className="administration-dialog-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void save(next))}>
+      <BaseerValidatedFormField<CompanyForm> id="administration-company" className="administration-dialog-form" values={values} schemaFactory={companySchemaFactory} onValid={(next) => void save(next)} errorSummaryLabel={text.checkRequiredFields}>
+        {({ errors }) => <>
         {owner ? <footer className="administration-company-dialog__save"><button className="daily-sales-primary" disabled={busy || vatBusy}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</button></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         <div className="administration-company-editor-profile">
           {logoUrl ? <img alt={`${text.companyLogo}: ${values.nameAr || text.companies}`} src={logoUrl} /> : <span>{values.nameAr.trim().slice(0, 1) || "ش"}</span>}
           <div><strong>{values.nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
         </div>
-        <label>{text.companyArabicName}<input disabled={!owner || busy} autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-        <label>{text.companyEnglishName}<input disabled={!owner || busy} aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
+        <label>{text.companyArabicName}<input disabled={!owner || busy} autoFocus aria-invalid={Boolean(errors.nameAr)} value={values.nameAr} onChange={(event) => setValues((current) => ({ ...current, nameAr: event.target.value }))} />{errors.nameAr ? <small role="alert">{errors.nameAr.message}</small> : null}</label>
+        <label>{text.companyEnglishName}<input disabled={!owner || busy} aria-invalid={Boolean(errors.nameEn)} value={values.nameEn} onChange={(event) => setValues((current) => ({ ...current, nameEn: event.target.value }))} />{errors.nameEn ? <small role="alert">{errors.nameEn.message}</small> : null}</label>
         {!isCreate && owner && <label className="administration-company-logo-upload">{text.companyLogo}<input accept="image/png,image/jpeg,image/webp" disabled={busy || vatBusy} type="file" onChange={(event) => void selectLogo(event)} /><span>{text.companyLogoHint}</span></label>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-location">
           <legend>{language === "ar" ? "موقع الشركة وسياقها" : "Company location and context"}</legend>
-          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<select disabled={!owner || busy} {...form.register("contextLocationCode")}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</select></label>
+          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<select disabled={!owner || busy} value={values.contextLocationCode} onChange={(event) => setValues((current) => ({ ...current, contextLocationCode: event.target.value }))}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</select></label>
           <small>{language === "ar" ? "يحفظ النظام رمز المدينة وإحداثياتها المعتمدة تلقائياً لربط الطقس والمباريات المحلية بهذه الشركة فقط." : "Baseer saves the approved city code and coordinates automatically to connect local weather and fixtures to this company only."}</small>
         </fieldset>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-tax">
           <legend>{language === "ar" ? "الإعدادات الضريبية" : "Tax settings"}</legend>
-          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-describedby="company-vat-rate-note" disabled={!owner || vatBusy} inputMode="decimal" min="0" max="100" step="0.01" type="number" value={vatRate} onChange={(event) => setVatRate(event.target.value)} /></label>
+          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-describedby="company-vat-rate-note" aria-invalid={Boolean(vatError)} disabled={!owner || vatBusy} inputMode="decimal" min="0" max="100" step="0.01" type="number" value={vatRate} onChange={(event) => { setVatRate(event.target.value); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
           <small id="company-vat-rate-note">{language === "ar" ? "تطبّق على الفواتير الجديدة فقط؛ الفواتير السابقة لا تتغير." : "Applies to future invoices only; posted invoices never change."}</small>
           {owner && <footer><button className="daily-sales-secondary" disabled={vatBusy} type="button" onClick={() => void saveVatRate()}>{vatBusy ? text.saving : language === "ar" ? "حفظ النسبة" : "Save rate"}</button></footer>}
         </fieldset>}
         {!isCreate && owner && <fieldset className="administration-company-status-action">
           <legend>{company.status === "ACTIVE" ? text.archiveCompany : text.reactivateCompany}</legend>
           <label>{text.changeReason} ({text.optional})<input value={reason} onChange={(event) => setReason(event.target.value)} placeholder={text.shortReason} /></label>
-          <button className={company.status === "ACTIVE" ? "daily-sales-danger" : "daily-sales-secondary"} disabled={busy || vatBusy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? "أرشفة الشركة" : "إعادة التفعيل"}</button>
+          <button className={company.status === "ACTIVE" ? "daily-sales-danger" : "daily-sales-secondary"} disabled={busy || vatBusy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</button>
         </fieldset>}
-      </form>
+        </>}
+      </BaseerValidatedFormField>
     </section>
   </div>;
 }

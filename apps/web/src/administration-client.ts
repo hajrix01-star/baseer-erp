@@ -3,7 +3,7 @@ import type { AdministrationOverview } from "./administration-types";
 
 const jsonHeaders = () => ({ "Content-Type": "application/json", "X-Request-Id": requestId() });
 
-export const loadAdministrationOverview = (session: ActiveSession) => api<AdministrationOverview>(session, "/administration/overview");
+export const loadAdministrationOverview = (session: ActiveSession, signal?: AbortSignal) => api<AdministrationOverview>(session, "/administration/overview", { signal });
 export const createAdministrationCompany = (session: ActiveSession, body: { nameAr: string; nameEn: string }) => api(session, "/administration/companies", { method: "POST", headers: jsonHeaders(), body: JSON.stringify({ ...body, businessTimezone: "Asia/Riyadh" }) });
 export async function uploadAdministrationCompanyLogo(session: ActiveSession, companyId: string, file: File): Promise<{ id: string; mimeType: string; byteSize: number }> {
   const contentBase64 = await fileToBase64(file);
