@@ -15,17 +15,34 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer is in **local stabilization and owner verification**, not final delivery or production readiness.
+Baseer is in **local finance-acceptance closure and next-scope selection**, not final delivery or production readiness.
 
-The current stabilization refinement is financial read scale: bounded server pages, server-owned summaries, current-Riyadh-month defaults, remote master-data lookup, and a ledger-derived daily account-balance projection. It is an implementation quality refinement of existing Finance scopes, not a new business module.
+On 2026-08-22, the owner accepted locally the Purchase & Expense and
+Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
+Categories, and the read-only Invoice Register. The correction/cancellation
+policy is also recorded in
+[FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md](FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md).
 
-The owner-verification scopes remain:
+No new business scope is active until the owner selects and authorizes the
+next bounded scope. This closure authorizes planning that next scope; it does
+not itself authorize production, Google connectivity, an AI provider, or a
+Noorix cutover.
 
-- Purchase & Expense, including Expenses & Obligations and recurring/cash-on-payment journeys.
-- Treasury and vault movements.
-- Suppliers, Categories, and the read-only Invoice Register under the recorded bounded exceptions.
+## Active cross-cutting enablement — 2026-08-22
 
-No current implementation closes owner acceptance for those journeys. No new business module begins until the active owner-acceptance and correction/cancellation decisions are recorded.
+The owner has authorized exactly one bounded cross-cutting scope:
+**Baseer UI Platform Enablement — Phase 0 baseline and one React Aria
+Combobox pilot**. It is not a business-module activation and it excludes
+production, Noorix, external providers, broad UI migration, a dashboard, and
+any financial-policy change.
+
+The permitted order is: establish an auditable baseline; resolve a failing
+web-release budget if it is reproduced from the approved tree; record the
+dependency decision; then implement one non-financial `BaseerCombobox` pilot
+behind the Baseer adapter. The scope stops at the Phase 1 acceptance gate.
+The [quality and delivery monitor model](QUALITY_AND_DELIVERY_MONITOR_OPERATING_MODEL.md)
+and [platform transformation plan](UI_PLATFORM_ADOPTION_AND_DASHBOARD_IMPLEMENTATION_PLAN_2026-08-22.md)
+govern its evidence. Any later phase requires a new owner decision.
 
 ## 2026-08-21 current working-tree verification
 
@@ -50,11 +67,10 @@ These changes improve safe operational scale but do **not** prove multi-year or 
 
 Production release remains blocked until all of the following are evidenced:
 
-1. Owner acceptance in AR/EN, RTL/LTR, desktop and mobile for the active financial journeys.
-2. A governed correction/cancellation policy and acceptance for published financial documents.
-3. Production backup coverage and an isolated restore rehearsal.
-4. Noorix staging import, dry run, reconciliation, and cutover approval.
-5. Volume benchmark and deployed-database query-plan evidence for the intended data scale.
+1. Production backup coverage and an isolated restore rehearsal.
+2. Noorix staging import, dry run, reconciliation, and cutover approval.
+3. Volume benchmark and deployed-database query-plan evidence for the intended data scale.
+4. A separate owner acceptance for each future business scope and its production readiness.
 
 Noorix remains a read-only discovery/migration source. There is no runtime integration or dual-write.
 

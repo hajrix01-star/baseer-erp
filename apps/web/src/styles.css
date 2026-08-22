@@ -1160,42 +1160,8 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 @media (max-width: 900px) { .purchase-history-day__documents { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .purchase-history-day__documents { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .purchase-document-view { grid-template-columns: 1fr; }.purchase-document-view__actions { display: grid; grid-template-columns: 1fr; width: 100%; }.purchase-document-view__actions .baseer-button { width: 100%; } }
-.administration-archive-toggle input { inline-size: 1rem; block-size: 1rem; accent-color: var(--brand); }
-.administration-archive-toggle span { min-inline-size: 1.25rem; padding: 0.1rem 0.36rem; border-radius: 999px; color: var(--brand-deep); background: #e7f4ec; text-align: center; }
-.administration-company-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--section-gap); }
-.administration-company-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; min-height: 8.75rem; color: var(--ink); text-align: start; cursor: pointer; font: inherit; }
-.administration-company-card__mark,
-.administration-company-editor-profile > span,
-.administration-company-editor-profile > img { display: grid; inline-size: 2.8rem; block-size: 2.8rem; place-items: center; flex: 0 0 auto; border: 1px solid #bedfcf; border-radius: 50%; color: #075e40; background: #e3f4ea; font-size: var(--font-title-sm); font-weight: 850; object-fit: cover; }
-.administration-company-card__body { display: grid; align-content: center; gap: 0.22rem; min-width: 0; }
-.administration-company-card__body strong { font-size: var(--font-body); }
-.administration-company-card__body small,
-.administration-company-card__body > span { overflow: hidden; color: var(--muted); font-size: var(--font-caption); text-overflow: ellipsis; white-space: nowrap; }
-.administration-company-card__status { align-self: start; display: inline-flex; padding: 0.15rem 0.48rem; border-radius: 999px; font-size: var(--font-caption); font-style: normal; font-weight: 800; }
-.administration-company-card__footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 0.65rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--font-caption); }
-.administration-company-card__footer b { color: var(--brand); font-weight: 750; }
-.administration-company-empty { padding: var(--card-padding); border: 1px dashed var(--line); border-radius: var(--card-radius); color: var(--muted); text-align: center; }
-.administration-company-dialog { width: min(42rem, calc(100vw - 2rem)); max-block-size: min(43rem, calc(100dvh - 2rem)); display: flex; flex-direction: column; overflow: hidden; }
-.administration-company-dialog .daily-sales-dialog__header { flex: 0 0 auto; padding: 1rem 1.25rem .75rem; }
-.administration-company-dialog .administration-dialog-form { min-block-size: 0; flex: 1 1 auto; overflow: auto; padding: .75rem 1.25rem 1.25rem; }
-.administration-company-dialog__save { position: sticky; inset-block-start: 0; z-index: 1; margin: -.75rem -1.25rem 0; padding: .7rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--surface); }
-.administration-company-location { gap: .65rem; padding: .8rem .9rem; background: color-mix(in srgb, var(--surface) 97%, var(--brand) 3%); }
-.administration-company-location__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .8rem; }
-.administration-company-location__grid label,
-.administration-company-tax label { display: grid; gap: .32rem; color: var(--muted); font-size: var(--font-caption); font-weight: 800; }
-.administration-company-location > small { line-height: 1.45; }
-.administration-company-tax { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) auto; align-items: end; gap: .65rem .8rem; padding: .8rem .9rem; }
-.administration-company-tax legend { grid-column: 1 / -1; }
-.administration-company-tax > footer { display: flex; justify-content: flex-end; }
 .dialog-icon-button { display: grid; inline-size: 2.25rem; block-size: 2.25rem; place-items: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 0.65rem; color: var(--muted); background: var(--surface); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .dialog-icon-button:hover { color: var(--ink); border-color: #b5cdbd; }
-.administration-company-editor-profile { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
-.administration-company-editor-profile > div { display: grid; gap: 0.15rem; }
-.administration-company-editor-profile small { color: var(--muted); font-size: var(--font-caption); font-weight: 500; }
-.administration-company-status-action { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 28rem) auto; align-items: end; gap: 0.75rem; margin: 0; padding: 0.85rem; border: 1px solid #efd3cc; border-radius: 0.8rem; }
-.administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
-.administration-company-status-action label { display: grid; gap: 0.35rem; }
-@media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-location__grid, .administration-company-tax { grid-template-columns: 1fr; } .administration-company-tax legend { grid-column: auto; } .administration-company-tax > footer { justify-content: stretch; } .administration-company-tax > footer button { width: 100%; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }
 /* Application-shell scrolling: navigation is an independent rail; only the work area scrolls. */
 .administration-loading { margin: 28px auto; max-width: 480px; padding: 14px 18px; border: 1px solid #dbe8e0; border-radius: 12px; background: #f7fbf8; color: var(--muted); text-align: center; }
 .administration-table-user { display: inline-flex; align-items: center; gap: 10px; border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; text-align: right; }
@@ -1205,6 +1171,13 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 .administration-status-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; font-weight: 700; }
 .administration-status-pill.is-active { background: #e8f7ee; color: #087f5b; }
 .administration-status-pill.is-disabled { background: #f8e9e7; color: #b42318; }
+.administration-users-summary { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 0 0 1rem; }
+.administration-users-summary > span { display: inline-flex; align-items: baseline; gap: 0.38rem; min-width: 6.75rem; padding: 0.62rem 0.78rem; border: 1px solid #dce7e0; border-radius: 10px; background: #fbfdfb; }
+.administration-users-summary b { color: var(--ink); font-size: 1.12rem; font-variant-numeric: tabular-nums; }
+.administration-users-summary small { color: var(--muted); font-weight: 700; }
+.administration-users__disabled-toggle { white-space: nowrap; }
+.administration-owner-badge { width: fit-content; padding: 3px 8px; border-radius: 999px; color: #5b3b00; background: #fff1c9; font-size: var(--font-caption); font-weight: 800; }
+@media (max-width: 640px) { .administration-users-summary > span { flex: 1 1 30%; min-width: 0; } .administration-users__disabled-toggle { width: 100%; } }
 @media (min-width: 801px) { body { overflow: hidden; } .workspace { height: calc(100vh - 72px); min-height: 0; overflow: hidden; } .module-page { height: calc(100vh - 72px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; } }
 @media (max-width: 800px) { body { overflow-y: auto; } .workspace, .module-page { height: auto; overflow: visible; } }
 .administration-company-checkboxes label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }

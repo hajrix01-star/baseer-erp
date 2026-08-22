@@ -9,6 +9,7 @@
                    ],
     "scripts":  {
                     "check:architecture":  "node scripts/check-architecture.mjs",
+                    "verify:local-database": "node scripts/verify-local-database.mjs",
                     "check:permissions":  "node scripts/check-permission-catalog.mjs",
                     "check:ai-gate-b":  "node scripts/check-ai-gate-b.mjs",
                     "verify:ai-gate-b-db":  "node scripts/run-ai-gate-b-db-verification.mjs",

@@ -938,3 +938,38 @@
     padding: 9px;
   }
 }
+/* Administration is mounted only inside an authenticated workspace. */
+.administration-archive-toggle input { inline-size: 1rem; block-size: 1rem; accent-color: var(--brand); }
+.administration-archive-toggle span { min-inline-size: 1.25rem; padding: 0.1rem 0.36rem; border-radius: 999px; color: var(--brand-deep); background: #e7f4ec; text-align: center; }
+.administration-company-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--section-gap); }
+.administration-company-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; min-height: 8.75rem; color: var(--ink); text-align: start; cursor: pointer; font: inherit; }
+.administration-company-card__mark,
+.administration-company-editor-profile > span,
+.administration-company-editor-profile > img { display: grid; inline-size: 2.8rem; block-size: 2.8rem; place-items: center; flex: 0 0 auto; border: 1px solid #bedfcf; border-radius: 50%; color: #075e40; background: #e3f4ea; font-size: var(--font-title-sm); font-weight: 850; object-fit: cover; }
+.administration-company-card__body { display: grid; align-content: center; gap: 0.22rem; min-width: 0; }
+.administration-company-card__body strong { font-size: var(--font-body); }
+.administration-company-card__body small,
+.administration-company-card__body > span { overflow: hidden; color: var(--muted); font-size: var(--font-caption); text-overflow: ellipsis; white-space: nowrap; }
+.administration-company-card__status { align-self: start; display: inline-flex; padding: 0.15rem 0.48rem; border-radius: 999px; font-size: var(--font-caption); font-style: normal; font-weight: 800; }
+.administration-company-card__footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 0.65rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--font-caption); }
+.administration-company-card__footer b { color: var(--brand); font-weight: 750; }
+.administration-company-empty { padding: var(--card-padding); border: 1px dashed var(--line); border-radius: var(--card-radius); color: var(--muted); text-align: center; }
+.administration-company-dialog { width: min(42rem, calc(100vw - 2rem)); max-block-size: min(43rem, calc(100dvh - 2rem)); display: flex; flex-direction: column; overflow: hidden; }
+.administration-company-dialog .daily-sales-dialog__header { flex: 0 0 auto; padding: 1rem 1.25rem .75rem; }
+.administration-company-dialog .administration-dialog-form { min-block-size: 0; flex: 1 1 auto; overflow: auto; padding: .75rem 1.25rem 1.25rem; }
+.administration-company-dialog__save { position: sticky; inset-block-start: 0; z-index: 1; margin: -.75rem -1.25rem 0; padding: .7rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+.administration-company-location { gap: .65rem; padding: .8rem .9rem; background: color-mix(in srgb, var(--surface) 97%, var(--brand) 3%); }
+.administration-company-location__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .8rem; }
+.administration-company-location__grid label,
+.administration-company-tax label { display: grid; gap: .32rem; color: var(--muted); font-size: var(--font-caption); font-weight: 800; }
+.administration-company-location > small { line-height: 1.45; }
+.administration-company-tax { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) auto; align-items: end; gap: .65rem .8rem; padding: .8rem .9rem; }
+.administration-company-tax legend { grid-column: 1 / -1; }
+.administration-company-tax > footer { display: flex; justify-content: flex-end; }
+.administration-company-editor-profile { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
+.administration-company-editor-profile > div { display: grid; gap: 0.15rem; }
+.administration-company-editor-profile small { color: var(--muted); font-size: var(--font-caption); font-weight: 500; }
+.administration-company-status-action { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 28rem) auto; align-items: end; gap: 0.75rem; margin: 0; padding: 0.85rem; border: 1px solid #efd3cc; border-radius: 0.8rem; }
+.administration-company-status-action legend { padding-inline: 0.3rem; color: #8d392c; font-size: var(--font-label); font-weight: 800; }
+.administration-company-status-action label { display: grid; gap: 0.35rem; }
+@media (max-width: 640px) { .administration-section-heading.administration-companies-heading { align-items: stretch; } .administration-companies-toolbar { justify-content: space-between; } .administration-company-cards { grid-template-columns: 1fr; } .administration-company-location__grid, .administration-company-tax { grid-template-columns: 1fr; } .administration-company-tax legend { grid-column: auto; } .administration-company-tax > footer { justify-content: stretch; } .administration-company-tax > footer button { width: 100%; } .administration-company-status-action { grid-template-columns: 1fr; } .administration-company-status-action button { width: 100%; } }

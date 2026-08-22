@@ -14,6 +14,10 @@
 ## كيف نقرأ بقية الوثائق
 
 - `governance/`: معايير دائمة، بوابات جودة، وسجلات القرار.
+- [قرار وخطة التحول لمنصة الواجهة والمكتبات](governance/UI_PLATFORM_ADOPTION_AND_DASHBOARD_IMPLEMENTATION_PLAN_2026-08-22.md): خطة تحول مرحلية مدققة؛ لا تنشّط نطاق تنفيذ دون قرار مالك مسجل.
+- [نموذج تشغيل مراقب الجودة ومراقب التسليم](governance/QUALITY_AND_DELIVERY_MONITOR_OPERATING_MODEL.md): أدوار المراقبة وبوابات الأدلة والإيقاف والتصعيد للعمل المستقبلي.
+- [سجل Phase 0 لتمكين منصة الواجهة](governance/UI_PLATFORM_ENABLEMENT_PHASE_0_RECORD_2026-08-22.md): baseline وقرار التبعية والـpilot المسموح وحالة بواباته.
+- [ADR React Aria للـCombobox](governance/ADR-UI-001-REACT_ARIA_COMBOBOX_PILOT.md): قرار تبعية محدد وحدود الـpilot ومعايير القبول والإزالة.
 - `foundation/`: قرارات نطاق وتنفيذ مؤرخة للشرائح المالية والتشغيلية.
 - `architecture/`: حدود الموديولات، المعمارية، ومقارنات Noorix.
 - `migration/`: خرائط Noorix، الاستكشاف، وبوابات الترحيل. لا يعني وجودها أن الاستيراد منفذ.

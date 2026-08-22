@@ -82,6 +82,8 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
   const language = options.language ?? "ar";
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "e2e-token");
+    sessionStorage.setItem("baseer.erp.refresh-token", "e2e-refresh-token");
+    sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", locale);
   }, { company: companyId, locale: language });
