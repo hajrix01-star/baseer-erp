@@ -15,9 +15,9 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer has **closed Operations Core, Human Resources, and Finance and Accounting
-locally, including their library migrations**. The next active transformation
-scope in the centralized sequence is **Administration and access
+Baseer has **closed Operations Core, Human Resources, Finance and Accounting,
+and Administration and access locally, including their library migrations**.
+The next active transformation scope in the centralized sequence is **Reports
 library-migration closure**. This is not final delivery or general production
 readiness.
 
@@ -29,10 +29,12 @@ policy is also recorded in
 
 Finance migration is closed at `a1cbf54`; its reproducible evidence is recorded
 in [Finance library-migration verification](FINANCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
-The active scope is now limited to converting already implemented Administration
-and access UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
-approved central Baseer adapters. It does not authorize an API, schema, RLS,
-RBAC policy, invitation/MFA feature, or production change.
+Administration migration is closed at `33a7175`; its reproducible evidence is
+recorded in [Administration library-migration verification](ADMINISTRATION_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+The active scope is now limited to converting already implemented Reports UI
+consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the approved
+central Baseer adapters. It does not authorize a new report policy, KPI,
+financial calculation, API, schema, RLS/RBAC rule, or production change.
 
 For the closed Finance scope only, the owner's instruction to remove all browser-side
 financial aggregation authorizes one backward-compatible read-model addition:
@@ -101,14 +103,14 @@ It also covers the local ECharts HR operational visualisation over the existing
 server overview, with its matching HTML summary/table and dedicated lazy-size
 gate. It is not a financial dashboard, reporting surface, or production claim.
 
-**Closed Finance scope / active Administration scope:** Finance migration is
-closed at `a1cbf54`. The same gated operating authority now applies only to
-Administration and access files recorded in the manifest. It permits
-central-adapter migration in homogeneous batches after contract, HTTP/RLS/RBAC,
-session-revocation, browser, accessibility and budget gates pass. It does not
-authorize a new library class, another module, a permission-policy change, or
-release/public production acceptance. The Prisma P1 and its private-deployment
-risk acceptance remain unchanged.
+**Closed Administration scope / active Reports scope:** Administration migration
+is closed at `33a7175`. The same gated operating authority now applies only to
+Reports files recorded in the manifest. It permits central-adapter migration in
+homogeneous batches after report-policy, read-model, financial-source,
+HTTP/RLS/RBAC, browser, accessibility and budget gates pass. It does not
+authorize a new library class, another module, a report or financial policy
+change, or release/public production acceptance. The Prisma P1 and its
+private-deployment risk acceptance remain unchanged.
 
 The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.
