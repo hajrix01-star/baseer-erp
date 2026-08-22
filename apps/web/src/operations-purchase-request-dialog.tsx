@@ -2,6 +2,7 @@ import { useBaseerForm, z } from "./baseer-form-state";
 import { lazy, Suspense, useEffect, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
+import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import type { OperationsPurchasePosLine } from "./operations-purchase-pos-composer";
 
@@ -52,6 +53,7 @@ export function OperationsPurchaseRequestDialog({ open, language, busy, material
   const form = useBaseerForm<FormValues>({ schema: schema(language), defaultValues: { businessDate: today(), paymentChannel: "CASH", custodyFundingAmount: "", representativeName: "", notes: "" } });
   const [lines, setLines] = useState<OperationsPurchasePosLine[]>([]);
   const channel = form.watch("paymentChannel");
+  const businessDate = form.watch("businessDate");
 
   useEffect(() => {
     if (!open) return;
@@ -77,7 +79,7 @@ export function OperationsPurchaseRequestDialog({ open, language, busy, material
   return <BaseerFormDialog open={open} title={text.title} language={language} formId="purchase-request" submitLabel={text.review} busy={busy} onClose={onClose}>
     <form id="purchase-request" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={(event) => void submit(event)}>
       <div className="operations-purchase-request-meta">
-        <label>{text.date}<input aria-invalid={Boolean(form.formState.errors.businessDate)} type="date" {...form.register("businessDate")} />{form.formState.errors.businessDate ? <small role="alert">{form.formState.errors.businessDate.message}</small> : null}</label>
+        <label>{text.date}<BaseerDatePicker language={language} label={text.date} value={businessDate} onChange={(value) => form.setValue("businessDate", value, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.businessDate ? <small role="alert">{form.formState.errors.businessDate.message}</small> : null}</label>
         <fieldset className="operations-payment-channel"><legend>{text.channel}</legend><div>
           <BaseerButton type="button" variant={channel === "CASH" ? "primary" : "secondary"} onClick={() => form.setValue("paymentChannel", "CASH", { shouldValidate: true })}>{text.cash}</BaseerButton>
           <BaseerButton type="button" variant={channel === "BANK_TRANSFER" ? "primary" : "secondary"} onClick={() => form.setValue("paymentChannel", "BANK_TRANSFER", { shouldValidate: true })}>{text.transfer}</BaseerButton>

@@ -82,6 +82,16 @@
       "file": "operations-internal-registration-workspace.tsx",
       "decision": "migrated-operations-wave-1"
     },
+    "editable-date:operations-purchase-completion-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "operations-purchase-completion-dialog.tsx",
+      "decision": "migrated-operations-purchase-command"
+    },
+    "editable-date:operations-purchase-request-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "operations-purchase-request-dialog.tsx",
+      "decision": "migrated-operations-purchase-command"
+    },
     "editable-date:purchase-expense-credit-panel.tsx": {
       "kind": "editable-date",
       "file": "purchase-expense-credit-panel.tsx",
@@ -265,12 +275,12 @@
     "form:operations-purchase-completion-dialog.tsx": {
       "kind": "form",
       "file": "operations-purchase-completion-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-purchase-command"
     },
     "form:operations-purchase-request-dialog.tsx": {
       "kind": "form",
       "file": "operations-purchase-request-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-purchase-command"
     },
     "form:operations-unit-form-dialog.tsx": {
       "kind": "form",

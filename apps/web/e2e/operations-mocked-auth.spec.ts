@@ -114,3 +114,22 @@ test("custody return keeps decimal text and Gregorian business date through its 
     notes: "باقي العهدة",
   });
 });
+
+test("purchase request and completion expose the shared Gregorian date adapter", async ({ page }) => {
+  await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=6");
+
+  await page.getByRole("button", { name: "إنشاء طلب شراء" }).click();
+  let dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "فتح التقويم" }).click();
+  await expect(page.getByRole("grid")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await dialog.getByRole("button", { name: "إلغاء" }).click();
+
+  await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
+  dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "فتح التقويم" }).click();
+  await expect(page.getByRole("grid")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("grid")).toHaveCount(0);
+});
