@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AiCredentialVault } from './ai-platform/ai-credential-vault.js';
 import { AdministrationController } from './administration/administration.controller.js';
@@ -117,6 +118,16 @@ import { DecisionContextImportService } from './decision-intelligence/decision-c
 import { DecisionContextResearchService } from './decision-intelligence/decision-context-research.service.js';
 
 @Module({
+  imports: [
+    ThrottlerModule.forRoot({
+      // Deliberately no global guard: ordinary ERP reads must not share the
+      // authentication attack budget. AuthController opts in per endpoint.
+      throttlers: [
+        { name: 'authIp', limit: 10, ttl: 900_000, blockDuration: 900_000 },
+        { name: 'authIdentity', limit: 5, ttl: 900_000, blockDuration: 900_000 },
+      ],
+    }),
+  ],
   controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController],
   providers: [
     DatabaseService,

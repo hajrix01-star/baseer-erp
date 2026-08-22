@@ -27,7 +27,10 @@ export class ApiExceptionFilter implements ExceptionFilter {
       : HttpStatus.INTERNAL_SERVER_ERROR;
     const correlationId = RequestContext.correlationId()
       ?? RequestContext.resolveCorrelationId(request.headers['x-request-id']);
-    const [code, retry] = this.classify(status);
+    const retryAfterSeconds = status === HttpStatus.TOO_MANY_REQUESTS
+      ? this.retryAfterSeconds(response)
+      : undefined;
+    const [code, retry] = this.classify(status, retryAfterSeconds);
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       // Keep the response safe, but preserve a correlation-bound diagnosis in
       // the server log. Without this, an interceptor can record its pre-filter
@@ -45,20 +48,43 @@ export class ApiExceptionFilter implements ExceptionFilter {
       },
     };
 
+    if (retryAfterSeconds) response.header('retry-after', retryAfterSeconds);
     response.header('x-request-id', correlationId).status(status).send(receipt);
   }
 
-  private classify(status: number): [ErrorCode, Retry] {
+  private classify(
+    status: number,
+    retryAfterSeconds?: number,
+  ): [ErrorCode, Retry] {
     if (status === HttpStatus.BAD_REQUEST) return ['VALIDATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.UNAUTHORIZED) return ['AUTHENTICATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.FORBIDDEN) return ['AUTHORIZATION_DENIED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.NOT_FOUND) return ['NOT_FOUND', { kind: 'do-not-retry' }];
     if (status === HttpStatus.CONFLICT) return ['CONFLICT', { kind: 'do-not-retry' }];
-    if (status === HttpStatus.TOO_MANY_REQUESTS) return ['RATE_LIMITED', { kind: 'retry-after', retryAfterSeconds: 900 }];
+    if (status === HttpStatus.TOO_MANY_REQUESTS)
+      return ['RATE_LIMITED', {
+        kind: 'retry-after',
+        retryAfterSeconds: retryAfterSeconds ?? 900,
+      }];
     if (status === HttpStatus.SERVICE_UNAVAILABLE) return ['DEPENDENCY_UNAVAILABLE', { kind: 'retry' }];
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) return ['INTERNAL_ERROR', { kind: 'retry' }];
 
     return ['VALIDATION_FAILED', { kind: 'do-not-retry' }];
+  }
+
+  private retryAfterSeconds(response: FastifyReply): number {
+    for (const header of ['retry-after-authIp', 'retry-after-authIdentity']) {
+      const value = response.getHeader(header);
+      const parsed = typeof value === 'number'
+        ? value
+        : typeof value === 'string'
+          ? Number.parseInt(value, 10)
+          : Number.NaN;
+      if (Number.isFinite(parsed) && parsed > 0) return Math.ceil(parsed);
+    }
+    // This is a safe fallback for a 15-minute identity limiter. A custom
+    // 429 from another subsystem must never ask a client to retry immediately.
+    return 900;
   }
 
   private messageFor(code: ErrorCode): ApiErrorReceipt['error']['message'] {

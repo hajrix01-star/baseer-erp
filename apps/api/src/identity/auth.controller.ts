@@ -13,9 +13,17 @@ import {
   InternalServerErrorException,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from "@nestjs/common";
+import { Throttle, ThrottlerGuard } from "@nestjs/throttler";
 import { RequestContext } from "../observability/request-context.js";
 import { AuthService } from "./auth.service.js";
+import {
+  AUTH_THROTTLE_WINDOW_MS,
+  ownerActivationIdentityTracker,
+  refreshIdentityTracker,
+  signInIdentityTracker,
+} from "./auth-throttle-policy.js";
 
 @Controller("auth")
 export class AuthController {
@@ -23,6 +31,16 @@ export class AuthController {
 
   @Post("sign-in")
   @HttpCode(200)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({
+    authIp: { limit: 10, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
+    authIdentity: {
+      limit: 5,
+      ttl: AUTH_THROTTLE_WINDOW_MS,
+      blockDuration: AUTH_THROTTLE_WINDOW_MS,
+      getTracker: signInIdentityTracker,
+    },
+  })
   async signIn(
     @Body() body: unknown,
     @Headers("x-request-id") requestId?: string,
@@ -37,6 +55,16 @@ export class AuthController {
 
   @Post("owner/activate")
   @HttpCode(204)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({
+    authIp: { limit: 5, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
+    authIdentity: {
+      limit: 3,
+      ttl: AUTH_THROTTLE_WINDOW_MS,
+      blockDuration: AUTH_THROTTLE_WINDOW_MS,
+      getTracker: ownerActivationIdentityTracker,
+    },
+  })
   async activateOwner(
     @Body() body: unknown,
     @Headers("x-request-id") requestId?: string,
@@ -51,6 +79,16 @@ export class AuthController {
 
   @Post("refresh")
   @HttpCode(200)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({
+    authIp: { limit: 30, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
+    authIdentity: {
+      limit: 10,
+      ttl: AUTH_THROTTLE_WINDOW_MS,
+      blockDuration: AUTH_THROTTLE_WINDOW_MS,
+      getTracker: refreshIdentityTracker,
+    },
+  })
   async refresh(
     @Body() body: unknown,
     @Headers("x-request-id") requestId?: string,
