@@ -417,11 +417,6 @@
       "file": "baseer-combobox.tsx",
       "decision": "central-adapter"
     },
-    "searchable-selector:baseer-search-select.tsx": {
-      "kind": "searchable-selector",
-      "file": "baseer-search-select.tsx",
-      "decision": "central-adapter"
-    },
     "searchable-selector:baseer-select.tsx": {
       "kind": "searchable-selector",
       "file": "baseer-select.tsx",
@@ -510,7 +505,7 @@
     "table:data-table.tsx": {
       "kind": "table",
       "file": "data-table.tsx",
-      "decision": "pending-module-closure"
+      "decision": "central-intentional-lightweight-bounded-table"
     },
     "table:finance-accounts-workspace.tsx": {
       "kind": "table",
