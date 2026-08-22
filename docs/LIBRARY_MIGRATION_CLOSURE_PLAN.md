@@ -51,7 +51,101 @@
 8. لا يغير adapter مسار API أو method أو payload أو idempotency key أو audit/reversal أو تاريخ العمل. التحقق الخادمي هو الحكم وتظهر أخطاء 401/403/409 والتحقق بصورة آمنة.
 9. لكل dependency: إصدار دقيق، ترخيص، lockfile/SBOM/audit، مالك، rollback ومدة للاستثناء؛ لا ترقية Prisma أو override تلقائي ضمن موجة الواجهة.
 
-## 4. موجات التنفيذ
+## 4. المركزية ومنع التفرع
+
+قبل إغلاق أي موديول، تبقى هذه طبقة مركزية واحدة ومملوكة للفريق:
+
+- `BaseerForm` adapters: عقود RHF/Zod، عرض الخطأ، Decimal string، وربط أخطاء الخادم.
+- `BaseerCombobox` وadapter التاريخ النهائي: RTL وARIA وkeyboard وabort/cancel وعقد ISO.
+- `BaseerDataGrid` و`BaseerCompanyReadQuery`: server mode وcache-key وinvalidation policy.
+- `BaseerChart`: عقد العرض، ARIA، summary/table، وقيود الأرقام المالية.
+- scripts الجرد والـarchitecture gate والـbundle budget وسجل الإغلاق.
+
+لا يُسمح للموديول بعمل fork لهذه الطبقة أو استيراد المكتبات مباشرة. أي تحسين adapter يطبق مركزياً أولاً، ثم يستهلكه الموديول المستهدف. بهذا تكون الواجهة موحدة حتى مع إغلاق الموديولات واحداً واحداً.
+
+## 5. برنامج الإغلاق حسب الموديول
+
+**قاعدة التنفيذ:** يبدأ موديول واحد فقط، ولا يبدأ التالي حتى يصبح السابق `Closed` وفق معيار الإقفال واختبار المتصفح. ترتيب البداية: **العمليات → الموارد البشرية → المالية → الإدارة → التقارير → مركز القرار → مركز القيادة**.
+يجوز تجهيز manifest والاختبارات للموديول التالي قراءة فقط، لكن لا ترحل واجهاته أو تغير كوده قبل إغلاق السابق.
+
+### 5.1 العمليات — الموديول الأول
+
+| القسم | التبويبات/المسارات التي تدخل الجرد |
+|---|---|
+| نظرة التشغيل | الصفحة الرئيسية ومؤشراتها فقط |
+| المبيعات | التسجيل، السجل/التاريخ، التقفيل، العكس والتصحيح |
+| المشتريات | `entry`، `credit` |
+| المصروفات والالتزامات | `items`، `batch`، `history` |
+| الموردون | موردون، تسويات ودفعات ائتمانية |
+| المخزون والمستودعات | raw materials، units، menu، archive؛ كرت المنتج details/price/recipe وكرت المادة details/units/conversions |
+| طلبات المشتريات والعهدة | إنشاء الطلب، اعتماد الاستلام، الإلغاء، مرتجع العهدة |
+| التسجيل الداخلي | الإدخال، السلة، التقرير |
+| تقارير العمليات | التقارير التشغيلية ومصادرها |
+| الأصول والضمان | التسجيل، الضمان، المتابعة |
+
+### 5.2 الموارد البشرية
+
+| القسم | التبويبات/المسارات التي تدخل الجرد |
+|---|---|
+| نظرة HR | KPI والاختصارات والقراءات |
+| الموظفون | ملف الموظف، onboarding، profile، promotions، documents، letters، agreements |
+| الإجازات والعودة | leave، return، سجل الإجازات وفلتر الموظف |
+| الرواتب | create، preview، detail، payment، reversal، policies |
+| السلف والخصومات | create، settlement، defer، cancellation، deductions |
+| الإقامات والخدمات | services، costs، residency/employee service flows |
+| أدوات الراتب | salary adjustment، calculations وread models |
+| نهاية الخدمة | verification، approval، payment، reversal وallocations |
+
+### 5.3 المالية والمحاسبة
+
+| القسم | التبويبات/المسارات التي تدخل الجرد |
+|---|---|
+| إعدادات المالية | الشركات/الفترات/التهيئة والموردون |
+| السجل المالي الموحد | register، filters، drill-down، snapshot |
+| الخزائن والبنوك | vaults، bank/cash flows، recurring profiles |
+| الحسابات | chart of accounts وإدارة الحسابات |
+| الفئات والتصنيفات | categories وclassification rules |
+
+### 5.4 الإدارة
+
+| القسم | التبويبات/المسارات التي تدخل الجرد |
+|---|---|
+| نظرة الإدارة | cards والقراءات |
+| الشركات | create/update، context switch |
+| المستخدمون | create/edit، company assignment، sessions |
+| الأدوار والصلاحيات | role template، permission matrix، sensitive capabilities |
+| الهوية والثيم | settings والتهيئة المحلية |
+| النسخ الاحتياطي | read-only status وعمليات التفويض المتاحة |
+
+### 5.5 التقارير
+
+| القسم | التبويبات/المسارات التي تدخل الجرد |
+|---|---|
+| نظرة التقارير | KPI وreport navigation |
+| التقارير المالية | trial balance، cash performance، report runs |
+| التقرير الضريبي | VAT views وperiod controls |
+| Hajri Tax | التكامل/القراءة المتاحة |
+| مستندات التقارير | documents، export، drill-down |
+
+### 5.6 مركز القرار والسياق
+
+النظرة والقرارات، الخط الزمني والسياق، التنبيهات، جودة البيانات، المصادر والسياسات؛ وكل KPI أو Chart يخضع لعقد MetricContract.
+
+### 5.7 مركز القيادة
+
+النظرة التنفيذية، الأولويات، التنبيهات، موجز النشاط؛ لا يبنى رسم أو Query إضافي دون مصدر خادمي وحالة عمل واضحة.
+
+### بوابة إغلاق الموديول عبر المتصفح
+
+لا ينتقل الفريق للموديول التالي قبل تنفيذ وتسجيل ما يلي لكل قسم وتبويب قابل للعمل:
+
+1. فتح المسار الفعلي بالعربية RTL والإنجليزية LTR، سطح المكتب والجوال.
+2. تنفيذ happy path وinvalid/denied/server-error، واختبار keyboard/focus/escape لكل حوار أو selector.
+3. اختبار تبديل الشركة/المستخدم حيث توجد قراءة أو بحث أو cache.
+4. لقطة دليل للمسارات الرئيسة، E2E/Axe للمسارات المتحولة، ثم check/build/budget من SHA المحدد.
+5. manifest للموديول بلا `unclassified` وسجل إغلاقه `Closed`، وموافقة المالك المسجلة.
+
+## 6. موجات التنفيذ داخل الموديول
 
 ### قاعدة حجم الدفعة
 
@@ -60,14 +154,7 @@
 
 ### الموجة A — إغلاق النماذج المتبقية
 
-الهدف: تصنيف وتحويل ملفات النماذج غير المحولة حالياً، مع أولوية الأقل خطراً ثم المالية.
-
-1. الإدارة: `administration-roles-panel`.
-2. التشغيل: نماذج تفاصيل المادة والتحويل والوحدات في `operations-catalog-workspace`، ثم `purchase-expense-workspace` و`recurring-expense-workspace` و`treasury-workspace`.
-3. الموارد البشرية غير المالية: `hr-employee-documents-panel` و`hr-employee-promotions-panel` و`hr-salary-adjustment-dialog`.
-4. HR ذات الأثر المالي: `hr-services-workspace` و`hr-payroll-*` و`hr-final-settlement-panel` و`hr-workspace`.
-5. المالية: `finance-setup-workspace` و`expenses-obligations-workspace` و`outflow-batch-entry-table`.
-6. قرارات/مبيعات: `decision-intelligence-workspace` و`daily-sales-*`؛ تسجل تسجيل الدخول كاستثناء أمني إن لم يكن RHF هو الأنسب.
+الهدف: تصنيف وتحويل كل نماذج **الموديول النشط فقط**، مع أولوية الأقل خطراً داخل ذلك الموديول ثم المسارات المالية/السلطوية. قائمة الأقسام والتبويبات الملزمة موجودة في برنامج الإغلاق أعلاه؛ لا تفتح ملفات موديول تالٍ في هذه الموجة.
 
 **مخرج الموجة:** لا يبقى نموذج بلا سطر قرار في سجل الإغلاق.
 
@@ -112,7 +199,7 @@
 3. تشغيل E2E وaxe على المسارات المتحولة، ثم check/build/budget.
 4. تحديث هذا الملف وسجل التنفيذ النهائي وإعلان النتيجة: **Closed** أو قائمة استثناءات محدودة بمالك وتاريخ مراجعة.
 
-## 5. سجل التنفيذ والـmanifest الإلزاميان
+## 7. سجل التنفيذ والـmanifest الإلزاميان
 
 ينشأ manifest آلي من `apps/web/src` في كل موجة، ويحتوي كل surface أو استعمال adapter أو import مباشر. يفشل CI إن وُجد `unclassified` أو استيراد جديد للـlegacy/direct library import.
 
@@ -124,7 +211,7 @@
 
 لـQuery يضاف: key fields وcache policy وTTL وinvalidation. وللجدول: cardinality وserver paging/sort/filter ومصدر السلطة. وللـKPI/Chart: MetricContract وsource وdrill-down.
 
-## 6. بوابات الإيقاف
+## 8. بوابات الإيقاف
 
 - فشل عزل الشركة أو الصلاحية أو RLS.
 - تغيير API/محاسبة/تاريخ عمل بسبب ترحيل واجهة فقط.
@@ -134,7 +221,7 @@
 - Query أو Combobox يعرض نتيجة/خطأ قديماً بعد تبديل user/company/role.
 - فرز أو تجميع أو paging مالي في المتصفح، أو Chart/Table لا يطابقان نفس snapshot.
 
-## 7. معيار الإغلاق النهائي
+## 9. معيار الإغلاق النهائي
 
 يُغلق ملف التحول فقط عندما:
 
