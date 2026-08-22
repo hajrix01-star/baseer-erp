@@ -7,7 +7,8 @@ import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
-import { DataTable, type DataTableColumn } from "./data-table";
+import type { BaseerDataGridColumn } from "./baseer-data-grid";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
 import { reportTopmostDialogError } from "./use-dialog-focus-trap";
 import { consumeHrRouteStage } from "./hr-route-stage";
@@ -69,7 +70,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "ملغى" : "Cancelled" })[status];
   const openDetail = (run: HrPayrollRun) => { setReviewDraft(false); setSelectedRun(run); };
 
-  const columns: readonly DataTableColumn<HrPayrollRun>[] = [
+  const columns: readonly BaseerDataGridColumn<HrPayrollRun>[] = [
     { id: "number", header: ar ? "رقم المسير" : "Run no.", cell: (row) => <BaseerButton type="button" variant="quiet" onClick={() => void openDetail(row)}>{row.runNumber}</BaseerButton>, sort: (row) => row.runNumber, width: "14rem" },
     { id: "month", header: ar ? "الشهر" : "Month", cell: (row) => row.payrollMonth, sort: (row) => row.payrollMonth, width: "10rem" },
     { id: "employees", header: ar ? "الموظفون" : "Employees", cell: (row) => row.employeeCount, sort: (row) => row.employeeCount, width: "8rem" },
@@ -84,7 +85,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2></div><div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div></div>
     <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /><BaseerSummaryMetric tone="muted" label={ar ? "مسيرات ملغاة" : "Cancelled runs"} value={String(summary.cancelledCount)} /></BaseerSummaryMetricGrid>
     <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} />
-    {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <DataTable<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
+    {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <BaseerDataGrid<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
     {message ? <p className={`daily-sales-message ${message.tone}`}>{message.text}</p> : null}

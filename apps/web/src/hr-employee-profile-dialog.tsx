@@ -9,7 +9,7 @@ import { BaseerDialog } from "./baseer-dialog";
 import { BaseerMoney } from "./baseer-money";
 import { BaseerStatusBadge } from "./baseer-status-badge";
 import { BaseerEmptyState, BaseerNotice } from "./baseer-workspace";
-import { DataTable } from "./data-table";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession } from "./daily-sales-client";
 import { HrEmployeePhoto } from "./hr-employee-photo";
 import { hrEnumLabel, hrText } from "./hr-copy";
@@ -147,8 +147,8 @@ export function HrEmployeeProfileDialog({ detail, language, onClose, onEdit, onM
   </BaseerBatchPanel></section></BaseerDialog>{payrollRunId ? <Suspense fallback={null}><HrPayrollDetailDialog runId={payrollRunId} language={language} onClose={() => setPayrollRunId(null)} onChanged={onChanged} onError={onError} /></Suspense> : null}{finalSettlementOpen ? <BaseerDialog open title={ar ? `نهاية خدمة ${name}` : `End of service — ${name}`} size="wide" language={language} onClose={() => { setFinalSettlementOpen(false); void onChanged(); }}><Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل المخالصة…" : "Loading settlement…"}</BaseerCard>}><HrFinalSettlementWorkspace language={language} employee={detail.employee} /></Suspense></BaseerDialog> : null}</>;
 }
 
-function ProfileTable<T>({ language, rows, columns, rowKey, empty, label, onMore, loadingMore = false }: { language: Language; rows: readonly T[]; columns: readonly any[]; rowKey: (row: T) => string; empty: string; label: string; onMore?: () => void | Promise<void>; loadingMore?: boolean }) {
-  return <section className="hr-profile-table"><header><h3>{label}</h3></header>{rows.length ? <DataTable ariaLabel={label} caption={label} rows={rows} columns={columns} rowKey={rowKey} /> : <BaseerEmptyState title={empty} />}{onMore ? <BaseerButton type="button" variant="secondary" disabled={loadingMore} onClick={() => void onMore()}>{hrText(language).loadMore}</BaseerButton> : null}</section>;
+function ProfileTable<T extends object>({ language, rows, columns, rowKey, empty, label, onMore, loadingMore = false }: { language: Language; rows: readonly T[]; columns: readonly any[]; rowKey: (row: T) => string; empty: string; label: string; onMore?: () => void | Promise<void>; loadingMore?: boolean }) {
+  return <section className="hr-profile-table"><header><h3>{label}</h3></header>{rows.length ? <BaseerDataGrid ariaLabel={label} caption={label} rows={rows} columns={columns} rowKey={rowKey} /> : <BaseerEmptyState title={empty} />}{onMore ? <BaseerButton type="button" variant="secondary" disabled={loadingMore} onClick={() => void onMore()}>{hrText(language).loadMore}</BaseerButton> : null}</section>;
 }
 
 function PayrollSettlementLedger({ language, sections }: { language: Language; sections: readonly LedgerSection[] }) {

@@ -9,13 +9,15 @@ import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoneyInput, BaseerTextArea } from "./baseer-form-fields";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
+import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
-import { DataTable } from "./data-table";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { formatNumber, formatPercent } from "./number-format";
+import { isPositiveMoneyDecimal } from "./decimal-string";
 import {
   approveHrFinalSettlement, createHrFinalSettlement, listHrAdministrativeDeductions,
   getHrFinalSettlement, listHrAdvances, listHrEmployees, listHrFinalSettlements, payHrFinalSettlement,
@@ -40,6 +42,27 @@ const money = (value: string) => formatNumber(value);
 
 export function HrFinalSettlementWorkspace({ language, employee }: { language: Language; employee?: HrEmployee }) {
   const ar = language === "ar";
+  const validationCopy = useMemo(() => ar ? {
+    date: "اختر تاريخاً صحيحاً.",
+    employee: "اختر الموظف.",
+    evidence: "أدخل مرجع دليل الإنهاء.",
+    verification: "أدخل ملاحظة التحقق.",
+    vault: "اختر الخزينة.",
+    amount: "أدخل مبلغاً صحيحاً.",
+    positiveAmount: "يجب أن يكون المبلغ أكبر من صفر.",
+    allocation: "أضف توزيع سداد واحداً على الأقل.",
+    cancellation: "أدخل سبب الإلغاء.",
+  } : {
+    date: "Choose a valid date.",
+    employee: "Choose an employee.",
+    evidence: "Enter the termination evidence reference.",
+    verification: "Enter the verification note.",
+    vault: "Choose a vault.",
+    amount: "Enter a valid amount.",
+    positiveAmount: "The amount must be greater than zero.",
+    allocation: "Add at least one payment allocation.",
+    cancellation: "Enter the cancellation reason.",
+  }, [ar]);
   const [tab, setTab] = useState<Tab>("calculator");
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
   const [draft, setDraft] = useState<Draft>(() => ({ ...emptyDraft(), employeeId: employee?.id ?? "" }));
@@ -103,10 +126,33 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     ...deductions.filter((item) => item.status === "OPEN" || item.status === "PARTIALLY_APPLIED" || item.status === "DEFERRED").map((item) => ({ id: item.id, recoveryType: "ADMINISTRATIVE_DEDUCTION" as const, reference: item.deductionNumber, remainingAmount: item.remainingAmount })),
   ], [advances, deductions]);
   const activeVaults = useMemo(() => vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination), [vaults]);
+  const dateSchema = useMemo(() => z.string().regex(/^\d{4}-\d{2}-\d{2}$/, validationCopy.date), [validationCopy.date]);
+  const previewForm = useBaseerForm<Draft>({
+    schema: useMemo(() => z.object({
+      employeeId: z.string().min(1, validationCopy.employee),
+      terminationDate: dateSchema,
+      terminationReason: z.enum(["EMPLOYER_TERMINATION", "RESIGNATION", "ARTICLE_80", "ARTICLE_81", "FORCE_MAJEURE", "MATERNITY", "OTHER_LEGAL_REVIEW"]),
+      reasonEvidenceReference: z.string().trim().min(1, validationCopy.evidence).max(240),
+      reasonEvidenceNote: z.string().max(2000),
+    }), [dateSchema, validationCopy.employee, validationCopy.evidence]),
+    values: draft,
+  });
+  const approveForm = useBaseerForm<{ businessDate: string }>({ schema: useMemo(() => z.object({ businessDate: dateSchema }), [dateSchema]), values: { businessDate } });
+  const verifyForm = useBaseerForm<{ verificationNote: string }>({ schema: useMemo(() => z.object({ verificationNote: z.string().trim().min(1, validationCopy.verification).max(2000) }), [validationCopy.verification]), values: { verificationNote } });
+  const paymentSchema = useMemo(() => z.object({
+    businessDate: dateSchema,
+    allocations: z.array(z.object({
+      vaultId: z.string().min(1, validationCopy.vault),
+      paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "BANK_CARD", "BANK_PAYMENT", "APP"]),
+      amount: baseerDecimalString(validationCopy.amount).refine(isPositiveMoneyDecimal, validationCopy.positiveAmount),
+    })).min(1, validationCopy.allocation),
+  }), [dateSchema, validationCopy.allocation, validationCopy.amount, validationCopy.positiveAmount, validationCopy.vault]);
+  const payForm = useBaseerForm<{ businessDate: string; allocations: Allocation[] }>({ schema: paymentSchema, values: { businessDate, allocations } });
+  const reverseForm = useBaseerForm<{ businessDate: string; reason: string }>({ schema: useMemo(() => z.object({ businessDate: dateSchema, reason: z.string().trim().min(1, validationCopy.cancellation) }), [dateSchema, validationCopy.cancellation]), values: { businessDate, reason: reverseReason } });
 
   const selectedRecoveries = (): HrFinalSettlementRecovery[] => recoveryRows.flatMap((row) => {
     const amount = recoveries[row.id] ?? "";
-    return Number(amount) > 0 ? [{ recoveryType: row.recoveryType, sourceId: row.id, amount }] : [];
+    return isPositiveMoneyDecimal(amount) ? [{ recoveryType: row.recoveryType, sourceId: row.id, amount }] : [];
   });
   const previewPayload = () => ({ employeeId: draft.employeeId, terminationDate: draft.terminationDate, terminationReason: draft.terminationReason, reasonEvidenceReference: draft.reasonEvidenceReference.trim(), ...(draft.reasonEvidenceNote.trim() ? { reasonEvidenceNote: draft.reasonEvidenceNote.trim() } : {}), recoveries: selectedRecoveries() });
 
@@ -218,8 +264,8 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     try { const receipt = await getHrFinalSettlement(current, settlement.id, { pageSize: 100 }); setSelected(receipt.settlement); setPayments(receipt.payments); setNextPaymentCursor(receipt.nextPaymentCursor); }
     catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل تفاصيل المخالصة." : "Final-settlement details could not be loaded.")); }
   };
-  const reversePayment = async (event: React.FormEvent) => {
-    event.preventDefault(); const current = activeSession(); if (!current || !paymentToReverse || !selected || busy || !reverseReason.trim()) return;
+  const reversePayment = async () => {
+    const current = activeSession(); if (!current || !paymentToReverse || !selected || busy || !reverseReason.trim()) return;
     setBusy(true);
     try { await reverseHrFinalSettlementPayment(current, { finalSettlementPaymentId: paymentToReverse.id, businessDate, reason: reverseReason.trim(), idempotencyKey: requestId() }); const receipt = await getHrFinalSettlement(current, selected.id, { pageSize: 100 }); setSelected(receipt.settlement); setPayments(receipt.payments); setNextPaymentCursor(receipt.nextPaymentCursor); setPaymentToReverse(null); setReverseReason(""); await load(); }
     catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر إلغاء دفعة المخالصة." : "The final-settlement payment could not be cancelled.")); }
@@ -243,16 +289,16 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     <BaseerBatchPanel id={`hr-final-settlement-panel-${tab}`} labelledBy={`hr-final-settlement-${tab}`}>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       {tab === "calculator" ? <>
-        <form className="administration-form" onSubmit={(event) => { event.preventDefault(); void preparePreview(); }}>
-          {employee ? <label>{ar ? "الموظف" : "Employee"}<input readOnly value={labelEmployee(employee)} /></label> : <label>{ar ? "الموظف" : "Employee"}<BaseerCombobox required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={[]} remoteSearch={searchEmployees} scopeKey={session?.companyId ?? "signed-out"} onChange={(employeeId) => { setDraft((value) => ({ ...value, employeeId })); setPreview(null); }} /></label>}
-          <BaseerDatePicker language={language} label={ar ? "تاريخ الإنهاء" : "Termination date"} value={draft.terminationDate} onChange={(terminationDate) => { setDraft((value) => ({ ...value, terminationDate })); setPreview(null); }} />
+        <form className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={previewForm.handleSubmit(() => void preparePreview())}>
+          {employee ? <label>{ar ? "الموظف" : "Employee"}<input readOnly value={labelEmployee(employee)} /></label> : <label>{ar ? "الموظف" : "Employee"}<BaseerCombobox required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={[]} remoteSearch={searchEmployees} scopeKey={session?.companyId ?? "signed-out"} onChange={(employeeId) => { setDraft((value) => ({ ...value, employeeId })); setPreview(null); }} />{previewForm.formState.errors.employeeId ? <small role="alert">{previewForm.formState.errors.employeeId.message}</small> : null}</label>}
+          <label>{ar ? "تاريخ الإنهاء" : "Termination date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الإنهاء" : "Termination date"} value={draft.terminationDate} onChange={(terminationDate) => { setDraft((value) => ({ ...value, terminationDate })); setPreview(null); }} />{previewForm.formState.errors.terminationDate ? <small role="alert">{previewForm.formState.errors.terminationDate.message}</small> : null}</label>
           <label>{ar ? "سبب الإنهاء" : "Termination reason"}<select value={draft.terminationReason} onChange={(event) => { setDraft((value) => ({ ...value, terminationReason: event.target.value as HrFinalSettlementReason })); setPreview(null); }}>{(["EMPLOYER_TERMINATION", "RESIGNATION", "ARTICLE_80", "ARTICLE_81", "FORCE_MAJEURE", "MATERNITY", "OTHER_LEGAL_REVIEW"] as const).map((reason) => <option key={reason} value={reason}>{labelReason(reason)}</option>)}</select></label>
-          <label>{ar ? "مرجع دليل الإنهاء" : "Termination evidence reference"}<input required maxLength={240} value={draft.reasonEvidenceReference} placeholder={ar ? "رقم خطاب أو قرار أو مرجع موثّق" : "Letter, decision, or documented reference"} onChange={(event) => { setDraft((value) => ({ ...value, reasonEvidenceReference: event.target.value })); setPreview(null); }} /></label>
+          <label>{ar ? "مرجع دليل الإنهاء" : "Termination evidence reference"}<input required maxLength={240} aria-invalid={Boolean(previewForm.formState.errors.reasonEvidenceReference)} value={draft.reasonEvidenceReference} placeholder={ar ? "رقم خطاب أو قرار أو مرجع موثّق" : "Letter, decision, or documented reference"} onChange={(event) => { setDraft((value) => ({ ...value, reasonEvidenceReference: event.target.value })); setPreview(null); }} />{previewForm.formState.errors.reasonEvidenceReference ? <small role="alert">{previewForm.formState.errors.reasonEvidenceReference.message}</small> : null}</label>
           <label>{ar ? "ملاحظة الدليل (اختيارية)" : "Evidence note (optional)"}<textarea maxLength={2000} value={draft.reasonEvidenceNote} onChange={(event) => { setDraft((value) => ({ ...value, reasonEvidenceNote: event.target.value })); setPreview(null); }} /></label>
           <BaseerButton type="submit" disabled={previewLoading || !draft.employeeId || !draft.reasonEvidenceReference.trim()}>{previewLoading ? (ar ? "جارٍ المعاينة…" : "Previewing…") : (ar ? "معاينة خادمية" : "Server preview")}</BaseerButton>
         </form>
         <BaseerCard><p>{ar ? "الإصدار الأول: مكافأة نهاية الخدمة + استردادات مرجعية فقط. لا يشمل رصيد الإجازة أو المادة 77 أو أي مستحقات أخرى؛ الخادم وحده يحسب المكافأة والصافي." : "V1 covers the end-of-service award plus referenced recoveries only. It excludes leave balance, Article 77, and other credits; the server alone calculates the award and net amount."}</p></BaseerCard>
-        {recoveryRows.length ? <DataTable ariaLabel={ar ? "أرصدة قابلة للاسترداد" : "Recoverable balances"} caption={ar ? "السلف والخصومات المراد استردادها" : "Advances and deductions to recover"} rows={recoveryRows} rowKey={(row) => row.id} columns={[
+        {recoveryRows.length ? <BaseerDataGrid ariaLabel={ar ? "أرصدة قابلة للاسترداد" : "Recoverable balances"} caption={ar ? "السلف والخصومات المراد استردادها" : "Advances and deductions to recover"} rows={recoveryRows} rowKey={(row) => row.id} columns={[
           { id: "type", header: ar ? "النوع" : "Type", cell: (row: RecoveryRow) => row.recoveryType === "ADVANCE" ? (ar ? "سلفة" : "Advance") : (ar ? "خصم إداري" : "Administrative deduction") },
           { id: "reference", header: ar ? "المرجع" : "Reference", cell: (row: RecoveryRow) => row.reference },
           { id: "remaining", header: ar ? "المتاح" : "Available", cell: (row: RecoveryRow) => money(row.remainingAmount) },
@@ -270,7 +316,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       </> : null}
       {tab === "register" ? <>
         <BaseerFilterBar language={language} search={search} searchLabel={ar ? "بحث المخالصات" : "Search settlements"} searchPlaceholder={ar ? "رقم المخالصة أو الحالة" : "Number or status"} onSearchChange={setSearch} controls={<>{employee ? null : <label>{ar ? "الموظف" : "Employee"}<BaseerCombobox label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={[]} remoteSearch={searchEmployees} scopeKey={session?.companyId ?? "signed-out"} onChange={setEmployeeFilter} /></label>}<label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "" | HrFinalSettlementStatus)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option>{(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED", "CANCELLED"] as const).map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}</select></label></>} />
-        {loading ? <BaseerCard>{ar ? "جارٍ تحميل سجل المكافآت…" : "Loading award register…"}</BaseerCard> : rows.length ? <DataTable ariaLabel={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} caption={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} rows={rows} rowKey={(row) => row.id} columns={[
+        {loading ? <BaseerCard>{ar ? "جارٍ تحميل سجل المكافآت…" : "Loading award register…"}</BaseerCard> : rows.length ? <BaseerDataGrid ariaLabel={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} caption={ar ? "سجل مكافأة نهاية الخدمة" : "End-of-service award register"} rows={rows} rowKey={(row) => row.id} columns={[
           { id: "number", header: ar ? "المخالصة" : "Settlement", cell: (row: HrFinalSettlement) => <BaseerButton type="button" variant="quiet" onClick={() => void openSettlementDetail(row)}>{row.settlementNumber}</BaseerButton> },
           { id: "date", header: ar ? "تاريخ الإنهاء" : "Termination", cell: (row: HrFinalSettlement) => row.terminationDate },
           { id: "reason", header: ar ? "السبب" : "Reason", cell: (row: HrFinalSettlement) => labelReason(row.terminationReason) },
@@ -289,29 +335,29 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
       {selected.status === "DRAFT" ? <BaseerButton type="button" disabled={busy || Boolean(reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED")} onClick={() => { setBusinessDate(today()); setApproveOpen(true); }}>{ar ? "اعتماد" : "Approve"}</BaseerButton> : null}
       {selected.status === "APPROVED" || selected.status === "PARTIALLY_PAID" ? <BaseerButton type="button" disabled={busy} onClick={() => void openPayDialog()}>{ar ? "صرف" : "Pay"}</BaseerButton> : null}
       {selected.status !== "DRAFT" && selected.status !== "REVERSED" && selected.status !== "CANCELLED" ? <BaseerButton type="button" variant="danger" disabled={busy} onClick={() => { setBusinessDate(today()); setReverseReason(""); setReverseOpen(true); }}>{ar ? "إلغاء" : "Cancel"}</BaseerButton> : null}
-    </> : undefined}>{selected ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص المخالصة" : "Settlement summary"}><BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS"} value={money(selected.eosAmount)} /><BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(selected.recoveryAmount)} /><BaseerSummaryMetric label={ar ? "الصافي" : "Net"} value={money(selected.netPayableAmount)} /><BaseerSummaryMetric label={ar ? "المدفوع" : "Paid"} value={money(selected.paidAmount)} /></BaseerSummaryMetricGrid>{reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerCard>{ar ? "يتطلب هذا السبب تحققاً موثقاً قبل الاعتماد." : "This reason requires documented verification before approval."}</BaseerCard> : null}<dl className="administration-details"><div><dt>{ar ? "السبب" : "Reason"}</dt><dd>{labelReason(selected.terminationReason)}</dd></div><div><dt>{ar ? "مرجع الدليل" : "Evidence reference"}</dt><dd>{selected.reasonEvidenceReference}</dd></div><div><dt>{ar ? "تحقق السبب" : "Reason verification"}</dt><dd>{labelVerification(selected.reasonVerificationStatus)}</dd></div><div><dt>{ar ? "تاريخ الإنهاء" : "Termination date"}</dt><dd>{selected.terminationDate}</dd></div><div><dt>{ar ? "الحالة" : "Status"}</dt><dd>{labelStatus(selected.status)}</dd></div><div><dt>{ar ? "سياسة الحساب" : "Calculation policy"}</dt><dd>{selected.calculationPolicyVersion}</dd></div></dl>{payments.length ? <DataTable ariaLabel={ar ? "دفعات المخالصة" : "Final-settlement payments"} caption={ar ? "دفعات المخالصة" : "Final-settlement payments"} rows={payments} rowKey={(payment) => payment.id} columns={paymentColumns} /> : null}{nextPaymentCursor ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void loadMorePayments()}>{ar ? "تحميل دفعات إضافية" : "Load more payments"}</BaseerButton> : null}</> : null}</BaseerDialog>
+    </> : undefined}>{selected ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص المخالصة" : "Settlement summary"}><BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS"} value={money(selected.eosAmount)} /><BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(selected.recoveryAmount)} /><BaseerSummaryMetric label={ar ? "الصافي" : "Net"} value={money(selected.netPayableAmount)} /><BaseerSummaryMetric label={ar ? "المدفوع" : "Paid"} value={money(selected.paidAmount)} /></BaseerSummaryMetricGrid>{reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerCard>{ar ? "يتطلب هذا السبب تحققاً موثقاً قبل الاعتماد." : "This reason requires documented verification before approval."}</BaseerCard> : null}<dl className="administration-details"><div><dt>{ar ? "السبب" : "Reason"}</dt><dd>{labelReason(selected.terminationReason)}</dd></div><div><dt>{ar ? "مرجع الدليل" : "Evidence reference"}</dt><dd>{selected.reasonEvidenceReference}</dd></div><div><dt>{ar ? "تحقق السبب" : "Reason verification"}</dt><dd>{labelVerification(selected.reasonVerificationStatus)}</dd></div><div><dt>{ar ? "تاريخ الإنهاء" : "Termination date"}</dt><dd>{selected.terminationDate}</dd></div><div><dt>{ar ? "الحالة" : "Status"}</dt><dd>{labelStatus(selected.status)}</dd></div><div><dt>{ar ? "سياسة الحساب" : "Calculation policy"}</dt><dd>{selected.calculationPolicyVersion}</dd></div></dl>{payments.length ? <BaseerDataGrid ariaLabel={ar ? "دفعات المخالصة" : "Final-settlement payments"} caption={ar ? "دفعات المخالصة" : "Final-settlement payments"} rows={payments} rowKey={(payment) => payment.id} columns={paymentColumns} /> : null}{nextPaymentCursor ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void loadMorePayments()}>{ar ? "تحميل دفعات إضافية" : "Load more payments"}</BaseerButton> : null}</> : null}</BaseerDialog>
 
     <BaseerFormDialog open={approveOpen} title={ar ? "اعتماد المخالصة" : "Approve final settlement"} language={language} busy={busy} size="compact" formId="hr-settlement-approve" submitLabel={ar ? "اعتماد" : "Approve"} onClose={() => setApproveOpen(false)}>
-      <form id="hr-settlement-approve" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void approve(); }}><BaseerFormSection title={ar ? "تاريخ الاعتماد" : "Approval date"}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ الاعتماد" : "Approval date"} value={businessDate} onChange={setBusinessDate} /></BaseerFormGrid></BaseerFormSection></form>
+      <form id="hr-settlement-approve" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={approveForm.handleSubmit(() => void approve())}><BaseerFormSection title={ar ? "تاريخ الاعتماد" : "Approval date"}><BaseerFormGrid columns="one"><label>{ar ? "تاريخ الاعتماد" : "Approval date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الاعتماد" : "Approval date"} value={businessDate} onChange={setBusinessDate} />{approveForm.formState.errors.businessDate ? <small role="alert">{approveForm.formState.errors.businessDate.message}</small> : null}</label></BaseerFormGrid></BaseerFormSection></form>
     </BaseerFormDialog>
     <BaseerFormDialog open={verifyOpen} title={ar ? "تحقق من سبب الإنهاء" : "Verify termination reason"} language={language} busy={busy} size="compact" formId="hr-settlement-verify" submitLabel={ar ? "تأكيد التحقق" : "Confirm verification"} submitDisabled={!verificationNote.trim()} onClose={() => setVerifyOpen(false)}>
-      <form id="hr-settlement-verify" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void verifyReason(); }}><BaseerFormSection title={ar ? "ملاحظة التحقق" : "Verification note"}><BaseerFormGrid columns="one"><label>{ar ? "ملاحظة التحقق" : "Verification note"}<BaseerTextArea compact required maxLength={2000} value={verificationNote} onValueChange={setVerificationNote} /></label></BaseerFormGrid></BaseerFormSection></form>
+      <form id="hr-settlement-verify" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={verifyForm.handleSubmit(() => void verifyReason())}><BaseerFormSection title={ar ? "ملاحظة التحقق" : "Verification note"}><BaseerFormGrid columns="one"><label>{ar ? "ملاحظة التحقق" : "Verification note"}<BaseerTextArea compact required maxLength={2000} value={verificationNote} onValueChange={setVerificationNote} />{verifyForm.formState.errors.verificationNote ? <small role="alert">{verifyForm.formState.errors.verificationNote.message}</small> : null}</label></BaseerFormGrid></BaseerFormSection></form>
     </BaseerFormDialog>
     <BaseerFormDialog open={payOpen} title={ar ? "صرف المخالصة" : "Pay final settlement"} language={language} busy={busy} size="standard" formId="hr-settlement-pay" submitLabel={ar ? "تسجيل الصرف" : "Record payment"} submitDisabled={!allocations.length} onClose={() => setPayOpen(false)}>
-      <form id="hr-settlement-pay" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void pay(); }}>
+      <form id="hr-settlement-pay" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={payForm.handleSubmit(() => void pay())}>
         <BaseerFormSection title={ar ? "بيانات الصرف" : "Payment details"}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ الصرف" : "Payment date"} value={businessDate} onChange={setBusinessDate} /></BaseerFormGrid></BaseerFormSection>
         {allocations.map((allocation, index) => <BaseerFormSection key={`${allocation.vaultId}-${index}`} title={ar ? `توزيع ${index + 1}` : `Allocation ${index + 1}`}><BaseerFormGrid>
           <label>{ar ? "الخزينة" : "Vault"}<BaseerCombobox required label={ar ? "الخزينة" : "Vault"} value={allocation.vaultId} placeholder={ar ? "اختر الخزينة" : "Select vault"} options={activeVaults.map((vault) => ({ id: vault.id, label: ar ? vault.nameAr : vault.nameEn }))} onChange={(vaultId) => { const vault = activeVaults.find((item) => item.id === vaultId); setAllocations((rows) => rows.map((row, rowIndex) => rowIndex === index ? { ...row, vaultId, paymentMethod: vault?.paymentMethod ?? "" } : row)); }} /></label>
           <label>{ar ? "طريقة السداد" : "Payment method"}<BaseerCombobox searchable={false} required label={ar ? "طريقة السداد" : "Payment method"} value={allocation.paymentMethod} placeholder={ar ? "اختر الطريقة" : "Select method"} options={(activeVaults.find((vault) => vault.id === allocation.vaultId)?.paymentMethods ?? []).map((method) => ({ id: method, label: method }))} onChange={(paymentMethod) => setAllocations((rows) => rows.map((row, rowIndex) => rowIndex === index ? { ...row, paymentMethod: paymentMethod as PaymentMethod } : row))} /></label>
-          <label className="baseer-form-field--full">{ar ? "المبلغ" : "Amount"}<BaseerMoneyInput required value={allocation.amount} onValueChange={(amount) => setAllocations((rows) => rows.map((row, rowIndex) => rowIndex === index ? { ...row, amount } : row))} /></label>
+          <label className="baseer-form-field--full">{ar ? "المبلغ" : "Amount"}<BaseerMoneyInput required value={allocation.amount} onValueChange={(amount) => setAllocations((rows) => rows.map((row, rowIndex) => rowIndex === index ? { ...row, amount } : row))} />{payForm.formState.errors.allocations?.[index]?.amount ? <small role="alert">{payForm.formState.errors.allocations[index]?.amount?.message}</small> : null}</label>
           {allocations.length > 1 ? <BaseerButton type="button" variant="quiet" onClick={() => setAllocations((rows) => rows.filter((_, rowIndex) => rowIndex !== index))}>{ar ? "إزالة هذا التوزيع" : "Remove this allocation"}</BaseerButton> : null}
         </BaseerFormGrid></BaseerFormSection>)}
         <BaseerButton type="button" variant="secondary" onClick={() => { const vault = activeVaults.find((item) => !allocations.some((allocation) => allocation.vaultId === item.id)) ?? activeVaults[0]; if (vault) setAllocations((rows) => [...rows, { vaultId: vault.id, paymentMethod: vault.paymentMethod, amount: "" }]); }}>{ar ? "إضافة خزينة" : "Add vault"}</BaseerButton>
       </form>
     </BaseerFormDialog>
     <BaseerFormDialog open={reverseOpen} title={ar ? "إلغاء المخالصة" : "Cancel final settlement"} language={language} busy={busy} size="compact" formId="hr-settlement-reverse" submitLabel={ar ? "إلغاء" : "Cancel"} submitDisabled={!reverseReason.trim()} onClose={() => setReverseOpen(false)}>
-      <form id="hr-settlement-reverse" className="baseer-form" onSubmit={(event) => { event.preventDefault(); void reverse(); }}><BaseerFormSection title={ar ? "سبب الإلغاء" : "Cancellation reason"}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ الإلغاء" : "Cancellation date"} value={businessDate} onChange={setBusinessDate} /><label>{ar ? "سبب الإلغاء" : "Cancellation reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} /></label></BaseerFormGrid></BaseerFormSection></form>
+      <form id="hr-settlement-reverse" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={reverseForm.handleSubmit(() => void reverse())}><BaseerFormSection title={ar ? "سبب الإلغاء" : "Cancellation reason"}><BaseerFormGrid columns="one"><label>{ar ? "تاريخ الإلغاء" : "Cancellation date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الإلغاء" : "Cancellation date"} value={businessDate} onChange={setBusinessDate} />{reverseForm.formState.errors.businessDate ? <small role="alert">{reverseForm.formState.errors.businessDate.message}</small> : null}</label><label>{ar ? "سبب الإلغاء" : "Cancellation reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} />{reverseForm.formState.errors.reason ? <small role="alert">{reverseForm.formState.errors.reason.message}</small> : null}</label></BaseerFormGrid></BaseerFormSection></form>
     </BaseerFormDialog>
-    <BaseerFormDialog open={Boolean(paymentToReverse)} title={ar ? "إلغاء دفعة المخالصة" : "Cancel final-settlement payment"} language={language} busy={busy} size="compact" formId="hr-settlement-payment-reverse" submitLabel={ar ? "إلغاء" : "Cancel"} submitDisabled={!reverseReason.trim()} onClose={() => setPaymentToReverse(null)}><form id="hr-settlement-payment-reverse" className="baseer-form" onSubmit={(event) => void reversePayment(event)}><BaseerFormSection title={paymentToReverse?.paymentNumber ?? ""}><BaseerFormGrid columns="one"><BaseerDatePicker language={language} label={ar ? "تاريخ الإلغاء" : "Cancellation date"} max={today()} value={businessDate} onChange={setBusinessDate} /><label>{ar ? "سبب الإلغاء" : "Cancellation reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} /></label></BaseerFormGrid></BaseerFormSection></form></BaseerFormDialog>
+    <BaseerFormDialog open={Boolean(paymentToReverse)} title={ar ? "إلغاء دفعة المخالصة" : "Cancel final-settlement payment"} language={language} busy={busy} size="compact" formId="hr-settlement-payment-reverse" submitLabel={ar ? "إلغاء" : "Cancel"} submitDisabled={!reverseReason.trim()} onClose={() => setPaymentToReverse(null)}><form id="hr-settlement-payment-reverse" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={reverseForm.handleSubmit(() => void reversePayment())}><BaseerFormSection title={paymentToReverse?.paymentNumber ?? ""}><BaseerFormGrid columns="one"><label>{ar ? "تاريخ الإلغاء" : "Cancellation date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الإلغاء" : "Cancellation date"} max={today()} value={businessDate} onChange={setBusinessDate} />{reverseForm.formState.errors.businessDate ? <small role="alert">{reverseForm.formState.errors.businessDate.message}</small> : null}</label><label>{ar ? "سبب الإلغاء" : "Cancellation reason"}<BaseerTextArea compact required value={reverseReason} onValueChange={setReverseReason} />{reverseForm.formState.errors.reason ? <small role="alert">{reverseForm.formState.errors.reason.message}</small> : null}</label></BaseerFormGrid></BaseerFormSection></form></BaseerFormDialog>
   </section>;
 }

@@ -10,6 +10,7 @@ import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { activeSession, requestId } from "./daily-sales-client";
+import { addMoneyDecimals, isPositiveMoneyDecimal, normalizeMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
 import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensationProfile, type HrEmployee } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -35,7 +36,6 @@ const month = (offset = 0) => {
   value.setMonth(value.getMonth() + offset);
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
 };
-const amount = (value: string) => Number(value || 0);
 const employeeLabel = (language: Language, employee: HrEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 const operationCopy = (language: Language, operation: SalaryOperation) => ({
   FULL: language === "ar" ? { label: "تعديل شامل", description: "الراتب والبدلات" } : { label: "Full edit", description: "Salary and allowances" },
@@ -77,14 +77,16 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
 
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
   const existingSalary = profile ?? null;
-  const current = amount(existingSalary?.monthlyGross ?? "0");
-  const delta = amount(changeAmount);
-  const nextSalary = operation === "FULL" ? amount(draft.monthlyGross) : current + (operation === "INCREASE" ? delta : -delta);
+  const nextSalary = tryMoneyDecimal(() => operation === "FULL"
+    ? normalizeMoneyDecimal(draft.monthlyGross)
+    : operation === "INCREASE"
+      ? addMoneyDecimals(existingSalary!.monthlyGross, changeAmount)
+      : subtractMoneyDecimals(existingSalary!.monthlyGross, changeAmount));
   const fullEdit = operation === "FULL";
   const requiresOvertimeSchedule = fullEdit && draft.compensationMethod === "INCLUSIVE_OVERTIME";
   const selectedEmployee = activeEmployees.find((employee) => employee.id === draft.employeeId);
   const salarySchema = useMemo(() => {
-    const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
+    const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.", 4, 14);
     const optionalDecimal = z.string().refine((value) => !value.trim() || decimal.safeParse(value.trim()).success, ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
     return z.object({
       employeeId: z.string().min(1, ar ? "اختر الموظف." : "Choose an employee."),
@@ -116,8 +118,8 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
   const submit = async () => {
     const session = activeSession();
     if (!session || busy) return;
-    if (!fullEdit && (!Number.isFinite(delta) || delta <= 0)) { onError(ar ? "أدخل مبلغ التعديل أكبر من صفر." : "Enter an adjustment amount greater than zero."); return; }
-    if (!Number.isFinite(nextSalary) || nextSalary <= 0) { onError(ar ? "لا يمكن أن يصبح الراتب صفراً أو أقل." : "The salary cannot become zero or less."); return; }
+    if (!fullEdit && !isPositiveMoneyDecimal(changeAmount)) { onError(ar ? "أدخل مبلغ التعديل أكبر من صفر." : "Enter an adjustment amount greater than zero."); return; }
+    if (!nextSalary || !isPositiveMoneyDecimal(nextSalary)) { onError(ar ? "لا يمكن أن يصبح الراتب صفراً أو أقل أو يتجاوز حد الدقة المالية." : "The salary cannot become zero or less or exceed the financial precision limit."); return; }
     if (requiresOvertimeSchedule && (!Number.isInteger(Number(draft.scheduledHoursPerDay)) || Number(draft.scheduledHoursPerDay) < 9 || Number(draft.scheduledHoursPerDay) > 12 || !Number.isInteger(Number(draft.scheduledWorkDays)) || Number(draft.scheduledWorkDays) < 1 || Number(draft.scheduledWorkDays) > 31)) { onError(ar ? "للراتب الشامل للأوفر تايم، أدخل ساعات الدوام من 9 إلى 12 وأيام العمل الشهرية." : "For inclusive overtime, enter daily hours from 9 to 12 and monthly work days."); return; }
     const method = fullEdit ? draft.compensationMethod : existingSalary!.compensationMethod;
     setBusy(true);
@@ -126,7 +128,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
         employeeId: draft.employeeId,
         policyVersionId: draft.policyVersionId || undefined,
         effectiveFrom: draft.effectiveFrom,
-        monthlyGross: nextSalary.toFixed(4),
+        monthlyGross: nextSalary,
         compensationMethod: method,
         foodAllowance: (fullEdit ? draft.foodAllowance : existingSalary!.foodAllowance) || "0",
         housingAllowance: (fullEdit ? draft.housingAllowance : existingSalary!.housingAllowance) || "0",
@@ -148,7 +150,7 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
     <form id="hr-salary-editor" className="baseer-form hr-salary-manager" data-baseer-rhf-form="true" noValidate onSubmit={salaryForm.handleSubmit(() => void submit())}>
       <BaseerFormSection title={selectedEmployee ? (ar ? `راتب ${selectedEmployee.nameAr}` : `${selectedEmployee.nameEn ?? selectedEmployee.nameAr} salary`) : (ar ? "بيانات الراتب" : "Salary details")}>
         {existingSalary ? <div className="hr-salary-manager__operations" role="group" aria-label={ar ? "نوع عملية الراتب" : "Salary operation"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} className="hr-salary-manager__operation" disabled={busy} onClick={() => setOperation(value)}><span>{operationCopy(language, value).label}</span><small>{operationCopy(language, value).description}</small></BaseerButton>)}</div> : null}
-        {existingSalary ? <div className="hr-salary-manager__summary"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "بعد العملية" : "After change"}</span><strong><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div></div> : null}
+        {existingSalary ? <div className="hr-salary-manager__summary"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "بعد العملية" : "After change"}</span><strong><BaseerMoney value={nextSalary && isPositiveMoneyDecimal(nextSalary) ? nextSalary : "0"} language={language} /></strong></div></div> : null}
         <BaseerFormGrid className="hr-salary-manager__fields">
           {!fixedEmployeeId ? <label className="baseer-form-field baseer-form-field--full">{ar ? "الموظف" : "Employee"}<BaseerCombobox required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: employeeLabel(language, employee) }))} onChange={(employeeId) => setDraft((value) => ({ ...value, employeeId }))} />{salaryForm.formState.errors.employeeId ? <small role="alert">{salaryForm.formState.errors.employeeId.message}</small> : null}</label> : null}
           <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<input required type="month" min={month(existingSalary ? 1 : 0)} value={draft.effectiveFrom.slice(0, 7)} onChange={(event) => setDraft((value) => ({ ...value, effectiveFrom: `${event.target.value}-01` }))} /></label>

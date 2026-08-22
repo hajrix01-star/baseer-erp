@@ -7,6 +7,7 @@ import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, requestId } from "./daily-sales-client";
+import { addMoneyDecimals, isPositiveMoneyDecimal, normalizeMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
 import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensationProfile, type HrEmployee } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -19,7 +20,6 @@ const month = (offset = 0) => {
   value.setMonth(value.getMonth() + offset);
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
 };
-const amount = (value: string) => Number(value || 0);
 const operationLabel = (language: Language, operation: SalaryOperation) => ({
   FULL: language === "ar" ? "تعديل شامل" : "Full edit",
   INCREASE: language === "ar" ? "زيادة راتب" : "Increase salary",
@@ -62,14 +62,16 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
     submissionKey.current = requestId();
   }, [open, profile]);
 
-  const current = amount(profile?.monthlyGross ?? "0");
-  const delta = amount(changeAmount);
-  const next = useMemo(() => operation === "FULL" ? amount(monthlyGross) : current + (operation === "INCREASE" ? delta : -delta), [current, delta, monthlyGross, operation]);
+  const next = useMemo(() => tryMoneyDecimal(() => operation === "FULL"
+    ? normalizeMoneyDecimal(monthlyGross)
+    : operation === "INCREASE"
+      ? addMoneyDecimals(profile!.monthlyGross, changeAmount)
+      : subtractMoneyDecimals(profile!.monthlyGross, changeAmount)), [changeAmount, monthlyGross, operation, profile]);
   const minimumMonth = month(profile ? 1 : 0);
   const isFullEdit = operation === "FULL";
   const requiresOvertimeSchedule = isFullEdit && compensationMethod === "INCLUSIVE_OVERTIME";
   const salarySchema = useMemo(() => {
-    const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
+    const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.", 4, 14);
     const optionalDecimal = z.string().refine((value) => !value.trim() || decimal.safeParse(value.trim()).success, ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
     return z.object({
       effectiveMonth: z.string().regex(/^\d{4}-\d{2}$/, ar ? "اختر شهر التطبيق." : "Choose the effective month."), monthlyGross: optionalDecimal,
@@ -90,8 +92,8 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
   const submit = async () => {
     const session = activeSession();
     if (!session || busy) return;
-    if (!isFullEdit && (!Number.isFinite(delta) || delta <= 0)) { onError(ar ? "أدخل مبلغ التعديل أكبر من صفر." : "Enter an adjustment amount greater than zero."); return; }
-    if (!Number.isFinite(next) || next <= 0) { onError(ar ? "لا يمكن أن يصبح الراتب صفراً أو أقل." : "The salary cannot become zero or less."); return; }
+    if (!isFullEdit && !isPositiveMoneyDecimal(changeAmount)) { onError(ar ? "أدخل مبلغ التعديل أكبر من صفر." : "Enter an adjustment amount greater than zero."); return; }
+    if (!next || !isPositiveMoneyDecimal(next)) { onError(ar ? "لا يمكن أن يصبح الراتب صفراً أو أقل أو يتجاوز حد الدقة المالية." : "The salary cannot become zero or less or exceed the financial precision limit."); return; }
     if (requiresOvertimeSchedule && (!Number.isInteger(Number(scheduledHoursPerDay)) || Number(scheduledHoursPerDay) < 9 || Number(scheduledHoursPerDay) > 12 || !Number.isInteger(Number(scheduledWorkDays)) || Number(scheduledWorkDays) < 1 || Number(scheduledWorkDays) > 31)) {
       onError(ar ? "للراتب الشامل للأوفر تايم، أدخل ساعات الدوام من 9 إلى 12 وأيام العمل الشهرية." : "For inclusive overtime, enter daily hours from 9 to 12 and monthly work days.");
       return;
@@ -103,7 +105,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
         employeeId: employee.id,
         policyVersionId: profile?.policyVersionId ?? undefined,
         effectiveFrom: `${effectiveMonth}-01`,
-        monthlyGross: next.toFixed(4),
+        monthlyGross: next,
         compensationMethod: method,
         foodAllowance: (isFullEdit ? foodAllowance : profile!.foodAllowance) || "0",
         housingAllowance: (isFullEdit ? housingAllowance : profile!.housingAllowance) || "0",
@@ -137,7 +139,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
             {requiresOvertimeSchedule ? <><label className="baseer-form-field">{ar ? "ساعات الدوام اليومية" : "Daily hours"}<input required type="number" min="9" max="12" value={scheduledHoursPerDay} onChange={(event) => setScheduledHoursPerDay(event.target.value)} /></label><label className="baseer-form-field">{ar ? "أيام العمل الشهرية" : "Monthly working days"}<input required type="number" min="1" max="31" value={scheduledWorkDays} onChange={(event) => setScheduledWorkDays(event.target.value)} /></label></> : null}
           </> : <>
             <label className="baseer-form-field baseer-form-field--full">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" aria-invalid={Boolean(salaryForm.formState.errors.changeAmount)} value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} />{salaryForm.formState.errors.changeAmount ? <small role="alert">{String(salaryForm.formState.errors.changeAmount.message)}</small> : null}</label>
-            <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={Number.isFinite(next) && next >= 0 ? next.toFixed(4) : "0"} language={language} /></strong></div>
+            <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={next && isPositiveMoneyDecimal(next) ? next : "0"} language={language} /></strong></div>
           </>}
           <label className="baseer-form-field baseer-form-field--full">{ar ? "السبب أو الملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={reason} onChange={(event) => setReason(event.target.value)} /></label>
         </BaseerFormGrid>

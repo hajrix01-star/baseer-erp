@@ -20,7 +20,9 @@ export function useBaseerForm<Values extends FieldValues>({ schema, shouldFocusE
 }
 
 /** Decimal values cross the UI/API boundary as strings; never coerce them to JS numbers. */
-export const baseerDecimalString = (message: string, scale = 4) => z.string().regex(new RegExp(`^\\d+(?:\\.\\d{1,${scale}})?$`), message);
+export const baseerDecimalString = (message: string, scale = 4, maxIntegerDigits?: number) => z.string().regex(new RegExp(maxIntegerDigits
+  ? `^(?:0|[1-9]\\d{0,${maxIntegerDigits - 1}})(?:\\.\\d{1,${scale}})?$`
+  : `^\\d+(?:\\.\\d{1,${scale}})?$`), message);
 
 /** Dynamic collections use the same gateway; screens never import React Hook Form directly. */
 export { z, useFieldArray };

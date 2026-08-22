@@ -11,8 +11,9 @@ import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { BaseerEmptyState, BaseerNotice } from "./baseer-workspace";
-import { DataTable } from "./data-table";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, requestId } from "./daily-sales-client";
+import { absoluteMoneyDecimal, addMoneyDecimals, compareMoneyDecimals, isPositiveMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
 import { HrCompensationAgreementDialog } from "./hr-compensation-agreement-dialog";
 import { createHrEmployeePromotion, listHrEmployeeCompensationHistory, listHrEmployeePromotions, setHrEmployeeCompensation, type HrCompensationProfile, type HrDetail, type HrEmployeePromotion } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
@@ -37,7 +38,6 @@ const nextMonth = () => {
   value.setMonth(value.getMonth() + 1);
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
 };
-const amount = (value: string) => Number(value || 0);
 
 /** Combines the employee's job path and compensation view while retaining two
  * governed records: promotion decisions and dated compensation profiles. */
@@ -93,13 +93,14 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
 
   const employee = detail.employee;
   const currentSalary = detail.compensation;
-  const increase = amount(salaryIncreaseAmount);
-  const nextSalary = currentSalary ? amount(currentSalary.monthlyGross) + increase : 0;
+  const increaseRequested = Boolean(salaryIncreaseAmount.trim());
+  const nextSalary = currentSalary && increaseRequested ? tryMoneyDecimal(() => addMoneyDecimals(currentSalary.monthlyGross, salaryIncreaseAmount.trim())) : null;
   const salaryHistory = useMemo(() => compensationHistory.map((row, index, rows) => {
     const previous = rows[index + 1];
-    const delta = previous ? Number(row.monthlyGross) - Number(previous.monthlyGross) : 0;
-    const label = row.notes?.startsWith("ترقية") ? text.promotionSalaryIncrease : delta > 0 ? text.salaryIncrease : delta < 0 ? text.salaryDecrease : text.initialSalaryOrEdit;
-    return { ...row, label, changeAmount: previous ? Math.abs(delta).toFixed(4) : null };
+    const comparison = previous ? compareMoneyDecimals(row.monthlyGross, previous.monthlyGross) : 0;
+    const label = row.notes?.startsWith("ترقية") ? text.promotionSalaryIncrease : comparison > 0 ? text.salaryIncrease : comparison < 0 ? text.salaryDecrease : text.initialSalaryOrEdit;
+    const difference = previous ? subtractMoneyDecimals(row.monthlyGross, previous.monthlyGross) : null;
+    return { ...row, label, changeAmount: difference ? absoluteMoneyDecimal(difference) : null };
   }), [compensationHistory, text]);
   const loadMoreCompensation = async () => { const session = activeSession(); if (!session || !compensationCursor) return; try { const receipt = await listHrEmployeeCompensationHistory(session, employeeId, { cursor: compensationCursor, pageSize: 50 }); setCompensationHistory((rows) => [...rows, ...receipt.compensationHistory.filter((profile) => !rows.some((row) => row.id === profile.id))]); setCompensationCursor(receipt.nextCursor); } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل سجل الراتب." : "Salary history could not be loaded.")); } };
 
@@ -115,19 +116,20 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
   const createPromotion = async () => {
     const session = activeSession();
     if (!session || busy) return;
-    if (salaryIncreaseAmount.trim() && (!Number.isFinite(increase) || increase <= 0)) { showError(ar ? "أدخل مبلغ زيادة أكبر من صفر أو اتركه فارغاً." : "Enter a positive increase amount or leave it blank."); return; }
-    if (increase > 0 && !currentSalary) { showError(ar ? "حدّد راتب الموظف أولاً، ثم سجّل الترقية مع الزيادة." : "Set the employee salary first, then record the promotion with its increase."); return; }
+    if (increaseRequested && !isPositiveMoneyDecimal(salaryIncreaseAmount.trim())) { showError(ar ? "أدخل مبلغ زيادة أكبر من صفر أو اتركه فارغاً." : "Enter a positive increase amount or leave it blank."); return; }
+    if (increaseRequested && !currentSalary) { showError(ar ? "حدّد راتب الموظف أولاً، ثم سجّل الترقية مع الزيادة." : "Set the employee salary first, then record the promotion with its increase."); return; }
+    if (increaseRequested && !nextSalary) { showError(ar ? "الراتب الناتج يتجاوز حد الدقة المالية." : "The resulting salary exceeds the financial precision limit."); return; }
     setBusy(true);
     setMessage(null);
     try {
       await createHrEmployeePromotion(session, employeeId, { effectiveDate, newJobTitle, decisionReference, ...(reason.trim() ? { reason: reason.trim() } : {}), idempotencyKey: requestId() });
-      if (increase > 0 && currentSalary) {
+      if (increaseRequested && currentSalary && nextSalary) {
         try {
           await setHrEmployeeCompensation(session, {
             employeeId,
             policyVersionId: currentSalary.policyVersionId ?? undefined,
             effectiveFrom: `${salaryEffectiveMonth}-01`,
-            monthlyGross: nextSalary.toFixed(4),
+            monthlyGross: nextSalary,
             compensationMethod: currentSalary.compensationMethod,
             foodAllowance: currentSalary.foodAllowance,
             housingAllowance: currentSalary.housingAllowance,
@@ -168,8 +170,8 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
 
   return <section className="hr-employment-compensation">
     {message ? <BaseerNotice tone={message.tone}>{message.text}</BaseerNotice> : null}
-    <section className="hr-employment-compensation__section" aria-labelledby="hr-compensation-heading"><header><h3 id="hr-compensation-heading">{ar ? "الراتب والبدلات" : "Salary & allowances"}</h3><BaseerButton type="button" onClick={() => { setMessage(null); setSalaryOpen(true); }}>{currentSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")}</BaseerButton></header>{currentSalary ? <div className="hr-employment-compensation__salary-summary"><div><span>{ar ? "الإجمالي الشهري" : "Monthly total"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><strong><BaseerMoney value={(Number(currentSalary.monthlyGross) - Number(currentSalary.foodAllowance) - Number(currentSalary.housingAllowance) - Number(currentSalary.transportAllowance) - Number(currentSalary.otherAllowance)).toFixed(4)} language={language} /></strong></div><div><span>{ar ? "المسمى الحالي" : "Current title"}</span><strong>{employee?.jobTitle ?? "—"}</strong></div></div> : <BaseerEmptyState title={ar ? "لم يُحدد راتب بعد" : "Salary not set"} />}{salaryHistory.length ? <DataTable ariaLabel={ar ? "سجل تغييرات الراتب" : "Salary history"} caption={ar ? "سجل تغييرات الراتب" : "Salary change history"} rows={salaryHistory} columns={salaryHistoryColumns} rowKey={(row) => row.id} /> : null}{compensationCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreCompensation()}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</section>
-    <section className="hr-employment-compensation__section" aria-labelledby="hr-employment-heading"><header><h3 id="hr-employment-heading">{ar ? "المسار الوظيفي" : "Employment path"}</h3><BaseerButton type="button" variant="secondary" onClick={() => { setMessage(null); setPromotionOpen(true); }}>{ar ? "تسجيل ترقية" : "Record promotion"}</BaseerButton></header>{loading && !promotions.length ? <BaseerCard>{ar ? "جارٍ تحميل المسار الوظيفي…" : "Loading employment history…"}</BaseerCard> : promotions.length ? <><DataTable ariaLabel={ar ? "سجل الترقيات" : "Promotion history"} caption={ar ? "سجل الترقيات" : "Promotion history"} rows={promotions} columns={promotionColumns} rowKey={(row) => row.id} />{nextCursor ? <BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</> : <BaseerEmptyState title={ar ? "لا توجد ترقيات موثقة." : "No promotions are recorded."} />}</section>
+    <section className="hr-employment-compensation__section" aria-labelledby="hr-compensation-heading"><header><h3 id="hr-compensation-heading">{ar ? "الراتب والبدلات" : "Salary & allowances"}</h3><BaseerButton type="button" onClick={() => { setMessage(null); setSalaryOpen(true); }}>{currentSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")}</BaseerButton></header>{currentSalary ? <div className="hr-employment-compensation__salary-summary"><div><span>{ar ? "الإجمالي الشهري" : "Monthly total"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><strong><BaseerMoney value={tryMoneyDecimal(() => [currentSalary.foodAllowance, currentSalary.housingAllowance, currentSalary.transportAllowance, currentSalary.otherAllowance].reduce((value, allowance) => subtractMoneyDecimals(value, allowance), currentSalary.monthlyGross)) ?? "0"} language={language} /></strong></div><div><span>{ar ? "المسمى الحالي" : "Current title"}</span><strong>{employee?.jobTitle ?? "—"}</strong></div></div> : <BaseerEmptyState title={ar ? "لم يُحدد راتب بعد" : "Salary not set"} />}{salaryHistory.length ? <BaseerDataGrid ariaLabel={ar ? "سجل تغييرات الراتب" : "Salary history"} caption={ar ? "سجل تغييرات الراتب" : "Salary change history"} rows={salaryHistory} columns={salaryHistoryColumns} rowKey={(row) => row.id} /> : null}{compensationCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreCompensation()}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</section>
+    <section className="hr-employment-compensation__section" aria-labelledby="hr-employment-heading"><header><h3 id="hr-employment-heading">{ar ? "المسار الوظيفي" : "Employment path"}</h3><BaseerButton type="button" variant="secondary" onClick={() => { setMessage(null); setPromotionOpen(true); }}>{ar ? "تسجيل ترقية" : "Record promotion"}</BaseerButton></header>{loading && !promotions.length ? <BaseerCard>{ar ? "جارٍ تحميل المسار الوظيفي…" : "Loading employment history…"}</BaseerCard> : promotions.length ? <><BaseerDataGrid ariaLabel={ar ? "سجل الترقيات" : "Promotion history"} caption={ar ? "سجل الترقيات" : "Promotion history"} rows={promotions} columns={promotionColumns} rowKey={(row) => row.id} />{nextCursor ? <BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</> : <BaseerEmptyState title={ar ? "لا توجد ترقيات موثقة." : "No promotions are recorded."} />}</section>
     {salaryOpen && employee ? <HrCompensationAgreementDialog open language={language} employees={[employee]} fixedEmployeeId={employee.id} profile={currentSalary} onClose={() => setSalaryOpen(false)} onSaved={async () => { await load(); await onChanged(); }} onError={onError} /> : null}
     <BaseerFormDialog open={promotionOpen} title={ar ? "تسجيل ترقية" : "Record promotion"} language={language} busy={busy} size="standard" formId="hr-employee-promotion" submitLabel={ar ? "حفظ الترقية" : "Save promotion"} onClose={() => setPromotionOpen(false)}>
       <form id="hr-employee-promotion" className="baseer-form hr-promotion-form" data-baseer-rhf-form="true" noValidate onSubmit={promotionForm.handleSubmit(() => void createPromotion())}>
@@ -179,7 +181,7 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
         </BaseerFormSection>
         <BaseerFormSection title={ar ? "الأثر المالي (اختياري)" : "Salary effect (optional)"}>
           <BaseerFormGrid><label className="baseer-form-field">{ar ? "مبلغ زيادة الراتب" : "Salary increase"}<input inputMode="decimal" aria-invalid={Boolean(promotionForm.formState.errors.salaryIncreaseAmount)} value={salaryIncreaseAmount} onChange={(event) => setSalaryIncreaseAmount(event.target.value)} />{promotionForm.formState.errors.salaryIncreaseAmount ? <small role="alert">{promotionForm.formState.errors.salaryIncreaseAmount.message}</small> : null}</label>{salaryIncreaseAmount.trim() ? <label className="baseer-form-field">{ar ? "شهر بداية الزيادة" : "Increase month"}<input required type="month" min={nextMonth()} aria-invalid={Boolean(promotionForm.formState.errors.salaryEffectiveMonth)} value={salaryEffectiveMonth} onChange={(event) => setSalaryEffectiveMonth(event.target.value)} />{promotionForm.formState.errors.salaryEffectiveMonth ? <small role="alert">{promotionForm.formState.errors.salaryEffectiveMonth.message}</small> : null}</label> : null}</BaseerFormGrid>
-          {currentSalary && salaryIncreaseAmount.trim() ? <div className="hr-promotion-form__salary-comparison"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><span aria-hidden="true">←</span><div><span>{ar ? "الراتب بعد الزيادة" : "Salary after increase"}</span><strong><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div></div> : null}
+          {currentSalary && salaryIncreaseAmount.trim() ? <div className="hr-promotion-form__salary-comparison"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><span aria-hidden="true">←</span><div><span>{ar ? "الراتب بعد الزيادة" : "Salary after increase"}</span><strong><BaseerMoney value={nextSalary ?? "0"} language={language} /></strong></div></div> : null}
           <label className="baseer-form-field baseer-form-field--full">{ar ? "سبب أو ملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={reason} onChange={(event) => setReason(event.target.value)} /></label>
         </BaseerFormSection>
       </form>

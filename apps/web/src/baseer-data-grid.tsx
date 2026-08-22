@@ -9,6 +9,8 @@ export type BaseerDataGridColumn<Row extends object> = Readonly<{
   align?: 'start' | 'end' | 'center';
   numeric?: boolean;
   className?: string;
+  /** Compatibility metadata only. Sorting remains server-controlled. */
+  sort?: (row: Row) => string | number | null | undefined;
 }>;
 
 const features = tableFeatures({});
@@ -17,7 +19,7 @@ const features = tableFeatures({});
  * Display-grid adapter for an already bounded result set. It must not receive
  * a partial page and then sort, filter or aggregate it in the browser.
  */
-export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: {
+export type BaseerDataGridProps<Row extends object> = {
   ariaLabel: string;
   caption: string;
   columns: readonly BaseerDataGridColumn<Row>[];
@@ -26,7 +28,9 @@ export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns
   serverSortColumnId?: string;
   sortDirection?: 'asc' | 'desc';
   onSortDirectionChange?: () => void;
-}) {
+};
+
+export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: BaseerDataGridProps<Row>) {
   const helper = createColumnHelper<typeof features, Row>();
   const tableColumns = useMemo(() => columns.map((column) => helper.display({
     id: column.id,

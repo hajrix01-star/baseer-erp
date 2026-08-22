@@ -30,12 +30,14 @@ let app;
 try {
   await seedFixture();
   process.env.BASEER_SYSTEM_TENANT_CODE = fixture.tenantCode;
-  const [{ AppModule }, { AuthService }, { ApiExceptionFilter }] = await Promise.all([
+  const [{ AppModule }, { AuthService }, { ApiExceptionFilter }, { BUSINESS_DATE_CLOCK }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/identity/auth.service.js"),
     import("../apps/api/dist/common/api-exception.filter.js"),
+    import("../apps/api/dist/business-date/business-date.service.js"),
   ]);
   app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }), { logger: false });
+  app.get(BUSINESS_DATE_CLOCK).now = () => new Date("2026-08-20T12:00:00.000Z");
   app.setGlobalPrefix("v1");
   app.useGlobalFilters(new ApiExceptionFilter());
   await app.init();

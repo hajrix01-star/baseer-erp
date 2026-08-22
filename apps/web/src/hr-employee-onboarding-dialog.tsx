@@ -1,4 +1,4 @@
-import { useBaseerForm, z } from "./baseer-form-state";
+import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
@@ -7,6 +7,7 @@ import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoney } from "./baseer-money";
 import { formatNumber } from "./number-format";
 import { activeSession, requestId } from "./daily-sales-client";
+import { normalizeMoneyDecimal } from "./decimal-string";
 import { createHrEmployeeDocument, getHrEmployee, onboardHrEmployee } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { HR_PROFILE_PHOTO_REFERENCE, hrEmployeePhotoAsBase64, isHrEmployeePhoto } from "./hr-employee-photo";
@@ -23,6 +24,9 @@ function onboardingSchema(ar: boolean) {
   const required = ar ? "هذا الحقل مطلوب." : "This field is required.";
   const invalidEmail = ar ? "أدخل بريداً إلكترونياً صحيحاً أو اتركه فارغاً." : "Enter a valid email address or leave it blank.";
   const invalidDate = ar ? "أدخل تاريخاً صحيحاً." : "Enter a valid date.";
+  const invalidMoney = ar ? "أدخل مبلغاً عشرياً صحيحاً ضمن حد الدقة المالية." : "Enter a valid decimal amount within the financial precision limit.";
+  const money = baseerDecimalString(invalidMoney, 4, 14);
+  const optionalMoney = z.string().refine((value) => !value.trim() || money.safeParse(value.trim()).success, invalidMoney);
   return z.object({
     nameAr: z.string().trim().min(1, required),
     nameEn: z.string(),
@@ -31,11 +35,11 @@ function onboardingSchema(ar: boolean) {
     iqamaNumber: z.string(),
     phone: z.string(),
     email: z.string().trim().refine((value) => !value || z.email().safeParse(value).success, invalidEmail),
-    monthlyGross: z.string().trim().min(1, required),
-    housingAllowance: z.string(),
-    transportAllowance: z.string(),
-    foodAllowance: z.string(),
-    otherAllowance: z.string(),
+    monthlyGross: money.refine((value) => !/^0+(?:\.0+)?$/.test(value), ar ? "يجب أن يكون الراتب أكبر من صفر." : "The salary must be greater than zero."),
+    housingAllowance: optionalMoney,
+    transportAllowance: optionalMoney,
+    foodAllowance: optionalMoney,
+    otherAllowance: optionalMoney,
     scheduledHoursPerDay: z.string(),
     scheduledWorkDays: z.string(),
     notes: z.string(),
@@ -85,7 +89,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
     if (photoFile && !isHrEmployeePhoto(photoFile)) { onError(ar ? "اختر صورة JPG أو PNG بحجم لا يتجاوز 5 ميجابايت." : "Choose a JPG or PNG image up to 5 MiB."); return; }
     setBusy(true);
     try {
-      const employee = await onboardHrEmployee(session, { nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, initialCompensation: { monthlyGross: calculation.monthlyGross.toFixed(4), compensationMethod, foodAllowance: number(draft.foodAllowance).toFixed(4), housingAllowance: number(draft.housingAllowance).toFixed(4), transportAllowance: number(draft.transportAllowance).toFixed(4), otherAllowance: number(draft.otherAllowance).toFixed(4), ...(compensationMethod === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: enteredHours!, scheduledWorkDays: enteredWorkDays! } : {}) }, idempotencyKey: submissionKey.current });
+      const employee = await onboardHrEmployee(session, { nameAr: draft.nameAr, nameEn: draft.nameEn || undefined, jobTitle: draft.jobTitle || undefined, phone: draft.phone || undefined, email: draft.email || undefined, iqamaNumber: draft.iqamaNumber || undefined, hireDate: draft.hireDate, notes: draft.notes || undefined, initialCompensation: { monthlyGross: normalizeMoneyDecimal(draft.monthlyGross), compensationMethod, foodAllowance: normalizeMoneyDecimal(draft.foodAllowance || "0"), housingAllowance: normalizeMoneyDecimal(draft.housingAllowance || "0"), transportAllowance: normalizeMoneyDecimal(draft.transportAllowance || "0"), otherAllowance: normalizeMoneyDecimal(draft.otherAllowance || "0"), ...(compensationMethod === "INCLUSIVE_OVERTIME" ? { scheduledHoursPerDay: enteredHours!, scheduledWorkDays: enteredWorkDays! } : {}) }, idempotencyKey: submissionKey.current });
       const followUpErrors: string[] = [];
       if (photoFile) {
         try { await createHrEmployeeDocument(session, employee.id, { documentType: "OTHER", title: ar ? "صورة الموظف الشخصية" : "Employee profile photo", referenceNumber: HR_PROFILE_PHOTO_REFERENCE, upload: { fileName: photoFile.name, contentBase64: await hrEmployeePhotoAsBase64(photoFile) }, idempotencyKey: requestId() }); }
