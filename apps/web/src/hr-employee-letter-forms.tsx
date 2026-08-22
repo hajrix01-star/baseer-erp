@@ -26,12 +26,15 @@ export function HrEmployeeLetterIssueDialog({ open, language, busy, hasCurrentCo
   const form = useBaseerForm<IssueLetterForm>({ defaultValues: { letterType: "SALARY_CERTIFICATE", locale: language, recipient: "" }, schema: schema, shouldFocusError: true });
   const value = form.watch();
   useEffect(() => { if (open) form.reset({ letterType: hasCurrentCompensation ? "SALARY_CERTIFICATE" : "SERVICE_CERTIFICATE", locale: language, recipient: "" }); }, [form, hasCurrentCompensation, language, open]);
-  const typeLabel = (type: HrEmployeeLetterType) => type === "SALARY_CERTIFICATE" ? (ar ? "خطاب تعريف بالراتب" : "Salary certificate") : (ar ? "شهادة خدمة" : "Service certificate");
+  const typeLabels: Record<HrEmployeeLetterType, string> = ar
+    ? { SALARY_CERTIFICATE: "خطاب تعريف بالراتب", SERVICE_CERTIFICATE: "شهادة خدمة" }
+    : { SALARY_CERTIFICATE: "Salary certificate", SERVICE_CERTIFICATE: "Service certificate" };
+  const localeLabels: Record<Language, string> = ar ? { ar: "العربية", en: "الإنجليزية" } : { ar: "Arabic", en: "English" };
 
   return <BaseerFormDialog open={open} title={ar ? "إصدار خطاب موظف" : "Issue employee letter"} language={language} busy={busy} size="standard" formId="hr-employee-letter-issue" submitLabel={ar ? "إصدار الخطاب" : "Issue letter"} onClose={onClose}>
     <form id="hr-employee-letter-issue" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((values) => void onSubmit(values))}>{!hasCurrentCompensation ? <BaseerNotice tone="warning" title={ar ? "لا يوجد راتب ساري" : "No current salary"}>{ar ? "لا يمكن إصدار خطاب تعريف بالراتب قبل تحديد راتب الموظف." : "A salary certificate requires a current employee salary."} <BaseerButton type="button" variant="quiet" onClick={() => { onClose(); onManageCompensation(); }}>{ar ? "تحديد الراتب" : "Set salary"}</BaseerButton></BaseerNotice> : null}<BaseerFormSection title={ar ? "بيانات الخطاب" : "Letter details"}><BaseerFormGrid>
-      <label>{ar ? "نوع الخطاب" : "Letter type"}<select value={value.letterType} onChange={(event) => form.setValue("letterType", event.target.value as HrEmployeeLetterType, { shouldDirty: true })}><option disabled={!hasCurrentCompensation} value="SALARY_CERTIFICATE">{typeLabel("SALARY_CERTIFICATE")}</option><option value="SERVICE_CERTIFICATE">{typeLabel("SERVICE_CERTIFICATE")}</option></select></label>
-      <label>{ar ? "لغة الخطاب" : "Letter language"}<select value={value.locale} onChange={(event) => form.setValue("locale", event.target.value as Language, { shouldDirty: true })}><option value="ar">العربية</option><option value="en">English</option></select></label>
+      <label>{ar ? "نوع الخطاب" : "Letter type"}<select value={value.letterType} onChange={(event) => form.setValue("letterType", event.target.value as HrEmployeeLetterType, { shouldDirty: true })}><option disabled={!hasCurrentCompensation} value="SALARY_CERTIFICATE">{typeLabels.SALARY_CERTIFICATE}</option><option value="SERVICE_CERTIFICATE">{typeLabels.SERVICE_CERTIFICATE}</option></select></label>
+      <label>{ar ? "لغة الخطاب" : "Letter language"}<select value={value.locale} onChange={(event) => form.setValue("locale", event.target.value as Language, { shouldDirty: true })}><option value="ar">{localeLabels.ar}</option><option value="en">{localeLabels.en}</option></select></label>
       <label className="baseer-form-field--full">{ar ? "موجه إلى" : "Recipient"}<input {...form.register("recipient")} /></label>
     </BaseerFormGrid></BaseerFormSection></form>
   </BaseerFormDialog>;
