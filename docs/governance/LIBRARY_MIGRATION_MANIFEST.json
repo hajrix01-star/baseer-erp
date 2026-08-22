@@ -510,7 +510,7 @@
     "table:operations-execution-workspace.tsx": {
       "kind": "table",
       "file": "operations-execution-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-bounded-execution-grid"
     },
     "table:operations-internal-registration-workspace.tsx": {
       "kind": "table",

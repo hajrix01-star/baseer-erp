@@ -1,13 +1,14 @@
 import { createColumnHelper, tableFeatures, useTable } from '@tanstack/react-table';
 import { useMemo, type ReactNode } from 'react';
 
-export type BaseerDataGridColumn<Row extends Record<string, unknown>> = Readonly<{
+export type BaseerDataGridColumn<Row extends object> = Readonly<{
   id: string;
   header: ReactNode;
   cell: (row: Row) => ReactNode;
   width?: string;
   align?: 'start' | 'end' | 'center';
   numeric?: boolean;
+  className?: string;
 }>;
 
 const features = tableFeatures({});
@@ -16,7 +17,7 @@ const features = tableFeatures({});
  * Display-grid adapter for an already bounded result set. It must not receive
  * a partial page and then sort, filter or aggregate it in the browser.
  */
-export function BaseerDataGrid<Row extends Record<string, unknown>>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: {
+export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: {
   ariaLabel: string;
   caption: string;
   columns: readonly BaseerDataGridColumn<Row>[];
@@ -40,14 +41,16 @@ export function BaseerDataGrid<Row extends Record<string, unknown>>({ ariaLabel,
       <colgroup>{columns.map((column) => <col key={column.id} style={column.width ? { width: column.width } : undefined} />)}</colgroup>
       <thead>{table.getHeaderGroups().map((group) => <tr key={group.id}>{group.headers.map((header) => {
         const sortable = header.id === serverSortColumnId && onSortDirectionChange;
-        return <th key={header.id} scope="col" aria-sort={header.id === serverSortColumnId ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`baseer-data-table__${columns.find((column) => column.id === header.id)?.align ?? 'start'}`}>{header.isPlaceholder ? null : sortable ? <button className="baseer-sort" type="button" onClick={onSortDirectionChange}><table.FlexRender header={header} /><span aria-hidden="true">{sortDirection === 'asc' ? '▲' : '▼'}</span></button> : <table.FlexRender header={header} />}</th>;
+        const column = columns.find((entry) => entry.id === header.id);
+        const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' ');
+        return <th key={header.id} scope="col" aria-sort={header.id === serverSortColumnId ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={className}>{header.isPlaceholder ? null : sortable ? <button className="baseer-sort" type="button" onClick={onSortDirectionChange}><table.FlexRender header={header} /><span aria-hidden="true">{sortDirection === 'asc' ? '▲' : '▼'}</span></button> : <table.FlexRender header={header} />}</th>;
       })}</tr>)}</thead>
-      <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => <td key={cell.id} className={`baseer-data-table__${columns.find((column) => column.id === cell.column.id)?.align ?? 'start'}`}>{<table.FlexRender cell={cell} />}</td>)}</tr>)}</tbody>
+      <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => { const column = columns.find((entry) => entry.id === cell.column.id); const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' '); return <td key={cell.id} className={className}>{<table.FlexRender cell={cell} />}</td>; })}</tr>)}</tbody>
     </table>
   </div>;
 }
 
-export type BaseerServerGridPage<Row extends Record<string, unknown>> = Readonly<{
+export type BaseerServerGridPage<Row extends object> = Readonly<{
   rows: readonly Row[];
   nextCursor: string | null;
   asOf: string;
@@ -57,6 +60,6 @@ export type BaseerServerGridPage<Row extends Record<string, unknown>> = Readonly
  * Controlled server-grid contract. The caller sends filter/sort/cursor intent
  * to a server allow-list; this adapter only renders the returned page.
  */
-export function BaseerServerDataGrid<Row extends Record<string, unknown>>({ page, loadMoreControl, ...props }: Omit<Parameters<typeof BaseerDataGrid<Row>>[0], "rows"> & { page: BaseerServerGridPage<Row>; loadMoreControl?: ReactNode }) {
+export function BaseerServerDataGrid<Row extends object>({ page, loadMoreControl, ...props }: Omit<Parameters<typeof BaseerDataGrid<Row>>[0], "rows"> & { page: BaseerServerGridPage<Row>; loadMoreControl?: ReactNode }) {
   return <><BaseerDataGrid {...props} rows={page.rows} />{page.nextCursor ? loadMoreControl : null}</>;
 }
