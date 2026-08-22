@@ -79,8 +79,9 @@ const settlementPayment = { id: "payment-settlement-1", paymentNumber: "SP-001",
 
 async function fulfill(route: Route, json: unknown, status = 200) { await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) }); }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; terminatedEmployee?: boolean } = {}) {
   const language = options.language ?? "ar";
+  const profileEmployee = options.terminatedEmployee ? { ...employee, status: "TERMINATED", terminatedAt: "2026-08-01" } : employee;
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "e2e-refresh-token");
@@ -103,7 +104,7 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     });
     if (url.pathname === "/v1/hr/employees" && route.request().method() === "GET") {
       if (options.slowEmployeeSearch && url.searchParams.has("search")) await new Promise((resolve) => setTimeout(resolve, 350));
-      return fulfill(route, { companyId, employees: [employee], hasMore: false, nextCursor: null, summary: { activeEmployees: 7, employeesOnLeave: 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
+      return fulfill(route, { companyId, employees: [profileEmployee], hasMore: false, nextCursor: null, summary: { activeEmployees: 7, employeesOnLeave: 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
     }
     if (url.pathname === `/v1/hr/employees/${employee.id}/promotions`) return fulfill(route, { promotions: [], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}/compensation-history`) return fulfill(route, { compensationHistory: [compensation], hasMore: false, nextCursor: null });
@@ -114,7 +115,7 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     if (url.pathname === `/v1/hr/employees/${employee.id}/letters`) return fulfill(route, { companyId, letters: [letter], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}/payroll`) return fulfill(route, { companyId, lines: [], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}`) return fulfill(route, {
-      companyId, employee, compensation, compensationHistory: [], compensationHistoryCount: 14, services: [], serviceCount: 52, servicesHasMore: true,
+      companyId, employee: profileEmployee, compensation, compensationHistory: [], compensationHistoryCount: 14, services: [], serviceCount: 52, servicesHasMore: true,
       movements: [{ id: "movement-1", journalEntryId: "journal-1", movementType: "PAYROLL_ACCRUAL", businessDate: "2026-08-20", amount: "3000.0000", sourceReference: payrollRun.runNumber, description: null }], movementCount: 81, hasMoreMovements: false, nextMovementCursor: null,
     });
     if (url.pathname === `/v1/hr/services/${service.id}`) return fulfill(route, { service });
@@ -162,7 +163,9 @@ async function expectViewportContained(page: Page) {
   for (const dialog of await page.getByRole("dialog").all()) {
     if (!(await dialog.isVisible())) continue;
     const box = await dialog.boundingBox();
-    expect(box).not.toBeNull();
+    // A dialog can close between the visibility read and measurement while a
+    // nested action is replacing it. It is no longer a visible viewport item.
+    if (!box) continue;
     expect(box!.x).toBeGreaterThanOrEqual(0);
     expect(box!.x + box!.width).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + 1);
     expect(box!.y + box!.height).toBeLessThanOrEqual((await page.evaluate(() => innerHeight)) + 1);
@@ -285,7 +288,7 @@ test("payroll preview failure reports once without a request loop", async ({ pag
 test("employee profile shows exact counts, lazy compliance paging, and topmost modal semantics", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const requested: string[] = [];
-  await mockHr(page, requested);
+  await mockHr(page, requested, { terminatedEmployee: true });
   await page.goto("/#module=hr&section=1");
   await page.getByRole("listitem").filter({ hasText: "موظف الاختبار" }).click();
   const profile = page.getByRole("dialog", { name: "موظف الاختبار" });
@@ -393,7 +396,7 @@ test("all seven HR top-level sections render without page overflow", async ({ pa
 
 test("employee profile covers all tabs and its principal dialogs", async ({ page }) => {
   const requested: string[] = [];
-  await mockHr(page, requested);
+  await mockHr(page, requested, { terminatedEmployee: true });
   await page.goto("/#module=hr&section=1");
   await page.getByRole("listitem").filter({ hasText: employee.nameAr }).click();
   const profile = await expectTopmostDialog(page, employee.nameAr);
@@ -472,11 +475,11 @@ test("employee profile covers all tabs and its principal dialogs", async ({ page
   await approvedDetail.getByRole("button", { name: "صرف" }).click();
   await expectTopmostDialog(page, "صرف المخالصة");
   await page.keyboard.press("Escape");
-  await approvedDetail.getByRole("button", { name: "عكس", exact: true }).click();
-  await expectTopmostDialog(page, "عكس المخالصة");
+  await approvedDetail.getByRole("button", { name: "إلغاء", exact: true }).click();
+  await expectTopmostDialog(page, "إلغاء المخالصة");
   await page.keyboard.press("Escape");
-  await approvedDetail.getByRole("button", { name: "عكس الدفعة" }).click();
-  await expectTopmostDialog(page, "عكس دفعة المخالصة");
+  await approvedDetail.getByRole("button", { name: "إلغاء الدفعة" }).click();
+  await expectTopmostDialog(page, "إلغاء دفعة المخالصة");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
@@ -536,11 +539,11 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await approvedPayroll.getByRole("button", { name: "سداد" }).click();
   await expectTopmostDialog(page, "سداد مسير الرواتب");
   await page.keyboard.press("Escape");
-  await approvedPayroll.getByRole("button", { name: "عكس", exact: true }).click();
-  await expectTopmostDialog(page, "عكس مسير الرواتب");
+  await approvedPayroll.getByRole("button", { name: "إلغاء", exact: true }).click();
+  await expectTopmostDialog(page, "إلغاء مسير الرواتب");
   await page.keyboard.press("Escape");
-  await approvedPayroll.getByRole("button", { name: "عكس الدفعة" }).click();
-  await expectTopmostDialog(page, "عكس دفعة المسير");
+  await approvedPayroll.getByRole("button", { name: "إلغاء الدفعة" }).click();
+  await expectTopmostDialog(page, "إلغاء دفعة المسير");
 });
 
 test("leave date picker is keyboard-operable and remains Gregorian in Arabic", async ({ page }) => {
@@ -706,8 +709,8 @@ test("advance deduction and service create/detail dialogs are centralized", asyn
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: advance.advanceNumber }).click();
   const advanceDetail = await expectTopmostDialog(page, advance.advanceNumber);
-  await advanceDetail.getByRole("button", { name: "عكس إصدار السلفة" }).click();
-  await expectTopmostDialog(page, "عكس إصدار السلفة");
+  await advanceDetail.getByRole("button", { name: "إلغاء إصدار السلفة" }).click();
+  await expectTopmostDialog(page, "إلغاء إصدار السلفة");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "سداد السلفة" }).click();
@@ -752,6 +755,6 @@ test("advance deduction and service create/detail dialogs are centralized", asyn
   const postedRow = page.getByRole("row").filter({ hasText: postedService.referenceNumber! });
   await postedRow.getByRole("button", { name: new RegExp(employee.employeeNumber) }).click();
   const postedDetail = await expectTopmostDialog(page, "تجديد إقامة");
-  await postedDetail.getByRole("button", { name: "عكس التكلفة" }).click();
-  await expectTopmostDialog(page, "عكس تكلفة الخدمة");
+  await postedDetail.getByRole("button", { name: "إلغاء التكلفة" }).click();
+  await expectTopmostDialog(page, "إلغاء تكلفة الخدمة");
 });

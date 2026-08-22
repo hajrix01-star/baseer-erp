@@ -16,11 +16,15 @@ type BaseerComboboxProps = {
   placeholder: string;
   disabled?: boolean;
   required?: boolean;
-  scopeKey: string;
+  /** Changes only when the owning company/session/query scope changes. */
+  scopeKey?: string;
   remoteSearch?: (query: string, signal: AbortSignal) => Promise<readonly BaseerSearchOption[]>;
   loadingLabel: string;
   emptyLabel: string;
   errorLabel: string;
+  searchable?: boolean;
+  className?: string;
+  menuClassName?: string;
   onChange: (value: string) => void;
 };
 
@@ -28,7 +32,7 @@ type BaseerComboboxProps = {
  * The only gateway from Baseer UI to React Aria Combobox. Screens keep the
  * Baseer option/value contract and never import the library directly.
  */
-export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey, remoteSearch, loadingLabel, emptyLabel, errorLabel, onChange }: BaseerComboboxProps) {
+export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey = "baseer-combobox", remoteSearch, loadingLabel, emptyLabel, errorLabel, searchable = true, className, menuClassName, onChange }: BaseerComboboxProps) {
   const generatedId = useId();
   const inputId = id ?? `baseer-combobox-${generatedId}`;
   const [open, setOpen] = useState(false);
@@ -74,26 +78,26 @@ export function BaseerCombobox({ id, label, value, options, placeholder, disable
   }, [onChange, scopeKey]);
 
   return <ComboBox
-    className="baseer-combobox"
+    className={["baseer-combobox", className].filter(Boolean).join(" ")}
     selectedKey={value || null}
     inputValue={inputValue}
     isDisabled={disabled}
     isRequired={required}
     allowsEmptyCollection
-    onInputChange={setInputValue}
+    onInputChange={(next) => { if (searchable) setInputValue(next); }}
     onOpenChange={setOpen}
     onKeyDown={(event) => { if (event.key === "Escape") event.stopPropagation(); }}
-    onSelectionChange={(key) => { if (key !== null) onChange(String(key)); }}
+    onSelectionChange={(key) => { if (key !== null) onChange(String(key)); else if (!required) onChange(""); }}
   >
     <Label className="visually-hidden">{label}</Label>
     <div className="baseer-combobox__control">
-      <Input id={inputId} className="baseer-combobox__input" placeholder={placeholder} autoComplete="off" onFocus={() => { if (inputValue === selected?.label) setInputValue(""); }} />
+      <Input id={inputId} className="baseer-combobox__input" placeholder={placeholder} autoComplete="off" readOnly={!searchable} onFocus={() => { if (searchable && inputValue === selected?.label) setInputValue(""); }} />
       <Button className="baseer-combobox__trigger" aria-label={label}>▾</Button>
     </div>
-    <Popover className="baseer-combobox__popover" data-baseer-filter-menu-portal="" offset={4}>
+    <Popover className={["baseer-combobox__popover", menuClassName].filter(Boolean).join(" ")} data-baseer-filter-menu-portal="" offset={4}>
       <ListBox className="baseer-combobox__list" renderEmptyState={() => loading ? loadingLabel : failed ? errorLabel : emptyLabel}>
         {visibleOptions.map((option) => <ListBoxItem key={option.id} id={option.id} textValue={option.label} className="baseer-combobox__option">
-          <span>{option.label}</span>{option.description ? <small>{option.description}</small> : null}
+          <span>{option.label}</span>{option.description ? <small>{option.description}</small> : null}{option.isFavorite ? <span aria-hidden="true">★</span> : null}
         </ListBoxItem>)}
       </ListBox>
     </Popover>

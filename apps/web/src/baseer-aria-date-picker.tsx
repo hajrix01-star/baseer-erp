@@ -14,6 +14,9 @@ type BaseerAriaDatePickerProps = {
   min?: string;
   max?: string;
   disabled?: boolean;
+  clearable?: boolean;
+  plain?: boolean;
+  className?: string;
 };
 
 function parseIso(value?: string) {
@@ -24,7 +27,7 @@ function parseIso(value?: string) {
  * Opt-in date pilot: it keeps Baseer's Gregorian YYYY-MM-DD business contract
  * while React Aria owns the keyboard, focus, calendar and popover behavior.
  */
-export function BaseerAriaDatePicker({ language, value, onChange, label, min, max, disabled = false }: BaseerAriaDatePickerProps) {
+export function BaseerAriaDatePicker({ language, value, onChange, label, min, max, disabled = false, clearable = false, plain = false, className }: BaseerAriaDatePickerProps) {
   // Business dates in Baseer are always Gregorian ISO dates. The locale may
   // change the language and text direction, but never the calendar system.
   const locale = language === "ar" ? "ar-SA-u-ca-gregory" : "en-US-u-ca-gregory";
@@ -34,7 +37,7 @@ export function BaseerAriaDatePicker({ language, value, onChange, label, min, ma
 
   return <I18nProvider locale={locale}><DatePicker<CalendarDate>
     aria-label={label}
-    className="baseer-aria-date-picker"
+    className={["baseer-aria-date-picker", plain ? "is-plain" : "", className].filter(Boolean).join(" ")}
     value={selected}
     minValue={minValue}
     maxValue={maxValue}
@@ -46,6 +49,7 @@ export function BaseerAriaDatePicker({ language, value, onChange, label, min, ma
     <Group className="baseer-aria-date-picker__group">
       <DateInput className="baseer-aria-date-picker__input">{(segment) => <DateSegment segment={segment} />}</DateInput>
       <Button className="baseer-aria-date-picker__trigger" aria-label={language === "ar" ? "فتح التقويم" : "Open calendar"}>⌄</Button>
+      {clearable ? <Button className="baseer-aria-date-picker__clear" isDisabled={disabled || !value} aria-label={language === "ar" ? "مسح التاريخ" : "Clear date"} onPress={() => onChange("")}>×</Button> : null}
     </Group>
     <Popover className="baseer-aria-date-picker__popover" offset={4}>
       <Dialog className="baseer-aria-date-picker__dialog">
