@@ -4,12 +4,12 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerSelect } from "./baseer-select";
 import { DataTable, type DataTableColumn } from "./data-table";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { hasActivePermission } from "./module-access";
 import { OperationsRecipeEditor, type OperationsRecipeWorkspaceData } from "./operations-recipe-editor";
+import type { OperationsCatalogConversionEdge } from "./operations-catalog-conversion-form";
 import type { OperationsUnitForm } from "./operations-unit-form-dialog";
 import "./operations-catalog-base.css";
 
@@ -28,6 +28,7 @@ const LazyOperationsUnitFormDialog = lazy(async () => ({ default: (await import(
 const LazyOperationsCatalogItemCreateDialog = lazy(async () => ({ default: (await import("./operations-catalog-item-create-dialog")).OperationsCatalogItemCreateDialog }));
 const LazyOperationsCatalogItemDetailsForm = lazy(async () => ({ default: (await import("./operations-catalog-item-details-form")).OperationsCatalogItemDetailsForm }));
 const LazyOperationsCatalogPriceForm = lazy(async () => ({ default: (await import("./operations-catalog-price-form")).OperationsCatalogPriceForm }));
+const LazyOperationsCatalogConversionForm = lazy(async () => ({ default: (await import("./operations-catalog-conversion-form")).OperationsCatalogConversionForm }));
 
 export function OperationsCatalogWorkspace({ language }: { language: Language }) {
   const isArabic = language === "ar";
@@ -46,7 +47,7 @@ export function OperationsCatalogWorkspace({ language }: { language: Language })
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [unitForm, setUnitForm] = useState<OperationsUnitForm>({ nameAr: "", nameEn: "", dimension: "COUNT", isActive: true });
   const [itemForm, setItemForm] = useState<ItemForm>(emptyItem);
-  const [conversion, setConversion] = useState({ itemId: "", edges: [] as Array<{ fromUnitId: string; toUnitId: string; factor: string; isPurchasePackaging: boolean }> });
+  const [conversion, setConversion] = useState({ itemId: "", edges: [] as OperationsCatalogConversionEdge[] });
   const [menuCardTab, setMenuCardTab] = useState<MenuCardTab>("details");
   const [rawMaterialCardTab, setRawMaterialCardTab] = useState<RawMaterialCardTab>("details");
   const [editingConversion, setEditingConversion] = useState(false);
@@ -117,22 +118,21 @@ export function OperationsCatalogWorkspace({ language }: { language: Language })
     setConversion({ itemId: item.id, edges: edges.some((edge) => edge.isPurchasePackaging) ? edges : edges.map((edge, index) => index === 0 ? { ...edge, isPurchasePackaging: true } : edge) });
     setEditingConversion(true);
   };
-  const linkConversionEdges = (edges: Array<{ fromUnitId: string; toUnitId: string; factor: string; isPurchasePackaging: boolean }>) => edges.map((edge, index) => index === 0 ? edge : { ...edge, fromUnitId: edges[index - 1]?.toUnitId ?? "" });
-  const saveMaterialChain = async () => {
+  const saveMaterialChain = async (edges: OperationsCatalogConversionEdge[]) => {
     if (!session || !editingItem || !catalog) return;
-    const complete = conversion.edges.length > 0 && conversion.edges.every((edge) => edge.fromUnitId && edge.toUnitId && edge.factor);
+    const complete = edges.length > 0 && edges.every((edge) => edge.fromUnitId && edge.toUnitId && edge.factor);
     if (!complete) { setNotice({ kind: "error", text: isArabic ? "أكمل الوحدة والعامل في كل مرحلة أولاً." : "Complete the unit and factor in every stage first." }); return; }
-    const selectedUnitIds = new Set([editingItem.baseUnitId, ...conversion.edges.flatMap((edge) => [edge.fromUnitId, edge.toUnitId])]);
+    const selectedUnitIds = new Set([editingItem.baseUnitId, ...edges.flatMap((edge) => [edge.fromUnitId, edge.toUnitId])]);
     const configuredUnits = [
       ...editingItem.itemUnits.map((line) => ({ unitId: line.unitId, isActive: line.isActive || selectedUnitIds.has(line.unitId), isOrderEnabled: line.isOrderEnabled })),
       ...[...selectedUnitIds].filter((unitId) => !editingItem.itemUnits.some((line) => line.unitId === unitId)).map((unitId) => ({ unitId, isActive: true, isOrderEnabled: false })),
     ];
-    const conversionSourceUnits = new Set(conversion.edges.map((edge) => edge.fromUnitId));
-    const purchasingUnits = new Set(conversion.edges.filter((edge) => edge.isPurchasePackaging).map((edge) => edge.fromUnitId));
+    const conversionSourceUnits = new Set(edges.map((edge) => edge.fromUnitId));
+    const purchasingUnits = new Set(edges.filter((edge) => edge.isPurchasePackaging).map((edge) => edge.fromUnitId));
     setSaving(true); setNotice(null);
     try {
       await api(session, "/operations/catalog/item-units/configure", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ itemId: editingItem.id, units: configuredUnits, idempotencyKey: requestId() }) });
-      await api(session, "/operations/catalog/conversions/publish", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ itemId: editingItem.id, edges: conversion.edges.map(({ fromUnitId, toUnitId, factor }) => ({ fromUnitId, toUnitId, factor })), idempotencyKey: requestId() }) });
+      await api(session, "/operations/catalog/conversions/publish", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ itemId: editingItem.id, edges: edges.map(({ fromUnitId, toUnitId, factor }) => ({ fromUnitId, toUnitId, factor })), idempotencyKey: requestId() }) });
       await api(session, "/operations/catalog/item-units/configure", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ itemId: editingItem.id, units: configuredUnits.map((line) => ({ ...line, isOrderEnabled: conversionSourceUnits.has(line.unitId) ? purchasingUnits.has(line.unitId) : line.isOrderEnabled })), idempotencyKey: requestId() }) });
       const next = await reload();
       const refreshed = next?.items.find((item) => item.id === editingItem.id);
@@ -152,14 +152,6 @@ export function OperationsCatalogWorkspace({ language }: { language: Language })
   const tabs: Array<{ id: Tab; label: string }> = [{ id: "raw", label: t.raw }, { id: "units", label: t.units }, { id: "menu", label: t.menu }, { id: "archive", label: t.archive }];
   const archived = catalog?.items.filter((item) => item.status === "ARCHIVED") ?? [];
   const menu = catalog?.items.filter((item) => item.kind === "MENU_PRODUCT" && item.status === "ACTIVE") ?? [];
-  const draftBaseUnitId = editingItem?.baseUnitId || "";
-  const defaultBridgeFactor = (fromUnitId: string, toUnitId: string) => {
-    const normalizeCode = (id: string) => catalog?.units.find((unit) => unit.id === id)?.code.trim().toUpperCase().replaceAll(/[^A-Z]/g, "") ?? "";
-    const from = normalizeCode(fromUnitId); const to = normalizeCode(toUnitId);
-    const litreCodes = new Set(["L", "LTR", "LITRE", "LITER"]);
-    const gramCodes = new Set(["G", "GR", "GRAM", "GRAMS"]);
-    return litreCodes.has(from) && gramCodes.has(to) ? "1000" : "";
-  };
   return <>
     <section className="operations-catalog" aria-label={t.title}>
       <header className="operations-catalog__header"><div><p className="eyebrow">Operations O1</p><h3>{t.title}</h3><p>{t.description}</p></div><div className="baseer-inline-actions"><BaseerButton type="button" variant="secondary" onClick={() => { setEditingUnit(null); setUnitForm({ nameAr: "", nameEn: "", dimension: "COUNT", isActive: true }); showDialog("unit"); }}>{t.addUnit}</BaseerButton><BaseerButton type="button" onClick={() => openItem()}>{t.addMaterial}</BaseerButton></div></header>
@@ -186,14 +178,7 @@ export function OperationsCatalogWorkspace({ language }: { language: Language })
         </nav>
         {rawMaterialCardTab === "details" ? <><Suspense fallback={null}><LazyOperationsCatalogItemDetailsForm formId="operations-raw-material-card" language={language} value={{ itemId: editingItem.id, code: itemForm.code, nameAr: itemForm.nameAr, nameEn: itemForm.nameEn, sectionId: "", kind: editingItem.kind }} sections={[]} onSubmit={(next) => write("/operations/catalog/items/update", { itemId: next.itemId, code: next.code, nameAr: next.nameAr, nameEn: next.nameEn || undefined, sectionId: null })} /></Suspense><section className="operations-material-overview"><div><small>{isArabic ? "وحدة أساس المخزون" : "Inventory base unit"}</small><strong>{unitName(editingItem.baseUnitId)}</strong></div><div><small>{isArabic ? "إصدار التحويل" : "Conversion version"}</small><strong>{editingItem.conversionVersion ? <bdi dir="ltr">v{editingItem.conversionVersion.version}</bdi> : t.none}</strong></div><div className="operations-material-overview__purchase"><small>{isArabic ? "تغليفات الشراء" : "Purchase packaging"}</small><div>{purchasePackaging(editingItem).length ? purchasePackaging(editingItem).map((line) => <span key={line.unitId}><em>{unitName(line.unitId)}</em>{line.lastPurchaseUnitPrice ? <bdi>{line.lastPurchaseUnitPrice} {isArabic ? "ر.س" : "SAR"}</bdi> : null}</span>) : <strong>{t.none}</strong>}</div></div></section><section className="operations-material-stages-card"><strong>{isArabic ? "المراحل المطبقة" : "Applied stages"}</strong>{materialStages(editingItem)}</section></> : <section className="operations-inline-conversion">
           <header className="operations-inline-conversion__header"><div><h4>{isArabic ? "الوحدات والتحويلات" : "Units & conversions"}</h4></div>{editingConversion ? <BaseerButton type="button" variant="secondary" onClick={() => openConversion(editingItem)}>{isArabic ? "إلغاء التعديل" : "Cancel edit"}</BaseerButton> : <BaseerButton type="button" onClick={() => beginConversionEdit(editingItem)}>{isArabic ? "تعديل" : "Edit"}</BaseerButton>}</header>
-          <form id="operations-inline-conversion" className="operations-inline-conversion__form" onSubmit={(event) => { event.preventDefault(); void saveMaterialChain(); }}>
-            <fieldset className="operations-inline-conversion__fields" disabled={!editingConversion}>
-            <div className="operations-inline-conversion__table-wrap"><table><thead><tr><th scope="col">#</th><th scope="col">{isArabic ? "من الوحدة" : "From unit"}</th><th scope="col">{t.factor}</th><th scope="col">{t.to}</th><th scope="col">{isArabic ? "تغليف شراء" : "Purchase packaging"}</th><th scope="col"><span className="visually-hidden">{isArabic ? "حذف" : "Remove"}</span></th></tr></thead><tbody>{conversion.edges.length ? conversion.edges.map((edge, index) => { const availableUnits = (catalog?.units ?? []).filter((unit) => unit.isActive && unit.id !== editingItem.baseUnitId); const targetOptions = (catalog?.units ?? []).filter((unit) => unit.isActive && unit.id !== edge.fromUnitId && (!conversion.edges.some((other) => other.fromUnitId === unit.id) || unit.id === edge.toUnitId || unit.id === editingItem.baseUnitId)); return <tr key={`${edge.fromUnitId || "new"}-${index}`}><td>{index + 1}</td><td><BaseerSelect searchable={false} required disabled={index > 0} id={`inline-conversion-from-${index}`} label={isArabic ? "من الوحدة" : "From unit"} value={edge.fromUnitId} placeholder={t.unit} options={index && edge.fromUnitId ? [{ id: edge.fromUnitId, label: unitName(edge.fromUnitId) }] : index ? [] : availableUnits.map((unit) => ({ id: unit.id, label: unitName(unit.id) }))} onChange={(fromUnitId) => { const next = [...conversion.edges]; next[index] = { ...edge, fromUnitId }; setConversion({ ...conversion, edges: linkConversionEdges(next) }); }} /></td><td><input required inputMode="decimal" value={edge.factor} placeholder="0" onChange={(event) => { const next = [...conversion.edges]; next[index] = { ...edge, factor: event.target.value }; setConversion({ ...conversion, edges: next }); }} /></td><td><BaseerSelect searchable={false} required id={`inline-conversion-to-${index}`} label={t.to} value={edge.toUnitId} placeholder={t.unit} options={targetOptions.map((unit) => ({ id: unit.id, label: unitName(unit.id) }))} onChange={(toUnitId) => { const next = [...conversion.edges]; next[index] = { ...edge, toUnitId, factor: edge.factor || defaultBridgeFactor(edge.fromUnitId, toUnitId) }; if (next[index + 1]) next[index + 1] = { ...next[index + 1], fromUnitId: toUnitId }; setConversion({ ...conversion, edges: linkConversionEdges(next) }); }} /></td><td><label className="operations-inline-conversion__purchase"><input type="checkbox" checked={edge.isPurchasePackaging} onChange={(event) => { const next = [...conversion.edges]; next[index] = { ...edge, isPurchasePackaging: event.target.checked }; setConversion({ ...conversion, edges: next }); }} /><span>{isArabic ? "يظهر في الطلب" : "Show in request"}</span></label></td><td><BaseerButton type="button" variant="quiet" disabled={index !== conversion.edges.length - 1} onClick={() => setConversion({ ...conversion, edges: conversion.edges.slice(0, -1) })}>{isArabic ? "حذف" : "Remove"}</BaseerButton></td></tr>; }) : <tr><td className="operations-inline-conversion__empty" colSpan={6}>{isArabic ? "أضف مرحلة بدءاً من تغليف الشراء أو أكبر وحدة مستخدمة." : "Add a stage starting from purchase packaging or the largest used unit."}</td></tr>}</tbody></table></div>
-            <div className="operations-inline-conversion__actions"><BaseerButton type="button" variant="secondary" onClick={() => { const previous = conversion.edges.at(-1); if (!previous) { setConversion({ ...conversion, edges: [{ fromUnitId: "", toUnitId: editingItem.baseUnitId, factor: "", isPurchasePackaging: true }] }); return; } setConversion({ ...conversion, edges: [...conversion.edges, { fromUnitId: previous.toUnitId, toUnitId: "", factor: "", isPurchasePackaging: false }] }); }}>{isArabic ? "+ إضافة مرحلة" : "+ Add stage"}</BaseerButton><BaseerButton type="submit" disabled={!conversion.edges.length || saving}>{isArabic ? "حفظ الوحدات والتحويلات" : "Save units & conversions"}</BaseerButton></div>
-            </fieldset>
-            <div className="operations-inline-conversion__summary"><section><strong>{isArabic ? "سلسلة الصنف" : "Item chain"}</strong><div>{conversion.edges.length ? [conversion.edges[0]!.fromUnitId, ...conversion.edges.map((edge) => edge.toUnitId)].map((unitId, index) => <span key={`${unitId}-${index}`}>{index ? <bdi aria-hidden="true">←</bdi> : null}{unitName(unitId)}</span>) : <span>{unitName(editingItem.baseUnitId)}</span>}</div></section><section><strong>{isArabic ? "وحدة أساس المخزون" : "Inventory base unit"}</strong><span>{unitName(draftBaseUnitId)}</span></section></div>
-            <section className="operations-inline-conversion__equations"><strong>{isArabic ? "معادلات التحويل" : "Conversion equations"}</strong>{conversion.edges.length && conversion.edges.every((edge) => edge.factor && edge.toUnitId) ? conversion.edges.map((edge, index) => <p key={`${edge.fromUnitId}-${edge.toUnitId}-${index}`}><bdi dir="ltr">1</bdi> {unitName(edge.fromUnitId)} <span>=</span> <bdi dir="ltr">{Number(edge.factor).toLocaleString("en-US", { maximumFractionDigits: 8 })}</bdi> {unitName(edge.toUnitId)}</p>) : <p>{isArabic ? "أكمل عامل التحويل والوحدة التالية لعرض المعادلات." : "Complete the factor and next unit to show the equations."}</p>}</section>
-          </form>
+          <Suspense fallback={null}><LazyOperationsCatalogConversionForm language={language} editing={editingConversion} busy={saving} value={conversion.edges} baseUnitId={editingItem.baseUnitId} units={catalog?.units ?? []} unitName={unitName} onSubmit={(edges) => saveMaterialChain(edges)} /></Suspense>
         </section>}
       </> : null}
     </BaseerDialog>

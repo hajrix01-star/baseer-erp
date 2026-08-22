@@ -247,6 +247,11 @@
       "file": "operations-asset-register-dialog.tsx",
       "decision": "migrated-operations-wave-1"
     },
+    "form:operations-catalog-conversion-form.tsx": {
+      "kind": "form",
+      "file": "operations-catalog-conversion-form.tsx",
+      "decision": "migrated-operations-inventory-conversion-command"
+    },
     "form:operations-catalog-item-create-dialog.tsx": {
       "kind": "form",
       "file": "operations-catalog-item-create-dialog.tsx",
@@ -261,11 +266,6 @@
       "kind": "form",
       "file": "operations-catalog-price-form.tsx",
       "decision": "migrated-operations-catalog-price-command"
-    },
-    "form:operations-catalog-workspace.tsx": {
-      "kind": "form",
-      "file": "operations-catalog-workspace.tsx",
-      "decision": "pending-module-closure"
     },
     "form:operations-custody-return-dialog.tsx": {
       "kind": "form",
@@ -392,10 +392,10 @@
       "file": "hr-workspace.tsx",
       "decision": "pending-module-closure"
     },
-    "searchable-selector:operations-catalog-workspace.tsx": {
+    "searchable-selector:operations-catalog-conversion-form.tsx": {
       "kind": "searchable-selector",
-      "file": "operations-catalog-workspace.tsx",
-      "decision": "migrated-operations-wave-1"
+      "file": "operations-catalog-conversion-form.tsx",
+      "decision": "migrated-operations-inventory-conversion-command"
     },
     "searchable-selector:operations-recipe-editor.tsx": {
       "kind": "searchable-selector",

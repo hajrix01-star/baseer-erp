@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type FieldValues, type UseFormProps, type UseFormReturn } from "react-hook-form";
+import { useFieldArray, useForm, type FieldValues, type UseFormProps, type UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
 /**
@@ -22,4 +22,5 @@ export function useBaseerForm<Values extends FieldValues>({ schema, shouldFocusE
 /** Decimal values cross the UI/API boundary as strings; never coerce them to JS numbers. */
 export const baseerDecimalString = (message: string, scale = 4) => z.string().regex(new RegExp(`^\\d+(?:\\.\\d{1,${scale}})?$`), message);
 
-export { z };
+/** Dynamic collections use the same gateway; screens never import React Hook Form directly. */
+export { z, useFieldArray };

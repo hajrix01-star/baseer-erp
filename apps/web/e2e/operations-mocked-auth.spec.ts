@@ -3,10 +3,13 @@ import AxeBuilder from "@axe-core/playwright";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
 const catalog = {
-  units: [{ id: "unit-1", code: "EA", nameAr: "حبة", nameEn: "Each", dimension: "COUNT", isActive: true }],
+  units: [
+    { id: "unit-1", code: "EA", nameAr: "حبة", nameEn: "Each", dimension: "COUNT", isActive: true },
+    { id: "unit-2", code: "CARTON", nameAr: "كرتون", nameEn: "Carton", dimension: "PACKAGE", isActive: true },
+  ],
   sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen", isActive: true }],
   items: [
-    { id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
+    { id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }, { unitId: "unit-2", isBase: false, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: { version: 1, edges: [{ fromUnitId: "unit-2", toUnitId: "unit-1", factor: "12.0000" }] }, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
     { id: "menu-1", code: "MENU-001", nameAr: "منتج الاختبار", nameEn: "Test menu product", kind: "MENU_PRODUCT", status: "ACTIVE", sectionId: "section-1", baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: "7.0000" }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
   ],
 };
@@ -51,6 +54,8 @@ async function mockInternalRegistration(page: Page) {
     if (url.pathname === "/v1/operations/catalog") return fulfill(route, catalog);
     if (url.pathname === "/v1/operations/catalog/items/update" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
+    if (url.pathname === "/v1/operations/catalog/item-units/configure" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
+    if (url.pathname === "/v1/operations/catalog/conversions/publish" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
     if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
@@ -113,6 +118,30 @@ test("catalog price keeps the decimal string in its separate Baseer command form
     unitId: "unit-1",
     price: "9.2500",
   });
+});
+
+test("catalog conversion uses the lazy Baseer form adapter without changing the three inventory commands", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=5");
+
+  await page.getByRole("button", { name: "مادة الاختبار" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "الوحدات والتحويلات" }).click();
+  await dialog.getByRole("button", { name: "تعديل" }).click();
+  await dialog.getByLabel("عامل التحويل").fill("24.0000");
+  await dialog.getByRole("button", { name: "حفظ الوحدات والتحويلات" }).click();
+
+  await expect.poll(() => requested.filter((request) => request.method === "POST" && request.path.startsWith("/v1/operations/catalog/")).map((request) => request.path)).toEqual([
+    "/v1/operations/catalog/item-units/configure",
+    "/v1/operations/catalog/conversions/publish",
+    "/v1/operations/catalog/item-units/configure",
+  ]);
+  expect(requested.find((request) => request.path === "/v1/operations/catalog/conversions/publish")?.body).toMatchObject({
+    itemId: "item-1",
+    edges: [{ fromUnitId: "unit-2", toUnitId: "unit-1", factor: "24.0000" }],
+  });
+  const accessibility = await new AxeBuilder({ page }).include(".operations-inline-conversion").analyze();
+  expect(accessibility.violations).toEqual([]);
 });
 
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
