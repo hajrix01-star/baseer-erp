@@ -619,6 +619,16 @@ test("leave employee filter uses the Baseer Combobox adapter with keyboard searc
   await expect(combobox).toBeFocused();
 });
 
+test("leave register requests server sorting when its period header changes", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("columnheader", { name: "الفترة" }).getByRole("button").click();
+  await expect.poll(() => requested.filter((request) => request.startsWith("GET /v1/hr/leaves")).at(-1) ?? "").toContain("sortDirection=asc");
+  await expect(page.getByRole("columnheader", { name: "الفترة" })).toHaveAttribute("aria-sort", "ascending");
+});
+
 test("leave employee filter rejects a stale employee result after company switching", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested, { slowEmployeeSearch: true });
