@@ -16,7 +16,8 @@ export function BaseerFilterBar({ language, search, searchLabel, searchPlacehold
   useEffect(() => {
     if (!useMenu || !isMenuOpen) return;
     const closeMenu = (event: PointerEvent) => {
-      if (!menuRootRef.current?.contains(event.target as Node)) setIsMenuOpen(false);
+      const target = event.target as Element | null;
+      if (!menuRootRef.current?.contains(target) && !target?.closest("[data-baseer-filter-menu-portal]")) setIsMenuOpen(false);
     };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsMenuOpen(false);

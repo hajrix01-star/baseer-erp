@@ -51,12 +51,16 @@ const largestJourney = journeys.reduce((largest, journey) => journey.js > larges
 const largestCssJourney = journeys.reduce((largest, journey) => journey.css > largest.css ? journey : largest);
 const totalLazyJs = total(".js") - initialJs;
 const totalCss = total(".css");
+const comboboxLazyJs = files.filter((file) => /^baseer-combobox-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
 
 // A user loads startup plus one workspace journey. Cache totals are reported for observability,
 // but only startup and the largest individual journey are release gates.
-const limits = { initialJs: 250_000, largestJourneyJs: 85_000, initialCss: 58_000, largestJourneyCss: 16_000 };
-const sizes = { initialJs, largestJourneyJs: largestJourney.js, initialCss: cssSize(startupKeys), largestJourneyCss: largestCssJourney.css };
+// The React Aria adapter is an interaction-only chunk. It is deliberately not
+// charged to the initial HR route, but it has its own hard ceiling so a future
+// library upgrade cannot grow the filter interaction unnoticed.
+const limits = { initialJs: 250_000, largestJourneyJs: 85_000, initialCss: 58_000, largestJourneyCss: 16_000, comboboxLazyJs: 200_000 };
+const sizes = { initialJs, largestJourneyJs: largestJourney.js, initialCss: cssSize(startupKeys), largestJourneyCss: largestCssJourney.css, comboboxLazyJs };
 for (const [kind, limit] of Object.entries(limits)) {
   if (sizes[kind] > limit) throw new Error(`Web ${kind.toUpperCase()} bundle is ${sizes[kind]} bytes; release limit is ${limit}.`);
 }
-console.log(`Web release budget verified (startup JS ${sizes.initialJs} B / ${limits.initialJs} B; largest route JS ${sizes.largestJourneyJs} B / ${limits.largestJourneyJs} B from ${largestJourney.source}; startup CSS ${sizes.initialCss} B / ${limits.initialCss} B; largest route CSS ${sizes.largestJourneyCss} B / ${limits.largestJourneyCss} B from ${largestCssJourney.source}; cache report lazy JS ${totalLazyJs} B, CSS ${totalCss} B).`);
+console.log(`Web release budget verified (startup JS ${sizes.initialJs} B / ${limits.initialJs} B; largest route JS ${sizes.largestJourneyJs} B / ${limits.largestJourneyJs} B from ${largestJourney.source}; startup CSS ${sizes.initialCss} B / ${limits.initialCss} B; largest route CSS ${sizes.largestJourneyCss} B / ${limits.largestJourneyCss} B from ${largestCssJourney.source}; Combobox interaction JS ${sizes.comboboxLazyJs} B / ${limits.comboboxLazyJs} B; cache report lazy JS ${totalLazyJs} B, CSS ${totalCss} B).`);

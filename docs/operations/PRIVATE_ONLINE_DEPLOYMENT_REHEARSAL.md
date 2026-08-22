@@ -8,7 +8,7 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 
 ## Files supplied
 
-- `Dockerfile`: repeatable API image build.
+- `Dockerfile`: separate `runtime` API image and short-lived `migrate` image.
 - `docker-compose.private-online.yml`: private API, internal PostgreSQL, and HTTPS reverse proxy.
 - `docker/Caddyfile.private-online`: HTTPS reverse proxy configuration; certificates are handled by Caddy after DNS points to the selected domain.
 - `ops/private-online/.env.private-online.example`: non-secret configuration template.
@@ -19,10 +19,10 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 1. Choose the owner-controlled Hostinger server and subscribe to Hostinger daily server backups. Do not treat the live database volume itself as a backup. The adopted policy is recorded in `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
 2. Choose any available domain and point its DNS records to the private server. The domain may change later; **BASEER ERP** remains the product name.
 3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository.
-4. Build the API image locally; this does not start the services:
+4. Build the API runtime and migration images locally; this does not start the services:
 
    ```powershell
-   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml build api
+   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml build api migrate
    ```
 
 5. Run database migrations with the separate bootstrap service, then grant only the required schema/table/sequence privileges to `BASEER_DB_APP_USER`:
@@ -32,14 +32,30 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
    .\scripts\Grant-BaseerPrivateAppAccess.ps1
    ```
 
-   The API must run only with `BASEER_DB_APP_USER`, never `postgres`.
-6. Start the private stack only after the preceding review:
+   The API must run only with `BASEER_DB_APP_USER`, never `postgres`. The
+   `migrate` job has the bootstrap database credential, no public listener,
+   and exits after `prisma migrate deploy`; it must not be kept running.
+
+   The public `api` image intentionally excludes the Prisma CLI,
+   `@prisma/config`, and `deepmerge-ts`. This boundary is checked while the
+   image builds, so a future dependency change cannot silently put migration
+   tooling back into the API container.
+
+6. The release order is mandatory: backup/restore gate → successful `migrate`
+   job → migration status plus restricted-application-role/RLS verification →
+   API rollout. A failed migration or verification stops the rollout; the
+   compose profile deliberately does not start the API after migrations by
+   itself. The migration job is read-only except for its temporary filesystem,
+   has no public port, uses `no-new-privileges`, and has access only to the
+   database network.
+
+7. Start the private stack only after the preceding review:
 
    ```powershell
    docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml up -d
    ```
 
-7. Create users only through the approved administrator process. Do not enable public sign-up.
+8. Create users only through the approved administrator process. Do not enable public sign-up.
 
 ## Gate C evidence required before real financial data
 

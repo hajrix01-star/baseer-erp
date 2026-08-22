@@ -1,6 +1,6 @@
 # ADR-UI-001 — React Aria Components لــBaseerCombobox
 
-**الحالة:** مرشح معتمد تقنياً؛ **ممنوع التثبيت** حتى إغلاق P1 في [سجل Phase 0](UI_PLATFORM_ENABLEMENT_PHASE_0_RECORD_2026-08-22.md).
+**الحالة:** معتمد لدمج المصدر وتجربة محلية واحدة فقط بموجب استثناء مالك ينتهي في **2026-09-05**؛ لا إصدار أو إنتاج بينما P1 في [سجل Phase 0](UI_PLATFORM_ENABLEMENT_PHASE_0_RECORD_2026-08-22.md) مفتوحة.
 
 ## السياق
 
@@ -30,7 +30,7 @@ react-aria-components@1.20.0
 | CSS أو theme مفروض | لا؛ يبقى CSS بصير وtokens الخاصة به |
 | شبكة أو telemetry | لا يضاف SDK أو CDN أو خدمة خارجية ضمن هذا القرار |
 
-قبل الدمج يعاد تنفيذ `npm audit --omit=dev` وDependency Review على الـlockfile الناتج. أي advisory عالي غير مقبول بلا قرار معالجة صريح.
+قبل الدمج يعاد تنفيذ فحص اعتماد التشغيل الفعلي `npm audit --omit=dev --omit=optional` وDependency Review على الـlockfile الناتج. يعاد أيضاً تسجيل فحص build/migrate الكامل؛ الاستثناء الصريح لهذه الـP1 لا يجيز إصداراً أو توسيع نطاق.
 
 ## حدود الـpilot
 
@@ -45,7 +45,7 @@ react-aria-components@1.20.0
 1. يمر `check`, `build`, `verify:web-budget`, وحراس architecture/dialog/financial/localization وE2E ذات الصلة.
 2. يثبت AR/EN وRTL/LTR، keyboard: Tab/Shift+Tab والأسهم وHome/End وEnter وEscape مع عودة focus، mouse/touch، loading/empty/error، وشاشة ضيقة.
 3. يثبت اختبار عدم تقاطع النتائج بين الشركات وعدم بقاء نتيجة بحث ملغاة أو جلسة منتهية.
-4. يقاس أثر bundle بعد التثبيت. أكبر route JavaScript الحالي هامشه 642 بايت فقط؛ إذا دخلت المكتبة في رحلة البداية أو تجاوز المسار المحدد الحد، يرفض التغيير أو يعاد تقسيمه.
+4. يقاس أثر bundle بعد التثبيت. أكبر route JavaScript الحالي هامشه 557 بايت فقط؛ إذا دخلت المكتبة في رحلة البداية أو تجاوز المسار المحدد الحد، يرفض التغيير أو يعاد تقسيمه. ولأن الـadapter مؤجل حتى فتح قائمة الفلاتر، يفرض `verify:web-budget` حداً مستقلاً `200,000 B` على chunk `baseer-combobox` التفاعلي.
 5. يزال الـadapter والاعتماد إذا لم يقلل كلفة الصيانة أو إذا أخفق في RTL/keyboard/الحجم؛ ولا يزال `BaseerSearchSelect` القديم قبل ترحيل كل مستهلكيه واختبار تكافؤهم.
 
 ## البدائل المرفوضة حالياً

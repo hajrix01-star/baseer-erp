@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:24-alpine AS dependencies
 
 WORKDIR /app
 
@@ -8,17 +8,56 @@ COPY packages/contracts/package.json packages/contracts/package.json
 COPY packages/output-platform/package.json packages/output-platform/package.json
 RUN npm ci
 
+FROM dependencies AS build
+
+WORKDIR /app
+
 COPY . .
 RUN npm run build --workspace @baseer-erp/contracts \
   && npm run build --workspace @baseer-erp/output-platform \
   && npm run build --workspace @baseer-erp/api
+
+FROM node:24-alpine AS migrate
+
+ENV NODE_ENV=production
+WORKDIR /app
+
+# Migrations retain Prisma CLI, but only run as an internal, short-lived job.
+COPY --from=build --chown=node:node /app /app
+
+USER node
+
+CMD ["npx", "prisma", "migrate", "deploy", "--schema", "apps/api/prisma/schema.prisma"]
+
+FROM node:24-alpine AS runtime-dependencies
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY apps/api/package.json apps/api/package.json
+COPY packages/contracts/package.json packages/contracts/package.json
+COPY packages/output-platform/package.json packages/output-platform/package.json
+
+# Do not copy the build workspace wholesale: omit the Prisma CLI and all
+# development-only packages from the public API runtime image.
+RUN npm ci --omit=dev --omit=optional --omit=peer --ignore-scripts
 
 FROM node:24-alpine AS runtime
 
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=build --chown=node:node /app /app
+COPY --from=runtime-dependencies --chown=node:node /app/node_modules /app/node_modules
+COPY --from=build --chown=node:node /app/apps/api/package.json /app/apps/api/package.json
+COPY --from=build --chown=node:node /app/apps/api/dist /app/apps/api/dist
+COPY --from=build --chown=node:node /app/packages/contracts/package.json /app/packages/contracts/package.json
+COPY --from=build --chown=node:node /app/packages/contracts/dist /app/packages/contracts/dist
+COPY --from=build --chown=node:node /app/packages/output-platform/package.json /app/packages/output-platform/package.json
+COPY --from=build --chown=node:node /app/packages/output-platform/dist /app/packages/output-platform/dist
+
+# The advisory is in the Prisma CLI/configuration path. Fail the image build if
+# it leaks into the public API image rather than relying on package manifests.
+RUN node -e "for (const name of ['prisma', '@prisma/config', 'deepmerge-ts']) { try { require.resolve(name); process.stderr.write(name + ' must not exist in the API runtime image\\n'); process.exit(1); } catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; } }"
 
 USER node
 EXPOSE 5200

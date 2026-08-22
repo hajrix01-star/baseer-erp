@@ -329,6 +329,17 @@
   background: color-mix(in srgb, var(--brand, #0d6b42) 12%, transparent);
 }
 .company-session-control__menu button.is-active { color: var(--brand); }
+.baseer-combobox { display: grid; min-inline-size: min(18rem, calc(100vw - 3rem)); }
+.baseer-combobox__control { display: flex; align-items: center; min-inline-size: 0; border: 1px solid var(--line, #d9e4dd); border-radius: 0.65rem; background: var(--surface, #fff); }
+.baseer-combobox__control:has(.baseer-combobox__input:focus) { border-color: var(--brand, #0d6b42); outline: 2px solid color-mix(in srgb, var(--brand, #0d6b42) 20%, transparent); outline-offset: 1px; }
+.baseer-combobox__input { min-inline-size: 0; flex: 1; border: 0; outline: 0; box-shadow: none; background: transparent; }
+.baseer-combobox__trigger { flex: 0 0 auto; min-block-size: 2.25rem; border: 0; border-inline-start: 1px solid var(--line, #d9e4dd); border-radius: 0; background: transparent; color: var(--muted, #5b6a61); cursor: pointer; }
+.baseer-combobox__popover { z-index: 100; inline-size: var(--trigger-width); max-inline-size: calc(100vw - 1rem); overflow: hidden; border: 1px solid var(--line, #d9e4dd); border-radius: 0.65rem; background: var(--surface, #fff); box-shadow: 0 10px 30px color-mix(in srgb, #123 16%, transparent); }
+.baseer-combobox__list { max-block-size: min(18rem, calc(100vh - 8rem)); overflow: auto; padding: 0.25rem; outline: 0; }
+.baseer-combobox__option { display: grid; gap: 0.125rem; cursor: pointer; padding: 0.6rem 0.7rem; border-radius: 0.45rem; color: inherit; }
+.baseer-combobox__option[data-focused], .baseer-combobox__option[data-selected] { background: color-mix(in srgb, var(--brand, #0d6b42) 14%, transparent); }
+.baseer-combobox__option small { color: var(--muted, #5b6a61); }
+@media (max-width: 520px) { .baseer-combobox { min-inline-size: min(100%, calc(100vw - 3rem)); } }
 .daily-sales-danger {
   min-height: 42px;
   padding: 9px 14px;

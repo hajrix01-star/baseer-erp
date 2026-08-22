@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -26,6 +26,7 @@ type ReturnForm = { leaveId: string; returnDate: string; notes: string };
 const today = () => new Date().toISOString().slice(0, 10);
 const emptyLeave = (): LeaveForm => ({ employeeId: "", leaveType: "ANNUAL", startDate: today(), endDate: today(), notes: "" });
 const label = (language: Language, row: { nameAr: string; nameEn: string | null }) => language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr;
+const BaseerCombobox = lazy(() => import("./baseer-combobox").then((module) => ({ default: module.BaseerCombobox })));
 
 export function HrLeaveWorkspace({ language, stage }: { language: Language; stage?: string | null }) {
   const ar = language === "ar";
@@ -50,12 +51,21 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
   const [returnForm, setReturnForm] = useState<ReturnForm>({ leaveId: "", returnDate: today(), notes: "" });
   const showError = (text: string) => { if (!reportTopmostDialogError(text)) setMessage(text); };
   const loadRequestRef = useRef(0);
+  const sessionCompanyId = session?.companyId;
   useEffect(() => { if (stage !== "record-leave") return; setLeaveForm(emptyLeave()); setCreateOpen(true); consumeHrRouteStage(2); }, [stage]);
   useEffect(() => { const timeout = window.setTimeout(() => setServerSearch(search.trim()), 250); return () => window.clearTimeout(timeout); }, [search]);
 
   const load = useCallback(async (cursor?: string, append = false) => {
     const current = activeSession(); setSession(current);
     if (!current) { setLoading(false); return; }
+    if (sessionCompanyId && sessionCompanyId !== current.companyId) {
+      // A company switch normally reloads the application. This guard also
+      // protects a live workspace from issuing one request with the previous
+      // company's employee filter before the React state catches up.
+      setEmployeeFilter("");
+      setLoading(false);
+      return;
+    }
     const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
@@ -66,7 +76,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
       if (employeeReceipt) setEmployees((currentEmployees) => [...employeeReceipt.employees, ...currentEmployees.filter((employee) => !employeeReceipt.employees.some((candidate) => candidate.id === employee.id))]);
     } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل الإجازات" : "Loading leaves")); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
-  }, [ar, employeeFilter, language, serverSearch, statusFilter, typeFilter]);
+  }, [ar, employeeFilter, language, serverSearch, sessionCompanyId, statusFilter, typeFilter]);
   useEffect(() => { void load(); }, [load]);
 
   const showDetail = async (leave: HrEmployeeLeave) => {
@@ -93,10 +103,11 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
     finally { setBusy(false); }
   };
   const activeEmployees = useMemo(() => employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE"), [employees]);
-  const searchEmployeeOptions = useCallback(async (query: string) => {
+  const searchEmployeeOptions = useCallback(async (query: string, signal?: AbortSignal) => {
     const current = activeSession();
     if (!current) return [];
-    const receipt = await listHrEmployees(current, { search: query.trim() || undefined, pageSize: 50 });
+    const receipt = await listHrEmployees(current, { search: query.trim() || undefined, pageSize: 50 }, { signal });
+    if (signal?.aborted || activeSession()?.companyId !== current.companyId) return [];
     const next = receipt.employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE");
     setEmployees((currentEmployees) => [...currentEmployees, ...next.filter((employee) => !currentEmployees.some((candidate) => candidate.id === employee.id))]);
     return next.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }));
@@ -119,7 +130,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
   return <section className="administration-panel">
     <div className="administration-section-heading"><div><h2>{ar ? "الإجازات والعودة" : "Leave & return"}</h2></div><BaseerButton type="button" onClick={() => { setLeaveForm(emptyLeave()); setCreateOpen(true); }}>{ar ? "تسجيل إجازة" : "Record leave"}</BaseerButton></div>
     <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص الإجازات" : "Leave summary"}><BaseerSummaryMetric label={ar ? "في إجازة الآن" : "On leave now"} value={summary.onLeaveNow} /><BaseerSummaryMetric label={ar ? "إجازات قادمة" : "Upcoming leaves"} value={summary.upcoming} /><BaseerSummaryMetric label={ar ? "تمت العودة" : "Returned"} value={summary.returned} /></BaseerSummaryMetricGrid>
-    <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في الإجازات" : "Search leaves"} searchPlaceholder={ar ? "ابحث بالموظف أو الفترة" : "Search employee or period"} onSearchChange={setSearch} controlsPresentation="menu" controls={<><BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={employees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} remoteSearch={searchEmployeeOptions} onChange={setEmployeeFilter} /><label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option><option value="APPROVED">{statusLabel("APPROVED")}</option><option value="RETURNED">{statusLabel("RETURNED")}</option></select></label><label>{ar ? "النوع" : "Type"}<select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}><option value="">{ar ? "كل الأنواع" : "All types"}</option>{(["ANNUAL", "SICK", "UNPAID", "OTHER"] as const).map((type) => <option key={type} value={type}>{typeLabel(type)}</option>)}</select></label></>} appliedFilters={appliedFilters} onClear={() => { setEmployeeFilter(""); setStatusFilter(""); setTypeFilter(""); }} />
+    <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في الإجازات" : "Search leaves"} searchPlaceholder={ar ? "ابحث بالموظف أو الفترة" : "Search employee or period"} onSearchChange={setSearch} controlsPresentation="menu" controls={<><Suspense fallback={<span>{ar ? "جارٍ تحميل الفلتر…" : "Loading filter…"}</span>}><BaseerCombobox label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={employees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} remoteSearch={searchEmployeeOptions} scopeKey={session.companyId} loadingLabel={ar ? "جارٍ تحميل الموظفين…" : "Loading employees…"} emptyLabel={ar ? "لا يوجد موظفون مطابقون." : "No matching employees."} errorLabel={ar ? "تعذر تحميل الموظفين. حاول مجدداً." : "Employees could not be loaded. Try again."} onChange={setEmployeeFilter} /></Suspense><label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option><option value="APPROVED">{statusLabel("APPROVED")}</option><option value="RETURNED">{statusLabel("RETURNED")}</option></select></label><label>{ar ? "النوع" : "Type"}<select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}><option value="">{ar ? "كل الأنواع" : "All types"}</option>{(["ANNUAL", "SICK", "UNPAID", "OTHER"] as const).map((type) => <option key={type} value={type}>{typeLabel(type)}</option>)}</select></label></>} appliedFilters={appliedFilters} onClear={() => { setEmployeeFilter(""); setStatusFilter(""); setTypeFilter(""); }} />
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل الإجازات…" : "Loading leaves…"}</BaseerCard> : leaves.length ? <DataTable<HrEmployeeLeave> ariaLabel={ar ? "سجل الإجازات والعودة" : "Leave and return register"} caption={ar ? "سجل الإجازات والعودة" : "Leave and return register"} rows={leaves} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد إجازات مطابقة لهذه الشركة." : "No matching leaves for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     {message ? <p className="daily-sales-message error">{message}</p> : null}

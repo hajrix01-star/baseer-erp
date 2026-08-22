@@ -13,7 +13,7 @@ const permissions = [
 const employee = {
   id: "22222222-2222-4222-8222-222222222222", employeeNumber: "EMP-001", nameAr: "موظف الاختبار", nameEn: "Test Employee",
   jobTitle: "محاسب", phone: null, email: null, iqamaNumber: "1234567890", workSchedule: null, hireDate: "2024-01-01",
-  currentMonthlyGross: "3000.0000", profilePhotoVersionId: null, status: "TERMINATED", terminatedAt: "2026-08-01", notes: null,
+  currentMonthlyGross: "3000.0000", profilePhotoVersionId: null, status: "ACTIVE", terminatedAt: null, notes: null,
 };
 const payrollRun = {
   id: "33333333-3333-4333-8333-333333333333", runNumber: "PAY-2026-08", payrollMonth: "2026-08-01", businessDate: "2026-08-20",
@@ -78,7 +78,7 @@ const settlementPayment = { id: "payment-settlement-1", paymentNumber: "SP-001",
 
 async function fulfill(route: Route, json: unknown, status = 200) { await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) }); }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; payrollPreviewFailure?: boolean } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean } = {}) {
   const language = options.language ?? "ar";
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "e2e-token");
@@ -100,7 +100,10 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
       payroll: { draftCount: 1, awaitingPaymentCount: 0, recentRuns: [payrollRun] }, services: { expiredCount: 0, expiringCount: 1, attentionItems: [] },
       leaves: { openCount: 1, actionItems: [] }, finalSettlements: { openCount: 0, actionItems: [] },
     });
-    if (url.pathname === "/v1/hr/employees" && route.request().method() === "GET") return fulfill(route, { companyId, employees: [employee], hasMore: false, nextCursor: null, summary: { activeEmployees: 7, employeesOnLeave: 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
+    if (url.pathname === "/v1/hr/employees" && route.request().method() === "GET") {
+      if (options.slowEmployeeSearch && url.searchParams.has("search")) await new Promise((resolve) => setTimeout(resolve, 350));
+      return fulfill(route, { companyId, employees: [employee], hasMore: false, nextCursor: null, summary: { activeEmployees: 7, employeesOnLeave: 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
+    }
     if (url.pathname === `/v1/hr/employees/${employee.id}/promotions`) return fulfill(route, { promotions: [], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}/compensation-history`) return fulfill(route, { compensationHistory: [compensation], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}/documents`) {
@@ -535,6 +538,80 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await page.keyboard.press("Escape");
   await approvedPayroll.getByRole("button", { name: "عكس الدفعة" }).click();
   await expectTopmostDialog(page, "عكس دفعة المسير");
+});
+
+test("leave employee filter uses the Baseer Combobox adapter with keyboard search", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("button", { name: "الفلاتر" }).click();
+  const combobox = page.getByRole("combobox", { name: "الموظف" });
+  await combobox.focus();
+  await combobox.fill("موظف");
+  await expect(page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` })).toBeVisible();
+  await combobox.press("Home");
+  await combobox.press("End");
+  await combobox.press("ArrowDown");
+  await combobox.press("Enter");
+  await expect(combobox).toHaveValue(`${employee.employeeNumber} · ${employee.nameAr}`);
+  expect(requested.some((request) => request.includes("GET /v1/hr/employees?search="))).toBeTruthy();
+
+  await combobox.focus();
+  await combobox.press("Escape");
+  await expect(page.getByRole("listbox")).toHaveCount(0);
+  await expect(combobox).toBeFocused();
+});
+
+test("leave employee filter rejects a stale employee result after company switching", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { slowEmployeeSearch: true });
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("button", { name: "الفلاتر" }).click();
+  const combobox = page.getByRole("combobox", { name: "الموظف" });
+  await combobox.fill("موظف");
+  await expect.poll(() => requested.some((request) => request.includes("GET /v1/hr/employees?search="))).toBeTruthy();
+  await page.evaluate(() => sessionStorage.setItem("baseer.erp.company-id", "99999999-9999-4999-8999-999999999999"));
+  await expect(page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` })).toHaveCount(0);
+  await expect(page.getByText("لا يوجد موظفون مطابقون.")).toBeVisible();
+  expect(requested.some((request) => request.includes("GET /v1/hr/employees?search="))).toBeTruthy();
+});
+
+test("leave employee filter clears its selected employee when its company scope changes", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("button", { name: "الفلاتر" }).click();
+  const combobox = page.getByRole("combobox", { name: "الموظف" });
+  await combobox.fill("موظف");
+  await expect(page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` })).toBeVisible();
+  await page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` }).click();
+  const employeeChip = page.locator(".baseer-inline-actions .daily-sales-badge").filter({ hasText: "موظف الاختبار" });
+  await expect(employeeChip).toBeVisible();
+
+  requested.length = 0;
+  await page.evaluate(() => sessionStorage.setItem("baseer.erp.company-id", "99999999-9999-4999-8999-999999999999"));
+  await page.getByLabel("الحالة").selectOption("APPROVED");
+  await expect(employeeChip).toHaveCount(0);
+  await expect.poll(() => requested.filter((request) => request.startsWith("GET /v1/hr/leaves")).at(-1) ?? "").not.toContain("employeeId=");
+});
+
+test("leave employee filter remains labeled and usable in English LTR", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { language: "en" });
+
+  await page.goto("/#module=hr&section=2");
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await page.getByRole("button", { name: "Filters" }).click();
+  const combobox = page.getByRole("combobox", { name: "Employee" });
+  await combobox.fill("Test");
+  await expect(page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameEn}` })).toBeVisible();
+  await combobox.press("ArrowDown");
+  await combobox.press("Enter");
+  await expect(combobox).toHaveValue(`${employee.employeeNumber} · ${employee.nameEn}`);
+  expect(requested.some((request) => request.includes("GET /v1/hr/employees?search=Test"))).toBeTruthy();
 });
 
 test("advance deduction and service create/detail dialogs are centralized", async ({ page }) => {

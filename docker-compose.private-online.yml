@@ -22,23 +22,24 @@ services:
       - database
 
   migrate:
-    image: baseer-erp-api:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
+    image: baseer-erp-migrate:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
     profiles:
       - bootstrap
+    restart: "no"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
     environment:
       DATABASE_URL: postgresql://postgres:${BASEER_DB_BOOTSTRAP_PASSWORD:?BASEER_DB_BOOTSTRAP_PASSWORD is required}@postgres:5432/${BASEER_DB_NAME:?BASEER_DB_NAME is required}
     depends_on:
       postgres:
         condition: service_healthy
-    command:
-      [
-        "npx",
-        "prisma",
-        "migrate",
-        "deploy",
-        "--schema",
-        "apps/api/prisma/schema.prisma",
-      ]
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
     networks:
       - database
   api:
@@ -46,6 +47,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: runtime
     restart: unless-stopped
     environment:
       NODE_ENV: production

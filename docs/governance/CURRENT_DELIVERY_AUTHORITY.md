@@ -44,6 +44,43 @@ The [quality and delivery monitor model](QUALITY_AND_DELIVERY_MONITOR_OPERATING_
 and [platform transformation plan](UI_PLATFORM_ADOPTION_AND_DASHBOARD_IMPLEMENTATION_PLAN_2026-08-22.md)
 govern its evidence. Any later phase requires a new owner decision.
 
+### Security gate recorded after the validation install
+
+Phase 0 baseline is verified at
+`cc9c89d3300fd09c7cf9da413f85b172e32d6d62`. The isolated validation install
+of `react-aria-components@1.20.0` did not change the web build budget before
+import, but `npm audit --omit=dev` found three high findings through the
+pre-existing path `prisma@7.9.1` → `@prisma/config@7.9.1` →
+`deepmerge-ts@7.1.5` (`GHSA-ggr8-5vv4-36mx`). React Aria is not in that path.
+
+No newer stable Prisma 7 patch is presently available, and an override to
+`deepmerge-ts@8` is not an approved remediation because it breaks Prisma's
+published dependency contract. The owner approved the following written,
+time-boxed exception on 2026-08-22: until **2026-09-05** only, source merge,
+local implementation, and verification of exactly one non-financial
+`BaseerCombobox` is allowed. Its only consumer is the employee filter in HR
+“Leave & return”; it excludes the leave-create dialog, production,
+release acceptance, dashboard work, any additional library, and all
+API/RLS/permission/financial changes. The P1 remains open and this exception
+does not reclassify it as resolved. The pilot passed its adapter,
+company/session-isolation, AR/EN RTL/LTR, keyboard/mobile, E2E and web-budget
+gates locally. The deployable dependency graph is also clean when development
+and optional Prisma CLI peers are omitted; the full build/migration graph is
+still tracked as P1.
+
+Outside that narrow exception, no additional pilot, release, or production
+claim is authorized. The durable remedy remains an official Prisma patch,
+followed by a matched Prisma-stack upgrade and re-verification.
+Automatic `npm audit fix --force` is explicitly forbidden here because its
+proposed Prisma change is breaking.
+
+The public API exposure has been reduced independently: the deployment now
+builds a production-only `runtime` image that proves it excludes `prisma`,
+`@prisma/config`, and `deepmerge-ts`, while an internal, read-only `migrate`
+job holds the CLI and has only the database network. This is a containment
+control, not a patch; it does not close the advisory in the build or migration
+image and does not change the owner decision above.
+
 ## 2026-08-21 current working-tree verification
 
 The current working tree contains uncommitted candidate additions for Reports and Operations. They do not alter the active delivery order or grant owner acceptance. Type checks, API/web builds, report-policy verifiers, the Operations purchase-cycle verifier, Finance Gate B, and the web release budget passed on the local test database. The budget result is 83,636/85,000 bytes for the largest JavaScript journey and 14,161/16,000 bytes for the largest CSS journey.
