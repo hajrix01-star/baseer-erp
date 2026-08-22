@@ -1,4 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -17,10 +20,35 @@ const today = () => new Date().toISOString().slice(0, 10);
 const empty = (): Draft => ({ nameAr: "", nameEn: "", jobTitle: "", hireDate: "", iqamaNumber: "", phone: "", email: "", monthlyGross: "", housingAllowance: "", transportAllowance: "", foodAllowance: "", otherAllowance: "", scheduledHoursPerDay: "", scheduledWorkDays: "", notes: "" });
 const number = (value: string) => { const parsed = Number(value || "0"); return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0; };
 
+function onboardingSchema(ar: boolean) {
+  const required = ar ? "هذا الحقل مطلوب." : "This field is required.";
+  const invalidEmail = ar ? "أدخل بريداً إلكترونياً صحيحاً أو اتركه فارغاً." : "Enter a valid email address or leave it blank.";
+  const invalidDate = ar ? "أدخل تاريخاً صحيحاً." : "Enter a valid date.";
+  return z.object({
+    nameAr: z.string().trim().min(1, required),
+    nameEn: z.string(),
+    jobTitle: z.string(),
+    hireDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, invalidDate),
+    iqamaNumber: z.string(),
+    phone: z.string(),
+    email: z.string().trim().refine((value) => !value || z.email().safeParse(value).success, invalidEmail),
+    monthlyGross: z.string().trim().min(1, required),
+    housingAllowance: z.string(),
+    transportAllowance: z.string(),
+    foodAllowance: z.string(),
+    otherAllowance: z.string(),
+    scheduledHoursPerDay: z.string(),
+    scheduledWorkDays: z.string(),
+    notes: z.string(),
+  });
+}
+
 /** Creates the employee and their first salary record together. */
 export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, onError }: { open: boolean; language: Language; onClose: () => void; onSaved: () => Promise<boolean>; onError: (message: string) => void }) {
   const ar = language === "ar";
-  const [draft, setDraft] = useState<Draft>(empty);
+  const schema = useMemo(() => onboardingSchema(ar), [ar]);
+  const { formState: { errors }, handleSubmit, register, reset, setValue, watch } = useForm<Draft>({ defaultValues: empty(), resolver: zodResolver(schema), shouldFocusError: true });
+  const draft = watch();
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState("");
   const [busy, setBusy] = useState(false);
@@ -33,7 +61,7 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
   }, [photoFile]);
   useEffect(() => {
     if (!open) return;
-    setDraft(empty());
+    reset(empty());
     setPhotoFile(null);
     submissionKey.current = requestId();
   }, [open]);
@@ -45,11 +73,10 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
   const calculation = useMemo(() => calculateSalaryTool({ monthlyGross: draft.monthlyGross, compensationMethod, foodAllowance: draft.foodAllowance, housingAllowance: draft.housingAllowance, transportAllowance: draft.transportAllowance, otherAllowance: draft.otherAllowance, scheduledHoursPerDay: draft.scheduledHoursPerDay, scheduledWorkDays: draft.scheduledWorkDays }), [compensationMethod, draft.foodAllowance, draft.housingAllowance, draft.monthlyGross, draft.otherAllowance, draft.scheduledHoursPerDay, draft.scheduledWorkDays, draft.transportAllowance]);
   const allowancesTotal = number(draft.foodAllowance) + number(draft.housingAllowance) + number(draft.transportAllowance) + number(draft.otherAllowance);
   const identityComplete = Boolean(draft.nameAr.trim() && draft.hireDate);
-  const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((current) => ({ ...current, [key]: value }));
-  const close = () => { if (busy) return; setDraft(empty()); setPhotoFile(null); onClose(); };
-  const submit = async (event: React.FormEvent) => {
-    event.preventDefault(); const session = activeSession(); if (!session || busy) return;
-    if (!draft.nameAr.trim() || !draft.hireDate) { onError(ar ? "أدخل الاسم الكامل وتاريخ التعيين قبل الحفظ." : "Enter the full name and hire date before saving."); return; }
+  const set = (key: keyof Draft, value: string) => setValue(key, value, { shouldDirty: true, shouldValidate: true });
+  const close = () => { if (busy) return; reset(empty()); setPhotoFile(null); onClose(); };
+  const submit = async (draft: Draft) => {
+    const session = activeSession(); if (!session || busy) return;
     if (enteredHours !== null && (!Number.isInteger(enteredHours) || enteredHours < 8 || enteredHours > 12)) { onError(ar ? "ساعات الدوام، عند إدخالها، تكون من 8 إلى 12 ساعة." : "When entered, daily hours must be from 8 to 12."); return; }
     if (enteredWorkDays !== null && (!Number.isInteger(enteredWorkDays) || enteredWorkDays < 1 || enteredWorkDays > 31)) { onError(ar ? "أيام العمل الشهرية، عند إدخالها، تكون من 1 إلى 31 يوماً." : "When entered, monthly work days must be from 1 to 31."); return; }
     if (compensationMethod === "INCLUSIVE_OVERTIME" && (!Number.isInteger(enteredHours) || (enteredHours ?? 0) <= 8 || (enteredHours ?? 0) > 12 || !Number.isInteger(enteredWorkDays) || (enteredWorkDays ?? 0) < 1 || (enteredWorkDays ?? 0) > 31)) {
@@ -73,18 +100,18 @@ export function HrEmployeeOnboardingDialog({ open, language, onClose, onSaved, o
       try { refreshed = await onSaved(); }
       catch { refreshed = false; }
       if (!refreshed) followUpErrors.push(ar ? "حُفظ الموظف والراتب، لكن تعذر تحديث جدول الموظفين." : "The employee and salary were saved, but the employee register could not be refreshed.");
-      setDraft(empty()); setPhotoFile(null); onClose();
+      reset(empty()); setPhotoFile(null); onClose();
       if (followUpErrors.length) onError(followUpErrors.join(" "));
     } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر إضافة الموظف وحفظ الراتب." : "The employee and salary could not be saved.")); }
     finally { setBusy(false); }
   };
   return <BaseerFormDialog open={open} title={ar ? "إضافة موظف" : "Add employee"} size="wide" className="hr-onboarding-dialog" language={language} busy={busy} formId="hr-employee-onboarding" submitLabel={ar ? "إضافة الموظف وحفظ الراتب" : "Add employee & save salary"} onClose={close}>
-    <form id="hr-employee-onboarding" className="hr-onboarding" noValidate onSubmit={(event) => void submit(event)}>
+    <form id="hr-employee-onboarding" className="hr-onboarding" data-baseer-rhf-form="true" noValidate onSubmit={handleSubmit((values) => void submit(values))}>
       <div className="hr-onboarding__workspace">
         <div className="hr-onboarding__entry">
-          <section className="hr-onboarding__section"><header><span>01</span><h3>{ar ? "الهوية والتعيين" : "Identity & employment"}</h3><label className="hr-onboarding__avatar-picker" title={ar ? "إضافة صورة الموظف" : "Add employee photo"}><input accept="image/jpeg,image/png" type="file" onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} />{photoPreviewUrl ? <img src={photoPreviewUrl} alt={ar ? "معاينة صورة الموظف" : "Employee photo preview"} /> : <span aria-hidden="true" />}<b aria-hidden="true">+</b></label></header><div className="hr-onboarding__grid"><label><span className="hr-onboarding__field-label">{ar ? "الاسم الكامل" : "Full name"}<em>*</em></span><input required autoFocus value={draft.nameAr} placeholder={ar ? "الاسم الكامل" : "Full name"} onChange={(event) => set("nameAr", event.target.value)} /></label><label>{ar ? "الاسم بالإنجليزية" : "Name (English)"}<input dir="ltr" value={draft.nameEn} placeholder="Employee name in English" onChange={(event) => set("nameEn", event.target.value)} /></label><label>{ar ? "المسمى الوظيفي" : "Job title"}<HrJobTitleSelect id="hr-onboarding-job-titles" language={language} value={draft.jobTitle} allowCustom={false} onChange={(value) => set("jobTitle", value)} /></label><label><span className="hr-onboarding__field-label">{ar ? "تاريخ التعيين" : "Hire date"}<em>*</em></span><input required type="date" max={today()} value={draft.hireDate} onChange={(event) => set("hireDate", event.target.value)} /></label><label>{ar ? "رقم الإقامة" : "Iqama number"}<input inputMode="numeric" value={draft.iqamaNumber} placeholder="1234567890" onChange={(event) => set("iqamaNumber", event.target.value)} /></label><label>{ar ? "رقم الجوال" : "Phone"}<input dir="ltr" inputMode="tel" value={draft.phone} onChange={(event) => set("phone", event.target.value)} /></label><label>{ar ? "البريد الإلكتروني" : "Email"}<input dir="ltr" type="email" value={draft.email} onChange={(event) => set("email", event.target.value)} /></label></div></section>
-          <section className="hr-onboarding__section"><header><span>02</span><h3>{ar ? "الراتب الأول" : "Initial salary"}</h3></header><div className="hr-onboarding__grid"><label><span className="hr-onboarding__field-label">{ar ? "إجمالي الراتب الشهري" : "Total monthly salary"}<em>*</em></span><input required min="0.01" inputMode="decimal" value={draft.monthlyGross} placeholder="2500" onChange={(event) => set("monthlyGross", event.target.value)} /></label><label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<input inputMode="decimal" value={draft.foodAllowance} placeholder="500" onChange={(event) => set("foodAllowance", event.target.value)} /></label><label>{ar ? "بدل السكن" : "Housing allowance"}<input inputMode="decimal" value={draft.housingAllowance} onChange={(event) => set("housingAllowance", event.target.value)} /></label><label>{ar ? "بدل المواصلات" : "Transport allowance"}<input inputMode="decimal" value={draft.transportAllowance} onChange={(event) => set("transportAllowance", event.target.value)} /></label><label>{ar ? "بدلات أخرى" : "Other allowances"}<input inputMode="decimal" value={draft.otherAllowance} onChange={(event) => set("otherAllowance", event.target.value)} /></label><label>{ar ? "ساعات الدوام يومياً (للأوفر تايم)" : "Daily hours (for overtime)"}<input type="number" min="8" max="12" value={draft.scheduledHoursPerDay} onChange={(event) => set("scheduledHoursPerDay", event.target.value)} /></label><label>{ar ? "أيام العمل شهرياً (للأوفر تايم)" : "Monthly work days (for overtime)"}<input type="number" min="1" max="31" value={draft.scheduledWorkDays} onChange={(event) => set("scheduledWorkDays", event.target.value)} /></label></div></section>
-          <section className="hr-onboarding__section"><header><span>03</span><h3>{ar ? "ملاحظات" : "Notes"}</h3></header><label className="hr-onboarding__notes">{ar ? "ملاحظات الموظف" : "Employee notes"}<textarea value={draft.notes} onChange={(event) => set("notes", event.target.value)} /></label></section>
+          <section className="hr-onboarding__section"><header><span>01</span><h3>{ar ? "الهوية والتعيين" : "Identity & employment"}</h3><label className="hr-onboarding__avatar-picker" title={ar ? "إضافة صورة الموظف" : "Add employee photo"}><input accept="image/jpeg,image/png" type="file" onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} />{photoPreviewUrl ? <img src={photoPreviewUrl} alt={ar ? "معاينة صورة الموظف" : "Employee photo preview"} /> : <span aria-hidden="true" />}<b aria-hidden="true">+</b></label></header><div className="hr-onboarding__grid"><label><span className="hr-onboarding__field-label">{ar ? "الاسم الكامل" : "Full name"}<em>*</em></span><input autoFocus aria-invalid={Boolean(errors.nameAr)} aria-describedby={errors.nameAr ? "hr-onboarding-name-error" : undefined} placeholder={ar ? "الاسم الكامل" : "Full name"} {...register("nameAr")} />{errors.nameAr ? <small id="hr-onboarding-name-error" role="alert">{errors.nameAr.message}</small> : null}</label><label>{ar ? "الاسم بالإنجليزية" : "Name (English)"}<input dir="ltr" placeholder="Employee name in English" {...register("nameEn")} /></label><label>{ar ? "المسمى الوظيفي" : "Job title"}<HrJobTitleSelect id="hr-onboarding-job-titles" language={language} value={draft.jobTitle} allowCustom={false} onChange={(value) => set("jobTitle", value)} /></label><label><span className="hr-onboarding__field-label">{ar ? "تاريخ التعيين" : "Hire date"}<em>*</em></span><input type="date" max={today()} aria-invalid={Boolean(errors.hireDate)} aria-describedby={errors.hireDate ? "hr-onboarding-hire-date-error" : undefined} {...register("hireDate")} />{errors.hireDate ? <small id="hr-onboarding-hire-date-error" role="alert">{errors.hireDate.message}</small> : null}</label><label>{ar ? "رقم الإقامة" : "Iqama number"}<input inputMode="numeric" placeholder="1234567890" {...register("iqamaNumber")} /></label><label>{ar ? "رقم الجوال" : "Phone"}<input dir="ltr" inputMode="tel" {...register("phone")} /></label><label>{ar ? "البريد الإلكتروني" : "Email"}<input dir="ltr" type="email" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "hr-onboarding-email-error" : undefined} {...register("email")} />{errors.email ? <small id="hr-onboarding-email-error" role="alert">{errors.email.message}</small> : null}</label></div></section>
+          <section className="hr-onboarding__section"><header><span>02</span><h3>{ar ? "الراتب الأول" : "Initial salary"}</h3></header><div className="hr-onboarding__grid"><label><span className="hr-onboarding__field-label">{ar ? "إجمالي الراتب الشهري" : "Total monthly salary"}<em>*</em></span><input min="0.01" inputMode="decimal" aria-invalid={Boolean(errors.monthlyGross)} aria-describedby={errors.monthlyGross ? "hr-onboarding-salary-error" : undefined} placeholder="2500" {...register("monthlyGross")} />{errors.monthlyGross ? <small id="hr-onboarding-salary-error" role="alert">{errors.monthlyGross.message}</small> : null}</label><label>{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<input inputMode="decimal" placeholder="500" {...register("foodAllowance")} /></label><label>{ar ? "بدل السكن" : "Housing allowance"}<input inputMode="decimal" {...register("housingAllowance")} /></label><label>{ar ? "بدل المواصلات" : "Transport allowance"}<input inputMode="decimal" {...register("transportAllowance")} /></label><label>{ar ? "بدلات أخرى" : "Other allowances"}<input inputMode="decimal" {...register("otherAllowance")} /></label><label>{ar ? "ساعات الدوام يومياً (للأوفر تايم)" : "Daily hours (for overtime)"}<input type="number" min="8" max="12" {...register("scheduledHoursPerDay")} /></label><label>{ar ? "أيام العمل شهرياً (للأوفر تايم)" : "Monthly work days (for overtime)"}<input type="number" min="1" max="31" {...register("scheduledWorkDays")} /></label></div></section>
+          <section className="hr-onboarding__section"><header><span>03</span><h3>{ar ? "ملاحظات" : "Notes"}</h3></header><label className="hr-onboarding__notes">{ar ? "ملاحظات الموظف" : "Employee notes"}<textarea {...register("notes")} /></label></section>
         </div>
         <aside className="hr-onboarding__result" aria-live="polite">
           <header><div><span>{ar ? "ملخص الموظف" : "Employee summary"}</span><small>{ar ? "يتحدّث أثناء الإدخال" : "Updates while you type"}</small></div><strong className={identityComplete ? "is-ready" : ""}>{identityComplete ? (ar ? "مكتمل" : "Ready") : (ar ? "بانتظار البيانات" : "Waiting")}</strong></header>
