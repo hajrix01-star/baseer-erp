@@ -1,4 +1,7 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useEffect, useState, type ChangeEvent } from "react";
+import { z } from "zod";
 import { COMPANY_CONTEXT_LOCATIONS } from "@baseer-erp/contracts/administration";
 
 import {
@@ -18,6 +21,7 @@ import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 
 type Company = AdministrationOverview["companies"][number];
 type DialogMode = "create" | "manage" | null;
+type CompanyForm = { nameAr: string; nameEn: string; businessTimezone: string; contextLocationCode: string };
 type Props = {
   language: "ar" | "en";
   session: ActiveSession;
@@ -26,6 +30,12 @@ type Props = {
   onDone: () => Promise<void>;
   onError: (error: unknown) => void;
 };
+const companySchema = (ar: boolean) => z.object({
+  nameAr: z.string().trim().min(1, ar ? "أدخل اسم الشركة بالعربية." : "Enter the company name in Arabic."),
+  nameEn: z.string().trim().min(1, ar ? "أدخل اسم الشركة بالإنجليزية." : "Enter the company name in English."),
+  businessTimezone: z.string().trim().min(1),
+  contextLocationCode: z.string(),
+});
 
 export function AdministrationCompaniesPanel({ language, session, companies, owner, onDone, onError }: Props) {
   const text = administrationText(language);
@@ -71,10 +81,8 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
 function CompanyDialog({ language, session, company, owner, onDone, onError, onClose }: { language: "ar" | "en"; session: ActiveSession; company?: Company; owner: boolean; onDone: () => Promise<void>; onError: (error: unknown) => void; onClose: () => void }) {
   const text = administrationText(language);
   const isCreate = !company;
-  const [nameAr, setNameAr] = useState(company?.nameAr ?? "");
-  const [nameEn, setNameEn] = useState(company?.nameEn ?? "");
-  const [businessTimezone, setBusinessTimezone] = useState(company?.businessTimezone ?? "Asia/Riyadh");
-  const [contextLocationCode, setContextLocationCode] = useState(company?.contextLocationCode ?? "");
+  const form = useForm<CompanyForm>({ defaultValues: { nameAr: company?.nameAr ?? "", nameEn: company?.nameEn ?? "", businessTimezone: company?.businessTimezone ?? "Asia/Riyadh", contextLocationCode: company?.contextLocationCode ?? "" }, resolver: zodResolver(companySchema(language === "ar")), shouldFocusError: true });
+  const values = form.watch();
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -103,15 +111,14 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   }, [company, onError, session]);
 
   const dialogRef = useDialogFocusTrap({ open: true, saving: busy, onClose });
-  const selectedLocation = COMPANY_CONTEXT_LOCATIONS.find((location) => location.code === contextLocationCode) ?? null;
-  const save = async (event: FormEvent) => {
-    event.preventDefault();
+  const selectedLocation = COMPANY_CONTEXT_LOCATIONS.find((location) => location.code === values.contextLocationCode) ?? null;
+  const save = async (next: CompanyForm) => {
     if (!owner) return;
     setBusy(true);
     try {
-      if (isCreate) await createAdministrationCompany(session, { nameAr, nameEn });
+      if (isCreate) await createAdministrationCompany(session, { nameAr: next.nameAr, nameEn: next.nameEn });
       else await updateAdministrationCompany(session, company.id, {
-        nameAr, nameEn, businessTimezone, logoFileMetadataId,
+        nameAr: next.nameAr, nameEn: next.nameEn, businessTimezone: next.businessTimezone, logoFileMetadataId,
         contextLocationCode: selectedLocation?.code ?? null,
         contextLocationLabelAr: selectedLocation?.labelAr ?? null,
         contextLatitude: selectedLocation?.latitude ?? null,
@@ -159,18 +166,18 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
         <div><p className="eyebrow">{text.companyManagement}</p><h3>{title}</h3></div>
         <button className="dialog-icon-button" type="button" aria-label={text.close} disabled={busy || vatBusy} onClick={onClose}>×</button>
       </header>
-      <form className="administration-dialog-form" onSubmit={(event) => void save(event)}>
+      <form className="administration-dialog-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void save(next))}>
         {owner ? <footer className="administration-company-dialog__save"><button className="daily-sales-primary" disabled={busy || vatBusy}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</button></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         <div className="administration-company-editor-profile">
-          {logoUrl ? <img alt={`${text.companyLogo}: ${nameAr || text.companies}`} src={logoUrl} /> : <span>{nameAr.trim().slice(0, 1) || "ش"}</span>}
-          <div><strong>{nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
+          {logoUrl ? <img alt={`${text.companyLogo}: ${values.nameAr || text.companies}`} src={logoUrl} /> : <span>{values.nameAr.trim().slice(0, 1) || "ش"}</span>}
+          <div><strong>{values.nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
         </div>
-        <label>{text.companyArabicName}<input required disabled={!owner || busy} value={nameAr} onChange={(event) => setNameAr(event.target.value)} autoFocus /></label>
-        <label>{text.companyEnglishName}<input required disabled={!owner || busy} value={nameEn} onChange={(event) => setNameEn(event.target.value)} /></label>
+        <label>{text.companyArabicName}<input disabled={!owner || busy} autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+        <label>{text.companyEnglishName}<input disabled={!owner || busy} aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
         {!isCreate && owner && <label className="administration-company-logo-upload">{text.companyLogo}<input accept="image/png,image/jpeg,image/webp" disabled={busy || vatBusy} type="file" onChange={(event) => void selectLogo(event)} /><span>{text.companyLogoHint}</span></label>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-location">
           <legend>{language === "ar" ? "موقع الشركة وسياقها" : "Company location and context"}</legend>
-          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<select disabled={!owner || busy} value={selectedLocation?.code ?? ""} onChange={(event) => setContextLocationCode(event.target.value)}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</select></label>
+          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<select disabled={!owner || busy} {...form.register("contextLocationCode")}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</select></label>
           <small>{language === "ar" ? "يحفظ النظام رمز المدينة وإحداثياتها المعتمدة تلقائياً لربط الطقس والمباريات المحلية بهذه الشركة فقط." : "Baseer saves the approved city code and coordinates automatically to connect local weather and fixtures to this company only."}</small>
         </fieldset>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-tax">
