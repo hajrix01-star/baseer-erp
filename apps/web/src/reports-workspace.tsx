@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type ComponentProps } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 
 import { BaseerButton } from './baseer-button';
 import { BaseerDialog } from './baseer-dialog';
@@ -10,6 +10,7 @@ import { ReportDocumentActions } from './report-document-actions';
 import { DailySalesSignIn } from './daily-sales-sign-in';
 import { activeSession, api, type ActiveSession } from './daily-sales-client';
 import { presentBaseerApiError } from './baseer-api-error';
+import { BaseerCompanyReadQuery } from './baseer-company-read-query';
 import './reports-workspace.css';
 
 const LazyBaseerPeriodFilter = lazy(async () => ({ default: (await import('./baseer-period-filter')).BaseerPeriodFilter }));
@@ -42,35 +43,35 @@ const copy = {
 } as const;
 
 function PersonalCashPerformanceWorkspace({ language }: { language: Language }) {
-  const text = copy[language];
-  const [session, setSession] = useState<ActiveSession | null>(activeSession);
+  const [session] = useState<ActiveSession | null>(activeSession);
   const [period, setPeriod] = useState<BaseerPeriodRange>(defaultBaseerPeriodRange);
   const [vatInclusive, setVatInclusive] = useState(true);
-  const [report, setReport] = useState<ReportResult | null>(null);
+  if (!session) return <DailySalesSignIn language={language} />;
+  const query = new URLSearchParams({ from: period.from, to: period.to, vatInclusive: String(vatInclusive) });
+  if (period.preset === 'MONTH' && period.months.length > 1) query.set('months', period.months.join(','));
+  return <BaseerCompanyReadQuery session={session} resource="reports.personal-cash-performance" scope={[language, period.preset, period.from, period.to, period.months.join(','), String(vatInclusive)]} mode="snapshot" load={(current, signal) => api<ReportResult>(current, `/reports/personal-cash-performance?${query.toString()}`, { signal })}>
+    {({ data, loading, error, refetch }) => <PersonalCashPerformanceContent language={language} session={session} period={period} setPeriod={setPeriod} vatInclusive={vatInclusive} setVatInclusive={setVatInclusive} report={data ?? null} loading={loading} loadError={error} refetch={refetch} />}
+  </BaseerCompanyReadQuery>;
+}
+
+function PersonalCashPerformanceContent({ language, session, period, setPeriod, vatInclusive, setVatInclusive, report, loading, loadError, refetch }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; setPeriod: (value: BaseerPeriodRange) => void; vatInclusive: boolean; setVatInclusive: (value: boolean) => void; report: ReportResult | null; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
+  const text = copy[language];
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(() => activeSession() !== null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [displayLevel, setDisplayLevel] = useState<2 | 3>(2);
   const [selectedRow, setSelectedRow] = useState<ReportRow | null>(null);
   const [evidence, setEvidence] = useState<EvidenceReceipt | null>(null);
   const [evidenceBusy, setEvidenceBusy] = useState(false);
   const [source, setSource] = useState<SourceReceipt | null>(null);
-
-  const loadReport = useCallback(async () => {
-    const current = activeSession();
-    setSession(current);
-    if (!current) { setLoading(false); return; }
-    setLoading(true); setMessage('');
-    try {
-      const query = new URLSearchParams({ from: period.from, to: period.to, vatInclusive: String(vatInclusive) });
-      if (period.preset === 'MONTH' && period.months.length > 1) query.set('months', period.months.join(','));
-      setReport(await api<ReportResult>(current, `/reports/personal-cash-performance?${query.toString()}`));
-    } catch (error) {
-      setReport(null);
-      setMessage(presentBaseerApiError(error, language, text.title));
-    } finally { setLoading(false); }
-  }, [language, period.from, period.months, period.preset, period.to, text.title, vatInclusive]);
-  useEffect(() => { void loadReport(); }, [loadReport]);
+  const readAbort = useRef<AbortController | null>(null);
+  const readEpoch = useRef(0);
+  const runId = report?.state === 'READY' ? report.reportRunId : '';
+  useEffect(() => {
+    readEpoch.current += 1;
+    readAbort.current?.abort();
+    setSelectedRow(null); setEvidence(null); setSource(null); setEvidenceBusy(false); setMessage('');
+    return () => readAbort.current?.abort();
+  }, [session.companyId, session.sessionExpiresAt, period.from, period.to, period.months, vatInclusive, runId]);
 
   const rows = report?.state === 'READY' ? report.rows : [];
   const netResultRow: ReportRow | null = report?.state === 'READY' ? {
@@ -88,23 +89,24 @@ function PersonalCashPerformanceWorkspace({ language }: { language: Language }) 
   const hasChildren = (row: ReportRow) => rows.some((candidate) => candidate.parentCode === row.code && hierarchy.depthFor(candidate) <= displayLevel);
   const openEvidence = async (row: ReportRow, cursor?: string) => {
     if (!report || report.state !== 'READY') return;
-    const current = activeSession(); if (!current) return;
+    const epoch = ++readEpoch.current; readAbort.current?.abort(); const controller = new AbortController(); readAbort.current = controller;
     if (!cursor) { setSelectedRow(row); setEvidence(null); setSource(null); }
     setEvidenceBusy(true);
     try {
       const query = new URLSearchParams({ rowCode: row.code, ...(cursor ? { cursor } : {}) });
-      const next = await api<EvidenceReceipt>(current, `/reports/personal-cash-performance/${report.reportRunId}/evidence?${query.toString()}`);
+      const next = await api<EvidenceReceipt>(session, `/reports/personal-cash-performance/${report.reportRunId}/evidence?${query.toString()}`, { signal: controller.signal });
+      if (controller.signal.aborted || epoch !== readEpoch.current || activeSession()?.companyId !== session.companyId || activeSession()?.sessionExpiresAt !== session.sessionExpiresAt) return;
       setEvidence((previous) => cursor && previous ? { ...next, items: [...previous.items, ...next.items] } : next);
-    } catch (error) { setMessage(presentBaseerApiError(error, language, text.details)); }
-    finally { setEvidenceBusy(false); }
+    } catch (error) { if (!controller.signal.aborted) setMessage(presentBaseerApiError(error, language, text.details)); }
+    finally { if (epoch === readEpoch.current) setEvidenceBusy(false); }
   };
   const openSource = async (eventId: string) => {
     if (!report || report.state !== 'READY') return;
-    const current = activeSession(); if (!current) return;
+    const epoch = ++readEpoch.current; readAbort.current?.abort(); const controller = new AbortController(); readAbort.current = controller;
     setEvidenceBusy(true);
-    try { setSource(await api<SourceReceipt>(current, `/reports/personal-cash-performance/${report.reportRunId}/evidence/${eventId}/source`)); }
-    catch (error) { setMessage(presentBaseerApiError(error, language, text.source)); }
-    finally { setEvidenceBusy(false); }
+    try { const next = await api<SourceReceipt>(session, `/reports/personal-cash-performance/${report.reportRunId}/evidence/${eventId}/source`, { signal: controller.signal }); if (!controller.signal.aborted && epoch === readEpoch.current && activeSession()?.companyId === session.companyId && activeSession()?.sessionExpiresAt === session.sessionExpiresAt) setSource(next); }
+    catch (error) { if (!controller.signal.aborted) setMessage(presentBaseerApiError(error, language, text.source)); }
+    finally { if (epoch === readEpoch.current) setEvidenceBusy(false); }
   };
   const closeDetails = () => { setSelectedRow(null); setEvidence(null); setSource(null); };
   const useCoveredPeriod = () => {
@@ -117,7 +119,7 @@ function PersonalCashPerformanceWorkspace({ language }: { language: Language }) 
     setPeriod({ preset: 'RANGE', from: report.coverageStartBusinessDate, to, months: [] });
   };
 
-  if (!session) return <DailySalesSignIn language={language} />;
+  const rootMessage = loadError ? presentBaseerApiError(loadError, language, text.title) : '';
   return <section className="reports-prototype reports-workspace" aria-label={text.title}>
     <header className="reports-prototype__intro"><div><h2>{text.title}</h2></div></header>
     <section className="reports-prototype__canvas" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -129,12 +131,12 @@ function PersonalCashPerformanceWorkspace({ language }: { language: Language }) 
         </div>
         {!loading && report?.state === 'READY' ? <ReportDocumentActions session={session} reportRunId={report.reportRunId} language={language} /> : null}
       </div>
-      {message ? <p className="reports-prototype__notice is-error">{message}</p> : null}
-      {message ? <div className="reports-prototype__retry"><BaseerButton type="button" variant="secondary" onClick={() => void loadReport()}>{text.retry}</BaseerButton></div> : null}
+      {message || rootMessage ? <p className="reports-prototype__notice is-error">{message || rootMessage}</p> : null}
+      {message || rootMessage ? <div className="reports-prototype__retry"><BaseerButton type="button" variant="secondary" onClick={() => { setMessage(''); void refetch().catch(() => undefined); }}>{text.retry}</BaseerButton></div> : null}
       {loading ? <p className="reports-prototype__notice">{text.loading}</p> : null}
       {!loading && report && report.state !== 'READY' ? <p className={`reports-prototype__notice${report.state === 'NO_DATA' ? '' : ' is-warning'}`}>{report.messageAr || text.noData}</p> : null}
       {!loading && report?.state === 'COVERAGE_INCOMPLETE' && report.coverageStartBusinessDate ? <div className="reports-prototype__coverage-action"><BaseerButton type="button" variant="secondary" onClick={useCoveredPeriod}>{text.showCoveredPeriod}</BaseerButton></div> : null}
-      {!loading && report?.state === 'READY' ? <div className="reports-prototype__table-shell"><table className="reports-prototype__table"><caption>{text.title}</caption><thead><tr><th scope="col">{text.title}</th><th scope="col" className="reports-prototype__amount">{text.amount}</th></tr></thead><tbody>
+      {!loading && report?.state === 'READY' ? <div className="reports-prototype__table-shell"><table data-baseer-report-table="snapshot" className="reports-prototype__table"><caption>{text.title}</caption><thead><tr><th scope="col">{text.title}</th><th scope="col" className="reports-prototype__amount">{text.amount}</th></tr></thead><tbody>
         {hierarchy.visible.map((row) => <ReportTableRow key={row.code} row={row} depth={hierarchy.depthFor(row)} label={label(row)} hasChildren={hasChildren(row)} expanded={expanded[row.code] !== false} onToggle={() => setExpanded((current) => ({ ...current, [row.code]: !(current[row.code] !== false) }))} onOpen={() => void openEvidence(row)} />)}
         {netResultRow ? <tr className="reports-prototype__row reports-prototype__row--result"><th scope="row">{label(netResultRow)}</th><td><MoneyButton money={netResultRow.amount} label={label(netResultRow)} onClick={() => void openEvidence(netResultRow)} /></td></tr> : null}
       </tbody></table></div> : null}
@@ -191,5 +193,5 @@ function EvidenceDetail({ language, text, row, evidence, onOpenSource, onLoadMor
 
 function SourceJournal({ language, source, onBack }: { language: Language; source: SourceReceipt; onBack: () => void }) {
   const text = copy[language]; const journal = source.journalEntry;
-  return <div className="reports-prototype__detail" dir={language === 'ar' ? 'rtl' : 'ltr'}><BaseerButton type="button" variant="secondary" onClick={onBack}>{text.back}</BaseerButton><div className="reports-prototype__source-journal"><p><strong dir="ltr">{journal.sourceReference}</strong> · {journal.businessDate} · {journal.status === 'REVERSED' ? text.statusCancelled : text.statusPosted}</p>{journal.description ? <p>{journal.description}</p> : null}<table><thead><tr><th>#</th><th>{text.source}</th><th>{text.debit}</th><th>{text.credit}</th></tr></thead><tbody>{journal.lines.map((line) => <tr key={line.id}><td>{line.lineNumber}</td><td>{line.accountCode} · {language === 'ar' ? line.accountNameAr : line.accountNameEn}</td><td dir="ltr">{line.debitAmount}</td><td dir="ltr">{line.creditAmount}</td></tr>)}</tbody></table></div></div>;
+  return <div className="reports-prototype__detail" dir={language === 'ar' ? 'rtl' : 'ltr'}><BaseerButton type="button" variant="secondary" onClick={onBack}>{text.back}</BaseerButton><div className="reports-prototype__source-journal"><p><strong dir="ltr">{journal.sourceReference}</strong> · {journal.businessDate} · {journal.status === 'REVERSED' ? text.statusCancelled : text.statusPosted}</p>{journal.description ? <p>{journal.description}</p> : null}<table data-baseer-report-table="detail"><thead><tr><th>#</th><th>{text.source}</th><th>{text.debit}</th><th>{text.credit}</th></tr></thead><tbody>{journal.lines.map((line) => <tr key={line.id}><td>{line.lineNumber}</td><td>{line.accountCode} · {language === 'ar' ? line.accountNameAr : line.accountNameEn}</td><td dir="ltr">{line.debitAmount}</td><td dir="ltr">{line.creditAmount}</td></tr>)}</tbody></table></div></div>;
 }

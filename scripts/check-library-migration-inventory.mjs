@@ -15,7 +15,7 @@ const targetEntries = [
   ...targetsFor('form', /<form\b|BaseerValidatedForm/),
   ...targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/),
   ...targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/),
-  ...targetsFor('table', /DataTable|BaseerDataGrid/),
+  ...targetsFor('table', /DataTable|BaseerDataGrid|data-baseer-report-table/),
   ...targetsFor('query', /useQuery|useMutation|BaseerCompanyReadQuery/),
   ...targetsFor('chart', /BaseerChart|echarts/),
 ].sort((left, right) => left.id.localeCompare(right.id));
@@ -35,7 +35,7 @@ const inventory = {
     formLibraryConsumers: matches(/react-hook-form|zodResolver/).length,
     searchableSelectors: targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/).length,
     editableDates: targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/).length,
-    tables: targetsFor('table', /DataTable|BaseerDataGrid/).length,
+    tables: targetsFor('table', /DataTable|BaseerDataGrid|data-baseer-report-table/).length,
     queries: targetsFor('query', /useQuery|useMutation|BaseerCompanyReadQuery/).length,
     charts: targetsFor('chart', /BaseerChart|echarts/).length,
   },

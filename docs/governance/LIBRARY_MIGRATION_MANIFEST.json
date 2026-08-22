@@ -347,25 +347,50 @@
       "file": "treasury-workspace.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "query:baseer-company-read-query.tsx": {
-      "kind": "query",
-      "file": "baseer-company-read-query.tsx",
-      "decision": "central-adapter"
-    },
     "query:administration-workspace.tsx": {
       "kind": "query",
       "file": "administration-workspace.tsx",
       "decision": "migrated-administration-company-session-query"
+    },
+    "query:baseer-company-read-query.tsx": {
+      "kind": "query",
+      "file": "baseer-company-read-query.tsx",
+      "decision": "central-adapter"
     },
     "query:hr-overview-workspace.tsx": {
       "kind": "query",
       "file": "hr-overview-workspace.tsx",
       "decision": "migrated-hr-central-query"
     },
+    "query:internal-vat-report-workspace.tsx": {
+      "kind": "query",
+      "file": "internal-vat-report-workspace.tsx",
+      "decision": "migrated-reports-snapshot-company-session-query"
+    },
+    "query:ledger-trial-balance-workspace.tsx": {
+      "kind": "query",
+      "file": "ledger-trial-balance-workspace.tsx",
+      "decision": "migrated-reports-snapshot-company-session-query"
+    },
     "query:operations-reports-workspace.tsx": {
       "kind": "query",
       "file": "operations-reports-workspace.tsx",
       "decision": "migrated-operations-report-read-boundary"
+    },
+    "query:report-documents-workspace.tsx": {
+      "kind": "query",
+      "file": "report-documents-workspace.tsx",
+      "decision": "migrated-reports-company-session-query"
+    },
+    "query:reports-overview-workspace.tsx": {
+      "kind": "query",
+      "file": "reports-overview-workspace.tsx",
+      "decision": "migrated-reports-company-session-query"
+    },
+    "query:reports-workspace.tsx": {
+      "kind": "query",
+      "file": "reports-workspace.tsx",
+      "decision": "migrated-reports-snapshot-company-session-query"
     },
     "searchable-selector:baseer-combobox-field.tsx": {
       "kind": "searchable-selector",
@@ -537,10 +562,20 @@
       "file": "hr-workspace-content.tsx",
       "decision": "migrated-hr-central-data-grid-lazy-route"
     },
+    "table:internal-vat-report-workspace.tsx": {
+      "kind": "table",
+      "file": "internal-vat-report-workspace.tsx",
+      "decision": "intentional-bounded-report-snapshot-detail"
+    },
     "table:invoice-register-workspace.tsx": {
       "kind": "table",
       "file": "invoice-register-workspace.tsx",
       "decision": "migrated-finance-central-data-grid"
+    },
+    "table:ledger-trial-balance-workspace.tsx": {
+      "kind": "table",
+      "file": "ledger-trial-balance-workspace.tsx",
+      "decision": "intentional-bounded-report-snapshot-detail"
     },
     "table:operations-catalog-workspace.tsx": {
       "kind": "table",
@@ -576,6 +611,11 @@
       "kind": "table",
       "file": "recurring-expense-workspace.tsx",
       "decision": "migrated-finance-central-data-grid"
+    },
+    "table:reports-workspace.tsx": {
+      "kind": "table",
+      "file": "reports-workspace.tsx",
+      "decision": "intentional-bounded-report-snapshot-detail"
     },
     "table:treasury-workspace.tsx": {
       "kind": "table",

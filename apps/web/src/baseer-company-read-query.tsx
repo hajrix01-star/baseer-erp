@@ -10,6 +10,11 @@ type BaseerCompanyReadQueryProps<T> = {
   resource: string;
   /** Filter/cursor intent. It is part of the key so pages or companies cannot share a cached result. */
   scope?: readonly string[];
+  /**
+   * Snapshot reads create or address an immutable server receipt. They must
+   * never be repeated merely because the browser regained focus or network.
+   */
+  mode?: "live" | "snapshot";
   load: (session: ActiveSession, signal: AbortSignal) => Promise<T>;
   children: (state: QueryState<T>) => ReactNode;
 };
@@ -30,10 +35,12 @@ export function baseerReadQueryKey(session: ActiveSession, resource: string, sco
   return ["baseer", "read", session.companyId, session.sessionExpiresAt, resource, ...scope] as const;
 }
 
-function CompanyQuery<T>({ session, resource, scope, load, children }: BaseerCompanyReadQueryProps<T>) {
+function CompanyQuery<T>({ session, resource, scope, mode, load, children }: BaseerCompanyReadQueryProps<T>) {
+  const snapshot = mode === "snapshot";
   const query = useQuery({
     queryKey: baseerReadQueryKey(session, resource, scope),
     queryFn: ({ signal }) => load(session, signal),
+    ...(snapshot ? { staleTime: Infinity, retry: false, retryOnMount: false, refetchOnWindowFocus: false, refetchOnReconnect: false } : {}),
   });
   return <>{children({ data: query.data, loading: query.isPending, error: query.error, refetch: async () => { await query.refetch({ throwOnError: true }); } })}</>;
 }

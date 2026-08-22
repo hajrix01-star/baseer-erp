@@ -920,9 +920,12 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 }
 .daily-sales-dialog-backdrop {
   position: fixed;
-  inset: 0;
+  inset: 0 auto auto 0;
   z-index: 50;
   display: grid;
+  box-sizing: border-box;
+  width: 100dvw;
+  height: 100dvh;
   place-items: center;
   padding: 24px;
   overflow-y: auto;
