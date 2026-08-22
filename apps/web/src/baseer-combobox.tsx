@@ -6,7 +6,7 @@ import { Label } from "react-aria-components/Label";
 import { ListBox, ListBoxItem } from "react-aria-components/ListBox";
 import { Popover } from "react-aria-components/Popover";
 
-import type { BaseerSearchOption } from "./baseer-search-select";
+import type { BaseerSearchOption } from "./baseer-select-options";
 
 type BaseerComboboxProps = {
   id?: string;
@@ -19,9 +19,9 @@ type BaseerComboboxProps = {
   /** Changes only when the owning company/session/query scope changes. */
   scopeKey?: string;
   remoteSearch?: (query: string, signal: AbortSignal) => Promise<readonly BaseerSearchOption[]>;
-  loadingLabel: string;
-  emptyLabel: string;
-  errorLabel: string;
+  loadingLabel?: string;
+  emptyLabel?: string;
+  errorLabel?: string;
   searchable?: boolean;
   className?: string;
   menuClassName?: string;
@@ -35,6 +35,12 @@ type BaseerComboboxProps = {
 export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey = "baseer-combobox", remoteSearch, loadingLabel, emptyLabel, errorLabel, searchable = true, className, menuClassName, onChange }: BaseerComboboxProps) {
   const generatedId = useId();
   const inputId = id ?? `baseer-combobox-${generatedId}`;
+  const english = typeof document !== "undefined" && document.documentElement.lang === "en";
+  const copy = {
+    loading: loadingLabel ?? (english ? "Loading…" : "جارٍ التحميل…"),
+    empty: emptyLabel ?? (english ? "No matching results" : "لا توجد نتائج مطابقة"),
+    error: errorLabel ?? (english ? "Search could not be completed" : "تعذر إتمام البحث"),
+  };
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [remoteOptions, setRemoteOptions] = useState<readonly BaseerSearchOption[]>([]);
@@ -95,7 +101,7 @@ export function BaseerCombobox({ id, label, value, options, placeholder, disable
       <Button className="baseer-combobox__trigger" aria-label={label}>▾</Button>
     </div>
     <Popover className={["baseer-combobox__popover", menuClassName].filter(Boolean).join(" ")} data-baseer-filter-menu-portal="" offset={4}>
-      <ListBox className="baseer-combobox__list" renderEmptyState={() => loading ? loadingLabel : failed ? errorLabel : emptyLabel}>
+      <ListBox className="baseer-combobox__list" renderEmptyState={() => loading ? copy.loading : failed ? copy.error : copy.empty}>
         {visibleOptions.map((option) => <ListBoxItem key={option.id} id={option.id} textValue={option.label} className="baseer-combobox__option">
           <span>{option.label}</span>{option.description ? <small>{option.description}</small> : null}{option.isFavorite ? <span aria-hidden="true">★</span> : null}
         </ListBoxItem>)}

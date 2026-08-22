@@ -13,7 +13,7 @@ const targetsFor = (kind, pattern) => matches(pattern).map((file) => ({ id: `${k
 
 const targetEntries = [
   ...targetsFor('form', /<form\b/),
-  ...targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox/),
+  ...targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/),
   ...targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/),
   ...targetsFor('table', /DataTable|BaseerDataGrid/),
   ...targetsFor('query', /useQuery|useMutation|BaseerCompanyReadQuery/),
@@ -27,7 +27,7 @@ const inventory = {
     files: files.length,
     forms: targetsFor('form', /<form\b/).length,
     formLibraryConsumers: matches(/react-hook-form|zodResolver/).length,
-    searchableSelectors: targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox/).length,
+    searchableSelectors: targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/).length,
     editableDates: targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/).length,
     tables: targetsFor('table', /DataTable|BaseerDataGrid/).length,
     queries: targetsFor('query', /useQuery|useMutation|BaseerCompanyReadQuery/).length,

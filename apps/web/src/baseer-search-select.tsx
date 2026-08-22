@@ -1,8 +1,10 @@
 import { lazy, Suspense } from "react";
 
+import type { BaseerSearchOption } from "./baseer-select-options";
+
 const LazyBaseerCombobox = lazy(async () => ({ default: (await import("./baseer-combobox")).BaseerCombobox }));
 
-export type BaseerSearchOption = { id: string; label: string; description?: string; isFavorite?: boolean };
+export type { BaseerSearchOption } from "./baseer-select-options";
 
 /**
  * Compatibility entry point for existing screens.  React Aria now owns the
