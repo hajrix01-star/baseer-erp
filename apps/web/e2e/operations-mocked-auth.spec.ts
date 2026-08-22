@@ -7,6 +7,11 @@ const catalog = {
   sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen", isActive: true }],
   items: [{ id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" }],
 };
+const execution = {
+  inventory: [],
+  requests: [{ id: "request-1", requestNumber: "REQ-001", businessDate: "2026-08-20", executionKind: "DELEGATED", plannedPaymentChannel: "CUSTODY", status: "PENDING_RECEIPT", custodyFundingAmount: "50.0000", custodyBalance: "50.0000", representativeName: "مندوب الاختبار", notes: null, cancellationReason: null, estimatedTotal: "50.0000", actualTotal: "0.0000", varianceTotal: "0.0000", lines: [], receipts: [] }],
+  custody: { representativeName: "مندوب الاختبار", balance: "50.0000", events: [] },
+};
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
@@ -42,6 +47,8 @@ async function mockInternalRegistration(page: Page) {
     }
     if (url.pathname === "/v1/operations/catalog") return fulfill(route, catalog);
     if (url.pathname === "/v1/operations/catalog/items/update" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
+    if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
+    if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
   });
   return requested;
@@ -84,5 +91,26 @@ test("catalog item details use the lazy Baseer form adapter without changing the
     code: "MAT-002",
     nameAr: "مادة الاختبار",
     sectionId: null,
+  });
+});
+
+test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=6");
+
+  await page.getByRole("button", { name: "تسجيل مرتجع عهدة" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "فتح التقويم" }).click();
+  await expect(page.getByRole("grid")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await dialog.getByLabel("ربط بالطلب").selectOption("request-1");
+  await dialog.getByLabel("الإجمالي").fill("12.5000");
+  await dialog.getByLabel("سبب المرتجع").fill("باقي العهدة");
+  await dialog.getByRole("button", { name: "حفظ" }).click();
+  await expect.poll(() => requested.find((request) => request.method === "POST" && request.path === "/v1/operations/custody/returns")?.body).toMatchObject({
+    requestId: "request-1",
+    businessDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+    amount: "12.5000",
+    notes: "باقي العهدة",
   });
 });

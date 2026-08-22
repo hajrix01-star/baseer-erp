@@ -67,6 +67,11 @@
       "file": "operations-asset-register-dialog.tsx",
       "decision": "migrated-operations-wave-1"
     },
+    "editable-date:operations-custody-return-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "operations-custody-return-dialog.tsx",
+      "decision": "migrated-operations-custody-command"
+    },
     "editable-date:operations-internal-registration-entry.tsx": {
       "kind": "editable-date",
       "file": "operations-internal-registration-entry.tsx",
@@ -250,7 +255,7 @@
     "form:operations-custody-return-dialog.tsx": {
       "kind": "form",
       "file": "operations-custody-return-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-operations-custody-command"
     },
     "form:operations-purchase-cancel-dialog.tsx": {
       "kind": "form",
