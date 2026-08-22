@@ -88,6 +88,21 @@ job holds the CLI and has only the database network. This is a containment
 control, not a patch; it does not close the advisory in the build or migration
 image and does not change the owner decision above.
 
+### Superseding owner decision — private personal deployment
+
+The owner has now approved
+[the Prisma private-deployment risk acceptance](PRISMA_PRIVATE_DEPLOYMENT_RISK_ACCEPTANCE_2026-08-22.md).
+It supersedes the earlier `2026-09-05` Prisma-only restriction: this advisory
+no longer blocks completing modules, eligible library adoption, source merge,
+or a private personal online deployment while the documented runtime boundary,
+one-shot migration procedure, backup, audit and monitoring controls pass.
+
+This does not mark the advisory fixed and does not waive any unrelated release,
+financial, RLS, authorization, backup/restore or owner-acceptance gate. It is
+automatically revoked for SaaS, commercial sale, public signup, public exposure
+of the migration job, external Prisma-config input, or leakage of the affected
+packages into the API runtime image.
+
 ## 2026-08-21 current working-tree verification
 
 The current working tree contains uncommitted candidate additions for Reports and Operations. They do not alter the active delivery order or grant owner acceptance. Type checks, API/web builds, report-policy verifiers, the Operations purchase-cycle verifier, Finance Gate B, and the web release budget passed on the local test database. The budget result is 83,636/85,000 bytes for the largest JavaScript journey and 14,161/16,000 bytes for the largest CSS journey.
