@@ -1,0 +1,52 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { BaseerFormDialog } from "./baseer-form-dialog";
+import { BaseerTextArea } from "./baseer-form-fields";
+import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
+import { BaseerButton } from "./baseer-button";
+import { BaseerNotice } from "./baseer-workspace";
+import type { HrEmployeeLetterType } from "./hr-client";
+
+type Language = "ar" | "en";
+export type IssueLetterForm = { letterType: HrEmployeeLetterType; locale: Language; recipient: string };
+export type RevokeLetterForm = { reason: string };
+
+function issueSchema() {
+  return z.object({ letterType: z.enum(["SALARY_CERTIFICATE", "SERVICE_CERTIFICATE"]), locale: z.enum(["ar", "en"]), recipient: z.string() });
+}
+
+function revokeSchema(ar: boolean) {
+  return z.object({ reason: z.string().trim().min(1, ar ? "أدخل سبب الإلغاء." : "Enter a revocation reason.") });
+}
+
+export function HrEmployeeLetterIssueDialog({ open, language, busy, hasCurrentCompensation, onClose, onManageCompensation, onSubmit }: { open: boolean; language: Language; busy: boolean; hasCurrentCompensation: boolean; onClose: () => void; onManageCompensation: () => void; onSubmit: (value: IssueLetterForm) => Promise<void> | void }) {
+  const ar = language === "ar";
+  const schema = useMemo(() => issueSchema(), []);
+  const form = useForm<IssueLetterForm>({ defaultValues: { letterType: "SALARY_CERTIFICATE", locale: language, recipient: "" }, resolver: zodResolver(schema), shouldFocusError: true });
+  const value = form.watch();
+  useEffect(() => { if (open) form.reset({ letterType: hasCurrentCompensation ? "SALARY_CERTIFICATE" : "SERVICE_CERTIFICATE", locale: language, recipient: "" }); }, [form, hasCurrentCompensation, language, open]);
+  const typeLabel = (type: HrEmployeeLetterType) => type === "SALARY_CERTIFICATE" ? (ar ? "خطاب تعريف بالراتب" : "Salary certificate") : (ar ? "شهادة خدمة" : "Service certificate");
+
+  return <BaseerFormDialog open={open} title={ar ? "إصدار خطاب موظف" : "Issue employee letter"} language={language} busy={busy} size="standard" formId="hr-employee-letter-issue" submitLabel={ar ? "إصدار الخطاب" : "Issue letter"} onClose={onClose}>
+    <form id="hr-employee-letter-issue" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((values) => void onSubmit(values))}>{!hasCurrentCompensation ? <BaseerNotice tone="warning" title={ar ? "لا يوجد راتب ساري" : "No current salary"}>{ar ? "لا يمكن إصدار خطاب تعريف بالراتب قبل تحديد راتب الموظف." : "A salary certificate requires a current employee salary."} <BaseerButton type="button" variant="quiet" onClick={() => { onClose(); onManageCompensation(); }}>{ar ? "تحديد الراتب" : "Set salary"}</BaseerButton></BaseerNotice> : null}<BaseerFormSection title={ar ? "بيانات الخطاب" : "Letter details"}><BaseerFormGrid>
+      <label>{ar ? "نوع الخطاب" : "Letter type"}<select value={value.letterType} onChange={(event) => form.setValue("letterType", event.target.value as HrEmployeeLetterType, { shouldDirty: true })}><option disabled={!hasCurrentCompensation} value="SALARY_CERTIFICATE">{typeLabel("SALARY_CERTIFICATE")}</option><option value="SERVICE_CERTIFICATE">{typeLabel("SERVICE_CERTIFICATE")}</option></select></label>
+      <label>{ar ? "لغة الخطاب" : "Letter language"}<select value={value.locale} onChange={(event) => form.setValue("locale", event.target.value as Language, { shouldDirty: true })}><option value="ar">العربية</option><option value="en">English</option></select></label>
+      <label className="baseer-form-field--full">{ar ? "موجه إلى" : "Recipient"}<input {...form.register("recipient")} /></label>
+    </BaseerFormGrid></BaseerFormSection></form>
+  </BaseerFormDialog>;
+}
+
+export function HrEmployeeLetterRevokeDialog({ open, language, busy, onClose, onSubmit }: { open: boolean; language: Language; busy: boolean; onClose: () => void; onSubmit: (value: RevokeLetterForm) => Promise<void> | void }) {
+  const ar = language === "ar";
+  const schema = useMemo(() => revokeSchema(ar), [ar]);
+  const form = useForm<RevokeLetterForm>({ defaultValues: { reason: "" }, resolver: zodResolver(schema), shouldFocusError: true });
+  const value = form.watch();
+  useEffect(() => { if (open) form.reset({ reason: "" }); }, [form, open]);
+
+  return <BaseerFormDialog open={open} title={ar ? "إلغاء الخطاب" : "Revoke letter"} language={language} busy={busy} size="compact" formId="hr-employee-letter-revoke" submitLabel={ar ? "تأكيد الإلغاء" : "Confirm revocation"} onClose={onClose}>
+    <form id="hr-employee-letter-revoke" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((values) => void onSubmit(values))}><BaseerFormSection title={ar ? "سبب الإلغاء" : "Revocation reason"}><BaseerFormGrid columns="one"><label>{ar ? "سبب الإلغاء" : "Revocation reason"}<BaseerTextArea compact value={value.reason} onValueChange={(reason) => form.setValue("reason", reason, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.reason ? <small role="alert">{form.formState.errors.reason.message}</small> : null}</label></BaseerFormGrid></BaseerFormSection></form>
+  </BaseerFormDialog>;
+}
