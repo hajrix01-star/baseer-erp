@@ -237,6 +237,11 @@
       "file": "operations-catalog-item-create-dialog.tsx",
       "decision": "migrated-operations-wave-1"
     },
+    "form:operations-catalog-item-details-form.tsx": {
+      "kind": "form",
+      "file": "operations-catalog-item-details-form.tsx",
+      "decision": "migrated-operations-wave-1"
+    },
     "form:operations-catalog-workspace.tsx": {
       "kind": "form",
       "file": "operations-catalog-workspace.tsx",

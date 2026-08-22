@@ -2,6 +2,11 @@ import { expect, test, type Page, type Route } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
+const catalog = {
+  units: [{ id: "unit-1", code: "EA", nameAr: "حبة", nameEn: "Each", dimension: "COUNT", isActive: true }],
+  sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen", isActive: true }],
+  items: [{ id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" }],
+};
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
@@ -21,7 +26,7 @@ async function mockInternalRegistration(page: Page) {
     const body = method === "POST" ? route.request().postDataJSON() : undefined;
     requested.push({ method, path: `${url.pathname}${url.search}`, body });
     if (url.pathname === "/v1/companies/available") {
-      return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read"] }] });
+      return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read", "operations.catalog.manage"] }] });
     }
     if (url.pathname === "/v1/operations/internal-registration/workstation") {
       return fulfill(route, {
@@ -35,6 +40,8 @@ async function mockInternalRegistration(page: Page) {
     if (url.pathname === "/v1/operations/internal-registration" && method === "POST") {
       return fulfill(route, { id: "registration-1", replayed: false });
     }
+    if (url.pathname === "/v1/operations/catalog") return fulfill(route, catalog);
+    if (url.pathname === "/v1/operations/catalog/items/update" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
   });
   return requested;
@@ -61,4 +68,21 @@ test("internal registration keeps its Gregorian business date through the Baseer
 
   const accessibility = await new AxeBuilder({ page }).include(".operations-internal-registration").analyze();
   expect(accessibility.violations).toEqual([]);
+});
+
+test("catalog item details use the lazy Baseer form adapter without changing the update command", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=5");
+
+  await page.getByRole("button", { name: "مادة الاختبار" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel("الرمز").fill("MAT-002");
+  await dialog.getByRole("button", { name: "حفظ" }).click();
+  await expect.poll(() => requested.find((request) => request.method === "POST" && request.path === "/v1/operations/catalog/items/update")?.body).toMatchObject({
+    itemId: "item-1",
+    code: "MAT-002",
+    nameAr: "مادة الاختبار",
+    sectionId: null,
+  });
 });
