@@ -540,6 +540,38 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await expectTopmostDialog(page, "عكس دفعة المسير");
 });
 
+test("leave date picker is keyboard-operable and remains Gregorian in Arabic", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("button", { name: "تسجيل إجازة" }).click();
+  const dialog = await expectTopmostDialog(page, "تسجيل إجازة");
+  await dialog.getByRole("button", { name: "فتح التقويم" }).first().click();
+  const calendar = page.getByRole("grid");
+  await expect(calendar).toBeVisible();
+  await page.keyboard.press("PageDown");
+  await page.keyboard.press("Home");
+  await page.keyboard.press("Enter");
+  await expect(calendar).toHaveCount(0);
+  await expect(dialog.locator(".baseer-aria-date-picker").first().getByRole("spinbutton")).toHaveCount(3);
+});
+
+test("leave date picker remains labeled and usable in English LTR", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { language: "en" });
+
+  await page.goto("/#module=hr&section=2");
+  await page.getByRole("button", { name: "Record leave" }).click();
+  const dialog = page.getByRole("dialog", { name: "Record leave" });
+  await expect(dialog).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await dialog.getByRole("button", { name: "Open calendar" }).first().click();
+  await expect(page.getByRole("grid")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("grid")).toHaveCount(0);
+});
+
 test("leave employee filter uses the Baseer Combobox adapter with keyboard search", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested);

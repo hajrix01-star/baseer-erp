@@ -1,9 +1,8 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, type ComponentProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
-import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerTextArea } from "./baseer-form-fields";
@@ -27,6 +26,11 @@ const today = () => new Date().toISOString().slice(0, 10);
 const emptyLeave = (): LeaveForm => ({ employeeId: "", leaveType: "ANNUAL", startDate: today(), endDate: today(), notes: "" });
 const label = (language: Language, row: { nameAr: string; nameEn: string | null }) => language === "ar" ? row.nameAr : row.nameEn ?? row.nameAr;
 const BaseerCombobox = lazy(() => import("./baseer-combobox").then((module) => ({ default: module.BaseerCombobox })));
+const LazyBaseerDatePicker = lazy(() => import("./baseer-aria-date-picker").then((module) => ({ default: module.BaseerAriaDatePicker })));
+
+function BaseerDatePicker(props: ComponentProps<typeof LazyBaseerDatePicker>) {
+  return <Suspense fallback={<input aria-label={props.label} type="date" value={props.value} min={props.min} max={props.max} disabled={props.disabled} onChange={(event) => props.onChange(event.target.value)} />}><LazyBaseerDatePicker {...props} /></Suspense>;
+}
 
 export function HrLeaveWorkspace({ language, stage }: { language: Language; stage?: string | null }) {
   const ar = language === "ar";

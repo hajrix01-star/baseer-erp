@@ -56,16 +56,15 @@ No newer stable Prisma 7 patch is presently available, and an override to
 `deepmerge-ts@8` is not an approved remediation because it breaks Prisma's
 published dependency contract. The owner approved the following written,
 time-boxed exception on 2026-08-22: until **2026-09-05** only, source merge,
-local implementation, and verification of exactly one non-financial
-`BaseerCombobox` is allowed. Its only consumer is the employee filter in HR
-“Leave & return”; it excludes the leave-create dialog, production,
-release acceptance, dashboard work, any additional library, and all
-API/RLS/permission/financial changes. The P1 remains open and this exception
-does not reclassify it as resolved. The pilot passed its adapter,
-company/session-isolation, AR/EN RTL/LTR, keyboard/mobile, E2E and web-budget
-gates locally. The deployable dependency graph is also clean when development
-and optional Prisma CLI peers are omitted; the full build/migration graph is
-still tracked as P1.
+local implementation, and verification of two non-financial React Aria adapters
+is allowed: `BaseerCombobox` in the employee filter of HR “Leave & return”, and
+`BaseerAriaDatePicker` in the leave/return date fields. They exclude production,
+release acceptance, dashboard work, a third consumer, any API/RLS/permission/
+financial change and financial business dates. The P1 remains open and this
+exception does not reclassify it as resolved. Both pilots passed their adapter,
+AR/EN RTL/LTR, keyboard/mobile, E2E and web-budget gates locally. The deployable
+dependency graph is also clean when development and optional Prisma CLI peers
+are omitted; the full build/migration graph is still tracked as P1.
 
 Outside that narrow exception, no additional pilot, release, or production
 claim is authorized. The durable remedy remains an official Prisma patch,

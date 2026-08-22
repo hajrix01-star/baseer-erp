@@ -7,7 +7,8 @@
 
 | المكتبة | الإصدار الدقيق | الترخيص | الحالة | أول استخدام مسموح | حدود أساسية |
 | --- | --- | --- | --- | --- | --- |
-| `react-aria-components` | `1.20.0` | Apache-2.0 | Active pilot | فلتر موظف الإجازات والعودة فقط | خلف `BaseerCombobox`؛ لا API أو صلاحيات أو نموذج إنشاء إجازة. |
+| `react-aria-components` | `1.20.0` | Apache-2.0 | Active pilots | فلتر موظف الإجازات والعودة، ومنتقي تاريخ الإجازة والعودة فقط | خلف `BaseerCombobox` و`BaseerAriaDatePicker`؛ لا API أو صلاحيات أو منطق مالي. |
+| `@internationalized/date` | `3.12.3` | Apache-2.0 | Active pilot dependency | مع `BaseerAriaDatePicker` في الإجازات والعودة فقط | تاريخ أعمال Gregorian بصيغة `YYYY-MM-DD`؛ لا تحويل بحسب المتصفح أو التقويم الهجري. |
 | `react-hook-form` | `7.86.0` | MIT | Installed / dormant | نموذج موظف أو مستخدم غير مالي | خلف `BaseerFormField`؛ التحقق الخادمي يبقى حتمياً. |
 | `@hookform/resolvers` | `5.9.1` | MIT | Installed / dormant | مع RHF وZod في النموذج نفسه | لا schema ثانية كمصدر حقيقة. |
 | `zod` | `4.4.3` | MIT | Installed / dormant | تحقق تجربة المستخدم للنموذج التجريبي | مبالغ بصيغة Decimal string؛ لا JS float للمال. |
