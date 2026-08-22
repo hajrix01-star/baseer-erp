@@ -7,6 +7,16 @@ import {
 } from "./daily-sales-auth-client";
 import { persistActiveSession } from "./daily-sales-client";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
+import {
+  BaseerValidatedFormField as BaseerValidatedForm,
+  type BaseerValidatedFormSchemaFactory,
+} from "./baseer-validated-form-field";
+
+type SignInValues = { login: string; password: string };
+type ActivationValues = SignInValues & {
+  activationCode: string;
+  confirmPassword: string;
+};
 
 export function DailySalesSignIn({
   language,
@@ -14,10 +24,46 @@ export function DailySalesSignIn({
   language: DailySalesLanguage;
 }) {
   const copy = dailySalesText[language];
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [activationCode, setActivationCode] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const required =
+    language === "ar" ? "هذا الحقل مطلوب." : "This field is required.";
+  const passwordLength =
+    language === "ar"
+      ? "يجب أن تكون كلمة المرور 6 خانات على الأقل."
+      : "Password must be at least 6 characters.";
+  const passwordMismatch =
+    language === "ar"
+      ? "كلمتا المرور غير متطابقتين."
+      : "Passwords do not match.";
+  const signInSchemaFactory: BaseerValidatedFormSchemaFactory = ({ z }) =>
+    z
+      .object({
+        login: z.string().trim().min(1, required),
+        password: z.string().min(1, required),
+      })
+      .strict();
+  const activationSchemaFactory: BaseerValidatedFormSchemaFactory = ({ z }) =>
+    z
+      .object({
+        login: z.string().trim().email(required),
+        activationCode: z.string().trim().min(1, required),
+        password: z.string().min(6, passwordLength),
+        confirmPassword: z.string().min(6, passwordLength),
+      })
+      .strict()
+      .refine((value) => value.password === value.confirmPassword, {
+        path: ["confirmPassword"],
+        message: passwordMismatch,
+      });
+  const [signInValues, setSignInValues] = useState<SignInValues>({
+    login: "",
+    password: "",
+  });
+  const [activationValues, setActivationValues] = useState<ActivationValues>({
+    login: "",
+    password: "",
+    activationCode: "",
+    confirmPassword: "",
+  });
   const [showPasswords, setShowPasswords] = useState(false);
   const [activationMode, setActivationMode] = useState(false);
   const [error, setError] = useState("");
@@ -36,8 +82,7 @@ export function DailySalesSignIn({
     persistActiveSession(session, company.id);
     window.location.reload();
   };
-  const signIn = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const signIn = async ({ login, password }: SignInValues) => {
     setLoading(true);
     setError("");
     try {
@@ -48,24 +93,11 @@ export function DailySalesSignIn({
       setLoading(false);
     }
   };
-  const activate = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (password.trim().length < 6) {
-      setError(
-        language === "ar"
-          ? "يجب أن تكون كلمة المرور 6 خانات على الأقل."
-          : "Password must be at least 6 characters.",
-      );
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError(
-        language === "ar"
-          ? "كلمتا المرور غير متطابقتين."
-          : "Passwords do not match.",
-      );
-      return;
-    }
+  const activate = async ({
+    login,
+    activationCode,
+    password,
+  }: ActivationValues) => {
     setLoading(true);
     setError("");
     try {
@@ -87,7 +119,14 @@ export function DailySalesSignIn({
       <h2>{copy.noSession}</h2>
       <p>{copy.noSessionDetail}</p>
       {activationMode ? (
-        <form className="daily-sales-sign-in" onSubmit={activate}>
+        <BaseerValidatedForm
+          className="daily-sales-sign-in"
+          values={activationValues}
+          schemaFactory={activationSchemaFactory}
+          errorSummaryLabel={required}
+          onValid={activate}
+        >
+          {({ errors }) => <>
           <p>
             {language === "ar"
               ? "تفعيل المالك العام لأول مرة فقط"
@@ -97,11 +136,21 @@ export function DailySalesSignIn({
             <span>{language === "ar" ? "البريد الإلكتروني" : "Email"}</span>
             <input
               type="email"
-              value={login}
-              onChange={(event) => setLogin(event.target.value)}
+              value={activationValues.login}
+              onChange={(event) => setActivationValues((value) => ({ ...value, login: event.target.value }))}
               autoComplete="username"
-              required
+              aria-invalid={Boolean(errors.login)}
+              aria-describedby={
+                errors.login
+                  ? "activation-login-error"
+                  : undefined
+              }
             />
+            {errors.login ? (
+              <span id="activation-login-error" role="alert">
+                {errors.login.message}
+              </span>
+            ) : null}
           </label>
           <label>
             <span>
@@ -110,11 +159,21 @@ export function DailySalesSignIn({
                 : "One-time activation code"}
             </span>
             <input
-              value={activationCode}
-              onChange={(event) => setActivationCode(event.target.value)}
+              value={activationValues.activationCode}
+              onChange={(event) => setActivationValues((value) => ({ ...value, activationCode: event.target.value }))}
               autoComplete="one-time-code"
-              required
+              aria-invalid={Boolean(errors.activationCode)}
+              aria-describedby={
+                errors.activationCode
+                  ? "activation-code-error"
+                  : undefined
+              }
             />
+            {errors.activationCode ? (
+              <span id="activation-code-error" role="alert">
+                {errors.activationCode.message}
+              </span>
+            ) : null}
           </label>
           <label>
             <span>
@@ -122,12 +181,21 @@ export function DailySalesSignIn({
             </span>
             <input
               type={showPasswords ? "text" : "password"}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              value={activationValues.password}
+              onChange={(event) => setActivationValues((value) => ({ ...value, password: event.target.value }))}
               autoComplete="new-password"
-              minLength={6}
-              required
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={
+                errors.password
+                  ? "activation-password-error"
+                  : undefined
+              }
             />
+            {errors.password ? (
+              <span id="activation-password-error" role="alert">
+                {errors.password.message}
+              </span>
+            ) : null}
           </label>
           <label>
             <span>
@@ -135,14 +203,35 @@ export function DailySalesSignIn({
             </span>
             <input
               type={showPasswords ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
+              value={activationValues.confirmPassword}
+              onChange={(event) => setActivationValues((value) => ({ ...value, confirmPassword: event.target.value }))}
               autoComplete="new-password"
-              minLength={6}
-              required
+              aria-invalid={Boolean(errors.confirmPassword)}
+              aria-describedby={
+                errors.confirmPassword
+                  ? "activation-confirm-error"
+                  : undefined
+              }
             />
+            {errors.confirmPassword ? (
+              <span id="activation-confirm-error" role="alert">
+                {errors.confirmPassword.message}
+              </span>
+            ) : null}
           </label>
-          <button className="daily-sales-secondary" type="button" onClick={() => setShowPasswords((current) => !current)}>{showPasswords ? (language === "ar" ? "إخفاء كلمة المرور" : "Hide password") : (language === "ar" ? "إظهار كلمة المرور" : "Show password")}</button>
+          <button
+            className="daily-sales-secondary"
+            type="button"
+            onClick={() => setShowPasswords((current) => !current)}
+          >
+            {showPasswords
+              ? language === "ar"
+                ? "إخفاء كلمة المرور"
+                : "Hide password"
+              : language === "ar"
+                ? "إظهار كلمة المرور"
+                : "Show password"}
+          </button>
           {error && <p className="daily-sales-message error">{error}</p>}
           <button
             className="daily-sales-primary"
@@ -165,9 +254,17 @@ export function DailySalesSignIn({
           >
             {language === "ar" ? "العودة للدخول" : "Back to sign in"}
           </button>
-        </form>
+          </>}
+        </BaseerValidatedForm>
       ) : (
-        <form className="daily-sales-sign-in" onSubmit={signIn}>
+        <BaseerValidatedForm
+          className="daily-sales-sign-in"
+          values={signInValues}
+          schemaFactory={signInSchemaFactory}
+          errorSummaryLabel={required}
+          onValid={signIn}
+        >
+          {({ errors }) => <>
           <p>
             {language === "ar"
               ? "ادخل بالبريد الإلكتروني أو اسم المستخدم. الشركات تظهر حسب صلاحياتك."
@@ -177,23 +274,55 @@ export function DailySalesSignIn({
             <span>{copy.login}</span>
             <input
               type="text"
-              value={login}
-              onChange={(event) => setLogin(event.target.value)}
+              value={signInValues.login}
+              onChange={(event) => setSignInValues((value) => ({ ...value, login: event.target.value }))}
               autoComplete="username"
-              required
+              aria-invalid={Boolean(errors.login)}
+              aria-describedby={
+                errors.login
+                  ? "sign-in-login-error"
+                  : undefined
+              }
             />
+            {errors.login ? (
+              <span id="sign-in-login-error" role="alert">
+                {errors.login.message}
+              </span>
+            ) : null}
           </label>
           <label>
             <span>{copy.password}</span>
             <input
               type={showPasswords ? "text" : "password"}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              value={signInValues.password}
+              onChange={(event) => setSignInValues((value) => ({ ...value, password: event.target.value }))}
               autoComplete="current-password"
-              required
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={
+                errors.password
+                  ? "sign-in-password-error"
+                  : undefined
+              }
             />
+            {errors.password ? (
+              <span id="sign-in-password-error" role="alert">
+                {errors.password.message}
+              </span>
+            ) : null}
           </label>
-          <button className="daily-sales-secondary" type="button" onClick={() => setShowPasswords((current) => !current)}>{showPasswords ? (language === "ar" ? "إخفاء كلمة المرور" : "Hide password") : (language === "ar" ? "إظهار كلمة المرور" : "Show password")}</button>
+          <button
+            className="daily-sales-secondary"
+            type="button"
+            onClick={() => setShowPasswords((current) => !current)}
+          >
+            {showPasswords
+              ? language === "ar"
+                ? "إخفاء كلمة المرور"
+                : "Hide password"
+              : language === "ar"
+                ? "إظهار كلمة المرور"
+                : "Show password"}
+          </button>
           {error && <p className="daily-sales-message error">{error}</p>}
           <button
             className="daily-sales-primary"
@@ -208,13 +337,15 @@ export function DailySalesSignIn({
             onClick={() => {
               setActivationMode(true);
               setError("");
+              setActivationValues((value) => ({ ...value, login: signInValues.login }));
             }}
           >
             {language === "ar"
               ? "تفعيل المالك العام لأول مرة"
               : "Activate general owner"}
           </button>
-        </form>
+          </>}
+        </BaseerValidatedForm>
       )}
       <p className="daily-sales-session-note">{copy.sessionOnly}</p>
     </section>

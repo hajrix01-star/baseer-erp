@@ -1,0 +1,156 @@
+import { expect, test, type Page, type Route } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+
+const companyId = "11111111-1111-4111-8111-111111111111";
+const permissions = ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"];
+const treasuryPermissions = ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"];
+
+async function fulfill(route: Route, json: unknown, status = 200) {
+  await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
+}
+
+async function mockAuthenticatedSession(page: Page, language: "ar" | "en", permissionCodes: string[]) {
+  await page.addInitScript(({ locale, company, grantedPermissions }) => {
+    sessionStorage.setItem("baseer.erp.access-token", "finance-e2e-token");
+    sessionStorage.setItem("baseer.erp.refresh-token", "finance-e2e-refresh-token");
+    sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
+    sessionStorage.setItem("baseer.erp.company-id", company);
+    localStorage.setItem("baseer.ui.locale.v1", locale);
+    localStorage.setItem("baseer.e2e.permission-codes", JSON.stringify(grantedPermissions));
+  }, { locale: language, company: companyId, grantedPermissions: permissionCodes });
+}
+
+function availableCompanies(permissionCodes: string[]) {
+  return {
+    companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes }],
+  };
+}
+
+async function mockFinanceSetup(page: Page, language: "ar" | "en") {
+  await page.addInitScript(({ locale, company }) => {
+    sessionStorage.setItem("baseer.erp.access-token", "finance-e2e-token");
+    sessionStorage.setItem("baseer.erp.refresh-token", "finance-e2e-refresh-token");
+    sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
+    sessionStorage.setItem("baseer.erp.company-id", company);
+    localStorage.setItem("baseer.ui.locale.v1", locale);
+  }, { locale: language, company: companyId });
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
+    if (url.pathname === "/v1/finance/configuration/readiness") return fulfill(route, {
+      companyId, requiredBaseSeedVersion: 8, profile: null, openPeriod: null,
+      counts: { activeVaults: 0, activeAccounts: 0, activeCategories: 0, activeSuppliers: 0 },
+      issues: ["FINANCE_NOT_INITIALIZED"], standardSuppliers: [{ key: "electricity", nameAr: "الكهرباء", nameEn: "Electricity" }],
+    });
+    return fulfill(route, {});
+  });
+}
+
+async function mockTreasury(page: Page) {
+  await mockAuthenticatedSession(page, "ar", treasuryPermissions);
+  const vaults = [
+    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", nameAr: "الصندوق", nameEn: "Cash", type: "CASH", paymentMethods: ["CASH"], status: "ACTIVE", isSalesChannel: true, isPaymentDestination: true, sortOrder: 1, balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
+    { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nameAr: "البنك", nameEn: "Bank", type: "BANK", paymentMethods: ["BANK_TRANSFER"], status: "ACTIVE", isSalesChannel: false, isPaymentDestination: true, sortOrder: 2, balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
+  ];
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(treasuryPermissions));
+    if (url.pathname === "/v1/finance/treasury") return fulfill(route, {
+      companyId, businessDate: "2026-08-20", asOfBusinessDate: "2026-08-20", fromBusinessDate: null, toBusinessDate: null,
+      summary: { balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" },
+      groups: [{ key: "OTHER_VAULTS", count: 2, balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" }], vaults,
+    });
+    if (url.pathname === "/v1/finance/treasury/reconciliations") return fulfill(route, { companyId, items: [], nextCursor: null });
+    return fulfill(route, {});
+  });
+}
+
+async function mockFinancialReads(page: Page, requests: string[]) {
+  await mockAuthenticatedSession(page, "ar", ["finance.configuration.read", "finance.purchase_expense.read"]);
+  const account = { id: "account-1", code: "1000", nameAr: "النقدية", nameEn: "Cash", type: "ASSET", status: "ACTIVE", isSystem: false, balanceDebit: "10.0000", balanceCredit: "0.0000", periodDebit: "10.0000", periodCredit: "0.0000" };
+  const movement = (id: string, reference: string) => ({ id, journalEntryId: `journal-${id}`, businessDate: "2026-08-20", sourceType: "JOURNAL", sourceReference: reference, displayLabelAr: "قيد يومية", displayLabelEn: "Journal", displayReference: reference, description: null, debitAmount: "10.0000", creditAmount: "0.0000", reversalOfEntryId: null, reversalEntryId: null });
+  const invoice = (id: string, number: string) => ({ id, source: "OUTFLOW_DOCUMENT", sourceType: "outflow_document", documentNumber: number, displayLabelAr: "فاتورة مشتريات", displayLabelEn: "Purchase invoice", businessDate: "2026-08-20", supplierInvoiceDate: null, kind: "PURCHASE", operationFamily: "PURCHASES", operationClass: "PURCHASE_INVOICE", settlementKind: "PAID", status: "POSTED", supplier: { id: "supplier-1", nameAr: "مورد", nameEn: "Supplier" }, category: { id: "category-1", nameAr: "مواد", nameEn: "Materials" }, parentClassification: null, grossAmount: "10.0000", netAmount: "8.6957", vatAmount: "1.3043", payrollAccrual: null, journalEntryId: "journal-1", batchNumber: null, notes: null, recurring: false, createdAt: "2026-08-20T00:00:00Z" });
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    requests.push(`${url.pathname}${url.search}`);
+    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(["finance.configuration.read", "finance.purchase_expense.read"]));
+    if (url.pathname === "/v1/finance/accounts") return fulfill(route, { companyId, asOfBusinessDate: "2026-08-20", fromBusinessDate: null, toBusinessDate: null, summary: { accountCount: 1, periodDebit: "10.0000", periodCredit: "0.0000" }, accounts: [account] });
+    if (url.pathname === "/v1/finance/accounts/account-1/movements") {
+      const secondPage = url.searchParams.get("cursor") === "account-next";
+      return fulfill(route, { account, asOfBusinessDate: "2026-08-20", fromBusinessDate: null, toBusinessDate: null, summary: { balanceDebit: "10.0000", balanceCredit: "0.0000", periodDebit: "10.0000", periodCredit: "0.0000" }, items: [movement(secondPage ? "2" : "1", secondPage ? "JE-2" : "JE-1")], nextCursor: secondPage ? null : "account-next" });
+    }
+    if (url.pathname === "/v1/finance/invoice-register") {
+      const secondPage = url.searchParams.get("cursor") === "invoice-next";
+      return fulfill(route, { companyId, appliedPeriod: { fromBusinessDate: null, toBusinessDate: null, businessMonths: [] }, summary: { documentCount: 1, postedCount: 1, cancelledCount: 0, salesCount: 0, purchaseCount: 1, expenseCount: 0, obligationCount: 0, otherCount: 0, paidCount: 1, payableCount: 0 }, filters: { suppliers: [], categories: [] }, records: [invoice(secondPage ? "invoice-2" : "invoice-1", secondPage ? "PUR-002" : "PUR-001")], hasMore: !secondPage, nextCursor: secondPage ? null : "invoice-next" });
+    }
+    return fulfill(route, {});
+  });
+}
+
+
+test("finance setup uses the shared Gregorian form and date adapters in RTL", async ({ page }) => {
+  await mockFinanceSetup(page, "ar");
+  await page.goto("/#module=finance&section=0");
+
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  const form = page.locator("[data-baseer-rhf-form]");
+  await expect(form).toBeVisible();
+  await expect(form.getByLabel("بداية الفترة").locator('[role="spinbutton"]')).toHaveCount(3);
+  await expect(form.getByLabel("نهاية الفترة").locator('[role="spinbutton"]')).toHaveCount(3);
+
+  const startDate = form.getByLabel("بداية الفترة");
+  await startDate.getByRole("button", { name: "فتح التقويم" }).press("Enter");
+  await expect(page.getByRole("dialog").filter({ has: page.locator(".baseer-aria-date-picker__calendar") })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog").filter({ has: page.locator(".baseer-aria-date-picker__calendar") })).toHaveCount(0);
+
+  await form.getByRole("button", { name: "التالي" }).click();
+  await expect(form.getByRole("group", { name: "الخزائن والقنوات المبدئية" })).toBeVisible();
+  await expect(form.getByRole("checkbox")).toHaveCount(5);
+  const accessibility = await new AxeBuilder({ page }).include("[data-baseer-rhf-form]").analyze();
+  expect(accessibility.violations).toEqual([]);
+});
+
+test("finance setup keeps the Gregorian adapter available in LTR", async ({ page }) => {
+  await mockFinanceSetup(page, "en");
+  await page.goto("/#module=finance&section=0");
+
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.locator("[data-baseer-rhf-form]").getByLabel("Period start").locator('[role="spinbutton"]')).toHaveCount(3);
+});
+
+test("treasury control uses the central form and reports inline validation errors", async ({ page }) => {
+  await mockTreasury(page);
+  await page.goto("/#module=finance&section=2");
+
+  await page.getByRole("button", { name: "مطابقة وجرد" }).click();
+  const dialog = page.getByRole("dialog", { name: "مطابقة وجرد" });
+  const form = dialog.locator("[data-baseer-rhf-form]");
+  await expect(form).toBeVisible();
+  await expect(form).not.toHaveAttribute("aria-busy", "true");
+  await dialog.getByRole("button", { name: "تسجيل المطابقة / الجرد" }).click();
+  await expect(dialog.getByRole("alert").first()).toBeVisible();
+  await expect(dialog.getByLabel("الرصيد الفعلي")).toHaveAttribute("aria-invalid", "true");
+
+  const accessibility = await new AxeBuilder({ page }).include('[role="dialog"]').analyze();
+  expect(accessibility.violations).toEqual([]);
+});
+
+test("accounts and invoice register retain server cursor pagination", async ({ page }) => {
+  const requests: string[] = [];
+  await mockFinancialReads(page, requests);
+  await page.goto("/#module=finance&section=3");
+
+  await page.getByRole("button", { name: "النقدية" }).click();
+  const accountDialog = page.getByRole("dialog");
+  await expect(accountDialog).toContainText("JE-1");
+  await accountDialog.getByRole("button", { name: "المزيد" }).click();
+  await expect(accountDialog).toContainText("JE-2");
+  expect(requests.some((request) => request.includes("/v1/finance/accounts/account-1/movements") && request.includes("cursor=account-next"))).toBeTruthy();
+
+  await page.goto("/#module=finance&section=1");
+  await expect(page.getByText("PUR-001")).toBeVisible();
+  await page.getByRole("button", { name: "المزيد" }).click();
+  await expect(page.getByText("PUR-002")).toBeVisible();
+  expect(requests.some((request) => request.includes("/v1/finance/invoice-register") && request.includes("cursor=invoice-next"))).toBeTruthy();
+});

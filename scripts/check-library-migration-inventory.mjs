@@ -12,7 +12,7 @@ const display = (file) => relative(sourceRoot, file).replaceAll('\\', '/');
 const targetsFor = (kind, pattern) => matches(pattern).map((file) => ({ id: `${kind}:${display(file)}`, kind, file: display(file) }));
 
 const targetEntries = [
-  ...targetsFor('form', /<form\b/),
+  ...targetsFor('form', /<form\b|BaseerValidatedForm/),
   ...targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/),
   ...targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/),
   ...targetsFor('table', /DataTable|BaseerDataGrid/),
@@ -31,7 +31,7 @@ const inventory = {
   sourceRoot,
   totals: {
     files: files.length,
-    forms: targetsFor('form', /<form\b/).length,
+    forms: targetsFor('form', /<form\b|BaseerValidatedForm/).length,
     formLibraryConsumers: matches(/react-hook-form|zodResolver/).length,
     searchableSelectors: targetsFor('searchable-selector', /BaseerSearchSelect|BaseerCombobox|BaseerSelect/).length,
     editableDates: targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/).length,
@@ -47,9 +47,9 @@ const libraryPolicies = [
   ['@tanstack/react-query', new Set(['baseer-company-read-query.tsx'])],
   ['@tanstack/react-table', new Set(['baseer-data-grid.tsx'])],
   ['echarts', new Set(['baseer-chart.tsx'])],
-  ['react-hook-form', new Set(['baseer-form-state.ts'])],
+  ['react-hook-form', new Set(['baseer-form-state.ts', 'baseer-validated-form.tsx'])],
   ['@hookform/resolvers/zod', new Set(['baseer-form-state.ts'])],
-  ['zod', new Set(['baseer-form-state.ts'])],
+  ['zod', new Set(['baseer-form-state.ts', 'baseer-validated-form.tsx'])],
 ];
 const directLibraryImports = libraryPolicies.flatMap(([library, allowed]) => {
   const escaped = library.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

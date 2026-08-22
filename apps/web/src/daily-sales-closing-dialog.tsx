@@ -1,7 +1,11 @@
-import { type FormEvent } from "react";
-
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import {
+  divideMoneyDecimalByInteger,
+  isPositiveMoneyDecimal,
+  sumMoneyDecimals,
+  tryMoneyDecimal,
+} from "./decimal-string";
 import { iso, riyadhToday } from "./baseer-period-filter";
 import { formatMoney } from "./number-format";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
@@ -16,6 +20,7 @@ import type {
   FormState,
   Vault,
 } from "./daily-sales-client";
+import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
 
 type Props = {
   language: DailySalesLanguage;
@@ -32,7 +37,7 @@ type Props = {
   maxBusinessDate?: string;
   allowDayOff: boolean;
   onClose: () => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmit: () => void;
   onFormsChange: (forms: DailySalesShiftForms) => void;
   onSelectedScopesChange: (scopes: DailySalesScope[]) => void;
   onModeChange: (mode: DailySalesEntryMode) => void;
@@ -80,16 +85,19 @@ function ShiftCard({
         ? copy.evening
         : copy.all;
   const customerCount = Number(form.customerCount) || 0;
-  const localGrossAmount = form.allocations.reduce(
-    (total, allocation) => total + (Number(allocation.grossAmount) || 0),
-    0,
+  const localGrossAmount = tryMoneyDecimal(() =>
+    sumMoneyDecimals(
+      form.allocations.map((allocation) => allocation.grossAmount || "0"),
+    ),
   );
-  const displayGrossAmount = preview
-    ? Number(preview.grossAmount)
-    : localGrossAmount;
+  const displayGrossAmount = preview ? preview.grossAmount : localGrossAmount;
   const average =
-    customerCount > 0 && displayGrossAmount > 0
-      ? displayGrossAmount / customerCount
+    customerCount > 0 &&
+    displayGrossAmount !== null &&
+    isPositiveMoneyDecimal(displayGrossAmount)
+      ? tryMoneyDecimal(() =>
+          divideMoneyDecimalByInteger(displayGrossAmount, customerCount),
+        )
       : null;
 
   return (
@@ -166,8 +174,9 @@ function ShiftCard({
         <span>
           <small>{copy.entryTotal}</small>
           <strong dir="ltr">
-            {displayGrossAmount !== null && displayGrossAmount > 0
-              ? formatMoney(String(displayGrossAmount))
+            {displayGrossAmount !== null &&
+            isPositiveMoneyDecimal(displayGrossAmount)
+              ? formatMoney(displayGrossAmount)
               : copy.previewUnavailable}
           </strong>
         </span>
@@ -180,11 +189,10 @@ function ShiftCard({
             {language === "ar" ? "معدل العميل" : "Average customer"}
           </small>
           <strong dir="ltr">
-            {average === null ? "—" : formatMoney(String(average))}
+            {average === null ? "—" : formatMoney(average)}
           </strong>
         </span>
       </output>
-
     </section>
   );
 }
@@ -217,7 +225,8 @@ export function DailySalesClosingDialog({
   const activeScopes = editing ? [editing.scope] : selectedScopes;
   const businessDate = forms[activeScopes[0] ?? "ALL"].businessDate;
   const today = riyadhToday();
-  const maximumEntryDate = maxBusinessDate ?? iso(today.year, today.month, today.day);
+  const maximumEntryDate =
+    maxBusinessDate ?? iso(today.year, today.month, today.day);
   const setDate = (value: string) =>
     onFormsChange({
       ...forms,
@@ -237,6 +246,9 @@ export function DailySalesClosingDialog({
   const close = () => {
     if (!saving) onClose();
   };
+  const validationMessage = language === "ar" ? "أكمل بيانات الإغلاق بقيم صحيحة." : "Complete the closing with valid values.";
+  const closingValues = { businessDate, mode, dayOffReason, dayOffNote, forms: activeScopes.map((scope) => forms[scope]) };
+  const closingSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), mode: z.enum(["CLOSING", "DAY_OFF"]), dayOffReason: z.enum(["WEEKLY_CLOSURE", "HOLIDAY", "MAINTENANCE", "OTHER"]), dayOffNote: z.string().max(2000), forms: z.array(z.custom<FormState>()).min(1).max(2) }).strict().superRefine((value, context) => { if (value.mode === "DAY_OFF") { if (value.dayOffReason === "OTHER" && !value.dayOffNote.trim()) context.addIssue({ code: "custom", path: ["dayOffNote"], message: validationMessage }); return; } if (value.forms.some((draft) => !/^\d+$/.test(draft.customerCount) || !draft.allocations.some((allocation) => isPositiveMoneyDecimal(allocation.grossAmount)) || draft.allocations.some((allocation) => allocation.grossAmount.trim() && !isPositiveMoneyDecimal(allocation.grossAmount)) || (draft.cashHandoverAmount.trim() && !isPositiveMoneyDecimal(draft.cashHandoverAmount)))) context.addIssue({ code: "custom", path: ["forms"], message: validationMessage }); });
 
   return (
     <div
@@ -265,7 +277,7 @@ export function DailySalesClosingDialog({
             <p>{isDayOff ? copy.dayOffIntro : copy.entryIntro}</p>
           </div>
         </header>
-        <form className="daily-sales-dialog__form" onSubmit={onSubmit}>
+        <BaseerValidatedForm className="daily-sales-dialog__form" values={closingValues} schemaFactory={closingSchemaFactory} errorSummaryLabel={validationMessage} onValid={() => onSubmit()}>
           {!editing && (
             <>
               <div
@@ -293,10 +305,20 @@ export function DailySalesClosingDialog({
                 )}
               </div>
               <div className="daily-sales-dialog__date">
-                <BaseerDatePicker language={language} label={copy.date} max={maximumEntryDate} value={businessDate} onChange={setDate} disabled={saving} />
+                <BaseerDatePicker
+                  language={language}
+                  label={copy.date}
+                  max={maximumEntryDate}
+                  value={businessDate}
+                  onChange={setDate}
+                  disabled={saving}
+                />
               </div>
               {!isDayOff && (
-                <fieldset className="daily-sales-dialog__scope-picker" aria-label={copy.scope}>
+                <fieldset
+                  className="daily-sales-dialog__scope-picker"
+                  aria-label={copy.scope}
+                >
                   {scopeOrder.map((scope) => (
                     <button
                       key={scope}
@@ -320,7 +342,15 @@ export function DailySalesClosingDialog({
           )}
           {editing && (
             <div className="daily-sales-dialog__date">
-              <BaseerDatePicker language={language} label={copy.date} min={editing.businessDate.slice(0, 10)} max={maximumEntryDate} value={businessDate} onChange={setDate} disabled={saving} />
+              <BaseerDatePicker
+                language={language}
+                label={copy.date}
+                min={editing.businessDate.slice(0, 10)}
+                max={maximumEntryDate}
+                value={businessDate}
+                onChange={setDate}
+                disabled={saving}
+              />
             </div>
           )}
           {isDayOff ? (
@@ -392,7 +422,7 @@ export function DailySalesClosingDialog({
                     : copy.saveAndSend}
             </button>
           </footer>
-        </form>
+        </BaseerValidatedForm>
       </section>
     </div>
   );

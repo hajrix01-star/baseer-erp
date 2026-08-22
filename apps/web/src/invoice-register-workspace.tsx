@@ -5,7 +5,8 @@ import { BaseerDialog } from "./baseer-dialog";
 import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerWorkspaceTabs } from "./baseer-batch-layout";
-import { DataTable, type DataTableColumn } from "./data-table";
+import type { BaseerDataGridColumn } from "./baseer-data-grid";
+import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
 import { financeText } from "./finance-copy";
@@ -89,7 +90,7 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const documentKindOptions = (["SALE", "PURCHASE", "EXPENSE"] as const).map((id) => ({ id, label: documentKindLabel(id) }));
   const operationClassOptions = (["SALE_COLLECTION", "PURCHASE_INVOICE", "EXPENSE_INVOICE", "RECURRING_EXPENSE", "SUPPLIER_SETTLEMENT", "PAYROLL_ACCRUAL", "PAYROLL_PAYMENT", "EMPLOYEE_ADVANCE", "EMPLOYEE_ADVANCE_SETTLEMENT", "FINAL_SETTLEMENT_ACCRUAL", "FINAL_SETTLEMENT_PAYMENT", "LOAN_OPENING", "LOAN_REPAYMENT", "GENERAL_JOURNAL"] as const).map((id) => ({ id, label: operationClassLabel(id) }));
   const statusOptions = (["POSTED", "CANCELLED"] as const).map((id) => ({ id, label: statusLabel(id) }));
-  const columns: DataTableColumn<Movement>[] = useMemo(() => [
+  const columns: BaseerDataGridColumn<Movement>[] = useMemo(() => [
     { id: "number", header: language === "ar" ? "رقم المستند / الحركة" : "Document / movement no.", cell: (item) => <button className="baseer-link-button invoice-register__number" type="button" dir="ltr" title={item.documentNumber} onClick={() => void openMovement(item)}>{item.documentNumber}</button> },
     { id: "date", header: text.documentDate, cell: (item) => item.businessDate },
     { id: "document-type", header: language === "ar" ? "نوع المستند" : "Document type", cell: (item) => item.kind === "SALE" || item.kind === "PURCHASE" || item.kind === "EXPENSE" ? <span className="daily-sales-badge">{documentKindLabel(item.kind)}</span> : <span className="daily-sales-badge is-muted">{language === "ar" ? "عملية دفترية" : "Journal operation"}</span> },
@@ -115,12 +116,12 @@ export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
 }
 
 function MovementFile({ detail, language, text, optionName, sourceLabel, pane, onPaneChange }: { detail: MovementDetail; language: Language; text: ReturnType<typeof financeText>; optionName: (value: Option | null) => string; sourceLabel: (movement: Movement) => string; pane: "operation" | "journal"; onPaneChange: (value: "operation" | "journal") => void }) {
-  const allocationColumns: DataTableColumn<MovementDetail["allocations"][number]>[] = [
+  const allocationColumns: BaseerDataGridColumn<MovementDetail["allocations"][number]>[] = [
     { id: "vault", header: text.vaults, cell: (item) => language === "ar" ? item.vaultNameAr : item.vaultNameEn },
     { id: "method", header: text.paymentMethod, cell: (item) => item.paymentMethod },
     { id: "amount", header: text.amount, numeric: true, align: "end", cell: (item) => formatMoney(item.grossAmount) },
   ];
-  const journalColumns: DataTableColumn<MovementDetail["journal"]["lines"][number]>[] = [
+  const journalColumns: BaseerDataGridColumn<MovementDetail["journal"]["lines"][number]>[] = [
     { id: "account", header: text.account, cell: (item) => `${item.accountCode} · ${language === "ar" ? item.accountNameAr : item.accountNameEn}` },
     { id: "debit", header: text.debit, numeric: true, align: "end", cell: (item) => formatMoney(item.debitAmount) },
     { id: "credit", header: text.creditAmount, numeric: true, align: "end", cell: (item) => formatMoney(item.creditAmount) },

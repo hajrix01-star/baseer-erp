@@ -1510,6 +1510,11 @@ export const financeAccountsWorkspaceReceiptSchema = z.object({
   asOfBusinessDate: businessDateSchema,
   fromBusinessDate: businessDateSchema.nullable(),
   toBusinessDate: businessDateSchema.nullable(),
+  summary: z.object({
+    accountCount: z.number().int().min(0).max(500),
+    periodDebit: financeAmountSchema,
+    periodCredit: financeAmountSchema,
+  }).strict(),
   accounts: z.array(financeAccountRecordSchema).max(500),
 }).strict();
 export const financeAccountMovementReceiptSchema = z.object({

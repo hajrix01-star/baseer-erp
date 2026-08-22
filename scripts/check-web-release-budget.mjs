@@ -53,7 +53,7 @@ const totalLazyJs = total(".js") - initialJs;
 const totalCss = total(".css");
 const comboboxLazyJs = files.filter((file) => /^baseer-combobox-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
 const datePickerLazyJs = files.filter((file) => /^baseer-aria-date-picker-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
-const formLazyJs = files.filter((file) => /^baseer-required-textarea-form-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
+const formLazyJs = files.filter((file) => /^baseer-(?:required-textarea-form|validated-form)-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
 const formStateLazyJs = files.filter((file) => /^baseer-form-state-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
 const chartLazyJs = files.filter((file) => /^baseer-chart-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
 const dataGridLazyJs = files.filter((file) => /^baseer-data-grid-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
@@ -69,6 +69,9 @@ const dataGridLazyJs = files.filter((file) => /^baseer-data-grid-.*\.js$/.test(f
 const limits = { initialJs: 250_000, largestJourneyJs: 85_000, initialCss: 58_000, largestJourneyCss: 16_000, comboboxLazyJs: 200_000, datePickerLazyJs: 200_000, formLazyJs: 100_000, formStateLazyJs: 110_000, chartLazyJs: 500_000, dataGridLazyJs: 50_000 };
 const sizes = { initialJs, largestJourneyJs: largestJourney.js, initialCss: cssSize(startupKeys), largestJourneyCss: largestCssJourney.css, comboboxLazyJs, datePickerLazyJs, formLazyJs, formStateLazyJs, chartLazyJs, dataGridLazyJs };
 for (const [kind, limit] of Object.entries(limits)) {
-  if (sizes[kind] > limit) throw new Error(`Web ${kind.toUpperCase()} bundle is ${sizes[kind]} bytes; release limit is ${limit}.`);
+  if (sizes[kind] > limit) {
+    const source = kind === "largestJourneyJs" ? ` from ${largestJourney.source}` : kind === "largestJourneyCss" ? ` from ${largestCssJourney.source}` : "";
+    throw new Error(`Web ${kind.toUpperCase()} bundle is ${sizes[kind]} bytes; release limit is ${limit}${source}.`);
+  }
 }
 console.log(`Web release budget verified (startup JS ${sizes.initialJs} B / ${limits.initialJs} B; largest route JS ${sizes.largestJourneyJs} B / ${limits.largestJourneyJs} B from ${largestJourney.source}; startup CSS ${sizes.initialCss} B / ${limits.initialCss} B; largest route CSS ${sizes.largestJourneyCss} B / ${limits.largestJourneyCss} B from ${largestCssJourney.source}; Combobox interaction JS ${sizes.comboboxLazyJs} B / ${limits.comboboxLazyJs} B; DatePicker interaction JS ${sizes.datePickerLazyJs} B / ${limits.datePickerLazyJs} B; Form interaction JS ${sizes.formLazyJs} B / ${limits.formLazyJs} B; Form-state interaction JS ${sizes.formStateLazyJs} B / ${limits.formStateLazyJs} B; Chart interaction JS ${sizes.chartLazyJs} B / ${limits.chartLazyJs} B; DataGrid interaction JS ${sizes.dataGridLazyJs} B / ${limits.dataGridLazyJs} B; cache report lazy JS ${totalLazyJs} B, CSS ${totalCss} B).`);

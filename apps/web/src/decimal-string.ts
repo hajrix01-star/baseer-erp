@@ -1,7 +1,7 @@
 const POWERS_OF_TEN = Array.from({ length: 19 }, (_, index) => 10n ** BigInt(index));
 
 function parseDecimal(value: string, scale: number, maxIntegerDigits: number): bigint {
-  const pattern = new RegExp(`^(?:0|[1-9]\\d{0,${maxIntegerDigits - 1}})(?:\\.\\d{1,${scale}})?$`);
+  const pattern = new RegExp(`^\\d{1,${maxIntegerDigits}}(?:\\.\\d{1,${scale}})?$`);
   if (!pattern.test(value)) throw new Error("Invalid decimal string");
   const [whole, fraction = ""] = value.split(".");
   return BigInt(whole) * POWERS_OF_TEN[scale] + BigInt(fraction.padEnd(scale, "0") || "0");
@@ -26,6 +26,12 @@ export function addMoneyDecimals(left: string, right: string): string {
   return formatDecimal(parseDecimal(left, 4, 14) + parseDecimal(right, 4, 14), 4, 14);
 }
 
+export function sumMoneyDecimals(values: Iterable<string>): string {
+  let total = 0n;
+  for (const value of values) total += parseDecimal(value, 4, 14);
+  return formatDecimal(total, 4, 14);
+}
+
 export function subtractMoneyDecimals(left: string, right: string): string {
   return formatDecimal(parseDecimal(left, 4, 14) - parseDecimal(right, 4, 14), 4, 14);
 }
@@ -43,6 +49,12 @@ export function absoluteMoneyDecimal(value: string): string {
 export function isPositiveMoneyDecimal(value: string): boolean {
   try { return parseDecimal(value, 4, 14) > 0n; }
   catch { return false; }
+}
+
+/** Exact fixed-scale division for UI-derived averages; the divisor is a non-financial count. */
+export function divideMoneyDecimalByInteger(value: string, divisor: number): string {
+  if (!Number.isSafeInteger(divisor) || divisor <= 0) throw new Error("Invalid divisor");
+  return formatDecimal(parseDecimal(value, 4, 14) / BigInt(divisor), 4, 14);
 }
 
 export function tryMoneyDecimal(operation: () => string): string | null {

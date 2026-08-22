@@ -25,17 +25,17 @@
     "editable-date:daily-sales-closing-dialog.tsx": {
       "kind": "editable-date",
       "file": "daily-sales-closing-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:expenses-obligations-workspace.tsx": {
       "kind": "editable-date",
       "file": "expenses-obligations-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:finance-setup-workspace.tsx": {
       "kind": "editable-date",
       "file": "finance-setup-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:hr-employee-documents-panel.tsx": {
       "kind": "editable-date",
@@ -107,30 +107,35 @@
       "file": "operations-purchase-request-dialog.tsx",
       "decision": "migrated-operations-purchase-command"
     },
+    "editable-date:outflow-batch-entry-table.tsx": {
+      "kind": "editable-date",
+      "file": "outflow-batch-entry-table.tsx",
+      "decision": "migrated-finance-central-date-picker"
+    },
     "editable-date:purchase-expense-credit-panel.tsx": {
       "kind": "editable-date",
       "file": "purchase-expense-credit-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:purchase-expense-workspace.tsx": {
       "kind": "editable-date",
       "file": "purchase-expense-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:recurring-expense-profile-dialog.tsx": {
       "kind": "editable-date",
       "file": "recurring-expense-profile-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:recurring-expense-workspace.tsx": {
       "kind": "editable-date",
       "file": "recurring-expense-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "editable-date:treasury-workspace.tsx": {
       "kind": "editable-date",
       "file": "treasury-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-date-picker"
     },
     "form:administration-companies-panel.tsx": {
       "kind": "form",
@@ -157,15 +162,25 @@
       "file": "baseer-required-textarea-form.tsx",
       "decision": "central-adapter"
     },
+    "form:baseer-validated-form-field.tsx": {
+      "kind": "form",
+      "file": "baseer-validated-form-field.tsx",
+      "decision": "central-adapter"
+    },
+    "form:baseer-validated-form.tsx": {
+      "kind": "form",
+      "file": "baseer-validated-form.tsx",
+      "decision": "central-adapter"
+    },
     "form:daily-sales-closing-dialog.tsx": {
       "kind": "form",
       "file": "daily-sales-closing-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:daily-sales-sign-in.tsx": {
       "kind": "form",
       "file": "daily-sales-sign-in.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-auth-form"
     },
     "form:decision-intelligence-workspace.tsx": {
       "kind": "form",
@@ -175,22 +190,22 @@
     "form:expenses-obligations-workspace.tsx": {
       "kind": "form",
       "file": "expenses-obligations-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:finance-category-form-dialog.tsx": {
       "kind": "form",
       "file": "finance-category-form-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:finance-setup-workspace.tsx": {
       "kind": "form",
       "file": "finance-setup-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:finance-supplier-form-dialog.tsx": {
       "kind": "form",
       "file": "finance-supplier-form-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:hr-compensation-agreement-dialog.tsx": {
       "kind": "form",
@@ -305,32 +320,32 @@
     "form:purchase-expense-credit-panel.tsx": {
       "kind": "form",
       "file": "purchase-expense-credit-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:purchase-expense-workspace.tsx": {
       "kind": "form",
       "file": "purchase-expense-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:recurring-expense-profile-dialog.tsx": {
       "kind": "form",
       "file": "recurring-expense-profile-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:recurring-expense-workspace.tsx": {
       "kind": "form",
       "file": "recurring-expense-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:treasury-vault-form-dialog.tsx": {
       "kind": "form",
       "file": "treasury-vault-form-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:treasury-workspace.tsx": {
       "kind": "form",
       "file": "treasury-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-form-decimal-safe"
     },
     "query:baseer-company-read-query.tsx": {
       "kind": "query",
@@ -425,7 +440,7 @@
     "searchable-selector:outflow-batch-entry-table.tsx": {
       "kind": "searchable-selector",
       "file": "outflow-batch-entry-table.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-scoped-central-combobox"
     },
     "table:administration-users-panel.tsx": {
       "kind": "table",
@@ -445,27 +460,22 @@
     "table:daily-sales-history.tsx": {
       "kind": "table",
       "file": "daily-sales-history.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:data-table.tsx": {
       "kind": "table",
       "file": "data-table.tsx",
       "decision": "pending-module-closure"
     },
-    "table:expenses-obligations-workspace.tsx": {
-      "kind": "table",
-      "file": "expenses-obligations-workspace.tsx",
-      "decision": "pending-module-closure"
-    },
     "table:finance-accounts-workspace.tsx": {
       "kind": "table",
       "file": "finance-accounts-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:finance-setup-workspace.tsx": {
       "kind": "table",
       "file": "finance-setup-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:hr-compensation-policies-dialog.tsx": {
       "kind": "table",
@@ -525,7 +535,7 @@
     "table:invoice-register-workspace.tsx": {
       "kind": "table",
       "file": "invoice-register-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:operations-catalog-workspace.tsx": {
       "kind": "table",
@@ -550,22 +560,22 @@
     "table:outflow-batch-entry-table.tsx": {
       "kind": "table",
       "file": "outflow-batch-entry-table.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:purchase-expense-credit-panel.tsx": {
       "kind": "table",
       "file": "purchase-expense-credit-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:recurring-expense-workspace.tsx": {
       "kind": "table",
       "file": "recurring-expense-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:treasury-workspace.tsx": {
       "kind": "table",
       "file": "treasury-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-finance-central-data-grid"
     }
   }
 }

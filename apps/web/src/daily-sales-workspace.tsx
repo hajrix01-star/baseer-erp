@@ -120,8 +120,7 @@ export function DailySalesWorkspace({
     setSelectedScopes(["ALL"]);
   };
 
-  const submit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const submit = async () => {
     if (!session || saving) return;
     if (
       entryMode === "DAY_OFF" &&

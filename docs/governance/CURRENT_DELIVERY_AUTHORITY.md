@@ -31,6 +31,13 @@ Accounting UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
 approved central Baseer adapters. It does not authorize an API, schema, RLS,
 RBAC, accounting-policy, business-date or report-definition change.
 
+For this closure only, the owner's instruction to remove all browser-side
+financial aggregation authorizes one backward-compatible read-model addition:
+`GET /finance/accounts` may return an authoritative Decimal-string summary
+computed in its existing tenant transaction. This does not change a command,
+schema, RLS, posting rule, period rule or permission, and it may not be reused
+as authority for another API expansion.
+
 It excludes asset capitalization/depreciation/disposal, automatic financial
 posting, public attachments, bank connectivity, external providers, Noorix
 import/cutover, formal reports/P&L and any unapproved financial policy. Reports

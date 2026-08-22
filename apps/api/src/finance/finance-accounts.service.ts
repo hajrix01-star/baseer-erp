@@ -34,11 +34,20 @@ export class FinanceAccountsService {
         select: accountSelect,
       });
       const amounts = await this.amountsForAccounts(tx, context, accounts.map((account) => account.id), input.from, periodTo, asOf, input.businessMonths);
+      const summary = [...amounts.values()].reduce((total, amount) => ({
+        periodDebit: total.periodDebit.plus(amount.periodDebit),
+        periodCredit: total.periodCredit.plus(amount.periodCredit),
+      }), { periodDebit: new Prisma.Decimal(0), periodCredit: new Prisma.Decimal(0) });
       return {
         companyId: context.companyId,
         asOfBusinessDate: dateValue(asOf),
         fromBusinessDate: input.from ? dateValue(input.from) : null,
         toBusinessDate: periodTo ? dateValue(periodTo) : null,
+        summary: {
+          accountCount: accounts.length,
+          periodDebit: summary.periodDebit.toFixed(4),
+          periodCredit: summary.periodCredit.toFixed(4),
+        },
         accounts: accounts.map((account) => accountReceipt(account, amounts.get(account.id) ?? zeroAmounts())),
       };
     });

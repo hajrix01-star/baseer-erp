@@ -22,6 +22,7 @@ const features = tableFeatures({});
 export type BaseerDataGridProps<Row extends object> = {
   ariaLabel: string;
   caption: string;
+  className?: string;
   columns: readonly BaseerDataGridColumn<Row>[];
   rows: readonly Row[];
   rowKey: (row: Row) => string;
@@ -30,7 +31,7 @@ export type BaseerDataGridProps<Row extends object> = {
   onSortDirectionChange?: () => void;
 };
 
-export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: BaseerDataGridProps<Row>) {
+export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, className, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: BaseerDataGridProps<Row>) {
   const helper = createColumnHelper<typeof features, Row>();
   const tableColumns = useMemo(() => columns.map((column) => helper.display({
     id: column.id,
@@ -39,7 +40,7 @@ export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, columns
   })), [columns]);
   const table = useTable<typeof features, Row>({ features, columns: tableColumns, data: rows, getRowId: rowKey });
 
-  return <div className="baseer-data-table" role="region" aria-label={ariaLabel} tabIndex={0}>
+  return <div className={["baseer-data-table", className].filter(Boolean).join(" ")} role="region" aria-label={ariaLabel} tabIndex={0}>
     <table>
       <caption className="visually-hidden">{caption}</caption>
       <colgroup>{columns.map((column) => <col key={column.id} style={column.width ? { width: column.width } : undefined} />)}</colgroup>

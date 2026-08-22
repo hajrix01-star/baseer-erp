@@ -1,4 +1,5 @@
-import { DataTable, type DataTableColumn } from "./data-table";
+import type { BaseerDataGridColumn } from "./baseer-data-grid";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { BaseerButton } from "./baseer-button";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing } from "./daily-sales-client";
@@ -22,7 +23,7 @@ export function DailySalesHistory({
   const copy = dailySalesText[language];
   const cancelledLabel = language === "ar" ? "\u0645\u0644\u063a\u0649" : "Cancelled";
   const recordLabel = language === "ar" ? "\u0627\u0644\u0633\u062c\u0644" : "Record";
-  const columns: readonly DataTableColumn<Closing>[] = [
+  const columns: readonly BaseerDataGridColumn<Closing>[] = [
     {
       id: "record",
       header: recordLabel,
@@ -92,7 +93,7 @@ export function DailySalesHistory({
       {closings.length === 0 ? (
         <p className="daily-sales-empty-copy">{copy.noClosings}</p>
       ) : (
-        <DataTable
+        <BaseerDataGrid
           ariaLabel={copy.closings}
           caption={copy.closings}
           className="daily-sales-register"

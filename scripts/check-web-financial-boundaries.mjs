@@ -5,6 +5,16 @@ const workspace = readFileSync("apps/web/src/daily-sales-workspace.tsx", "utf8")
 const reversal = readFileSync("apps/web/src/daily-sales-reversal-dialog.tsx", "utf8");
 const copy = readFileSync("apps/web/src/daily-sales-copy.ts", "utf8");
 const client = readFileSync("apps/web/src/daily-sales-client.ts", "utf8");
+const purchase = readFileSync("apps/web/src/purchase-expense-workspace.tsx", "utf8");
+const financeSources = [
+  "apps/web/src/daily-sales-closing-dialog.tsx",
+  "apps/web/src/expenses-obligations-workspace.tsx",
+  "apps/web/src/finance-accounts-workspace.tsx",
+  "apps/web/src/purchase-expense-credit-panel.tsx",
+  "apps/web/src/purchase-expense-workspace.tsx",
+  "apps/web/src/recurring-expense-workspace.tsx",
+  "apps/web/src/treasury-workspace.tsx",
+].map((file) => [file, readFileSync(file, "utf8")]);
 if (/\bfetch\(/.test(signIn) || /\bfetch\(/.test(workspace)) {
   throw new Error("Screen components must use a typed adapter, not fetch directly.");
 }
@@ -16,5 +26,12 @@ if (!reversal.includes("useDialogFocusTrap") || !copy.includes("reverseConfirm")
 }
 if (!client.includes("parseBaseerApiResponse")) {
   throw new Error("API client must parse the standard Baseer error receipt.");
+}
+if (!purchase.includes("async (query: string, signal: AbortSignal)") || !purchase.includes('async (kind: BatchRow["kind"], query: string, signal: AbortSignal)') || (purchase.match(/\{ signal \}/g) ?? []).length < 2) {
+  throw new Error("Remote financial selectors must forward AbortSignal to both supplier and category requests.");
+}
+const moneyNumberPattern = /Number\([^\n)]*(?:amount|balance|debit|credit|gross|net|vat|allocation|outstanding)/i;
+for (const [file, source] of financeSources) {
+  if (moneyNumberPattern.test(source)) throw new Error(`${file} must not coerce money to JavaScript Number.`);
 }
 console.log("Web financial boundaries verified.");

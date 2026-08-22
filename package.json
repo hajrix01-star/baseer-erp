@@ -31,6 +31,7 @@
                     "check:web-localization":  "node scripts/check-web-localization.mjs",
                     "check:session-resilience": "node scripts/check-session-resilience.mjs",
                     "check:hr-rls":  "node scripts/check-hr-rls.mjs",
+                    "check:finance-rls": "node scripts/check-finance-rls.mjs",
                     "verify:administration-lifecycle":  "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-administration-lifecycle-verification.mjs",
                     "verify:ai-gate-b-http":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-ai-gate-b-http-verification.mjs",
                     "verify:daily-sales-db":  "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-daily-sales-gate-b-verification.mjs",
