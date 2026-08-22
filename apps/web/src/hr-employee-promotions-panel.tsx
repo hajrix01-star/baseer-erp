@@ -8,6 +8,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
+import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { BaseerEmptyState, BaseerNotice } from "./baseer-workspace";
 import { DataTable } from "./data-table";
@@ -20,6 +21,14 @@ import { reportTopmostDialogError } from "./use-dialog-focus-trap";
 
 type Language = "ar" | "en";
 type Message = { tone: "info" | "danger"; text: string } | null;
+type PromotionFormValues = {
+  effectiveDate: string;
+  newJobTitle: string;
+  decisionReference: string;
+  reason: string;
+  salaryIncreaseAmount: string;
+  salaryEffectiveMonth: string;
+};
 
 const today = () => new Date().toISOString().slice(0, 10);
 const nextMonth = () => {
@@ -51,6 +60,18 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
   const [salaryEffectiveMonth, setSalaryEffectiveMonth] = useState(nextMonth());
   const [message, setMessage] = useState<Message>(null);
   const showError = (value: string) => { if (!reportTopmostDialogError(value)) setMessage({ tone: "danger", text: value }); };
+  const promotionSchema = useMemo(() => z.object({
+    effectiveDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, ar ? "اختر تاريخ الترقية." : "Choose the promotion date."),
+    newJobTitle: z.string().trim().min(1, ar ? "اختر المسمى الجديد." : "Choose the new job title."),
+    decisionReference: z.string().trim().min(1, ar ? "أدخل مرجع القرار." : "Enter the decision reference."),
+    reason: z.string(),
+    salaryIncreaseAmount: z.string().refine((value) => !value.trim() || baseerDecimalString("", 4).safeParse(value.trim()).success && !/^0+(?:\.0+)?$/.test(value.trim()), ar ? "أدخل مبلغ زيادة صحيحاً أكبر من صفر." : "Enter a valid increase amount greater than zero."),
+    salaryEffectiveMonth: z.string().regex(/^\d{4}-\d{2}$/, ar ? "اختر شهر بداية الزيادة." : "Choose the increase start month."),
+  }), [ar]);
+  const promotionForm = useBaseerForm<PromotionFormValues>({
+    schema: promotionSchema,
+    values: { effectiveDate, newJobTitle, decisionReference, reason, salaryIncreaseAmount, salaryEffectiveMonth },
+  });
 
   const load = useCallback(async (cursor?: string, append = false) => {
     const session = activeSession();
@@ -91,8 +112,7 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
     setSalaryEffectiveMonth(nextMonth());
   };
 
-  const createPromotion = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const createPromotion = async () => {
     const session = activeSession();
     if (!session || busy) return;
     if (salaryIncreaseAmount.trim() && (!Number.isFinite(increase) || increase <= 0)) { showError(ar ? "أدخل مبلغ زيادة أكبر من صفر أو اتركه فارغاً." : "Enter a positive increase amount or leave it blank."); return; }
@@ -152,13 +172,13 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
     <section className="hr-employment-compensation__section" aria-labelledby="hr-employment-heading"><header><h3 id="hr-employment-heading">{ar ? "المسار الوظيفي" : "Employment path"}</h3><BaseerButton type="button" variant="secondary" onClick={() => { setMessage(null); setPromotionOpen(true); }}>{ar ? "تسجيل ترقية" : "Record promotion"}</BaseerButton></header>{loading && !promotions.length ? <BaseerCard>{ar ? "جارٍ تحميل المسار الوظيفي…" : "Loading employment history…"}</BaseerCard> : promotions.length ? <><DataTable ariaLabel={ar ? "سجل الترقيات" : "Promotion history"} caption={ar ? "سجل الترقيات" : "Promotion history"} rows={promotions} columns={promotionColumns} rowKey={(row) => row.id} />{nextCursor ? <BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</> : <BaseerEmptyState title={ar ? "لا توجد ترقيات موثقة." : "No promotions are recorded."} />}</section>
     {salaryOpen && employee ? <HrCompensationAgreementDialog open language={language} employees={[employee]} fixedEmployeeId={employee.id} profile={currentSalary} onClose={() => setSalaryOpen(false)} onSaved={async () => { await load(); await onChanged(); }} onError={onError} /> : null}
     <BaseerFormDialog open={promotionOpen} title={ar ? "تسجيل ترقية" : "Record promotion"} language={language} busy={busy} size="standard" formId="hr-employee-promotion" submitLabel={ar ? "حفظ الترقية" : "Save promotion"} onClose={() => setPromotionOpen(false)}>
-      <form id="hr-employee-promotion" className="baseer-form hr-promotion-form" onSubmit={(event) => void createPromotion(event)}>
+      <form id="hr-employee-promotion" className="baseer-form hr-promotion-form" data-baseer-rhf-form="true" noValidate onSubmit={promotionForm.handleSubmit(() => void createPromotion())}>
         <BaseerFormSection title={ar ? "التغيير الوظيفي" : "Employment change"}>
           <div className="hr-promotion-form__comparison"><div><span>{ar ? "المسمى الحالي" : "Current title"}</span><strong>{employee?.jobTitle ?? "—"}</strong></div><span aria-hidden="true">←</span><div><span>{ar ? "المسمى الجديد" : "New title"}</span><strong>{newJobTitle || "—"}</strong></div></div>
-          <BaseerFormGrid><label className="baseer-form-field">{ar ? "تاريخ الترقية" : "Promotion date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الترقية" : "Promotion date"} min="1900-01-01" max={today()} value={effectiveDate} onChange={setEffectiveDate} /></label><label className="baseer-form-field">{ar ? "المسمى الجديد" : "New job title"}<HrJobTitleSelect id="hr-promotion-job-titles" language={language} value={newJobTitle} required onChange={setNewJobTitle} /></label><label className="baseer-form-field baseer-form-field--full">{ar ? "مرجع قرار الترقية" : "Promotion decision reference"}<input required value={decisionReference} onChange={(event) => setDecisionReference(event.target.value)} /></label></BaseerFormGrid>
+          <BaseerFormGrid><label className="baseer-form-field">{ar ? "تاريخ الترقية" : "Promotion date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الترقية" : "Promotion date"} min="1900-01-01" max={today()} value={effectiveDate} onChange={setEffectiveDate} />{promotionForm.formState.errors.effectiveDate ? <small role="alert">{promotionForm.formState.errors.effectiveDate.message}</small> : null}</label><label className="baseer-form-field">{ar ? "المسمى الجديد" : "New job title"}<HrJobTitleSelect id="hr-promotion-job-titles" language={language} value={newJobTitle} required onChange={setNewJobTitle} />{promotionForm.formState.errors.newJobTitle ? <small role="alert">{promotionForm.formState.errors.newJobTitle.message}</small> : null}</label><label className="baseer-form-field baseer-form-field--full">{ar ? "مرجع قرار الترقية" : "Promotion decision reference"}<input required aria-invalid={Boolean(promotionForm.formState.errors.decisionReference)} value={decisionReference} onChange={(event) => setDecisionReference(event.target.value)} />{promotionForm.formState.errors.decisionReference ? <small role="alert">{promotionForm.formState.errors.decisionReference.message}</small> : null}</label></BaseerFormGrid>
         </BaseerFormSection>
         <BaseerFormSection title={ar ? "الأثر المالي (اختياري)" : "Salary effect (optional)"}>
-          <BaseerFormGrid><label className="baseer-form-field">{ar ? "مبلغ زيادة الراتب" : "Salary increase"}<input inputMode="decimal" value={salaryIncreaseAmount} onChange={(event) => setSalaryIncreaseAmount(event.target.value)} /></label>{salaryIncreaseAmount.trim() ? <label className="baseer-form-field">{ar ? "شهر بداية الزيادة" : "Increase month"}<input required type="month" min={nextMonth()} value={salaryEffectiveMonth} onChange={(event) => setSalaryEffectiveMonth(event.target.value)} /></label> : null}</BaseerFormGrid>
+          <BaseerFormGrid><label className="baseer-form-field">{ar ? "مبلغ زيادة الراتب" : "Salary increase"}<input inputMode="decimal" aria-invalid={Boolean(promotionForm.formState.errors.salaryIncreaseAmount)} value={salaryIncreaseAmount} onChange={(event) => setSalaryIncreaseAmount(event.target.value)} />{promotionForm.formState.errors.salaryIncreaseAmount ? <small role="alert">{promotionForm.formState.errors.salaryIncreaseAmount.message}</small> : null}</label>{salaryIncreaseAmount.trim() ? <label className="baseer-form-field">{ar ? "شهر بداية الزيادة" : "Increase month"}<input required type="month" min={nextMonth()} aria-invalid={Boolean(promotionForm.formState.errors.salaryEffectiveMonth)} value={salaryEffectiveMonth} onChange={(event) => setSalaryEffectiveMonth(event.target.value)} />{promotionForm.formState.errors.salaryEffectiveMonth ? <small role="alert">{promotionForm.formState.errors.salaryEffectiveMonth.message}</small> : null}</label> : null}</BaseerFormGrid>
           {currentSalary && salaryIncreaseAmount.trim() ? <div className="hr-promotion-form__salary-comparison"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><span aria-hidden="true">←</span><div><span>{ar ? "الراتب بعد الزيادة" : "Salary after increase"}</span><strong><BaseerMoney value={Number.isFinite(nextSalary) && nextSalary >= 0 ? nextSalary.toFixed(4) : "0"} language={language} /></strong></div></div> : null}
           <label className="baseer-form-field baseer-form-field--full">{ar ? "سبب أو ملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={reason} onChange={(event) => setReason(event.target.value)} /></label>
         </BaseerFormSection>

@@ -4,6 +4,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
+import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, requestId } from "./daily-sales-client";
 import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensationProfile, type HrEmployee } from "./hr-client";
@@ -67,9 +68,26 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
   const minimumMonth = month(profile ? 1 : 0);
   const isFullEdit = operation === "FULL";
   const requiresOvertimeSchedule = isFullEdit && compensationMethod === "INCLUSIVE_OVERTIME";
+  const salarySchema = useMemo(() => {
+    const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
+    const optionalDecimal = z.string().refine((value) => !value.trim() || decimal.safeParse(value.trim()).success, ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
+    return z.object({
+      effectiveMonth: z.string().regex(/^\d{4}-\d{2}$/, ar ? "اختر شهر التطبيق." : "Choose the effective month."), monthlyGross: optionalDecimal,
+      compensationMethod: z.enum(["FIXED_MONTHLY", "INCLUSIVE_OVERTIME"]), foodAllowance: optionalDecimal, housingAllowance: optionalDecimal, transportAllowance: optionalDecimal, otherAllowance: optionalDecimal,
+      scheduledHoursPerDay: z.string(), scheduledWorkDays: z.string(), changeAmount: optionalDecimal, reason: z.string(), operation: z.enum(["FULL", "INCREASE", "DECREASE"]),
+    }).superRefine((value, context) => {
+      const positive = (input: string) => decimal.safeParse(input.trim()).success && !/^0+(?:\.0+)?$/.test(input.trim());
+      if (value.operation === "FULL" && !positive(value.monthlyGross)) context.addIssue({ code: "custom", path: ["monthlyGross"], message: ar ? "أدخل راتباً أكبر من صفر." : "Enter a salary greater than zero." });
+      if (value.operation !== "FULL" && !positive(value.changeAmount)) context.addIssue({ code: "custom", path: ["changeAmount"], message: ar ? "أدخل مبلغ تعديل أكبر من صفر." : "Enter an adjustment amount greater than zero." });
+      if (value.operation === "FULL" && value.compensationMethod === "INCLUSIVE_OVERTIME") {
+        if (!/^(?:9|10|11|12)$/.test(value.scheduledHoursPerDay)) context.addIssue({ code: "custom", path: ["scheduledHoursPerDay"], message: ar ? "أدخل من 9 إلى 12 ساعة." : "Enter 9 to 12 hours." });
+        if (!/^(?:[1-9]|[12]\d|3[01])$/.test(value.scheduledWorkDays)) context.addIssue({ code: "custom", path: ["scheduledWorkDays"], message: ar ? "أدخل من يوم إلى 31 يوماً." : "Enter 1 to 31 days." });
+      }
+    });
+  }, [ar]);
+  const salaryForm = useBaseerForm({ schema: salarySchema, values: { effectiveMonth, monthlyGross, compensationMethod, foodAllowance, housingAllowance, transportAllowance, otherAllowance, scheduledHoursPerDay, scheduledWorkDays, changeAmount, reason, operation } });
 
-  const submit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const submit = async () => {
     const session = activeSession();
     if (!session || busy) return;
     if (!isFullEdit && (!Number.isFinite(delta) || delta <= 0)) { onError(ar ? "أدخل مبلغ التعديل أكبر من صفر." : "Enter an adjustment amount greater than zero."); return; }
@@ -103,14 +121,14 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
   };
 
   return <BaseerFormDialog open={open} title={profile ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")} language={language} busy={busy} size="standard" formId="hr-salary-management" submitLabel={ar ? "حفظ الراتب" : "Save salary"} onClose={onClose}>
-    <form id="hr-salary-management" className="baseer-form" onSubmit={(event) => void submit(event)}>
+    <form id="hr-salary-management" className="baseer-form" data-baseer-rhf-form="true" noValidate onSubmit={salaryForm.handleSubmit(() => void submit())}>
       <BaseerFormSection title={employee.nameAr}>
         {profile ? <div className="baseer-inline-actions" role="group" aria-label={ar ? "نوع تعديل الراتب" : "Salary change type"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} disabled={busy} onClick={() => setOperation(value)}>{operationLabel(language, value)}</BaseerButton>)}</div> : null}
         <BaseerFormGrid>
           <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<input required type="month" min={minimumMonth} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>
           {profile ? <div className="baseer-form-field"><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong className="baseer-form-static"><BaseerMoney value={profile.monthlyGross} language={language} /></strong></div> : null}
           {isFullEdit ? <>
-            <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input required autoFocus inputMode="decimal" value={monthlyGross} onChange={(event) => setMonthlyGross(event.target.value)} /></label>
+            <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<input required autoFocus inputMode="decimal" aria-invalid={Boolean(salaryForm.formState.errors.monthlyGross)} value={monthlyGross} onChange={(event) => setMonthlyGross(event.target.value)} />{salaryForm.formState.errors.monthlyGross ? <small role="alert">{String(salaryForm.formState.errors.monthlyGross.message)}</small> : null}</label>
             <label className="baseer-form-field">{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={compensationMethod} onChange={(event) => setCompensationMethod(event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></select></label>
             <label className="baseer-form-field">{ar ? "بدل الأكل" : "Food allowance"}<input inputMode="decimal" value={foodAllowance} onChange={(event) => setFoodAllowance(event.target.value)} /></label>
             <label className="baseer-form-field">{ar ? "بدل السكن" : "Housing allowance"}<input inputMode="decimal" value={housingAllowance} onChange={(event) => setHousingAllowance(event.target.value)} /></label>
@@ -118,7 +136,7 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
             <label className="baseer-form-field">{ar ? "بدلات أخرى" : "Other allowances"}<input inputMode="decimal" value={otherAllowance} onChange={(event) => setOtherAllowance(event.target.value)} /></label>
             {requiresOvertimeSchedule ? <><label className="baseer-form-field">{ar ? "ساعات الدوام اليومية" : "Daily hours"}<input required type="number" min="9" max="12" value={scheduledHoursPerDay} onChange={(event) => setScheduledHoursPerDay(event.target.value)} /></label><label className="baseer-form-field">{ar ? "أيام العمل الشهرية" : "Monthly working days"}<input required type="number" min="1" max="31" value={scheduledWorkDays} onChange={(event) => setScheduledWorkDays(event.target.value)} /></label></> : null}
           </> : <>
-            <label className="baseer-form-field baseer-form-field--full">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} /></label>
+            <label className="baseer-form-field baseer-form-field--full">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<input required autoFocus inputMode="decimal" aria-invalid={Boolean(salaryForm.formState.errors.changeAmount)} value={changeAmount} onChange={(event) => setChangeAmount(event.target.value)} />{salaryForm.formState.errors.changeAmount ? <small role="alert">{String(salaryForm.formState.errors.changeAmount.message)}</small> : null}</label>
             <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={Number.isFinite(next) && next >= 0 ? next.toFixed(4) : "0"} language={language} /></strong></div>
           </>}
           <label className="baseer-form-field baseer-form-field--full">{ar ? "السبب أو الملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={reason} onChange={(event) => setReason(event.target.value)} /></label>

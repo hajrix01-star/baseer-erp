@@ -195,32 +195,32 @@
     "form:hr-compensation-agreement-dialog.tsx": {
       "kind": "form",
       "file": "hr-compensation-agreement-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form-decimal-string"
     },
     "form:hr-compensation-policies-dialog.tsx": {
       "kind": "form",
       "file": "hr-compensation-policies-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form"
     },
     "form:hr-employee-documents-panel.tsx": {
       "kind": "form",
       "file": "hr-employee-documents-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form"
     },
     "form:hr-employee-letter-forms.tsx": {
       "kind": "form",
       "file": "hr-employee-letter-forms.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form"
     },
     "form:hr-employee-onboarding-dialog.tsx": {
       "kind": "form",
       "file": "hr-employee-onboarding-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form-decimal-string"
     },
     "form:hr-employee-promotions-panel.tsx": {
       "kind": "form",
       "file": "hr-employee-promotions-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form-decimal-string"
     },
     "form:hr-final-settlement-panel.tsx": {
       "kind": "form",
@@ -230,7 +230,7 @@
     "form:hr-leave-forms.tsx": {
       "kind": "form",
       "file": "hr-leave-forms.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form"
     },
     "form:hr-payroll-create-dialog.tsx": {
       "kind": "form",
@@ -245,7 +245,7 @@
     "form:hr-salary-adjustment-dialog.tsx": {
       "kind": "form",
       "file": "hr-salary-adjustment-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-form-decimal-string"
     },
     "form:hr-services-workspace.tsx": {
       "kind": "form",
