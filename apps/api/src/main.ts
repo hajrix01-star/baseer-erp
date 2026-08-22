@@ -9,8 +9,10 @@ import { ApiExceptionFilter } from './common/api-exception.filter.js';
 import { ObservabilityService } from './observability/observability.service.js';
 import { RequestObservabilityInterceptor } from './observability/request-observability.interceptor.js';
 import { validatePrivateDeploymentConfiguration } from './operations/private-deployment-config.js';
+import { loadCanonicalLocalEnvironment } from './local-environment.js';
 
 async function bootstrap(): Promise<void> {
+  loadCanonicalLocalEnvironment();
   validatePrivateDeploymentConfiguration();
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

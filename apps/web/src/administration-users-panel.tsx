@@ -15,25 +15,68 @@ type User = AdministrationOverview["users"][number];
 type DialogMode = "create" | "manage" | null;
 type LoginParts = { local: string; domain: string };
 const activeCompanies = (overview: AdministrationOverview) => overview.companies.filter((company) => company.status === "ACTIVE");
+const uniqueRoleNames = (user: User, language: "ar" | "en") => [...new Set(user.memberships.map((membership) => language === "ar" ? membership.roleNameAr : membership.roleNameEn))];
 const sameIds = (left: readonly string[], right: readonly string[]) => [...left].sort().join("|") === [...right].sort().join("|");
 const splitLogin = (login: string): LoginParts => { const at = login.lastIndexOf("@"); return at > 0 ? { local: login.slice(0, at), domain: login.slice(at + 1) } : { local: login, domain: "hajrix.com" }; };
 const composeLogin = (local: string, domain: string) => `${local.trim()}@${domain.trim().replace(/^@/, "")}`;
 const administrationAuditReason = "تحديث بيانات المستخدم من الإدارة";
 
-export function AdministrationUsersPanel({ language, session, overview, owner, onDone, onError }: Props) { const text = administrationText(language);
+export function AdministrationUsersPanel({ language, session, overview, owner, onDone, onError }: Props) {
+  const text = administrationText(language);
   const [mode, setMode] = useState<DialogMode>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [showDisabled, setShowDisabled] = useState(false);
   const selectedUser = overview.users.find((user) => user.id === selectedUserId) ?? null;
+  const activeUsers = overview.users.filter((user) => user.status === "ACTIVE");
+  const disabledUsers = overview.users.filter((user) => user.status === "DISABLED");
+  const ownerCount = overview.users.filter((user) => user.isOwner).length;
+  const term = search.trim().toLocaleLowerCase();
+  const visibleUsers = overview.users.filter((user) =>
+    (showDisabled || user.status === "ACTIVE") &&
+    (!term || `${user.login} ${user.nameAr} ${user.nameEn}`.toLocaleLowerCase().includes(term)),
+  );
   const close = () => { setMode(null); setSelectedUserId(null); };
   const openUser = (user: User) => { setSelectedUserId(user.id); setMode("manage"); };
-  const visibleUsers = overview.users.filter((user) => { const term = search.trim().toLocaleLowerCase(); return !term || `${user.login} ${user.nameAr} ${user.nameEn}`.toLocaleLowerCase().includes(term); });
-  const appliedFilters = search.trim() ? [{ id: "search", label: search.trim(), onRemove: () => setSearch("") }] : [];
+  const appliedFilters = [
+    ...(search.trim() ? [{ id: "search", label: search.trim(), onRemove: () => setSearch("") }] : []),
+    ...(!showDisabled && disabledUsers.length ? [{ id: "disabled", label: text.hiddenDisabledUsers(disabledUsers.length), onRemove: () => setShowDisabled(true) }] : []),
+  ];
 
   return <section className="administration-section administration-users-section">
-    <header className="administration-section-heading"><div><h3>{text.users}</h3></div>{owner && <button className="daily-sales-primary" type="button" onClick={() => setMode("create")}>+ {text.addEmployee}</button>}</header>
-    <BaseerFilterBar language={language} search={search} searchLabel={text.users} searchPlaceholder={language === "ar" ? "ابحث بالاسم أو اسم الدخول" : "Search user or login"} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={() => setSearch("")} />
-    <DataTable ariaLabel={text.usersTable} caption={text.users} rowKey={(row) => row.key} columns={[{ id: "user", header: text.displayName, cell: (row) => row.cells.user }, { id: "login", header: text.loginName, cell: (row) => row.cells.login }, { id: "access", header: text.access, cell: (row) => row.cells.access }, { id: "language", header: text.interface, cell: (row) => row.cells.language }, { id: "status", header: text.status, cell: (row) => row.cells.status }]} rows={visibleUsers.map((user) => ({ key: user.id, cells: { user: <button className="administration-table-user" type="button" onClick={() => openUser(user)}><AdministrationUserAvatar name={user.nameAr} kind={user.avatarKind} language={language} /><span><strong>{displayName(language, user)}</strong><small>{language === "ar" ? user.nameEn : user.nameAr}</small></span></button>, login: user.login, access: user.memberships.length ? <span className="administration-table-access">{user.memberships.map((membership) => <span key={membership.companyId}><strong>{language === "ar" ? membership.companyNameAr : membership.companyNameEn}</strong><small>{language === "ar" ? membership.roleNameAr : membership.roleNameEn}</small></span>)}</span> : text.noCompany, language: user.preferredLanguage === "ar" ? text.arabic : text.english, status: <span className={user.status === "ACTIVE" ? "administration-status-pill is-active" : "administration-status-pill is-disabled"}>{user.status === "ACTIVE" ? text.active : text.disabled}</span> } }))} />
+    <header className="administration-section-heading">
+      <div><h3>{text.usersManagement}</h3><p>{text.usersDescription}</p></div>
+      {owner && <button className="daily-sales-primary" type="button" onClick={() => setMode("create")}>+ {text.addEmployee}</button>}
+    </header>
+    <div className="administration-users-summary" aria-label={text.users}>
+      <span><b>{activeUsers.length}</b><small>{text.activeUserCount}</small></span>
+      <span><b>{disabledUsers.length}</b><small>{text.disabledUserCount}</small></span>
+      <span><b>{ownerCount}</b><small>{text.systemOwnerCount}</small></span>
+    </div>
+    <BaseerFilterBar
+      language={language}
+      search={search}
+      searchLabel={text.users}
+      searchPlaceholder={language === "ar" ? "ابحث بالاسم أو اسم الدخول" : "Search user or login"}
+      onSearchChange={setSearch}
+      controls={<button className="daily-sales-secondary administration-users__disabled-toggle" type="button" aria-pressed={showDisabled} onClick={() => setShowDisabled((current) => !current)}>{showDisabled ? text.hideDisabledUsers : text.showDisabledUsers} ({disabledUsers.length})</button>}
+      appliedFilters={appliedFilters}
+      onClear={() => { setSearch(""); setShowDisabled(true); }}
+    />
+    <DataTable
+      ariaLabel={text.usersTable}
+      caption={text.users}
+      rowKey={(user) => user.id}
+      columns={[
+        { id: "user", header: text.displayName, sort: (user) => displayName(language, user), cell: (user) => <button className="administration-table-user" type="button" onClick={() => openUser(user)}><AdministrationUserAvatar name={user.nameAr} kind={user.avatarKind} language={language} /><span><strong>{displayName(language, user)}</strong><small>{language === "ar" ? user.nameEn : user.nameAr}</small></span></button> },
+        { id: "login", header: text.loginName, sort: (user) => user.login, cell: (user) => user.login },
+        { id: "companies", header: text.companies, sort: (user) => user.memberships.map((membership) => membership.companyNameAr).join(" "), cell: (user) => user.memberships.length ? <div className="administration-table-access">{user.memberships.map((membership) => <span key={membership.companyId}><strong>{language === "ar" ? membership.companyNameAr : membership.companyNameEn}</strong></span>)}</div> : <span>{text.noCompany}</span> },
+        { id: "access", header: text.roles, sort: (user) => uniqueRoleNames(user, language).join(" "), cell: (user) => <div className="administration-table-access">{user.isOwner && <strong className="administration-owner-badge">{text.systemOwner}</strong>}{uniqueRoleNames(user, language).map((role) => <span key={role}><strong>{role}</strong></span>)}</div> },
+        { id: "language", header: text.interface, sort: (user) => user.preferredLanguage, cell: (user) => user.preferredLanguage === "ar" ? text.arabic : text.english },
+        { id: "status", header: text.status, sort: (user) => user.status, cell: (user) => <span className={user.status === "ACTIVE" ? "administration-status-pill is-active" : "administration-status-pill is-disabled"}>{user.status === "ACTIVE" ? text.active : text.disabled}</span> },
+      ]}
+      rows={visibleUsers}
+    />
     {mode === "create" && <CreateUserDialog language={language} session={session} overview={overview} onDone={onDone} onError={onError} onClose={close} />}
     {mode === "manage" && selectedUser && <ManageUserDialog language={language} session={session} user={selectedUser} overview={overview} owner={owner} onDone={onDone} onError={onError} onClose={close} />}
   </section>;

@@ -21,14 +21,14 @@ export class AdministrationService {
       const [tenant, companies, users, roles] = await Promise.all([
         tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } }),
         tx.company.findMany({ orderBy: { nameAr: "asc" }, take: 250, include: { branding: { select: { logoFileMetadataId: true } } } }),
-        tx.user.findMany({ orderBy: { nameAr: "asc" }, take: 500, include: { memberships: { include: { company: true, role: true }, orderBy: { company: { nameAr: "asc" } } } } }),
+        tx.user.findMany({ orderBy: { nameAr: "asc" }, take: 500, include: { memberships: { where: { company: { status: CompanyStatus.ACTIVE } }, include: { company: true, role: true }, orderBy: { company: { nameAr: "asc" } } }, tenantAdministrationAssignments: { where: { isOwner: true }, select: { isOwner: true } } } }),
         tx.role.findMany({ orderBy: [{ isSystem: "desc" }, { nameAr: "asc" }], take: 250, include: { grants: { orderBy: { permissionCode: "asc" } } } }),
       ]);
       return {
         owner: context.isOwner,
         permissions: ADMINISTRATION_PERMISSION_CATALOG,
         companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null, contextLocationCode: company.contextLocationCode, contextLocationLabelAr: company.contextLocationLabelAr, contextLatitude: company.contextLatitude?.toString() ? Number(company.contextLatitude.toString()) : null, contextLongitude: company.contextLongitude?.toString() ? Number(company.contextLongitude.toString()) : null })),
-        users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, avatarKind: user.avatarKind as "INITIALS" | "MALE" | "FEMALE", status: user.status, memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
+        users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, avatarKind: user.avatarKind as "INITIALS" | "MALE" | "FEMALE", status: user.status, isOwner: user.tenantAdministrationAssignments.some((assignment) => assignment.isOwner), memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
         roles: roles.map((role) => ({ id: role.id, code: role.code, nameAr: role.nameAr, nameEn: role.nameEn, isSystem: role.isSystem, permissionCodes: role.grants.map((grant) => grant.permissionCode) })),
       };
     });

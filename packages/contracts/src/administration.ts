@@ -43,7 +43,7 @@ export const administrationCompanySchema = z.object({
   id: companyIdSchema, nameAr: text160, nameEn: text160, businessTimezone: z.string().min(1).max(64), status: z.enum(["ACTIVE", "ARCHIVED"]), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields,
 }).strict();
 export const administrationUserSchema = z.object({
-  id: userIdSchema, login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema, avatarKind: userAvatarKind, status: z.enum(["ACTIVE", "DISABLED"]), memberships: z.array(z.object({ companyId: companyIdSchema, companyNameAr: text160, companyNameEn: text160, roleId: z.string().uuid(), roleNameAr: text160, roleNameEn: text160 }).strict()).max(250),
+  id: userIdSchema, login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema, avatarKind: userAvatarKind, status: z.enum(["ACTIVE", "DISABLED"]), isOwner: z.boolean(), memberships: z.array(z.object({ companyId: companyIdSchema, companyNameAr: text160, companyNameEn: text160, roleId: z.string().uuid(), roleNameAr: text160, roleNameEn: text160 }).strict()).max(250),
 }).strict();
 export const administrationOverviewReceiptSchema = z.object({ companies: z.array(administrationCompanySchema).max(250), users: z.array(administrationUserSchema).max(500), roles: z.array(administrationRoleSchema).max(250), permissions: z.array(administrationPermissionSchema), owner: z.boolean() }).strict();
 export const createAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64).default("Asia/Riyadh") }).strict();
