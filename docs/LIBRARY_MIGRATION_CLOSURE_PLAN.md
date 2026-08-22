@@ -185,6 +185,13 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 والإتاحة وميزانيات startup/route/interaction. لا تصبح المالية `Closed` قبل
 ربط هذه الأدلة بـSHA واحد نظيف وتحديث manifest إلى صفر pending/stale.
 
+#### سجل إغلاق المالية والمحاسبة
+
+**الحالة:** `Closed` — 2026-08-22، بمرجع التنفيذ `a1cbf54` وسجل الإثبات
+[Finance library-migration verification](governance/FINANCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+كل targets المالية مصنفة، وDecimal/HTTP/RLS/دفتر/فترة/browser/budget gates
+ناجحة. الحدود المفتوحة تخص الإنتاج والتقارير الرسمية والحجم، لا legacy UI.
+
 ### 5.4 الإدارة
 
 | القسم | التبويبات/المسارات التي تدخل الجرد |
@@ -196,6 +203,14 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 | الهوية والثيم | settings والتهيئة المحلية |
 | النسخ الاحتياطي | read-only status وعمليات التفويض المتاحة |
 
+#### سجل إغلاق الإدارة والصلاحيات
+
+**الحالة:** `Closed` — 2026-08-22، بمرجع التنفيذ النهائي `33a7175` وسجل
+الإثبات
+[Administration library-migration verification](governance/ADMINISTRATION_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+نماذج الإدارة وقراءة overview مركزية، وجدول المستخدمين bounded/lightweight
+بقرار نهائي. اختبارات RBAC والجلسات وRLS والمتصفح والميزانية ناجحة.
+
 ### 5.5 التقارير
 
 | القسم | التبويبات/المسارات التي تدخل الجرد |
@@ -205,6 +220,25 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 | التقرير الضريبي | VAT views وperiod controls |
 | Hajri Tax | التكامل/القراءة المتاحة |
 | مستندات التقارير | documents، export، drill-down |
+
+#### سجل إغلاق التقارير
+
+**الحالة:** `Closed` — 2026-08-23، بمرجع التنفيذ `82ae65d` وسجل الإثبات
+[Reports library-migration verification](governance/REPORTS_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
+
+- catalogue/documents يستخدمان Query live، والتقارير المالية والضريبية
+  تستخدم Query snapshot بلا focus/reconnect/retry تلقائي.
+- evidence/source معزولان بالشركة والجلسة وAbort/epoch، وReportRun/checksum
+  ومبالغ Decimal مصدرها الخادم.
+- جداول Trial/Cash/VAT متخصصة ومحدودة خادمياً بقرار intentional bounded؛ لا
+  DataGrid أو Chart بلا حاجة، ولا حساب مالي في المتصفح.
+- الجرد صفر unclassified/stale، وReports E2E `6/6` والمجموعة الكاملة
+  `97 passed` مع `1 intentional skip`؛ HTTP/RLS/policies/build/budget/audit Pass.
+- `Hajri Tax` لا يملك حالياً UI/API instance حية؛ بناؤه الوظيفي نطاق مستقل
+  وليس legacy متبقياً من التحول.
+
+الموديول النشط التالي هو مركز القرار والسياق، ولا يبدأ مركز القيادة قبل
+إغلاق مركز القرار وفق البوابة نفسها.
 
 ### 5.6 مركز القرار والسياق
 

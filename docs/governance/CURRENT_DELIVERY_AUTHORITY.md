@@ -1,6 +1,6 @@
 # BASEER ERP — Current Delivery Authority
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-08-23
 **Purpose:** single authority for the active delivery order, local acceptance status, and production boundaries.
 
 ## Read order
@@ -16,10 +16,10 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 ## Current decision
 
 Baseer has **closed Operations Core, Human Resources, Finance and Accounting,
-and Administration and access locally, including their library migrations**.
-The next active transformation scope in the centralized sequence is **Reports
-library-migration closure**. This is not final delivery or general production
-readiness.
+Administration and access, and Reports locally, including their library
+migrations**. The next active transformation scope in the centralized sequence
+is **Decision Intelligence library-migration closure**. This is not final
+delivery or general production readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
 Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
@@ -31,10 +31,13 @@ Finance migration is closed at `a1cbf54`; its reproducible evidence is recorded
 in [Finance library-migration verification](FINANCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
 Administration migration is closed at `33a7175`; its reproducible evidence is
 recorded in [Administration library-migration verification](ADMINISTRATION_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
-The active scope is now limited to converting already implemented Reports UI
-consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the approved
-central Baseer adapters. It does not authorize a new report policy, KPI,
-financial calculation, API, schema, RLS/RBAC rule, or production change.
+Reports migration is closed at `82ae65d`; its reproducible evidence is recorded
+in [Reports library-migration verification](REPORTS_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
+The active scope is now limited to converting already implemented Decision
+Intelligence UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to
+the approved central Baseer adapters. It does not authorize a new metric,
+decision policy, financial calculation, API, schema, RLS/RBAC rule, external
+AI provider, or production change.
 
 For the closed Finance scope only, the owner's instruction to remove all browser-side
 financial aggregation authorizes one backward-compatible read-model addition:
@@ -103,14 +106,15 @@ It also covers the local ECharts HR operational visualisation over the existing
 server overview, with its matching HTML summary/table and dedicated lazy-size
 gate. It is not a financial dashboard, reporting surface, or production claim.
 
-**Closed Administration scope / active Reports scope:** Administration migration
-is closed at `33a7175`. The same gated operating authority now applies only to
-Reports files recorded in the manifest. It permits central-adapter migration in
-homogeneous batches after report-policy, read-model, financial-source,
-HTTP/RLS/RBAC, browser, accessibility and budget gates pass. It does not
-authorize a new library class, another module, a report or financial policy
-change, or release/public production acceptance. The Prisma P1 and its
-private-deployment risk acceptance remain unchanged.
+**Closed Reports scope / active Decision Intelligence scope:** Reports migration
+is closed at `82ae65d`. The same gated operating authority now applies only to
+Decision Intelligence files recorded in the manifest. It permits
+central-adapter migration in homogeneous batches after metric-contract,
+read-model, source, HTTP/RLS/RBAC, browser, accessibility and budget gates pass.
+It does not authorize a new library class, another module, a decision or
+financial policy change, an external AI provider, or release/public production
+acceptance. The Prisma P1 and its private-deployment risk acceptance remain
+unchanged.
 
 The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.
@@ -139,11 +143,16 @@ automatically revoked for SaaS, commercial sale, public signup, public exposure
 of the migration job, external Prisma-config input, or leakage of the affected
 packages into the API runtime image.
 
-## 2026-08-21 current working-tree verification
+## 2026-08-21 historical working-tree verification
 
-The current working tree contains uncommitted candidate additions for Reports and Operations. They do not alter the active delivery order or grant owner acceptance. Type checks, API/web builds, report-policy verifiers, the Operations purchase-cycle verifier, Finance Gate B, and the web release budget passed on the local test database. The budget result is 83,636/85,000 bytes for the largest JavaScript journey and 14,161/16,000 bytes for the largest CSS journey.
+This historical entry recorded then-uncommitted Reports and Operations candidates.
+Both scopes have since been superseded by their dedicated closure records and
+commits; it does not describe the current working tree or active priority.
 
-Finance Gate B was restored by updating its direct fixture to inject `FinanceCashPerformanceEventService` into both supplier-due and purchase-expense services. The candidate must still be explicitly accepted before it is recorded as a delivered Reports or Operations scope.
+Finance Gate B was restored by updating its direct fixture to inject
+`FinanceCashPerformanceEventService` into both supplier-due and purchase-expense
+services. Reports and Operations acceptance are now recorded in their closure
+records.
 
 Assets & Warranty Gate A is now a local, bounded candidate within Operations: the Purchase & Expense entry row can mark follow-up; Operations contains the company-scoped queue and operational asset/warranty register; archive, audit, idempotency and no-finance-posting behavior are verified by `npm run verify:operations-assets-warranty`. It does not grant acceptance, financial asset accounting, attachment upload, claims, disposal, or Noorix import. Owner acceptance remains required.
 
