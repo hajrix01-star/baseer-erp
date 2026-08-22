@@ -35,7 +35,7 @@ function CompanyQuery<T>({ session, resource, scope, load, children }: BaseerCom
     queryKey: baseerReadQueryKey(session, resource, scope),
     queryFn: ({ signal }) => load(session, signal),
   });
-  return <>{children({ data: query.data, loading: query.isPending, error: query.error, refetch: async () => { await query.refetch(); } })}</>;
+  return <>{children({ data: query.data, loading: query.isPending, error: query.error, refetch: async () => { await query.refetch({ throwOnError: true }); } })}</>;
 }
 
 /** A lazy company/session-scoped read cache for a single read surface. */
