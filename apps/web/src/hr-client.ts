@@ -79,7 +79,7 @@ export type HrOverviewReceipt = {
 };
 
 function withQuery(path: string, query: Record<string, string | number | undefined>) { const parameters = new URLSearchParams(); for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value)); return `${path}${parameters.size ? `?${parameters}` : ""}`; }
-export function getHrOverview(session: ActiveSession) { return api<HrOverviewReceipt>(session, "/hr/overview"); }
+export function getHrOverview(session: ActiveSession, signal?: AbortSignal) { return api<HrOverviewReceipt>(session, "/hr/overview", { signal }); }
 export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployeeStatus; search?: string; cursor?: string; pageSize?: number } = {}, options?: Pick<RequestInit, "signal">) { return api<HrEmployeesReceipt>(session, withQuery("/hr/employees", query), options); }
 export function onboardHrEmployee(session: ActiveSession, payload: unknown) { return api<{ id: string; compensationId: string; replayed: boolean }>(session, "/hr/employees/onboard", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function updateHrEmployee(session: ActiveSession, payload: unknown) { return api(session, "/hr/employees/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

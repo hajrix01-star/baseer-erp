@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
 import { activeSession, type ActiveSession } from "./daily-sales-client";
 import { getHrOverview, type HrFinalSettlementStatus, type HrOverviewReceipt, type HrPayrollStatus, type HrService } from "./hr-client";
@@ -25,21 +25,13 @@ function settlementStatusLabel(value: HrFinalSettlementStatus, language: Languag
 }
 
 export function HrOverviewWorkspace({ language }: { language: Language }) {
-  const ar = language === "ar";
-  const [session, setSession] = useState<ActiveSession | null>(activeSession());
-  const [data, setData] = useState<HrOverviewReceipt | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const load = useCallback(async () => {
-    const current = activeSession(); setSession(current);
-    if (!current) { setLoading(false); return; }
-    setLoading(true); setError("");
-    try { setData(await getHrOverview(current)); }
-    catch { setError(ar ? "تعذر تحميل ملخص الموارد البشرية. حاول مرة أخرى." : "The HR overview could not be loaded. Please try again."); }
-    finally { setLoading(false); }
-  }, [ar]);
-  useEffect(() => { void load(); }, [load]);
+  const session = activeSession();
   if (!session) return null;
+  return <BaseerCompanyReadQuery session={session} resource="hr-overview" load={getHrOverview}>{({ data, loading, error, refetch }) => <HrOverviewContent language={language} data={data} loading={loading} error={error ? true : false} refetch={refetch} />}</BaseerCompanyReadQuery>;
+}
+
+function HrOverviewContent({ language, data, loading, error, refetch }: { language: Language; data: HrOverviewReceipt | undefined; loading: boolean; error: boolean; refetch: () => void }) {
+  const ar = language === "ar";
 
   const workforce = data?.workforce ?? null;
   const financial = data?.financial ?? null;
@@ -64,7 +56,7 @@ export function HrOverviewWorkspace({ language }: { language: Language }) {
 
   return <BaseerWorkspace className="hr-overview">
     <BaseerSectionHeader eyebrow={ar ? "مركز عمل الموارد البشرية" : "HR operations hub"} title={ar ? "اليوم في الموارد البشرية" : "Today in human resources"} actions={<BaseerButton type="button" variant="primary" onClick={() => routeTo(1)}>{ar ? "إدارة الموظفين" : "Manage employees"}</BaseerButton>} />
-    {error ? <BaseerNotice tone="danger" title={ar ? "تعذر التحديث" : "Unable to refresh"}>{error}<div className="hr-overview__notice-action"><BaseerButton type="button" onClick={() => void load()}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></div></BaseerNotice> : null}
+    {error ? <BaseerNotice tone="danger" title={ar ? "تعذر التحديث" : "Unable to refresh"}>{ar ? "تعذر تحميل ملخص الموارد البشرية. حاول مرة أخرى." : "The HR overview could not be loaded. Please try again."}<div className="hr-overview__notice-action"><BaseerButton type="button" onClick={refetch}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></div></BaseerNotice> : null}
     <section className="hr-overview__metrics" aria-label={ar ? "ملخص الموارد البشرية" : "Human resources summary"}>
       <button type="button" disabled={!workforce} onClick={() => routeTo(1)}><small>{ar ? "الموظفون النشطون" : "Active employees"}</small><strong>{countLabel(workforce?.activeEmployees)}</strong><span>{workforce ? (ar ? "فتح سجل الموظفين" : "Open employees") : unavailable}</span></button>
       <button type="button" disabled={!workforce} onClick={() => routeTo(2)}><small>{ar ? "في إجازة حالياً" : "Currently on leave"}</small><strong>{countLabel(workforce?.employeesOnLeave)}</strong><span>{workforce ? (ar ? "متابعة الإجازات والعودة" : "Review leave and return") : unavailable}</span></button>
