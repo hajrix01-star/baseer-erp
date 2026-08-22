@@ -186,7 +186,10 @@ async function expectTopmostDialog(page: Page, name: string | RegExp) {
 async function fillOnboarding(page: Page) {
   const dialog = page.getByRole("dialog", { name: "إضافة موظف" });
   await dialog.getByLabel("الاسم الكامل*").fill("موظف جديد");
-  await dialog.getByLabel("تاريخ التعيين*").fill("2026-08-01");
+  const hireDate = dialog.locator(".baseer-aria-date-picker").first();
+  await expect(hireDate.getByRole("spinbutton")).toHaveCount(3);
+  await hireDate.getByRole("button", { name: "فتح التقويم" }).click();
+  await page.keyboard.press("Enter");
   await dialog.getByLabel("إجمالي الراتب الشهري*").fill("3000");
   return dialog;
 }

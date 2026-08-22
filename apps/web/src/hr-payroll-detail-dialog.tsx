@@ -9,7 +9,7 @@ import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoneyInput, BaseerTextArea } from "./baseer-form-fields";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { BaseerOutputActions } from "./baseer-output-actions";
-import { BaseerSearchSelect } from "./baseer-search-select";
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { DataTable } from "./data-table";
 import { activeSession, api, requestId } from "./daily-sales-client";
 import { approveHrPayrollRun, discardHrPayrollRun, getHrPayrollRun, payHrPayrollRun, reverseHrPayrollPayment, reverseHrPayrollRun, type HrPayrollDetail, type HrPayment } from "./hr-client";
@@ -113,8 +113,8 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
         </BaseerFormSection>
         {allocations.map((allocation, index) => <BaseerFormSection key={`${allocation.vaultId}-${index}`} title={ar ? `توزيع ${index + 1}` : `Allocation ${index + 1}`}>
           <BaseerFormGrid>
-            <label>{ar ? "الخزينة" : "Vault"}<BaseerSearchSelect required label={ar ? "الخزينة" : "Vault"} value={allocation.vaultId} placeholder={ar ? "اختر الخزينة" : "Select vault"} options={activeVaults.map((vault) => ({ id: vault.id, label: ar ? vault.nameAr : vault.nameEn }))} onChange={(vaultId) => { const vault = vaults.find((item) => item.id === vaultId); updateAllocation(index, { vaultId, paymentMethod: vault?.paymentMethod ?? "" }); }} /></label>
-            <label>{ar ? "طريقة السداد" : "Payment method"}<BaseerSearchSelect searchable={false} required label={ar ? "طريقة السداد" : "Payment method"} value={allocation.paymentMethod} placeholder={ar ? "اختر الطريقة" : "Select method"} options={(vaults.find((vault) => vault.id === allocation.vaultId)?.paymentMethods ?? []).map((method) => ({ id: method, label: method }))} onChange={(paymentMethod) => updateAllocation(index, { paymentMethod: paymentMethod as PaymentMethod })} /></label>
+            <label>{ar ? "الخزينة" : "Vault"}<BaseerCombobox required label={ar ? "الخزينة" : "Vault"} value={allocation.vaultId} placeholder={ar ? "اختر الخزينة" : "Select vault"} options={activeVaults.map((vault) => ({ id: vault.id, label: ar ? vault.nameAr : vault.nameEn }))} onChange={(vaultId) => { const vault = vaults.find((item) => item.id === vaultId); updateAllocation(index, { vaultId, paymentMethod: vault?.paymentMethod ?? "" }); }} /></label>
+            <label>{ar ? "طريقة السداد" : "Payment method"}<BaseerCombobox searchable={false} required label={ar ? "طريقة السداد" : "Payment method"} value={allocation.paymentMethod} placeholder={ar ? "اختر الطريقة" : "Select method"} options={(vaults.find((vault) => vault.id === allocation.vaultId)?.paymentMethods ?? []).map((method) => ({ id: method, label: method }))} onChange={(paymentMethod) => updateAllocation(index, { paymentMethod: paymentMethod as PaymentMethod })} /></label>
             <label className="baseer-form-field--full">{ar ? "المبلغ" : "Amount"}<BaseerMoneyInput required value={allocation.amount} onValueChange={(amount) => updateAllocation(index, { amount })} /></label>
             {allocations.length > 1 ? <BaseerButton type="button" variant="quiet" onClick={() => setAllocations((items) => items.filter((_, itemIndex) => itemIndex !== index))}>{ar ? "إزالة هذا التوزيع" : "Remove this allocation"}</BaseerButton> : null}
           </BaseerFormGrid>

@@ -40,27 +40,42 @@
     "editable-date:hr-employee-documents-panel.tsx": {
       "kind": "editable-date",
       "file": "hr-employee-documents-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-date-picker"
+    },
+    "editable-date:hr-employee-onboarding-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "hr-employee-onboarding-dialog.tsx",
+      "decision": "migrated-hr-central-date-picker"
+    },
+    "editable-date:hr-employee-promotions-panel.tsx": {
+      "kind": "editable-date",
+      "file": "hr-employee-promotions-panel.tsx",
+      "decision": "migrated-hr-central-date-picker"
     },
     "editable-date:hr-final-settlement-panel.tsx": {
       "kind": "editable-date",
       "file": "hr-final-settlement-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-date-picker"
     },
     "editable-date:hr-leave-forms.tsx": {
       "kind": "editable-date",
       "file": "hr-leave-forms.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-date-picker"
     },
     "editable-date:hr-payroll-detail-dialog.tsx": {
       "kind": "editable-date",
       "file": "hr-payroll-detail-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-date-picker"
+    },
+    "editable-date:hr-services-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "hr-services-workspace.tsx",
+      "decision": "migrated-hr-central-date-picker"
     },
     "editable-date:hr-workspace.tsx": {
       "kind": "editable-date",
       "file": "hr-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-central-date-picker"
     },
     "editable-date:operations-asset-register-dialog.tsx": {
       "kind": "editable-date",
@@ -332,6 +347,11 @@
       "file": "operations-reports-workspace.tsx",
       "decision": "migrated-operations-report-read-boundary"
     },
+    "searchable-selector:baseer-combobox-field.tsx": {
+      "kind": "searchable-selector",
+      "file": "baseer-combobox-field.tsx",
+      "decision": "central-adapter"
+    },
     "searchable-selector:baseer-combobox.tsx": {
       "kind": "searchable-selector",
       "file": "baseer-combobox.tsx",
@@ -350,47 +370,47 @@
     "searchable-selector:hr-compensation-agreement-dialog.tsx": {
       "kind": "searchable-selector",
       "file": "hr-compensation-agreement-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-lazy-central-combobox"
     },
     "searchable-selector:hr-final-settlement-panel.tsx": {
       "kind": "searchable-selector",
       "file": "hr-final-settlement-panel.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:hr-job-titles.tsx": {
       "kind": "searchable-selector",
       "file": "hr-job-titles.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-lazy-central-combobox"
     },
     "searchable-selector:hr-leave-forms.tsx": {
       "kind": "searchable-selector",
       "file": "hr-leave-forms.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:hr-leave-workspace.tsx": {
       "kind": "searchable-selector",
       "file": "hr-leave-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:hr-payroll-detail-dialog.tsx": {
       "kind": "searchable-selector",
       "file": "hr-payroll-detail-dialog.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-lazy-central-combobox"
     },
     "searchable-selector:hr-salary-tools-workspace.tsx": {
       "kind": "searchable-selector",
       "file": "hr-salary-tools-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:hr-services-workspace.tsx": {
       "kind": "searchable-selector",
       "file": "hr-services-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:hr-workspace.tsx": {
       "kind": "searchable-selector",
       "file": "hr-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-hr-scoped-remote-combobox"
     },
     "searchable-selector:operations-catalog-conversion-form.tsx": {
       "kind": "searchable-selector",

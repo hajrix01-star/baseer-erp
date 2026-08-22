@@ -5,6 +5,7 @@ import "./hr-employee-promotions-panel.css";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
 import { BaseerMoney } from "./baseer-money";
@@ -154,7 +155,7 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
       <form id="hr-employee-promotion" className="baseer-form hr-promotion-form" onSubmit={(event) => void createPromotion(event)}>
         <BaseerFormSection title={ar ? "التغيير الوظيفي" : "Employment change"}>
           <div className="hr-promotion-form__comparison"><div><span>{ar ? "المسمى الحالي" : "Current title"}</span><strong>{employee?.jobTitle ?? "—"}</strong></div><span aria-hidden="true">←</span><div><span>{ar ? "المسمى الجديد" : "New title"}</span><strong>{newJobTitle || "—"}</strong></div></div>
-          <BaseerFormGrid><label className="baseer-form-field">{ar ? "تاريخ الترقية" : "Promotion date"}<input required type="date" min="1900-01-01" max={today()} value={effectiveDate} onChange={(event) => setEffectiveDate(event.target.value)} /></label><label className="baseer-form-field">{ar ? "المسمى الجديد" : "New job title"}<HrJobTitleSelect id="hr-promotion-job-titles" language={language} value={newJobTitle} required onChange={setNewJobTitle} /></label><label className="baseer-form-field baseer-form-field--full">{ar ? "مرجع قرار الترقية" : "Promotion decision reference"}<input required value={decisionReference} onChange={(event) => setDecisionReference(event.target.value)} /></label></BaseerFormGrid>
+          <BaseerFormGrid><label className="baseer-form-field">{ar ? "تاريخ الترقية" : "Promotion date"}<BaseerDatePicker language={language} label={ar ? "تاريخ الترقية" : "Promotion date"} min="1900-01-01" max={today()} value={effectiveDate} onChange={setEffectiveDate} /></label><label className="baseer-form-field">{ar ? "المسمى الجديد" : "New job title"}<HrJobTitleSelect id="hr-promotion-job-titles" language={language} value={newJobTitle} required onChange={setNewJobTitle} /></label><label className="baseer-form-field baseer-form-field--full">{ar ? "مرجع قرار الترقية" : "Promotion decision reference"}<input required value={decisionReference} onChange={(event) => setDecisionReference(event.target.value)} /></label></BaseerFormGrid>
         </BaseerFormSection>
         <BaseerFormSection title={ar ? "الأثر المالي (اختياري)" : "Salary effect (optional)"}>
           <BaseerFormGrid><label className="baseer-form-field">{ar ? "مبلغ زيادة الراتب" : "Salary increase"}<input inputMode="decimal" value={salaryIncreaseAmount} onChange={(event) => setSalaryIncreaseAmount(event.target.value)} /></label>{salaryIncreaseAmount.trim() ? <label className="baseer-form-field">{ar ? "شهر بداية الزيادة" : "Increase month"}<input required type="month" min={nextMonth()} value={salaryEffectiveMonth} onChange={(event) => setSalaryEffectiveMonth(event.target.value)} /></label> : null}</BaseerFormGrid>

@@ -35,10 +35,10 @@ type HrEmployeesReceipt = { employees: HrEmployee[]; hasMore: boolean; nextCurso
 type HrEmployeeServicesReceipt = { services: HrEmployeeServiceRecord[]; hasMore: boolean; nextCursor: string | null; summary: { count: number; expired: number; due30: number; due90: number } };
 type HrEmployeeServiceDetail = { service: HrEmployeeServiceRecord };
 
-export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployee["status"]; search?: string; cursor?: string; pageSize?: number } = {}) {
+export function listHrEmployees(session: ActiveSession, query: { status?: HrEmployee["status"]; search?: string; cursor?: string; pageSize?: number } = {}, options?: Pick<RequestInit, "signal">) {
   const parameters = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") parameters.set(key, String(value));
-  return api<HrEmployeesReceipt>(session, `/hr/employees${parameters.size ? `?${parameters}` : ""}`);
+  return api<HrEmployeesReceipt>(session, `/hr/employees${parameters.size ? `?${parameters}` : ""}`, options);
 }
 export function createHrEmployeeService(session: ActiveSession, payload: unknown) { return api(session, "/hr/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function recordHrEmployeeServiceAndIssueCost(session: ActiveSession, payload: unknown) { return api(session, "/hr/services/record-and-issue", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }

@@ -4,7 +4,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerMoneyInput } from "./baseer-form-fields";
-import { BaseerSearchSelect } from "./baseer-search-select";
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { activeSession } from "./daily-sales-client";
 import { getHrEmployee, listHrEmployees, type HrCompensationMethod, type HrDetail, type HrEmployee } from "./hr-client";
 import { calculateSalaryTool, type SalaryToolInput } from "./hr-salary-tools-calculations";
@@ -45,9 +45,9 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
     catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تحميل الموظفين" : "Loading employees")); }
   }, [ar, language]);
   useEffect(() => { void loadEmployees(); }, [loadEmployees]);
-  const searchEmployeeOptions = useCallback(async (query: string) => {
+  const searchEmployeeOptions = useCallback(async (query: string, signal: AbortSignal) => {
     const session = activeSession(); if (!session) return [];
-    const next = (await listHrEmployees(session, { search: query.trim() || undefined, pageSize: 50 })).employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE");
+    const next = (await listHrEmployees(session, { search: query.trim() || undefined, pageSize: 50 }, { signal })).employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE");
     setEmployees((current) => [...current, ...next.filter((employee) => !current.some((candidate) => candidate.id === employee.id))]);
     return next.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }));
   }, [language]);
@@ -87,7 +87,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       <section className="hr-salary-tools__calculator">
         <section className="hr-salary-tools__inputs" aria-labelledby="salary-tool-inputs-title"><header><h3 id="salary-tool-inputs-title">{ar ? "مدخلات الحاسبة" : "Calculator inputs"}</h3></header><div className="hr-salary-tools__input-grid">
-          <label className="hr-salary-tools__field--full">{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} remoteSearch={searchEmployeeOptions} onChange={setSelectedEmployeeId} /></label>
+          <label className="hr-salary-tools__field--full">{ar ? "الموظف (اختياري)" : "Employee (optional)"}<BaseerCombobox label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "حساب يدوي أو اختر موظفاً" : "Manual calculation or select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} remoteSearch={searchEmployeeOptions} scopeKey={activeSession()?.companyId ?? "signed-out"} onChange={setSelectedEmployeeId} /></label>
           <label>{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={draft.compensationMethod} onChange={(event) => setField("compensationMethod", event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "إجمالي شامل الأوفر تايم" : "Inclusive overtime total"}</option></select></label>
           <label>{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<BaseerMoneyInput value={draft.monthlyGross} onValueChange={(monthlyGross) => setField("monthlyGross", monthlyGross)} /></label>
           <label className="hr-salary-tools__allowance">{ar ? "بدل الأكل الشهري" : "Monthly food allowance"}<BaseerMoneyInput value={draft.foodAllowance} onValueChange={(foodAllowance) => setField("foodAllowance", foodAllowance)} /></label>
@@ -103,7 +103,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
       </> : null}
       {activeTab === "documents" ? <>
         <div className="administration-section-heading"><h2>{ar ? "وثائق الراتب المعتمدة" : "Approved salary documents"}</h2></div>
-        <label>{ar ? "الموظف" : "Employee"}<BaseerSearchSelect label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "اختر الموظف" : "Select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} remoteSearch={searchEmployeeOptions} onChange={setSelectedEmployeeId} /></label>
+        <label>{ar ? "الموظف" : "Employee"}<BaseerCombobox label={ar ? "الموظف" : "Employee"} value={selectedEmployeeId} placeholder={ar ? "اختر الموظف" : "Select an employee"} options={employees.map((employee) => ({ id: employee.id, label: labelEmployee(language, employee) }))} remoteSearch={searchEmployeeOptions} scopeKey={activeSession()?.companyId ?? "signed-out"} onChange={setSelectedEmployeeId} /></label>
         {selectedEmployeeId ? <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل سجل الخطابات…" : "Loading letter register…"}</BaseerCard>}><HrEmployeeLettersPanel employeeId={selectedEmployeeId} language={language} hasCurrentCompensation={Boolean(selectedDetail?.compensation)} canIssue={canIssueDocuments} onManageCompensation={() => setMessage(ar ? "تُدار رواتب الموظفين من ملف الموظف." : "Employee salary is managed from the employee file.")} onError={setMessage} onChanged={loadEmployees} /></Suspense> : <BaseerCard tone="muted">{ar ? "اختر موظفاً." : "Select an employee."}</BaseerCard>}
       </> : null}
     </BaseerBatchPanel>
