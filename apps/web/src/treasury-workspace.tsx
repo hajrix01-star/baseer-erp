@@ -16,7 +16,7 @@ import { financeText } from "./finance-copy";
 import { hasActivePermission } from "./module-access";
 
 type Language = "ar" | "en";
-type PaymentMethod = "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP";
+export type PaymentMethod = "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP";
 type Vault = { id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; paymentMethods: PaymentMethod[]; status: "ACTIVE" | "ARCHIVED"; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number; balanceAsOf: string; inflow: string; outflow: string };
 type TreasuryReceipt = { companyId: string; businessDate: string; asOfBusinessDate: string; fromBusinessDate: string | null; toBusinessDate: string | null; summary: AmountSummary; groups: Array<{ key: "COLLECTION_CHANNELS" | "OTHER_VAULTS" | "ARCHIVED"; count: number } & AmountSummary>; vaults: Vault[] };
 type AmountSummary = { balanceAsOf: string; inflow: string; outflow: string; net?: string };
@@ -26,10 +26,11 @@ type Journal = { id: string; sourceType: string; sourceReference: string; displa
 type TreasuryControlKind = "BANK_RECONCILIATION" | "CASH_COUNT";
 type TreasuryControl = { id: string; vaultId: string; vaultNameAr: string; vaultNameEn: string; kind: TreasuryControlKind; asOfBusinessDate: string; ledgerBalance: string; observedBalance: string; differenceAmount: string; status: "MATCHED" | "VARIANCE"; referenceNumber: string | null; notes: string | null; createdAt: string };
 type TreasuryControlsReceipt = { companyId: string; items: TreasuryControl[]; nextCursor: string | null };
-type VaultForm = { nameAr: string; nameEn: string; type: Vault["type"]; paymentMethods: PaymentMethod[]; isSalesChannel: boolean; isPaymentDestination: boolean };
+export type VaultForm = { nameAr: string; nameEn: string; type: Vault["type"]; paymentMethods: PaymentMethod[]; isSalesChannel: boolean; isPaymentDestination: boolean };
 const emptyVault: VaultForm = { nameAr: "", nameEn: "", type: "CASH", paymentMethods: ["CASH"], isSalesChannel: false, isPaymentDestination: true };
 const LazyBaseerDatePicker = lazy(async () => ({ default: (await import("./baseer-date-picker")).BaseerDatePicker }));
 const LazyBaseerFilterBar = lazy(async () => ({ default: (await import("./baseer-filter-bar")).BaseerFilterBar }));
+const LazyTreasuryVaultFormDialog = lazy(async () => ({ default: (await import("./treasury-vault-form-dialog")).TreasuryVaultFormDialog }));
 
 /** Date picking is needed only after opening a Treasury form, not on the initial workspace route. */
 function BaseerDatePicker(props: ComponentProps<typeof LazyBaseerDatePicker>) {
@@ -122,7 +123,6 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
     setTransfer({ fromVaultId: vault.id, toVaultId: "", amount: "", businessDate: workspace?.businessDate ?? "", notes: "" });
     setShowTransfer(true);
   };
-  const togglePaymentMethod = (method: PaymentMethod) => setVaultForm((value) => ({ ...value, paymentMethods: value.paymentMethods.includes(method) ? value.paymentMethods.length > 1 ? value.paymentMethods.filter((item) => item !== method) : value.paymentMethods : [...value.paymentMethods, method] }));
   const openDetail = async (vault: Vault, cursor?: string) => {
     const current = activeSession();
     if (!current) return;
@@ -144,12 +144,12 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
     finally { setJournalLoading(false); }
   };
 
-  const saveVault = async (event: React.FormEvent) => {
-    event.preventDefault(); const current = activeSession(); if (!current || saving) return;
+  const saveVault = async (nextVault: VaultForm) => {
+    const current = activeSession(); if (!current || saving) return;
     setSaving(true); setMessage({ kind: "idle", text: "" });
     try {
-      if (formMode === "edit" && formTarget) await api(current, "/finance/vaults/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ vaultId: formTarget.id, ...vaultForm, idempotencyKey: requestId() }) });
-      else await api(current, "/finance/vaults", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...vaultForm, idempotencyKey: requestId() }) });
+      if (formMode === "edit" && formTarget) await api(current, "/finance/vaults/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ vaultId: formTarget.id, ...nextVault, idempotencyKey: requestId() }) });
+      else await api(current, "/finance/vaults", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...nextVault, idempotencyKey: requestId() }) });
       setFormMode(null); setMessage({ kind: "success", text: text.saveSucceeded }); await load();
     } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.vaults) }); }
     finally { setSaving(false); }
@@ -227,7 +227,7 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
       <BaseerCard><header className="administration-section-heading"><div><h3>{text.reconciliationHistory}</h3></div></header>{controls?.items.length ? <DataTable ariaLabel={text.reconciliationHistory} caption={text.reconciliationHistory} rowKey={(item) => item.id} columns={[{ id: "kind", header: text.treasuryControl, cell: (item) => item.kind === "BANK_RECONCILIATION" ? text.bankReconciliation : text.cashCount }, { id: "vault", header: text.vaults, cell: (item) => displayName(language, { nameAr: item.vaultNameAr, nameEn: item.vaultNameEn }) }, { id: "date", header: text.asOfDate, cell: (item) => item.asOfBusinessDate }, { id: "ledger", header: text.ledgerBalance, numeric: true, align: "end", cell: (item) => formatMoney(item.ledgerBalance) }, { id: "observed", header: text.observedBalance, numeric: true, align: "end", cell: (item) => formatMoney(item.observedBalance) }, { id: "difference", header: text.difference, numeric: true, align: "end", cell: (item) => formatMoney(item.differenceAmount) }, { id: "status", header: text.status, cell: (item) => item.status === "MATCHED" ? text.matched : text.variance }]} rows={controls.items} /> : <p className="empty-results">{text.noResults}</p>}{controls?.nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadControls(controls.nextCursor ?? undefined)}>{text.loadMore}</BaseerButton> : null}</BaseerCard>
       {(["channels", "others", "archived"] as const).map((key) => <section key={key} className="treasury-vault-group"><header className="administration-section-heading"><h3>{titleFor(key)} <small>({groups[key].length})</small></h3></header><VaultCards vaults={groups[key]} language={language} text={text} canTransfer={key !== "archived" && activeVaults.length > 1} transferLabel={transferFromLabel} onTransfer={openTransferFrom} onOpen={(vault) => void openDetail(vault)} onEdit={openEdit} onArchive={setArchiveTarget} onRestore={(vault) => void restoreVault(vault)} /></section>)}
     </>}
-    <BaseerDialog open={formMode !== null} language={language} busy={saving} title={formMode === "edit" ? text.edit : text.addVault} onClose={() => setFormMode(null)} footer={<><BaseerButton type="button" onClick={() => setFormMode(null)}>{text.cancel}</BaseerButton><BaseerButton type="submit" variant="primary" form="vault-form" disabled={saving}>{saving ? text.saving : formMode === "edit" ? text.save : text.saveVault}</BaseerButton></>}><form id="vault-form" className="administration-form" onSubmit={(event) => void saveVault(event)}><label>{text.nameArabic}<input required value={vaultForm.nameAr} onChange={(event) => setVaultForm((value) => ({ ...value, nameAr: event.target.value }))} /></label><label>{text.nameEnglish}<input required value={vaultForm.nameEn} onChange={(event) => setVaultForm((value) => ({ ...value, nameEn: event.target.value }))} /></label><label>{text.vaultType}<select value={vaultForm.type} onChange={(event) => { const type = event.target.value as Vault["type"]; setVaultForm((value) => ({ ...value, type, paymentMethods: defaultPaymentMethods(type) })); }}><option value="CASH">{text.cash}</option><option value="BANK">{text.bank}</option><option value="APP">{text.app}</option></select></label><fieldset><legend>{text.paymentMethod}</legend>{paymentMethodOptions(vaultForm.type, text).map((option) => <label key={option.value}><input type="checkbox" disabled={!vaultForm.isPaymentDestination} checked={vaultForm.paymentMethods.includes(option.value)} onChange={() => togglePaymentMethod(option.value)} /> {option.label}</label>)}</fieldset><fieldset><legend>{text.vaults}</legend><label><input type="checkbox" checked={vaultForm.isSalesChannel} onChange={(event) => setVaultForm((value) => ({ ...value, isSalesChannel: event.target.checked }))} /> {text.collectionChannel}</label><label><input type="checkbox" checked={vaultForm.isPaymentDestination} onChange={(event) => setVaultForm((value) => ({ ...value, isPaymentDestination: event.target.checked }))} /> {text.paymentDestination}</label></fieldset></form></BaseerDialog>
+    <Suspense fallback={null}><LazyTreasuryVaultFormDialog open={formMode !== null} language={language} busy={saving} value={vaultForm} editing={formMode === "edit"} onClose={() => setFormMode(null)} onSubmit={saveVault} /></Suspense>
     <BaseerDialog open={showOrder} language={language} busy={saving} title={orderLabel} onClose={() => setShowOrder(false)} footer={<><BaseerButton type="button" onClick={() => setShowOrder(false)}>{text.cancel}</BaseerButton><BaseerButton type="button" variant="primary" disabled={saving} onClick={() => void saveOrder()}>{saving ? text.saving : text.save}</BaseerButton></>}><DataTable ariaLabel={orderLabel} caption={orderLabel} columns={[{ id: "order", header: "#", align: "center", numeric: true, cell: (row) => row.index + 1 }, { id: "vault", header: text.vaults, cell: (row) => displayName(language, row.vault) }, { id: "actions", header: text.edit, align: "end", cell: (row) => <><BaseerButton type="button" disabled={row.index === 0} onClick={() => moveVault(row.index, -1)} aria-label={orderLabel}>↑</BaseerButton><BaseerButton type="button" disabled={row.index === orderRows.length - 1} onClick={() => moveVault(row.index, 1)} aria-label={orderLabel}>↓</BaseerButton></> }]} rows={orderRows} rowKey={(row) => row.id} /></BaseerDialog>
     <BaseerDialog open={showTransfer} language={language} busy={saving} title={text.transfer} onClose={() => setShowTransfer(false)} footer={<><BaseerButton type="button" onClick={() => setShowTransfer(false)}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="vault-transfer" variant="primary" disabled={saving || !transferSource}>{saving ? text.saving : text.saveTransfer}</BaseerButton></>}>
       <form id="vault-transfer" className="administration-form" onSubmit={(event) => void saveTransfer(event)}>
