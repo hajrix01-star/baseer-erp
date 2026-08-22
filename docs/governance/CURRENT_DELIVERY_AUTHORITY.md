@@ -71,6 +71,10 @@ verification boundary also covers the isolated non-financial RHF/Zod adapter
 for a draft HR service cancellation reason. It has no financial values, API,
 RLS or permission change, and it does not authorize release or production.
 
+It also covers the local ECharts HR operational visualisation over the existing
+server overview, with its matching HTML summary/table and dedicated lazy-size
+gate. It is not a financial dashboard, reporting surface, or production claim.
+
 Outside these logged eligible pilots, no additional pilot, release, or
 production claim is authorized. The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.

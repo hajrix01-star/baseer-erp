@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
@@ -10,6 +11,7 @@ import { hasActivePermission } from "./module-access";
 type Language = "ar" | "en";
 const routeTo = (section: number, stage?: string) => { window.location.hash = `#module=hr&section=${section}${stage ? `&stage=${stage}` : ""}`; };
 const dateValue = (value: string) => new Date(`${value}T00:00:00`).getTime();
+const LazyBaseerChart = lazy(() => import("./baseer-chart").then((module) => ({ default: module.BaseerChart })));
 
 function serviceTypeLabel(value: HrService["serviceType"], language: Language) {
   const labels = { IQAMA_ISSUANCE: ["إصدار إقامة", "Iqama issuance"], IQAMA_RENEWAL: ["تجديد إقامة", "Iqama renewal"], SPONSORSHIP_TRANSFER: ["نقل كفالة", "Sponsorship transfer"], EXIT_REENTRY_VISA: ["تأشيرة خروج وعودة", "Exit/re-entry visa"], FLIGHT_TICKET: ["تذكرة طيران", "Flight ticket"], MEDICAL_INSURANCE: ["تأمين طبي", "Medical insurance"], HEALTH_CERTIFICATE: ["شهادة صحية", "Health certificate"], OTHER: ["خدمة أخرى", "Other service"] } as const;
@@ -53,6 +55,7 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
   const countLabel = (value: number | null | undefined) => value == null ? "—" : formatNumber(value);
   const task = (section: number, className: string, icon: string, title: string, detail: string, count: number | null) => <button type="button" className={className} disabled={count == null} onClick={() => routeTo(section)}><span className="hr-overview__task-icon" aria-hidden="true">{icon}</span><span><strong>{title}</strong><small>{count == null ? unavailable : detail}</small></span><b>{countLabel(count)}</b></button>;
   const businessDateMs = data ? dateValue(data.businessDate) : Date.now();
+  const workforceChartPoints = workforce ? [{ label: ar ? "موظفون نشطون" : "Active employees", value: workforce.activeEmployees }, { label: ar ? "في إجازة" : "On leave", value: workforce.employeesOnLeave }, { label: ar ? "خدمات تحتاج متابعة" : "Services needing follow-up", value: serviceAttentionCount ?? 0 }] : [];
 
   return <BaseerWorkspace className="hr-overview">
     <BaseerSectionHeader eyebrow={ar ? "مركز عمل الموارد البشرية" : "HR operations hub"} title={ar ? "اليوم في الموارد البشرية" : "Today in human resources"} actions={<BaseerButton type="button" variant="primary" onClick={() => routeTo(1)}>{ar ? "إدارة الموظفين" : "Manage employees"}</BaseerButton>} />
@@ -63,6 +66,7 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
       <button type="button" disabled={!financial} onClick={() => routeTo(4)}><small>{ar ? "سلف وخصومات مفتوحة" : "Open advances and deductions"}</small><strong>{countLabel(financialCount)}</strong><span>{financial ? (ar ? "فتح التسويات" : "Open settlements") : unavailable}</span></button>
       <button type="button" disabled={!payroll} onClick={() => routeTo(3)}><small>{ar ? "مسيرات تحتاج إجراء" : "Payrolls needing action"}</small><strong>{countLabel(payrollActionCount)}</strong><span>{payroll ? (ar ? "فتح مسير الرواتب" : "Open payroll") : unavailable}</span></button>
     </section>
+    {workforceChartPoints.length ? <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل الرسم…" : "Loading chart…"}</BaseerCard>}><LazyBaseerChart language={language} title={ar ? "صورة القوى العاملة اليوم" : "Today's workforce picture"} points={workforceChartPoints} asOf={data?.businessDate ?? ""} /></Suspense> : null}
     {hasQuickAction ? <section className="hr-overview__quick-actions" aria-label={ar ? "إجراءات سريعة" : "Quick actions"}><h3>{ar ? "إجراءات سريعة" : "Quick actions"}</h3><nav>{canOnboardEmployee ? <BaseerButton type="button" variant="primary" onClick={() => routeTo(1, "new-employee")}>{ar ? "موظف جديد" : "New employee"}</BaseerButton> : null}{canCreatePayroll ? <BaseerButton type="button" onClick={() => routeTo(3, "create-payroll")}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton> : null}{canManageLeaves ? <BaseerButton type="button" onClick={() => routeTo(2, "record-leave")}>{ar ? "تسجيل إجازة" : "Record leave"}</BaseerButton> : null}{canRecordService ? <BaseerButton type="button" onClick={() => routeTo(5, "record-service")}>{ar ? "تسجيل خدمة" : "Record service"}</BaseerButton> : null}</nav></section> : null}
     <section className="hr-overview__work" aria-label={ar ? "يحتاج إجراء" : "Needs action"}><header><div><p>{ar ? "يحتاج إجراء" : "Needs action"}</p><h3>{hasTaskVisibility ? (taskCount ? (ar ? `${formatNumber(taskCount)} عناصر بانتظار المتابعة` : `${formatNumber(taskCount)} items need follow-up`) : (ar ? "لا توجد مهام معلقة" : "No pending work")) : unavailable}</h3></div></header><div className="hr-overview__task-grid">
       {task(3, payroll?.draftCount ? "is-warning" : "", "▣", ar ? "مسيرات مسودة" : "Draft payrolls", payroll?.draftCount ? (ar ? "راجعها ثم اعتمدها أو احذفها." : "Review, approve, or discard them.") : (ar ? "لا توجد مسيرات مسودة." : "No draft payrolls."), payroll?.draftCount ?? null)}

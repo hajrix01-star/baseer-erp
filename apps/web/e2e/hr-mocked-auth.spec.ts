@@ -192,6 +192,8 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await mockHr(page, requested);
   await page.goto("/#module=hr&section=0");
   await expect(page.getByRole("heading", { name: "اليوم في الموارد البشرية" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "صورة القوى العاملة اليوم" })).toBeVisible();
+  await expect(page.getByRole("table")).toBeVisible();
   await expect(page.getByRole("button", { name: "موظف جديد" })).toBeVisible();
   await expect(page.getByRole("button", { name: "إنشاء مسير" })).toBeVisible();
   await expect(page.getByRole("button", { name: "تسجيل إجازة" })).toBeVisible();
