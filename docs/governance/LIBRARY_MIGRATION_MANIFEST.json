@@ -520,7 +520,7 @@
     "table:operations-reports-workspace.tsx": {
       "kind": "table",
       "file": "operations-reports-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-materials-server-grid-retained-bounded-custody-months"
     },
     "table:outflow-batch-entry-table.tsx": {
       "kind": "table",

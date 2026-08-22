@@ -56,10 +56,15 @@ export type BaseerServerGridPage<Row extends object> = Readonly<{
   asOf: string;
 }>;
 
+export type BaseerServerDataGridProps<Row extends object> = Omit<Parameters<typeof BaseerDataGrid<Row>>[0], "rows"> & {
+  page: BaseerServerGridPage<Row>;
+  loadMoreControl?: ReactNode;
+};
+
 /**
  * Controlled server-grid contract. The caller sends filter/sort/cursor intent
  * to a server allow-list; this adapter only renders the returned page.
  */
-export function BaseerServerDataGrid<Row extends object>({ page, loadMoreControl, ...props }: Omit<Parameters<typeof BaseerDataGrid<Row>>[0], "rows"> & { page: BaseerServerGridPage<Row>; loadMoreControl?: ReactNode }) {
+export function BaseerServerDataGrid<Row extends object>({ page, loadMoreControl, ...props }: BaseerServerDataGridProps<Row>) {
   return <><BaseerDataGrid {...props} rows={page.rows} />{page.nextCursor ? loadMoreControl : null}</>;
 }

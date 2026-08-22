@@ -56,7 +56,17 @@ async function mockInternalRegistration(page: Page) {
     if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/configure" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/conversions/publish" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
-    if (url.pathname === "/v1/operations/reports/materials-received") return fulfill(route, { totals: { materialCount: 1, quantity: "12.0000", amount: "96.0000" }, materials: [{ rawMaterialItemId: "item-1", materialNameAr: "مادة الاختبار", materialNameEn: "Test material", unitId: "unit-1", unitNameAr: "حبة", unitNameEn: "Each", quantity: "12.0000", amount: "96.0000", weightedActualUnitPrice: "8.0000" }] });
+    if (url.pathname === "/v1/operations/reports/materials-received") {
+      const firstPage = !url.searchParams.has("cursor");
+      return fulfill(route, {
+        totals: { materialCount: 2, quantity: "24.0000", amount: "216.0000" },
+        materials: firstPage
+          ? [{ rawMaterialItemId: "item-1", materialNameAr: "مادة الاختبار", materialNameEn: "Test material", unitId: "unit-1", unitNameAr: "حبة", unitNameEn: "Each", quantity: "12.0000", amount: "96.0000", weightedActualUnitPrice: "8.0000" }]
+          : [{ rawMaterialItemId: "item-2", materialNameAr: "مادة الاختبار الثانية", materialNameEn: "Second test material", unitId: "unit-2", unitNameAr: "كرتون", unitNameEn: "Carton", quantity: "12.0000", amount: "120.0000", weightedActualUnitPrice: "10.0000" }],
+        nextCursor: firstPage ? "item-1:unit-1" : null,
+        asOf: "2026-08-22T12:00:00.000Z",
+      });
+    }
     if (url.pathname === "/v1/operations/reports/custody-monthly") return fulfill(route, { representativeName: "مندوب الاختبار", months: [{ month: "2026-08", openingBalance: "50.0000", funding: "0", purchases: "8.0000", returns: "0", reversals: "0", closingBalance: "42.0000" }] });
     if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
     if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
@@ -152,12 +162,19 @@ test("operations reports keep their read-only data inside the company and period
 
   await expect(page.getByRole("heading", { name: "تقارير المشتريات والعهدة" })).toBeVisible();
   await expect(page.getByRole("cell", { name: "96.0000" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "مادة الاختبار الثانية" })).toHaveCount(0);
+  await page.getByRole("button", { name: "تحميل المزيد" }).click();
+  await expect(page.getByRole("cell", { name: "مادة الاختبار الثانية" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "تحميل المزيد" })).toHaveCount(0);
   await expect(page.getByText("مندوب الاختبار")).toBeVisible();
   const reportRequests = requested.filter((request) => request.path.startsWith("/v1/operations/reports/")).map((request) => request.path);
   expect(reportRequests).toEqual(expect.arrayContaining([
-    expect.stringMatching(/^\/v1\/operations\/reports\/materials-received\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}$/),
-    expect.stringMatching(/^\/v1\/operations\/reports\/custody-monthly\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}$/),
+    expect.stringMatching(/^\/v1\/operations\/reports\/materials-received\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}&pageSize=50$/),
+    expect.stringMatching(/^\/v1\/operations\/reports\/materials-received\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}&pageSize=50&cursor=item-1%3Aunit-1$/),
+    expect.stringMatching(/^\/v1\/operations\/reports\/custody-monthly\?from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}&pageSize=50$/),
   ]));
+  const accessibility = await new AxeBuilder({ page }).include(".baseer-data-table").analyze();
+  expect(accessibility.violations).toEqual([]);
 });
 
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {

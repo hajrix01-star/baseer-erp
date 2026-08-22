@@ -57,8 +57,20 @@ export class OperationsExecutionService {
         const current = grouped.get(key) ?? { rawMaterialItemId: line.rawMaterialItemId, materialNameAr: line.rawMaterial.nameAr, materialNameEn: line.rawMaterial.nameEn, unitId: line.receivedUnitId, unitNameAr: line.receivedUnit.nameAr, unitNameEn: line.receivedUnit.nameEn, quantity: zero(), amount: zero() };
         current.quantity = current.quantity.plus(line.receivedQuantity); current.amount = money(current.amount.plus(line.lineTotal)); grouped.set(key, current);
       }
-      const materials = [...grouped.values()].sort((left, right) => left.materialNameAr.localeCompare(right.materialNameAr, "ar")).map((line) => ({ ...line, quantity: operationalQuantity(line.quantity).toString(), amount: money(line.amount).toString(), weightedActualUnitPrice: money(line.amount.div(line.quantity)).toString() }));
-      return { totals: { materialCount: materials.length, quantity: operationalQuantity(materials.reduce((sum, line) => sum.plus(line.quantity), zero())).toString(), amount: money(materials.reduce((sum, line) => sum.plus(line.amount), zero())).toString() }, materials };
+      const materials = [...grouped.values()].sort((left, right) => left.materialNameAr.localeCompare(right.materialNameAr, "ar") || left.rawMaterialItemId.localeCompare(right.rawMaterialItemId) || left.unitId.localeCompare(right.unitId)).map((line) => ({ ...line, quantity: operationalQuantity(line.quantity).toString(), amount: money(line.amount).toString(), weightedActualUnitPrice: money(line.amount.div(line.quantity)).toString() }));
+      const cursorIndex = query.cursor ? materials.findIndex((line) => `${line.rawMaterialItemId}:${line.unitId}` === query.cursor) : -1;
+      if (query.cursor && cursorIndex < 0) throw new BadRequestException("The materials report cursor is outside this company and period scope.");
+      const start = cursorIndex + 1;
+      const pageSize = query.pageSize ?? 50;
+      const page = materials.slice(start, start + pageSize);
+      const hasMore = start + page.length < materials.length;
+      const last = page.at(-1);
+      return {
+        totals: { materialCount: materials.length, quantity: operationalQuantity(materials.reduce((sum, line) => sum.plus(line.quantity), zero())).toString(), amount: money(materials.reduce((sum, line) => sum.plus(line.amount), zero())).toString() },
+        materials: page,
+        nextCursor: hasMore && last ? `${last.rawMaterialItemId}:${last.unitId}` : null,
+        asOf: new Date().toISOString(),
+      };
     });
   }
 

@@ -19,7 +19,7 @@ export function BaseerDialog({ open, title, children, language, busy = false, er
   // touch size on small screens through the existing global media rule.
   return createPortal(<div className="daily-sales-dialog-backdrop" role="presentation" onMouseDown={() => !busy && onClose()}>
     <section ref={dialogRef} className={["daily-sales-dialog", "baseer-dialog", `baseer-dialog--${size}`, className].filter(Boolean).join(" ")} role="dialog" aria-modal={isTopmost ? "true" : undefined} aria-hidden={isTopmost ? undefined : true} aria-label={title} onMouseDown={(event) => event.stopPropagation()}>
-      <header className="daily-sales-dialog__header"><h3>{title}</h3><BaseerButton variant="icon" type="button" aria-label={copy.close} disabled={busy} onClick={onClose}>×</BaseerButton></header>
+      <div className="daily-sales-dialog__header"><h3>{title}</h3><BaseerButton variant="icon" type="button" aria-label={copy.close} disabled={busy} onClick={onClose}>×</BaseerButton></div>
       <div className="daily-sales-dialog__body">
         {reserveErrorSpace || visibleError ? <div className={`baseer-dialog__error-slot${visibleError ? " is-visible" : ""}`} role={visibleError ? "alert" : undefined} aria-live="assertive" aria-atomic="true">{visibleError || "\u00a0"}</div> : null}
         {children}

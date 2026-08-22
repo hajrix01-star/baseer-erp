@@ -345,12 +345,16 @@ export const operationsExecutionWorkspaceReceiptSchema = z.object({
 export const operationsReportQuerySchema = z.object({
   from: z.string().date().optional(),
   to: z.string().date().optional(),
+  cursor: z.string().min(1).max(80).optional(),
+  pageSize: z.coerce.number().int().min(10).max(100).default(50),
 }).strict().refine((value) => !value.from || !value.to || value.from <= value.to, "Report start date must not be after end date.");
 
 /** These reports intentionally use posted purchases only; a purchase plan is not a financial fact. */
 export const operationsMaterialsReceivedReportReceiptSchema = z.object({
   totals: z.object({ materialCount: z.number().int().nonnegative(), quantity: z.string(), amount: z.string() }).strict(),
-  materials: z.array(z.object({ rawMaterialItemId: operationsIdSchema, materialNameAr: z.string().min(1).max(160), materialNameEn: z.string().max(160).nullable(), unitId: operationsIdSchema, unitNameAr: z.string().min(1).max(80), unitNameEn: z.string().max(80).nullable(), quantity: z.string(), amount: z.string(), weightedActualUnitPrice: z.string() }).strict()).max(10_000),
+  materials: z.array(z.object({ rawMaterialItemId: operationsIdSchema, materialNameAr: z.string().min(1).max(160), materialNameEn: z.string().max(160).nullable(), unitId: operationsIdSchema, unitNameAr: z.string().min(1).max(80), unitNameEn: z.string().max(80).nullable(), quantity: z.string(), amount: z.string(), weightedActualUnitPrice: z.string() }).strict()).max(100),
+  nextCursor: z.string().min(1).max(80).nullable(),
+  asOf: z.string().datetime(),
 }).strict();
 
 export const operationsCustodyMonthlyReportReceiptSchema = z.object({
