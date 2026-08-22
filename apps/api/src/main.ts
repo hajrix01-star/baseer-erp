@@ -1,5 +1,6 @@
 ﻿import 'reflect-metadata';
 
+import helmet from '@fastify/helmet';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
@@ -15,6 +16,13 @@ async function bootstrap(): Promise<void> {
     AppModule,
     new FastifyAdapter({ logger: false }),
   );
+  // The API does not serve the SPA. Keep CSP/HSTS deployment-controlled until
+  // the TLS edge and SPA asset policy are verified; the remaining Helmet
+  // headers are safe for JSON API responses in every environment.
+  await app.register(helmet, {
+    contentSecurityPolicy: false,
+    hsts: process.env.BASEER_ENABLE_HSTS === 'true',
+  });
   app.setGlobalPrefix('v1');
   // Authenticated ERP receipts must always be read from the live company
   // projection. The client also requests no-store; this response policy keeps
