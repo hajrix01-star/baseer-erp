@@ -16,7 +16,7 @@ import { financeText } from "./finance-copy";
 import { uiCopy } from "./baseer-ui-copy";
 
 type SupplierRecord = { id: string; nameAr: string; nameEn: string | null; phone: string | null; taxNumber: string | null; isTaxRegistered: boolean; supplierType: "PURCHASE" | "EXPENSE"; status: "ACTIVE" | "ARCHIVED"; categoryId: string | null };
-type SupplierForm = { nameAr: string; nameEn: string; phone: string; taxNumber: string; supplierType: "PURCHASE" | "EXPENSE"; categoryId: string; isTaxRegistered: boolean };
+export type SupplierForm = { nameAr: string; nameEn: string; phone: string; taxNumber: string; supplierType: "PURCHASE" | "EXPENSE"; categoryId: string; isTaxRegistered: boolean };
 type InitialFinanceForm = { nameAr: string; nameEn: string; startDate: string; endDate: string; selectedVaults: VaultChoice[]; selectedStandardSupplierKeys: string[] };
 type Configuration = { profile: { baseSeedVersion: number; accountingMode: string; vatAccountingEnabled: boolean; initializedAt: string } | null; periods: Array<{ id: string; nameAr: string; nameEn: string; startDate: string; endDate: string; status: "OPEN" | "CLOSED" | "LOCKED" }>; vaults: Array<{ id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; status: "ACTIVE" | "ARCHIVED"; isSalesChannel: boolean; isPaymentDestination: boolean }>; categories: Array<{ id: string; code: string; nameAr: string; nameEn: string; kind: "PURCHASE" | "EXPENSE" | "SALE"; status: "ACTIVE" | "ARCHIVED"; parentId: string | null; isPosting: boolean }>; suppliers: SupplierRecord[]; standardSuppliers: Array<{ key: string; nameAr: string; nameEn: string }> };
 type FinanceReadiness = { companyId: string; requiredBaseSeedVersion: number; profile: { baseSeedVersion: number; accountingMode: string; vatAccountingEnabled: boolean; vatRateBasisPoints: number; initializedAt: string } | null; openPeriod: { id: string; nameAr: string; nameEn: string; startDate: string; endDate: string; status: "OPEN" } | null; counts: { activeVaults: number; activeAccounts: number; activeCategories: number; activeSuppliers: number }; issues: Array<"FINANCE_NOT_INITIALIZED" | "NO_OPEN_PERIOD" | "NO_ACTIVE_VAULT" | "NO_POSTING_CATEGORY">; standardSuppliers: Array<{ key: string; nameAr: string; nameEn: string }> };
@@ -27,6 +27,7 @@ const BASE_FINANCE_SEED_VERSION = 8;
 const vaultChoices: Array<{ value: VaultChoice; nameAr: string; nameEn: string }> = [{ value: "CASH", nameAr: "نقد", nameEn: "Cash" }, { value: "BANK", nameAr: "بنك", nameEn: "Bank" }, { value: "HUNGERSTATION", nameAr: "هنقرستيشن", nameEn: "HungerStation" }, { value: "JAHEZ", nameAr: "جاهز", nameEn: "Jahez" }, { value: "KEETA", nameAr: "كيتا", nameEn: "Keeta" }];
 const dateValue = (offset = 0) => { const date = new Date(); date.setDate(date.getDate() + offset); return date.toISOString().slice(0, 10); };
 const LazyBaseerDatePicker = lazy(async () => ({ default: (await import("./baseer-date-picker")).BaseerDatePicker }));
+const LazyFinanceSupplierFormDialog = lazy(async () => ({ default: (await import("./finance-supplier-form-dialog")).FinanceSupplierFormDialog }));
 
 /** The calendar control is fetched only when the finance setup form renders. */
 function BaseerDatePicker(props: ComponentProps<typeof LazyBaseerDatePicker>) {
@@ -79,10 +80,10 @@ export function FinanceSetupWorkspace({ language, view = "setup" }: { language: 
     setSupplierForm(supplier ? { nameAr: supplier.nameAr, nameEn: supplier.nameEn ?? "", phone: supplier.phone ?? "", taxNumber: supplier.taxNumber ?? "", supplierType: supplier.supplierType, categoryId: supplier.categoryId ?? "", isTaxRegistered: supplier.isTaxRegistered } : { nameAr: "", nameEn: "", phone: "", taxNumber: "", supplierType: "PURCHASE", categoryId: "", isTaxRegistered: false });
     setSupplierDialogOpen(true);
   };
-  const saveSupplier = async (event: React.FormEvent) => {
-    event.preventDefault(); const current = activeSession(); if (!current || saving) return; if (!supplierForm.categoryId) { setMessage({ kind: "error", text: text.selectCategory }); return; } setSaving(true);
+  const saveSupplier = async (nextForm: SupplierForm) => {
+    const current = activeSession(); if (!current || saving) return; if (!nextForm.categoryId) { setMessage({ kind: "error", text: text.selectCategory }); return; } setSaving(true);
     try {
-      const payload = { nameAr: supplierForm.nameAr, nameEn: supplierForm.nameEn || undefined, phone: supplierForm.phone || undefined, taxNumber: supplierForm.taxNumber || undefined, supplierType: supplierForm.supplierType, categoryId: supplierForm.categoryId, isTaxRegistered: supplierForm.isTaxRegistered, idempotencyKey: requestId() };
+      const payload = { nameAr: nextForm.nameAr, nameEn: nextForm.nameEn || undefined, phone: nextForm.phone || undefined, taxNumber: nextForm.taxNumber || undefined, supplierType: nextForm.supplierType, categoryId: nextForm.categoryId, isTaxRegistered: nextForm.isTaxRegistered, idempotencyKey: requestId() };
       await api(current, editingSupplier ? "/finance/master-data/suppliers/update" : "/finance/master-data/suppliers", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editingSupplier ? { ...payload, supplierId: editingSupplier.id } : payload) });
       setMessage({ kind: "success", text: text.supplierSaved }); setSupplierDialogOpen(false); setEditingSupplier(null); await load();
     } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.suppliers) }); } finally { setSaving(false); }
@@ -93,7 +94,7 @@ export function FinanceSetupWorkspace({ language, view = "setup" }: { language: 
     catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.archive) }); } finally { setSaving(false); }
   };
   if (!session) return <DailySalesSignIn language={language} />;
-  if (view === "suppliers") return <SuppliersWorkspacePanel language={language} configuration={configuration} loading={!configuration} saving={saving} message={message} form={supplierForm} editingSupplier={editingSupplier} supplierDetails={supplierDetails} dialogOpen={supplierDialogOpen} archiveTarget={archiveTarget} onOpen={openSupplierDialog} onOpenDetails={setSupplierDetails} onClose={() => { setSupplierDialogOpen(false); setEditingSupplier(null); }} onCloseDetails={() => setSupplierDetails(null)} onChange={setSupplierForm} onSave={saveSupplier} onArchiveRequest={setArchiveTarget} onArchiveCancel={() => setArchiveTarget(null)} onArchive={archiveSupplier} />;
+  if (view === "suppliers") return <SuppliersWorkspacePanel language={language} configuration={configuration} loading={!configuration} saving={saving} message={message} form={supplierForm} editingSupplier={editingSupplier} supplierDetails={supplierDetails} dialogOpen={supplierDialogOpen} archiveTarget={archiveTarget} onOpen={openSupplierDialog} onOpenDetails={setSupplierDetails} onClose={() => { setSupplierDialogOpen(false); setEditingSupplier(null); }} onCloseDetails={() => setSupplierDetails(null)} onSave={saveSupplier} onArchiveRequest={setArchiveTarget} onArchiveCancel={() => setArchiveTarget(null)} onArchive={archiveSupplier} />;
   if (!readiness) return <section className="daily-sales-workspace finance-setup-workspace" aria-label={text.setup}>
     <header className="administration-section-heading"><div><p className="eyebrow">{text.finance}</p><h3>{text.setup}</h3></div></header>
     <BaseerCard>
@@ -241,7 +242,6 @@ function SuppliersWorkspacePanel({
   onOpenDetails,
   onClose,
   onCloseDetails,
-  onChange,
   onSave,
   onArchiveRequest,
   onArchiveCancel,
@@ -261,8 +261,7 @@ onOpen: (supplier?: SupplierRecord) => void;
   onOpenDetails: (supplier: SupplierRecord) => void;
   onClose: () => void;
   onCloseDetails: () => void;
-  onChange: (value: SupplierForm) => void;
-  onSave: (event: React.FormEvent) => Promise<void>;
+  onSave: (value: SupplierForm) => Promise<void>;
   onArchiveRequest: (supplier: SupplierRecord) => void;
   onArchiveCancel: () => void;
   onArchive: () => Promise<void>;
@@ -300,17 +299,7 @@ onOpen: (supplier?: SupplierRecord) => void;
     <BaseerDialog open={supplierDetails !== null} title={supplierDetails ? displayName(language, supplierDetails) : text.supplier} language={language} busy={saving} onClose={onCloseDetails} footer={supplierDetails ? <><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => { const supplier = supplierDetails; onCloseDetails(); onOpen(supplier); }}>{text.edit}</BaseerButton>{supplierDetails.status === "ACTIVE" ? <BaseerButton type="button" variant="danger" disabled={saving} onClick={() => { onArchiveRequest(supplierDetails); onCloseDetails(); }}>{text.archive}</BaseerButton> : null}</> : null}>
       {supplierDetails ? <div className="administration-list"><article><span>{text.invoiceType}: {supplierDetails.supplierType === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice}</span><span>{text.defaultCategory}: {supplierDetails.categoryId ? categoryNames.get(supplierDetails.categoryId) ?? "—" : "—"}</span><span>{text.phone}: {supplierDetails.phone ?? "—"}</span><span>{text.taxNumber}: {supplierDetails.taxNumber ?? "—"}</span><span>{text.taxRegistered}: {supplierDetails.isTaxRegistered ? "✓" : "—"}</span><span>{text.status}: {supplierDetails.status === "ACTIVE" ? text.active : text.archive}</span></article></div> : null}
     </BaseerDialog>
-    <BaseerDialog open={dialogOpen} title={`${editingSupplier ? text.edit : text.add} ${text.supplier}`} language={language} busy={saving} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={saving} onClick={onClose}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="baseer-supplier-form" variant="primary" disabled={saving}>{saving ? text.saving : text.save}</BaseerButton></>}>
-      <form id="baseer-supplier-form" className="administration-form" onSubmit={(event) => void onSave(event)}>
-        <label>{text.nameArabic}<input required value={form.nameAr} onChange={(event) => onChange({ ...form, nameAr: event.target.value })} /></label>
-        <label>{text.nameEnglish}<input value={form.nameEn} onChange={(event) => onChange({ ...form, nameEn: event.target.value })} /></label>
-        <label>{text.phone}<input inputMode="tel" value={form.phone} onChange={(event) => onChange({ ...form, phone: event.target.value })} /></label>
-        <label>{text.taxNumber}<input value={form.taxNumber} onChange={(event) => onChange({ ...form, taxNumber: event.target.value })} /></label>
-        <label>{text.invoiceType}<select value={form.supplierType} onChange={(event) => onChange({ ...form, supplierType: event.target.value as SupplierForm["supplierType"], categoryId: "" })}><option value="PURCHASE">{text.purchaseInvoice}</option><option value="EXPENSE">{text.expenseInvoice}</option></select></label>
-        <label>{text.defaultCategory}<select required value={form.categoryId} onChange={(event) => onChange({ ...form, categoryId: event.target.value })}><option value="">{text.selectCategory}</option>{categoriesForType.map((category) => <option value={category.id} key={category.id}>{displayName(language, category)}</option>)}</select></label>
-        <label><input type="checkbox" checked={form.isTaxRegistered} onChange={(event) => onChange({ ...form, isTaxRegistered: event.target.checked })} /> {text.taxRegistered}</label>
-      </form>
-    </BaseerDialog>
+    <Suspense fallback={null}><LazyFinanceSupplierFormDialog open={dialogOpen} language={language} busy={saving} value={form} editing={Boolean(editingSupplier)} categories={configuration?.categories ?? []} onClose={onClose} onSubmit={onSave} /></Suspense>
     <BaseerConfirmDialog open={archiveTarget !== null} title={text.archive} message={archiveTarget ? `${text.archive}: ${displayName(language, archiveTarget)}. ${text.archiveConfirmation}` : ""} confirmLabel={text.archive} destructive busy={saving} language={language} onCancel={onArchiveCancel} onConfirm={() => void onArchive()} />
   </section>;
 }
