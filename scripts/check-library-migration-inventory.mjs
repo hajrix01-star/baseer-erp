@@ -20,6 +20,12 @@ const targetEntries = [
   ...targetsFor('chart', /BaseerChart|echarts/),
 ].sort((left, right) => left.id.localeCompare(right.id));
 
+// Classifications are reviewed decisions, not generated data.  Preserve them
+// when refreshing the inventory so that adding one discovered target cannot
+// silently reset already-approved module closure decisions to "pending".
+const existingManifestForWrite = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : null;
+const existingTargetDecisions = existingManifestForWrite?.targets ?? {};
+
 const inventory = {
   manifestVersion: 1,
   sourceRoot,
@@ -54,7 +60,11 @@ const defaultDecision = (entry) => entry.file.startsWith('baseer-') ? 'central-a
 const generatedManifest = {
   manifestVersion: 1,
   generatedBy: 'scripts/check-library-migration-inventory.mjs',
-  targets: Object.fromEntries(targetEntries.map((entry) => [entry.id, { kind: entry.kind, file: entry.file, decision: defaultDecision(entry) }])),
+  targets: Object.fromEntries(targetEntries.map((entry) => [entry.id, {
+    kind: entry.kind,
+    file: entry.file,
+    decision: existingTargetDecisions[entry.id]?.decision ?? defaultDecision(entry),
+  }])),
 };
 
 if (writeManifest) {

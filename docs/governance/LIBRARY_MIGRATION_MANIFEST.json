@@ -67,6 +67,16 @@
       "file": "operations-asset-register-dialog.tsx",
       "decision": "pending-module-closure"
     },
+    "editable-date:operations-internal-registration-entry.tsx": {
+      "kind": "editable-date",
+      "file": "operations-internal-registration-entry.tsx",
+      "decision": "migrated-operations-wave-1"
+    },
+    "editable-date:operations-internal-registration-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "operations-internal-registration-workspace.tsx",
+      "decision": "migrated-operations-wave-1"
+    },
     "editable-date:purchase-expense-credit-panel.tsx": {
       "kind": "editable-date",
       "file": "purchase-expense-credit-panel.tsx",
