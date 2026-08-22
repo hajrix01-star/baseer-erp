@@ -1,6 +1,6 @@
 # Baseer — خطة إغلاق تحول المكتبات
 
-**الحالة:** معتمدة للتنفيذ في بيئة تجريبية.
+**الحالة:** `Closed locally` — اكتمل التنفيذ والإغلاق في 2026-08-23.
 **السلطة:** [سلطة تسليم بصير](governance/CURRENT_DELIVERY_AUTHORITY.md) و[سلطة اعتماد المكتبات](governance/LIBRARY_ADOPTION_OPERATING_AUTHORITY.md) وسجل الجودة.
 **الهدف:** لا يبقى استعمال توافق قديم (*legacy compatibility primitive*) أو قرار غير مصنف. كل استعمال ينتهي بحالة واحدة موثقة: **محوّل** أو **خفيف مقصود** أو **مستثنى بسبب محدد ومدة مراجعة**.
 
@@ -239,7 +239,7 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 
 أُغلق مركز القرار والسياق بمرجع التنفيذ `97c99bf` وسجل الإثبات
 [Decision Intelligence library-migration verification](governance/DECISION_INTELLIGENCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
-الموديول النشط الأخير في الخطة هو مركز القيادة.
+اكتمل مركز القرار، ثم أُغلق مركز القيادة بوصفه الموديول الأخير في الخطة.
 
 ### 5.6 مركز القرار والسياق
 
@@ -274,6 +274,19 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 | موجز النشاط | timeline وactivity brief |
 
 لا يبنى رسم أو Query إضافي دون مصدر خادمي وحالة عمل واضحة.
+
+#### سجل إغلاق مركز القيادة
+
+**الحالة:** `Closed` — 2026-08-23، بمرجع التنفيذ `9742d09` وتنظيف
+التوافق النهائي `e547134`، وسجل الإثبات
+[Command Center library-migration verification](governance/COMMAND_CENTER_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
+
+- القسم الحي الوحيد هو تقويم تشغيل read-only عبر Query مقيدة بالشركة والجلسة
+  والفترة والصلاحية، مع Abort والتحقق من receipt.
+- المبلغ يعرض Decimal string من الخادم بلا Number أو تجميع؛ لا Chart/DataGrid
+  بلا حاجة، والأقسام الثلاثة الأخرى placeholders بلا instance قديمة.
+- Command E2E `6/6` والمجموعة الكاملة `109 passed` مع `1 intentional skip`؛
+  HTTP/RLS/build/budget/audit Pass.
 
 ### بوابة إغلاق الموديول عبر المتصفح
 
@@ -348,3 +361,10 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 3. كل جدول/بحث/تاريخ/رسم يحمل قراراً موثقاً.
 4. manifest يساوي سجل الإغلاق بعدد targets: صفر `unclassified`، صفر legacy consumer غير مسجل، وصفر direct library import.
 5. الشجرة نظيفة، SHA محدد، الاختبارات والميزانية وaudit/license/SBOM ناجحة، ولا توجد primitive قديمة بلا مستهلك معروف.
+
+### قرار الإغلاق النهائي
+
+استوفيت المعايير الخمسة في 2026-08-23. manifest بلا unclassified أو stale أو
+pending، وحُذف آخر compatibility primitive غير المستخدم، وثُبتت القرارات
+الخفيفة المقصودة. المرجع الحاكم هو
+[سجل إغلاق برنامج التحول](governance/LIBRARY_MIGRATION_PROGRAM_CLOSURE_RECORD_2026-08-23.md).
