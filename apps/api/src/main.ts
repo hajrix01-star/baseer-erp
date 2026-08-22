@@ -16,11 +16,20 @@ async function bootstrap(): Promise<void> {
     AppModule,
     new FastifyAdapter({ logger: false }),
   );
-  // The API does not serve the SPA. Keep CSP/HSTS deployment-controlled until
-  // the TLS edge and SPA asset policy are verified; the remaining Helmet
-  // headers are safe for JSON API responses in every environment.
+  // The API does not serve the SPA. Report CSP violations without blocking a
+  // response while the TLS edge and SPA asset policy are verified. HSTS stays
+  // deployment-controlled because it is only safe after TLS is confirmed.
   await app.register(helmet, {
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      reportOnly: true,
+      directives: {
+        baseUri: ["'none'"],
+        defaultSrc: ["'none'"],
+        formAction: ["'none'"],
+        frameAncestors: ["'none'"],
+        objectSrc: ["'none'"],
+      },
+    },
     hsts: process.env.BASEER_ENABLE_HSTS === 'true',
   });
   app.setGlobalPrefix('v1');
