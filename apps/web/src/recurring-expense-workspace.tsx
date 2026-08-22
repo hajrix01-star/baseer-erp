@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
@@ -23,36 +23,27 @@ type PaymentMethod = "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "
 type PaymentAllocationDraft = { id: string; vaultId: string; paymentMethod: PaymentMethod | ""; grossAmount: string };
 type IndividualPaymentForm = { profileId: string; paymentDate: string; coverageYear: string; coverageStartMonth: string; grossAmount: string; isTaxable: boolean; supplierInvoiceNumber: string; supplierInvoiceMissingReason: string; supplierInvoiceDate: string; allocations: PaymentAllocationDraft[] };
 export type Profile = { id: string; nameAr: string; nameEn: string; supplierId: string | null; supplierNameAr: string | null; supplierNameEn: string | null; categoryId: string; categoryNameAr: string; categoryNameEn: string; serviceNumber: string | null; expectedAmount: string; intervalMonths: number; nextReminderDate: string; defaultVaultId: string | null; allowAmountOverride: boolean; status: "ACTIVE" | "ARCHIVED"; notes: string | null };
-type ProfileForm = { nameAr: string; nameEn: string; categoryId: string; supplierId: string; serviceNumber: string; expectedAmount: string; intervalMonths: string; nextReminderDate: string; defaultVaultId: string; allowAmountOverride: boolean; notes: string };
+export type ProfileForm = { nameAr: string; nameEn: string; categoryId: string; supplierId: string; serviceNumber: string; expectedAmount: string; intervalMonths: "1" | "2" | "3" | "4" | "6" | "12"; nextReminderDate: string; defaultVaultId: string; allowAmountOverride: boolean; notes: string };
 const money = (value: string) => formatNumber(value);
 const emptyProfile = (businessDate: string): ProfileForm => ({ nameAr: "", nameEn: "", categoryId: "", supplierId: "", serviceNumber: "", expectedAmount: "", intervalMonths: "1", nextReminderDate: businessDate, defaultVaultId: "", allowAmountOverride: true, notes: "" });
 const coverageStartMonth = (profile: Profile, date: string) => String(Math.floor((Number(date.slice(5, 7)) - 1) / profile.intervalMonths) * profile.intervalMonths + 1);
 const paymentMethodLabel = (text: ReturnType<typeof financeText>, method: PaymentMethod) => ({ CASH: text.cash, BANK_TRANSFER: text.bankTransfer, BANK_CARD: text.bankCard, BANK_PAYMENT: text.bankPayment, APP: text.app }[method]);
+const LazyRecurringExpenseProfileDialog = lazy(async () => ({ default: (await import("./recurring-expense-profile-dialog")).RecurringExpenseProfileDialog }));
 
 export function RecurringExpenseWorkspace({ language, configuration, profiles, businessDate, reload }: { language: "ar" | "en"; configuration: RecurringExpenseConfiguration; profiles: Profile[]; businessDate: string; reload: () => Promise<void> }) {
   const text = financeText(language);
   const session = activeSession();
   const [creating, setCreating] = useState(false);
-  const [profileForm, setProfileForm] = useState<ProfileForm>(() => emptyProfile(businessDate));
   const [archiveTarget, setArchiveTarget] = useState<Profile | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "idle" | "error" | "success"; text: string }>({ type: "idle", text: "" });
-  const categories = useMemo(() => configuration?.categories.filter((item) => item.status === "ACTIVE" && item.kind === "EXPENSE") ?? [], [configuration]);
-  const suppliers = useMemo(() => configuration?.suppliers.filter((item) => item.status === "ACTIVE") ?? [], [configuration]);
-  const vaults = useMemo(() => configuration?.vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination) ?? [], [configuration]);
   const dueCount = profiles.filter((profile) => profile.status === "ACTIVE" && profile.nextReminderDate.slice(0, 10) <= businessDate).length;
-  const updateProfile = <K extends keyof ProfileForm>(key: K, value: ProfileForm[K]) => setProfileForm((current) => ({ ...current, [key]: value }));
-  const chooseCategory = (categoryId: string) => {
-    const category = categories.find((item) => item.id === categoryId);
-    setProfileForm((current) => ({ ...current, categoryId, supplierId: category?.suggestedSupplierId ?? "" }));
-  };
-  const saveProfile = async (event: React.FormEvent) => {
-    event.preventDefault(); const current = activeSession(); if (!current || saving) return;
-    if (!profileForm.nameAr.trim() || !profileForm.categoryId || !profileForm.expectedAmount || !profileForm.nextReminderDate) { setMessage({ type: "error", text: text.recurringDefinition }); return; }
+  const saveProfile = async (profileForm: ProfileForm) => {
+    const current = activeSession(); if (!current || saving) return;
     setSaving(true); setMessage({ type: "idle", text: "" });
     try {
       await api(current, "/finance/recurring-expenses", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nameAr: profileForm.nameAr.trim(), ...(profileForm.nameEn.trim() ? { nameEn: profileForm.nameEn.trim() } : {}), categoryId: profileForm.categoryId, ...(profileForm.supplierId ? { supplierId: profileForm.supplierId } : {}), ...(profileForm.serviceNumber.trim() ? { serviceNumber: profileForm.serviceNumber.trim() } : {}), expectedAmount: profileForm.expectedAmount, intervalMonths: Number(profileForm.intervalMonths), nextReminderDate: profileForm.nextReminderDate, ...(profileForm.defaultVaultId ? { defaultVaultId: profileForm.defaultVaultId } : {}), allowAmountOverride: profileForm.allowAmountOverride, ...(profileForm.notes.trim() ? { notes: profileForm.notes.trim() } : {}), idempotencyKey: requestId() }) });
-      setProfileForm(emptyProfile(businessDate)); setCreating(false); setMessage({ type: "success", text: text.recurringSaved }); await reload();
+      setCreating(false); setMessage({ type: "success", text: text.recurringSaved }); await reload();
     } catch (error) { setMessage({ type: "error", text: presentBaseerApiError(error, language, text.recurringDefinition) }); } finally { setSaving(false); }
   };
   const archive = async (profile: Profile) => { const current = activeSession(); if (!current || saving) return; setSaving(true); try { await api(current, "/finance/recurring-expenses/archive", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profileId: profile.id, idempotencyKey: requestId() }) }); setMessage({ type: "success", text: text.archiveSuccess }); await reload(); } catch (error) { setMessage({ type: "error", text: presentBaseerApiError(error, language, text.archive) }); } finally { setSaving(false); } };
@@ -60,21 +51,7 @@ export function RecurringExpenseWorkspace({ language, configuration, profiles, b
   return <section className="recurring-expense-workspace" aria-label={text.recurringExpenses}>
     <header className="recurring-expense-heading"><div><h3>{text.recurringTitle}</h3><span>{dueCount ? dueCount + " " + text.due : text.allTracked}</span></div><BaseerButton type="button" variant="primary" onClick={() => setCreating(true)}>{text.addRecurring}</BaseerButton></header>
     {message.type !== "idle" && <p className={`daily-sales-message ${message.type}`}>{message.text}</p>}
-    <BaseerDialog open={creating} title={text.addRecurring} language={language} busy={saving} onClose={() => setCreating(false)} footer={<><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => setCreating(false)}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="recurring-profile-form" variant="primary" disabled={saving}>{saving ? text.saving : text.saveRecurring}</BaseerButton></>}>
-      <form id="recurring-profile-form" className="administration-form" onSubmit={(event) => void saveProfile(event)}>
-        <label>{text.nameArabic}<input required value={profileForm.nameAr} placeholder={language === "ar" ? "كهرباء الفرع" : "Branch electricity"} onChange={(event) => updateProfile("nameAr", event.target.value)} /></label>
-        <label>{text.nameEnglish}<input value={profileForm.nameEn} placeholder="Branch electricity" onChange={(event) => updateProfile("nameEn", event.target.value)} /></label>
-        <label>{text.financialCategory}<select required value={profileForm.categoryId} onChange={(event) => chooseCategory(event.target.value)}><option value="">{text.selectCategory}</option>{categories.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
-        <label>{text.supplier}<select value={profileForm.supplierId} onChange={(event) => updateProfile("supplierId", event.target.value)}><option value="">{text.optional}</option>{suppliers.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
-        <label>{text.serviceNumber}<input value={profileForm.serviceNumber} placeholder={text.optional} onChange={(event) => updateProfile("serviceNumber", event.target.value)} /></label>
-        <label>{text.expectedAmount} (SAR)<input required inputMode="decimal" value={profileForm.expectedAmount} placeholder={text.enterAmount} onChange={(event) => updateProfile("expectedAmount", event.target.value)} /></label>
-        <label>{text.paymentCycle}<select value={profileForm.intervalMonths} onChange={(event) => updateProfile("intervalMonths", event.target.value)}>{[1,2,3,4,6,12].map((month) => <option key={month} value={month}>{month === 1 ? text.monthly : text.everyMonths(month)}</option>)}</select></label>
-        <label>{text.nextDueDate}<BaseerDatePicker language={language} label={text.nextDueDate} value={profileForm.nextReminderDate} onChange={(value) => updateProfile("nextReminderDate", value)} /></label>
-        <label>{text.defaultPaymentChannel}<select value={profileForm.defaultVaultId} onChange={(event) => updateProfile("defaultVaultId", event.target.value)}><option value="">{text.setAtPayment}</option>{vaults.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
-        <label><input type="checkbox" checked={profileForm.allowAmountOverride} onChange={(event) => updateProfile("allowAmountOverride", event.target.checked)} /> {text.allowAmountOverride}</label>
-        <label style={{ gridColumn: "1 / -1" }}>{text.notes}<input value={profileForm.notes} placeholder={text.optional} onChange={(event) => updateProfile("notes", event.target.value)} /></label>
-      </form>
-    </BaseerDialog>
+    <Suspense fallback={null}><LazyRecurringExpenseProfileDialog open={creating} language={language} busy={saving} configuration={configuration} businessDate={businessDate} onClose={() => setCreating(false)} onSubmit={saveProfile} /></Suspense>
     <div className="recurring-profile-list">{profiles.filter((profile) => profile.status === "ACTIVE").map((profile) => <BaseerCard key={profile.id}><article className="recurring-profile"><div><span className="eyebrow">{profile.intervalMonths === 1 ? text.monthly : text.everyMonths(profile.intervalMonths)}</span><h4>{displayName(language, profile)}</h4><p>{displayName(language, { nameAr: profile.categoryNameAr, nameEn: profile.categoryNameEn })}{profile.supplierNameAr ? ` · ${displayName(language, { nameAr: profile.supplierNameAr, nameEn: profile.supplierNameEn })}` : ""}{profile.serviceNumber ? ` · ${profile.serviceNumber}` : ""}</p></div><div className="recurring-profile__amount"><span>{text.expected}</span><strong>SAR {money(profile.expectedAmount)}</strong><small>{text.dueDate} {profile.nextReminderDate}</small></div><div className="recurring-profile__actions"><BaseerButton type="button" variant="primary" onClick={() => setArchiveTarget(profile)}>{text.archive}</BaseerButton></div></article></BaseerCard>)}</div>
     {!profiles.filter((profile) => profile.status === "ACTIVE").length && <BaseerCard><p className="empty-results">{text.noRecurringDescription}</p></BaseerCard>}
   <BaseerConfirmDialog open={archiveTarget !== null} title={text.archive} message={archiveTarget ? `${text.archive}: ${displayName(language, archiveTarget)}. ${text.archiveConfirmation}` : ""} confirmLabel={text.archive} destructive busy={saving} language={language} onCancel={() => setArchiveTarget(null)} onConfirm={() => { if (archiveTarget) void archive(archiveTarget).finally(() => setArchiveTarget(null)); }} /></section>;
