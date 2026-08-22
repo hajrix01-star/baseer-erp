@@ -1,4 +1,5 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
 const permissions = [
@@ -628,6 +629,18 @@ test("leave register requests server sorting when its period header changes", as
   await expect.poll(() => requested.filter((request) => request.startsWith("GET /v1/hr/leaves")).at(-1) ?? "").toContain("sortDirection=asc");
   await expect(page.getByRole("columnheader", { name: "الفترة" })).toHaveAttribute("aria-sort", "ascending");
 });
+
+for (const language of ["ar", "en"] as const) {
+  test(`leave register has no automated WCAG A or AA violations in ${language}`, async ({ page }) => {
+    const requested: string[] = [];
+    await mockHr(page, requested, { language });
+
+    await page.goto("/#module=hr&section=2");
+    const report = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+
+    expect(report.violations).toEqual([]);
+  });
+}
 
 test("leave employee filter rejects a stale employee result after company switching", async ({ page }) => {
   const requested: string[] = [];
