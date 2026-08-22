@@ -15,6 +15,7 @@ const OperationsPurchasePosComposer = LazyOperationsPurchasePosComposer as unkno
 const LazyOperationsCustodyReturnDialog = lazy(async () => ({ default: (await import("./operations-custody-return-dialog")).OperationsCustodyReturnDialog }));
 const LazyOperationsPurchaseRequestDialog = lazy(async () => ({ default: (await import("./operations-purchase-request-dialog")).OperationsPurchaseRequestDialog }));
 const LazyOperationsPurchaseCompletionDialog = lazy(async () => ({ default: (await import("./operations-purchase-completion-dialog")).OperationsPurchaseCompletionDialog }));
+const LazyOperationsPurchaseCancelDialog = lazy(async () => ({ default: (await import("./operations-purchase-cancel-dialog")).OperationsPurchaseCancelDialog }));
 
 type Language = "ar" | "en";
 type Unit = { id: string; nameAr: string; nameEn: string | null; dimension: "COUNT" | "MASS" | "VOLUME" | "PACKAGE" };
@@ -39,7 +40,7 @@ export function OperationsExecutionWorkspace({ language }: { language: Language 
   const [message, setMessage] = useState<{ kind: "success" | "error"; text: string } | null>(null);
   const [dialog, setDialog] = useState<"request" | "receipt" | "return" | "cancel" | null>(null);
   const [receiptInitialRequestId, setReceiptInitialRequestId] = useState("");
-  const [target, setTarget] = useState<PurchaseRequest | null>(null); const [reason, setReason] = useState("");
+  const [target, setTarget] = useState<PurchaseRequest | null>(null);
   const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) { setLoading(false); return; } setLoading(true); try { const [meta, workspace] = await Promise.all([api<Catalog>(current, "/operations/catalog"), api<Execution>(current, "/operations/execution-workspace")]); setCatalog(meta); setExecution(workspace); } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, t.failed) }); } finally { setLoading(false); } }, [language, t.failed]);
   useEffect(() => { void load(); }, [load]);
   const save = async (path: string, payload: Record<string, unknown>) => { if (!session) return; setSaving(true); setMessage(null); try { await api(session, path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, idempotencyKey: requestId() }) }); setMessage({ kind: "success", text: t.saved }); setDialog(null); await load(); } catch (error) { setMessage({ kind: "error", text: presentBaseerApiError(error, language, t.failed) }); } finally { setSaving(false); } };
@@ -63,6 +64,6 @@ export function OperationsExecutionWorkspace({ language }: { language: Language 
     <Suspense fallback={null}><LazyOperationsPurchaseRequestDialog open={dialog === "request"} language={language} busy={saving} materials={raw} units={catalog?.units ?? []} defaultRepresentative={execution?.custody.representativeName ?? ""} onClose={() => setDialog(null)} onSubmit={(value) => save("/operations/purchase-requests", value)} /></Suspense>
     <Suspense fallback={null}><LazyOperationsPurchaseCompletionDialog open={dialog === "receipt"} language={language} busy={saving} requests={openRequests} materials={raw} units={catalog?.units ?? []} initialRequestId={receiptInitialRequestId} onClose={() => setDialog(null)} onSubmit={(value) => save("/operations/purchase-requests/complete", value)} /></Suspense>
     <Suspense fallback={null}><LazyOperationsCustodyReturnDialog open={dialog === "return"} language={language} busy={saving} requests={openRequests.filter((request) => request.executionKind === "DELEGATED")} onClose={() => setDialog(null)} onSubmit={(value) => save("/operations/custody/returns", { requestId: value.requestId || undefined, businessDate: value.businessDate, amount: value.amount, notes: value.notes })} /></Suspense>
-    <BaseerFormDialog open={dialog === "cancel"} title={t.cancel} language={language} formId="purchase-cancel" submitLabel={t.cancel} busy={saving} onClose={() => setDialog(null)}><form id="purchase-cancel" className="administration-form" onSubmit={(event) => { event.preventDefault(); if (target) void save("/operations/purchase-requests/cancel", { requestId: target.id, reason }); }}><label>{t.cancelReason}<input required value={reason} onChange={(event) => setReason(event.target.value)} /></label></form></BaseerFormDialog>
+    <Suspense fallback={null}><LazyOperationsPurchaseCancelDialog open={dialog === "cancel"} language={language} busy={saving} onClose={() => setDialog(null)} onSubmit={(reason) => target ? save("/operations/purchase-requests/cancel", { requestId: target.id, reason }) : undefined} /></Suspense>
   </section>;
 }
