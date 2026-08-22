@@ -27,6 +27,11 @@
       "file": "daily-sales-closing-dialog.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
+    "editable-date:decision-intelligence-workspace-content.tsx": {
+      "kind": "editable-date",
+      "file": "decision-intelligence-workspace-content.tsx",
+      "decision": "migrated-decision-central-date-picker-lazy-content"
+    },
     "editable-date:expenses-obligations-workspace.tsx": {
       "kind": "editable-date",
       "file": "expenses-obligations-workspace.tsx",
@@ -182,10 +187,10 @@
       "file": "daily-sales-sign-in.tsx",
       "decision": "migrated-finance-central-auth-form"
     },
-    "form:decision-intelligence-workspace.tsx": {
+    "form:decision-intelligence-workspace-content.tsx": {
       "kind": "form",
-      "file": "decision-intelligence-workspace.tsx",
-      "decision": "pending-module-closure"
+      "file": "decision-intelligence-workspace-content.tsx",
+      "decision": "migrated-decision-central-validated-form-lazy-content"
     },
     "form:expenses-obligations-workspace.tsx": {
       "kind": "form",
@@ -356,6 +361,11 @@
       "kind": "query",
       "file": "baseer-company-read-query.tsx",
       "decision": "central-adapter"
+    },
+    "query:decision-intelligence-workspace-content.tsx": {
+      "kind": "query",
+      "file": "decision-intelligence-workspace-content.tsx",
+      "decision": "migrated-decision-section-scoped-company-session-query"
     },
     "query:hr-overview-workspace.tsx": {
       "kind": "query",

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
+import { IdempotencyPayloadMismatchError } from '../core-controls/idempotency.service.js';
 import { RequestContext } from '../observability/request-context.js';
 
 type ErrorCode = ApiErrorReceipt['error']['code'];
@@ -22,7 +23,10 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const context = host.switchToHttp();
     const response = context.getResponse<FastifyReply>();
     const request = context.getRequest<FastifyRequest>();
-    const status = exception instanceof HttpException
+    const idempotencyMismatch = exception instanceof IdempotencyPayloadMismatchError;
+    const status = idempotencyMismatch
+      ? HttpStatus.CONFLICT
+      : exception instanceof HttpException
       ? exception.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
     const correlationId = RequestContext.correlationId()
@@ -30,7 +34,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const retryAfterSeconds = status === HttpStatus.TOO_MANY_REQUESTS
       ? this.retryAfterSeconds(response)
       : undefined;
-    const [code, retry] = this.classify(status, retryAfterSeconds);
+    const [code, retry] = this.classify(status, retryAfterSeconds, idempotencyMismatch);
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       // Keep the response safe, but preserve a correlation-bound diagnosis in
       // the server log. Without this, an interceptor can record its pre-filter
@@ -55,7 +59,9 @@ export class ApiExceptionFilter implements ExceptionFilter {
   private classify(
     status: number,
     retryAfterSeconds?: number,
+    idempotencyMismatch = false,
   ): [ErrorCode, Retry] {
+    if (idempotencyMismatch) return ['IDEMPOTENCY_MISMATCH', { kind: 'do-not-retry' }];
     if (status === HttpStatus.BAD_REQUEST) return ['VALIDATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.UNAUTHORIZED) return ['AUTHENTICATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.FORBIDDEN) return ['AUTHORIZATION_DENIED', { kind: 'do-not-retry' }];

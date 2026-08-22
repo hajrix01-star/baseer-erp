@@ -9,6 +9,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
 import { catchError, finalize, throwError } from 'rxjs';
 
+import { IdempotencyPayloadMismatchError } from '../core-controls/idempotency.service.js';
 import { ObservabilityService } from './observability.service.js';
 import { RequestContext } from './request-context.js';
 
@@ -35,7 +36,9 @@ export class RequestObservabilityInterceptor implements NestInterceptor {
         this.observability.recordRequest({
           method: request.method,
           route,
-          statusCode: error instanceof HttpException ? error.getStatus() : 500,
+          statusCode: error instanceof IdempotencyPayloadMismatchError
+            ? 409
+            : error instanceof HttpException ? error.getStatus() : 500,
           elapsedMilliseconds: performance.now() - startedAt,
           correlationId,
         });

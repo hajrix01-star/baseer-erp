@@ -221,7 +221,7 @@ test("cash and VAT snapshots are read models, and saved report documents remain 
   expect(reportRequests(requests, "/v1/reports/internal-vat").length).toBeGreaterThan(0);
 
   await page.goto("/#module=reports&section=4");
-  await expect(page.getByRole("heading", { name: "Report documents" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Report documents", level: 2 })).toBeVisible();
   await expect(page.getByText("August Trial Balance")).toBeVisible();
   expect(reportRequests(requests, "/v1/reports/documents").length).toBeGreaterThan(0);
 });
