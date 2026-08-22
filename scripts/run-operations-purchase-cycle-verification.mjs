@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 
 import dotenv from "dotenv";
 import { NestFactory } from "@nestjs/core";
+import { operationsCatalogReceiptSchema } from "@baseer-erp/contracts";
 import pg from "pg";
 
 dotenv.config({ path: "apps/api/.env.baseer-test" });
@@ -114,7 +115,13 @@ try {
   workspace = await execution.workspace(context);
   assert.equal(workspace.inventory.find((row) => row.rawMaterialItemId === tomato.id)?.baseQuantity, "1", "The published recipe must consume inventory exactly once on internal registration.");
 
-  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction", "recipe", "internal_registration", "inventory_consumption"] }));
+  const rawCatalogPage = operationsCatalogReceiptSchema.parse(await catalog.catalog(context, { kind: "RAW_MATERIAL", status: "ACTIVE", search: "طماطم", pageSize: 10 }));
+  assert.deepEqual(rawCatalogPage.items.map((item) => item.id), [tomato.id], "Catalog filtering must stay inside the requested item kind, status, and search scope.");
+  assert.equal(rawCatalogPage.metrics.activeRawMaterialCount, 1, "Catalog metrics must describe the full company scope rather than only the current page.");
+  assert.equal(rawCatalogPage.nextCursor, null, "A bounded one-row catalog result must not advertise another page.");
+  await assert.rejects(() => catalog.catalog(context, { kind: "RAW_MATERIAL", status: "ACTIVE", cursor: randomUUID(), pageSize: 10 }), /outside this company and filter scope/, "A cursor outside the live company/filter scope must be rejected.");
+
+  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction", "recipe", "internal_registration", "inventory_consumption", "catalog_filtering", "catalog_cursor_scope"] }));
 } finally {
   await app?.close();
   await pool.end();

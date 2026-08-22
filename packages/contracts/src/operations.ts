@@ -71,11 +71,26 @@ export const operationsItemSchema = z.object({
   liveRecipeCostStatus: z.enum(["NO_RECIPE", "INCOMPLETE", "AVAILABLE"]),
 }).strict();
 
+export const operationsCatalogQuerySchema = z.object({
+  kind: operationsItemKindSchema.optional(),
+  status: operationsItemStatusSchema.optional(),
+  search: z.string().trim().min(1).max(160).optional(),
+  cursor: operationsIdSchema.optional(),
+  pageSize: z.coerce.number().int().min(10).max(100).default(50),
+}).strict();
+
 export const operationsCatalogReceiptSchema = z.object({
   companyId: companyIdSchema,
   sections: z.array(operationsSectionSchema).max(1_000),
   units: z.array(operationsUnitSchema).max(1_000),
-  items: z.array(operationsItemSchema).max(10_000),
+  metrics: z.object({
+    activeRawMaterialCount: z.number().int().nonnegative(),
+    needsConversionCount: z.number().int().nonnegative(),
+    missingPurchasePriceCount: z.number().int().nonnegative(),
+  }).strict(),
+  items: z.array(operationsItemSchema).max(100),
+  nextCursor: operationsIdSchema.nullable(),
+  asOf: z.string().datetime(),
 }).strict();
 
 export const createOperationsUnitRequestSchema = z.object({
@@ -238,6 +253,7 @@ export const operationsInternalRegistrationReportReceiptSchema = z.object({
 }).strict();
 
 export type OperationsCatalogReceipt = z.infer<typeof operationsCatalogReceiptSchema>;
+export type OperationsCatalogQuery = z.infer<typeof operationsCatalogQuerySchema>;
 export type CreateOperationsUnitRequest = z.infer<typeof createOperationsUnitRequestSchema>;
 export type CreateOperationsSectionRequest = z.infer<typeof createOperationsSectionRequestSchema>;
 export type CreateOperationsItemRequest = z.infer<typeof createOperationsItemRequestSchema>;

@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 
-import type { ConfigureOperationsItemUnitsRequest, UpdateOperationsItemRequest, UpdateOperationsSectionRequest, UpdateOperationsUnitRequest } from "@baseer-erp/contracts";
+import type { ConfigureOperationsItemUnitsRequest, OperationsCatalogQuery, UpdateOperationsItemRequest, UpdateOperationsSectionRequest, UpdateOperationsUnitRequest } from "@baseer-erp/contracts";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { IdempotencyPayloadMismatchError, IdempotencyService, type CanonicalJsonValue } from "../core-controls/idempotency.service.js";
@@ -48,36 +48,69 @@ const restaurantUnitPresets: ReadonlyArray<RestaurantUnitPreset> = [
 export class OperationsCatalogService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
-  async catalog(context: TrustedCompanyActorContext) {
+  async catalog(context: TrustedCompanyActorContext, query: OperationsCatalogQuery = { pageSize: 50 }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [sections, units, items, inventoryBalances, publishedRecipes] = await Promise.all([
+      const pageSize = query.pageSize ?? 50;
+      const itemWhere: Prisma.OperationsItemWhereInput = {
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        ...(query.kind ? { kind: query.kind } : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.search ? { OR: [
+          { code: { contains: query.search, mode: "insensitive" } },
+          { nameAr: { contains: query.search, mode: "insensitive" } },
+          { nameEn: { contains: query.search, mode: "insensitive" } },
+        ] } : {}),
+      };
+      if (query.cursor) {
+        const cursor = await tx.operationsItem.findFirst({ where: { ...itemWhere, id: query.cursor }, select: { id: true } });
+        if (!cursor) throw new BadRequestException("The catalog cursor is outside this company and filter scope.");
+      }
+      const [sections, units, metricItems, itemCandidates] = await Promise.all([
         tx.operationsSection.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: [{ isActive: "desc" }, { sortOrder: "asc" }, { nameAr: "asc" }] }),
         tx.operationsUnit.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: [{ isActive: "desc" }, { dimension: "asc" }, { nameAr: "asc" }] }),
         tx.operationsItem.findMany({
-          where: { tenantId: context.tenantId, companyId: context.companyId },
-          orderBy: [{ status: "asc" }, { nameAr: "asc" }],
+          where: { tenantId: context.tenantId, companyId: context.companyId, kind: OperationsItemKind.RAW_MATERIAL, status: OperationsItemStatus.ACTIVE },
+          select: {
+            itemUnits: { select: { isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: true } },
+            conversionVersions: { where: { status: OperationsConversionVersionStatus.PUBLISHED }, take: 1, select: { id: true } },
+          },
+        }),
+        tx.operationsItem.findMany({
+          where: itemWhere,
+          orderBy: [{ status: "asc" }, { nameAr: "asc" }, { id: "asc" }],
+          take: pageSize + 1,
+          ...(query.cursor ? { cursor: { id: query.cursor }, skip: 1 } : {}),
           include: {
             itemUnits: { orderBy: [{ isBase: "desc" }, { createdAt: "asc" }] },
             conversionVersions: { where: { status: OperationsConversionVersionStatus.PUBLISHED }, orderBy: { version: "desc" }, take: 1, include: { edges: { orderBy: { createdAt: "asc" } } } },
           },
         }),
-        tx.operationsInventoryBalance.findMany({
-          where: { tenantId: context.tenantId, companyId: context.companyId },
-          select: { rawMaterialItemId: true, weightedUnitCost: true },
-        }),
-        tx.operationsRecipeVersion.findMany({
-          where: { tenantId: context.tenantId, companyId: context.companyId, status: OperationsRecipeVersionStatus.PUBLISHED },
-          orderBy: [{ outputItemId: "asc" }, { version: "desc" }],
-          include: { lines: { select: { rawMaterialItemId: true, resolvedBaseQuantity: true } } },
-        }),
       ]);
+      const hasMore = itemCandidates.length > pageSize;
+      const items = hasMore ? itemCandidates.slice(0, pageSize) : itemCandidates;
+      const itemIds = items.map((item) => item.id);
+      const publishedRecipes = itemIds.length ? await tx.operationsRecipeVersion.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, outputItemId: { in: itemIds }, status: OperationsRecipeVersionStatus.PUBLISHED },
+        orderBy: [{ outputItemId: "asc" }, { version: "desc" }],
+        include: { lines: { select: { rawMaterialItemId: true, resolvedBaseQuantity: true } } },
+      }) : [];
+      const recipeMaterialIds = [...new Set(publishedRecipes.flatMap((recipe) => recipe.lines.map((line) => line.rawMaterialItemId)))];
+      const inventoryBalances = recipeMaterialIds.length ? await tx.operationsInventoryBalance.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, rawMaterialItemId: { in: recipeMaterialIds } },
+        select: { rawMaterialItemId: true, weightedUnitCost: true },
+      }) : [];
       const weightedCostByMaterialId = new Map(inventoryBalances.map((balance) => [balance.rawMaterialItemId, balance.weightedUnitCost]));
       const latestRecipeByOutputId = new Map<string, (typeof publishedRecipes)[number]>();
       for (const recipe of publishedRecipes) if (!latestRecipeByOutputId.has(recipe.outputItemId)) latestRecipeByOutputId.set(recipe.outputItemId, recipe);
+      const activeRawMaterialCount = metricItems.length;
+      const needsConversionCount = metricItems.filter((item) => item.itemUnits.filter((line) => line.isActive).length > 1 && !item.conversionVersions.length).length;
+      const missingPurchasePriceCount = metricItems.filter((item) => !item.itemUnits.some((line) => line.isActive && line.isOrderEnabled && line.lastPurchaseUnitPrice)).length;
       return {
         companyId: context.companyId,
         sections: sections.map((section) => ({ id: section.id, code: section.code, nameAr: section.nameAr, nameEn: section.nameEn, isActive: section.isActive })),
         units: units.map((unit) => ({ id: unit.id, code: unit.code, nameAr: unit.nameAr, nameEn: unit.nameEn, dimension: unit.dimension, isActive: unit.isActive })),
+        metrics: { activeRawMaterialCount, needsConversionCount, missingPurchasePriceCount },
         items: items.map((item) => {
           const version = item.conversionVersions[0];
           const recipe = latestRecipeByOutputId.get(item.id);
@@ -96,6 +129,8 @@ export class OperationsCatalogService {
             liveRecipeCostStatus: recipe ? recipeCostAvailable ? "AVAILABLE" : "INCOMPLETE" : "NO_RECIPE",
           };
         }),
+        nextCursor: hasMore ? items.at(-1)?.id ?? null : null,
+        asOf: new Date().toISOString(),
       };
     });
   }

@@ -3,6 +3,9 @@ import AxeBuilder from "@axe-core/playwright";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
 const catalog = {
+  metrics: { activeRawMaterialCount: 2, needsConversionCount: 0, missingPurchasePriceCount: 2 },
+  nextCursor: null,
+  asOf: "2026-08-22T12:00:00.000Z",
   units: [
     { id: "unit-1", code: "EA", nameAr: "حبة", nameEn: "Each", dimension: "COUNT", isActive: true },
     { id: "unit-2", code: "CARTON", nameAr: "كرتون", nameEn: "Carton", dimension: "PACKAGE", isActive: true },
@@ -10,6 +13,7 @@ const catalog = {
   sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen", isActive: true }],
   items: [
     { id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }, { unitId: "unit-2", isBase: false, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: { version: 1, edges: [{ fromUnitId: "unit-2", toUnitId: "unit-1", factor: "12.0000" }] }, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
+    { id: "item-2", code: "MAT-002", nameAr: "مادة الاختبار الثانية", nameEn: "Second test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
     { id: "menu-1", code: "MENU-001", nameAr: "منتج الاختبار", nameEn: "Test menu product", kind: "MENU_PRODUCT", status: "ACTIVE", sectionId: "section-1", baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: "7.0000" }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
   ],
 };
@@ -51,7 +55,17 @@ async function mockInternalRegistration(page: Page) {
     if (url.pathname === "/v1/operations/internal-registration" && method === "POST") {
       return fulfill(route, { id: "registration-1", replayed: false });
     }
-    if (url.pathname === "/v1/operations/catalog") return fulfill(route, catalog);
+    if (url.pathname === "/v1/operations/catalog") {
+      const kind = url.searchParams.get("kind");
+      const status = url.searchParams.get("status");
+      const search = url.searchParams.get("search")?.toLocaleLowerCase();
+      const cursor = url.searchParams.get("cursor");
+      let items = catalog.items.filter((item) => (!kind || item.kind === kind) && (!status || item.status === status));
+      if (search) items = items.filter((item) => `${item.code} ${item.nameAr} ${item.nameEn ?? ""}`.toLocaleLowerCase().includes(search));
+      if (cursor) items = items.slice(Math.max(0, items.findIndex((item) => item.id === cursor) + 1));
+      const pagedRaw = kind === "RAW_MATERIAL" && status === "ACTIVE" && !search;
+      return fulfill(route, { ...catalog, items: pagedRaw ? items.slice(0, 1) : items, nextCursor: pagedRaw && items.length > 1 ? items[0]!.id : null });
+    }
     if (url.pathname === "/v1/operations/catalog/items/update" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/configure" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
@@ -95,6 +109,25 @@ test("internal registration keeps its Gregorian business date through the Baseer
   });
 
   const accessibility = await new AxeBuilder({ page }).include(".operations-internal-registration").analyze();
+  expect(accessibility.violations).toEqual([]);
+});
+
+test("operations catalog keeps filters and cursor paging on the server", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=5");
+
+  await expect(page.getByRole("cell", { name: /مادة الاختبار MAT-001/ })).toBeVisible();
+  await expect(page.getByRole("cell", { name: /مادة الاختبار الثانية MAT-002/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "تحميل المزيد" }).click();
+  await expect(page.getByRole("cell", { name: /مادة الاختبار الثانية MAT-002/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "تحميل المزيد" })).toHaveCount(0);
+
+  const catalogRequests = requested.filter((request) => request.path.startsWith("/v1/operations/catalog?"));
+  expect(catalogRequests.map((request) => request.path)).toEqual(expect.arrayContaining([
+    "/v1/operations/catalog?pageSize=50&kind=RAW_MATERIAL&status=ACTIVE",
+    "/v1/operations/catalog?pageSize=50&kind=RAW_MATERIAL&status=ACTIVE&cursor=item-1",
+  ]));
+  const accessibility = await new AxeBuilder({ page }).include(".baseer-data-table").analyze();
   expect(accessibility.violations).toEqual([]);
 });
 

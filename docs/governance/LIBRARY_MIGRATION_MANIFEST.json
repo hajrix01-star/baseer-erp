@@ -505,7 +505,7 @@
     "table:operations-catalog-workspace.tsx": {
       "kind": "table",
       "file": "operations-catalog-workspace.tsx",
-      "decision": "pending-module-closure"
+      "decision": "migrated-item-tabs-server-grid-retained-bounded-unit-reference"
     },
     "table:operations-execution-workspace.tsx": {
       "kind": "table",

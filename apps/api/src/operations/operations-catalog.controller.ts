@@ -1,5 +1,5 @@
-import { archiveOperationsItemRequestSchema, companyIdSchema, configureOperationsItemUnitsRequestSchema, createOperationsItemRequestSchema, createOperationsSectionRequestSchema, createOperationsUnitRequestSchema, installOperationsRestaurantUnitPresetsRequestSchema, operationsCatalogReceiptSchema, operationsEntityReceiptSchema, publishOperationsConversionsRequestSchema, updateOperationsItemRequestSchema, updateOperationsItemUnitPriceRequestSchema, updateOperationsSectionRequestSchema, updateOperationsUnitRequestSchema } from "@baseer-erp/contracts";
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from "@nestjs/common";
+import { archiveOperationsItemRequestSchema, companyIdSchema, configureOperationsItemUnitsRequestSchema, createOperationsItemRequestSchema, createOperationsSectionRequestSchema, createOperationsUnitRequestSchema, installOperationsRestaurantUnitPresetsRequestSchema, operationsCatalogQuerySchema, operationsCatalogReceiptSchema, operationsEntityReceiptSchema, publishOperationsConversionsRequestSchema, updateOperationsItemRequestSchema, updateOperationsItemUnitPriceRequestSchema, updateOperationsSectionRequestSchema, updateOperationsUnitRequestSchema } from "@baseer-erp/contracts";
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { OperationsCatalogService } from "./operations-catalog.service.js";
@@ -9,8 +9,9 @@ export class OperationsCatalogController {
   constructor(private readonly companyContext: CompanyContextService, private readonly catalog: OperationsCatalogService) {}
 
   @Get()
-  async read(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    return operationsCatalogReceiptSchema.parse(await this.catalog.catalog(await this.authorize(authorization, companyId, "operations.catalog.manage")));
+  async read(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = operationsCatalogQuerySchema.safeParse(query); if (!parsed.success) throw new BadRequestException("Invalid operations catalog query.");
+    return operationsCatalogReceiptSchema.parse(await this.catalog.catalog(await this.authorize(authorization, companyId, "operations.catalog.manage"), parsed.data));
   }
 
   @Post("units") @HttpCode(201)
