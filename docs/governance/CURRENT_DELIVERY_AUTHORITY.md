@@ -1,6 +1,6 @@
 # BASEER ERP — Current Delivery Authority
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-22
 **Purpose:** single authority for the active delivery order, local acceptance status, and production boundaries.
 
 ## Read order
@@ -15,7 +15,8 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer is in **local finance-acceptance closure and next-scope selection**, not final delivery or production readiness.
+Baseer is in **Operations Core verification and owner-acceptance**, not final
+delivery or general production readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
 Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
@@ -23,10 +24,21 @@ Categories, and the read-only Invoice Register. The correction/cancellation
 policy is also recorded in
 [FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md](FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md).
 
-No new business scope is active until the owner selects and authorizes the
-next bounded scope. This closure authorizes planning that next scope; it does
-not itself authorize production, Google connectivity, an AI provider, or a
-Noorix cutover.
+The owner has selected and authorized one active business scope:
+**Operations Core**. It includes catalogue and units, conversions and recipes,
+purchase requests and receipts, inventory/custody, internal registration and
+the existing operational Assets & Warranty Gate A. The work is limited to the
+already implemented company-scoped workflows, their contracts, UI, RLS,
+permissions, audit and acceptance evidence.
+
+It excludes asset capitalization/depreciation/disposal, automatic financial
+posting, public attachments, bank connectivity, external providers, Noorix
+import/cutover, formal reports/P&L and any unapproved financial policy. Reports
+remain a separate candidate until Operations is accepted or returned.
+
+Technical verification for this scope passed on 2026-08-22; the commands and
+remaining owner browser acceptance are recorded in
+[Operations Core verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md).
 
 ## Active cross-cutting enablement — 2026-08-22
 
