@@ -237,8 +237,9 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 - `Hajri Tax` لا يملك حالياً UI/API instance حية؛ بناؤه الوظيفي نطاق مستقل
   وليس legacy متبقياً من التحول.
 
-الموديول النشط التالي هو مركز القرار والسياق، ولا يبدأ مركز القيادة قبل
-إغلاق مركز القرار وفق البوابة نفسها.
+أُغلق مركز القرار والسياق بمرجع التنفيذ `97c99bf` وسجل الإثبات
+[Decision Intelligence library-migration verification](governance/DECISION_INTELLIGENCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
+الموديول النشط الأخير في الخطة هو مركز القيادة.
 
 ### 5.6 مركز القرار والسياق
 
@@ -251,6 +252,17 @@ payload مالي، وHTTP 401/403/409 وidempotency/reversal، وRLS الفعل�
 | المصادر والسياسات | global/company events والسياسات |
 
 كل KPI أو Chart يخضع لعقد MetricContract.
+
+#### سجل إغلاق مركز القرار
+
+**الحالة:** `Closed` — 2026-08-23، بمرجع التنفيذ `97c99bf`.
+
+- القراءات حسب القسم ومقيدة بالشركة والجلسة والصلاحيات مع Abort؛ النماذج
+  والتواريخ خلف محولات Baseer المركزية.
+- المدخلات المالية والنسب سلاسل دقيقة، ومخالفة idempotency ترجع 409 ثابتة.
+- لا Chart أو DataGrid بلا عقد series/cursor؛ القوائم الحالية خفيفة مقصودة.
+- الجرد صفر unclassified/stale، وDecision E2E `6/6` والمجموعة الكاملة
+  `103 passed` مع `1 intentional skip`؛ HTTP/RLS/build/budget/audit Pass.
 
 ### 5.7 مركز القيادة
 

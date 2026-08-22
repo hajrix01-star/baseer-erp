@@ -16,9 +16,9 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 ## Current decision
 
 Baseer has **closed Operations Core, Human Resources, Finance and Accounting,
-Administration and access, and Reports locally, including their library
-migrations**. The next active transformation scope in the centralized sequence
-is **Decision Intelligence library-migration closure**. This is not final
+Administration and access, Reports, and Decision Intelligence locally,
+including their library migrations**. The next active transformation scope in
+the centralized sequence is **Command Center library-migration closure**. This is not final
 delivery or general production readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
@@ -33,11 +33,13 @@ Administration migration is closed at `33a7175`; its reproducible evidence is
 recorded in [Administration library-migration verification](ADMINISTRATION_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
 Reports migration is closed at `82ae65d`; its reproducible evidence is recorded
 in [Reports library-migration verification](REPORTS_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
-The active scope is now limited to converting already implemented Decision
-Intelligence UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to
-the approved central Baseer adapters. It does not authorize a new metric,
-decision policy, financial calculation, API, schema, RLS/RBAC rule, external
-AI provider, or production change.
+Decision Intelligence migration is closed at `97c99bf`; its reproducible
+evidence is recorded in [Decision Intelligence library-migration verification](DECISION_INTELLIGENCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-23.md).
+The active scope is now limited to converting already implemented Command
+Center UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
+approved central Baseer adapters. It does not authorize a new KPI, action,
+financial calculation, API, schema, RLS/RBAC rule, external provider, or
+production change.
 
 For the closed Finance scope only, the owner's instruction to remove all browser-side
 financial aggregation authorizes one backward-compatible read-model addition:
@@ -106,11 +108,12 @@ It also covers the local ECharts HR operational visualisation over the existing
 server overview, with its matching HTML summary/table and dedicated lazy-size
 gate. It is not a financial dashboard, reporting surface, or production claim.
 
-**Closed Reports scope / active Decision Intelligence scope:** Reports migration
-is closed at `82ae65d`. The same gated operating authority now applies only to
-Decision Intelligence files recorded in the manifest. It permits
-central-adapter migration in homogeneous batches after metric-contract,
-read-model, source, HTTP/RLS/RBAC, browser, accessibility and budget gates pass.
+**Closed Decision Intelligence scope / active Command Center scope:** Decision
+Intelligence migration is closed at `97c99bf`. The same gated operating
+authority now applies only to Command Center files recorded in the manifest. It
+permits central-adapter migration in homogeneous batches after KPI/action
+ownership, read-model, source, HTTP/RLS/RBAC, browser, accessibility and budget
+gates pass.
 It does not authorize a new library class, another module, a decision or
 financial policy change, an external AI provider, or release/public production
 acceptance. The Prisma P1 and its private-deployment risk acceptance remain
