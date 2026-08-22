@@ -7,10 +7,10 @@
 
 | Field | Value |
 | --- | --- |
-| Active work | **Finance and Accounting — library-migration closure** is the next module in the approved centralized sequence. Operations and HR library migrations are closed locally. UI Platform Enablement remains an ongoing cross-cutting authority, not a competing business scope. |
-| Open owner acceptance | No Operations or HR library-migration acceptance remains. Production, Noorix and official reporting keep their independent gates. |
-| Next decision gate | جرد المالية من الـmanifest، وتحويل واجهاتها عبر المحولات المركزية مع HTTP/RLS/Decimal/period/browser evidence قبل الانتقال إلى الإدارة. |
-| Explicitly deferred | Noorix import/cutover, production release, bank reconciliation, cash count/handover accounting, transfer reversal, official reports/P&L, assets accounting, external marketing/AI work. |
+| Active work | **Administration and access — library-migration closure** is the next module in the approved centralized sequence. Operations, HR and Finance library migrations are closed locally. UI Platform Enablement remains an ongoing cross-cutting authority, not a competing business scope. |
+| Open owner acceptance | No Operations, HR or Finance library-migration acceptance remains. Production, Noorix and official reporting keep their independent gates. |
+| Next decision gate | جرد الإدارة من الـmanifest، وتحويل الشركات والمستخدمين والأدوار عبر المحولات المركزية مع HTTP/RLS/RBAC/session/browser evidence قبل الانتقال إلى التقارير. |
+| Explicitly deferred | Noorix import/cutover, production release, external bank connectivity/automated reconciliation, official reports/P&L, assets accounting, invitations/MFA, external marketing/AI work. |
 
 ## Portfolio state
 
@@ -19,6 +19,7 @@
 | Baseer UI Platform Enablement | **Active — operating authority for eligible libraries** | Governance, monitor model, staged plan, CSS-budget recovery, complete-session HR E2E fixture and local-database guard are recorded and re-verified at `cc9c89d3300fd09c7cf9da413f85b172e32d6d62`. HR now has bounded React Aria controls, an RHF/Zod validation form, company/session-scoped Query read and an ECharts operational visualisation with a matching HTML table. Docker hardening removes the Prisma advisory path from the public API runtime while keeping a hardened internal migration job. | The [operating authority](LIBRARY_ADOPTION_OPERATING_AUTHORITY.md) permits further eligible library phases after their gates, without per-library owner authorization. Excluded categories and the current Prisma P1 remain separately governed; no production, dashboard, API/RLS/permission or financial change is implied. |
 | Platform foundation | Verified locally | Identity, company context, RBAC, audit, idempotency, business date, sequences, files, output and observability foundations. | Production backup/restore evidence and production deployment. |
 | Finance journal and master data | **Closed — local owner acceptance** | Posted balanced journal, periods, accounts/categories, suppliers, tax-rate configuration, recurring profiles, dues and inclusive loans; governed cancellation policy. | Tax-code model beyond one company VAT rate; production controls remain separate. |
+| Finance and Accounting UI migration | **Closed — local owner acceptance and library migration** | Forms, Gregorian dates, scoped remote selectors and server cursor grids are centralized; money remains exact Decimal strings and account summaries are server-owned. Reference `a1cbf54`; inventory/browser/HTTP/RLS/journal/period/budget gates pass. | Production, Noorix, formal reporting, bank connectivity and volume certification remain separate. |
 | Purchase & Expense | **Closed — local owner acceptance** | Batch purchase/expense input, VAT-inclusive server calculation, supplier credit on cash payment, recurring expenses, payment histories and governed cancellation. | Official long-range reporting and production are separate scopes. |
 | Expenses & Obligations | **Closed — local owner acceptance** | Cash payments, supplier dues, recurring profiles, loan obligations, settlement paths and governed cancellation. | Official long-range reporting and production are separate scopes. |
 | Treasury and vaults | **Closed — local owner acceptance** | Ledger-derived balances, vault lifecycle, payment methods, balanced internal transfer, bounded activity, daily account-balance projection and control observations. | Bank connectivity, automated reconciliation and external transfer remain excluded. |

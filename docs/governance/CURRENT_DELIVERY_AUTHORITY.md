@@ -15,10 +15,11 @@ The dated Gate A/B records, module decisions, and retrospective reviews are hist
 
 ## Current decision
 
-Baseer has **closed Operations Core and Human Resources locally, including both
-library migrations**. The next active transformation scope in the centralized
-sequence is **Finance and Accounting library-migration closure**. This is not
-final delivery or general production readiness.
+Baseer has **closed Operations Core, Human Resources, and Finance and Accounting
+locally, including their library migrations**. The next active transformation
+scope in the centralized sequence is **Administration and access
+library-migration closure**. This is not final delivery or general production
+readiness.
 
 On 2026-08-22, the owner accepted locally the Purchase & Expense and
 Expenses & Obligations journeys, Treasury and custody movements, Suppliers,
@@ -26,22 +27,24 @@ Categories, and the read-only Invoice Register. The correction/cancellation
 policy is also recorded in
 [FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md](FINANCE_CORRECTION_AND_CANCELLATION_POLICY_2026-08-22.md).
 
-The active scope is limited to converting already implemented Finance and
-Accounting UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
+Finance migration is closed at `a1cbf54`; its reproducible evidence is recorded
+in [Finance library-migration verification](FINANCE_LIBRARY_MIGRATION_VERIFICATION_RECORD_2026-08-22.md).
+The active scope is now limited to converting already implemented Administration
+and access UI consumers registered in `LIBRARY_MIGRATION_MANIFEST.json` to the
 approved central Baseer adapters. It does not authorize an API, schema, RLS,
-RBAC, accounting-policy, business-date or report-definition change.
+RBAC policy, invitation/MFA feature, or production change.
 
-For this closure only, the owner's instruction to remove all browser-side
+For the closed Finance scope only, the owner's instruction to remove all browser-side
 financial aggregation authorizes one backward-compatible read-model addition:
 `GET /finance/accounts` may return an authoritative Decimal-string summary
 computed in its existing tenant transaction. This does not change a command,
 schema, RLS, posting rule, period rule or permission, and it may not be reused
 as authority for another API expansion.
 
-It excludes asset capitalization/depreciation/disposal, automatic financial
-posting, public attachments, bank connectivity, external providers, Noorix
-import/cutover, formal reports/P&L and any unapproved financial policy. Reports
-remain a separately governed candidate after Operations closure.
+It excludes invitation and MFA work, new permission semantics, asset
+capitalization/depreciation/disposal, automatic financial posting, public
+attachments, bank connectivity, external providers, Noorix import/cutover,
+formal reports/P&L and any unapproved financial policy.
 
 Operations evidence remains in
 [Operations Core verification](OPERATIONS_CORE_VERIFICATION_RECORD_2026-08-22.md),
@@ -98,14 +101,14 @@ It also covers the local ECharts HR operational visualisation over the existing
 server overview, with its matching HTML summary/table and dedicated lazy-size
 gate. It is not a financial dashboard, reporting surface, or production claim.
 
-**Closed HR scope / active Finance scope:** HR migration is closed at `6942b50`.
-The same gated operating authority now applies only to Finance and Accounting
-files recorded in the manifest. It permits central-adapter migration in
-homogeneous batches after contract, HTTP/RLS, Decimal-string, accounting,
-period, browser, accessibility and budget gates pass. It does not authorize a
-new library class, another module, a financial-policy change, or release/public
-production acceptance. The Prisma P1 and its private-deployment risk acceptance
-remain unchanged.
+**Closed Finance scope / active Administration scope:** Finance migration is
+closed at `a1cbf54`. The same gated operating authority now applies only to
+Administration and access files recorded in the manifest. It permits
+central-adapter migration in homogeneous batches after contract, HTTP/RLS/RBAC,
+session-revocation, browser, accessibility and budget gates pass. It does not
+authorize a new library class, another module, a permission-policy change, or
+release/public production acceptance. The Prisma P1 and its private-deployment
+risk acceptance remain unchanged.
 
 The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.
