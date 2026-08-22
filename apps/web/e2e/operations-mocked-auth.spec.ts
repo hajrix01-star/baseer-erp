@@ -5,7 +5,10 @@ const companyId = "11111111-1111-4111-8111-111111111111";
 const catalog = {
   units: [{ id: "unit-1", code: "EA", nameAr: "حبة", nameEn: "Each", dimension: "COUNT", isActive: true }],
   sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen", isActive: true }],
-  items: [{ id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" }],
+  items: [
+    { id: "item-1", code: "MAT-001", nameAr: "مادة الاختبار", nameEn: "Test material", kind: "RAW_MATERIAL", status: "ACTIVE", sectionId: null, baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: null }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
+    { id: "menu-1", code: "MENU-001", nameAr: "منتج الاختبار", nameEn: "Test menu product", kind: "MENU_PRODUCT", status: "ACTIVE", sectionId: "section-1", baseUnitId: "unit-1", itemUnits: [{ unitId: "unit-1", isBase: true, isActive: true, isOrderEnabled: false, lastPurchaseUnitPrice: null, lastPurchasePriceAt: null, menuSaleUnitPrice: "7.0000" }], conversionVersion: null, liveRecipeUnitCost: null, liveRecipeCostStatus: "NO_RECIPE" },
+  ],
 };
 const execution = {
   inventory: [],
@@ -47,6 +50,7 @@ async function mockInternalRegistration(page: Page) {
     }
     if (url.pathname === "/v1/operations/catalog") return fulfill(route, catalog);
     if (url.pathname === "/v1/operations/catalog/items/update" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
+    if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
     if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
     if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
@@ -91,6 +95,23 @@ test("catalog item details use the lazy Baseer form adapter without changing the
     code: "MAT-002",
     nameAr: "مادة الاختبار",
     sectionId: null,
+  });
+});
+
+test("catalog price keeps the decimal string in its separate Baseer command form", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=5");
+
+  await page.getByRole("button", { name: "منتجات المنيو" }).click();
+  await page.getByRole("button", { name: "منتج الاختبار" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "سعر بيع المنيو" }).click();
+  await dialog.getByLabel("سعر بيع المنيو").fill("9.2500");
+  await dialog.getByRole("button", { name: "حفظ" }).click();
+  await expect.poll(() => requested.find((request) => request.method === "POST" && request.path === "/v1/operations/catalog/item-units/price")?.body).toMatchObject({
+    itemId: "menu-1",
+    unitId: "unit-1",
+    price: "9.2500",
   });
 });
 
