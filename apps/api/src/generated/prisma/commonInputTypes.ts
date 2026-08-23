@@ -752,6 +752,40 @@ export type EnumDecisionAlertActionKindWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumDecisionAlertActionKindFilter<$PrismaModel>
 }
 
+export type EnumMarketingCampaignPlatformFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignPlatform | Prisma.EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel> | $Enums.MarketingCampaignPlatform
+}
+
+export type EnumMarketingCampaignStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignStatus | Prisma.EnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel> | $Enums.MarketingCampaignStatus
+}
+
+export type EnumMarketingCampaignPlatformWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignPlatform | Prisma.EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignPlatformWithAggregatesFilter<$PrismaModel> | $Enums.MarketingCampaignPlatform
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel>
+}
+
+export type EnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignStatus | Prisma.EnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
+}
+
 export type EnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceCashPerformanceEventKind | Prisma.EnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceCashPerformanceEventKind[] | Prisma.ListEnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
@@ -2660,6 +2694,40 @@ export type NestedEnumDecisionAlertActionKindWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDecisionAlertActionKindFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDecisionAlertActionKindFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingCampaignPlatformFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignPlatform | Prisma.EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel> | $Enums.MarketingCampaignPlatform
+}
+
+export type NestedEnumMarketingCampaignStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignStatus | Prisma.EnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel> | $Enums.MarketingCampaignStatus
+}
+
+export type NestedEnumMarketingCampaignPlatformWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignPlatform | Prisma.EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignPlatformWithAggregatesFilter<$PrismaModel> | $Enums.MarketingCampaignPlatform
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingCampaignPlatformFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingCampaignStatus | Prisma.EnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingCampaignStatus[] | Prisma.ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {

@@ -17,3 +17,4 @@ export * from './reporting.js';
 export * from './ledger-trial-balance.js';
 export * from './internal-vat-report.js';
 export * from './operations.js';
+export * from './marketing.js';

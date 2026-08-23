@@ -27,6 +27,12 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     3: ["decision.metrics.read", "decision.policy.manage"],
     4: ["decision.context.global.manage", "decision.policy.manage"],
   },
+  marketing: {
+    0: ["marketing.insights.read"],
+    1: ["marketing.insights.read", "marketing.campaign.write"],
+    2: ["marketing.insights.read", "marketing.google-business.profile.read"],
+    3: ["marketing.insights.read"],
+  },
   operations: {
     1: ["finance.daily_sales.read", "finance.daily_sales.create"],
     2: ["finance.purchase_expense.read", "finance.purchase_expense.create"],

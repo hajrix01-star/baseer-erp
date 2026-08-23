@@ -306,6 +306,30 @@ export const DecisionContextReviewActionKind = {
 export type DecisionContextReviewActionKind = (typeof DecisionContextReviewActionKind)[keyof typeof DecisionContextReviewActionKind]
 
 
+export const MarketingCampaignPlatform = {
+  MANUAL: 'MANUAL',
+  GOOGLE_ADS: 'GOOGLE_ADS',
+  META: 'META',
+  TIKTOK: 'TIKTOK',
+  SNAPCHAT: 'SNAPCHAT',
+  OTHER: 'OTHER'
+} as const
+
+export type MarketingCampaignPlatform = (typeof MarketingCampaignPlatform)[keyof typeof MarketingCampaignPlatform]
+
+
+export const MarketingCampaignStatus = {
+  DRAFT: 'DRAFT',
+  PLANNED: 'PLANNED',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type MarketingCampaignStatus = (typeof MarketingCampaignStatus)[keyof typeof MarketingCampaignStatus]
+
+
 export const FinanceCashPerformanceEventKind = {
   SALES_COLLECTION: 'SALES_COLLECTION',
   PURCHASE_PAYMENT: 'PURCHASE_PAYMENT',

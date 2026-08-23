@@ -351,6 +351,7 @@ export type CompanyWhereInput = {
   decisionAlerts?: Prisma.DecisionAlertListRelationFilter
   decisionAlertActions?: Prisma.DecisionAlertActionListRelationFilter
   decisionFeedback?: Prisma.DecisionFeedbackListRelationFilter
+  marketingCampaigns?: Prisma.MarketingCampaignListRelationFilter
   operationsSections?: Prisma.OperationsSectionListRelationFilter
   operationsUnits?: Prisma.OperationsUnitListRelationFilter
   operationsItems?: Prisma.OperationsItemListRelationFilter
@@ -463,6 +464,7 @@ export type CompanyOrderByWithRelationInput = {
   decisionAlerts?: Prisma.DecisionAlertOrderByRelationAggregateInput
   decisionAlertActions?: Prisma.DecisionAlertActionOrderByRelationAggregateInput
   decisionFeedback?: Prisma.DecisionFeedbackOrderByRelationAggregateInput
+  marketingCampaigns?: Prisma.MarketingCampaignOrderByRelationAggregateInput
   operationsSections?: Prisma.OperationsSectionOrderByRelationAggregateInput
   operationsUnits?: Prisma.OperationsUnitOrderByRelationAggregateInput
   operationsItems?: Prisma.OperationsItemOrderByRelationAggregateInput
@@ -579,6 +581,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   decisionAlerts?: Prisma.DecisionAlertListRelationFilter
   decisionAlertActions?: Prisma.DecisionAlertActionListRelationFilter
   decisionFeedback?: Prisma.DecisionFeedbackListRelationFilter
+  marketingCampaigns?: Prisma.MarketingCampaignListRelationFilter
   operationsSections?: Prisma.OperationsSectionListRelationFilter
   operationsUnits?: Prisma.OperationsUnitListRelationFilter
   operationsItems?: Prisma.OperationsItemListRelationFilter
@@ -728,6 +731,7 @@ export type CompanyCreateInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -839,6 +843,7 @@ export type CompanyUncheckedCreateInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -950,6 +955,7 @@ export type CompanyUpdateInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -1061,6 +1067,7 @@ export type CompanyUncheckedUpdateInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1575,6 +1582,20 @@ export type CompanyUpdateOneRequiredWithoutDecisionFeedbackNestedInput = {
   upsert?: Prisma.CompanyUpsertWithoutDecisionFeedbackInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutDecisionFeedbackInput, Prisma.CompanyUpdateWithoutDecisionFeedbackInput>, Prisma.CompanyUncheckedUpdateWithoutDecisionFeedbackInput>
+}
+
+export type CompanyCreateNestedOneWithoutMarketingCampaignsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedCreateWithoutMarketingCampaignsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMarketingCampaignsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutMarketingCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedCreateWithoutMarketingCampaignsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMarketingCampaignsInput
+  upsert?: Prisma.CompanyUpsertWithoutMarketingCampaignsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutMarketingCampaignsInput, Prisma.CompanyUpdateWithoutMarketingCampaignsInput>, Prisma.CompanyUncheckedUpdateWithoutMarketingCampaignsInput>
 }
 
 export type CompanyCreateNestedOneWithoutReportDocumentsInput = {
@@ -2699,6 +2720,7 @@ export type CompanyCreateWithoutTenantInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -2809,6 +2831,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -2964,6 +2987,7 @@ export type CompanyCreateWithoutBrandingInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -3074,6 +3098,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -3200,6 +3225,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -3310,6 +3336,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3419,6 +3446,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -3529,6 +3557,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -3655,6 +3684,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -3765,6 +3795,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3875,6 +3906,7 @@ export type CompanyCreateWithoutAuditsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -3985,6 +4017,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -4111,6 +4144,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -4221,6 +4255,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4331,6 +4366,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -4441,6 +4477,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -4567,6 +4604,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -4677,6 +4715,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4787,6 +4826,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -4897,6 +4937,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -5023,6 +5064,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -5133,6 +5175,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5243,6 +5286,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -5353,6 +5397,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -5479,6 +5524,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -5589,6 +5635,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5699,6 +5746,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -5809,6 +5857,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -5935,6 +5984,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -6045,6 +6095,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6155,6 +6206,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -6265,6 +6317,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -6391,6 +6444,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -6501,6 +6555,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6611,6 +6666,7 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -6721,6 +6777,7 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -6847,6 +6904,7 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -6957,6 +7015,7 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7067,6 +7126,7 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -7177,6 +7237,7 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -7303,6 +7364,7 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -7413,6 +7475,7 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7523,6 +7586,7 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -7633,6 +7697,7 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -7759,6 +7824,7 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -7869,6 +7935,7 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7979,6 +8046,7 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -8089,6 +8157,7 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -8215,6 +8284,7 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -8325,6 +8395,7 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8435,6 +8506,7 @@ export type CompanyCreateWithoutReportRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -8545,6 +8617,7 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -8671,6 +8744,7 @@ export type CompanyUpdateWithoutReportRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -8781,6 +8855,7 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8891,6 +8966,7 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -9001,6 +9077,7 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -9127,6 +9204,7 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -9237,6 +9315,7 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9347,6 +9426,7 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -9457,6 +9537,7 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -9583,6 +9664,7 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -9693,6 +9775,7 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9803,6 +9886,7 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -9913,6 +9997,7 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -10039,6 +10124,7 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -10149,6 +10235,7 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10259,6 +10346,7 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -10369,6 +10457,7 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -10495,6 +10584,7 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -10605,6 +10695,7 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10715,6 +10806,7 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -10825,6 +10917,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -10951,6 +11044,7 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -11061,6 +11155,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11171,6 +11266,7 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -11281,6 +11377,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -11407,6 +11504,7 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -11517,6 +11615,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11627,6 +11726,7 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -11737,6 +11837,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -11863,6 +11964,7 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -11973,6 +12075,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12083,6 +12186,7 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -12193,6 +12297,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -12319,6 +12424,7 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -12429,6 +12535,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12539,6 +12646,7 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -12649,6 +12757,7 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -12775,6 +12884,7 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -12885,6 +12995,467 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutMarketingCampaignsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutMarketingCampaignsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedCreateWithoutMarketingCampaignsInput>
+}
+
+export type CompanyUpsertWithoutMarketingCampaignsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedUpdateWithoutMarketingCampaignsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedCreateWithoutMarketingCampaignsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutMarketingCampaignsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutMarketingCampaignsInput, Prisma.CompanyUncheckedUpdateWithoutMarketingCampaignsInput>
+}
+
+export type CompanyUpdateWithoutMarketingCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12995,6 +13566,7 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -13105,6 +13677,7 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -13231,6 +13804,7 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -13341,6 +13915,7 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13451,6 +14026,7 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -13561,6 +14137,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -13687,6 +14264,7 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -13797,6 +14375,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13907,6 +14486,7 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -14017,6 +14597,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -14143,6 +14724,7 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -14253,6 +14835,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14363,6 +14946,7 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -14473,6 +15057,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -14599,6 +15184,7 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -14709,6 +15295,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14819,6 +15406,7 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -14929,6 +15517,7 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -15055,6 +15644,7 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -15165,6 +15755,7 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15275,6 +15866,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -15385,6 +15977,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -15511,6 +16104,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -15621,6 +16215,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15731,6 +16326,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -15841,6 +16437,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -15967,6 +16564,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -16077,6 +16675,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16187,6 +16786,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -16297,6 +16897,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -16423,6 +17024,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -16533,6 +17135,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16643,6 +17246,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -16753,6 +17357,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -16879,6 +17484,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -16989,6 +17595,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17099,6 +17706,7 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -17209,6 +17817,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -17335,6 +17944,7 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -17445,6 +18055,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17555,6 +18166,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -17665,6 +18277,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -17791,6 +18404,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -17901,6 +18515,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18011,6 +18626,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -18121,6 +18737,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -18247,6 +18864,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -18357,6 +18975,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18467,6 +19086,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -18577,6 +19197,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -18703,6 +19324,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -18813,6 +19435,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18923,6 +19546,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -19033,6 +19657,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -19159,6 +19784,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -19269,6 +19895,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19379,6 +20006,7 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -19489,6 +20117,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -19615,6 +20244,7 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -19725,6 +20355,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19836,6 +20467,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -19946,6 +20578,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -20072,6 +20705,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -20182,6 +20816,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20292,6 +20927,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -20402,6 +21038,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -20528,6 +21165,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -20638,6 +21276,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20747,6 +21386,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -20857,6 +21497,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -20983,6 +21624,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -21093,6 +21735,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21203,6 +21846,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -21313,6 +21957,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -21439,6 +22084,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -21549,6 +22195,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21659,6 +22306,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -21769,6 +22417,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -21895,6 +22544,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -22005,6 +22655,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22115,6 +22766,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -22225,6 +22877,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -22351,6 +23004,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -22461,6 +23115,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22571,6 +23226,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -22681,6 +23337,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -22807,6 +23464,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -22917,6 +23575,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23027,6 +23686,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -23137,6 +23797,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -23263,6 +23924,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -23373,6 +24035,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23483,6 +24146,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -23593,6 +24257,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -23719,6 +24384,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -23829,6 +24495,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23939,6 +24606,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -24049,6 +24717,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -24175,6 +24844,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -24285,6 +24955,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24395,6 +25066,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -24505,6 +25177,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -24631,6 +25304,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -24741,6 +25415,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24851,6 +25526,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -24961,6 +25637,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -25087,6 +25764,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -25197,6 +25875,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25307,6 +25986,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -25417,6 +26097,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -25543,6 +26224,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -25653,6 +26335,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25763,6 +26446,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -25873,6 +26557,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -25999,6 +26684,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -26109,6 +26795,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26219,6 +26906,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -26329,6 +27017,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -26455,6 +27144,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -26565,6 +27255,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26675,6 +27366,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -26785,6 +27477,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -26911,6 +27604,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -27021,6 +27715,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27131,6 +27826,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -27241,6 +27937,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -27367,6 +28064,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -27477,6 +28175,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27587,6 +28286,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -27697,6 +28397,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -27823,6 +28524,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -27933,6 +28635,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28043,6 +28746,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -28153,6 +28857,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -28279,6 +28984,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -28389,6 +29095,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28499,6 +29206,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -28609,6 +29317,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -28735,6 +29444,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -28845,6 +29555,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28955,6 +29666,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -29065,6 +29777,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -29191,6 +29904,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -29301,6 +30015,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29411,6 +30126,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -29521,6 +30237,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -29647,6 +30364,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -29757,6 +30475,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29867,6 +30586,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -29977,6 +30697,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -30103,6 +30824,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -30213,6 +30935,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30323,6 +31046,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -30433,6 +31157,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -30559,6 +31284,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -30669,6 +31395,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30779,6 +31506,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -30889,6 +31617,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -31015,6 +31744,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -31125,6 +31855,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31235,6 +31966,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -31345,6 +32077,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -31471,6 +32204,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -31581,6 +32315,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31691,6 +32426,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -31801,6 +32537,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -31927,6 +32664,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -32037,6 +32775,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32147,6 +32886,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -32257,6 +32997,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -32383,6 +33124,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -32493,6 +33235,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32603,6 +33346,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -32713,6 +33457,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -32839,6 +33584,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -32949,6 +33695,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33059,6 +33806,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -33169,6 +33917,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -33295,6 +34044,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -33405,6 +34155,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33515,6 +34266,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -33625,6 +34377,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -33751,6 +34504,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -33861,6 +34615,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33971,6 +34726,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -34081,6 +34837,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -34207,6 +34964,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -34317,6 +35075,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34427,6 +35186,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -34537,6 +35297,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -34663,6 +35424,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -34773,6 +35535,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34883,6 +35646,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -34993,6 +35757,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -35119,6 +35884,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -35229,6 +35995,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35339,6 +36106,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -35449,6 +36217,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -35575,6 +36344,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -35685,6 +36455,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35795,6 +36566,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -35905,6 +36677,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -36031,6 +36804,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -36141,6 +36915,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36251,6 +37026,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -36361,6 +37137,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -36487,6 +37264,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -36597,6 +37375,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36707,6 +37486,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -36817,6 +37597,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -36943,6 +37724,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -37053,6 +37835,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37163,6 +37946,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -37273,6 +38057,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -37399,6 +38184,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -37509,6 +38295,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37619,6 +38406,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -37729,6 +38517,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -37855,6 +38644,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -37965,6 +38755,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38076,6 +38867,7 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
@@ -38186,6 +38978,7 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -38312,6 +39105,7 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
@@ -38422,6 +39216,7 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38532,6 +39327,7 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
@@ -38642,6 +39438,7 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -38768,6 +39565,7 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
@@ -38878,6 +39676,7 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38988,6 +39787,7 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
@@ -39098,6 +39898,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
@@ -39224,6 +40025,7 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
@@ -39334,6 +40136,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39444,6 +40247,7 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -39554,6 +40358,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -39680,6 +40485,7 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -39790,6 +40596,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39900,6 +40707,7 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -40010,6 +40818,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -40136,6 +40945,7 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -40246,6 +41056,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40356,6 +41167,7 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -40466,6 +41278,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -40592,6 +41405,7 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -40702,6 +41516,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40812,6 +41627,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -40922,6 +41738,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -41048,6 +41865,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -41158,6 +41976,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41268,6 +42087,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -41378,6 +42198,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -41504,6 +42325,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -41614,6 +42436,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41724,6 +42547,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -41834,6 +42658,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -41960,6 +42785,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -42070,6 +42896,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42180,6 +43007,7 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -42290,6 +43118,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -42416,6 +43245,7 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -42526,6 +43356,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42636,6 +43467,7 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -42746,6 +43578,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -42872,6 +43705,7 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -42982,6 +43816,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43092,6 +43927,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -43202,6 +44038,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -43328,6 +44165,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -43438,6 +44276,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43548,6 +44387,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -43658,6 +44498,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -43784,6 +44625,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -43894,6 +44736,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44004,6 +44847,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -44114,6 +44958,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -44240,6 +45085,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -44350,6 +45196,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44460,6 +45307,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -44570,6 +45418,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -44696,6 +45545,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -44806,6 +45656,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44916,6 +45767,7 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -45026,6 +45878,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -45152,6 +46005,7 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -45262,6 +46116,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45372,6 +46227,7 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -45482,6 +46338,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -45608,6 +46465,7 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -45718,6 +46576,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45828,6 +46687,7 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -45938,6 +46798,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -46064,6 +46925,7 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -46174,6 +47036,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46284,6 +47147,7 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
@@ -46394,6 +47258,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
   operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
   operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
   operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
@@ -46520,6 +47385,7 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -46630,6 +47496,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46753,6 +47620,7 @@ export type CompanyUpdateWithoutTenantInput = {
   decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
@@ -46863,6 +47731,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
   decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
   decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
   operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
   operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
   operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46977,6 +47846,7 @@ export type CompanyCountOutputType = {
   decisionAlerts: number
   decisionAlertActions: number
   decisionFeedback: number
+  marketingCampaigns: number
   operationsSections: number
   operationsUnits: number
   operationsItems: number
@@ -47070,6 +47940,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   decisionAlerts?: boolean | CompanyCountOutputTypeCountDecisionAlertsArgs
   decisionAlertActions?: boolean | CompanyCountOutputTypeCountDecisionAlertActionsArgs
   decisionFeedback?: boolean | CompanyCountOutputTypeCountDecisionFeedbackArgs
+  marketingCampaigns?: boolean | CompanyCountOutputTypeCountMarketingCampaignsArgs
   operationsSections?: boolean | CompanyCountOutputTypeCountOperationsSectionsArgs
   operationsUnits?: boolean | CompanyCountOutputTypeCountOperationsUnitsArgs
   operationsItems?: boolean | CompanyCountOutputTypeCountOperationsItemsArgs
@@ -47595,6 +48466,13 @@ export type CompanyCountOutputTypeCountDecisionFeedbackArgs<ExtArgs extends runt
 /**
  * CompanyCountOutputType without action
  */
+export type CompanyCountOutputTypeCountMarketingCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingCampaignWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
 export type CompanyCountOutputTypeCountOperationsSectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OperationsSectionWhereInput
 }
@@ -47821,6 +48699,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   decisionAlerts?: boolean | Prisma.Company$decisionAlertsArgs<ExtArgs>
   decisionAlertActions?: boolean | Prisma.Company$decisionAlertActionsArgs<ExtArgs>
   decisionFeedback?: boolean | Prisma.Company$decisionFeedbackArgs<ExtArgs>
+  marketingCampaigns?: boolean | Prisma.Company$marketingCampaignsArgs<ExtArgs>
   operationsSections?: boolean | Prisma.Company$operationsSectionsArgs<ExtArgs>
   operationsUnits?: boolean | Prisma.Company$operationsUnitsArgs<ExtArgs>
   operationsItems?: boolean | Prisma.Company$operationsItemsArgs<ExtArgs>
@@ -47970,6 +48849,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   decisionAlerts?: boolean | Prisma.Company$decisionAlertsArgs<ExtArgs>
   decisionAlertActions?: boolean | Prisma.Company$decisionAlertActionsArgs<ExtArgs>
   decisionFeedback?: boolean | Prisma.Company$decisionFeedbackArgs<ExtArgs>
+  marketingCampaigns?: boolean | Prisma.Company$marketingCampaignsArgs<ExtArgs>
   operationsSections?: boolean | Prisma.Company$operationsSectionsArgs<ExtArgs>
   operationsUnits?: boolean | Prisma.Company$operationsUnitsArgs<ExtArgs>
   operationsItems?: boolean | Prisma.Company$operationsItemsArgs<ExtArgs>
@@ -48079,6 +48959,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     decisionAlerts: Prisma.$DecisionAlertPayload<ExtArgs>[]
     decisionAlertActions: Prisma.$DecisionAlertActionPayload<ExtArgs>[]
     decisionFeedback: Prisma.$DecisionFeedbackPayload<ExtArgs>[]
+    marketingCampaigns: Prisma.$MarketingCampaignPayload<ExtArgs>[]
     operationsSections: Prisma.$OperationsSectionPayload<ExtArgs>[]
     operationsUnits: Prisma.$OperationsUnitPayload<ExtArgs>[]
     operationsItems: Prisma.$OperationsItemPayload<ExtArgs>[]
@@ -48584,6 +49465,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   decisionAlerts<T extends Prisma.Company$decisionAlertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionAlertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionAlertActions<T extends Prisma.Company$decisionAlertActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionAlertActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   decisionFeedback<T extends Prisma.Company$decisionFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$decisionFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  marketingCampaigns<T extends Prisma.Company$marketingCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$marketingCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   operationsSections<T extends Prisma.Company$operationsSectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$operationsSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   operationsUnits<T extends Prisma.Company$operationsUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$operationsUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   operationsItems<T extends Prisma.Company$operationsItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$operationsItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -50801,6 +51683,30 @@ export type Company$decisionFeedbackArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.DecisionFeedbackScalarFieldEnum | Prisma.DecisionFeedbackScalarFieldEnum[]
+}
+
+/**
+ * Company.marketingCampaigns
+ */
+export type Company$marketingCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingCampaign
+   */
+  select?: Prisma.MarketingCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingCampaign
+   */
+  omit?: Prisma.MarketingCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingCampaignInclude<ExtArgs> | null
+  where?: Prisma.MarketingCampaignWhereInput
+  orderBy?: Prisma.MarketingCampaignOrderByWithRelationInput | Prisma.MarketingCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingCampaignScalarFieldEnum | Prisma.MarketingCampaignScalarFieldEnum[]
 }
 
 /**

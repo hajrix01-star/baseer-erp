@@ -241,6 +241,12 @@ export type DecisionAlertAction = Prisma.DecisionAlertActionModel
  */
 export type DecisionFeedback = Prisma.DecisionFeedbackModel
 /**
+ * Model MarketingCampaign
+ * P1 owns only an internal campaign register. Provider facts, OAuth tokens,
+ * Google locations and external publishing belong to later, separate gates.
+ */
+export type MarketingCampaign = Prisma.MarketingCampaignModel
+/**
  * Model ReportDocument
  * A user-retained, immutable rendering snapshot of a report run. A document
  * is created only by an explicit action; merely viewing a report never writes

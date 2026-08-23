@@ -64,6 +64,20 @@ The HR implementation reference is `6942b50`: Playwright reports `73 passed`
 and `1 intentional skip`; inventory has zero unclassified/stale targets; HR
 HTTP/RLS/lifecycle/onboarding/financial-integrity and Finance period gates pass.
 
+## Active product scope — 2026-08-23
+
+The owner has authorized **Marketing & Reputation — Gate A1 internal
+foundation**. Its binding scope is
+[the Marketing & Reputation foundation decision](../marketing/MARKETING_REPUTATION_FOUNDATION_DECISION_2026-08-23.md): company-scoped campaign register,
+centralized UI and honest provider readiness only. It does not authorize
+Google OAuth, credentials, SDKs, provider traffic, provider facts/content,
+workers, publishing, marketing-to-finance links, advertising spend/actions,
+Basira provider execution, or any automated response. Google Ads and Google
+Business each require their own later Provider Decision Record.
+
+This is the single active business scope. The module register and quality
+evidence must change together with its acceptance state.
+
 ## Active cross-cutting enablement — 2026-08-22
 
 The owner has authorized the **Baseer Library Adoption operating authority**:

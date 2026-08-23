@@ -146,6 +146,8 @@ const COMPANY_MANAGER_PERMISSIONS = [
   "decision.context.read",
   "decision.context.company.manage",
   "decision.feedback.write",
+  "marketing.insights.read",
+  "marketing.campaign.write",
   "finance.periods.write",
   "finance.vaults.read",
   "finance.vaults.write",

@@ -219,6 +219,26 @@ enum DecisionContextReviewActionKind {
   DISMISSED
 }
 
+/// A manual campaign register is business context. It cannot post finance,
+/// invoke a provider, or imply that provider conversions are ERP sales.
+enum MarketingCampaignPlatform {
+  MANUAL
+  GOOGLE_ADS
+  META
+  TIKTOK
+  SNAPCHAT
+  OTHER
+}
+
+enum MarketingCampaignStatus {
+  DRAFT
+  PLANNED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  ARCHIVED
+}
+
 /// A cash-performance event is a source-backed management fact, never a
 /// substitute for the ledger or the formal P&L account mapping.
 enum FinanceCashPerformanceEventKind {
@@ -721,6 +741,7 @@ model Company {
   decisionAlerts                             DecisionAlert[]
   decisionAlertActions                       DecisionAlertAction[]
   decisionFeedback                           DecisionFeedback[]
+  marketingCampaigns                         MarketingCampaign[]
   operationsSections                         OperationsSection[]
   operationsUnits                            OperationsUnit[]
   operationsItems                            OperationsItem[]
@@ -1474,6 +1495,32 @@ model DecisionFeedback {
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, alertId, createdAt])
+}
+
+/// P1 owns only an internal campaign register. Provider facts, OAuth tokens,
+/// Google locations and external publishing belong to later, separate gates.
+model MarketingCampaign {
+  id                String                    @id @default(uuid()) @db.Uuid
+  tenantId          String                    @db.Uuid
+  companyId         String                    @db.Uuid
+  titleAr           String                    @db.VarChar(160)
+  titleEn           String?                   @db.VarChar(160)
+  platform          MarketingCampaignPlatform @default(MANUAL)
+  externalReference String?                   @db.VarChar(160)
+  startsOn          DateTime?                 @db.Date
+  endsOn            DateTime?                 @db.Date
+  status            MarketingCampaignStatus   @default(DRAFT)
+  objective         String?                   @db.VarChar(500)
+  notes             String?                   @db.VarChar(2000)
+  createdByUserId   String                    @db.Uuid
+  createdAt         DateTime                  @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                  @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, status, startsOn])
+  @@index([tenantId, companyId, platform, createdAt])
 }
 
 /// A user-retained, immutable rendering snapshot of a report run. A document

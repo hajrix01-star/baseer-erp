@@ -116,6 +116,8 @@ import { DecisionIntelligenceController } from './decision-intelligence/decision
 import { DecisionIntelligenceService } from './decision-intelligence/decision-intelligence.service.js';
 import { DecisionContextImportService } from './decision-intelligence/decision-context-import.service.js';
 import { DecisionContextResearchService } from './decision-intelligence/decision-context-research.service.js';
+import { MarketingController } from './marketing/marketing.controller.js';
+import { MarketingService } from './marketing/marketing.service.js';
 
 @Module({
   imports: [
@@ -128,7 +130,7 @@ import { DecisionContextResearchService } from './decision-intelligence/decision
       ],
     }),
   ],
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController, MarketingController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -202,6 +204,7 @@ import { DecisionContextResearchService } from './decision-intelligence/decision
     DecisionIntelligenceService,
     DecisionContextImportService,
     DecisionContextResearchService,
+    MarketingService,
   ],
 })
 export class AppModule {}
