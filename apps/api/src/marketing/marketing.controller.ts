@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Param, Post, Put, UnauthorizedException } from "@nestjs/common";
-import { archiveMarketingCampaignRequestSchema, createMarketingCampaignRequestSchema, marketingEntityReceiptSchema, marketingWorkspaceSchema, updateMarketingCampaignRequestSchema } from "@baseer-erp/contracts";
+import { archiveMarketingCampaignRequestSchema, createMarketingCampaignRequestSchema, marketingEntityReceiptSchema, marketingWorkspaceSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingService } from "./marketing.service.js";
@@ -29,6 +29,12 @@ export class MarketingController {
   async archive(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = archiveMarketingCampaignRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException("Invalid marketing campaign archive request.");
     return marketingEntityReceiptSchema.parse(await this.marketing.archiveCampaign(await this.context(authorization, companyId, "marketing.campaign.write"), parsed.data));
+  }
+
+  @Put("reputation/reply-policy")
+  async updateReplyPolicy(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = updateMarketingReputationReplyPolicyRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException("Invalid marketing reputation reply policy request.");
+    return marketingEntityReceiptSchema.parse(await this.marketing.updateReputationReplyPolicy(await this.context(authorization, companyId, "marketing.reputation.policy.manage"), parsed.data));
   }
 
   private async context(authorization: string | undefined, companyId: string | undefined, capability: string) {

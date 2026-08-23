@@ -247,6 +247,14 @@ export type DecisionFeedback = Prisma.DecisionFeedbackModel
  */
 export type MarketingCampaign = Prisma.MarketingCampaignModel
 /**
+ * Model MarketingReputationReplyPolicy
+ * A company chooses the future handling of Google review ratings here. This
+ * row has no provider identifiers, review content, credential or publishing
+ * authority; a provider connection must independently prove consent before a
+ * configured automatic action can ever run.
+ */
+export type MarketingReputationReplyPolicy = Prisma.MarketingReputationReplyPolicyModel
+/**
  * Model ReportDocument
  * A user-retained, immutable rendering snapshot of a report run. A document
  * is created only by an explicit action; merely viewing a report never writes

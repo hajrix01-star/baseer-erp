@@ -330,6 +330,41 @@ export const MarketingCampaignStatus = {
 export type MarketingCampaignStatus = (typeof MarketingCampaignStatus)[keyof typeof MarketingCampaignStatus]
 
 
+export const MarketingReputationReplyAutomationStatus = {
+  DISABLED: 'DISABLED',
+  ENABLED: 'ENABLED',
+  PAUSED: 'PAUSED'
+} as const
+
+export type MarketingReputationReplyAutomationStatus = (typeof MarketingReputationReplyAutomationStatus)[keyof typeof MarketingReputationReplyAutomationStatus]
+
+
+export const MarketingReputationReplyAuthoringMethod = {
+  TEMPLATE: 'TEMPLATE',
+  BASIRA_DRAFT: 'BASIRA_DRAFT'
+} as const
+
+export type MarketingReputationReplyAuthoringMethod = (typeof MarketingReputationReplyAuthoringMethod)[keyof typeof MarketingReputationReplyAuthoringMethod]
+
+
+export const MarketingReputationReplyTone = {
+  WARM: 'WARM',
+  PROFESSIONAL: 'PROFESSIONAL',
+  FORMAL: 'FORMAL'
+} as const
+
+export type MarketingReputationReplyTone = (typeof MarketingReputationReplyTone)[keyof typeof MarketingReputationReplyTone]
+
+
+export const MarketingReputationReplyLanguageMode = {
+  MATCH_REVIEW: 'MATCH_REVIEW',
+  ARABIC: 'ARABIC',
+  ENGLISH: 'ENGLISH'
+} as const
+
+export type MarketingReputationReplyLanguageMode = (typeof MarketingReputationReplyLanguageMode)[keyof typeof MarketingReputationReplyLanguageMode]
+
+
 export const FinanceCashPerformanceEventKind = {
   SALES_COLLECTION: 'SALES_COLLECTION',
   PURCHASE_PAYMENT: 'PURCHASE_PAYMENT',

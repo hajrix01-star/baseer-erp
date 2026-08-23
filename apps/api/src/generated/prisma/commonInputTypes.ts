@@ -786,6 +786,74 @@ export type EnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
 }
 
+export type EnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAutomationStatus | Prisma.EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel> | $Enums.MarketingReputationReplyAutomationStatus
+}
+
+export type EnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAuthoringMethod | Prisma.EnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel> | $Enums.MarketingReputationReplyAuthoringMethod
+}
+
+export type EnumMarketingReputationReplyToneFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyTone | Prisma.EnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel> | $Enums.MarketingReputationReplyTone
+}
+
+export type EnumMarketingReputationReplyLanguageModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyLanguageMode | Prisma.EnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel> | $Enums.MarketingReputationReplyLanguageMode
+}
+
+export type EnumMarketingReputationReplyAutomationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAutomationStatus | Prisma.EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyAutomationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel>
+}
+
+export type EnumMarketingReputationReplyAuthoringMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAuthoringMethod | Prisma.EnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyAuthoringMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel>
+}
+
+export type EnumMarketingReputationReplyToneWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyTone | Prisma.EnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyToneWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyTone
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel>
+}
+
+export type EnumMarketingReputationReplyLanguageModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyLanguageMode | Prisma.EnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyLanguageModeWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyLanguageMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel>
+}
+
 export type EnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceCashPerformanceEventKind | Prisma.EnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceCashPerformanceEventKind[] | Prisma.ListEnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel>
@@ -2728,6 +2796,74 @@ export type NestedEnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAutomationStatus | Prisma.EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel> | $Enums.MarketingReputationReplyAutomationStatus
+}
+
+export type NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAuthoringMethod | Prisma.EnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel> | $Enums.MarketingReputationReplyAuthoringMethod
+}
+
+export type NestedEnumMarketingReputationReplyToneFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyTone | Prisma.EnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel> | $Enums.MarketingReputationReplyTone
+}
+
+export type NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyLanguageMode | Prisma.EnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel> | $Enums.MarketingReputationReplyLanguageMode
+}
+
+export type NestedEnumMarketingReputationReplyAutomationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAutomationStatus | Prisma.EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyAutomationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingReputationReplyAuthoringMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyAuthoringMethod | Prisma.EnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyAuthoringMethod[] | Prisma.ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyAuthoringMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyAuthoringMethodFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingReputationReplyToneWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyTone | Prisma.EnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyTone[] | Prisma.ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyToneWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyTone
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyToneFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingReputationReplyLanguageModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingReputationReplyLanguageMode | Prisma.EnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingReputationReplyLanguageMode[] | Prisma.ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingReputationReplyLanguageModeWithAggregatesFilter<$PrismaModel> | $Enums.MarketingReputationReplyLanguageMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingReputationReplyLanguageModeFilter<$PrismaModel>
 }
 
 export type NestedEnumFinanceCashPerformanceEventKindFilter<$PrismaModel = never> = {

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import type { ArchiveMarketingCampaignRequest, CreateMarketingCampaignRequest, UpdateMarketingCampaignRequest } from "@baseer-erp/contracts";
+import type { ArchiveMarketingCampaignRequest, CreateMarketingCampaignRequest, UpdateMarketingCampaignRequest, UpdateMarketingReputationReplyPolicyRequest } from "@baseer-erp/contracts";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { IdempotencyPayloadMismatchError, IdempotencyService, type CanonicalJsonValue } from "../core-controls/idempotency.service.js";
@@ -26,6 +26,9 @@ export class MarketingService {
         orderBy: [{ status: "asc" }, { startsOn: "desc" }, { createdAt: "desc" }],
         take: 1_000,
       });
+      const replyPolicy = await tx.marketingReputationReplyPolicy.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+      });
       return {
         companyId: context.companyId,
         campaigns: campaigns.map((campaign) => ({
@@ -46,6 +49,7 @@ export class MarketingService {
           { provider: "GOOGLE_ADS" as const, status: "NOT_CONNECTED" as const, messageAr: "Google Ads غير متصل في هذه المرحلة؛ لا تُعرض أي تكلفة أو تحويلات أو قرارات إنفاق." },
           { provider: "GOOGLE_BUSINESS" as const, status: "NOT_CONNECTED" as const, messageAr: "ملف Google Business غير متصل؛ لا توجد تقييمات أو منشورات أو صلاحية نشر في هذه المرحلة." },
         ],
+        replyPolicy: publicReplyPolicy(replyPolicy),
       };
     });
   }
@@ -83,6 +87,18 @@ export class MarketingService {
     }, 200);
   }
 
+  async updateReputationReplyPolicy(context: TrustedCompanyActorContext, request: UpdateMarketingReputationReplyPolicyRequest): Promise<Receipt> {
+    return this.withIdempotency(context, "marketing.reputation.reply_policy.update", request.idempotencyKey, request, async (tx) => {
+      const existing = await tx.marketingReputationReplyPolicy.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId } });
+      const next = normalizeReplyPolicy(request);
+      const policy = existing
+        ? await tx.marketingReputationReplyPolicy.update({ where: { id: existing.id }, data: { ...next, revision: { increment: 1 }, updatedByUserId: context.actorUserId } })
+        : await tx.marketingReputationReplyPolicy.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, updatedByUserId: context.actorUserId, ...next } });
+      await this.audit(tx, context, "marketing.reputation.reply_policy.updated", policy.id, existing ? publicReplyPolicy(existing) : null, publicReplyPolicy(policy));
+      return { id: policy.id, replayed: false };
+    }, 200);
+  }
+
   private async withIdempotency(context: TrustedCompanyActorContext, operation: string, key: string, request: unknown, action: (tx: Prisma.TransactionClient) => Promise<Receipt>, status: number) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       let begun;
@@ -113,4 +129,20 @@ function date(value: string | undefined) { return value ? new Date(`${value}T00:
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
 function publicCampaign(campaign: { titleAr: string; titleEn: string | null; platform: string; externalReference: string | null; startsOn: Date | null; endsOn: Date | null; status: string; objective: string | null; notes: string | null }) {
   return { titleAr: campaign.titleAr, titleEn: campaign.titleEn, platform: campaign.platform, externalReference: campaign.externalReference, startsOn: day(campaign.startsOn), endsOn: day(campaign.endsOn), status: campaign.status, objective: campaign.objective, notes: campaign.notes };
+}
+
+function normalizeReplyPolicy(value: UpdateMarketingReputationReplyPolicyRequest) {
+  return {
+    automationStatus: value.automationStatus,
+    authoringMethod: value.authoringMethod,
+    tone: value.tone,
+    languageMode: value.languageMode,
+    autoFourFiveEnabled: value.autoFourFiveEnabled,
+    autoThreeIfSafe: value.autoThreeIfSafe,
+    signature: blank(value.signature),
+  };
+}
+
+function publicReplyPolicy(policy: { automationStatus: "DISABLED" | "ENABLED" | "PAUSED"; authoringMethod: "TEMPLATE" | "BASIRA_DRAFT"; tone: "WARM" | "PROFESSIONAL" | "FORMAL"; languageMode: "MATCH_REVIEW" | "ARABIC" | "ENGLISH"; autoFourFiveEnabled: boolean; autoThreeIfSafe: boolean; signature: string | null; revision: number } | null) {
+  return policy ? { automationStatus: policy.automationStatus, authoringMethod: policy.authoringMethod, tone: policy.tone, languageMode: policy.languageMode, autoFourFiveEnabled: policy.autoFourFiveEnabled, autoThreeIfSafe: policy.autoThreeIfSafe, signature: policy.signature, revision: policy.revision, executionReadiness: "NOT_CONNECTED" as const } : { automationStatus: "DISABLED" as const, authoringMethod: "TEMPLATE" as const, tone: "WARM" as const, languageMode: "MATCH_REVIEW" as const, autoFourFiveEnabled: true, autoThreeIfSafe: true, signature: null, revision: 0 + 1, executionReadiness: "NOT_CONNECTED" as const };
 }

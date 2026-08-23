@@ -67,13 +67,14 @@ HTTP/RLS/lifecycle/onboarding/financial-integrity and Finance period gates pass.
 ## Active product scope — 2026-08-23
 
 The owner has authorized **Marketing & Reputation — Gate A1 internal
-foundation**. Its binding scope is
+foundation and reply-policy configuration**. Its binding scope is
 [the Marketing & Reputation foundation decision](../marketing/MARKETING_REPUTATION_FOUNDATION_DECISION_2026-08-23.md): company-scoped campaign register,
-centralized UI and honest provider readiness only. It does not authorize
+centralized UI, an audited company reply policy and honest provider readiness
+only. It does not authorize
 Google OAuth, credentials, SDKs, provider traffic, provider facts/content,
 workers, publishing, marketing-to-finance links, advertising spend/actions,
-Basira provider execution, or any automated response. Google Ads and Google
-Business each require their own later Provider Decision Record.
+Basira provider execution, or any live automated response. Google Ads and
+Google Business each require their own later Provider Decision Record.
 
 This is the single active business scope. The module register and quality
 evidence must change together with its acceptance state.

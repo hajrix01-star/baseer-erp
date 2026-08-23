@@ -7,9 +7,9 @@
 
 | Field | Value |
 | --- | --- |
-| Active work | **Marketing & Reputation — Gate A1 internal foundation.** سجل حملات الشركة وواجهة جاهزية صادقة فقط، بحسب قرار 2026-08-23. |
+| Active work | **Marketing & Reputation — Gate A1 internal foundation.** سجل الحملات، سياسة ردود السمعة للشركة، وواجهة جاهزية صادقة فقط، بحسب قرار 2026-08-23. |
 | Open owner acceptance | قبول A1 بعد اختبارات contracts/API/RLS/audit/UI. تبقى Production وNoorix والتقارير الرسمية وGoogle وAI بوابات مستقلة. |
-| Next decision gate | قبول A1، ثم Provider Decision Record منفصل لـGoogle Ads read-only أو Google Business manual publisher. |
+| Next decision gate | قبول A1 ثم اكتمال القسم الداخلي. الموصلات تأتي آخر النطاق؛ وعند اعتماد كل PDR يكون ربط كل شركة ذاتياً من الواجهة، لا تدخلاً برمجياً. |
 | Explicitly deferred | Noorix import/cutover, production release, external bank connectivity/automated reconciliation, official reports/P&L, assets accounting, invitations/MFA, Google/provider integration and AI provider execution. |
 
 ## Portfolio state
@@ -34,7 +34,7 @@
 | Operations (catalogue, purchasing, inventory and custody) | **Closed — local owner acceptance and library migration** | Items, units, recipes/conversions, purchase request/receipt, inventory movement, custody, internal registration and operation reports. Browser E2E, 12-scope DB verifier, migration inventory and release budgets pass from `c53ba7d`; server paging/filtering covers the large catalogue and report surfaces. | No financial policy, formal financial report, Noorix or external integration is activated. Intentional bounded `DataTable` surfaces are final lightweight decisions, not legacy. |
 | Assets & Warranty | **Closed locally inside Operations Core — Gate A** | Operations section: Purchase & Expense follow-up marker, company-scoped queue and operational asset/warranty register; archive, permissions, audit, idempotency and no-finance-posting behavior are verified. | Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes rather than unfinished Gate A work. |
 | Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
-| Marketing & Reputation | **Active — Gate A1 internal foundation** | سجل الحملات وحالة اتصال Google الصادقة فقط؛ لا provider facts ولا أسرار أو اتصال خارجي. | اختبار/قبول A1، ثم PDR منفصل لكل من Ads (read-only) وGoogle Business (read ثم نشر يدوي مؤكد). |
+| Marketing & Reputation | **Active — Gate A1 internal foundation** | سجل الحملات وسياسة ردود السمعة وحالة اتصال Google الصادقة فقط؛ لا provider facts ولا أسرار أو اتصال خارجي. | اختبار/قبول القسم الداخلي أولاً. الموصلات هي آخر بناء النطاق: PDR منفصل ثم تفعيل ذاتي من الواجهة لكل شركة لـAds (read-only) وGoogle Business (read ثم ردود حية محكومة). |
 | Inbound, AI provider, remaining modules | Not started or deferred | AI platform guardrails only; no provider execution. | Separate authorized scopes after their gates. |
 
 ## Financial read-scale baseline

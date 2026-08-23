@@ -32,17 +32,28 @@ try {
   const workspace = await marketing.workspace(context);
   assert.equal(workspace.campaigns.length, 1, "The company register must return its campaign.");
   assert.equal(workspace.readiness.every((entry) => entry.status === "NOT_CONNECTED"), true, "Provider readiness must not masquerade as a zero metric.");
+  assert.equal(workspace.replyPolicy.executionReadiness, "NOT_CONNECTED", "Saving reply configuration must not imply a live publisher.");
+  const replyPolicyRequest = { automationStatus: "ENABLED", authoringMethod: "TEMPLATE", tone: "WARM", languageMode: "MATCH_REVIEW", autoFourFiveEnabled: true, autoThreeIfSafe: true, signature: "فريق الشركة", idempotencyKey: randomUUID() };
+  const policyCreated = await marketing.updateReputationReplyPolicy(context, replyPolicyRequest);
+  const policyReplayed = await marketing.updateReputationReplyPolicy(context, replyPolicyRequest);
+  assert.equal(policyReplayed.id, policyCreated.id, "A matching reply policy request must replay its receipt.");
+  assert.equal(policyReplayed.replayed, true, "A matching reply policy request must be marked replayed.");
+  const policyWorkspace = await marketing.workspace(context);
+  assert.equal(policyWorkspace.replyPolicy.automationStatus, "ENABLED", "The company policy must retain its selected automation state.");
+  assert.equal(policyWorkspace.replyPolicy.executionReadiness, "NOT_CONNECTED", "A configured policy must still report no live Google execution.");
+  const otherPolicyWorkspace = await marketing.workspace({ ...context, companyId: fixture.otherCompanyId });
+  assert.equal(otherPolicyWorkspace.replyPolicy.automationStatus, "DISABLED", "A company must not read another company's reply policy.");
   await assert.rejects(() => marketing.updateCampaign({ ...context, companyId: fixture.otherCompanyId }, created.id, { ...request, idempotencyKey: randomUUID(), titleAr: "محاولة شركة أخرى" }), /not found/i, "A company must not update another company's campaign.");
   await marketing.archiveCampaign(context, { campaignId: created.id, reason: "اختبار دورة الحياة", idempotencyKey: randomUUID() });
   const archived = await marketing.workspace(context);
   assert.equal(archived.campaigns[0]?.status, "ARCHIVED", "Archiving must preserve a campaign record.");
   const [auditCount, journalCount] = await database.inTenantTransaction(fixture.tenantId, async (tx) => Promise.all([
-    tx.auditEvent.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, action: { startsWith: "marketing.campaign." } } }),
+    tx.auditEvent.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, action: { startsWith: "marketing." } } }),
     tx.financeJournalEntry.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
   ]));
-  assert.ok(auditCount >= 2, "Marketing create and archive must be audited.");
+  assert.ok(auditCount >= 3, "Marketing create, reply policy and archive must be audited.");
   assert.equal(journalCount, 0, "Marketing Gate A1 must not create financial journal entries.");
-  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "audit", "no_finance_posting", "honest_provider_readiness"] }));
+  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "reply_policy", "reply_policy_replay", "audit", "no_finance_posting", "honest_provider_readiness"] }));
 } finally {
   await app?.close();
   await pool.end();

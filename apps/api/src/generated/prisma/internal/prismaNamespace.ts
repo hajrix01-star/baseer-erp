@@ -434,6 +434,7 @@ export const ModelName = {
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
   FinanceCashPerformanceCoverage: 'FinanceCashPerformanceCoverage',
@@ -533,7 +534,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "marketingCampaign" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "marketingCampaign" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3272,6 +3273,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MarketingCampaignCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingReputationReplyPolicy: {
+      payload: Prisma.$MarketingReputationReplyPolicyPayload<ExtArgs>
+      fields: Prisma.MarketingReputationReplyPolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingReputationReplyPolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingReputationReplyPolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingReputationReplyPolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingReputationReplyPolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingReputationReplyPolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingReputationReplyPolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingReputationReplyPolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingReputationReplyPolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingReputationReplyPolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        update: {
+          args: Prisma.MarketingReputationReplyPolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingReputationReplyPolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingReputationReplyPolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingReputationReplyPolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingReputationReplyPolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingReputationReplyPolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingReputationReplyPolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingReputationReplyPolicy>
+        }
+        groupBy: {
+          args: Prisma.MarketingReputationReplyPolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingReputationReplyPolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingReputationReplyPolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingReputationReplyPolicyCountAggregateOutputType> | number
         }
       }
     }
@@ -10148,6 +10223,26 @@ export const MarketingCampaignScalarFieldEnum = {
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
 
 
+export const MarketingReputationReplyPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  automationStatus: 'automationStatus',
+  authoringMethod: 'authoringMethod',
+  tone: 'tone',
+  languageMode: 'languageMode',
+  autoFourFiveEnabled: 'autoFourFiveEnabled',
+  autoThreeIfSafe: 'autoThreeIfSafe',
+  signature: 'signature',
+  revision: 'revision',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingReputationReplyPolicyScalarFieldEnum = (typeof MarketingReputationReplyPolicyScalarFieldEnum)[keyof typeof MarketingReputationReplyPolicyScalarFieldEnum]
+
+
 export const ReportDocumentScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -12224,6 +12319,62 @@ export type ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel> = FieldRe
 
 
 /**
+ * Reference to a field of type 'MarketingReputationReplyAutomationStatus'
+ */
+export type EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyAutomationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyAutomationStatus[]'
+ */
+export type ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyAutomationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyAuthoringMethod'
+ */
+export type EnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyAuthoringMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyAuthoringMethod[]'
+ */
+export type ListEnumMarketingReputationReplyAuthoringMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyAuthoringMethod[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyTone'
+ */
+export type EnumMarketingReputationReplyToneFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyTone'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyTone[]'
+ */
+export type ListEnumMarketingReputationReplyToneFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyTone[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyLanguageMode'
+ */
+export type EnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyLanguageMode'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingReputationReplyLanguageMode[]'
+ */
+export type ListEnumMarketingReputationReplyLanguageModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyLanguageMode[]'>
+    
+
+
+/**
  * Reference to a field of type 'FinanceCashPerformanceEventKind'
  */
 export type EnumFinanceCashPerformanceEventKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinanceCashPerformanceEventKind'>
@@ -13376,6 +13527,7 @@ export type GlobalOmitConfig = {
   decisionAlertAction?: Prisma.DecisionAlertActionOmit
   decisionFeedback?: Prisma.DecisionFeedbackOmit
   marketingCampaign?: Prisma.MarketingCampaignOmit
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyOmit
   reportDocument?: Prisma.ReportDocumentOmit
   financeCashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOmit
   financeCashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageOmit

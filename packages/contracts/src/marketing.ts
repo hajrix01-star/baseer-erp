@@ -8,6 +8,23 @@ const marketingIdSchema = z.string().uuid();
 /** A campaign is business context, never a financial posting or a provider action. */
 export const marketingCampaignPlatformSchema = z.enum(["MANUAL", "GOOGLE_ADS", "META", "TIKTOK", "SNAPCHAT", "OTHER"]);
 export const marketingCampaignStatusSchema = z.enum(["DRAFT", "PLANNED", "ACTIVE", "COMPLETED", "CANCELLED", "ARCHIVED"]);
+export const marketingReputationReplyAutomationStatusSchema = z.enum(["DISABLED", "ENABLED", "PAUSED"]);
+export const marketingReputationReplyAuthoringMethodSchema = z.enum(["TEMPLATE", "BASIRA_DRAFT"]);
+export const marketingReputationReplyToneSchema = z.enum(["WARM", "PROFESSIONAL", "FORMAL"]);
+export const marketingReputationReplyLanguageModeSchema = z.enum(["MATCH_REVIEW", "ARABIC", "ENGLISH"]);
+
+/** Configuration only. It has no provider credential or authority to publish. */
+export const marketingReputationReplyPolicySchema = z.object({
+  automationStatus: marketingReputationReplyAutomationStatusSchema,
+  authoringMethod: marketingReputationReplyAuthoringMethodSchema,
+  tone: marketingReputationReplyToneSchema,
+  languageMode: marketingReputationReplyLanguageModeSchema,
+  autoFourFiveEnabled: z.boolean(),
+  autoThreeIfSafe: z.boolean(),
+  signature: z.string().max(160).nullable(),
+  revision: z.number().int().positive(),
+  executionReadiness: z.literal("NOT_CONNECTED"),
+}).strict();
 
 export const marketingCampaignSchema = z.object({
   id: marketingIdSchema,
@@ -32,6 +49,7 @@ export const marketingWorkspaceSchema = z.object({
     status: z.literal("NOT_CONNECTED"),
     messageAr: z.string().min(1).max(500),
   }).strict()).length(2),
+  replyPolicy: marketingReputationReplyPolicySchema,
 }).strict();
 
 const campaignPayloadSchema = z.object({
@@ -54,8 +72,19 @@ export const archiveMarketingCampaignRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 export const marketingEntityReceiptSchema = z.object({ id: marketingIdSchema, replayed: z.boolean() }).strict();
+export const updateMarketingReputationReplyPolicyRequestSchema = z.object({
+  automationStatus: marketingReputationReplyAutomationStatusSchema,
+  authoringMethod: marketingReputationReplyAuthoringMethodSchema,
+  tone: marketingReputationReplyToneSchema,
+  languageMode: marketingReputationReplyLanguageModeSchema,
+  autoFourFiveEnabled: z.boolean(),
+  autoThreeIfSafe: z.boolean(),
+  signature: z.string().trim().max(160).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
 
 export type MarketingWorkspace = z.infer<typeof marketingWorkspaceSchema>;
 export type CreateMarketingCampaignRequest = z.infer<typeof createMarketingCampaignRequestSchema>;
 export type UpdateMarketingCampaignRequest = z.infer<typeof updateMarketingCampaignRequestSchema>;
 export type ArchiveMarketingCampaignRequest = z.infer<typeof archiveMarketingCampaignRequestSchema>;
+export type UpdateMarketingReputationReplyPolicyRequest = z.infer<typeof updateMarketingReputationReplyPolicyRequestSchema>;

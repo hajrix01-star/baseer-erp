@@ -88,6 +88,7 @@ export const ModelName = {
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
   FinanceCashPerformanceCoverage: 'FinanceCashPerformanceCoverage',
@@ -806,6 +807,26 @@ export const MarketingCampaignScalarFieldEnum = {
 } as const
 
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
+
+
+export const MarketingReputationReplyPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  automationStatus: 'automationStatus',
+  authoringMethod: 'authoringMethod',
+  tone: 'tone',
+  languageMode: 'languageMode',
+  autoFourFiveEnabled: 'autoFourFiveEnabled',
+  autoThreeIfSafe: 'autoThreeIfSafe',
+  signature: 'signature',
+  revision: 'revision',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingReputationReplyPolicyScalarFieldEnum = (typeof MarketingReputationReplyPolicyScalarFieldEnum)[keyof typeof MarketingReputationReplyPolicyScalarFieldEnum]
 
 
 export const ReportDocumentScalarFieldEnum = {

@@ -239,6 +239,31 @@ enum MarketingCampaignStatus {
   ARCHIVED
 }
 
+/// Company-owned reply behaviour. It is configuration only until the separate
+/// Google Business provider gate, consent and publisher controls are active.
+enum MarketingReputationReplyAutomationStatus {
+  DISABLED
+  ENABLED
+  PAUSED
+}
+
+enum MarketingReputationReplyAuthoringMethod {
+  TEMPLATE
+  BASIRA_DRAFT
+}
+
+enum MarketingReputationReplyTone {
+  WARM
+  PROFESSIONAL
+  FORMAL
+}
+
+enum MarketingReputationReplyLanguageMode {
+  MATCH_REVIEW
+  ARABIC
+  ENGLISH
+}
+
 /// A cash-performance event is a source-backed management fact, never a
 /// substitute for the ledger or the formal P&L account mapping.
 enum FinanceCashPerformanceEventKind {
@@ -742,6 +767,7 @@ model Company {
   decisionAlertActions                       DecisionAlertAction[]
   decisionFeedback                           DecisionFeedback[]
   marketingCampaigns                         MarketingCampaign[]
+  marketingReputationReplyPolicy             MarketingReputationReplyPolicy?
   operationsSections                         OperationsSection[]
   operationsUnits                            OperationsUnit[]
   operationsItems                            OperationsItem[]
@@ -1521,6 +1547,33 @@ model MarketingCampaign {
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status, startsOn])
   @@index([tenantId, companyId, platform, createdAt])
+}
+
+/// A company chooses the future handling of Google review ratings here. This
+/// row has no provider identifiers, review content, credential or publishing
+/// authority; a provider connection must independently prove consent before a
+/// configured automatic action can ever run.
+model MarketingReputationReplyPolicy {
+  id                    String                                          @id @default(uuid()) @db.Uuid
+  tenantId              String                                          @db.Uuid
+  companyId             String                                          @db.Uuid
+  automationStatus      MarketingReputationReplyAutomationStatus        @default(DISABLED)
+  authoringMethod       MarketingReputationReplyAuthoringMethod          @default(TEMPLATE)
+  tone                  MarketingReputationReplyTone                     @default(WARM)
+  languageMode          MarketingReputationReplyLanguageMode             @default(MATCH_REVIEW)
+  autoFourFiveEnabled   Boolean                                         @default(true)
+  autoThreeIfSafe       Boolean                                         @default(true)
+  signature             String?                                         @db.VarChar(160)
+  revision              Int                                             @default(1)
+  updatedByUserId       String                                          @db.Uuid
+  createdAt             DateTime                                        @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime                                        @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([companyId, tenantId])
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, automationStatus])
 }
 
 /// A user-retained, immutable rendering snapshot of a report run. A document
