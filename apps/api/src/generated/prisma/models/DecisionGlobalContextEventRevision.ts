@@ -277,6 +277,7 @@ export type DecisionGlobalContextEventRevisionWhereInput = {
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
   event?: Prisma.XOR<Prisma.DecisionGlobalContextEventScalarRelationFilter, Prisma.DecisionGlobalContextEventWhereInput>
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
 }
 
 export type DecisionGlobalContextEventRevisionOrderByWithRelationInput = {
@@ -294,6 +295,7 @@ export type DecisionGlobalContextEventRevisionOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   event?: Prisma.DecisionGlobalContextEventOrderByWithRelationInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkOrderByRelationAggregateInput
 }
 
 export type DecisionGlobalContextEventRevisionWhereUniqueInput = Prisma.AtLeast<{
@@ -316,6 +318,7 @@ export type DecisionGlobalContextEventRevisionWhereUniqueInput = Prisma.AtLeast<
   status?: Prisma.EnumDecisionContextEventStatusFilter<"DecisionGlobalContextEventRevision"> | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
   event?: Prisma.XOR<Prisma.DecisionGlobalContextEventScalarRelationFilter, Prisma.DecisionGlobalContextEventWhereInput>
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
 }, "id" | "id_tenantId" | "eventId_revision">
 
 export type DecisionGlobalContextEventRevisionOrderByWithAggregationInput = {
@@ -371,6 +374,7 @@ export type DecisionGlobalContextEventRevisionCreateInput = {
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
   event: Prisma.DecisionGlobalContextEventCreateNestedOneWithoutRevisionsInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutGlobalContextRevisionInput
 }
 
 export type DecisionGlobalContextEventRevisionUncheckedCreateInput = {
@@ -387,6 +391,7 @@ export type DecisionGlobalContextEventRevisionUncheckedCreateInput = {
   verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutGlobalContextRevisionInput
 }
 
 export type DecisionGlobalContextEventRevisionUpdateInput = {
@@ -402,6 +407,7 @@ export type DecisionGlobalContextEventRevisionUpdateInput = {
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.DecisionGlobalContextEventUpdateOneRequiredWithoutRevisionsNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutGlobalContextRevisionNestedInput
 }
 
 export type DecisionGlobalContextEventRevisionUncheckedUpdateInput = {
@@ -418,6 +424,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateInput = {
   verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutGlobalContextRevisionNestedInput
 }
 
 export type DecisionGlobalContextEventRevisionCreateManyInput = {
@@ -540,6 +547,11 @@ export type DecisionGlobalContextEventRevisionSumOrderByAggregateInput = {
   revision?: Prisma.SortOrder
 }
 
+export type DecisionGlobalContextEventRevisionNullableScalarRelationFilter = {
+  is?: Prisma.DecisionGlobalContextEventRevisionWhereInput | null
+  isNot?: Prisma.DecisionGlobalContextEventRevisionWhereInput | null
+}
+
 export type DecisionGlobalContextEventRevisionCreateNestedManyWithoutEventInput = {
   create?: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionCreateWithoutEventInput, Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutEventInput> | Prisma.DecisionGlobalContextEventRevisionCreateWithoutEventInput[] | Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutEventInput[]
   connectOrCreate?: Prisma.DecisionGlobalContextEventRevisionCreateOrConnectWithoutEventInput | Prisma.DecisionGlobalContextEventRevisionCreateOrConnectWithoutEventInput[]
@@ -586,6 +598,22 @@ export type EnumDecisionVerificationStatusFieldUpdateOperationsInput = {
   set?: $Enums.DecisionVerificationStatus
 }
 
+export type DecisionGlobalContextEventRevisionCreateNestedOneWithoutMarketingCampaignContextLinksInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventRevisionCreateOrConnectWithoutMarketingCampaignContextLinksInput
+  connect?: Prisma.DecisionGlobalContextEventRevisionWhereUniqueInput
+}
+
+export type DecisionGlobalContextEventRevisionUpdateOneWithoutMarketingCampaignContextLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  connectOrCreate?: Prisma.DecisionGlobalContextEventRevisionCreateOrConnectWithoutMarketingCampaignContextLinksInput
+  upsert?: Prisma.DecisionGlobalContextEventRevisionUpsertWithoutMarketingCampaignContextLinksInput
+  disconnect?: Prisma.DecisionGlobalContextEventRevisionWhereInput | boolean
+  delete?: Prisma.DecisionGlobalContextEventRevisionWhereInput | boolean
+  connect?: Prisma.DecisionGlobalContextEventRevisionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionUpdateToOneWithWhereWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUpdateWithoutMarketingCampaignContextLinksInput>, Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+}
+
 export type DecisionGlobalContextEventRevisionCreateWithoutEventInput = {
   id?: string
   revision: number
@@ -598,6 +626,7 @@ export type DecisionGlobalContextEventRevisionCreateWithoutEventInput = {
   verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutGlobalContextRevisionInput
 }
 
 export type DecisionGlobalContextEventRevisionUncheckedCreateWithoutEventInput = {
@@ -612,6 +641,7 @@ export type DecisionGlobalContextEventRevisionUncheckedCreateWithoutEventInput =
   verificationStatus?: $Enums.DecisionVerificationStatus
   status?: $Enums.DecisionContextEventStatus
   createdAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutGlobalContextRevisionInput
 }
 
 export type DecisionGlobalContextEventRevisionCreateOrConnectWithoutEventInput = {
@@ -659,6 +689,84 @@ export type DecisionGlobalContextEventRevisionScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DecisionGlobalContextEventRevision"> | Date | string
 }
 
+export type DecisionGlobalContextEventRevisionCreateWithoutMarketingCampaignContextLinksInput = {
+  id?: string
+  revision: number
+  titleAr: string
+  startsOn: Date | string
+  endsOn: Date | string
+  sourceUpdatedAt?: Date | string | null
+  sourceChecksum: string
+  importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
+  status?: $Enums.DecisionContextEventStatus
+  createdAt?: Date | string
+  event: Prisma.DecisionGlobalContextEventCreateNestedOneWithoutRevisionsInput
+}
+
+export type DecisionGlobalContextEventRevisionUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
+  id?: string
+  tenantId: string
+  eventId: string
+  revision: number
+  titleAr: string
+  startsOn: Date | string
+  endsOn: Date | string
+  sourceUpdatedAt?: Date | string | null
+  sourceChecksum: string
+  importReceipt: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: $Enums.DecisionVerificationStatus
+  status?: $Enums.DecisionContextEventStatus
+  createdAt?: Date | string
+}
+
+export type DecisionGlobalContextEventRevisionCreateOrConnectWithoutMarketingCampaignContextLinksInput = {
+  where: Prisma.DecisionGlobalContextEventRevisionWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+}
+
+export type DecisionGlobalContextEventRevisionUpsertWithoutMarketingCampaignContextLinksInput = {
+  update: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionUpdateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+  create: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  where?: Prisma.DecisionGlobalContextEventRevisionWhereInput
+}
+
+export type DecisionGlobalContextEventRevisionUpdateToOneWithWhereWithoutMarketingCampaignContextLinksInput = {
+  where?: Prisma.DecisionGlobalContextEventRevisionWhereInput
+  data: Prisma.XOR<Prisma.DecisionGlobalContextEventRevisionUpdateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionGlobalContextEventRevisionUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+}
+
+export type DecisionGlobalContextEventRevisionUpdateWithoutMarketingCampaignContextLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  startsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
+  importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.DecisionGlobalContextEventUpdateOneRequiredWithoutRevisionsNestedInput
+}
+
+export type DecisionGlobalContextEventRevisionUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  startsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sourceChecksum?: Prisma.StringFieldUpdateOperationsInput | string
+  importReceipt?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type DecisionGlobalContextEventRevisionCreateManyEventInput = {
   id?: string
   revision: number
@@ -685,6 +793,7 @@ export type DecisionGlobalContextEventRevisionUpdateWithoutEventInput = {
   verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutGlobalContextRevisionNestedInput
 }
 
 export type DecisionGlobalContextEventRevisionUncheckedUpdateWithoutEventInput = {
@@ -699,6 +808,7 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateWithoutEventInput =
   verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
   status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutGlobalContextRevisionNestedInput
 }
 
 export type DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventInput = {
@@ -716,6 +826,35 @@ export type DecisionGlobalContextEventRevisionUncheckedUpdateManyWithoutEventInp
 }
 
 
+/**
+ * Count Type DecisionGlobalContextEventRevisionCountOutputType
+ */
+
+export type DecisionGlobalContextEventRevisionCountOutputType = {
+  marketingCampaignContextLinks: number
+}
+
+export type DecisionGlobalContextEventRevisionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  marketingCampaignContextLinks?: boolean | DecisionGlobalContextEventRevisionCountOutputTypeCountMarketingCampaignContextLinksArgs
+}
+
+/**
+ * DecisionGlobalContextEventRevisionCountOutputType without action
+ */
+export type DecisionGlobalContextEventRevisionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionGlobalContextEventRevisionCountOutputType
+   */
+  select?: Prisma.DecisionGlobalContextEventRevisionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DecisionGlobalContextEventRevisionCountOutputType without action
+ */
+export type DecisionGlobalContextEventRevisionCountOutputTypeCountMarketingCampaignContextLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingCampaignContextLinkWhereInput
+}
+
 
 export type DecisionGlobalContextEventRevisionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -732,6 +871,8 @@ export type DecisionGlobalContextEventRevisionSelect<ExtArgs extends runtime.Typ
   status?: boolean
   createdAt?: boolean
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
+  marketingCampaignContextLinks?: boolean | Prisma.DecisionGlobalContextEventRevision$marketingCampaignContextLinksArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionGlobalContextEventRevisionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionGlobalContextEventRevision"]>
 
 export type DecisionGlobalContextEventRevisionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -787,6 +928,8 @@ export type DecisionGlobalContextEventRevisionSelectScalar = {
 export type DecisionGlobalContextEventRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "eventId" | "revision" | "titleAr" | "startsOn" | "endsOn" | "sourceUpdatedAt" | "sourceChecksum" | "importReceipt" | "verificationStatus" | "status" | "createdAt", ExtArgs["result"]["decisionGlobalContextEventRevision"]>
 export type DecisionGlobalContextEventRevisionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
+  marketingCampaignContextLinks?: boolean | Prisma.DecisionGlobalContextEventRevision$marketingCampaignContextLinksArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionGlobalContextEventRevisionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DecisionGlobalContextEventRevisionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>
@@ -799,6 +942,7 @@ export type $DecisionGlobalContextEventRevisionPayload<ExtArgs extends runtime.T
   name: "DecisionGlobalContextEventRevision"
   objects: {
     event: Prisma.$DecisionGlobalContextEventPayload<ExtArgs>
+    marketingCampaignContextLinks: Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1209,6 +1353,7 @@ readonly fields: DecisionGlobalContextEventRevisionFieldRefs;
 export interface Prisma__DecisionGlobalContextEventRevisionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   event<T extends Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionGlobalContextEventDefaultArgs<ExtArgs>>): Prisma.Prisma__DecisionGlobalContextEventClient<runtime.Types.Result.GetResult<Prisma.$DecisionGlobalContextEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  marketingCampaignContextLinks<T extends Prisma.DecisionGlobalContextEventRevision$marketingCampaignContextLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionGlobalContextEventRevision$marketingCampaignContextLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1649,6 +1794,30 @@ export type DecisionGlobalContextEventRevisionDeleteManyArgs<ExtArgs extends run
    * Limit how many DecisionGlobalContextEventRevisions to delete.
    */
   limit?: number
+}
+
+/**
+ * DecisionGlobalContextEventRevision.marketingCampaignContextLinks
+ */
+export type DecisionGlobalContextEventRevision$marketingCampaignContextLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingCampaignContextLink
+   */
+  select?: Prisma.MarketingCampaignContextLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingCampaignContextLink
+   */
+  omit?: Prisma.MarketingCampaignContextLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingCampaignContextLinkInclude<ExtArgs> | null
+  where?: Prisma.MarketingCampaignContextLinkWhereInput
+  orderBy?: Prisma.MarketingCampaignContextLinkOrderByWithRelationInput | Prisma.MarketingCampaignContextLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingCampaignContextLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingCampaignContextLinkScalarFieldEnum | Prisma.MarketingCampaignContextLinkScalarFieldEnum[]
 }
 
 /**

@@ -31,6 +31,7 @@ import {
 import { isPositiveMoneyDecimal } from "./decimal-string";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
+import { takeMarketingFinanceHandoff, type MarketingFinanceHandoff } from "./marketing-finance-handoff";
 import type { PurchaseCreditWorkspace } from "./purchase-expense-credit-panel";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
 
@@ -207,6 +208,7 @@ export function PurchaseExpenseWorkspace({
   } | null>(null);
   const [batchNotes, setBatchNotes] = useState("");
   const [rows, setRows] = useState<BatchRow[]>(initialRows);
+  const [marketingHandoff, setMarketingHandoff] = useState<MarketingFinanceHandoff | null>(null);
   const [message, setMessage] = useState<{
     kind: "idle" | "success" | "error";
     text: string;
@@ -269,6 +271,20 @@ export function PurchaseExpenseWorkspace({
       }),
     );
   }, [language, load, text.loadingPurchaseData]);
+  useEffect(() => {
+    const current = activeSession();
+    if (!current) return;
+    const draft = takeMarketingFinanceHandoff(current.companyId);
+    if (!draft) return;
+    const period = draft.startsOn && draft.endsOn ? `${draft.startsOn} — ${draft.endsOn}` : draft.startsOn ?? draft.endsOn ?? "غير محددة";
+    const notes = [`حملة تسويقية: ${draft.campaignTitleAr}`, `فترة الحملة: ${period}`, ...(draft.campaignSummary ? [`تفاصيل الحملة: ${draft.campaignSummary}`] : [])].join("\n");
+    const row = newRow();
+    setBusinessDate(draft.startsOn ?? "");
+    setBatchNotes(notes);
+    setRows([{ ...row, kind: "EXPENSE", grossAmount: draft.plannedCost ?? "", notes }]);
+    setMarketingHandoff(draft);
+    setMessage({ kind: "success", text: language === "ar" ? "تمت تعبئة فاتورة الحملة. أكمل المورد والتصنيف وطريقة السداد ثم احفظ." : "Campaign invoice details were prefilled. Complete supplier, category, and settlement, then save." });
+  }, [language, session?.companyId]);
   useEffect(() => {
     setTab(activeTab);
   }, [activeTab]);
@@ -603,6 +619,7 @@ export function PurchaseExpenseWorkspace({
         grossAmount: string;
         netAmount: string;
         vatAmount: string;
+        documents: Array<{ documentId: string }>;
       }>(current, "/finance/purchase-expense-documents/batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -635,10 +652,21 @@ export function PurchaseExpenseWorkspace({
       setRows(initialRows());
       setBatchNotes("");
       setLastReceipt(receipt);
-      setMessage({
-        kind: "success",
-        text: text.batchSaved(receipt.documentCount),
-      });
+      if (marketingHandoff) {
+        const document = receipt.documents[0];
+        try {
+          if (!document) throw new Error("The Finance receipt did not contain a document.");
+          await api(current, `/marketing/campaigns/${marketingHandoff.campaignId}/financial-documents`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ financialDocumentId: document.documentId, idempotencyKey: requestId() }),
+          });
+          setMarketingHandoff(null);
+          setMessage({ kind: "success", text: language === "ar" ? `${text.batchSaved(receipt.documentCount)} وتم ربط المستند بالحملة تلقائياً.` : `${text.batchSaved(receipt.documentCount)} The document was linked to the campaign.` });
+        } catch (linkError) {
+          setMessage({ kind: "error", text: language === "ar" ? `${text.batchSaved(receipt.documentCount)} لكن تعذر ربطه بالحملة. افتح الحملة واربط المستند المثبت يدوياً.` : `${text.batchSaved(receipt.documentCount)} The campaign link failed; open the campaign and link the posted document manually.` });
+        }
+      } else setMessage({ kind: "success", text: text.batchSaved(receipt.documentCount) });
       await Promise.all([load(), loadCredit()]);
     } catch (error) {
       setMessage({
@@ -902,7 +930,7 @@ export function PurchaseExpenseWorkspace({
                       ) : null
                     }
                   >
-                    <BaseerButton
+                    {!marketingHandoff ? <BaseerButton
                       aria-label={text.addRow}
                       type="button"
                       variant="icon"
@@ -912,7 +940,7 @@ export function PurchaseExpenseWorkspace({
                       }
                     >
                       +
-                    </BaseerButton>
+                    </BaseerButton> : null}
                     <BaseerButton
                       variant="primary"
                       className="baseer-batch-save"

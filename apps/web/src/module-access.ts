@@ -29,9 +29,10 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
   },
   marketing: {
     0: ["marketing.insights.read"],
-    1: ["marketing.insights.read", "marketing.campaign.write"],
-    2: ["marketing.insights.read", "marketing.google-business.profile.read"],
-    3: ["marketing.insights.read"],
+    1: ["marketing.insights.read"],
+    2: ["marketing.insights.read", "marketing.campaign.write"],
+    3: ["marketing.insights.read", "marketing.google-business.profile.read"],
+    4: ["marketing.insights.read"],
   },
   operations: {
     1: ["finance.daily_sales.read", "finance.daily_sales.create"],

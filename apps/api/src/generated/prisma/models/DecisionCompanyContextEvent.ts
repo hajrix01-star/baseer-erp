@@ -247,6 +247,7 @@ export type DecisionCompanyContextEventWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DecisionCompanyContextEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionCompanyContextEvent"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
 }
 
 export type DecisionCompanyContextEventOrderByWithRelationInput = {
@@ -264,6 +265,7 @@ export type DecisionCompanyContextEventOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkOrderByRelationAggregateInput
 }
 
 export type DecisionCompanyContextEventWhereUniqueInput = Prisma.AtLeast<{
@@ -285,6 +287,7 @@ export type DecisionCompanyContextEventWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"DecisionCompanyContextEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DecisionCompanyContextEvent"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type DecisionCompanyContextEventOrderByWithAggregationInput = {
@@ -338,6 +341,7 @@ export type DecisionCompanyContextEventCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutDecisionCompanyContextEventsInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyContextEventInput
 }
 
 export type DecisionCompanyContextEventUncheckedCreateInput = {
@@ -354,6 +358,7 @@ export type DecisionCompanyContextEventUncheckedCreateInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyContextEventInput
 }
 
 export type DecisionCompanyContextEventUpdateInput = {
@@ -369,6 +374,7 @@ export type DecisionCompanyContextEventUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionCompanyContextEventsNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyContextEventNestedInput
 }
 
 export type DecisionCompanyContextEventUncheckedUpdateInput = {
@@ -385,6 +391,7 @@ export type DecisionCompanyContextEventUncheckedUpdateInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyContextEventNestedInput
 }
 
 export type DecisionCompanyContextEventCreateManyInput = {
@@ -497,6 +504,11 @@ export type DecisionCompanyContextEventMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type DecisionCompanyContextEventNullableScalarRelationFilter = {
+  is?: Prisma.DecisionCompanyContextEventWhereInput | null
+  isNot?: Prisma.DecisionCompanyContextEventWhereInput | null
+}
+
 export type DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput = {
   create?: Prisma.XOR<Prisma.DecisionCompanyContextEventCreateWithoutCompanyInput, Prisma.DecisionCompanyContextEventUncheckedCreateWithoutCompanyInput> | Prisma.DecisionCompanyContextEventCreateWithoutCompanyInput[] | Prisma.DecisionCompanyContextEventUncheckedCreateWithoutCompanyInput[]
   connectOrCreate?: Prisma.DecisionCompanyContextEventCreateOrConnectWithoutCompanyInput | Prisma.DecisionCompanyContextEventCreateOrConnectWithoutCompanyInput[]
@@ -539,6 +551,22 @@ export type DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedIn
   deleteMany?: Prisma.DecisionCompanyContextEventScalarWhereInput | Prisma.DecisionCompanyContextEventScalarWhereInput[]
 }
 
+export type DecisionCompanyContextEventCreateNestedOneWithoutMarketingCampaignContextLinksInput = {
+  create?: Prisma.XOR<Prisma.DecisionCompanyContextEventCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  connectOrCreate?: Prisma.DecisionCompanyContextEventCreateOrConnectWithoutMarketingCampaignContextLinksInput
+  connect?: Prisma.DecisionCompanyContextEventWhereUniqueInput
+}
+
+export type DecisionCompanyContextEventUpdateOneWithoutMarketingCampaignContextLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionCompanyContextEventCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  connectOrCreate?: Prisma.DecisionCompanyContextEventCreateOrConnectWithoutMarketingCampaignContextLinksInput
+  upsert?: Prisma.DecisionCompanyContextEventUpsertWithoutMarketingCampaignContextLinksInput
+  disconnect?: Prisma.DecisionCompanyContextEventWhereInput | boolean
+  delete?: Prisma.DecisionCompanyContextEventWhereInput | boolean
+  connect?: Prisma.DecisionCompanyContextEventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionCompanyContextEventUpdateToOneWithWhereWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUpdateWithoutMarketingCampaignContextLinksInput>, Prisma.DecisionCompanyContextEventUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+}
+
 export type DecisionCompanyContextEventCreateWithoutCompanyInput = {
   id?: string
   eventKind: string
@@ -551,6 +579,7 @@ export type DecisionCompanyContextEventCreateWithoutCompanyInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyContextEventInput
 }
 
 export type DecisionCompanyContextEventUncheckedCreateWithoutCompanyInput = {
@@ -565,6 +594,7 @@ export type DecisionCompanyContextEventUncheckedCreateWithoutCompanyInput = {
   createdByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyContextEventInput
 }
 
 export type DecisionCompanyContextEventCreateOrConnectWithoutCompanyInput = {
@@ -612,6 +642,84 @@ export type DecisionCompanyContextEventScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DecisionCompanyContextEvent"> | Date | string
 }
 
+export type DecisionCompanyContextEventCreateWithoutMarketingCampaignContextLinksInput = {
+  id?: string
+  eventKind: string
+  titleAr: string
+  startsOn: Date | string
+  endsOn: Date | string
+  verificationStatus?: $Enums.DecisionVerificationStatus
+  status?: $Enums.DecisionContextEventStatus
+  sourceReference?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutDecisionCompanyContextEventsInput
+}
+
+export type DecisionCompanyContextEventUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  eventKind: string
+  titleAr: string
+  startsOn: Date | string
+  endsOn: Date | string
+  verificationStatus?: $Enums.DecisionVerificationStatus
+  status?: $Enums.DecisionContextEventStatus
+  sourceReference?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DecisionCompanyContextEventCreateOrConnectWithoutMarketingCampaignContextLinksInput = {
+  where: Prisma.DecisionCompanyContextEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionCompanyContextEventCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+}
+
+export type DecisionCompanyContextEventUpsertWithoutMarketingCampaignContextLinksInput = {
+  update: Prisma.XOR<Prisma.DecisionCompanyContextEventUpdateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+  create: Prisma.XOR<Prisma.DecisionCompanyContextEventCreateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedCreateWithoutMarketingCampaignContextLinksInput>
+  where?: Prisma.DecisionCompanyContextEventWhereInput
+}
+
+export type DecisionCompanyContextEventUpdateToOneWithWhereWithoutMarketingCampaignContextLinksInput = {
+  where?: Prisma.DecisionCompanyContextEventWhereInput
+  data: Prisma.XOR<Prisma.DecisionCompanyContextEventUpdateWithoutMarketingCampaignContextLinksInput, Prisma.DecisionCompanyContextEventUncheckedUpdateWithoutMarketingCampaignContextLinksInput>
+}
+
+export type DecisionCompanyContextEventUpdateWithoutMarketingCampaignContextLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  startsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  sourceReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionCompanyContextEventsNestedInput
+}
+
+export type DecisionCompanyContextEventUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKind?: Prisma.StringFieldUpdateOperationsInput | string
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  startsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsOn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  status?: Prisma.EnumDecisionContextEventStatusFieldUpdateOperationsInput | $Enums.DecisionContextEventStatus
+  sourceReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type DecisionCompanyContextEventCreateManyCompanyInput = {
   id?: string
   eventKind: string
@@ -638,6 +746,7 @@ export type DecisionCompanyContextEventUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyContextEventNestedInput
 }
 
 export type DecisionCompanyContextEventUncheckedUpdateWithoutCompanyInput = {
@@ -652,6 +761,7 @@ export type DecisionCompanyContextEventUncheckedUpdateWithoutCompanyInput = {
   createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyContextEventNestedInput
 }
 
 export type DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyInput = {
@@ -669,6 +779,35 @@ export type DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyInput = 
 }
 
 
+/**
+ * Count Type DecisionCompanyContextEventCountOutputType
+ */
+
+export type DecisionCompanyContextEventCountOutputType = {
+  marketingCampaignContextLinks: number
+}
+
+export type DecisionCompanyContextEventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  marketingCampaignContextLinks?: boolean | DecisionCompanyContextEventCountOutputTypeCountMarketingCampaignContextLinksArgs
+}
+
+/**
+ * DecisionCompanyContextEventCountOutputType without action
+ */
+export type DecisionCompanyContextEventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionCompanyContextEventCountOutputType
+   */
+  select?: Prisma.DecisionCompanyContextEventCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DecisionCompanyContextEventCountOutputType without action
+ */
+export type DecisionCompanyContextEventCountOutputTypeCountMarketingCampaignContextLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingCampaignContextLinkWhereInput
+}
+
 
 export type DecisionCompanyContextEventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -685,6 +824,8 @@ export type DecisionCompanyContextEventSelect<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  marketingCampaignContextLinks?: boolean | Prisma.DecisionCompanyContextEvent$marketingCampaignContextLinksArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionCompanyContextEventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionCompanyContextEvent"]>
 
 export type DecisionCompanyContextEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -740,6 +881,8 @@ export type DecisionCompanyContextEventSelectScalar = {
 export type DecisionCompanyContextEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "eventKind" | "titleAr" | "startsOn" | "endsOn" | "verificationStatus" | "status" | "sourceReference" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["decisionCompanyContextEvent"]>
 export type DecisionCompanyContextEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  marketingCampaignContextLinks?: boolean | Prisma.DecisionCompanyContextEvent$marketingCampaignContextLinksArgs<ExtArgs>
+  _count?: boolean | Prisma.DecisionCompanyContextEventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DecisionCompanyContextEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -752,6 +895,7 @@ export type $DecisionCompanyContextEventPayload<ExtArgs extends runtime.Types.Ex
   name: "DecisionCompanyContextEvent"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
+    marketingCampaignContextLinks: Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1162,6 +1306,7 @@ readonly fields: DecisionCompanyContextEventFieldRefs;
 export interface Prisma__DecisionCompanyContextEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  marketingCampaignContextLinks<T extends Prisma.DecisionCompanyContextEvent$marketingCampaignContextLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionCompanyContextEvent$marketingCampaignContextLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1602,6 +1747,30 @@ export type DecisionCompanyContextEventDeleteManyArgs<ExtArgs extends runtime.Ty
    * Limit how many DecisionCompanyContextEvents to delete.
    */
   limit?: number
+}
+
+/**
+ * DecisionCompanyContextEvent.marketingCampaignContextLinks
+ */
+export type DecisionCompanyContextEvent$marketingCampaignContextLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingCampaignContextLink
+   */
+  select?: Prisma.MarketingCampaignContextLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingCampaignContextLink
+   */
+  omit?: Prisma.MarketingCampaignContextLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingCampaignContextLinkInclude<ExtArgs> | null
+  where?: Prisma.MarketingCampaignContextLinkWhereInput
+  orderBy?: Prisma.MarketingCampaignContextLinkOrderByWithRelationInput | Prisma.MarketingCampaignContextLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingCampaignContextLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingCampaignContextLinkScalarFieldEnum | Prisma.MarketingCampaignContextLinkScalarFieldEnum[]
 }
 
 /**

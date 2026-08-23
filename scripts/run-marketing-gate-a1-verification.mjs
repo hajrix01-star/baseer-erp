@@ -33,6 +33,38 @@ try {
   assert.equal(workspace.campaigns.length, 1, "The company register must return its campaign.");
   assert.equal(workspace.readiness.every((entry) => entry.status === "NOT_CONNECTED"), true, "Provider readiness must not masquerade as a zero metric.");
   assert.equal(workspace.replyPolicy.executionReadiness, "NOT_CONNECTED", "Saving reply configuration must not imply a live publisher.");
+  const connectionsBefore = await marketing.providerConnections(context);
+  assert.equal(connectionsBefore.liveOauthEnabled, false, "The connection control centre must never claim a live OAuth flow before the provider gate.");
+  assert.equal(connectionsBefore.connections.every((entry) => entry.status === "NOT_CONNECTED"), true, "Both provider connection states begin disconnected.");
+  const providerSetupRequest = { idempotencyKey: randomUUID() };
+  const providerSetup = await marketing.requestProviderConnectionSetup(context, "GOOGLE_ADS", providerSetupRequest);
+  const providerSetupReplay = await marketing.requestProviderConnectionSetup(context, "GOOGLE_ADS", providerSetupRequest);
+  assert.equal(providerSetupReplay.id, providerSetup.id, "A matching provider setup request must replay its receipt.");
+  const connectionsAfter = await marketing.providerConnections(context);
+  assert.equal(connectionsAfter.connections.find((entry) => entry.provider === "GOOGLE_ADS")?.status, "SETUP_REQUESTED", "A setup request is recorded without becoming a live connection.");
+  assert.equal((await marketing.providerConnections({ ...context, companyId: fixture.otherCompanyId })).connections.every((entry) => entry.status === "NOT_CONNECTED"), true, "One company cannot read another company's setup request.");
+  const companyEventId = randomUUID();
+  await database.inTenantTransaction(fixture.tenantId, (tx) => tx.decisionCompanyContextEvent.create({ data: {
+    id: companyEventId, tenantId: fixture.tenantId, companyId: fixture.companyId, createdByUserId: fixture.actorUserId,
+    eventKind: "OPERATING_HOURS_CHANGE", titleAr: "حدث تسويقي متزامن", startsOn: new Date("2026-08-10T00:00:00.000Z"), endsOn: new Date("2026-08-12T00:00:00.000Z"),
+    verificationStatus: "HUMAN_CONFIRMED", status: "PUBLISHED",
+  } }));
+  const contextLinkRequest = { companyEventId, idempotencyKey: randomUUID() };
+  const contextLink = await marketing.linkContext(context, created.id, contextLinkRequest);
+  const contextLinkReplay = await marketing.linkContext(context, created.id, contextLinkRequest);
+  assert.equal(contextLinkReplay.id, contextLink.id, "A matching context-link request must replay its receipt.");
+  const campaignAnalysis = await marketing.campaignAnalysis(context, created.id);
+  assert.equal(campaignAnalysis.relatedContext.some((event) => event.id === companyEventId && event.explicitlyLinked), true, "A linked company event must be visible as explicit temporal context.");
+  assert.equal(campaignAnalysis.spendResult.googleAdsStatus, "NOT_CONNECTED", "A campaign spend read must not invent Google Ads facts.");
+  assert.equal(campaignAnalysis.spendResult.analysisBoundary, "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION", "Campaign spend results must remain descriptive, never causal or ROI.");
+  await assert.rejects(() => marketing.linkFinancialDocument(context, created.id, { financialDocumentId: randomUUID(), idempotencyKey: randomUUID() }), /financial document was not found/i, "Marketing must reject an unknown Finance document rather than creating a financial record.");
+  const calendar = await marketing.calendar(context, { from: new Date("2026-08-01T00:00:00.000Z"), to: new Date("2026-08-31T00:00:00.000Z") });
+  assert.equal(calendar.campaigns.some((campaign) => campaign.id === created.id), true, "The marketing calendar must consume the campaign register for the selected period.");
+  assert.equal(calendar.days.length, 31, "The calendar must return one server-owned point per requested Riyadh business day.");
+  assert.equal(calendar.days.every((entry) => entry.officialNetSales !== null || entry.salesDayQuality !== "READY"), true, "A missing, pending, or partial sales day must never become a zero-valued ready point.");
+  assert.equal(calendar.days.some((entry) => entry.activeCampaignIds.includes(created.id)), true, "A dated campaign must appear in its daily timeline layer.");
+  assert.equal(calendar.context.some((entry) => entry.id === companyEventId), true, "Published company context must appear as a calendar layer.");
+  assert.equal(calendar.spendResult.googleAdsStatus, "NOT_CONNECTED", "Overview spend results must show Ads readiness honestly.");
   const replyPolicyRequest = { automationStatus: "ENABLED", authoringMethod: "TEMPLATE", tone: "WARM", languageMode: "MATCH_REVIEW", autoFourFiveEnabled: true, autoThreeIfSafe: true, signature: "فريق الشركة", idempotencyKey: randomUUID() };
   const policyCreated = await marketing.updateReputationReplyPolicy(context, replyPolicyRequest);
   const policyReplayed = await marketing.updateReputationReplyPolicy(context, replyPolicyRequest);
@@ -51,9 +83,15 @@ try {
     tx.auditEvent.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId, action: { startsWith: "marketing." } } }),
     tx.financeJournalEntry.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
   ]));
-  assert.ok(auditCount >= 3, "Marketing create, reply policy and archive must be audited.");
+  assert.ok(auditCount >= 4, "Marketing create, context link, reply policy and archive must be audited.");
   assert.equal(journalCount, 0, "Marketing Gate A1 must not create financial journal entries.");
-  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "reply_policy", "reply_policy_replay", "audit", "no_finance_posting", "honest_provider_readiness"] }));
+  const rls = await pool.query(`SELECT c.relname, c.relrowsecurity, c.relforcerowsecurity
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'public' AND c.relname IN ('MarketingCampaignFinancialLink', 'MarketingCampaignContextLink', 'MarketingProviderConnection')`);
+  assert.equal(rls.rows.length, 3, "P2 links and the provider connection control-plane table must exist in PostgreSQL.");
+  assert.equal(rls.rows.every((row) => row.relrowsecurity && row.relforcerowsecurity), true, "Marketing connection metadata must enforce RLS.");
+  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "reply_policy", "reply_policy_replay", "provider_setup_request", "provider_request_is_not_connection", "context_link", "daily_calendar_timeline", "missing_is_not_zero", "descriptive_spend_result", "finance_reference_rejection", "rls_force", "audit", "no_finance_posting", "honest_provider_readiness"] }));
 } finally {
   await app?.close();
   await pool.end();

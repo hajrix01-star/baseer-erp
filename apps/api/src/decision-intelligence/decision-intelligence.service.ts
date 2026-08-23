@@ -69,6 +69,22 @@ type RelatedDecisionContext = Readonly<{
   relationship: "TEMPORAL_CONTEXT_ONLY";
 }>;
 
+/**
+ * A daily view is intentionally kept beside the official sales read.  Consumer
+ * modules can draw a timeline without re-implementing Finance eligibility
+ * rules or treating an unclosed/partial day as a zero-value day.
+ */
+type DecisionSalesDailyDay = Readonly<{
+  businessDate: string;
+  netAmount: string | null;
+  dayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
+}>;
+
+export type DecisionSalesDailySeries = Readonly<{
+  metric: DecisionSalesMetricRead;
+  days: readonly DecisionSalesDailyDay[];
+}>;
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MANUAL_GLOBAL_CONTEXT_SOURCE_CODE = "BASEER_MANUAL_CONTEXT";
 
@@ -92,6 +108,56 @@ export class DecisionIntelligenceService {
       return await this.database.inTenantTransaction(context.tenantId, (transaction) => this.readSalesMetricInTransaction(context, period, transaction));
     } catch {
       return unavailableSalesMetric(period);
+    }
+  }
+
+  async readSalesDailySeries(
+    context: TrustedCompanyActorContext,
+    period: Readonly<{ from: Date; to: Date }>,
+  ): Promise<DecisionSalesDailySeries> {
+    assertPeriod(period);
+    try {
+      return await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+        const [metric, summaries] = await Promise.all([
+          this.readSalesMetricInTransaction(context, period, transaction),
+          transaction.financeDailyFinancialSummary.findMany({
+            where: {
+              tenantId: context.tenantId,
+              companyId: context.companyId,
+              businessDate: { gte: period.from, lte: period.to },
+            },
+            select: {
+              businessDate: true,
+              salesNetAmount: true,
+              operationalDayStatus: true,
+              dataStatus: true,
+            },
+          }),
+        ]);
+        const byDate = new Map(summaries.map((summary) => [day(summary.businessDate), summary]));
+        const days: DecisionSalesDailyDay[] = [];
+        for (let cursor = new Date(period.from); cursor <= period.to; cursor = addDay(cursor)) {
+          const businessDate = day(cursor);
+          const summary = byDate.get(businessDate);
+          if (!summary) {
+            days.push({ businessDate, netAmount: null, dayQuality: "MISSING" });
+          } else if (summary.dataStatus === "PENDING") {
+            days.push({ businessDate, netAmount: null, dayQuality: "PENDING" });
+          } else if (summary.operationalDayStatus === "PARTIAL") {
+            days.push({ businessDate, netAmount: null, dayQuality: "PARTIAL" });
+          } else {
+            days.push({ businessDate, netAmount: summary.salesNetAmount.toFixed(4), dayQuality: "READY" });
+          }
+        }
+        return { metric, days };
+      });
+    } catch {
+      const metric = unavailableSalesMetric(period);
+      const days: DecisionSalesDailyDay[] = [];
+      for (let cursor = new Date(period.from); cursor <= period.to; cursor = addDay(cursor)) {
+        days.push({ businessDate: day(cursor), netAmount: null, dayQuality: "MISSING" });
+      }
+      return { metric, days };
     }
   }
 

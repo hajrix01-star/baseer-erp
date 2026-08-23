@@ -223,6 +223,25 @@ export type DecisionFeedback = Prisma.DecisionFeedbackModel
  */
 export type MarketingCampaign = Prisma.MarketingCampaignModel
 /**
+ * Model MarketingCampaignFinancialLink
+ * A one-way, company-scoped reference to an existing posted Finance document.
+ * Marketing never changes the document or copies it into a new monetary truth.
+ */
+export type MarketingCampaignFinancialLink = Prisma.MarketingCampaignFinancialLinkModel
+/**
+ * Model MarketingCampaignContextLink
+ * A campaign may explicitly cite a published global-event revision or a
+ * published company event. The link is context only, never causal evidence.
+ */
+export type MarketingCampaignContextLink = Prisma.MarketingCampaignContextLinkModel
+/**
+ * Model MarketingProviderConnection
+ * Company-scoped, audited readiness state for a future Google connection.
+ * The later OAuth gate adds a separate encrypted credential vault and account
+ * mapping; those sensitive concepts deliberately do not exist in this model.
+ */
+export type MarketingProviderConnection = Prisma.MarketingProviderConnectionModel
+/**
  * Model MarketingReputationReplyPolicy
  * A company chooses the future handling of Google review ratings here. This
  * row has no provider identifiers, review content, credential or publishing

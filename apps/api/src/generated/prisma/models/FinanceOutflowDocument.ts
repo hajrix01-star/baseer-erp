@@ -455,6 +455,7 @@ export type FinanceOutflowDocumentWhereInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
   hrEmployeeService?: Prisma.XOR<Prisma.HrEmployeeServiceNullableScalarRelationFilter, Prisma.HrEmployeeServiceWhereInput> | null
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetListRelationFilter
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkListRelationFilter
 }
 
 export type FinanceOutflowDocumentOrderByWithRelationInput = {
@@ -499,6 +500,7 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageOrderByRelationAggregateInput
   hrEmployeeService?: Prisma.HrEmployeeServiceOrderByWithRelationInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetOrderByRelationAggregateInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkOrderByRelationAggregateInput
 }
 
 export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -549,6 +551,7 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageListRelationFilter
   hrEmployeeService?: Prisma.XOR<Prisma.HrEmployeeServiceNullableScalarRelationFilter, Prisma.HrEmployeeServiceWhereInput> | null
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetListRelationFilter
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkListRelationFilter
 }, "id" | "id_tenantId_companyId" | "journalEntryId_tenantId_companyId" | "companyId_documentNumber">
 
 export type FinanceOutflowDocumentOrderByWithAggregationInput = {
@@ -660,6 +663,7 @@ export type FinanceOutflowDocumentCreateInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateInput = {
@@ -698,6 +702,7 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUpdateInput = {
@@ -735,6 +740,7 @@ export type FinanceOutflowDocumentUpdateInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateInput = {
@@ -773,6 +779,7 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyInput = {
@@ -875,6 +882,11 @@ export type FinanceOutflowDocumentListRelationFilter = {
 
 export type FinanceOutflowDocumentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FinanceOutflowDocumentScalarRelationFilter = {
+  is?: Prisma.FinanceOutflowDocumentWhereInput
+  isNot?: Prisma.FinanceOutflowDocumentWhereInput
 }
 
 export type FinanceOutflowDocumentNullableScalarRelationFilter = {
@@ -1020,11 +1032,6 @@ export type FinanceOutflowDocumentSumOrderByAggregateInput = {
   postingVersion?: Prisma.SortOrder
 }
 
-export type FinanceOutflowDocumentScalarRelationFilter = {
-  is?: Prisma.FinanceOutflowDocumentWhereInput
-  isNot?: Prisma.FinanceOutflowDocumentWhereInput
-}
-
 export type FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput = {
   create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutCompanyInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput> | Prisma.FinanceOutflowDocumentCreateWithoutCompanyInput[] | Prisma.FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput[]
   connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutCompanyInput | Prisma.FinanceOutflowDocumentCreateOrConnectWithoutCompanyInput[]
@@ -1065,6 +1072,20 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput =
   update?: Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutCompanyInput | Prisma.FinanceOutflowDocumentUpdateWithWhereUniqueWithoutCompanyInput[]
   updateMany?: Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutCompanyInput | Prisma.FinanceOutflowDocumentUpdateManyWithWhereWithoutCompanyInput[]
   deleteMany?: Prisma.FinanceOutflowDocumentScalarWhereInput | Prisma.FinanceOutflowDocumentScalarWhereInput[]
+}
+
+export type FinanceOutflowDocumentCreateNestedOneWithoutMarketingCampaignFinancialLinksInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinancialLinksInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutMarketingCampaignFinancialLinksInput
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+}
+
+export type FinanceOutflowDocumentUpdateOneRequiredWithoutMarketingCampaignFinancialLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinancialLinksInput>
+  connectOrCreate?: Prisma.FinanceOutflowDocumentCreateOrConnectWithoutMarketingCampaignFinancialLinksInput
+  upsert?: Prisma.FinanceOutflowDocumentUpsertWithoutMarketingCampaignFinancialLinksInput
+  connect?: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateToOneWithWhereWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUpdateWithoutMarketingCampaignFinancialLinksInput>, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput>
 }
 
 export type FinanceOutflowDocumentCreateNestedManyWithoutCategoryInput = {
@@ -1387,6 +1408,7 @@ export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
@@ -1423,6 +1445,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCompanyInput = {
@@ -1487,6 +1510,172 @@ export type FinanceOutflowDocumentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceOutflowDocument"> | Date | string
 }
 
+export type FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksInput = {
+  id?: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  assetWarrantyFollowUp?: boolean
+  notes?: string | null
+  postingVersion?: number
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOutflowDocumentsInput
+  batch?: Prisma.FinanceOutflowBatchCreateNestedOneWithoutDocumentsInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileCreateNestedOneWithoutDocumentsInput
+  supplier?: Prisma.FinanceSupplierCreateNestedOneWithoutOutflowDocumentsInput
+  category: Prisma.FinanceCategoryCreateNestedOneWithoutOutflowDocumentsInput
+  journalEntry: Prisma.FinanceJournalEntryCreateNestedOneWithoutOutflowDocumentInput
+  allocations?: Prisma.FinanceOutflowAllocationCreateNestedManyWithoutDocumentInput
+  revisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
+  assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+}
+
+export type FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  kind: $Enums.FinanceOutflowDocumentKind
+  status?: $Enums.FinanceOutflowDocumentStatus
+  settlementKind: $Enums.FinanceOutflowSettlementKind
+  documentNumber: string
+  batchId?: string | null
+  recurringExpenseProfileId?: string | null
+  coverageYear?: number | null
+  coverageStartMonth?: number | null
+  coverageMonths?: number | null
+  supplierId?: string | null
+  categoryId: string
+  supplierInvoiceNumber?: string | null
+  supplierInvoiceNumberNormalized?: string | null
+  supplierInvoiceMissingReason?: string | null
+  businessDate: Date | string
+  supplierInvoiceDate?: Date | string | null
+  grossAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: number
+  assetWarrantyFollowUp?: boolean
+  notes?: string | null
+  journalEntryId: string
+  postingVersion?: number
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedCreateNestedManyWithoutDocumentInput
+  revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutDocumentInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
+  assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+}
+
+export type FinanceOutflowDocumentCreateOrConnectWithoutMarketingCampaignFinancialLinksInput = {
+  where: Prisma.FinanceOutflowDocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinancialLinksInput>
+}
+
+export type FinanceOutflowDocumentUpsertWithoutMarketingCampaignFinancialLinksInput = {
+  update: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput>
+  create: Prisma.XOR<Prisma.FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinancialLinksInput>
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+}
+
+export type FinanceOutflowDocumentUpdateToOneWithWhereWithoutMarketingCampaignFinancialLinksInput = {
+  where?: Prisma.FinanceOutflowDocumentWhereInput
+  data: Prisma.XOR<Prisma.FinanceOutflowDocumentUpdateWithoutMarketingCampaignFinancialLinksInput, Prisma.FinanceOutflowDocumentUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput>
+}
+
+export type FinanceOutflowDocumentUpdateWithoutMarketingCampaignFinancialLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  assetWarrantyFollowUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  batch?: Prisma.FinanceOutflowBatchUpdateOneWithoutDocumentsNestedInput
+  recurringExpenseProfile?: Prisma.FinanceRecurringExpenseProfileUpdateOneWithoutDocumentsNestedInput
+  supplier?: Prisma.FinanceSupplierUpdateOneWithoutOutflowDocumentsNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneRequiredWithoutOutflowDocumentsNestedInput
+  journalEntry?: Prisma.FinanceJournalEntryUpdateOneRequiredWithoutOutflowDocumentNestedInput
+  allocations?: Prisma.FinanceOutflowAllocationUpdateManyWithoutDocumentNestedInput
+  revisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
+  assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+}
+
+export type FinanceOutflowDocumentUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumFinanceOutflowDocumentKindFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentKind
+  status?: Prisma.EnumFinanceOutflowDocumentStatusFieldUpdateOperationsInput | $Enums.FinanceOutflowDocumentStatus
+  settlementKind?: Prisma.EnumFinanceOutflowSettlementKindFieldUpdateOperationsInput | $Enums.FinanceOutflowSettlementKind
+  documentNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recurringExpenseProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplierInvoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  grossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatRateBasisPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  assetWarrantyFollowUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  postingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allocations?: Prisma.FinanceOutflowAllocationUncheckedUpdateManyWithoutDocumentNestedInput
+  revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutDocumentNestedInput
+  recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
+  hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
+  assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+}
+
 export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   id?: string
   kind: $Enums.FinanceOutflowDocumentKind
@@ -1521,6 +1710,7 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
@@ -1556,6 +1746,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutCategoryInput = {
@@ -1618,6 +1809,7 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
@@ -1653,6 +1845,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutSupplierInput = {
@@ -1715,6 +1908,7 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
@@ -1750,6 +1944,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutJournalEntryInput = {
@@ -1802,6 +1997,7 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
@@ -1837,6 +2033,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutRevisionsInput = {
@@ -1873,6 +2070,7 @@ export type FinanceOutflowDocumentCreateWithoutRevisionsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutRevisionsInput = {
@@ -1910,6 +2108,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRevisionsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutRevisionsInput = {
@@ -1962,6 +2161,7 @@ export type FinanceOutflowDocumentUpdateWithoutRevisionsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutRevisionsInput = {
@@ -1999,6 +2199,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRevisionsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutAssetWarrantyAssetsInput = {
@@ -2035,6 +2236,7 @@ export type FinanceOutflowDocumentCreateWithoutAssetWarrantyAssetsInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutAssetWarrantyAssetsInput = {
@@ -2072,6 +2274,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAssetWarrantyAssetsInput
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutAssetWarrantyAssetsInput = {
@@ -2124,6 +2327,7 @@ export type FinanceOutflowDocumentUpdateWithoutAssetWarrantyAssetsInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutAssetWarrantyAssetsInput = {
@@ -2161,6 +2365,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAssetWarrantyAssetsInput
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutBatchInput = {
@@ -2197,6 +2402,7 @@ export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
@@ -2232,6 +2438,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutBatchInput = {
@@ -2294,6 +2501,7 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
@@ -2331,6 +2539,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutAllocationsInput = {
@@ -2383,6 +2592,7 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
@@ -2420,6 +2630,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput = {
@@ -2456,6 +2667,7 @@ export type FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput = {
@@ -2493,6 +2705,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput =
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutDocumentInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutHrEmployeeServiceInput = {
@@ -2545,6 +2758,7 @@ export type FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput = {
@@ -2582,6 +2796,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput =
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutDocumentNestedInput
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
@@ -2618,6 +2833,7 @@ export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileInput = {
@@ -2653,6 +2869,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileI
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringExpenseProfileInput = {
@@ -2715,6 +2932,7 @@ export type FinanceOutflowDocumentCreateWithoutRecurringCoverageInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput = {
@@ -2752,6 +2970,7 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput =
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutDocumentInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedCreateNestedOneWithoutOutflowDocumentInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutSourceDocumentInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutFinancialDocumentInput
 }
 
 export type FinanceOutflowDocumentCreateOrConnectWithoutRecurringCoverageInput = {
@@ -2804,6 +3023,7 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput = {
   revisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput = {
@@ -2841,6 +3061,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput =
   revisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentCreateManyCompanyInput = {
@@ -2908,6 +3129,7 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
@@ -2944,6 +3166,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
@@ -3041,6 +3264,7 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
@@ -3076,6 +3300,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
@@ -3172,6 +3397,7 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
@@ -3207,6 +3433,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
@@ -3303,6 +3530,7 @@ export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
@@ -3338,6 +3566,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
@@ -3434,6 +3663,7 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput = {
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileInput = {
@@ -3469,6 +3699,7 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileI
   recurringCoverage?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutDocumentNestedInput
   hrEmployeeService?: Prisma.HrEmployeeServiceUncheckedUpdateOneWithoutOutflowDocumentNestedInput
   assetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutSourceDocumentNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutFinancialDocumentNestedInput
 }
 
 export type FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProfileInput = {
@@ -3511,6 +3742,7 @@ export type FinanceOutflowDocumentCountOutputType = {
   revisions: number
   recurringCoverage: number
   assetWarrantyAssets: number
+  marketingCampaignFinancialLinks: number
 }
 
 export type FinanceOutflowDocumentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3518,6 +3750,7 @@ export type FinanceOutflowDocumentCountOutputTypeSelect<ExtArgs extends runtime.
   revisions?: boolean | FinanceOutflowDocumentCountOutputTypeCountRevisionsArgs
   recurringCoverage?: boolean | FinanceOutflowDocumentCountOutputTypeCountRecurringCoverageArgs
   assetWarrantyAssets?: boolean | FinanceOutflowDocumentCountOutputTypeCountAssetWarrantyAssetsArgs
+  marketingCampaignFinancialLinks?: boolean | FinanceOutflowDocumentCountOutputTypeCountMarketingCampaignFinancialLinksArgs
 }
 
 /**
@@ -3556,6 +3789,13 @@ export type FinanceOutflowDocumentCountOutputTypeCountRecurringCoverageArgs<ExtA
  */
 export type FinanceOutflowDocumentCountOutputTypeCountAssetWarrantyAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OperationsAssetWarrantyAssetWhereInput
+}
+
+/**
+ * FinanceOutflowDocumentCountOutputType without action
+ */
+export type FinanceOutflowDocumentCountOutputTypeCountMarketingCampaignFinancialLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingCampaignFinancialLinkWhereInput
 }
 
 
@@ -3601,6 +3841,7 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
   hrEmployeeService?: boolean | Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>
   assetWarrantyAssets?: boolean | Prisma.FinanceOutflowDocument$assetWarrantyAssetsArgs<ExtArgs>
+  marketingCampaignFinancialLinks?: boolean | Prisma.FinanceOutflowDocument$marketingCampaignFinancialLinksArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeOutflowDocument"]>
 
@@ -3728,6 +3969,7 @@ export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensio
   recurringCoverage?: boolean | Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>
   hrEmployeeService?: boolean | Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>
   assetWarrantyAssets?: boolean | Prisma.FinanceOutflowDocument$assetWarrantyAssetsArgs<ExtArgs>
+  marketingCampaignFinancialLinks?: boolean | Prisma.FinanceOutflowDocument$marketingCampaignFinancialLinksArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceOutflowDocumentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceOutflowDocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3761,6 +4003,7 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
     recurringCoverage: Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>[]
     hrEmployeeService: Prisma.$HrEmployeeServicePayload<ExtArgs> | null
     assetWarrantyAssets: Prisma.$OperationsAssetWarrantyAssetPayload<ExtArgs>[]
+    marketingCampaignFinancialLinks: Prisma.$MarketingCampaignFinancialLinkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4198,6 +4441,7 @@ export interface Prisma__FinanceOutflowDocumentClient<T, Null = never, ExtArgs e
   recurringCoverage<T extends Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$recurringCoverageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceRecurringExpenseCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeService<T extends Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$hrEmployeeServiceArgs<ExtArgs>>): Prisma.Prisma__HrEmployeeServiceClient<runtime.Types.Result.GetResult<Prisma.$HrEmployeeServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   assetWarrantyAssets<T extends Prisma.FinanceOutflowDocument$assetWarrantyAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$assetWarrantyAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsAssetWarrantyAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  marketingCampaignFinancialLinks<T extends Prisma.FinanceOutflowDocument$marketingCampaignFinancialLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceOutflowDocument$marketingCampaignFinancialLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignFinancialLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4827,6 +5071,30 @@ export type FinanceOutflowDocument$assetWarrantyAssetsArgs<ExtArgs extends runti
   take?: number
   skip?: number
   distinct?: Prisma.OperationsAssetWarrantyAssetScalarFieldEnum | Prisma.OperationsAssetWarrantyAssetScalarFieldEnum[]
+}
+
+/**
+ * FinanceOutflowDocument.marketingCampaignFinancialLinks
+ */
+export type FinanceOutflowDocument$marketingCampaignFinancialLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingCampaignFinancialLink
+   */
+  select?: Prisma.MarketingCampaignFinancialLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingCampaignFinancialLink
+   */
+  omit?: Prisma.MarketingCampaignFinancialLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingCampaignFinancialLinkInclude<ExtArgs> | null
+  where?: Prisma.MarketingCampaignFinancialLinkWhereInput
+  orderBy?: Prisma.MarketingCampaignFinancialLinkOrderByWithRelationInput | Prisma.MarketingCampaignFinancialLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingCampaignFinancialLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingCampaignFinancialLinkScalarFieldEnum | Prisma.MarketingCampaignFinancialLinkScalarFieldEnum[]
 }
 
 /**

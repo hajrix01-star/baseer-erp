@@ -239,6 +239,21 @@ enum MarketingCampaignStatus {
   ARCHIVED
 }
 
+/// Connection metadata only. No OAuth token, client secret, Google account or
+/// location identifier is ever stored in this early self-service foundation.
+enum MarketingProvider {
+  GOOGLE_ADS
+  GOOGLE_BUSINESS
+}
+
+/// SETUP_REQUESTED records a company-admin request for platform readiness. It
+/// is not consent and must never be interpreted as a live Google connection.
+enum MarketingProviderConnectionStatus {
+  NOT_CONNECTED
+  SETUP_REQUESTED
+  BLOCKED
+}
+
 /// Company-owned reply behaviour. It is configuration only until the separate
 /// Google Business provider gate, consent and publisher controls are active.
 enum MarketingReputationReplyAutomationStatus {
@@ -767,6 +782,9 @@ model Company {
   decisionAlertActions                       DecisionAlertAction[]
   decisionFeedback                           DecisionFeedback[]
   marketingCampaigns                         MarketingCampaign[]
+  marketingCampaignFinancialLinks            MarketingCampaignFinancialLink[]
+  marketingCampaignContextLinks              MarketingCampaignContextLink[]
+  marketingProviderConnections               MarketingProviderConnection[]
   marketingReputationReplyPolicy             MarketingReputationReplyPolicy?
   operationsSections                         OperationsSection[]
   operationsUnits                            OperationsUnit[]
@@ -1366,6 +1384,7 @@ model DecisionGlobalContextEventRevision {
   createdAt          DateTime                   @default(now()) @db.Timestamptz(6)
 
   event DecisionGlobalContextEvent @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  marketingCampaignContextLinks MarketingCampaignContextLink[]
 
   @@unique([id, tenantId])
   @@unique([eventId, revision])
@@ -1409,6 +1428,7 @@ model DecisionCompanyContextEvent {
   updatedAt          DateTime                   @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  marketingCampaignContextLinks MarketingCampaignContextLink[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, startsOn, endsOn, status])
@@ -1538,15 +1558,83 @@ model MarketingCampaign {
   status            MarketingCampaignStatus   @default(DRAFT)
   objective         String?                   @db.VarChar(500)
   notes             String?                   @db.VarChar(2000)
+  plannedCost       Decimal?                  @db.Decimal(18, 4)
+  plannedCurrencyCode String?                 @db.Char(3)
   createdByUserId   String                    @db.Uuid
   createdAt         DateTime                  @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime                  @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  financialLinks MarketingCampaignFinancialLink[]
+  contextLinks MarketingCampaignContextLink[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status, startsOn])
   @@index([tenantId, companyId, platform, createdAt])
+}
+
+/// A one-way, company-scoped reference to an existing posted Finance document.
+/// Marketing never changes the document or copies it into a new monetary truth.
+model MarketingCampaignFinancialLink {
+  id                  String   @id @default(uuid()) @db.Uuid
+  tenantId            String   @db.Uuid
+  companyId           String   @db.Uuid
+  campaignId          String   @db.Uuid
+  financialDocumentId String   @db.Uuid
+  createdByUserId     String   @db.Uuid
+  createdAt           DateTime @default(now()) @db.Timestamptz(6)
+
+  company           Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  campaign          MarketingCampaign     @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  financialDocument FinanceOutflowDocument @relation(fields: [financialDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([financialDocumentId, tenantId, companyId])
+  @@index([tenantId, companyId, campaignId, createdAt])
+}
+
+/// A campaign may explicitly cite a published global-event revision or a
+/// published company event. The link is context only, never causal evidence.
+model MarketingCampaignContextLink {
+  id                       String                              @id @default(uuid()) @db.Uuid
+  tenantId                 String                              @db.Uuid
+  companyId                String                              @db.Uuid
+  campaignId               String                              @db.Uuid
+  globalContextRevisionId  String?                             @db.Uuid
+  companyContextEventId    String?                             @db.Uuid
+  createdByUserId          String                              @db.Uuid
+  createdAt                DateTime                            @default(now()) @db.Timestamptz(6)
+
+  company               Company                             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  campaign              MarketingCampaign                   @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  globalContextRevision DecisionGlobalContextEventRevision? @relation(fields: [globalContextRevisionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  companyContextEvent   DecisionCompanyContextEvent?        @relation(fields: [companyContextEventId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([campaignId, globalContextRevisionId])
+  @@unique([campaignId, companyContextEventId])
+  @@index([tenantId, companyId, campaignId, createdAt])
+}
+
+/// Company-scoped, audited readiness state for a future Google connection.
+/// The later OAuth gate adds a separate encrypted credential vault and account
+/// mapping; those sensitive concepts deliberately do not exist in this model.
+model MarketingProviderConnection {
+  id                    String                            @id @default(uuid()) @db.Uuid
+  tenantId              String                            @db.Uuid
+  companyId             String                            @db.Uuid
+  provider              MarketingProvider
+  status                MarketingProviderConnectionStatus @default(NOT_CONNECTED)
+  setupRequestedAt      DateTime?                         @db.Timestamptz(6)
+  setupRequestedByUserId String?                          @db.Uuid
+  createdAt             DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime                          @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, provider])
+  @@index([tenantId, companyId, status])
 }
 
 /// A company chooses the future handling of Google review ratings here. This
@@ -2055,6 +2143,7 @@ model FinanceOutflowDocument {
   recurringCoverage       FinanceRecurringExpenseCoverage[]
   hrEmployeeService       HrEmployeeService?                @relation("HrEmployeeServiceOutflowDocument")
   assetWarrantyAssets     OperationsAssetWarrantyAsset[]
+  marketingCampaignFinancialLinks MarketingCampaignFinancialLink[]
 
   @@unique([id, tenantId, companyId])
   @@unique([journalEntryId, tenantId, companyId])

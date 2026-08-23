@@ -330,6 +330,23 @@ export const MarketingCampaignStatus = {
 export type MarketingCampaignStatus = (typeof MarketingCampaignStatus)[keyof typeof MarketingCampaignStatus]
 
 
+export const MarketingProvider = {
+  GOOGLE_ADS: 'GOOGLE_ADS',
+  GOOGLE_BUSINESS: 'GOOGLE_BUSINESS'
+} as const
+
+export type MarketingProvider = (typeof MarketingProvider)[keyof typeof MarketingProvider]
+
+
+export const MarketingProviderConnectionStatus = {
+  NOT_CONNECTED: 'NOT_CONNECTED',
+  SETUP_REQUESTED: 'SETUP_REQUESTED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type MarketingProviderConnectionStatus = (typeof MarketingProviderConnectionStatus)[keyof typeof MarketingProviderConnectionStatus]
+
+
 export const MarketingReputationReplyAutomationStatus = {
   DISABLED: 'DISABLED',
   ENABLED: 'ENABLED',

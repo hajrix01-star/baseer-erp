@@ -66,15 +66,26 @@ HTTP/RLS/lifecycle/onboarding/financial-integrity and Finance period gates pass.
 
 ## Active product scope — 2026-08-23
 
-The owner has authorized **Marketing & Reputation — Gate A1 internal
-foundation and reply-policy configuration**. Its binding scope is
+The owner has authorized **Marketing & Reputation — Gate A1 foundation plus
+P2 internal campaign, Finance-reference and context analytics**. Its binding scope is
 [the Marketing & Reputation foundation decision](../marketing/MARKETING_REPUTATION_FOUNDATION_DECISION_2026-08-23.md): company-scoped campaign register,
-centralized UI, an audited company reply policy and honest provider readiness
-only. It does not authorize
+centralized UI, an audited company reply policy, honest provider readiness and
+the bounded internal plan in [Marketing internal analytics delivery](../marketing/MARKETING_INTERNAL_ANALYTICS_DELIVERY_PLAN_2026-08-23.md).
+P2 authorizes only campaign-to-existing-Finance-document references,
+published-context references, and server-owned campaign/calendar reads. It does not authorize
 Google OAuth, credentials, SDKs, provider traffic, provider facts/content,
-workers, publishing, marketing-to-finance links, advertising spend/actions,
-Basira provider execution, or any live automated response. Google Ads and
+workers, publishing, advertising spend/actions, Basira provider execution, or
+any live automated response. Google Ads and
 Google Business each require their own later Provider Decision Record.
+
+The owner has additionally authorized the bounded **P3a connection control
+centre**: an RLS-isolated company status and an audited request for platform
+setup, exposed through the Marketing UI. P3a has no OAuth callback, credential,
+account/location mapping, provider SDK, network traffic, worker, sync, provider
+fact, publishing, or live Google redirect. It records no secret and cannot make
+a company appear connected. The later P3 live consent journey still requires a
+completed Provider Decision Record, central Google-project configuration and a
+limited pilot.
 
 This is the single active business scope. The module register and quality
 evidence must change together with its acceptance state.

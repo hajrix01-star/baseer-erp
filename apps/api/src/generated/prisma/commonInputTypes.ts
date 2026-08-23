@@ -786,6 +786,40 @@ export type EnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
 }
 
+export type EnumMarketingProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProvider | Prisma.EnumMarketingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel> | $Enums.MarketingProvider
+}
+
+export type EnumMarketingProviderConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProviderConnectionStatus | Prisma.EnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel> | $Enums.MarketingProviderConnectionStatus
+}
+
+export type EnumMarketingProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProvider | Prisma.EnumMarketingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderWithAggregatesFilter<$PrismaModel> | $Enums.MarketingProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel>
+}
+
+export type EnumMarketingProviderConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProviderConnectionStatus | Prisma.EnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingProviderConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel>
+}
+
 export type EnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.MarketingReputationReplyAutomationStatus | Prisma.EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
   in?: $Enums.MarketingReputationReplyAutomationStatus[] | Prisma.ListEnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel>
@@ -2796,6 +2830,40 @@ export type NestedEnumMarketingCampaignStatusWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMarketingCampaignStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProvider | Prisma.EnumMarketingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel> | $Enums.MarketingProvider
+}
+
+export type NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProviderConnectionStatus | Prisma.EnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel> | $Enums.MarketingProviderConnectionStatus
+}
+
+export type NestedEnumMarketingProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProvider | Prisma.EnumMarketingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProvider[] | Prisma.ListEnumMarketingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderWithAggregatesFilter<$PrismaModel> | $Enums.MarketingProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingProviderFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketingProviderConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketingProviderConnectionStatus | Prisma.EnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketingProviderConnectionStatus[] | Prisma.ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketingProviderConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.MarketingProviderConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketingProviderConnectionStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumMarketingReputationReplyAutomationStatusFilter<$PrismaModel = never> = {

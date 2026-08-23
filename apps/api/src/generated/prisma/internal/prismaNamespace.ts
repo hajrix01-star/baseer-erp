@@ -434,6 +434,9 @@ export const ModelName = {
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
+  MarketingCampaignContextLink: 'MarketingCampaignContextLink',
+  MarketingProviderConnection: 'MarketingProviderConnection',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -534,7 +537,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "marketingCampaign" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "marketingCampaign" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingProviderConnection" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3273,6 +3276,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MarketingCampaignCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingCampaignFinancialLink: {
+      payload: Prisma.$MarketingCampaignFinancialLinkPayload<ExtArgs>
+      fields: Prisma.MarketingCampaignFinancialLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingCampaignFinancialLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingCampaignFinancialLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingCampaignFinancialLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingCampaignFinancialLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingCampaignFinancialLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingCampaignFinancialLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingCampaignFinancialLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingCampaignFinancialLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingCampaignFinancialLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        update: {
+          args: Prisma.MarketingCampaignFinancialLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingCampaignFinancialLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingCampaignFinancialLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingCampaignFinancialLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingCampaignFinancialLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignFinancialLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingCampaignFinancialLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingCampaignFinancialLink>
+        }
+        groupBy: {
+          args: Prisma.MarketingCampaignFinancialLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignFinancialLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingCampaignFinancialLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignFinancialLinkCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingCampaignContextLink: {
+      payload: Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>
+      fields: Prisma.MarketingCampaignContextLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingCampaignContextLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingCampaignContextLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingCampaignContextLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingCampaignContextLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingCampaignContextLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingCampaignContextLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingCampaignContextLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingCampaignContextLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingCampaignContextLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        update: {
+          args: Prisma.MarketingCampaignContextLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingCampaignContextLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingCampaignContextLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingCampaignContextLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingCampaignContextLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignContextLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingCampaignContextLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingCampaignContextLink>
+        }
+        groupBy: {
+          args: Prisma.MarketingCampaignContextLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignContextLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingCampaignContextLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignContextLinkCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingProviderConnection: {
+      payload: Prisma.$MarketingProviderConnectionPayload<ExtArgs>
+      fields: Prisma.MarketingProviderConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingProviderConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingProviderConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingProviderConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingProviderConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingProviderConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingProviderConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingProviderConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingProviderConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingProviderConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        update: {
+          args: Prisma.MarketingProviderConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingProviderConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingProviderConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingProviderConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingProviderConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingProviderConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingProviderConnection>
+        }
+        groupBy: {
+          args: Prisma.MarketingProviderConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingProviderConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingProviderConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingProviderConnectionCountAggregateOutputType> | number
         }
       }
     }
@@ -10215,12 +10440,56 @@ export const MarketingCampaignScalarFieldEnum = {
   status: 'status',
   objective: 'objective',
   notes: 'notes',
+  plannedCost: 'plannedCost',
+  plannedCurrencyCode: 'plannedCurrencyCode',
   createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
+
+
+export const MarketingCampaignFinancialLinkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  financialDocumentId: 'financialDocumentId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignFinancialLinkScalarFieldEnum = (typeof MarketingCampaignFinancialLinkScalarFieldEnum)[keyof typeof MarketingCampaignFinancialLinkScalarFieldEnum]
+
+
+export const MarketingCampaignContextLinkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  globalContextRevisionId: 'globalContextRevisionId',
+  companyContextEventId: 'companyContextEventId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignContextLinkScalarFieldEnum = (typeof MarketingCampaignContextLinkScalarFieldEnum)[keyof typeof MarketingCampaignContextLinkScalarFieldEnum]
+
+
+export const MarketingProviderConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  provider: 'provider',
+  status: 'status',
+  setupRequestedAt: 'setupRequestedAt',
+  setupRequestedByUserId: 'setupRequestedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingProviderConnectionScalarFieldEnum = (typeof MarketingProviderConnectionScalarFieldEnum)[keyof typeof MarketingProviderConnectionScalarFieldEnum]
 
 
 export const MarketingReputationReplyPolicyScalarFieldEnum = {
@@ -12319,6 +12588,34 @@ export type ListEnumMarketingCampaignStatusFieldRefInput<$PrismaModel> = FieldRe
 
 
 /**
+ * Reference to a field of type 'MarketingProvider'
+ */
+export type EnumMarketingProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingProvider[]'
+ */
+export type ListEnumMarketingProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingProvider[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingProviderConnectionStatus'
+ */
+export type EnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingProviderConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketingProviderConnectionStatus[]'
+ */
+export type ListEnumMarketingProviderConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingProviderConnectionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'MarketingReputationReplyAutomationStatus'
  */
 export type EnumMarketingReputationReplyAutomationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingReputationReplyAutomationStatus'>
@@ -13527,6 +13824,9 @@ export type GlobalOmitConfig = {
   decisionAlertAction?: Prisma.DecisionAlertActionOmit
   decisionFeedback?: Prisma.DecisionFeedbackOmit
   marketingCampaign?: Prisma.MarketingCampaignOmit
+  marketingCampaignFinancialLink?: Prisma.MarketingCampaignFinancialLinkOmit
+  marketingCampaignContextLink?: Prisma.MarketingCampaignContextLinkOmit
+  marketingProviderConnection?: Prisma.MarketingProviderConnectionOmit
   marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyOmit
   reportDocument?: Prisma.ReportDocumentOmit
   financeCashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOmit

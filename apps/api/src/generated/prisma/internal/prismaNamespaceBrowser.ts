@@ -88,6 +88,9 @@ export const ModelName = {
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
+  MarketingCampaignContextLink: 'MarketingCampaignContextLink',
+  MarketingProviderConnection: 'MarketingProviderConnection',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -801,12 +804,56 @@ export const MarketingCampaignScalarFieldEnum = {
   status: 'status',
   objective: 'objective',
   notes: 'notes',
+  plannedCost: 'plannedCost',
+  plannedCurrencyCode: 'plannedCurrencyCode',
   createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
+
+
+export const MarketingCampaignFinancialLinkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  financialDocumentId: 'financialDocumentId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignFinancialLinkScalarFieldEnum = (typeof MarketingCampaignFinancialLinkScalarFieldEnum)[keyof typeof MarketingCampaignFinancialLinkScalarFieldEnum]
+
+
+export const MarketingCampaignContextLinkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  globalContextRevisionId: 'globalContextRevisionId',
+  companyContextEventId: 'companyContextEventId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignContextLinkScalarFieldEnum = (typeof MarketingCampaignContextLinkScalarFieldEnum)[keyof typeof MarketingCampaignContextLinkScalarFieldEnum]
+
+
+export const MarketingProviderConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  provider: 'provider',
+  status: 'status',
+  setupRequestedAt: 'setupRequestedAt',
+  setupRequestedByUserId: 'setupRequestedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingProviderConnectionScalarFieldEnum = (typeof MarketingProviderConnectionScalarFieldEnum)[keyof typeof MarketingProviderConnectionScalarFieldEnum]
 
 
 export const MarketingReputationReplyPolicyScalarFieldEnum = {

@@ -51,6 +51,7 @@
                     "verify:operations-purchase-cycle": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-purchase-cycle-verification.mjs",
                     "verify:operations-assets-warranty": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-operations-assets-warranty-verification.mjs",
                     "verify:marketing-gate-a1": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/run-marketing-gate-a1-verification.mjs",
+                    "verify:marketing-internal-analytics": "npm run verify:marketing-gate-a1",
                     "verify:decision-intelligence-foundation": "npm run build --workspace @baseer-erp/contracts \u0026\u0026 npm run build --workspace @baseer-erp/api \u0026\u0026 node apps/api/dist/decision-intelligence/decision-context-import.policy-verification.js \u0026\u0026 node apps/api/dist/decision-intelligence/basira-decision-alert-brief.policy-verification.js \u0026\u0026 node scripts/run-decision-intelligence-foundation-verification.mjs",
                     "seed:operations-demo": "npm run build --workspace @baseer-erp/api \u0026\u0026 node scripts/seed-operations-demo.mjs"
                 }
