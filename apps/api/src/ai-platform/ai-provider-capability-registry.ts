@@ -55,7 +55,7 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
     displayNameAr: "ملف بصيرة الاقتصادي المعتمد",
     displayNameEn: "Approved economical Basira profile",
     summaryAr:
-      "تفسير منظّم منخفض التكلفة للتنبيهات والحملات، مع حدّ محلي للتوكن وسعر موثّق قبل الإرسال.",
+      "تفسير اقتصادي منظّم للتنبيهات والحملات، بتكلفة موثقة وحد توكن محلي.",
     summaryEn:
       "Low-cost structured alert and campaign explanations with a local token limit and documented pre-egress price.",
     status: "AVAILABLE",
@@ -85,7 +85,7 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
     displayNameAr: "Gemini Flash — مسار مستقبلي",
     displayNameEn: "Gemini Flash — future path",
     summaryAr:
-      "مسار Gemini محجوب حتى يعتمد قرار الخصوصية والمنطقة، ثم يبنى محوله وعداد التكلفة والتقييم العربي.",
+      "غير متاح حتى اعتماد الخصوصية والمنطقة والمحوّل والتقييم العربي.",
     summaryEn:
       "Gemini remains blocked until privacy and region decisions, its adapter, cost counter and Arabic evaluation are approved.",
     status: "PLANNED",
@@ -111,7 +111,7 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
     displayNameAr: "Qwen عبر DashScope — مسار مستقبلي",
     displayNameEn: "Qwen through DashScope — future path",
     summaryAr:
-      "مسار Qwen محجوب؛ توافق الواجهة لا يكفي من دون محول خادمي وحدود توكن وتسعير وتقييم معتمد.",
+      "غير متاح حتى يكتمل المحول والحدود والتسعير والتقييم.",
     summaryEn:
       "Qwen remains blocked; protocol compatibility alone is insufficient without a server adapter, token limits, pricing and approved evaluation.",
     status: "PLANNED",
@@ -137,7 +137,7 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
     displayNameAr: "DeepSeek Flash — مسار مستقبلي",
     displayNameEn: "DeepSeek Flash — future path",
     summaryAr:
-      "مسار DeepSeek محجوب حتى نثبت السعر الفعلي بحسب نافذة التسعير ونختبر الإخراج المنظم بالعربية.",
+      "غير متاح حتى توثيق السعر واختبار الإخراج العربي.",
     summaryEn:
       "DeepSeek remains blocked until its time-sensitive pricing and Arabic structured-output evaluation are verified.",
     status: "PLANNED",
