@@ -101,7 +101,7 @@ export function AdministrationAiSettingsPanel({ language, session, owner }: { la
   };
   return <div className="basira-workspace administration-section">
     <header className="administration-section-heading basira-workspace__heading">
-      <div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "مركز تشغيل بصيرة" : "Basira control center"}</h3><p>{ar ? "تشغيل بصيرة ومهاراتها ومعرفة الشركة. لا استخدام حي قبل الفحص والحدود." : "Basira operations, skills and company knowledge. No live use before checks and limits."}</p></div>
+      <div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "مركز تشغيل بصيرة" : "Basira control center"}</h3></div>
       <span className="basira-workspace__mark" aria-hidden="true">ب</span>
     </header>
     <nav className="basira-workspace__tabs" role="tablist" aria-label={ar ? "أقسام بصيرة" : "Basira sections"}>{tabs.map((tab, index) => <button key={tab.id} id={`basira-tab-${tab.id}`} type="button" role="tab" aria-selected={activeTab === tab.id} aria-controls={`basira-panel-${tab.id}`} tabIndex={activeTab === tab.id ? 0 : -1} className={activeTab === tab.id ? "is-active" : undefined} onKeyDown={(event) => handleTabKeyDown(event, index)} onClick={() => navigate(tab.id)}>{ar ? tab.ar : tab.en}</button>)}</nav>
