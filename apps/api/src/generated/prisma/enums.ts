@@ -787,7 +787,9 @@ export type HrCompensationPolicyVersionStatus = (typeof HrCompensationPolicyVers
 export const AiProviderKind = {
   OPENAI_COMPATIBLE: 'OPENAI_COMPATIBLE',
   ANTHROPIC: 'ANTHROPIC',
-  GOOGLE_GENERATIVE_AI: 'GOOGLE_GENERATIVE_AI'
+  GOOGLE_GENERATIVE_AI: 'GOOGLE_GENERATIVE_AI',
+  DASHSCOPE_QWEN: 'DASHSCOPE_QWEN',
+  DEEPSEEK: 'DEEPSEEK'
 } as const
 
 export type AiProviderKind = (typeof AiProviderKind)[keyof typeof AiProviderKind]

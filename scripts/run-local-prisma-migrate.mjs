@@ -15,10 +15,42 @@ if (databaseUrl.hostname !== '127.0.0.1' || databaseUrl.port !== '5433' || datab
   throw new Error('Refusing Prisma migration command outside the canonical local Baseer test database.');
 }
 
+/**
+ * The application role is intentionally restricted and must not own database
+ * types. Local deploys therefore use either an explicitly supplied migrator
+ * URL or the disposable test container's bootstrap role, while all normal
+ * API/test traffic continues to use DATABASE_URL as the restricted role.
+ * The password is read into process memory only and never printed or written.
+ */
+function localMigratorUrl() {
+  const configured = process.env.BASEER_DB_MIGRATOR_URL?.trim();
+  if (configured) {
+    const url = new URL(configured);
+    if (url.hostname !== '127.0.0.1' || url.port !== '5433' || url.pathname !== '/baseer_erp_test') {
+      throw new Error('BASEER_DB_MIGRATOR_URL must point only to the canonical local Baseer test database.');
+    }
+    return url.toString();
+  }
+
+  const password = spawnSync(
+    'docker',
+    ['exec', 'baseer-erp-postgres', 'sh', '-c', 'printf %s "$POSTGRES_PASSWORD"'],
+    { encoding: 'utf8' },
+  );
+  if (password.error || password.status !== 0 || !password.stdout.trim()) {
+    throw new Error('A local PostgreSQL migrator is required. Start baseer-erp-postgres or set BASEER_DB_MIGRATOR_URL for 127.0.0.1:5433/baseer_erp_test.');
+  }
+  const url = new URL('postgresql://postgres@127.0.0.1:5433/baseer_erp_test');
+  url.password = password.stdout.trim();
+  return url.toString();
+}
+
+const prismaDatabaseUrl = action === 'deploy' ? localMigratorUrl() : databaseUrl.toString();
+
 const prismaCli = resolve('node_modules/prisma/build/index.js');
 const result = spawnSync(process.execPath, [prismaCli, 'migrate', action, '--config', 'apps/api/prisma.config.ts'], {
   cwd: process.cwd(),
-  env: process.env,
+  env: { ...process.env, DATABASE_URL: prismaDatabaseUrl },
   stdio: 'inherit',
 });
 if (result.error) throw result.error;

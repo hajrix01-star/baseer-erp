@@ -23,7 +23,8 @@ try {
     const attempts = await client.query(`
       SELECT migration_name, checksum, finished_at IS NOT NULL AS succeeded
       FROM "_prisma_migrations"
-      WHERE finished_at IS NULL OR migration_name IN (SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NULL)
+      WHERE (finished_at IS NULL AND rolled_back_at IS NULL)
+        OR migration_name IN (SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NULL AND rolled_back_at IS NULL)
     `);
     const failedNames = [...new Set(attempts.rows.filter((row) => !row.succeeded).map((row) => row.migration_name))];
     const unmatched = [];
@@ -46,6 +47,7 @@ try {
       SELECT failed.id, failed.checksum, failed.finished_at, failed.migration_name, failed.logs, failed.rolled_back_at, failed.started_at, failed.applied_steps_count
       FROM "_prisma_migrations" AS failed
       WHERE failed.finished_at IS NULL
+        AND failed.rolled_back_at IS NULL
         AND EXISTS (
           SELECT 1 FROM "_prisma_migrations" AS succeeded
           WHERE succeeded.migration_name = failed.migration_name
@@ -57,6 +59,7 @@ try {
     const removed = await client.query(`
       DELETE FROM "_prisma_migrations" AS failed
       WHERE failed.finished_at IS NULL
+        AND failed.rolled_back_at IS NULL
         AND EXISTS (
           SELECT 1 FROM "_prisma_migrations" AS succeeded
           WHERE succeeded.migration_name = failed.migration_name

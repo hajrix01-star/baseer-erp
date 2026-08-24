@@ -40,6 +40,27 @@ function verify(): void {
     "A provider without a reviewed adapter must not be configurable.",
   );
 
+  const plannedPairs = [
+    ["GOOGLE_GENERATIVE_AI", "gemini-3.7-flash"],
+    ["DASHSCOPE_QWEN", "qwen3.7-flash"],
+    ["DEEPSEEK", "deepseek-v4-flash"],
+  ] as const;
+  for (const [provider, model] of plannedPairs) {
+    const planned = findAiProviderModelCapability(provider, model);
+    assert.ok(planned, `${provider}/${model} must be recorded as a future path.`);
+    assert.equal(planned.status, "PLANNED");
+    assert.equal(planned.activationReadiness, "REQUIRES_ADAPTER_AND_EVALUATION");
+    assert.ok(
+      planned.requiredActivationGates.length >= 6,
+      "Every future model must declare its activation gates.",
+    );
+    assert.equal(
+      canConfigureAiProviderModel(provider, model),
+      false,
+      "A planned provider/model must remain fail-closed before its gates pass.",
+    );
+  }
+
   const profile = liveAiModelProfileForSkill({
     provider: "OPENAI_COMPATIBLE",
     model: "gpt-5-mini",
@@ -63,7 +84,7 @@ function verify(): void {
   );
 
   console.log(
-    "Basira provider capability registry verification passed: model selection, skill scope and tokenizer binding are fail-closed.",
+    "Basira provider capability registry verification passed: approved selection, future-provider gates, skill scope and tokenizer binding are fail-closed.",
   );
 }
 

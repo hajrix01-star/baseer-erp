@@ -578,6 +578,8 @@ enum AiProviderKind {
   OPENAI_COMPATIBLE
   ANTHROPIC
   GOOGLE_GENERATIVE_AI
+  DASHSCOPE_QWEN
+  DEEPSEEK
 }
 
 enum AiProviderConfigurationStatus {

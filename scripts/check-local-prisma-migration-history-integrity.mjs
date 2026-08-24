@@ -13,7 +13,9 @@ if (databaseUrl.hostname !== '127.0.0.1' || databaseUrl.port !== '5433' || datab
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 try {
-  const failed = await pool.query('SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NULL');
+  // Prisma keeps a historical row when `migrate resolve --rolled-back` is
+  // used. That row is not an unresolved failure and must remain auditable.
+  const failed = await pool.query('SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NULL AND rolled_back_at IS NULL');
   const applied = await pool.query('SELECT migration_name, checksum FROM "_prisma_migrations" WHERE finished_at IS NOT NULL');
   const mismatches = [];
   for (const migration of applied.rows) {

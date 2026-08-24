@@ -8,6 +8,17 @@ export const aiProviderKindSchema = z.enum([
   "OPENAI_COMPATIBLE",
   "ANTHROPIC",
   "GOOGLE_GENERATIVE_AI",
+  "DASHSCOPE_QWEN",
+  "DEEPSEEK",
+]);
+
+export const aiProviderActivationGateSchema = z.enum([
+  "PRIVACY_AND_REGION_DECISION",
+  "SERVER_ADAPTER",
+  "LOCAL_TOKEN_COUNTER",
+  "CURRENT_PRICE_REVISION",
+  "ARABIC_SKILL_EVALUATION",
+  "LIVE_CONNECTION_PROBE",
 ]);
 
 /**
@@ -28,6 +39,7 @@ export const aiProviderModelCapabilityReceiptSchema = z
       "READY_FOR_CONFIGURATION",
       "REQUIRES_ADAPTER_AND_EVALUATION",
     ]),
+    requiredActivationGates: z.array(aiProviderActivationGateSchema),
     costTier: z.enum(["LOW", "MEDIUM", "HIGH"]),
     supportedSkillKeys: z.array(z.string().min(1).max(160)),
   })

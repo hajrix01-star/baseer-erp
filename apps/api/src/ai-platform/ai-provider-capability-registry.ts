@@ -24,6 +24,14 @@ export type AiProviderModelCapability = Readonly<{
   activationReadiness:
     | "READY_FOR_CONFIGURATION"
     | "REQUIRES_ADAPTER_AND_EVALUATION";
+  requiredActivationGates: readonly (
+    | "PRIVACY_AND_REGION_DECISION"
+    | "SERVER_ADAPTER"
+    | "LOCAL_TOKEN_COUNTER"
+    | "CURRENT_PRICE_REVISION"
+    | "ARABIC_SKILL_EVALUATION"
+    | "LIVE_CONNECTION_PROBE"
+  )[];
   costTier: "LOW" | "MEDIUM" | "HIGH";
   supportedSkillKeys: readonly string[];
   runtimeProfile: Readonly<{
@@ -52,6 +60,7 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
       "Low-cost structured alert and campaign explanations with a local token limit and documented pre-egress price.",
     status: "AVAILABLE",
     activationReadiness: "READY_FOR_CONFIGURATION",
+    requiredActivationGates: [],
     costTier: "LOW",
     supportedSkillKeys: [
       "decision.command_center_analyst",
@@ -69,6 +78,84 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
       structuredOutput: true,
       tools: "none",
     },
+  },
+  {
+    provider: "GOOGLE_GENERATIVE_AI",
+    model: "gemini-3.7-flash",
+    displayNameAr: "Gemini Flash — مسار مستقبلي",
+    displayNameEn: "Gemini Flash — future path",
+    summaryAr:
+      "مسار Gemini محجوب حتى يعتمد قرار الخصوصية والمنطقة، ثم يبنى محوله وعداد التكلفة والتقييم العربي.",
+    summaryEn:
+      "Gemini remains blocked until privacy and region decisions, its adapter, cost counter and Arabic evaluation are approved.",
+    status: "PLANNED",
+    activationReadiness: "REQUIRES_ADAPTER_AND_EVALUATION",
+    requiredActivationGates: [
+      "PRIVACY_AND_REGION_DECISION",
+      "SERVER_ADAPTER",
+      "LOCAL_TOKEN_COUNTER",
+      "CURRENT_PRICE_REVISION",
+      "ARABIC_SKILL_EVALUATION",
+      "LIVE_CONNECTION_PROBE",
+    ],
+    costTier: "MEDIUM",
+    supportedSkillKeys: [
+      "decision.command_center_analyst",
+      "marketing.performance_analyst",
+    ],
+    runtimeProfile: null,
+  },
+  {
+    provider: "DASHSCOPE_QWEN",
+    model: "qwen3.7-flash",
+    displayNameAr: "Qwen عبر DashScope — مسار مستقبلي",
+    displayNameEn: "Qwen through DashScope — future path",
+    summaryAr:
+      "مسار Qwen محجوب؛ توافق الواجهة لا يكفي من دون محول خادمي وحدود توكن وتسعير وتقييم معتمد.",
+    summaryEn:
+      "Qwen remains blocked; protocol compatibility alone is insufficient without a server adapter, token limits, pricing and approved evaluation.",
+    status: "PLANNED",
+    activationReadiness: "REQUIRES_ADAPTER_AND_EVALUATION",
+    requiredActivationGates: [
+      "PRIVACY_AND_REGION_DECISION",
+      "SERVER_ADAPTER",
+      "LOCAL_TOKEN_COUNTER",
+      "CURRENT_PRICE_REVISION",
+      "ARABIC_SKILL_EVALUATION",
+      "LIVE_CONNECTION_PROBE",
+    ],
+    costTier: "MEDIUM",
+    supportedSkillKeys: [
+      "decision.command_center_analyst",
+      "marketing.performance_analyst",
+    ],
+    runtimeProfile: null,
+  },
+  {
+    provider: "DEEPSEEK",
+    model: "deepseek-v4-flash",
+    displayNameAr: "DeepSeek Flash — مسار مستقبلي",
+    displayNameEn: "DeepSeek Flash — future path",
+    summaryAr:
+      "مسار DeepSeek محجوب حتى نثبت السعر الفعلي بحسب نافذة التسعير ونختبر الإخراج المنظم بالعربية.",
+    summaryEn:
+      "DeepSeek remains blocked until its time-sensitive pricing and Arabic structured-output evaluation are verified.",
+    status: "PLANNED",
+    activationReadiness: "REQUIRES_ADAPTER_AND_EVALUATION",
+    requiredActivationGates: [
+      "PRIVACY_AND_REGION_DECISION",
+      "SERVER_ADAPTER",
+      "LOCAL_TOKEN_COUNTER",
+      "CURRENT_PRICE_REVISION",
+      "ARABIC_SKILL_EVALUATION",
+      "LIVE_CONNECTION_PROBE",
+    ],
+    costTier: "LOW",
+    supportedSkillKeys: [
+      "decision.command_center_analyst",
+      "marketing.performance_analyst",
+    ],
+    runtimeProfile: null,
   },
 ] as const;
 
@@ -90,6 +177,7 @@ export function listAiProviderModelCapabilities(): readonly AiProviderModelCapab
     summaryEn: capability.summaryEn,
     status: capability.status,
     activationReadiness: capability.activationReadiness,
+    requiredActivationGates: [...capability.requiredActivationGates],
     costTier: capability.costTier,
     supportedSkillKeys: [...capability.supportedSkillKeys],
   }));
