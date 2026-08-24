@@ -851,14 +851,6 @@ export type EnumFinanceCashPerformanceDirectionFieldUpdateOperationsInput = {
   set?: $Enums.FinanceCashPerformanceDirection
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type NullableEnumFinanceCategoryKindFieldUpdateOperationsInput = {
   set?: $Enums.FinanceCategoryKind | null
 }

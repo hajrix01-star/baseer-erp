@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerMoneyInput } from "./baseer-form-fields";
@@ -42,7 +42,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
       const next = (await listHrEmployees(session, { pageSize: 100 })).employees.filter((employee) => employee.status === "ACTIVE" || employee.status === "ON_LEAVE");
       setEmployees((current) => [...next, ...current.filter((employee) => !next.some((candidate) => candidate.id === employee.id))]);
     }
-    catch (error) { setMessage(presentBaseerApiError(error, language, ar ? "تحميل الموظفين" : "Loading employees")); }
+    catch (error) { setMessage(presentBaseerLoadError(error, language, { ar: "الموظفين", en: "employees" })); }
   }, [ar, language]);
   useEffect(() => { void loadEmployees(); }, [loadEmployees]);
   const searchEmployeeOptions = useCallback(async (query: string, signal: AbortSignal) => {
@@ -58,7 +58,7 @@ export function HrSalaryToolsWorkspace({ language }: { language: Language }) {
     void getHrEmployee(session, selectedEmployeeId).then((detail) => {
       setSelectedDetail(detail);
       setDraft(emptyDraft());
-    }).catch((error) => setMessage(presentBaseerApiError(error, language, ar ? "تحميل الراتب" : "Loading salary"))).finally(() => setLoadingEmployee(false));
+    }).catch((error) => setMessage(presentBaseerLoadError(error, language, { ar: "الراتب", en: "salary" }))).finally(() => setLoadingEmployee(false));
   }, [ar, language, selectedEmployeeId]);
 
   const calculation = useMemo(() => calculateSalaryTool(draft), [draft]);

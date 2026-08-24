@@ -53,7 +53,7 @@ assert.equal(cancelled.netCashResult.toFixed(4), '0.0000');
 const vaultId = randomUUID();
 const movement = (group: VaultMovement['group'], amount: string, sourceLabelAr = 'اختبار', categoryPath: VaultMovement['categoryPath'] = null): VaultMovement => ({
   id: randomUUID(), journalEntryId: randomUUID(), businessDate: new Date('2026-08-20T00:00:00.000Z'),
-  vaultId, vaultNameAr: 'نقد', vaultNameEn: 'Cash', group,
+  vaultId, vaultNameAr: 'نقد', vaultNameEn: 'Cash', group, sourceType: 'test_source',
   direction: new Prisma.Decimal(amount).gte(0) ? FinanceCashPerformanceDirection.INFLOW : FinanceCashPerformanceDirection.OUTFLOW,
   amount: new Prisma.Decimal(amount), sourceLabelAr, sourceLabelEn: 'Test', sourceReference: 'TEST',
   categoryPath,

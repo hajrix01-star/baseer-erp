@@ -26,7 +26,7 @@ import {
 } from "./baseer-period-filter";
 import type { BaseerDataGridColumn as DataTableColumn } from "./baseer-data-grid";
 import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import {
   activeSession,
   api,
@@ -404,7 +404,7 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
     void load().catch((error) =>
       setMessage({
         kind: "error",
-        text: presentBaseerApiError(error, language, text.loadingVaults),
+        text: presentBaseerLoadError(error, language, { ar: "بيانات الخزائن", en: "treasury data" }),
       }),
     );
   }, [language, load, text.loadingVaults]);
@@ -896,11 +896,7 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
                 void load().catch((error) =>
                   setMessage({
                     kind: "error",
-                    text: presentBaseerApiError(
-                      error,
-                      language,
-                      text.loadingVaults,
-                    ),
+                    text: presentBaseerLoadError(error, language, { ar: "بيانات الخزائن", en: "treasury data" }),
                   }),
                 )
               }

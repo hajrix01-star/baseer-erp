@@ -56,6 +56,11 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "marketing.google-business.profile.read", module: "marketing", nameAr: "عرض ملف Google Business", nameEn: "View Google Business Profile", risk: "standard" },
   { code: "marketing.google-business.publisher", module: "marketing", nameAr: "ناشر Google Business", nameEn: "Google Business Publisher", risk: "sensitive" },
 
+  // This is deliberately absent from every company role template. The API
+  // additionally requires a live tenant-owner assignment, so a company user
+  // can neither discover nor query the central owner mailbox.
+  { code: "inbound_evidence.owner_access", module: "inbound-evidence", nameAr: "الوصول إلى البريد والأدلة المركزي", nameEn: "Access the central inbound evidence hub", risk: "sensitive" },
+
   { code: "hr.employees.read", module: "hr", nameAr: "عرض الموظفين وملفاتهم", nameEn: "View employees and their files", risk: "standard" },
   { code: "hr.employees.write", module: "hr", nameAr: "إدارة الموظفين وخدماتهم", nameEn: "Manage employees and employee services", risk: "sensitive" },
   { code: "hr.advances.read", module: "hr", nameAr: "عرض سلف الموظفين", nameEn: "View employee advances", risk: "standard" },

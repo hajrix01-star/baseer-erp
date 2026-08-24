@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
@@ -63,7 +63,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
       // count while it is being restarted. Never render the technical string
       // "undefined" in the financial workspace.
       setSummary({ ...payroll.summary, cancelledCount: payroll.summary.cancelledCount ?? 0 });
-    } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل مسيرات الرواتب" : "Loading payroll runs")); }
+    } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "مسيرات الرواتب", en: "payroll runs" })); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, language, serverSearch]);
   useEffect(() => { void load(); }, [load]);

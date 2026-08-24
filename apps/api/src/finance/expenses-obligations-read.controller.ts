@@ -12,12 +12,29 @@ export class ExpensesObligationsReadController {
     @Headers('authorization') authorization?: string,
     @Headers('x-baseer-company-id') companyId?: string,
   ) {
+    return expensesObligationsWorkspaceReceiptSchema.parse(await this.workspace.read(this.input(authorization, companyId)));
+  }
+
+  @Get('items')
+  async items(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    return this.workspace.readItems(this.input(authorization, companyId));
+  }
+
+  @Get('batch')
+  async batch(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    return this.workspace.readBatch(this.input(authorization, companyId));
+  }
+
+  @Get('history')
+  async history(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    return this.workspace.readHistory(this.input(authorization, companyId));
+  }
+
+  private input(authorization: string | undefined, companyId: string | undefined) {
     const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
     if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
     const parsedCompanyId = companyIdSchema.safeParse(companyId);
     if (!parsedCompanyId.success) throw new ForbiddenException('Company finance scope is not permitted.');
-    return expensesObligationsWorkspaceReceiptSchema.parse(
-      await this.workspace.read({ accessToken, companyId: parsedCompanyId.data }),
-    );
+    return { accessToken, companyId: parsedCompanyId.data };
   }
 }

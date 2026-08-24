@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -138,7 +138,7 @@ export function HrServicesWorkspace({ language, stage }: { language: Language; s
       setNextCursor(serviceReceipt.nextCursor);
       setSummary(serviceReceipt.summary);
       if (employeeReceipt) setEmployees((current) => [...employeeReceipt.employees, ...current.filter((employee) => !employeeReceipt.employees.some((candidate) => candidate.id === employee.id))]);
-    } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل خدمات الموظفين" : "Loading employee services")); }
+    } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "خدمات الموظفين", en: "employee services" })); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, complianceFilter, employeeFilter, language, serverSearch, typeFilter]);
   useEffect(() => { void load(); }, [load]);

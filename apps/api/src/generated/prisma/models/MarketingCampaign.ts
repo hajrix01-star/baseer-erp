@@ -316,6 +316,7 @@ export type MarketingCampaignWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   financialLinks?: Prisma.MarketingCampaignFinancialLinkListRelationFilter
   contextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackListRelationFilter
 }
 
 export type MarketingCampaignOrderByWithRelationInput = {
@@ -339,6 +340,7 @@ export type MarketingCampaignOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   financialLinks?: Prisma.MarketingCampaignFinancialLinkOrderByRelationAggregateInput
   contextLinks?: Prisma.MarketingCampaignContextLinkOrderByRelationAggregateInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackOrderByRelationAggregateInput
 }
 
 export type MarketingCampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -366,6 +368,7 @@ export type MarketingCampaignWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   financialLinks?: Prisma.MarketingCampaignFinancialLinkListRelationFilter
   contextLinks?: Prisma.MarketingCampaignContextLinkListRelationFilter
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type MarketingCampaignOrderByWithAggregationInput = {
@@ -435,6 +438,7 @@ export type MarketingCampaignCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutMarketingCampaignsInput
   financialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCampaignInput
   contextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignUncheckedCreateInput = {
@@ -457,6 +461,7 @@ export type MarketingCampaignUncheckedCreateInput = {
   updatedAt?: Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCampaignInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignUpdateInput = {
@@ -478,6 +483,7 @@ export type MarketingCampaignUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingCampaignsNestedInput
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCampaignNestedInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignUncheckedUpdateInput = {
@@ -500,6 +506,7 @@ export type MarketingCampaignUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCampaignNestedInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignCreateManyInput = {
@@ -699,6 +706,20 @@ export type EnumMarketingCampaignStatusFieldUpdateOperationsInput = {
   set?: $Enums.MarketingCampaignStatus
 }
 
+export type MarketingCampaignCreateNestedOneWithoutAnalysisFeedbackInput = {
+  create?: Prisma.XOR<Prisma.MarketingCampaignCreateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput>
+  connectOrCreate?: Prisma.MarketingCampaignCreateOrConnectWithoutAnalysisFeedbackInput
+  connect?: Prisma.MarketingCampaignWhereUniqueInput
+}
+
+export type MarketingCampaignUpdateOneRequiredWithoutAnalysisFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketingCampaignCreateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput>
+  connectOrCreate?: Prisma.MarketingCampaignCreateOrConnectWithoutAnalysisFeedbackInput
+  upsert?: Prisma.MarketingCampaignUpsertWithoutAnalysisFeedbackInput
+  connect?: Prisma.MarketingCampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketingCampaignUpdateToOneWithWhereWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUpdateWithoutAnalysisFeedbackInput>, Prisma.MarketingCampaignUncheckedUpdateWithoutAnalysisFeedbackInput>
+}
+
 export type MarketingCampaignCreateNestedOneWithoutFinancialLinksInput = {
   create?: Prisma.XOR<Prisma.MarketingCampaignCreateWithoutFinancialLinksInput, Prisma.MarketingCampaignUncheckedCreateWithoutFinancialLinksInput>
   connectOrCreate?: Prisma.MarketingCampaignCreateOrConnectWithoutFinancialLinksInput
@@ -745,6 +766,7 @@ export type MarketingCampaignCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCampaignInput
   contextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignUncheckedCreateWithoutCompanyInput = {
@@ -765,6 +787,7 @@ export type MarketingCampaignUncheckedCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCampaignInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignCreateOrConnectWithoutCompanyInput = {
@@ -816,6 +839,108 @@ export type MarketingCampaignScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"MarketingCampaign"> | Date | string
 }
 
+export type MarketingCampaignCreateWithoutAnalysisFeedbackInput = {
+  id?: string
+  titleAr: string
+  titleEn?: string | null
+  platform?: $Enums.MarketingCampaignPlatform
+  externalReference?: string | null
+  startsOn?: Date | string | null
+  endsOn?: Date | string | null
+  status?: $Enums.MarketingCampaignStatus
+  objective?: string | null
+  notes?: string | null
+  plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  plannedCurrencyCode?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutMarketingCampaignsInput
+  financialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCampaignInput
+  contextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCampaignInput
+}
+
+export type MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  titleAr: string
+  titleEn?: string | null
+  platform?: $Enums.MarketingCampaignPlatform
+  externalReference?: string | null
+  startsOn?: Date | string | null
+  endsOn?: Date | string | null
+  status?: $Enums.MarketingCampaignStatus
+  objective?: string | null
+  notes?: string | null
+  plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  plannedCurrencyCode?: string | null
+  createdByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCampaignInput
+  contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type MarketingCampaignCreateOrConnectWithoutAnalysisFeedbackInput = {
+  where: Prisma.MarketingCampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketingCampaignCreateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput>
+}
+
+export type MarketingCampaignUpsertWithoutAnalysisFeedbackInput = {
+  update: Prisma.XOR<Prisma.MarketingCampaignUpdateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedUpdateWithoutAnalysisFeedbackInput>
+  create: Prisma.XOR<Prisma.MarketingCampaignCreateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput>
+  where?: Prisma.MarketingCampaignWhereInput
+}
+
+export type MarketingCampaignUpdateToOneWithWhereWithoutAnalysisFeedbackInput = {
+  where?: Prisma.MarketingCampaignWhereInput
+  data: Prisma.XOR<Prisma.MarketingCampaignUpdateWithoutAnalysisFeedbackInput, Prisma.MarketingCampaignUncheckedUpdateWithoutAnalysisFeedbackInput>
+}
+
+export type MarketingCampaignUpdateWithoutAnalysisFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  titleEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.EnumMarketingCampaignPlatformFieldUpdateOperationsInput | $Enums.MarketingCampaignPlatform
+  externalReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  plannedCurrencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingCampaignsNestedInput
+  financialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCampaignNestedInput
+  contextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCampaignNestedInput
+}
+
+export type MarketingCampaignUncheckedUpdateWithoutAnalysisFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  titleAr?: Prisma.StringFieldUpdateOperationsInput | string
+  titleEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.EnumMarketingCampaignPlatformFieldUpdateOperationsInput | $Enums.MarketingCampaignPlatform
+  externalReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  plannedCurrencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCampaignNestedInput
+  contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
 export type MarketingCampaignCreateWithoutFinancialLinksInput = {
   id?: string
   titleAr: string
@@ -834,6 +959,7 @@ export type MarketingCampaignCreateWithoutFinancialLinksInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutMarketingCampaignsInput
   contextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignUncheckedCreateWithoutFinancialLinksInput = {
@@ -855,6 +981,7 @@ export type MarketingCampaignUncheckedCreateWithoutFinancialLinksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignCreateOrConnectWithoutFinancialLinksInput = {
@@ -891,6 +1018,7 @@ export type MarketingCampaignUpdateWithoutFinancialLinksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingCampaignsNestedInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignUncheckedUpdateWithoutFinancialLinksInput = {
@@ -912,6 +1040,7 @@ export type MarketingCampaignUncheckedUpdateWithoutFinancialLinksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignCreateWithoutContextLinksInput = {
@@ -932,6 +1061,7 @@ export type MarketingCampaignCreateWithoutContextLinksInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutMarketingCampaignsInput
   financialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignUncheckedCreateWithoutContextLinksInput = {
@@ -953,6 +1083,7 @@ export type MarketingCampaignUncheckedCreateWithoutContextLinksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCampaignInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type MarketingCampaignCreateOrConnectWithoutContextLinksInput = {
@@ -989,6 +1120,7 @@ export type MarketingCampaignUpdateWithoutContextLinksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingCampaignsNestedInput
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignUncheckedUpdateWithoutContextLinksInput = {
@@ -1010,6 +1142,7 @@ export type MarketingCampaignUncheckedUpdateWithoutContextLinksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignCreateManyCompanyInput = {
@@ -1048,6 +1181,7 @@ export type MarketingCampaignUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCampaignNestedInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignUncheckedUpdateWithoutCompanyInput = {
@@ -1068,6 +1202,7 @@ export type MarketingCampaignUncheckedUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   financialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCampaignNestedInput
   contextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCampaignNestedInput
+  analysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type MarketingCampaignUncheckedUpdateManyWithoutCompanyInput = {
@@ -1096,11 +1231,13 @@ export type MarketingCampaignUncheckedUpdateManyWithoutCompanyInput = {
 export type MarketingCampaignCountOutputType = {
   financialLinks: number
   contextLinks: number
+  analysisFeedback: number
 }
 
 export type MarketingCampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   financialLinks?: boolean | MarketingCampaignCountOutputTypeCountFinancialLinksArgs
   contextLinks?: boolean | MarketingCampaignCountOutputTypeCountContextLinksArgs
+  analysisFeedback?: boolean | MarketingCampaignCountOutputTypeCountAnalysisFeedbackArgs
 }
 
 /**
@@ -1127,6 +1264,13 @@ export type MarketingCampaignCountOutputTypeCountContextLinksArgs<ExtArgs extend
   where?: Prisma.MarketingCampaignContextLinkWhereInput
 }
 
+/**
+ * MarketingCampaignCountOutputType without action
+ */
+export type MarketingCampaignCountOutputTypeCountAnalysisFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingCampaignAnalysisFeedbackWhereInput
+}
+
 
 export type MarketingCampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1149,6 +1293,7 @@ export type MarketingCampaignSelect<ExtArgs extends runtime.Types.Extensions.Int
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   financialLinks?: boolean | Prisma.MarketingCampaign$financialLinksArgs<ExtArgs>
   contextLinks?: boolean | Prisma.MarketingCampaign$contextLinksArgs<ExtArgs>
+  analysisFeedback?: boolean | Prisma.MarketingCampaign$analysisFeedbackArgs<ExtArgs>
   _count?: boolean | Prisma.MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["marketingCampaign"]>
 
@@ -1219,6 +1364,7 @@ export type MarketingCampaignInclude<ExtArgs extends runtime.Types.Extensions.In
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   financialLinks?: boolean | Prisma.MarketingCampaign$financialLinksArgs<ExtArgs>
   contextLinks?: boolean | Prisma.MarketingCampaign$contextLinksArgs<ExtArgs>
+  analysisFeedback?: boolean | Prisma.MarketingCampaign$analysisFeedbackArgs<ExtArgs>
   _count?: boolean | Prisma.MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MarketingCampaignIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1234,6 +1380,7 @@ export type $MarketingCampaignPayload<ExtArgs extends runtime.Types.Extensions.I
     company: Prisma.$CompanyPayload<ExtArgs>
     financialLinks: Prisma.$MarketingCampaignFinancialLinkPayload<ExtArgs>[]
     contextLinks: Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>[]
+    analysisFeedback: Prisma.$MarketingCampaignAnalysisFeedbackPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1650,6 +1797,7 @@ export interface Prisma__MarketingCampaignClient<T, Null = never, ExtArgs extend
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   financialLinks<T extends Prisma.MarketingCampaign$financialLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingCampaign$financialLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignFinancialLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contextLinks<T extends Prisma.MarketingCampaign$contextLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingCampaign$contextLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignContextLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  analysisFeedback<T extends Prisma.MarketingCampaign$analysisFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingCampaign$analysisFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2142,6 +2290,30 @@ export type MarketingCampaign$contextLinksArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.MarketingCampaignContextLinkScalarFieldEnum | Prisma.MarketingCampaignContextLinkScalarFieldEnum[]
+}
+
+/**
+ * MarketingCampaign.analysisFeedback
+ */
+export type MarketingCampaign$analysisFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingCampaignAnalysisFeedback
+   */
+  select?: Prisma.MarketingCampaignAnalysisFeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingCampaignAnalysisFeedback
+   */
+  omit?: Prisma.MarketingCampaignAnalysisFeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingCampaignAnalysisFeedbackInclude<ExtArgs> | null
+  where?: Prisma.MarketingCampaignAnalysisFeedbackWhereInput
+  orderBy?: Prisma.MarketingCampaignAnalysisFeedbackOrderByWithRelationInput | Prisma.MarketingCampaignAnalysisFeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingCampaignAnalysisFeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingCampaignAnalysisFeedbackScalarFieldEnum | Prisma.MarketingCampaignAnalysisFeedbackScalarFieldEnum[]
 }
 
 /**

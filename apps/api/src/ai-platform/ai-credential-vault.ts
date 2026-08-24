@@ -1,4 +1,4 @@
-import { createCipheriv, randomBytes } from "node:crypto";
+import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 
 import { Injectable } from "@nestjs/common";
 
@@ -27,6 +27,18 @@ export class AiCredentialVault {
       credentialTag: cipher.getAuthTag().toString("base64"),
       credentialKeyVersion: 1,
     };
+  }
+
+  /** Decrypts a provider credential only inside a server-side adapter call. */
+  decryptApiKey(envelope: EncryptedAiCredentialEnvelope): string {
+    const decipher = createDecipheriv("aes-256-gcm", this.key(), Buffer.from(envelope.credentialIv, "base64"));
+    decipher.setAuthTag(Buffer.from(envelope.credentialTag, "base64"));
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(envelope.encryptedCredential, "base64")),
+      decipher.final(),
+    ]).toString("utf8").trim();
+    if (!decrypted) throw new Error("AI credential could not be decrypted.");
+    return decrypted;
   }
 
   private key(): Buffer {

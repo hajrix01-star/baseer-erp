@@ -28,6 +28,12 @@ export const configureAiProviderRequestSchema = z
   })
   .strict();
 
+export const activateAiProviderConfigurationRequestSchema = z
+  .object({
+    idempotencyKey: aiIdempotencyKeySchema,
+  })
+  .strict();
+
 export const createAiIdentityRequestSchema = z
   .object({
     displayNameAr: z.string().trim().min(1).max(160),
@@ -56,11 +62,36 @@ export const aiProviderConfigurationReceiptSchema = z
     provider: aiProviderKindSchema,
     model: z.string().min(1).max(160),
     status: z.enum(["ACTIVE", "DISABLED"]),
+    isDefault: z.boolean(),
     dailyRequestLimit: z.number().int().positive(),
     dailyCostLimit: z.string().regex(/^\d+(?:\.\d{1,4})?$/).nullable(),
     configurationVersion: z.number().int().positive(),
     createdAt: z.date(),
     updatedAt: z.date(),
+  })
+  .strict();
+
+/**
+ * A live, credential-free probe of the configured provider. It is deliberately
+ * not a model response and never includes an API key, prompt, or ERP data.
+ */
+export const aiProviderConnectionReceiptSchema = z
+  .object({
+    state: z.enum(["READY", "ERROR", "UNCONFIGURED"]),
+    reason: z
+      .enum([
+        "PROVIDER_NOT_CONFIGURED",
+        "CREDENTIAL_DECRYPTION_FAILED",
+        "CREDENTIAL_REJECTED",
+        "MODEL_UNAVAILABLE",
+        "PROVIDER_RATE_LIMITED",
+        "PROVIDER_UNREACHABLE",
+        "PROVIDER_UNAVAILABLE",
+      ])
+      .nullable(),
+    provider: aiProviderKindSchema.nullable(),
+    model: z.string().min(1).max(160).nullable(),
+    checkedAt: z.coerce.date(),
   })
   .strict();
 
@@ -99,6 +130,7 @@ export const aiPlatformConfigurationReceiptSchema = z
   .object({
     companyId: companyIdSchema,
     activeProvider: aiProviderConfigurationReceiptSchema.nullable(),
+    providerConfigurations: z.array(aiProviderConfigurationReceiptSchema),
     activeSystemIdentity: aiSystemIdentityReceiptSchema.nullable(),
     activeIdentity: aiCompanyIdentityReceiptSchema.nullable(),
   })
@@ -106,6 +138,12 @@ export const aiPlatformConfigurationReceiptSchema = z
 
 export type ConfigureAiProviderRequest = z.infer<
   typeof configureAiProviderRequestSchema
+>;
+export type ActivateAiProviderConfigurationRequest = z.infer<
+  typeof activateAiProviderConfigurationRequestSchema
+>;
+export type AiProviderConnectionReceipt = z.infer<
+  typeof aiProviderConnectionReceiptSchema
 >;
 export type CreateAiIdentityRequest = z.infer<typeof createAiIdentityRequestSchema>;
 export type CreateAiSystemIdentityRequest = z.infer<typeof createAiSystemIdentityRequestSchema>;
@@ -160,6 +198,37 @@ export const aiRuntimePreflightReceiptSchema = z
   })
   .strict();
 
+/** The only live AI input initially permitted by the product: a frozen Decision alert. */
+export const explainDecisionAlertRequestSchema = z
+  .object({
+    alertId: z.string().uuid(),
+    language: z.enum(["ar", "en"]),
+    idempotencyKey: aiIdempotencyKeySchema,
+  })
+  .strict();
+
+export const decisionAlertExplanationSchema = z
+  .object({
+    summary: z.string().trim().min(1).max(1_200),
+    evidence: z.array(z.string().trim().min(1).max(600)).min(1).max(3),
+    limitations: z.array(z.string().trim().min(1).max(600)).min(1).max(2),
+    reviewSteps: z.array(z.string().trim().min(1).max(400)).min(1).max(3),
+  })
+  .strict();
+export type DecisionAlertExplanation = z.infer<typeof decisionAlertExplanationSchema>;
+
+export const explainDecisionAlertReceiptSchema = z
+  .object({
+    receiptId: z.string().uuid(),
+    alertId: z.string().uuid(),
+    skillKey: z.literal("decision.command_center_analyst"),
+    model: z.string().min(1).max(160),
+    explanation: decisionAlertExplanationSchema,
+    createdAt: z.coerce.date(),
+    replayed: z.boolean(),
+  })
+  .strict();
+
 export type AiSkillCatalogItem = z.infer<typeof aiSkillCatalogItemSchema>;
 export type AiRuntimePreflightRequest = z.infer<
   typeof aiRuntimePreflightRequestSchema
@@ -167,3 +236,68 @@ export type AiRuntimePreflightRequest = z.infer<
 export type AiRuntimePreflightReceipt = z.infer<
   typeof aiRuntimePreflightReceiptSchema
 >;
+export type ExplainDecisionAlertRequest = z.infer<typeof explainDecisionAlertRequestSchema>;
+export type ExplainDecisionAlertReceipt = z.infer<typeof explainDecisionAlertReceiptSchema>;
+
+/** A campaign id is only a selector. The server builds and freezes the
+ * evidence package before the model is ever invoked. */
+export const explainMarketingCampaignRequestSchema = z
+  .object({
+    campaignId: z.string().uuid(),
+    language: z.enum(["ar", "en"]),
+    idempotencyKey: aiIdempotencyKeySchema,
+  })
+  .strict();
+
+export const marketingCampaignExplanationSchema = z
+  .object({
+    summary: z.string().trim().min(1).max(1_200),
+    evidence: z.array(z.string().trim().min(1).max(600)).min(1).max(4),
+    limitations: z.array(z.string().trim().min(1).max(600)).min(1).max(3),
+    reviewSteps: z.array(z.string().trim().min(1).max(400)).min(1).max(3),
+  })
+  .strict();
+export type MarketingCampaignExplanation = z.infer<typeof marketingCampaignExplanationSchema>;
+
+export const explainMarketingCampaignReceiptSchema = z
+  .object({
+    receiptId: z.string().uuid(),
+    campaignId: z.string().uuid(),
+    evidenceSnapshotId: z.string().uuid(),
+    skillKey: z.literal("marketing.performance_analyst"),
+    model: z.string().min(1).max(160),
+    explanation: marketingCampaignExplanationSchema,
+    createdAt: z.coerce.date(),
+    replayed: z.boolean(),
+  })
+  .strict();
+
+export type ExplainMarketingCampaignRequest = z.infer<typeof explainMarketingCampaignRequestSchema>;
+export type ExplainMarketingCampaignReceipt = z.infer<typeof explainMarketingCampaignReceiptSchema>;
+
+/** Owner-only, server-built Daily Brief question. The browser may supply no
+ * financial rows, prompt template, company scope, provider setting or tool. */
+export const ownerDailyBriefBasiraAnswerRequestSchema = z.object({
+  reportDate: z.string().date(),
+  question: z.string().trim().min(1).max(600),
+  language: z.enum(["ar", "en"]),
+  idempotencyKey: aiIdempotencyKeySchema,
+}).strict();
+
+export const ownerDailyBriefBasiraAnswerSchema = z.object({
+  summary: z.string().trim().min(1).max(1_200),
+  evidence: z.array(z.string().trim().min(1).max(600)).min(1).max(4),
+  limitations: z.array(z.string().trim().min(1).max(600)).min(1).max(3),
+  followupChips: z.array(z.string().trim().min(1).max(160)).min(1).max(3),
+}).strict();
+
+export const ownerDailyBriefBasiraAnswerReceiptSchema = z.object({
+  skillKey: z.literal("owner.daily_brief_analyst"),
+  model: z.string().trim().min(1).max(160),
+  answer: ownerDailyBriefBasiraAnswerSchema,
+  createdAt: z.coerce.date(),
+}).strict();
+
+export type OwnerDailyBriefBasiraAnswerRequest = z.infer<typeof ownerDailyBriefBasiraAnswerRequestSchema>;
+export type OwnerDailyBriefBasiraAnswer = z.infer<typeof ownerDailyBriefBasiraAnswerSchema>;
+export type OwnerDailyBriefBasiraAnswerReceipt = z.infer<typeof ownerDailyBriefBasiraAnswerReceiptSchema>;

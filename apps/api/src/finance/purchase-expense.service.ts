@@ -41,6 +41,23 @@ export type ReverseEmployeeServiceCostReceipt = Readonly<{ serviceId: string; do
 export class PurchaseExpenseService {
   constructor(private readonly db: DatabaseService, private readonly idem: IdempotencyService, private readonly serials: DocumentSerialService, private readonly journals: JournalPostingService, private readonly vaults: FinanceVaultService, private readonly dates: BusinessDateService, private readonly hr: HrService, private readonly cashEvents: FinanceCashPerformanceEventService) {}
 
+  /**
+   * Narrow reference data for a purchase-entry clerk.  It deliberately omits
+   * the chart of accounts, fiscal history, balances and posted documents that
+   * are returned by the wider finance-configuration workspace.
+   */
+  async entryReferences(context: TrustedCompanyActorContext) {
+    return this.db.inTenantTransaction(context.tenantId, async (tx) => {
+      const [profile, vaults, categories, suppliers] = await Promise.all([
+        tx.companyFinanceProfile.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId }, select: { vatAccountingEnabled: true, vatRateBasisPoints: true } }),
+        tx.financeVault.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: 'ACTIVE', isPaymentDestination: true }, orderBy: { sortOrder: 'asc' }, select: { id: true, nameAr: true, nameEn: true, type: true, status: true, isPaymentDestination: true, paymentMethod: true, paymentMethods: true } }),
+        tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, kind: { in: ['PURCHASE', 'EXPENSE'] } }, orderBy: { sortOrder: 'asc' }, select: { id: true, nameAr: true, nameEn: true, kind: true, status: true, isPosting: true, suggestedSupplierId: true } }),
+        tx.financeSupplier.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceSupplierStatus.ACTIVE }, orderBy: [{ isFavorite: 'desc' }, { nameAr: 'asc' }], take: 1_000, select: { id: true, nameAr: true, nameEn: true, status: true, categoryId: true, isFavorite: true } }),
+      ]);
+      return { companyId: context.companyId, profile, vaults, categories, suppliers };
+    });
+  }
+
   async create(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: PurchaseExpenseRequest }): Promise<PurchaseExpenseReceipt> {
     return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
       const request = this.normalise(input.request);

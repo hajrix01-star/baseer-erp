@@ -60,6 +60,17 @@ services:
       IDENTITY_JWT_SECRET: ${IDENTITY_JWT_SECRET:?IDENTITY_JWT_SECRET is required}
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
       BASEER_BACKUP_TARGET_LABEL: ${BASEER_BACKUP_TARGET_LABEL:?BASEER_BACKUP_TARGET_LABEL is required}
+      # Central Google application configuration.  It is empty until the owner
+      # moves approved values from the existing Google Cloud project.  Never
+      # put a company OAuth grant, refresh token, or account ID here.
+      BASEER_GOOGLE_OAUTH_CLIENT_ID: ${BASEER_GOOGLE_OAUTH_CLIENT_ID:-}
+      BASEER_GOOGLE_OAUTH_CLIENT_SECRET: ${BASEER_GOOGLE_OAUTH_CLIENT_SECRET:-}
+      BASEER_GOOGLE_OAUTH_REDIRECT_URI: ${BASEER_GOOGLE_OAUTH_REDIRECT_URI:-}
+      BASEER_GOOGLE_ADS_DEVELOPER_TOKEN: ${BASEER_GOOGLE_ADS_DEVELOPER_TOKEN:-}
+      BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY: ${BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY:-}
+      # Remains false until the callback, account-selection and pilot gates are
+      # delivered and the platform owner explicitly enables OAuth.
+      BASEER_GOOGLE_OAUTH_ENABLED: ${BASEER_GOOGLE_OAUTH_ENABLED:-false}
     depends_on:
       postgres:
         condition: service_healthy

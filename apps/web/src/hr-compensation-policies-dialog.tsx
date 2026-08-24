@@ -1,7 +1,7 @@
 import { useBaseerForm, z } from "./baseer-form-state";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
@@ -29,7 +29,7 @@ export function HrCompensationPoliciesDialog({ open, language, onClose, onError,
   const [versionPolicy, setVersionPolicy] = useState<HrCompensationPolicy | null>(null);
   const policyForm = useBaseerForm<PolicyForm>({ schema: policySchema(language), defaultValues: emptyPolicy() });
   const versionForm = useBaseerForm<{ effectiveMonth: string }>({ schema: versionSchema(language), defaultValues: { effectiveMonth: month() } });
-  const load = useCallback(async () => { const session = activeSession(); if (!session) return; setLoading(true); try { setPolicies((await listHrCompensationPolicies(session)).policies); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تحميل السياسات" : "Loading policies")); } finally { setLoading(false); } }, [ar, language, onError]);
+  const load = useCallback(async () => { const session = activeSession(); if (!session) return; setLoading(true); try { setPolicies((await listHrCompensationPolicies(session)).policies); } catch (error) { onError(presentBaseerLoadError(error, language, { ar: "سياسات التعويض", en: "compensation policies" })); } finally { setLoading(false); } }, [ar, language, onError]);
   useEffect(() => { if (open) void load(); }, [load, open]);
   const create = policyForm.handleSubmit(async (form) => { const session = activeSession(); if (!session || busy) return; setBusy(true); try { await createHrCompensationPolicy(session, { code: form.code.trim().toUpperCase(), nameAr: form.nameAr.trim(), nameEn: form.nameEn.trim() || undefined, effectiveFrom: `${form.effectiveMonth}-01`, idempotencyKey: requestId() }); setCreateOpen(false); policyForm.reset(emptyPolicy()); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "إنشاء السياسة" : "Creating policy")); } finally { setBusy(false); } });
   const createVersion = versionForm.handleSubmit(async ({ effectiveMonth }) => { const session = activeSession(); if (!session || busy || !versionPolicy) return; setBusy(true); try { await createHrCompensationPolicyVersion(session, { policyId: versionPolicy.id, effectiveFrom: `${effectiveMonth}-01`, idempotencyKey: requestId() }); setVersionPolicy(null); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "إنشاء إصدار" : "Creating version")); } finally { setBusy(false); } });

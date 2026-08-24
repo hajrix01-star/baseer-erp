@@ -68,6 +68,11 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
     try { body = request.postDataJSON() as Record<string, unknown>; } catch { /* request has no JSON body */ }
     requests.push({ method: request.method(), pathname: url.pathname, search: url.search, body, company: request.headers()["x-baseer-company-id"] ?? null, idempotencyKey: request.headers()["x-idempotency-key"] ?? null });
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, name: "شركة اختبار", functionalCurrency: "SAR", permissionCodes: permissions }] });
+    if (url.pathname === "/v1/administration/ai/runtime/decision-alert-explanations" && request.method() === "POST") return fulfill(route, {
+      receiptId: "77777777-7777-4777-8777-777777777777", alertId, skillKey: "decision.command_center_analyst", model: "gpt-5-mini",
+      explanation: { summary: "The frozen evidence shows a reconciled sales change that needs review.", evidence: ["The evidence snapshot checksum is valid."], limitations: ["This is not proof of causation."], reviewSteps: ["Review the source ledger evidence."] },
+      createdAt: "2026-08-23T10:00:00.000Z", replayed: false,
+    });
     if (url.pathname === "/v1/decision-intelligence/metrics/sales-daily") return fulfill(route, metric(url));
     if (url.pathname === "/v1/decision-intelligence/metrics/sales-comparison") return fulfill(route, comparison(url));
     if (url.pathname === "/v1/decision-intelligence/metrics/sales-matched-weekday") return fulfill(route, comparison(url, true));
@@ -83,7 +88,7 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
   });
 }
 
-const allPermissions = ["decision.metrics.read", "decision.context.read", "decision.alerts.read", "decision.alerts.manage", "decision.feedback.write", "decision.policy.manage", "decision.context.company.manage", "decision.context.global.manage"];
+const allPermissions = ["platform.ai.use", "decision.metrics.read", "decision.context.read", "decision.alerts.read", "decision.alerts.manage", "decision.feedback.write", "decision.policy.manage", "decision.context.company.manage", "decision.context.global.manage"];
 
 async function open(page: Page, section: number) {
   await page.goto(`/#module=decision&section=${section}`);
@@ -159,6 +164,15 @@ test("Timeline and alerts keep validation, evidence, status reason, Escape, and 
   await expect(page.getByRole("dialog", { name: "Alert evidence package" })).toContainText("Checksum valid");
   await page.keyboard.press("Escape");
   await expect(evidenceTrigger).toBeFocused();
+  const explain = page.getByRole("button", { name: "✦ Explain" });
+  await explain.click();
+  await expect(page.getByRole("dialog", { name: "Basira alert explanation" })).toContainText("not proof of causation");
+  await expect.poll(() => requests.filter((request) => request.pathname === "/v1/administration/ai/runtime/decision-alert-explanations").length).toBe(1);
+  const explanationRequest = requests.find((request) => request.pathname === "/v1/administration/ai/runtime/decision-alert-explanations");
+  expect(explanationRequest?.body).toMatchObject({ alertId, language: "en" });
+  expect(typeof explanationRequest?.body?.idempotencyKey).toBe("string");
+  await page.keyboard.press("Escape");
+  await expect(explain).toBeFocused();
   const acknowledge = page.getByRole("button", { name: "Acknowledge" });
   await acknowledge.click();
   await expect(page.getByRole("dialog", { name: "Acknowledge alert" })).toBeVisible();

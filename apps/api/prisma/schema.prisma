@@ -251,7 +251,32 @@ enum MarketingProvider {
 enum MarketingProviderConnectionStatus {
   NOT_CONNECTED
   SETUP_REQUESTED
+  AUTHORIZING
   BLOCKED
+}
+
+enum InboundEvidenceGmailConnectionStatus {
+  NOT_CONNECTED
+  AUTHORIZING
+  CONNECTED
+  REAUTH_REQUIRED
+  BLOCKED
+}
+
+enum InboundEvidenceAttachmentStatus {
+  STORED
+  QUARANTINED
+  UNSUPPORTED
+  TOO_LARGE
+  FAILED
+}
+
+/// A document-analysis result is evidence for human review, never a financial
+/// document, payment, voucher, or journal instruction.
+enum InboundEvidenceAnalysisStatus {
+  ANALYZED
+  NEEDS_REVIEW
+  FAILED
 }
 
 /// Company-owned reply behaviour. It is configuration only until the separate
@@ -657,6 +682,15 @@ model Tenant {
   fileMetadata              FileMetadata[]
   reportDocuments           ReportDocument[]
   administrationAssignments TenantAdministrationAssignment[]
+  inboundEvidenceLabels     InboundEvidenceLabel[]
+  inboundEvidenceRules      InboundEvidenceRule[]
+  inboundEvidenceCommands   InboundEvidenceCommandReceipt[]
+  inboundEvidenceGmailConnection InboundEvidenceGmailConnection?
+  inboundEvidenceOAuthStates     InboundEvidenceGmailOAuthState[]
+  inboundEvidenceMessages        InboundEvidenceMessage[]
+  inboundEvidenceAttachments     InboundEvidenceAttachment[]
+  inboundEvidenceDocumentAnalyses InboundEvidenceDocumentAnalysis[]
+  ownerDailyBriefSnapshots       OwnerDailyBriefSnapshot[]
 }
 
 model User {
@@ -756,6 +790,7 @@ model Company {
   hrEmployeeAdministrativeDeductions         HrEmployeeAdministrativeDeduction[]
   hrEmployeeAdministrativeDeductionActions   HrEmployeeAdministrativeDeductionAction[]
   hrEmployeeCompensationProfiles             HrEmployeeCompensationProfile[]
+  marketingSalesTargets                      MarketingSalesTarget[]
   hrEmployeePromotions                       HrEmployeePromotion[]
   hrCompensationPolicies                     HrCompensationPolicy[]
   hrCompensationPolicyVersions               HrCompensationPolicyVersion[]
@@ -782,6 +817,7 @@ model Company {
   decisionAlertActions                       DecisionAlertAction[]
   decisionFeedback                           DecisionFeedback[]
   marketingCampaigns                         MarketingCampaign[]
+  marketingCampaignAnalysisFeedback          MarketingCampaignAnalysisFeedback[]
   marketingCampaignFinancialLinks            MarketingCampaignFinancialLink[]
   marketingCampaignContextLinks              MarketingCampaignContextLink[]
   marketingProviderConnections               MarketingProviderConnection[]
@@ -950,6 +986,23 @@ model IdempotencyReceipt {
 
   @@unique([tenantId, companyId, actorUserId, operation, idempotencyKey])
   @@index([tenantId, companyId, expiresAt])
+}
+
+/// Immutable, tenant-scoped owner briefing receipt. A scheduled job writes at
+/// most one snapshot per completed Riyadh business date; historical reads must
+/// never silently change when source financial data is corrected later.
+model OwnerDailyBriefSnapshot {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  reportDate    DateTime @db.Date
+  receiptJson   Json
+  receiptSha256 String   @db.Char(64)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, reportDate])
+  @@index([tenantId, reportDate])
 }
 
 model DocumentSerialCounter {
@@ -1543,6 +1596,229 @@ model DecisionFeedback {
   @@index([tenantId, companyId, alertId, createdAt])
 }
 
+/// Owner-only central configuration for the Inbound Evidence Hub. Labels are
+/// tenant-scoped deliberately: one owner mailbox may contain evidence for
+/// several companies, while no company user can query this module.
+model InboundEvidenceLabel {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  nameAr          String   @db.VarChar(80)
+  nameEn          String?  @db.VarChar(80)
+  nameKey         String   @db.VarChar(120)
+  colorHex        String   @db.Char(7)
+  sortOrder       Int      @default(100)
+  systemKey       String?  @db.VarChar(80)
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  rules  InboundEvidenceRule[]
+  messageLabels InboundEvidenceMessageLabel[]
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, nameKey])
+  @@unique([tenantId, systemKey])
+  @@index([tenantId, sortOrder])
+}
+
+/// A rule is an owner-authored, declarative Label action. It never calls a
+/// provider or performs a financial command; it will be applied only after a
+/// governed connector imports an evidence record in a later gate.
+model InboundEvidenceRule {
+  id                  String   @id @default(uuid()) @db.Uuid
+  tenantId            String   @db.Uuid
+  labelId             String   @db.Uuid
+  name                String   @db.VarChar(120)
+  enabled             Boolean  @default(true)
+  priority            Int      @default(100)
+  senderContains      String?  @db.VarChar(240)
+  subjectContains     String?  @db.VarChar(240)
+  attachmentCondition String   @default("ANY") @db.VarChar(16)
+  createdByUserId     String   @db.Uuid
+  createdAt           DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  label  InboundEvidenceLabel  @relation(fields: [labelId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@index([tenantId, enabled, priority])
+  @@index([tenantId, labelId])
+}
+
+/// Tenant-level idempotency is intentionally separate from company financial
+/// receipts: the central mailbox has no selected company and cannot post.
+model InboundEvidenceCommandReceipt {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  actorUserId    String   @db.Uuid
+  operation      String   @db.VarChar(120)
+  idempotencyKey String   @db.VarChar(255)
+  requestHash    String   @db.Char(64)
+  responseJson   Json
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  expiresAt      DateTime @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, actorUserId, operation, idempotencyKey])
+  @@index([tenantId, expiresAt])
+}
+
+/// One encrypted Gmail mailbox connection for the tenant-owner evidence hub.
+/// Credentials never leave the server and are kept outside ordinary audit data.
+model InboundEvidenceGmailConnection {
+  id                    String                              @id @default(uuid()) @db.Uuid
+  tenantId              String                              @unique @db.Uuid
+  status                InboundEvidenceGmailConnectionStatus @default(NOT_CONNECTED)
+  mailboxEmail          String?                             @db.VarChar(320)
+  credentialCiphertext  String?                             @db.Text
+  credentialIv          String?                             @db.VarChar(64)
+  credentialTag         String?                             @db.VarChar(64)
+  credentialKeyVersion  Int?
+  accessTokenExpiresAt  DateTime?                           @db.Timestamptz(6)
+  gmailHistoryId        String?                             @db.VarChar(80)
+  lastSyncedAt          DateTime?                           @db.Timestamptz(6)
+  lastErrorCode         String?                             @db.VarChar(80)
+  createdByUserId       String?                             @db.Uuid
+  updatedByUserId       String?                             @db.Uuid
+  createdAt             DateTime                            @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime                            @updatedAt @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@index([tenantId, status])
+}
+
+/// Single-use PKCE/nonce material for an owner-initiated Gmail consent flow.
+model InboundEvidenceGmailOAuthState {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @db.Uuid
+  initiatedByUserId String   @db.Uuid
+  stateHash         String   @unique @db.Char(64)
+  nonceHash         String   @db.Char(64)
+  verifierEncrypted String   @db.Text
+  verifierIv        String   @db.VarChar(64)
+  verifierTag       String   @db.VarChar(64)
+  expiresAt         DateTime @db.Timestamptz(6)
+  consumedAt        DateTime? @db.Timestamptz(6)
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, expiresAt])
+}
+
+/// Imported mail metadata. Message bodies and provider attachments are not
+/// trusted instructions or financial truth; they remain evidence only.
+model InboundEvidenceMessage {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  gmailMessageId String   @db.VarChar(120)
+  gmailThreadId  String?  @db.VarChar(120)
+  sender         String?  @db.VarChar(600)
+  subject        String?  @db.VarChar(998)
+  snippet        String?  @db.Text
+  receivedAt     DateTime? @db.Timestamptz(6)
+  hasAttachments Boolean  @default(false)
+  rawChecksum    String   @db.Char(64)
+  importedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant      Tenant                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  attachments InboundEvidenceAttachment[]
+  labels      InboundEvidenceMessageLabel[]
+
+  @@unique([tenantId, gmailMessageId])
+  @@unique([id, tenantId])
+  @@index([tenantId, receivedAt])
+}
+
+/// Encrypted local copy of an attachment downloaded from Gmail. The original
+/// source reference and checksum make re-download and review auditable.
+model InboundEvidenceAttachment {
+  id                  String                         @id @default(uuid()) @db.Uuid
+  tenantId            String                         @db.Uuid
+  messageId           String                         @db.Uuid
+  gmailAttachmentId   String                         @db.VarChar(180)
+  gmailPartId         String                         @db.VarChar(80)
+  fileName            String                         @db.VarChar(500)
+  mimeType            String                         @db.VarChar(160)
+  byteSize            BigInt                         @db.BigInt
+  status              InboundEvidenceAttachmentStatus
+  sha256              String?                        @db.Char(64)
+  storageReference    String?                        @db.VarChar(500)
+  encryptionIv        String?                        @db.VarChar(64)
+  scannerName         String?                        @db.VarChar(120)
+  scannerResult       String?                        @db.VarChar(240)
+  retentionUntil      DateTime?                      @db.Timestamptz(6)
+  downloadedAt        DateTime?                      @db.Timestamptz(6)
+  createdAt           DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                       @updatedAt @db.Timestamptz(6)
+
+  tenant  Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  message InboundEvidenceMessage @relation(fields: [messageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  analyses InboundEvidenceDocumentAnalysis[]
+
+  @@unique([tenantId, messageId, gmailAttachmentId])
+  @@unique([id, tenantId])
+  @@index([tenantId, messageId])
+  @@index([tenantId, status, retentionUntil])
+}
+
+/// Immutable, versioned output of the visual document-intelligence skill.
+/// It stores only validated structured findings and provenance — never a raw
+/// provider transcript, prompt, or provider credential.
+model InboundEvidenceDocumentAnalysis {
+  id                  String                        @id @default(uuid()) @db.Uuid
+  tenantId            String                        @db.Uuid
+  attachmentId        String                        @db.Uuid
+  supersedesId        String?                       @db.Uuid
+  status              InboundEvidenceAnalysisStatus
+  sourceSha256        String                        @db.Char(64)
+  skillKey            String                        @db.VarChar(120)
+  skillVersion        Int
+  policyVersion       Int
+  provider            AiProviderKind
+  model               String                        @db.VarChar(160)
+  configurationVersion Int
+  promptVersion       Int
+  schemaVersion       Int
+  resultJson          Json
+  validationJson      Json
+  resultChecksum      String                        @db.Char(64)
+  requestId           String                        @db.VarChar(120)
+  createdByUserId     String                        @db.Uuid
+  createdAt           DateTime                      @default(now()) @db.Timestamptz(6)
+
+  tenant     Tenant                           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  attachment InboundEvidenceAttachment        @relation(fields: [attachmentId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  supersedes InboundEvidenceDocumentAnalysis? @relation("InboundEvidenceAnalysisSupersession", fields: [supersedesId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  successors InboundEvidenceDocumentAnalysis[] @relation("InboundEvidenceAnalysisSupersession")
+
+  @@unique([id, tenantId])
+  @@index([tenantId, attachmentId, createdAt])
+  @@index([tenantId, sourceSha256, createdAt])
+}
+
+/// A mail item may be given several internal Labels. Gmail itself is read-only
+/// in this connector and is never changed by this mapping.
+model InboundEvidenceMessageLabel {
+  tenantId  String   @db.Uuid
+  messageId String   @db.Uuid
+  labelId   String   @db.Uuid
+  appliedBy String   @db.VarChar(24)
+  appliedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  message InboundEvidenceMessage @relation(fields: [messageId, tenantId], references: [id, tenantId], onDelete: Cascade)
+  label   InboundEvidenceLabel   @relation(fields: [labelId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@id([tenantId, messageId, labelId])
+  @@index([tenantId, labelId])
+}
+
 /// P1 owns only an internal campaign register. Provider facts, OAuth tokens,
 /// Google locations and external publishing belong to later, separate gates.
 model MarketingCampaign {
@@ -1567,10 +1843,33 @@ model MarketingCampaign {
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   financialLinks MarketingCampaignFinancialLink[]
   contextLinks MarketingCampaignContextLink[]
+  analysisFeedback MarketingCampaignAnalysisFeedback[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status, startsOn])
   @@index([tenantId, companyId, platform, createdAt])
+}
+
+/// Structured human feedback about a retained campaign explanation. This is
+/// training/evaluation evidence only: it never changes the campaign, facts,
+/// comparison policy, or any financial record.
+model MarketingCampaignAnalysisFeedback {
+  id                 String   @id @default(uuid()) @db.Uuid
+  tenantId           String   @db.Uuid
+  companyId          String   @db.Uuid
+  campaignId         String   @db.Uuid
+  evidenceSnapshotId String   @db.Uuid
+  kind               String   @db.VarChar(80)
+  note               String?  @db.VarChar(1000)
+  createdByUserId    String   @db.Uuid
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+
+  company  Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  campaign MarketingCampaign @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, campaignId, createdAt])
+  @@index([tenantId, companyId, evidenceSnapshotId, createdAt])
 }
 
 /// A one-way, company-scoped reference to an existing posted Finance document.
@@ -1616,6 +1915,26 @@ model MarketingCampaignContextLink {
   @@index([tenantId, companyId, campaignId, createdAt])
 }
 
+/// A company-owned planning target for a calendar month. It is a target only:
+/// it never changes sales, campaign, or financial records.
+model MarketingSalesTarget {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  periodMonth     DateTime @db.Date
+  amount          Decimal  @db.Decimal(18, 4)
+  createdByUserId String   @db.Uuid
+  updatedByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+
+  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, periodMonth])
+  @@index([tenantId, companyId, periodMonth])
+}
+
 /// Company-scoped, audited readiness state for a future Google connection.
 /// The later OAuth gate adds a separate encrypted credential vault and account
 /// mapping; those sensitive concepts deliberately do not exist in this model.
@@ -1635,6 +1954,26 @@ model MarketingProviderConnection {
   @@unique([id, tenantId, companyId])
   @@unique([tenantId, companyId, provider])
   @@index([tenantId, companyId, status])
+}
+
+/// One short-lived, single-use OAuth attempt. It is company-scoped and stores
+/// only an encrypted PKCE verifier; no Google access or refresh token belongs
+/// in this table.
+model MarketingProviderOAuthState {
+  id                  String            @id @default(uuid()) @db.Uuid
+  tenantId            String            @db.Uuid
+  companyId           String            @db.Uuid
+  provider            MarketingProvider
+  initiatedByUserId   String            @db.Uuid
+  stateHash           String            @unique @db.VarChar(64)
+  verifierEncrypted   String            @db.Text
+  verifierIv          String            @db.VarChar(64)
+  verifierTag         String            @db.VarChar(64)
+  expiresAt           DateTime          @db.Timestamptz(6)
+  consumedAt          DateTime?         @db.Timestamptz(6)
+  createdAt           DateTime          @default(now()) @db.Timestamptz(6)
+
+  @@index([tenantId, companyId, provider, expiresAt])
 }
 
 /// A company chooses the future handling of Google review ratings here. This

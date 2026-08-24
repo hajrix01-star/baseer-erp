@@ -147,6 +147,11 @@
       "file": "administration-companies-panel.tsx",
       "decision": "migrated-administration-central-validated-form"
     },
+    "form:administration-ai-settings-panel.tsx": {
+      "kind": "form",
+      "file": "administration-ai-settings-panel.tsx",
+      "decision": "basira-provider-configuration-central-validated-form"
+    },
     "form:administration-roles-panel.tsx": {
       "kind": "form",
       "file": "administration-roles-panel.tsx",
@@ -356,6 +361,11 @@
       "kind": "query",
       "file": "administration-workspace.tsx",
       "decision": "migrated-administration-company-session-query"
+    },
+    "query:administration-ai-settings-panel.tsx": {
+      "kind": "query",
+      "file": "administration-ai-settings-panel.tsx",
+      "decision": "basira-provider-configuration-company-session-query"
     },
     "query:baseer-company-read-query.tsx": {
       "kind": "query",

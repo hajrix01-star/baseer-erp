@@ -17,7 +17,7 @@ import { BaseerEmptyState, BaseerNotice, BaseerSectionHeader, BaseerWorkspace } 
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
 import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { hrEnumLabel, hrText } from "./hr-copy";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { HrEmployeeDirectoryGrid } from "./hr-employee-directory-grid";
@@ -72,6 +72,10 @@ const DailySalesSignIn = lazy(() => import("./daily-sales-sign-in").then((module
 export function HrWorkspaceCore({ language, section, stage }: { language: Language; section: number; stage?: string | null }) {
   const text = hrText(language);
   const isAdvance = section === 4;
+  const canManageEmployees = hasActivePermission("hr.employees.write");
+  const canIssueAdvance = hasActivePermission("hr.advances.issue");
+  const canSettleAdvance = hasActivePermission("hr.advances.settle");
+  const canManageDeductions = hasActivePermission("hr.deductions.manage");
   const [session, setSession] = useState<ActiveSession | null>(activeSession());
   const [employees, setEmployees] = useState<HrEmployee[]>([]);
   const [advances, setAdvances] = useState<HrAdvance[]>([]);
@@ -165,7 +169,7 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
       }
       return true;
     }
-    catch (error) { showError(presentBaseerApiError(error, language, text.loading)); return false; }
+    catch (error) { showError(presentBaseerLoadError(error, language, { ar: "بيانات الموارد البشرية", en: "HR data" })); return false; }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [employeeFilter, employeeSearch, isAdvance, language, section, text.loading]);
   useEffect(() => { void load(); }, [load]);
@@ -203,15 +207,15 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
         setDeductions((rows) => [...rows, ...receipt.deductions]); setNextDeductionCursor(receipt.nextCursor);
       }
     } catch (error) {
-      showError(presentBaseerApiError(error, language, text.loadMore));
+      showError(presentBaseerLoadError(error, language, { ar: "سجلات إضافية", en: "additional records" }));
     }
   };
   const showDetail = async (employee: HrEmployee) => { try { await refreshDetail(employee.id); } catch (error) { showError(presentBaseerApiError(error, language, text.employeeFile)); } };
   const showAdvanceDetail = async (advance: HrAdvance) => { const current = activeSession(); if (!current) return; try { setAdvanceDetail(await getHrAdvance(current, advance.id)); } catch (error) { showError(presentBaseerApiError(error, language, text.advances)); } };
   const showDeductionDetail = async (deduction: HrAdministrativeDeduction) => { const current = activeSession(); if (!current) return; try { setDeductionDetail(await getHrAdministrativeDeduction(current, deduction.id)); } catch (error) { showError(presentBaseerApiError(error, language, text.administrativeDeductions)); } };
-  const loadMoreAdvanceSettlements = async () => { const current = activeSession(); if (!current || !advanceDetail?.nextSettlementCursor) return; try { const receipt = await getHrAdvance(current, advanceDetail.advance.id, { settlementCursor: advanceDetail.nextSettlementCursor, settlementPageSize: 50 }); setAdvanceDetail((detail) => detail ? { ...detail, settlements: [...detail.settlements, ...receipt.settlements.filter((item) => !detail.settlements.some((existing) => existing.id === item.id))], hasMoreSettlements: receipt.hasMoreSettlements, nextSettlementCursor: receipt.nextSettlementCursor } : detail); } catch (error) { showError(presentBaseerApiError(error, language, text.loadMore)); } };
-  const loadMoreAdvanceDeferrals = async () => { const current = activeSession(); if (!current || !advanceDetail?.nextDeferralCursor) return; try { const receipt = await getHrAdvance(current, advanceDetail.advance.id, { deferralCursor: advanceDetail.nextDeferralCursor, deferralPageSize: 50 }); setAdvanceDetail((detail) => detail ? { ...detail, deferrals: [...detail.deferrals, ...receipt.deferrals.filter((item) => !detail.deferrals.some((existing) => existing.id === item.id))], hasMoreDeferrals: receipt.hasMoreDeferrals, nextDeferralCursor: receipt.nextDeferralCursor } : detail); } catch (error) { showError(presentBaseerApiError(error, language, text.loadMore)); } };
-  const loadMoreDeductionActions = async () => { const current = activeSession(); if (!current || !deductionDetail?.nextActionCursor) return; try { const receipt = await getHrAdministrativeDeduction(current, deductionDetail.deduction.id, { actionCursor: deductionDetail.nextActionCursor, actionPageSize: 50 }); setDeductionDetail((detail) => detail ? { ...detail, actions: [...detail.actions, ...receipt.actions.filter((item) => !detail.actions.some((existing) => existing.id === item.id))], hasMoreActions: receipt.hasMoreActions, nextActionCursor: receipt.nextActionCursor } : detail); } catch (error) { showError(presentBaseerApiError(error, language, text.loadMore)); } };
+  const loadMoreAdvanceSettlements = async () => { const current = activeSession(); if (!current || !advanceDetail?.nextSettlementCursor) return; try { const receipt = await getHrAdvance(current, advanceDetail.advance.id, { settlementCursor: advanceDetail.nextSettlementCursor, settlementPageSize: 50 }); setAdvanceDetail((detail) => detail ? { ...detail, settlements: [...detail.settlements, ...receipt.settlements.filter((item) => !detail.settlements.some((existing) => existing.id === item.id))], hasMoreSettlements: receipt.hasMoreSettlements, nextSettlementCursor: receipt.nextSettlementCursor } : detail); } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "سجلات إضافية", en: "additional records" })); } };
+  const loadMoreAdvanceDeferrals = async () => { const current = activeSession(); if (!current || !advanceDetail?.nextDeferralCursor) return; try { const receipt = await getHrAdvance(current, advanceDetail.advance.id, { deferralCursor: advanceDetail.nextDeferralCursor, deferralPageSize: 50 }); setAdvanceDetail((detail) => detail ? { ...detail, deferrals: [...detail.deferrals, ...receipt.deferrals.filter((item) => !detail.deferrals.some((existing) => existing.id === item.id))], hasMoreDeferrals: receipt.hasMoreDeferrals, nextSettlementCursor: receipt.nextDeferralCursor } : detail); } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "سجلات إضافية", en: "additional records" })); } };
+  const loadMoreDeductionActions = async () => { const current = activeSession(); if (!current || !deductionDetail?.nextActionCursor) return; try { const receipt = await getHrAdministrativeDeduction(current, deductionDetail.deduction.id, { actionCursor: deductionDetail.nextActionCursor, actionPageSize: 50 }); setDeductionDetail((detail) => detail ? { ...detail, actions: [...detail.actions, ...receipt.actions.filter((item) => !detail.actions.some((existing) => existing.id === item.id))], hasMoreActions: receipt.hasMoreActions, nextActionCursor: receipt.nextActionCursor } : detail); } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "سجلات إضافية", en: "additional records" })); } };
   const openEmployeeEdit = (employee: HrEmployee) => { setEditingEmployeeId(employee.id); setAdditionalEmployeeInfoOpen(false); setEmployeeForm({ employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn ?? "", jobTitle: employee.jobTitle ?? "", phone: employee.phone ?? "", email: employee.email ?? "", iqamaNumber: employee.iqamaNumber ?? "", workSchedule: employee.workSchedule ?? "", hireDate: employee.hireDate, status: employee.status, terminatedAt: employee.terminatedAt ?? "", notes: employee.notes ?? "" }); setEmployeeOpen(true); };
   const saveEmployee = async () => { const current = activeSession(); if (!current || saving || !editingEmployeeId) return; setSaving(true); try { await updateHrEmployee(current, { employeeId: editingEmployeeId, nameAr: employeeForm.nameAr, nameEn: employeeForm.nameEn || null, jobTitle: employeeForm.jobTitle || null, phone: employeeForm.phone || null, email: employeeForm.email || null, iqamaNumber: employeeForm.iqamaNumber || null, workSchedule: employeeForm.workSchedule || null, status: employeeForm.status, terminatedAt: employeeForm.status === "TERMINATED" ? employeeForm.terminatedAt : null, notes: employeeForm.notes || null, idempotencyKey: requestId() }); const updatedId = editingEmployeeId; setEmployeeOpen(false); setEditingEmployeeId(null); setEmployeeForm(emptyEmployee()); showSuccess(text.employeeUpdated); await load(); if (detail?.employee.id === updatedId) await refreshDetail(updatedId); } catch (error) { showError(presentBaseerApiError(error, language, text.employeeUpdated)); } finally { setSaving(false); } };
   const openAdvance = async () => { try { const next = configuration ?? await loadConfiguration(); const firstVault = next?.vaults.find((item) => item.status === "ACTIVE" && item.isPaymentDestination); setAdvanceForm(emptyAdvance("", firstVault?.id ?? "", firstVault?.paymentMethod ?? "")); setAdvanceOpen(true); } catch (error) { showError(presentBaseerApiError(error, language, text.addAdvance)); } };
@@ -247,7 +251,7 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
     { id: "original", header: text.originalAmount, cell: (row) => <BaseerMoney value={row.originalAmount} language={language} />, align: "end", numeric: true, width: "9rem", sort: (row) => row.originalAmount },
     { id: "remaining", header: text.remainingAmount, cell: (row) => <BaseerMoney value={row.remainingAmount} language={language} />, align: "end", numeric: true, width: "10rem", sort: (row) => row.remainingAmount },
     { id: "next", header: text.nextSettlementDate, cell: (row) => row.nextSettlementDate ?? "—", width: "11rem", sort: (row) => row.nextSettlementDate },
-    { id: "settle", header: text.settleAdvance, cell: (row) => row.remainingAmount !== "0.0000" ? <BaseerButton type="button" variant="secondary" onClick={() => void openSettlement(row)}>{text.settleAdvance}</BaseerButton> : "—", width: "11rem" },
+    { id: "settle", header: text.settleAdvance, cell: (row) => canSettleAdvance && row.remainingAmount !== "0.0000" ? <BaseerButton type="button" variant="secondary" onClick={() => void openSettlement(row)}>{text.settleAdvance}</BaseerButton> : "—", width: "11rem" },
     { id: "defer", header: text.deferAdvance, cell: (row) => row.remainingAmount !== "0.0000" ? <BaseerButton type="button" variant="quiet" onClick={() => openDeferral(row)}>{text.deferAdvance}</BaseerButton> : "—", width: "11rem" },
   ];
   const deductionColumns: readonly BaseerDataGridColumn<HrAdministrativeDeduction>[] = [
@@ -263,11 +267,11 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
   ];
   const activeEmployees = employees.filter((item) => item.status === "ACTIVE" || item.status === "ON_LEAVE");
   const activeVaults = configuration?.vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination) ?? [];
-  const createEmployeeAction = <BaseerButton type="button" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton>;
+  const createEmployeeAction = canManageEmployees ? <BaseerButton type="button" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton> : undefined;
 
   if (!session) return <Suspense fallback={<BaseerCard>{text.loading}</BaseerCard>}><DailySalesSignIn language={language} /></Suspense>;
   return <BaseerWorkspace aria-label={text.title}>
-    <BaseerSectionHeader eyebrow={section === 0 ? (language === "ar" ? "مركز عمل الموارد البشرية" : "HR operations hub") : undefined} title={sectionTitle} actions={section === 1 ? <BaseerButton type="button" variant="primary" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton> : isAdvance ? <><BaseerButton type="button" variant="primary" onClick={() => void openAdvance()}>{text.addAdvance}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => { setDeductionForm(emptyDeduction()); setDeductionOpen(true); }}>{text.addAdministrativeDeduction}</BaseerButton></> : undefined} />
+    <BaseerSectionHeader eyebrow={section === 0 ? (language === "ar" ? "مركز عمل الموارد البشرية" : "HR operations hub") : undefined} title={sectionTitle} actions={section === 1 && canManageEmployees ? <BaseerButton type="button" variant="primary" onClick={() => setOnboardingOpen(true)}>{text.addEmployee}</BaseerButton> : isAdvance ? <>{canIssueAdvance ? <BaseerButton type="button" variant="primary" onClick={() => void openAdvance()}>{text.addAdvance}</BaseerButton> : null}{canManageDeductions ? <BaseerButton type="button" variant="secondary" onClick={() => { setDeductionForm(emptyDeduction()); setDeductionOpen(true); }}>{text.addAdministrativeDeduction}</BaseerButton> : null}</> : undefined} />
     {message ? <BaseerNotice tone={message.tone}>{message.text}</BaseerNotice> : null}
     {section === 0 ? (
       <>

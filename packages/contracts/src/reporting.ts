@@ -38,6 +38,11 @@ const personalCashPerformanceRowSchema = z.object({
   shareOfCollectedSalesPercent: reportPercentSchema.nullable(),
 }).strict();
 
+const personalCashPerformanceVaultSchema = z.object({
+  vaultId: z.string().uuid(), vaultNameAr: z.string().min(1).max(160), vaultNameEn: z.string().min(1).max(160),
+  inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, balance: reportMoneyDisplaySchema,
+}).strict();
+
 const personalCashPerformanceMetadataSchema = z.object({
   reportCode: z.literal('personal_cash_performance'),
   definitionVersion: z.string().min(1).max(80),
@@ -66,11 +71,13 @@ export const personalCashPerformanceResultSchema = z.discriminatedUnion('state',
   personalCashPerformanceMetadataSchema.extend({
     state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500),
     rows: z.array(z.never()).max(0),
+    vaults: z.array(personalCashPerformanceVaultSchema).max(500),
     totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable() }).strict(),
   }).strict(),
   personalCashPerformanceMetadataSchema.extend({
     state: z.literal('READY'),
     rows: z.array(personalCashPerformanceRowSchema).max(500),
+    vaults: z.array(personalCashPerformanceVaultSchema).max(500),
     totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable() }).strict(),
   }).strict(),
 ]);
@@ -84,7 +91,10 @@ export const personalCashPerformanceEvidenceReceiptSchema = z.object({
   reportRunId: z.string().uuid(), rowCode: z.string().min(1).max(160), nextCursor: z.string().regex(/^\d{4}-\d{2}-\d{2}:[0-9a-f-]{36}$/i).nullable(),
   items: z.array(z.object({
     eventId: z.string().uuid(), businessDate: businessDateSchema, direction: z.enum(['INFLOW', 'OUTFLOW']), amount: reportMoneyDisplaySchema,
-    source: z.object({ journalEntryId: z.string().uuid(), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), reference: z.string().min(1).max(160) }).strict(),
+      source: z.object({
+        journalEntryId: z.string().uuid(), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), reference: z.string().min(1).max(160),
+        origin: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), route: z.string().regex(/^#module=[a-z]+&section=\d+(?:&stage=[a-z-]+)?$/) }).strict(),
+      }).strict(),
   }).strict()).max(100),
 }).strict();
 

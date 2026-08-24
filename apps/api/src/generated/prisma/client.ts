@@ -97,6 +97,13 @@ export type AuditEvent = Prisma.AuditEventModel
  */
 export type IdempotencyReceipt = Prisma.IdempotencyReceiptModel
 /**
+ * Model OwnerDailyBriefSnapshot
+ * Immutable, tenant-scoped owner briefing receipt. A scheduled job writes at
+ * most one snapshot per completed Riyadh business date; historical reads must
+ * never silently change when source financial data is corrected later.
+ */
+export type OwnerDailyBriefSnapshot = Prisma.OwnerDailyBriefSnapshotModel
+/**
  * Model DocumentSerialCounter
  * 
  */
@@ -241,11 +248,74 @@ export type DecisionAlertAction = Prisma.DecisionAlertActionModel
  */
 export type DecisionFeedback = Prisma.DecisionFeedbackModel
 /**
+ * Model InboundEvidenceLabel
+ * Owner-only central configuration for the Inbound Evidence Hub. Labels are
+ * tenant-scoped deliberately: one owner mailbox may contain evidence for
+ * several companies, while no company user can query this module.
+ */
+export type InboundEvidenceLabel = Prisma.InboundEvidenceLabelModel
+/**
+ * Model InboundEvidenceRule
+ * A rule is an owner-authored, declarative Label action. It never calls a
+ * provider or performs a financial command; it will be applied only after a
+ * governed connector imports an evidence record in a later gate.
+ */
+export type InboundEvidenceRule = Prisma.InboundEvidenceRuleModel
+/**
+ * Model InboundEvidenceCommandReceipt
+ * Tenant-level idempotency is intentionally separate from company financial
+ * receipts: the central mailbox has no selected company and cannot post.
+ */
+export type InboundEvidenceCommandReceipt = Prisma.InboundEvidenceCommandReceiptModel
+/**
+ * Model InboundEvidenceGmailConnection
+ * One encrypted Gmail mailbox connection for the tenant-owner evidence hub.
+ * Credentials never leave the server and are kept outside ordinary audit data.
+ */
+export type InboundEvidenceGmailConnection = Prisma.InboundEvidenceGmailConnectionModel
+/**
+ * Model InboundEvidenceGmailOAuthState
+ * Single-use PKCE/nonce material for an owner-initiated Gmail consent flow.
+ */
+export type InboundEvidenceGmailOAuthState = Prisma.InboundEvidenceGmailOAuthStateModel
+/**
+ * Model InboundEvidenceMessage
+ * Imported mail metadata. Message bodies and provider attachments are not
+ * trusted instructions or financial truth; they remain evidence only.
+ */
+export type InboundEvidenceMessage = Prisma.InboundEvidenceMessageModel
+/**
+ * Model InboundEvidenceAttachment
+ * Encrypted local copy of an attachment downloaded from Gmail. The original
+ * source reference and checksum make re-download and review auditable.
+ */
+export type InboundEvidenceAttachment = Prisma.InboundEvidenceAttachmentModel
+/**
+ * Model InboundEvidenceDocumentAnalysis
+ * Immutable, versioned output of the visual document-intelligence skill.
+ * It stores only validated structured findings and provenance — never a raw
+ * provider transcript, prompt, or provider credential.
+ */
+export type InboundEvidenceDocumentAnalysis = Prisma.InboundEvidenceDocumentAnalysisModel
+/**
+ * Model InboundEvidenceMessageLabel
+ * A mail item may be given several internal Labels. Gmail itself is read-only
+ * in this connector and is never changed by this mapping.
+ */
+export type InboundEvidenceMessageLabel = Prisma.InboundEvidenceMessageLabelModel
+/**
  * Model MarketingCampaign
  * P1 owns only an internal campaign register. Provider facts, OAuth tokens,
  * Google locations and external publishing belong to later, separate gates.
  */
 export type MarketingCampaign = Prisma.MarketingCampaignModel
+/**
+ * Model MarketingCampaignAnalysisFeedback
+ * Structured human feedback about a retained campaign explanation. This is
+ * training/evaluation evidence only: it never changes the campaign, facts,
+ * comparison policy, or any financial record.
+ */
+export type MarketingCampaignAnalysisFeedback = Prisma.MarketingCampaignAnalysisFeedbackModel
 /**
  * Model MarketingCampaignFinancialLink
  * A one-way, company-scoped reference to an existing posted Finance document.
@@ -259,12 +329,25 @@ export type MarketingCampaignFinancialLink = Prisma.MarketingCampaignFinancialLi
  */
 export type MarketingCampaignContextLink = Prisma.MarketingCampaignContextLinkModel
 /**
+ * Model MarketingSalesTarget
+ * A company-owned planning target for a calendar month. It is a target only:
+ * it never changes sales, campaign, or financial records.
+ */
+export type MarketingSalesTarget = Prisma.MarketingSalesTargetModel
+/**
  * Model MarketingProviderConnection
  * Company-scoped, audited readiness state for a future Google connection.
  * The later OAuth gate adds a separate encrypted credential vault and account
  * mapping; those sensitive concepts deliberately do not exist in this model.
  */
 export type MarketingProviderConnection = Prisma.MarketingProviderConnectionModel
+/**
+ * Model MarketingProviderOAuthState
+ * One short-lived, single-use OAuth attempt. It is company-scoped and stores
+ * only an encrypted PKCE verifier; no Google access or refresh token belongs
+ * in this table.
+ */
+export type MarketingProviderOAuthState = Prisma.MarketingProviderOAuthStateModel
 /**
  * Model MarketingReputationReplyPolicy
  * A company chooses the future handling of Google review ratings here. This

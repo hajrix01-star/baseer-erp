@@ -11,6 +11,8 @@ const quantitySchema = z.string().trim().regex(/^\d{1,16}(?:\.\d{1,8})?$/).refin
 const moneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).refine((value) => Number(value) > 0, "Amount must be positive.");
 const nullableAmountSchema = moneySchema.nullable();
 const nullableNonNegativeMoneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).nullable();
+const operationsOverviewAmountSchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/);
+const operationsOverviewDateSchema = z.string().date();
 
 export const operationsUnitSchema = z.object({
   id: operationsIdSchema,
@@ -91,6 +93,31 @@ export const operationsCatalogReceiptSchema = z.object({
   items: z.array(operationsItemSchema).max(100),
   nextCursor: operationsIdSchema.nullable(),
   asOf: z.string().datetime(),
+}).strict();
+
+/** Current-month, server-owned execution read. Sales remain absent where a
+ * day is missing or incomplete; the dashboard must never convert that to 0. */
+export const operationsOverviewReadSchema = z.object({
+  companyId: companyIdSchema,
+  businessDate: operationsOverviewDateSchema,
+  period: z.object({
+    fromBusinessDate: operationsOverviewDateSchema,
+    toBusinessDate: operationsOverviewDateSchema,
+    timezone: z.literal("Asia/Riyadh"),
+  }).strict(),
+  sales: z.object({
+    grossAmount: operationsOverviewAmountSchema.nullable(),
+    closingCount: z.number().int().nonnegative(),
+    eligibleDayCount: z.number().int().nonnegative(),
+    incompleteDayCount: z.number().int().nonnegative(),
+    dataQuality: z.enum(["READY", "INCOMPLETE", "NO_DATA"]),
+    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema.nullable() }).strict()).max(31),
+  }).strict(),
+  purchases: z.object({
+    grossAmount: operationsOverviewAmountSchema,
+    documentCount: z.number().int().nonnegative(),
+    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(31),
+  }).strict(),
 }).strict();
 
 export const createOperationsUnitRequestSchema = z.object({

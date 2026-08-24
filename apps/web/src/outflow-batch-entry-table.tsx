@@ -410,19 +410,19 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({
           {
             id: "supplier",
             header: text.supplier,
-            width: "11rem",
+            width: "12rem",
             cell: supplierField,
           },
           {
             id: "category",
             header: text.financialCategory,
-            width: "9rem",
+            width: "12rem",
             cell: categoryField,
           },
           {
             id: "invoice",
             header: text.invoiceNumber,
-            width: "7.5rem",
+            width: "10.5rem",
             cell: (row) => (
               <input
                 aria-label={text.invoiceNumber}
@@ -441,7 +441,7 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({
           {
             id: "invoiceDate",
             header: text.supplierInvoiceDate,
-            width: "7.75rem",
+            width: "9.5rem",
             cell: (row) => (
               <BaseerDatePicker
                 language={language}

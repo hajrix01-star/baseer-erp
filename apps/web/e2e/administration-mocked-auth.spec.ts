@@ -8,6 +8,7 @@ const permissions = [
   "administration.companies.read", "administration.companies.manage",
   "administration.users.read", "administration.users.manage",
   "administration.roles.read", "administration.roles.manage",
+  "platform.ai.configuration.read", "platform.ai.configuration.write", "platform.ai.provider.configure",
 ];
 
 async function fulfill(route: Route, json: unknown, status = 200) {
@@ -40,6 +41,9 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     requests.push(`${route.request().method()} ${url.pathname}`);
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
     if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner));
+    if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, activeProvider: null, providerConfigurations: [], activeSystemIdentity: null, activeIdentity: null });
+    if (url.pathname === "/v1/administration/ai/provider-connection" && route.request().method() === "POST") return fulfill(route, { state: "READY", reason: null, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", checkedAt: "2026-08-23T12:00:00.000Z" });
+    if (url.pathname === "/v1/administration/ai/provider-configurations" && route.request().method() === "POST") return fulfill(route, { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true, dailyRequestLimit: 10, dailyCostLimit: null, configurationVersion: 1, createdAt: "2026-08-23T12:00:00.000Z", updatedAt: "2026-08-23T12:00:00.000Z" }, 201);
     return fulfill(route, { updated: true, id: "44444444-4444-4444-8444-444444444444" });
   });
 }
@@ -109,4 +113,23 @@ test("non-owner administration remains read-only", async ({ page }) => {
   const dialog = page.getByRole("dialog", { name: "مستخدم الاختبار" });
   await expect(dialog.getByRole("button", { name: "حفظ التغييرات" })).toHaveCount(0);
   expect(requests.some((request) => /POST|PUT|DELETE/.test(request))).toBeFalsy();
+});
+
+test("Basira settings store the OpenAI key once and never display it", async ({ page }) => {
+  const requests: string[] = [];
+  await mockAdministration(page, "en", requests);
+  await page.goto("/#module=administration&section=4");
+
+  await expect(page.getByRole("heading", { name: "Alert-explanation setup" })).toBeVisible();
+  const form = page.locator("form[data-baseer-rhf-form]");
+  await form.getByRole("button", { name: "Save OpenAI configuration" }).click();
+  await expect(form.getByRole("alert").first()).toBeVisible();
+  expect(requests.filter((request) => request === "POST /v1/administration/ai/provider-configurations")).toHaveLength(0);
+  await page.getByLabel("OpenAI API key").fill("sk-test-never-real");
+  await page.getByRole("button", { name: "Save OpenAI configuration" }).click();
+  await expect.poll(() => requests.filter((request) => request === "POST /v1/administration/ai/provider-configurations").length).toBe(1);
+  await expect(page.getByText("The OpenAI configuration was saved encrypted. The key cannot be shown again.")).toBeVisible();
+  await expect(page.getByLabel("OpenAI API key")).toHaveValue("");
+  const accessibility = await new AxeBuilder({ page }).include(".administration-ai-settings").analyze();
+  expect(accessibility.violations).toEqual([]);
 });

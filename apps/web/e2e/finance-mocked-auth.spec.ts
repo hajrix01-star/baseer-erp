@@ -87,6 +87,25 @@ async function mockFinancialReads(page: Page, requests: string[]) {
   });
 }
 
+/** A purchase-entry clerk is deliberately not allowed to read the register or credit workspace. */
+async function mockPurchaseEntryClerk(page: Page, requests: string[]) {
+  const entryPermissions = ["finance.purchase_expense.create"];
+  await mockAuthenticatedSession(page, "ar", entryPermissions);
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    requests.push(`${route.request().method()} ${url.pathname}${url.search}`);
+    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(entryPermissions));
+    if (url.pathname === "/v1/finance/purchase-expense-documents/entry-references") return fulfill(route, {
+      companyId,
+      profile: { vatAccountingEnabled: true, vatRateBasisPoints: 1500 },
+      vaults: [{ id: "vault-entry", nameAr: "صندوق الإدخال", nameEn: "Entry cash", type: "CASH", status: "ACTIVE", isPaymentDestination: true, paymentMethod: "CASH", paymentMethods: ["CASH"] }],
+      categories: [{ id: "category-entry", nameAr: "مواد تشغيل", nameEn: "Operating materials", kind: "PURCHASE", status: "ACTIVE", isPosting: true, suggestedSupplierId: null }],
+      suppliers: [{ id: "supplier-entry", nameAr: "مورد الإدخال", nameEn: "Entry supplier", status: "ACTIVE", categoryId: null, isFavorite: false }],
+    });
+    return fulfill(route, {});
+  });
+}
+
 
 test("finance setup uses the shared Gregorian form and date adapters in RTL", async ({ page }) => {
   await mockFinanceSetup(page, "ar");
@@ -95,14 +114,14 @@ test("finance setup uses the shared Gregorian form and date adapters in RTL", as
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const form = page.locator("[data-baseer-rhf-form]");
   await expect(form).toBeVisible();
-  await expect(form.getByLabel("بداية الفترة").locator('[role="spinbutton"]')).toHaveCount(3);
-  await expect(form.getByLabel("نهاية الفترة").locator('[role="spinbutton"]')).toHaveCount(3);
+  await expect(form.getByRole("button", { name: "بداية الفترة" })).toBeVisible();
+  await expect(form.getByRole("button", { name: "نهاية الفترة" })).toBeVisible();
 
-  const startDate = form.getByLabel("بداية الفترة");
-  await startDate.getByRole("button", { name: "فتح التقويم" }).press("Enter");
-  await expect(page.getByRole("dialog").filter({ has: page.locator(".baseer-aria-date-picker__calendar") })).toBeVisible();
+  const startDate = form.getByRole("button", { name: "بداية الفترة" });
+  await startDate.press("Enter");
+  await expect(page.getByRole("dialog", { name: "بداية الفترة" }).locator(".baseer-date-picker__popover")).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog").filter({ has: page.locator(".baseer-aria-date-picker__calendar") })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "بداية الفترة" })).toHaveCount(0);
 
   await form.getByRole("button", { name: "التالي" }).click();
   await expect(form.getByRole("group", { name: "الخزائن والقنوات المبدئية" })).toBeVisible();
@@ -116,7 +135,7 @@ test("finance setup keeps the Gregorian adapter available in LTR", async ({ page
   await page.goto("/#module=finance&section=0");
 
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expect(page.locator("[data-baseer-rhf-form]").getByLabel("Period start").locator('[role="spinbutton"]')).toHaveCount(3);
+  await expect(page.locator("[data-baseer-rhf-form]").getByRole("button", { name: "Period start" })).toBeVisible();
 });
 
 test("treasury control uses the central form and reports inline validation errors", async ({ page }) => {
@@ -153,4 +172,19 @@ test("accounts and invoice register retain server cursor pagination", async ({ p
   await page.getByRole("button", { name: "المزيد" }).click();
   await expect(page.getByText("PUR-002")).toBeVisible();
   expect(requests.some((request) => request.includes("/v1/finance/invoice-register") && request.includes("cursor=invoice-next"))).toBeTruthy();
+});
+
+test("purchase-entry clerk sees and loads only the entry surface", async ({ page }) => {
+  const requests: string[] = [];
+  await mockPurchaseEntryClerk(page, requests);
+
+  await page.goto("/#module=operations&section=2");
+
+  await expect(page.getByRole("tab", { name: "إدخال" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: "الآجل" })).toHaveCount(0);
+  await expect.poll(() => requests.some((request) => request === "GET /v1/finance/purchase-expense-documents/entry-references")).toBeTruthy();
+  expect(requests.some((request) => request.includes("/v1/finance/configuration"))).toBeFalsy();
+  expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents?") || request.endsWith("/v1/finance/purchase-expense-documents"))).toBeFalsy();
+  expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents/credit-workspace"))).toBeFalsy();
 });

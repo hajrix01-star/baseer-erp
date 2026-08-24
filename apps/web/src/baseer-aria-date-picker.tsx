@@ -4,6 +4,8 @@ import { Dialog } from "react-aria-components/Dialog";
 import { Heading } from "react-aria-components/Heading";
 import { I18nProvider } from "react-aria-components/I18nProvider";
 
+import "./baseer-calendar.css";
+
 type Language = "ar" | "en";
 
 type BaseerAriaDatePickerProps = {
@@ -30,7 +32,9 @@ function parseIso(value?: string) {
 export function BaseerAriaDatePicker({ language, value, onChange, label, min, max, disabled = false, clearable = false, plain = false, className }: BaseerAriaDatePickerProps) {
   // Business dates in Baseer are always Gregorian ISO dates. The locale may
   // change the language and text direction, but never the calendar system.
-  const locale = language === "ar" ? "ar-SA-u-ca-gregory" : "en-US-u-ca-gregory";
+  // Arabic layout with Latin numeric/date conventions gives the compact month
+  // abbreviation used in financial workspaces (for example, "Aug").
+  const locale = language === "ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-US-u-ca-gregory";
   const selected = parseIso(value);
   const minValue = parseIso(min);
   const maxValue = parseIso(max);
@@ -55,9 +59,9 @@ export function BaseerAriaDatePicker({ language, value, onChange, label, min, ma
       <Dialog className="baseer-aria-date-picker__dialog">
         <Calendar className="baseer-aria-date-picker__calendar" aria-label={label}>
           <header className="baseer-aria-date-picker__header">
-            <Button slot="previous" className="baseer-aria-date-picker__nav" aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>‹</Button>
+            <Button slot="previous" className="baseer-aria-date-picker__nav" aria-label={language === "ar" ? "الشهر السابق" : "Previous month"}>{language === "ar" ? "›" : "‹"}</Button>
             <Heading className="baseer-aria-date-picker__heading" />
-            <Button slot="next" className="baseer-aria-date-picker__nav" aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>›</Button>
+            <Button slot="next" className="baseer-aria-date-picker__nav" aria-label={language === "ar" ? "الشهر التالي" : "Next month"}>{language === "ar" ? "‹" : "›"}</Button>
           </header>
           <CalendarGrid className="baseer-aria-date-picker__grid" weekdayStyle="short">
             <CalendarGridHeader>{(day) => <CalendarHeaderCell>{day}</CalendarHeaderCell>}</CalendarGridHeader>

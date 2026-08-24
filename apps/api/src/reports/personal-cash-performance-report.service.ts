@@ -11,6 +11,7 @@ import {
   FinanceCashPerformanceEventKind,
   Prisma,
 } from '../generated/prisma/client.js';
+import { financeJournalPresentation } from '../finance/finance-journal-presentation.js';
 import { ReportRunService } from './report-run.service.js';
 
 const REPORT_CODE = 'personal_cash_performance';
@@ -19,7 +20,28 @@ const REPORT_CODE = 'personal_cash_performance';
  * It is not an event-feed report: every real movement is visible even when a
  * future workflow has not added a reporting-specific writer yet.
  */
-const DEFINITION_VERSION = 'actual_financial_movements_v3';
+const DEFINITION_VERSION = 'actual_financial_movements_v4';
+const journalPresentationSelect = {
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  dailySalesClosing: { select: { documentNumber: true } },
+  vatSettlement: { select: { referenceNumber: true } },
+  reversalOfEntry: { select: {
+    sourceType: true, sourceReference: true, description: true,
+    hrPayrollAccrual: { select: { runNumber: true } },
+    hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+    hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+    hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+    hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+    hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+    dailySalesClosing: { select: { documentNumber: true } },
+    vatSettlement: { select: { referenceNumber: true } },
+  } },
+} satisfies Prisma.FinanceJournalEntrySelect;
 
 export type PersonalCashPerformanceRequest = Readonly<{
   from: Date;
@@ -113,6 +135,7 @@ export class PersonalCashPerformanceReportService {
         messageAr: 'لا توجد حركات مؤهلة ضمن الفترة المحددة.',
         ...metadata(readySource, request, receipt),
         rows: [],
+        vaults: [],
         totals: zeroTotals(),
       };
     }
@@ -129,6 +152,7 @@ export class PersonalCashPerformanceReportService {
         amount: money(row.amount),
         shareOfCollectedSalesPercent: percentOfSales(row.amount, salesCollections),
       })),
+      vaults: aggregateVaultLedger(eligible).map((vault) => ({ vaultId: vault.vaultId, vaultNameAr: vault.vaultNameAr, vaultNameEn: vault.vaultNameEn, inflows: money(vault.inflows), outflows: money(vault.outflows), balance: money(vault.balance) })),
       totals: {
         inflows: money(aggregation.inflows),
         outflows: money(aggregation.outflows.negated()),
@@ -163,7 +187,10 @@ export class PersonalCashPerformanceReportService {
           eventId: movement.id, businessDate: dateText(movement.businessDate),
           direction: movement.direction === FinanceCashPerformanceDirection.INFLOW ? 'INFLOW' : 'OUTFLOW',
           amount: money(movement.amount),
-          source: { journalEntryId: movement.journalEntryId, labelAr: movement.sourceLabelAr, labelEn: movement.sourceLabelEn, reference: movement.sourceReference },
+          source: {
+            journalEntryId: movement.journalEntryId, labelAr: movement.sourceLabelAr, labelEn: movement.sourceLabelEn, reference: movement.sourceReference,
+            origin: sourceOrigin(movement.sourceType),
+          },
         };
       }),
     };
@@ -219,6 +246,7 @@ export class PersonalCashPerformanceReportService {
       where: { id: movement.journalEntryId, tenantId: context.tenantId, companyId: context.companyId, isSealed: true, status: { in: ['POSTED', 'REVERSED'] }, ledgerRevision: { lte: run.ledgerRevision } },
       select: {
         id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, postedAt: true,
+        ...journalPresentationSelect,
         reversalEntry: { select: { ledgerRevision: true } },
         lines: { orderBy: { lineNumber: 'asc' }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
       },
@@ -226,7 +254,7 @@ export class PersonalCashPerformanceReportService {
     if (!journal) throw new BadRequestException('The source journal is not available in this report run.');
     return {
       journalEntry: {
-        id: journal.id, businessDate: dateText(journal.businessDate), sourceType: journal.sourceType, sourceReference: journal.sourceReference, description: journal.description,
+        id: journal.id, businessDate: dateText(journal.businessDate), sourceType: journal.sourceType, sourceReference: financeJournalPresentation(journal).reference, description: journal.description,
         status: journal.reversalEntry && journal.reversalEntry.ledgerRevision <= run.ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: journal.postedAt.toISOString(),
         lines: journal.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })),
       },
@@ -255,7 +283,7 @@ export class PersonalCashPerformanceReportService {
           journalEntry: {
             select: {
               id: true, businessDate: true, sourceType: true, sourceReference: true, description: true,
-              reversalOfEntry: { select: { sourceType: true, sourceReference: true, description: true } },
+              ...journalPresentationSelect,
               lines: { select: { accountId: true } },
             },
           },
@@ -267,7 +295,7 @@ export class PersonalCashPerformanceReportService {
         journalIds.length ? transaction.financeCashPerformanceEvent.findMany({
           where: { tenantId: context.tenantId, companyId: context.companyId, sourceJournalEntryId: { in: journalIds }, ledgerRevision: { lte: ledgerRevision } },
           select: {
-            sourceJournalEntryId: true, kind: true, grossAmount: true, netAmount: true, vatBreakdownKnown: true,
+            sourceJournalEntryId: true, sourceId: true, kind: true, grossAmount: true, netAmount: true, vatBreakdownKnown: true,
             categoryCodeSnapshot: true, categoryNameArSnapshot: true, categoryNameEnSnapshot: true,
           },
         }) : [],
@@ -276,7 +304,12 @@ export class PersonalCashPerformanceReportService {
           select: { id: true, parentId: true, code: true, nameAr: true, nameEn: true },
         }),
       ]);
-      const eventByJournal = new Map(events.map((event) => [event.sourceJournalEntryId, event]));
+      const recurringDocuments = events.length ? await transaction.financeOutflowDocument.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, id: { in: events.map((event) => event.sourceId) }, recurringExpenseProfileId: { not: null } },
+        select: { id: true },
+      }) : [];
+      const recurringDocumentIds = new Set(recurringDocuments.map((document) => document.id));
+      const eventByJournal = new Map(events.map((event) => [event.sourceJournalEntryId, { ...event, isRecurringExpense: recurringDocumentIds.has(event.sourceId) }]));
       const categoryByCode = new Map(categories.map((category) => [category.code, category]));
       const categoryById = new Map(categories.map((category) => [category.id, category]));
       const vaultByAccount = new Map(vaults.map((vault) => [vault.accountId, vault]));
@@ -289,17 +322,17 @@ export class PersonalCashPerformanceReportService {
         if (rawAmount.isZero()) return [];
         const event = eventByJournal.get(entry.id);
         const direction = rawAmount.gt(0) ? FinanceCashPerformanceDirection.INFLOW : FinanceCashPerformanceDirection.OUTFLOW;
-        const group = movementGroup(sourceType, event?.kind, direction);
+        const group = movementGroup(sourceType, event?.kind, direction, event?.isRecurringExpense ?? false);
         if (!request.vatInclusive && group === 'vat') return [];
         const amount = !request.vatInclusive && event && event.grossAmount.gt(0) && operationalEvent(event.kind)
           ? rawAmount.mul(event.netAmount).div(event.grossAmount)
           : rawAmount;
         const vault = vaultByAccount.get(line.accountId)!;
-        const source = movementSourcePresentation(sourceType, original?.sourceReference ?? entry.sourceReference, original?.description ?? entry.description, rawAmount.gt(0));
+        const source = movementSourcePresentation(sourceType, financeJournalPresentation(entry).reference, original?.description ?? entry.description, rawAmount.gt(0));
         return [{
           id: line.id, journalEntryId: entry.id, businessDate: entry.businessDate, vaultId: vault.id, vaultNameAr: vault.nameAr, vaultNameEn: vault.nameEn,
           group, direction,
-          amount, sourceLabelAr: source.labelAr, sourceLabelEn: source.labelEn, sourceReference: source.reference,
+          amount, sourceType, sourceLabelAr: source.labelAr, sourceLabelEn: source.labelEn, sourceReference: source.reference,
           categoryPath: categoryPathFor(event, categoryByCode, categoryById),
           requiresVatEvidence: operationalSource(sourceType), vatBreakdownKnown: event?.vatBreakdownKnown ?? !operationalSource(sourceType),
         } satisfies VaultMovement];
@@ -308,7 +341,7 @@ export class PersonalCashPerformanceReportService {
   }
 }
 
-type MovementGroup = 'sales' | 'purchases' | 'expenses' | 'employee_payments' | 'final_settlement' | 'vat' | 'other_inflows' | 'other_outflows';
+type MovementGroup = 'sales' | 'purchases' | 'expenses' | 'recurring_expenses' | 'employee_payments' | 'final_settlement' | 'vat' | 'other_inflows' | 'other_outflows';
 
 export type VaultMovement = Readonly<{
   id: string;
@@ -318,6 +351,7 @@ export type VaultMovement = Readonly<{
   vaultNameAr: string;
   vaultNameEn: string;
   group: MovementGroup;
+  sourceType: string;
   direction: FinanceCashPerformanceDirection;
   amount: Prisma.Decimal;
   sourceLabelAr: string;
@@ -390,10 +424,21 @@ export function aggregateFinancialMovements(movements: readonly VaultMovement[])
   return { rows: ordered, inflows, outflows, netCashResult: inflows.plus(outflows) };
 }
 
+function aggregateVaultLedger(movements: readonly VaultMovement[]) {
+  const vaults = new Map<string, { vaultId: string; vaultNameAr: string; vaultNameEn: string; inflows: Prisma.Decimal; outflows: Prisma.Decimal; balance: Prisma.Decimal }>();
+  for (const movement of movements) {
+    const current = vaults.get(movement.vaultId) ?? { vaultId: movement.vaultId, vaultNameAr: movement.vaultNameAr, vaultNameEn: movement.vaultNameEn, inflows: new Prisma.Decimal(0), outflows: new Prisma.Decimal(0), balance: new Prisma.Decimal(0) };
+    if (movement.amount.gte(0)) current.inflows = current.inflows.plus(movement.amount); else current.outflows = current.outflows.plus(movement.amount.negated());
+    current.balance = current.balance.plus(movement.amount); vaults.set(movement.vaultId, current);
+  }
+  return [...vaults.values()].sort((left, right) => left.vaultNameAr.localeCompare(right.vaultNameAr, 'ar'));
+}
+
 const FINANCIAL_MOVEMENT_PARENTS = [
   { code: 'sales', labelAr: 'المبيعات المحصّلة', labelEn: 'Sales collections', kind: 'SECTION' as const, parentCode: null },
   { code: 'purchases', labelAr: 'المشتريات المدفوعة', labelEn: 'Paid purchases', kind: 'SECTION' as const, parentCode: null },
   { code: 'expenses', labelAr: 'المصروفات المدفوعة', labelEn: 'Paid expenses', kind: 'SECTION' as const, parentCode: null },
+  { code: 'recurring_expenses', labelAr: 'المصروفات الدورية المدفوعة', labelEn: 'Paid recurring expenses', kind: 'SECTION' as const, parentCode: null },
   { code: 'employee_payments', labelAr: 'رواتب وسلف الموظفين', labelEn: 'Employee payroll and advances', kind: 'SECTION' as const, parentCode: null },
   { code: 'final_settlement', labelAr: 'مستحقات نهاية الخدمة المدفوعة', labelEn: 'Paid final settlements', kind: 'SECTION' as const, parentCode: null },
   { code: 'vat', labelAr: 'الضريبة المسددة أو المستردة', labelEn: 'VAT paid or refunded', kind: 'SECTION' as const, parentCode: null },
@@ -406,13 +451,13 @@ function movementPresentation(group: MovementGroup, direction: FinanceCashPerfor
     ?? FINANCIAL_MOVEMENT_PARENTS.find((parent) => parent.code === (direction === FinanceCashPerformanceDirection.INFLOW ? 'other_inflows' : 'other_outflows'))!;
 }
 
-function movementGroup(sourceType: string, eventKind: FinanceCashPerformanceEventKind | undefined, direction: FinanceCashPerformanceDirection): MovementGroup {
+function movementGroup(sourceType: string, eventKind: FinanceCashPerformanceEventKind | undefined, direction: FinanceCashPerformanceDirection, isRecurringExpense: boolean): MovementGroup {
   if (sourceType === 'daily_sales_closing') return 'sales';
   if (sourceType === 'finance_vat_settlement') return 'vat';
   if (sourceType === 'hr_employee_advance' || sourceType === 'hr_employee_advance_receipt' || sourceType === 'hr_payroll_payment') return 'employee_payments';
   if (sourceType === 'hr_final_settlement_payment') return 'final_settlement';
   if (eventKind === FinanceCashPerformanceEventKind.PURCHASE_PAYMENT) return 'purchases';
-  if (eventKind === FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT) return 'expenses';
+  if (eventKind === FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT) return isRecurringExpense ? 'recurring_expenses' : 'expenses';
   if (sourceType === 'finance_outflow_document') return 'expenses';
   return direction === FinanceCashPerformanceDirection.INFLOW ? 'other_inflows' : 'other_outflows';
 }
@@ -434,7 +479,7 @@ function movementMatchesRow(movement: VaultMovement, rowCode: string) {
 }
 
 function movementRowPath(movement: VaultMovement, parentCode: string): readonly Omit<FinancialMovementRow, 'amount' | 'eventCount' | 'direction' | 'kind'>[] {
-  if ((movement.group === 'purchases' || movement.group === 'expenses') && movement.categoryPath) {
+  if ((movement.group === 'purchases' || movement.group === 'expenses' || movement.group === 'recurring_expenses') && movement.categoryPath) {
     const root = movement.categoryPath.parent ?? movement.categoryPath.leaf;
     const category = { code: `${parentCode}:category:${root.code}`, labelAr: root.labelAr, labelEn: root.labelEn, parentCode };
     if (!movement.categoryPath.parent) return [category];
@@ -509,6 +554,22 @@ function movementSourcePresentation(sourceType: string, sourceReference: string,
   };
   const [labelAr, labelEn] = labels[sourceType] ?? [inflow ? 'حركة مالية داخلة' : 'حركة مالية خارجة', inflow ? 'Financial inflow' : 'Financial outflow'];
   return { labelAr, labelEn, reference: sourceReference };
+}
+
+/** The source journal is always available in the evidence dialog.  This route
+ * additionally returns the operational screen that owns the transaction. */
+function sourceOrigin(sourceType: string) {
+  const origins: Record<string, { labelAr: string; labelEn: string; route: string }> = {
+    daily_sales_closing: { labelAr: 'العمليات ← المبيعات', labelEn: 'Operations → Sales', route: '#module=operations&section=1' },
+    finance_outflow_document: { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&section=2' },
+    supplier_due_payment: { labelAr: 'العمليات ← المصروفات والالتزامات', labelEn: 'Operations → Expenses & obligations', route: '#module=operations&section=3&stage=history' },
+    finance_vat_settlement: { labelAr: 'التقارير ← التقرير الضريبي', labelEn: 'Reports → VAT report', route: '#module=reports&section=2' },
+    hr_payroll_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&section=3' },
+    hr_employee_advance: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&section=4' },
+    hr_employee_advance_receipt: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&section=4' },
+    hr_final_settlement_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&section=3' },
+  };
+  return origins[sourceType] ?? { labelAr: 'المالية والمحاسبة ← السجل المالي الموحد', labelEn: 'Finance & accounting → Unified financial register', route: '#module=finance&section=1' };
 }
 
 export function aggregateCashPerformanceEvents(events: readonly EventForAggregation[], vatInclusive: boolean, vaultLabels: VaultLabels = new Map()) {
@@ -666,7 +727,7 @@ function rowPredicate(rowCode: string): Prisma.FinanceCashPerformanceEventWhereI
   };
   if (rowCode === 'vat_payment') return { kind: FinanceCashPerformanceEventKind.VAT_PAYMENT };
   if (rowCode === 'vat_refund') return { kind: FinanceCashPerformanceEventKind.VAT_REFUND };
-  const match = /^(purchases|expenses)(?::([A-Za-z0-9_-]+))?$/.exec(rowCode);
+  const match = /^(purchases|expenses|recurring_expenses)(?::([A-Za-z0-9_-]+))?$/.exec(rowCode);
   if (!match) throw new BadRequestException('The report row is not available for evidence.');
   const kind = match[1]! === 'purchases' ? FinanceCashPerformanceEventKind.PURCHASE_PAYMENT : FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT;
   const categoryCode = match[2];

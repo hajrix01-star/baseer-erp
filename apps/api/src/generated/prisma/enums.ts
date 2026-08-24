@@ -341,10 +341,42 @@ export type MarketingProvider = (typeof MarketingProvider)[keyof typeof Marketin
 export const MarketingProviderConnectionStatus = {
   NOT_CONNECTED: 'NOT_CONNECTED',
   SETUP_REQUESTED: 'SETUP_REQUESTED',
+  AUTHORIZING: 'AUTHORIZING',
   BLOCKED: 'BLOCKED'
 } as const
 
 export type MarketingProviderConnectionStatus = (typeof MarketingProviderConnectionStatus)[keyof typeof MarketingProviderConnectionStatus]
+
+
+export const InboundEvidenceGmailConnectionStatus = {
+  NOT_CONNECTED: 'NOT_CONNECTED',
+  AUTHORIZING: 'AUTHORIZING',
+  CONNECTED: 'CONNECTED',
+  REAUTH_REQUIRED: 'REAUTH_REQUIRED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type InboundEvidenceGmailConnectionStatus = (typeof InboundEvidenceGmailConnectionStatus)[keyof typeof InboundEvidenceGmailConnectionStatus]
+
+
+export const InboundEvidenceAttachmentStatus = {
+  STORED: 'STORED',
+  QUARANTINED: 'QUARANTINED',
+  UNSUPPORTED: 'UNSUPPORTED',
+  TOO_LARGE: 'TOO_LARGE',
+  FAILED: 'FAILED'
+} as const
+
+export type InboundEvidenceAttachmentStatus = (typeof InboundEvidenceAttachmentStatus)[keyof typeof InboundEvidenceAttachmentStatus]
+
+
+export const InboundEvidenceAnalysisStatus = {
+  ANALYZED: 'ANALYZED',
+  NEEDS_REVIEW: 'NEEDS_REVIEW',
+  FAILED: 'FAILED'
+} as const
+
+export type InboundEvidenceAnalysisStatus = (typeof InboundEvidenceAnalysisStatus)[keyof typeof InboundEvidenceAnalysisStatus]
 
 
 export const MarketingReputationReplyAutomationStatus = {

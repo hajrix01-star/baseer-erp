@@ -192,6 +192,15 @@ export type TenantWhereInput = {
   fileMetadata?: Prisma.FileMetadataListRelationFilter
   reportDocuments?: Prisma.ReportDocumentListRelationFilter
   administrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelListRelationFilter
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleListRelationFilter
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptListRelationFilter
+  inboundEvidenceGmailConnection?: Prisma.XOR<Prisma.InboundEvidenceGmailConnectionNullableScalarRelationFilter, Prisma.InboundEvidenceGmailConnectionWhereInput> | null
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateListRelationFilter
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageListRelationFilter
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentListRelationFilter
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisListRelationFilter
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -210,6 +219,15 @@ export type TenantOrderByWithRelationInput = {
   fileMetadata?: Prisma.FileMetadataOrderByRelationAggregateInput
   reportDocuments?: Prisma.ReportDocumentOrderByRelationAggregateInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentOrderByRelationAggregateInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelOrderByRelationAggregateInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleOrderByRelationAggregateInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptOrderByRelationAggregateInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionOrderByWithRelationInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateOrderByRelationAggregateInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageOrderByRelationAggregateInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentOrderByRelationAggregateInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisOrderByRelationAggregateInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -231,6 +249,15 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   fileMetadata?: Prisma.FileMetadataListRelationFilter
   reportDocuments?: Prisma.ReportDocumentListRelationFilter
   administrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelListRelationFilter
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleListRelationFilter
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptListRelationFilter
+  inboundEvidenceGmailConnection?: Prisma.XOR<Prisma.InboundEvidenceGmailConnectionNullableScalarRelationFilter, Prisma.InboundEvidenceGmailConnectionWhereInput> | null
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateListRelationFilter
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageListRelationFilter
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentListRelationFilter
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisListRelationFilter
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotListRelationFilter
 }, "id" | "code">
 
 export type TenantOrderByWithAggregationInput = {
@@ -271,6 +298,15 @@ export type TenantCreateInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -289,6 +325,15 @@ export type TenantUncheckedCreateInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -307,6 +352,15 @@ export type TenantUpdateInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -325,6 +379,15 @@ export type TenantUncheckedUpdateInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -486,6 +549,20 @@ export type TenantUpdateOneRequiredWithoutIdempotencyReceiptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutIdempotencyReceiptsInput, Prisma.TenantUpdateWithoutIdempotencyReceiptsInput>, Prisma.TenantUncheckedUpdateWithoutIdempotencyReceiptsInput>
 }
 
+export type TenantCreateNestedOneWithoutOwnerDailyBriefSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerDailyBriefSnapshotsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutOwnerDailyBriefSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerDailyBriefSnapshotsInput
+  upsert?: Prisma.TenantUpsertWithoutOwnerDailyBriefSnapshotsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUpdateWithoutOwnerDailyBriefSnapshotsInput>, Prisma.TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput>
+}
+
 export type TenantCreateNestedOneWithoutDocumentSerialCountersInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutDocumentSerialCountersInput, Prisma.TenantUncheckedCreateWithoutDocumentSerialCountersInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDocumentSerialCountersInput
@@ -512,6 +589,118 @@ export type TenantUpdateOneRequiredWithoutFileMetadataNestedInput = {
   upsert?: Prisma.TenantUpsertWithoutFileMetadataInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFileMetadataInput, Prisma.TenantUpdateWithoutFileMetadataInput>, Prisma.TenantUncheckedUpdateWithoutFileMetadataInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceLabelsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceLabelsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceLabelsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceLabelsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceLabelsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceLabelsInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceLabelsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceLabelsInput, Prisma.TenantUpdateWithoutInboundEvidenceLabelsInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceRulesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceRulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceRulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceRulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceRulesInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceRulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceRulesInput, Prisma.TenantUpdateWithoutInboundEvidenceRulesInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceRulesInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceCommandsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceCommandsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceCommandsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceCommandsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceCommandsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceCommandsInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceCommandsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceCommandsInput, Prisma.TenantUpdateWithoutInboundEvidenceCommandsInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceGmailConnectionInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceGmailConnectionInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceGmailConnectionNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceGmailConnectionInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceGmailConnectionInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUpdateWithoutInboundEvidenceGmailConnectionInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceOAuthStatesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceOAuthStatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceOAuthStatesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceOAuthStatesInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceOAuthStatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUpdateWithoutInboundEvidenceOAuthStatesInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceMessagesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceMessagesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceMessagesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceMessagesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceMessagesInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceMessagesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceMessagesInput, Prisma.TenantUpdateWithoutInboundEvidenceMessagesInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceAttachmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceAttachmentsInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceAttachmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUpdateWithoutInboundEvidenceAttachmentsInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput>
+}
+
+export type TenantCreateNestedOneWithoutInboundEvidenceDocumentAnalysesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceDocumentAnalysesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInboundEvidenceDocumentAnalysesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInboundEvidenceDocumentAnalysesInput
+  upsert?: Prisma.TenantUpsertWithoutInboundEvidenceDocumentAnalysesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput>, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput>
 }
 
 export type TenantCreateNestedOneWithoutReportDocumentsInput = {
@@ -543,6 +732,15 @@ export type TenantCreateWithoutUsersInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -560,6 +758,15 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -593,6 +800,15 @@ export type TenantUpdateWithoutUsersInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -610,6 +826,15 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCompaniesInput = {
@@ -627,6 +852,15 @@ export type TenantCreateWithoutCompaniesInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCompaniesInput = {
@@ -644,6 +878,15 @@ export type TenantUncheckedCreateWithoutCompaniesInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCompaniesInput = {
@@ -677,6 +920,15 @@ export type TenantUpdateWithoutCompaniesInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCompaniesInput = {
@@ -694,6 +946,15 @@ export type TenantUncheckedUpdateWithoutCompaniesInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAdministrationAssignmentsInput = {
@@ -711,6 +972,15 @@ export type TenantCreateWithoutAdministrationAssignmentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
@@ -728,6 +998,15 @@ export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAdministrationAssignmentsInput = {
@@ -761,6 +1040,15 @@ export type TenantUpdateWithoutAdministrationAssignmentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
@@ -778,6 +1066,15 @@ export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -795,6 +1092,15 @@ export type TenantCreateWithoutRolesInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRolesInput = {
@@ -812,6 +1118,15 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRolesInput = {
@@ -845,6 +1160,15 @@ export type TenantUpdateWithoutRolesInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -862,6 +1186,15 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSessionsInput = {
@@ -879,6 +1212,15 @@ export type TenantCreateWithoutSessionsInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSessionsInput = {
@@ -896,6 +1238,15 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSessionsInput = {
@@ -929,6 +1280,15 @@ export type TenantUpdateWithoutSessionsInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSessionsInput = {
@@ -946,6 +1306,15 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditsInput = {
@@ -963,6 +1332,15 @@ export type TenantCreateWithoutAuditsInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditsInput = {
@@ -980,6 +1358,15 @@ export type TenantUncheckedCreateWithoutAuditsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditsInput = {
@@ -1013,6 +1400,15 @@ export type TenantUpdateWithoutAuditsInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditsInput = {
@@ -1030,6 +1426,15 @@ export type TenantUncheckedUpdateWithoutAuditsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutIdempotencyReceiptsInput = {
@@ -1047,6 +1452,15 @@ export type TenantCreateWithoutIdempotencyReceiptsInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
@@ -1064,6 +1478,15 @@ export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutIdempotencyReceiptsInput = {
@@ -1097,6 +1520,15 @@ export type TenantUpdateWithoutIdempotencyReceiptsInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
@@ -1114,6 +1546,135 @@ export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutOwnerDailyBriefSnapshotsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutOwnerDailyBriefSnapshotsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput>
+}
+
+export type TenantUpsertWithoutOwnerDailyBriefSnapshotsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutOwnerDailyBriefSnapshotsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutOwnerDailyBriefSnapshotsInput, Prisma.TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput>
+}
+
+export type TenantUpdateWithoutOwnerDailyBriefSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDocumentSerialCountersInput = {
@@ -1131,6 +1692,15 @@ export type TenantCreateWithoutDocumentSerialCountersInput = {
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
@@ -1148,6 +1718,15 @@ export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDocumentSerialCountersInput = {
@@ -1181,6 +1760,15 @@ export type TenantUpdateWithoutDocumentSerialCountersInput = {
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
@@ -1198,6 +1786,15 @@ export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFileMetadataInput = {
@@ -1215,6 +1812,15 @@ export type TenantCreateWithoutFileMetadataInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFileMetadataInput = {
@@ -1232,6 +1838,15 @@ export type TenantUncheckedCreateWithoutFileMetadataInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFileMetadataInput = {
@@ -1265,6 +1880,15 @@ export type TenantUpdateWithoutFileMetadataInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFileMetadataInput = {
@@ -1282,6 +1906,975 @@ export type TenantUncheckedUpdateWithoutFileMetadataInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceLabelsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceLabelsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceLabelsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceLabelsInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceLabelsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceLabelsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceLabelsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceLabelsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceLabelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceRulesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceRulesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceRulesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceRulesInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceRulesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceRulesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceRulesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceRulesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceRulesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceRulesInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceCommandsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceCommandsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceCommandsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceCommandsInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceCommandsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceCommandsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceCommandsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceCommandsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceCommandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceGmailConnectionInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceGmailConnectionInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceGmailConnectionInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceGmailConnectionInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceGmailConnectionInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceOAuthStatesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceOAuthStatesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceOAuthStatesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceOAuthStatesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceOAuthStatesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceOAuthStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceMessagesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceMessagesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceMessagesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceMessagesInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceMessagesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceMessagesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceMessagesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceMessagesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceAttachmentsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceAttachmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceAttachmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceAttachmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceAttachmentsInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInboundEvidenceDocumentAnalysesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInboundEvidenceDocumentAnalysesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput>
+}
+
+export type TenantUpsertWithoutInboundEvidenceDocumentAnalysesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInboundEvidenceDocumentAnalysesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput, Prisma.TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput>
+}
+
+export type TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutReportDocumentsInput = {
@@ -1299,6 +2892,15 @@ export type TenantCreateWithoutReportDocumentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutReportDocumentsInput = {
@@ -1316,6 +2918,15 @@ export type TenantUncheckedCreateWithoutReportDocumentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutReportDocumentsInput = {
@@ -1349,6 +2960,15 @@ export type TenantUpdateWithoutReportDocumentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
@@ -1366,6 +2986,15 @@ export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
   administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -1384,6 +3013,14 @@ export type TenantCountOutputType = {
   fileMetadata: number
   reportDocuments: number
   administrationAssignments: number
+  inboundEvidenceLabels: number
+  inboundEvidenceRules: number
+  inboundEvidenceCommands: number
+  inboundEvidenceOAuthStates: number
+  inboundEvidenceMessages: number
+  inboundEvidenceAttachments: number
+  inboundEvidenceDocumentAnalyses: number
+  ownerDailyBriefSnapshots: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1397,6 +3034,14 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   fileMetadata?: boolean | TenantCountOutputTypeCountFileMetadataArgs
   reportDocuments?: boolean | TenantCountOutputTypeCountReportDocumentsArgs
   administrationAssignments?: boolean | TenantCountOutputTypeCountAdministrationAssignmentsArgs
+  inboundEvidenceLabels?: boolean | TenantCountOutputTypeCountInboundEvidenceLabelsArgs
+  inboundEvidenceRules?: boolean | TenantCountOutputTypeCountInboundEvidenceRulesArgs
+  inboundEvidenceCommands?: boolean | TenantCountOutputTypeCountInboundEvidenceCommandsArgs
+  inboundEvidenceOAuthStates?: boolean | TenantCountOutputTypeCountInboundEvidenceOAuthStatesArgs
+  inboundEvidenceMessages?: boolean | TenantCountOutputTypeCountInboundEvidenceMessagesArgs
+  inboundEvidenceAttachments?: boolean | TenantCountOutputTypeCountInboundEvidenceAttachmentsArgs
+  inboundEvidenceDocumentAnalyses?: boolean | TenantCountOutputTypeCountInboundEvidenceDocumentAnalysesArgs
+  ownerDailyBriefSnapshots?: boolean | TenantCountOutputTypeCountOwnerDailyBriefSnapshotsArgs
 }
 
 /**
@@ -1479,6 +3124,62 @@ export type TenantCountOutputTypeCountAdministrationAssignmentsArgs<ExtArgs exte
   where?: Prisma.TenantAdministrationAssignmentWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceLabelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceLabelWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceRuleWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceCommandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceCommandReceiptWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceOAuthStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceGmailOAuthStateWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceMessageWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceAttachmentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInboundEvidenceDocumentAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboundEvidenceDocumentAnalysisWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountOwnerDailyBriefSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OwnerDailyBriefSnapshotWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1496,6 +3197,15 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   fileMetadata?: boolean | Prisma.Tenant$fileMetadataArgs<ExtArgs>
   reportDocuments?: boolean | Prisma.Tenant$reportDocumentsArgs<ExtArgs>
   administrationAssignments?: boolean | Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>
+  inboundEvidenceLabels?: boolean | Prisma.Tenant$inboundEvidenceLabelsArgs<ExtArgs>
+  inboundEvidenceRules?: boolean | Prisma.Tenant$inboundEvidenceRulesArgs<ExtArgs>
+  inboundEvidenceCommands?: boolean | Prisma.Tenant$inboundEvidenceCommandsArgs<ExtArgs>
+  inboundEvidenceGmailConnection?: boolean | Prisma.Tenant$inboundEvidenceGmailConnectionArgs<ExtArgs>
+  inboundEvidenceOAuthStates?: boolean | Prisma.Tenant$inboundEvidenceOAuthStatesArgs<ExtArgs>
+  inboundEvidenceMessages?: boolean | Prisma.Tenant$inboundEvidenceMessagesArgs<ExtArgs>
+  inboundEvidenceAttachments?: boolean | Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>
+  inboundEvidenceDocumentAnalyses?: boolean | Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>
+  ownerDailyBriefSnapshots?: boolean | Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -1535,6 +3245,15 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   fileMetadata?: boolean | Prisma.Tenant$fileMetadataArgs<ExtArgs>
   reportDocuments?: boolean | Prisma.Tenant$reportDocumentsArgs<ExtArgs>
   administrationAssignments?: boolean | Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>
+  inboundEvidenceLabels?: boolean | Prisma.Tenant$inboundEvidenceLabelsArgs<ExtArgs>
+  inboundEvidenceRules?: boolean | Prisma.Tenant$inboundEvidenceRulesArgs<ExtArgs>
+  inboundEvidenceCommands?: boolean | Prisma.Tenant$inboundEvidenceCommandsArgs<ExtArgs>
+  inboundEvidenceGmailConnection?: boolean | Prisma.Tenant$inboundEvidenceGmailConnectionArgs<ExtArgs>
+  inboundEvidenceOAuthStates?: boolean | Prisma.Tenant$inboundEvidenceOAuthStatesArgs<ExtArgs>
+  inboundEvidenceMessages?: boolean | Prisma.Tenant$inboundEvidenceMessagesArgs<ExtArgs>
+  inboundEvidenceAttachments?: boolean | Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>
+  inboundEvidenceDocumentAnalyses?: boolean | Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>
+  ownerDailyBriefSnapshots?: boolean | Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1553,6 +3272,15 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     fileMetadata: Prisma.$FileMetadataPayload<ExtArgs>[]
     reportDocuments: Prisma.$ReportDocumentPayload<ExtArgs>[]
     administrationAssignments: Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>[]
+    inboundEvidenceLabels: Prisma.$InboundEvidenceLabelPayload<ExtArgs>[]
+    inboundEvidenceRules: Prisma.$InboundEvidenceRulePayload<ExtArgs>[]
+    inboundEvidenceCommands: Prisma.$InboundEvidenceCommandReceiptPayload<ExtArgs>[]
+    inboundEvidenceGmailConnection: Prisma.$InboundEvidenceGmailConnectionPayload<ExtArgs> | null
+    inboundEvidenceOAuthStates: Prisma.$InboundEvidenceGmailOAuthStatePayload<ExtArgs>[]
+    inboundEvidenceMessages: Prisma.$InboundEvidenceMessagePayload<ExtArgs>[]
+    inboundEvidenceAttachments: Prisma.$InboundEvidenceAttachmentPayload<ExtArgs>[]
+    inboundEvidenceDocumentAnalyses: Prisma.$InboundEvidenceDocumentAnalysisPayload<ExtArgs>[]
+    ownerDailyBriefSnapshots: Prisma.$OwnerDailyBriefSnapshotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1964,6 +3692,15 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   fileMetadata<T extends Prisma.Tenant$fileMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fileMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reportDocuments<T extends Prisma.Tenant$reportDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$reportDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   administrationAssignments<T extends Prisma.Tenant$administrationAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$administrationAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceLabels<T extends Prisma.Tenant$inboundEvidenceLabelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceLabelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceLabelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceRules<T extends Prisma.Tenant$inboundEvidenceRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceCommands<T extends Prisma.Tenant$inboundEvidenceCommandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceCommandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceCommandReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceGmailConnection<T extends Prisma.Tenant$inboundEvidenceGmailConnectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceGmailConnectionArgs<ExtArgs>>): Prisma.Prisma__InboundEvidenceGmailConnectionClient<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceGmailConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  inboundEvidenceOAuthStates<T extends Prisma.Tenant$inboundEvidenceOAuthStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceOAuthStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceGmailOAuthStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceMessages<T extends Prisma.Tenant$inboundEvidenceMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceAttachments<T extends Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboundEvidenceDocumentAnalyses<T extends Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceDocumentAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownerDailyBriefSnapshots<T extends Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OwnerDailyBriefSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2628,6 +4365,217 @@ export type Tenant$administrationAssignmentsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.TenantAdministrationAssignmentScalarFieldEnum | Prisma.TenantAdministrationAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceLabels
+ */
+export type Tenant$inboundEvidenceLabelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceLabel
+   */
+  select?: Prisma.InboundEvidenceLabelSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceLabel
+   */
+  omit?: Prisma.InboundEvidenceLabelOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceLabelInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceLabelWhereInput
+  orderBy?: Prisma.InboundEvidenceLabelOrderByWithRelationInput | Prisma.InboundEvidenceLabelOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceLabelWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceLabelScalarFieldEnum | Prisma.InboundEvidenceLabelScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceRules
+ */
+export type Tenant$inboundEvidenceRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceRule
+   */
+  select?: Prisma.InboundEvidenceRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceRule
+   */
+  omit?: Prisma.InboundEvidenceRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceRuleInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceRuleWhereInput
+  orderBy?: Prisma.InboundEvidenceRuleOrderByWithRelationInput | Prisma.InboundEvidenceRuleOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceRuleScalarFieldEnum | Prisma.InboundEvidenceRuleScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceCommands
+ */
+export type Tenant$inboundEvidenceCommandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceCommandReceipt
+   */
+  select?: Prisma.InboundEvidenceCommandReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceCommandReceipt
+   */
+  omit?: Prisma.InboundEvidenceCommandReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceCommandReceiptInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceCommandReceiptWhereInput
+  orderBy?: Prisma.InboundEvidenceCommandReceiptOrderByWithRelationInput | Prisma.InboundEvidenceCommandReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceCommandReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceCommandReceiptScalarFieldEnum | Prisma.InboundEvidenceCommandReceiptScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceGmailConnection
+ */
+export type Tenant$inboundEvidenceGmailConnectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceGmailConnection
+   */
+  select?: Prisma.InboundEvidenceGmailConnectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceGmailConnection
+   */
+  omit?: Prisma.InboundEvidenceGmailConnectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceGmailConnectionInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceGmailConnectionWhereInput
+}
+
+/**
+ * Tenant.inboundEvidenceOAuthStates
+ */
+export type Tenant$inboundEvidenceOAuthStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceGmailOAuthState
+   */
+  select?: Prisma.InboundEvidenceGmailOAuthStateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceGmailOAuthState
+   */
+  omit?: Prisma.InboundEvidenceGmailOAuthStateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceGmailOAuthStateInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceGmailOAuthStateWhereInput
+  orderBy?: Prisma.InboundEvidenceGmailOAuthStateOrderByWithRelationInput | Prisma.InboundEvidenceGmailOAuthStateOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceGmailOAuthStateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceGmailOAuthStateScalarFieldEnum | Prisma.InboundEvidenceGmailOAuthStateScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceMessages
+ */
+export type Tenant$inboundEvidenceMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceMessage
+   */
+  select?: Prisma.InboundEvidenceMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceMessage
+   */
+  omit?: Prisma.InboundEvidenceMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceMessageInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceMessageWhereInput
+  orderBy?: Prisma.InboundEvidenceMessageOrderByWithRelationInput | Prisma.InboundEvidenceMessageOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceMessageScalarFieldEnum | Prisma.InboundEvidenceMessageScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceAttachments
+ */
+export type Tenant$inboundEvidenceAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceAttachment
+   */
+  select?: Prisma.InboundEvidenceAttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceAttachment
+   */
+  omit?: Prisma.InboundEvidenceAttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceAttachmentInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceAttachmentWhereInput
+  orderBy?: Prisma.InboundEvidenceAttachmentOrderByWithRelationInput | Prisma.InboundEvidenceAttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceAttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceAttachmentScalarFieldEnum | Prisma.InboundEvidenceAttachmentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.inboundEvidenceDocumentAnalyses
+ */
+export type Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboundEvidenceDocumentAnalysis
+   */
+  select?: Prisma.InboundEvidenceDocumentAnalysisSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboundEvidenceDocumentAnalysis
+   */
+  omit?: Prisma.InboundEvidenceDocumentAnalysisOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboundEvidenceDocumentAnalysisInclude<ExtArgs> | null
+  where?: Prisma.InboundEvidenceDocumentAnalysisWhereInput
+  orderBy?: Prisma.InboundEvidenceDocumentAnalysisOrderByWithRelationInput | Prisma.InboundEvidenceDocumentAnalysisOrderByWithRelationInput[]
+  cursor?: Prisma.InboundEvidenceDocumentAnalysisWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboundEvidenceDocumentAnalysisScalarFieldEnum | Prisma.InboundEvidenceDocumentAnalysisScalarFieldEnum[]
+}
+
+/**
+ * Tenant.ownerDailyBriefSnapshots
+ */
+export type Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OwnerDailyBriefSnapshot
+   */
+  select?: Prisma.OwnerDailyBriefSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OwnerDailyBriefSnapshot
+   */
+  omit?: Prisma.OwnerDailyBriefSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OwnerDailyBriefSnapshotInclude<ExtArgs> | null
+  where?: Prisma.OwnerDailyBriefSnapshotWhereInput
+  orderBy?: Prisma.OwnerDailyBriefSnapshotOrderByWithRelationInput | Prisma.OwnerDailyBriefSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.OwnerDailyBriefSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OwnerDailyBriefSnapshotScalarFieldEnum | Prisma.OwnerDailyBriefSnapshotScalarFieldEnum[]
 }
 
 /**

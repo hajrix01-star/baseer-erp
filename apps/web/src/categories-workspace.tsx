@@ -3,10 +3,11 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react
 import { BaseerButton } from "./baseer-button";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterToggle } from "./baseer-filter-controls";
+import { BaseerLoadFailure } from "./baseer-load-failure";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { displayName, localizedEnum } from "./baseer-localization";
 import { uiCopy } from "./baseer-ui-copy";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
@@ -29,6 +30,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ kind: "idle" | "success" | "error"; text: string }>({ kind: "idle", text: "" });
   const [search, setSearch] = useState("");
@@ -45,11 +47,12 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
     setSession(current);
     if (!current) { setLoading(false); return; }
     setLoading(true);
+    setLoadError("");
     try {
       const result = await api<Configuration>(current, "/finance/configuration");
       setCategories(result.categories); setSuppliers(result.suppliers);
     } catch (error) {
-      setMessage({ kind: "error", text: presentBaseerApiError(error, language, text.loading) });
+      setLoadError(presentBaseerLoadError(error, language, { ar: "الفئات والتصنيفات", en: "categories" }));
     } finally { setLoading(false); }
   }, [language, text.loading]);
 
@@ -100,6 +103,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   return <section className="daily-sales-workspace" aria-label={text.title}>
     <header className="administration-section-heading"><h3>{text.title}</h3><span className="baseer-inline-actions"><BaseerButton type="button" variant="primary" onClick={() => openDialog()} disabled={saving}>{text.addCategory}</BaseerButton></span></header>
     {message.kind !== "idle" ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
+    {loadError ? <BaseerLoadFailure message={loadError} language={language} onRetry={() => void load()} /> : null}
     <BaseerWorkspaceTabs ariaLabel={text.kind} idPrefix="finance-category-kind" activeId={kind} onChange={(value) => setKind(value as CategoryKind)} tabs={[{ id: "PURCHASE", label: localizedEnum(language, "PURCHASE") }, { id: "EXPENSE", label: localizedEnum(language, "EXPENSE") }, { id: "SALE", label: localizedEnum(language, "SALE") }]} />
     <BaseerBatchPanel id={`finance-category-kind-panel-${kind}`} labelledBy={`finance-category-kind-${kind}`}><BaseerFilterBar controlsPresentation="menu" language={language} search={search} searchLabel={text.search} searchPlaceholder={text.search} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={clearFilters} controls={<BaseerFilterToggle label={text.showArchived} checked={showArchived} onChange={setShowArchived} />} />{loading ? <p>{text.loading}</p> : visible.length ? <FinanceCategoryTree key={kind} language={language} categories={visible} onOpen={(item) => setDetails(categories.find((category) => category.id === item.id) ?? null)} /> : <p>{text.noResults}</p>}</BaseerBatchPanel>
     <BaseerDialog open={details !== null} title={details ? displayName(language, details) : text.title} language={language} busy={saving} onClose={() => setDetails(null)} footer={details ? <><BaseerButton type="button" variant="secondary" disabled={details.status !== "ACTIVE"} onClick={() => { const item = details; setDetails(null); openDialog(item); }}>{text.edit}</BaseerButton>{details.status === "ACTIVE" ? <BaseerButton type="button" variant="danger" onClick={() => { setArchiveTarget(details); setDetails(null); }}>{text.archive}</BaseerButton> : null}</> : null}>{details ? <div className="administration-list"><article><strong>{text.code}: {details.code}</strong><span>{text.kind}: {localizedEnum(language, details.kind)}</span><span>{text.parent}: {details.parentId ? displayName(language, categories.find((item) => item.id === details.parentId) ?? { nameAr: "—", nameEn: "—" }) : text.noParent}</span><span>{text.suggestedSupplier}: {details.suggestedSupplierId ? displayName(language, suppliers.find((item) => item.id === details.suggestedSupplierId) ?? { nameAr: "—", nameEn: "—" }) : text.noSuggestedSupplier}</span><span>{details.isPosting ? text.acceptsPosting : text.groupOnly}</span><span>{details.status === "ACTIVE" ? text.active : text.archived}</span></article></div> : null}</BaseerDialog>

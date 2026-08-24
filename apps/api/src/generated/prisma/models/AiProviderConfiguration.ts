@@ -605,10 +605,6 @@ export type AiProviderConfigurationNullableScalarRelationFilter = {
   isNot?: Prisma.AiProviderConfigurationWhereInput | null
 }
 
-export type EnumAiProviderKindFieldUpdateOperationsInput = {
-  set?: $Enums.AiProviderKind
-}
-
 export type EnumAiProviderConfigurationStatusFieldUpdateOperationsInput = {
   set?: $Enums.AiProviderConfigurationStatus
 }

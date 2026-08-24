@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDatePicker } from "./baseer-date-picker";
@@ -61,14 +61,14 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
     const session = activeSession(); if (!session || !detail?.nextLineCursor || busy) return;
     setBusy(true);
     try { const receipt = await getHrPayrollRun(session, runId, { lineCursor: detail.nextLineCursor, linePageSize: 250, paymentPageSize: 1 }); setDetail((current) => current ? { ...current, lines: [...new Map([...current.lines, ...receipt.lines].map((line) => [line.id, line])).values()], hasMoreLines: receipt.hasMoreLines, nextLineCursor: receipt.nextLineCursor } : current); }
-    catch (error) { onError(presentBaseerApiError(error, language, ar ? "تحميل بقية موظفي المسير" : "Loading more payroll employees")); }
+    catch (error) { onError(presentBaseerLoadError(error, language, { ar: "بقية موظفي المسير", en: "more payroll employees" })); }
     finally { setBusy(false); }
   };
   const loadMorePayments = async () => {
     const session = activeSession(); if (!session || !detail?.nextPaymentCursor || busy) return;
     setBusy(true);
     try { const receipt = await getHrPayrollRun(session, runId, { linePageSize: 1, paymentCursor: detail.nextPaymentCursor, paymentPageSize: 100 }); setDetail((current) => current ? { ...current, payments: [...new Map([...current.payments, ...receipt.payments].map((payment) => [payment.id, payment])).values()], hasMorePayments: receipt.hasMorePayments, nextPaymentCursor: receipt.nextPaymentCursor } : current); }
-    catch (error) { onError(presentBaseerApiError(error, language, ar ? "تحميل بقية دفعات المسير" : "Loading more payroll payments")); }
+    catch (error) { onError(presentBaseerLoadError(error, language, { ar: "بقية دفعات المسير", en: "more payroll payments" })); }
     finally { setBusy(false); }
   };
   useEffect(() => { void load(); }, [runId]);
@@ -85,7 +85,7 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
         const configuration = await api<{ vaults: Vault[] }>(session, "/finance/configuration");
         setVaults(configuration.vaults); setVaultsLoaded(true);
         availableVaults = configuration.vaults.filter((vault) => vault.status === "ACTIVE" && vault.isPaymentDestination);
-      } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تحميل جهات السداد" : "Loading payment destinations")); return; }
+      } catch (error) { onError(presentBaseerLoadError(error, language, { ar: "جهات السداد", en: "payment destinations" })); return; }
       finally { setBusy(false); }
     }
     const vault = availableVaults[0];

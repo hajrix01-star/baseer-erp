@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
@@ -68,7 +68,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
       setLeaves((rows) => append ? [...rows, ...leaveReceipt.leaves] : leaveReceipt.leaves); setNextCursor(leaveReceipt.nextCursor);
       setSummary(leaveReceipt.summary);
       if (employeeReceipt) setEmployees((currentEmployees) => [...employeeReceipt.employees, ...currentEmployees.filter((employee) => !employeeReceipt.employees.some((candidate) => candidate.id === employee.id))]);
-    } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تحميل الإجازات" : "Loading leaves")); }
+    } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "الإجازات", en: "leaves" })); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, employeeFilter, language, serverSearch, sessionCompanyId, sortDirection, statusFilter, typeFilter]);
   useEffect(() => { void load(); }, [load]);

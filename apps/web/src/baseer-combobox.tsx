@@ -1,111 +1,32 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Button } from "react-aria-components/Button";
-import { ComboBox } from "react-aria-components/ComboBox";
-import { Input } from "react-aria-components/Input";
-import { Label } from "react-aria-components/Label";
-import { ListBox, ListBoxItem } from "react-aria-components/ListBox";
-import { Popover } from "react-aria-components/Popover";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 
 import type { BaseerSearchOption } from "./baseer-select-options";
 
 type BaseerComboboxProps = {
-  id?: string;
-  label: string;
-  value: string;
-  options: readonly BaseerSearchOption[];
-  placeholder: string;
-  disabled?: boolean;
-  required?: boolean;
-  /** Changes only when the owning company/session/query scope changes. */
-  scopeKey?: string;
-  remoteSearch?: (query: string, signal: AbortSignal) => Promise<readonly BaseerSearchOption[]>;
-  loadingLabel?: string;
-  emptyLabel?: string;
-  errorLabel?: string;
-  searchable?: boolean;
-  className?: string;
-  menuClassName?: string;
-  onChange: (value: string) => void;
+  id?: string; label: string; value: string; options: readonly BaseerSearchOption[]; placeholder: string; disabled?: boolean; required?: boolean;
+  scopeKey?: string; remoteSearch?: (query: string, signal: AbortSignal) => Promise<readonly BaseerSearchOption[]>;
+  loadingLabel?: string; emptyLabel?: string; errorLabel?: string; searchable?: boolean; className?: string; menuClassName?: string; onChange: (value: string) => void;
 };
 
-/**
- * The only gateway from Baseer UI to React Aria Combobox. Screens keep the
- * Baseer option/value contract and never import the library directly.
- */
+/** Baseer's original anchored selector: the menu follows the field and never expands a table cell. */
 export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey = "baseer-combobox", remoteSearch, loadingLabel, emptyLabel, errorLabel, searchable = true, className, menuClassName, onChange }: BaseerComboboxProps) {
-  const generatedId = useId();
-  const inputId = id ?? `baseer-combobox-${generatedId}`;
-  const english = typeof document !== "undefined" && document.documentElement.lang === "en";
-  const copy = {
-    loading: loadingLabel ?? (english ? "Loading…" : "جارٍ التحميل…"),
-    empty: emptyLabel ?? (english ? "No matching results" : "لا توجد نتائج مطابقة"),
-    error: errorLabel ?? (english ? "Search could not be completed" : "تعذر إتمام البحث"),
-  };
-  const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [remoteOptions, setRemoteOptions] = useState<readonly BaseerSearchOption[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const previousScopeKey = useRef(scopeKey);
+  const generatedId = useId(); const inputId = id ?? `baseer-combobox-${generatedId}`; const rootRef = useRef<HTMLDivElement>(null); const menuRef = useRef<HTMLDivElement>(null); const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false); const [query, setQuery] = useState(""); const [remoteOptions, setRemoteOptions] = useState<readonly BaseerSearchOption[]>([]); const [loading, setLoading] = useState(false); const [failed, setFailed] = useState(false); const [menuStyle, setMenuStyle] = useState<CSSProperties>({}); const previousScope = useRef(scopeKey);
   const selected = useMemo(() => options.find((option) => option.id === value) ?? remoteOptions.find((option) => option.id === value), [options, remoteOptions, value]);
-  const visibleOptions = useMemo(() => {
-    const source = remoteSearch ? remoteOptions : options;
-    const term = inputValue.trim().toLocaleLowerCase();
-    const filtered = remoteSearch ? source : source.filter((option) => !term || option.label.toLocaleLowerCase().includes(term));
-    return selected && !filtered.some((option) => option.id === selected.id) ? [selected, ...filtered] : filtered;
-  }, [inputValue, options, remoteOptions, remoteSearch, selected]);
+  const matches = useMemo(() => { const byId = new Map(options.map((option) => [option.id, option])); for (const option of remoteOptions) byId.set(option.id, option); const term = query.trim().toLocaleLowerCase(); const filtered = [...byId.values()].filter((option) => !term || option.label.toLocaleLowerCase().includes(term)); return selected && !filtered.some((option) => option.id === selected.id) ? [selected, ...filtered] : filtered; }, [options, query, remoteOptions, selected]);
+  const copy = { loading: loadingLabel ?? "جارٍ التحميل…", empty: emptyLabel ?? "لا توجد نتائج مطابقة", error: errorLabel ?? "تعذر إتمام البحث" };
 
-  useEffect(() => {
-    if (!open || !remoteSearch) return;
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => {
-      setLoading(true);
-      setFailed(false);
-      void remoteSearch(inputValue, controller.signal)
-        .then((next) => { if (!controller.signal.aborted) setRemoteOptions(next); })
-        .catch(() => { if (!controller.signal.aborted) { setRemoteOptions([]); setFailed(true); } })
-        .finally(() => { if (!controller.signal.aborted) setLoading(false); });
-    }, 180);
-    return () => { controller.abort(); window.clearTimeout(timeout); };
-  }, [inputValue, open, remoteSearch, scopeKey]);
+  useEffect(() => { if (!open || !remoteSearch) return; const controller = new AbortController(); const timer = window.setTimeout(() => { setLoading(true); setFailed(false); void remoteSearch(query, controller.signal).then((next) => { if (!controller.signal.aborted) setRemoteOptions(next); }).catch(() => { if (!controller.signal.aborted) { setRemoteOptions([]); setFailed(true); } }).finally(() => { if (!controller.signal.aborted) setLoading(false); }); }, 180); return () => { controller.abort(); window.clearTimeout(timer); }; }, [open, query, remoteSearch, scopeKey]);
+  useEffect(() => { if (previousScope.current === scopeKey) return; previousScope.current = scopeKey; setRemoteOptions([]); setQuery(""); setFailed(false); }, [scopeKey]);
+  useEffect(() => { if (!open) setQuery(""); }, [open]);
+  useEffect(() => { if (!open) return; const close = (event: PointerEvent) => { const target = event.target as Node; if (!rootRef.current?.contains(target) && !menuRef.current?.contains(target)) setOpen(false); }; document.addEventListener("pointerdown", close); return () => document.removeEventListener("pointerdown", close); }, [open]);
+  useEffect(() => { if (!open) return; const position = () => { const rect = inputRef.current?.getBoundingClientRect(); if (!rect) return; const width = Math.min(rect.width, window.innerWidth - 16); const below = window.innerHeight - rect.bottom - 12; const above = rect.top - 12; const placeAbove = below < 180 && above > below; setMenuStyle({ position: "fixed", zIndex: 1400, width, maxHeight: Math.max(120, Math.min(288, (placeAbove ? above : below) - 8)), overflowY: "auto", left: document.documentElement.dir === "rtl" ? Math.max(8, rect.right - width) : Math.min(rect.left, window.innerWidth - width - 8), ...(placeAbove ? { bottom: window.innerHeight - rect.top + 4 } : { top: rect.bottom + 4 }) }); }; position(); window.addEventListener("resize", position); window.addEventListener("scroll", position, true); return () => { window.removeEventListener("resize", position); window.removeEventListener("scroll", position, true); }; }, [open]);
 
-  useEffect(() => {
-    if (open) return;
-    setInputValue(selected?.label ?? "");
-  }, [open, selected]);
-
-  useEffect(() => {
-    if (previousScopeKey.current === scopeKey) return;
-    previousScopeKey.current = scopeKey;
-    setRemoteOptions([]);
-    setFailed(false);
-    setInputValue("");
-    onChange("");
-  }, [onChange, scopeKey]);
-
-  return <ComboBox
-    className={["baseer-combobox", className].filter(Boolean).join(" ")}
-    selectedKey={value || null}
-    inputValue={inputValue}
-    isDisabled={disabled}
-    isRequired={required}
-    allowsEmptyCollection
-    onInputChange={(next) => { if (searchable) setInputValue(next); }}
-    onOpenChange={setOpen}
-    onKeyDown={(event) => { if (event.key === "Escape") event.stopPropagation(); }}
-    onSelectionChange={(key) => { if (key !== null) onChange(String(key)); else if (!required) onChange(""); }}
-  >
-    <Label className="visually-hidden">{label}</Label>
-    <div className="baseer-combobox__control">
-      <Input id={inputId} className="baseer-combobox__input" placeholder={placeholder} autoComplete="off" readOnly={!searchable} onFocus={() => { if (searchable && inputValue === selected?.label) setInputValue(""); }} />
-      <Button className="baseer-combobox__trigger" aria-label={label}>▾</Button>
-    </div>
-    <Popover className={["baseer-combobox__popover", menuClassName].filter(Boolean).join(" ")} data-baseer-filter-menu-portal="" offset={4}>
-      <ListBox className="baseer-combobox__list" renderEmptyState={() => loading ? copy.loading : failed ? copy.error : copy.empty}>
-        {visibleOptions.map((option) => <ListBoxItem key={option.id} id={option.id} textValue={option.label} className="baseer-combobox__option">
-          <span>{option.label}</span>{option.description ? <small>{option.description}</small> : null}{option.isFavorite ? <span aria-hidden="true">★</span> : null}
-        </ListBoxItem>)}
-      </ListBox>
-    </Popover>
-  </ComboBox>;
+  const choose = (option: BaseerSearchOption) => { onChange(option.id); setOpen(false); setQuery(""); inputRef.current?.focus(); };
+  return <div ref={rootRef} className={["baseer-combobox", "company-session-control", className].filter(Boolean).join(" ")}>
+    <input ref={inputRef} id={inputId} className="baseer-combobox__input" role="combobox" aria-autocomplete={searchable ? "list" : "none"} aria-expanded={open} aria-controls={`${inputId}-options`} aria-label={label} autoComplete="off" disabled={disabled} required={required} readOnly={!searchable} value={searchable && open ? query : selected?.label ?? ""} placeholder={placeholder} onClick={() => { if (!disabled) setOpen(true); }} onFocus={() => { if (!disabled) { setQuery(""); setOpen(true); } }} onChange={(event) => { if (searchable) { setQuery(event.target.value); setOpen(true); } }} onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); setQuery(""); } else if (event.key === "Enter" && matches.length === 1) { event.preventDefault(); choose(matches[0]!); } else if (event.key === "ArrowDown") setOpen(true); else if (searchable && event.key === "Backspace" && !query && value && !required) onChange(""); }} />
+    <span className="baseer-combobox__trigger" aria-hidden="true">▾</span>
+    {typeof document === "undefined" || !open ? null : createPortal(<div ref={menuRef} id={`${inputId}-options`} style={menuStyle} className={["baseer-combobox__menu", "company-session-control__menu", menuClassName].filter(Boolean).join(" ")} role="listbox" aria-label={label}>{matches.length ? matches.map((option) => <button key={option.id} type="button" role="option" aria-selected={option.id === value} className={option.id === value ? "is-active" : undefined} onClick={() => choose(option)}><span>{option.label}{option.description ? <small>{option.description}</small> : null}</span>{option.isFavorite ? <b aria-hidden="true">★</b> : null}</button>) : loading ? <p>{copy.loading}</p> : failed ? <p>{copy.error}</p> : <p>{copy.empty}</p>}</div>, document.body)}
+  </div>;
 }

@@ -52,7 +52,7 @@ export class RecurringExpenseService {
         serviceNumber: profile.serviceNumber,
         expectedAmount: profile.expectedAmount.toFixed(4),
         intervalMonths: profile.intervalMonths,
-        nextReminderDate: profile.nextReminderDate,
+        nextReminderDate: profile.nextReminderDate.toISOString().slice(0, 10),
         defaultVaultId: profile.defaultVaultId,
         allowAmountOverride: profile.allowAmountOverride,
         status: profile.status,

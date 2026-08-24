@@ -10,6 +10,7 @@ export type BaseerApiErrorCode =
   | "VALIDATION_FAILED";
 
 type LocalizedMessage = { ar: string; en: string };
+export type BaseerLocalizedSubject = Readonly<{ ar: string; en: string }>;
 type RetryGuidance = { kind: "do-not-retry" | "retry" | "retry-after"; retryAfterSeconds?: number };
 type ErrorReceipt = { error: { code: BaseerApiErrorCode; message: LocalizedMessage; correlationId: string; retry: RetryGuidance } };
 
@@ -70,4 +71,20 @@ export function presentBaseerApiError(
     : "";
   // Correlation IDs stay in the server audit trail; they are not actionable UI copy.
   return `${message}${retry}`;
+}
+
+/**
+ * Loading copy describes an in-progress request and must never be displayed
+ * after a request has failed. Keep the safe fallback here so every read
+ * surface uses the same wording while preserving a valid server receipt.
+ */
+export function presentBaseerLoadError(
+  error: unknown,
+  language: "ar" | "en",
+  subject: BaseerLocalizedSubject,
+): string {
+  const fallback = language === "ar"
+    ? `تعذر تحميل ${subject.ar}. أعد المحاولة.`
+    : `Could not load ${subject.en}. Try again.`;
+  return presentBaseerApiError(error, language, fallback);
 }

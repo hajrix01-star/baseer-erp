@@ -1,7 +1,9 @@
 import {
   aiCompanyIdentityReceiptSchema,
+  aiProviderConnectionReceiptSchema,
   aiPlatformConfigurationReceiptSchema,
   aiProviderConfigurationReceiptSchema,
+  activateAiProviderConfigurationRequestSchema,
   aiSystemIdentityReceiptSchema,
   companyIdSchema,
   configureAiProviderRequestSchema,
@@ -16,6 +18,7 @@ import {
   Get,
   Headers,
   HttpCode,
+  Param,
   Post,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -54,6 +57,41 @@ export class AiPlatformController {
     );
     return aiProviderConfigurationReceiptSchema.parse(
       await this.platform.configureProvider(context, request.data),
+    );
+  }
+
+  @Post("provider-connection")
+  @HttpCode(200)
+  async checkProviderConnection(
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const scope = this.scope(authorization, companyId);
+    const context = await this.platform.authorizeProviderWrite(
+      scope.accessToken,
+      scope.companyId,
+    );
+    return aiProviderConnectionReceiptSchema.parse(
+      await this.platform.checkProviderConnection(context),
+    );
+  }
+
+  @Post("provider-configurations/:configurationId/activate")
+  @HttpCode(200)
+  async activateProvider(
+    @Param("configurationId") configurationId: string,
+    @Body() body: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const request = activateAiProviderConfigurationRequestSchema.safeParse(body);
+    if (!request.success || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(configurationId)) {
+      throw new BadRequestException("Invalid AI provider activation.");
+    }
+    const scope = this.scope(authorization, companyId);
+    const context = await this.platform.authorizeProviderWrite(scope.accessToken, scope.companyId);
+    return aiProviderConfigurationReceiptSchema.parse(
+      await this.platform.activateProvider(context, configurationId, request.data),
     );
   }
 

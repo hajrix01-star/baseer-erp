@@ -12,6 +12,11 @@ const READ_CAPABILITY = 'finance.purchase_expense.read';
 export class PurchaseExpenseController {
   constructor(private readonly companyContext: CompanyContextService, private readonly tenantAdministration: TenantAdministrationContextService, private readonly documents: PurchaseExpenseService) {}
 
+  @Get('entry-references')
+  async entryReferences(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    return this.documents.entryReferences(await this.authorize(authorization, companyId));
+  }
+
   @Post()
   @HttpCode(201)
   async create(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
@@ -86,7 +91,7 @@ export class PurchaseExpenseController {
   async creditWorkspace(@Query() query: Record<string, unknown>, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsedQuery = financeCreditWorkspaceQuerySchema.safeParse(query);
     if (!parsedQuery.success) throw new BadRequestException('Invalid credit workspace query.');
-    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    const context = await this.authorizeAll(authorization, companyId, [READ_CAPABILITY, 'finance.supplier_dues.read']);
     return financeCreditWorkspaceReceiptSchema.parse(await this.documents.creditWorkspace(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) }));
   }
   @Get()
@@ -109,6 +114,14 @@ export class PurchaseExpenseController {
     const parsedCompanyId = companyIdSchema.safeParse(companyId);
     if (!parsedCompanyId.success) throw new ForbiddenException('Company finance scope is not permitted.');
     const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [capability] });
+    return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
+  }
+  private async authorizeAll(authorization: string | undefined, companyId: string | undefined, capabilities: readonly string[]) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
+    if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
+    const parsedCompanyId = companyIdSchema.safeParse(companyId);
+    if (!parsedCompanyId.success) throw new ForbiddenException('Company finance scope is not permitted.');
+    const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [...capabilities] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
   }
   private async authorizeOwner(authorization: string | undefined, companyId: string | undefined) {

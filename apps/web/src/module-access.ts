@@ -2,7 +2,7 @@
 
 export type ModuleRoute = { moduleId: ModuleId; section: number };
 
-type Rule = readonly string[];
+type Rule = readonly string[] | Readonly<{ allOf: readonly string[] }>;
 let activePermissionCodes = new Set<string>();
 
 export function setActivePermissionCodes(codes: readonly string[]) { activePermissionCodes = new Set(codes); }
@@ -19,7 +19,7 @@ const hrOverviewRule = ["hr.employees.read", "hr.employees.write", "hr.leaves.re
  * a screen that is known to be unavailable to them.
  */
 const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
-  command: { 0: ["finance.daily_sales.read", "finance.purchase_expense.read", "finance.loans.read"] },
+  command: { 0: ["reports.read", "marketing.insights.read"], 1: ["marketing.insights.read"], 2: ["finance.daily_sales.read", "finance.daily_sales.history.read_all"], 3: ["inbound_evidence.owner_access"] },
   decision: {
     0: ["decision.metrics.read", "decision.alerts.read", "decision.context.read"],
     1: ["decision.context.read", "decision.context.company.manage"],
@@ -34,7 +34,15 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     3: ["marketing.insights.read", "marketing.google-business.profile.read"],
     4: ["marketing.insights.read"],
   },
+  // This is intentionally an owner-only hub. The permission merely controls
+  // navigation; the API independently verifies the tenant-owner assignment.
+  "inbound-evidence": {
+    0: ["inbound_evidence.owner_access"],
+    1: ["inbound_evidence.owner_access"],
+    2: ["inbound_evidence.owner_access"],
+  },
   operations: {
+    0: { allOf: ["finance.daily_sales.read", "finance.purchase_expense.read"] },
     1: ["finance.daily_sales.read", "finance.daily_sales.create"],
     2: ["finance.purchase_expense.read", "finance.purchase_expense.create"],
     3: ["finance.purchase_expense.read", "finance.purchase_expense.create", "finance.loans.read", "finance.loans.write"],
@@ -50,14 +58,16 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
   },
   finance: {
     0: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
-    1: ["finance.purchase_expense.read", "finance.purchase_expense.create", "finance.supplier_dues.read"],
+    1: ["finance.purchase_expense.read"],
     2: ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"],
     3: ["finance.configuration.read"],
     4: ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"],
   },
   reports: {
+    0: ["reports.read"],
     1: ["reports.read"],
     2: ["reports.read"],
+    3: ["reports.read"],
     4: ["reports.read"],
   },
   hr: {
@@ -77,6 +87,8 @@ const sectionRules: Partial<Record<ModuleId, Record<number, Rule>>> = {
     1: ["administration.companies.read", "administration.companies.manage"],
     2: ["administration.users.read", "administration.users.manage"],
     3: ["administration.roles.read", "administration.roles.manage"],
+    4: ["platform.ai.configuration.read", "platform.ai.identity.read", "platform.ai.system_identity.read"],
+    5: ["administration.companies.manage"],
   },
 };
 
@@ -84,8 +96,12 @@ function isAllowed(rule: Rule | undefined, permissionCodes: readonly string[] | 
   // Before the authenticated company response arrives we retain the shell to
   // avoid a misleading empty navigation flash. An empty, loaded list denies
   // every protected route.
-  if (permissionCodes === null || !rule) return true;
+  if (permissionCodes === null) return true;
+  // A missing rule must never turn into access. New pages need an explicit
+  // discoverability decision before they can appear in a live company shell.
+  if (!rule) return false;
   const permissions = new Set(permissionCodes);
+  if ("allOf" in rule) return rule.allOf.every((code) => permissions.has(code));
   return rule.some((code) => permissions.has(code));
 }
 

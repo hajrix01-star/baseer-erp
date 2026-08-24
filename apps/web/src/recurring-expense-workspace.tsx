@@ -359,7 +359,7 @@ const newRecurringBatchRow = (businessDate: string): RecurringBatchRow => ({
   vaultId: "",
   isTaxable: true,
   invoiceNumber: "",
-  supplierInvoiceDate: "",
+  supplierInvoiceDate: businessDate,
   missingReason: "",
 });
 const recurringBatchRows = (
@@ -467,7 +467,7 @@ export function RecurringExpensePaymentBatch({
       isTaxable: Boolean(configuration.profile?.vatAccountingEnabled),
       supplierInvoiceNumber: "",
       supplierInvoiceMissingReason: "",
-      supplierInvoiceDate: "",
+      supplierInvoiceDate: businessDate,
       allocations: [
         {
           ...newAllocation(profile.defaultVaultId ?? ""),

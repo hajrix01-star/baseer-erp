@@ -19,8 +19,10 @@ import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
+import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerLoadFailure } from "./baseer-load-failure";
 import { formatMoney } from "./number-format";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import {
   activeSession,
@@ -32,6 +34,7 @@ import { isPositiveMoneyDecimal } from "./decimal-string";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { takeMarketingFinanceHandoff, type MarketingFinanceHandoff } from "./marketing-finance-handoff";
+import { hasActivePermission } from "./module-access";
 import type { PurchaseCreditWorkspace } from "./purchase-expense-credit-panel";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
 
@@ -120,7 +123,11 @@ type BatchRow = {
   notes: string;
 };
 
-const newRow = (): BatchRow => ({
+const systemBusinessDate = () => {
+  const { year, month, day } = riyadhToday();
+  return iso(year, month, day);
+};
+const newRow = (supplierInvoiceDate = systemBusinessDate()): BatchRow => ({
   id: requestId(),
   kind: "",
   settlementKind: "PAID",
@@ -128,14 +135,14 @@ const newRow = (): BatchRow => ({
   supplierId: "",
   invoiceNumber: "",
   missingReason: "",
-  supplierInvoiceDate: "",
+  supplierInvoiceDate,
   grossAmount: "",
   isTaxable: true,
   assetWarrantyFollowUp: false,
   vaultId: "",
   notes: "",
 });
-const initialRows = () => Array.from({ length: 3 }, newRow);
+const initialRows = () => Array.from({ length: 3 }, () => newRow());
 const rowHasValue = (row: BatchRow) =>
   Boolean(
     row.categoryId ||
@@ -163,7 +170,7 @@ const rowForDocument = (document: Document): BatchRow => ({
   notes: document.notes ?? "",
 });
 
-type PurchaseWorkspaceTab = "entry" | "credit";
+type PurchaseWorkspaceTab = "entry" | "history" | "credit";
 
 export function PurchaseExpenseWorkspace({
   language,
@@ -188,6 +195,7 @@ export function PurchaseExpenseWorkspace({
   const [documents, setDocuments] = useState<Document[]>([]);
   const [ownerCanAmend, setOwnerCanAmend] = useState(false);
   const [historySearch, setHistorySearch] = useState("");
+  const [historyPeriod, setHistoryPeriod] = useState<BaseerPeriodRange>(() => defaultBaseerPeriodRange());
   const [historyKind, setHistoryKind] = useState<"ALL" | Document["kind"]>(
     "ALL",
   );
@@ -199,7 +207,15 @@ export function PurchaseExpenseWorkspace({
   >("POSTED");
   const [credit, setCredit] = useState<CreditWorkspace | null>(null);
   const [tab, setTab] = useState<PurchaseWorkspaceTab>(activeTab);
-  const [businessDate, setBusinessDate] = useState("");
+  const canCreate = hasActivePermission("finance.purchase_expense.create");
+  const canReadHistory = hasActivePermission("finance.purchase_expense.read");
+  const canReadCredit = canReadHistory && hasActivePermission("finance.supplier_dues.read");
+  const availableTabs = useMemo(() => [
+    ...(canCreate ? [{ id: "entry" as const, label: text.entry }] : []),
+    ...(canReadHistory ? [{ id: "history" as const, label: text.invoiceHistory }] : []),
+    ...(canReadCredit ? [{ id: "credit" as const, label: text.credit }] : []),
+  ], [canCreate, canReadCredit, canReadHistory, text.credit, text.entry, text.invoiceHistory]);
+  const [businessDate, setBusinessDate] = useState(systemBusinessDate);
   const [lastReceipt, setLastReceipt] = useState<{
     grossAmount: string;
     netAmount: string;
@@ -231,16 +247,16 @@ export function PurchaseExpenseWorkspace({
     setSession(current);
     if (!current) return;
     const [nextConfiguration, nextDocuments] = await Promise.all([
-      api<Configuration>(current, "/finance/configuration"),
-      api<{ documents: Document[]; ownerCanAmend: boolean }>(
+      api<Configuration>(current, canCreate ? "/finance/purchase-expense-documents/entry-references" : "/finance/configuration"),
+      canReadHistory ? api<{ documents: Document[]; ownerCanAmend: boolean }>(
         current,
         "/finance/purchase-expense-documents",
-      ),
+      ) : Promise.resolve({ documents: [], ownerCanAmend: false }),
     ]);
     setConfiguration(nextConfiguration);
     setDocuments(nextDocuments.documents);
     setOwnerCanAmend(nextDocuments.ownerCanAmend);
-  }, []);
+  }, [canCreate, canReadHistory]);
   const loadCredit = useCallback(async (cursor?: string) => {
     const current = activeSession();
     if (!current) return;
@@ -263,14 +279,14 @@ export function PurchaseExpenseWorkspace({
       (currentDate) => currentDate || snapshot.asOfBusinessDate.slice(0, 10),
     );
   }, []);
-  useEffect(() => {
-    void load().catch((error) =>
-      setMessage({
-        kind: "error",
-        text: presentBaseerApiError(error, language, text.loadingPurchaseData),
-      }),
-    );
-  }, [language, load, text.loadingPurchaseData]);
+  const reportLoadFailure = useCallback((error: unknown) => {
+    setMessage({
+      kind: "error",
+      text: presentBaseerLoadError(error, language, { ar: "بيانات المشتريات", en: "purchase data" }),
+    });
+  }, [language]);
+  const retryLoad = useCallback(() => { void load().catch(reportLoadFailure); }, [load, reportLoadFailure]);
+  useEffect(() => { retryLoad(); }, [retryLoad]);
   useEffect(() => {
     const current = activeSession();
     if (!current) return;
@@ -278,7 +294,7 @@ export function PurchaseExpenseWorkspace({
     if (!draft) return;
     const period = draft.startsOn && draft.endsOn ? `${draft.startsOn} — ${draft.endsOn}` : draft.startsOn ?? draft.endsOn ?? "غير محددة";
     const notes = [`حملة تسويقية: ${draft.campaignTitleAr}`, `فترة الحملة: ${period}`, ...(draft.campaignSummary ? [`تفاصيل الحملة: ${draft.campaignSummary}`] : [])].join("\n");
-    const row = newRow();
+    const row = newRow(draft.startsOn ?? systemBusinessDate());
     setBusinessDate(draft.startsOn ?? "");
     setBatchNotes(notes);
     setRows([{ ...row, kind: "EXPENSE", grossAmount: draft.plannedCost ?? "", notes }]);
@@ -286,17 +302,21 @@ export function PurchaseExpenseWorkspace({
     setMessage({ kind: "success", text: language === "ar" ? "تمت تعبئة فاتورة الحملة. أكمل المورد والتصنيف وطريقة السداد ثم احفظ." : "Campaign invoice details were prefilled. Complete supplier, category, and settlement, then save." });
   }, [language, session?.companyId]);
   useEffect(() => {
-    setTab(activeTab);
-  }, [activeTab]);
+    const stage = typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.hash.slice(1)).get("stage");
+    const candidate = stage === "history" ? "history" : activeTab;
+    setTab(availableTabs.some((item) => item.id === candidate) ? candidate : availableTabs[0]?.id ?? "entry");
+  }, [activeTab, availableTabs]);
   useEffect(() => {
-    if (tab === "credit")
+    if (tab === "credit" && canReadCredit)
       void loadCredit().catch((error) =>
         setMessage({
           kind: "error",
           text: presentBaseerApiError(error, language, text.credit),
         }),
       );
-  }, [language, loadCredit, tab, text.credit]);
+  }, [canReadCredit, language, loadCredit, tab, text.credit]);
 
   const categories = useMemo(() => {
     const byId = new Map<string, Configuration["categories"][number]>();
@@ -348,13 +368,17 @@ export function PurchaseExpenseWorkspace({
         .toLocaleLowerCase();
       return (
         (!query || searchable.includes(query)) &&
+        document.businessDate >= historyPeriod.from &&
+        document.businessDate <= historyPeriod.to &&
+        (historyPeriod.preset !== "MONTH" ||
+          historyPeriod.months.includes(document.businessDate.slice(0, 7))) &&
         (historyKind === "ALL" || document.kind === historyKind) &&
         (historySettlement === "ALL" ||
           document.settlementKind === historySettlement) &&
         (historyStatus === "ALL" || document.status === historyStatus)
       );
     });
-  }, [documents, historyKind, historySearch, historySettlement, historyStatus]);
+  }, [documents, historyKind, historyPeriod, historySearch, historySettlement, historyStatus]);
   const historyByDay = useMemo(() => {
     const days = new Map<string, Document[]>();
     for (const document of visibleHistory) {
@@ -372,6 +396,16 @@ export function PurchaseExpenseWorkspace({
             onRemove: () => setHistorySearch(""),
           },
         ]
+      : []),
+    ...((historyPeriod.from !== defaultBaseerPeriodRange().from ||
+      historyPeriod.to !== defaultBaseerPeriodRange().to ||
+      historyPeriod.preset !== defaultBaseerPeriodRange().preset ||
+      historyPeriod.months.join(",") !== defaultBaseerPeriodRange().months.join(","))
+      ? [{
+          id: "period",
+          label: baseerPeriodLabel(historyPeriod, language),
+          onRemove: () => setHistoryPeriod(defaultBaseerPeriodRange()),
+        }]
       : []),
     ...(historyKind !== "ALL"
       ? [
@@ -810,12 +844,12 @@ export function PurchaseExpenseWorkspace({
       className="daily-sales-workspace baseer-batch-workspace purchase-expense-workspace"
       aria-label={text.purchases}
     >
-      {message.kind !== "idle" && (
+      {message.kind !== "idle" && !(message.kind === "error" && !configuration) && (
         <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>
       )}
       {!configuration ? (
         <BaseerCard>
-          <p>{text.loadingCompanySetup}</p>
+          {message.kind === "error" ? <BaseerLoadFailure message={message.text} language={language} onRetry={retryLoad} /> : <p>{text.loadingCompanySetup}</p>}
         </BaseerCard>
       ) : (
         <section style={{ minWidth: 0 }}>
@@ -823,10 +857,7 @@ export function PurchaseExpenseWorkspace({
             ariaLabel={text.batchInvoices}
             idPrefix="purchase-tab"
             activeId={tab}
-            tabs={[
-              { id: "entry", label: text.entry },
-              { id: "credit", label: text.credit },
-            ]}
+            tabs={availableTabs}
             onChange={(id) => {
               const next = id as PurchaseWorkspaceTab;
               setTab(next);
@@ -936,7 +967,7 @@ export function PurchaseExpenseWorkspace({
                       variant="icon"
                       className="baseer-batch-add-row"
                       onClick={() =>
-                        setRows((current) => [...current, newRow()])
+                        setRows((current) => [...current, newRow(businessDate)])
                       }
                     >
                       +
@@ -953,6 +984,8 @@ export function PurchaseExpenseWorkspace({
                   </BaseerBatchFooter>
                 </BaseerValidatedForm>
               </BaseerBatchPanel>
+            </>
+          ) : tab === "history" ? (
               <section className="purchase-invoice-history">
                 <BaseerCard className="purchase-invoice-history__card">
                   <div className="administration-section-heading">
@@ -964,7 +997,7 @@ export function PurchaseExpenseWorkspace({
                     </span>
                   </div>
                   <BaseerFilterBar
-                    controlsPresentation="menu"
+                    controlsPresentation="inline"
                     language={language}
                     search={historySearch}
                     searchLabel={text.invoiceHistory}
@@ -977,12 +1010,18 @@ export function PurchaseExpenseWorkspace({
                     appliedFilters={historyFilters}
                     onClear={() => {
                       setHistorySearch("");
+                      setHistoryPeriod(defaultBaseerPeriodRange());
                       setHistoryKind("ALL");
                       setHistorySettlement("ALL");
                       setHistoryStatus("POSTED");
                     }}
                     controls={
                       <>
+                        <BaseerPeriodFilter
+                          language={language}
+                          value={historyPeriod}
+                          onChange={setHistoryPeriod}
+                        />
                         <BaseerFilterSelect
                           label={text.invoiceType}
                           value={historyKind}
@@ -1094,7 +1133,6 @@ export function PurchaseExpenseWorkspace({
                   )}
                 </BaseerCard>
               </section>
-            </>
           ) : (
             <BaseerBatchPanel
               id="purchase-tab-panel-credit"

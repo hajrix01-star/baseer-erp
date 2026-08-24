@@ -42,6 +42,15 @@ const money = (value: string) => formatNumber(value);
 
 export function HrFinalSettlementWorkspace({ language, employee }: { language: Language; employee?: HrEmployee }) {
   const ar = language === "ar";
+  const canCreate = hasActivePermission("hr.final_settlements.create");
+  const canRead = hasActivePermission("hr.final_settlements.read");
+  const canVerify = hasActivePermission("hr.final_settlements.verify");
+  const canApprove = hasActivePermission("hr.final_settlements.approve");
+  const canPay = hasActivePermission("hr.final_settlements.pay");
+  const canReverse = hasActivePermission("hr.final_settlements.reverse");
+  const canReadAdvances = hasActivePermission("hr.advances.read");
+  const canManageDeductions = hasActivePermission("hr.deductions.manage");
+  const canReadFinanceConfiguration = hasActivePermission("finance.configuration.read");
   const validationCopy = useMemo(() => ar ? {
     date: "اختر تاريخاً صحيحاً.",
     employee: "اختر الموظف.",
@@ -95,6 +104,10 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   const [allocations, setAllocations] = useState<Allocation[]>([]);
   const showError = (value: string) => { if (!reportTopmostDialogError(value)) setMessage(value); };
   const loadRequestRef = useRef(0);
+  const availableTabs = useMemo(() => [
+    ...(canCreate ? [{ id: "calculator" as const, label: ar ? "مكافأة نهاية الخدمة" : "End-of-service award" }] : []),
+    ...(canRead ? [{ id: "register" as const, label: ar ? "سجل المخالصات" : "Settlement register" }] : []),
+  ], [ar, canCreate, canRead]);
   useEffect(() => { const timeout = window.setTimeout(() => setServerSearch(search.trim()), 250); return () => window.clearTimeout(timeout); }, [search]);
 
   const labelEmployee = useCallback((employee: HrEmployee) => `${employee.employeeNumber} · ${ar ? employee.nameAr : employee.nameEn ?? employee.nameAr}`, [ar]);
@@ -159,7 +172,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   const load = useCallback(async (cursor?: string, append = false) => {
     const current = activeSession();
     setSession(current);
-    if (!current) { setLoading(false); return; }
+    if (!current || !canRead) { setSettlements([]); setNextCursor(null); setLoading(false); return; }
     const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
@@ -170,7 +183,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     } catch (error) {
       showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل سجل المخالصات." : "Final-settlement register could not be loaded."));
     } finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
-  }, [ar, employeeFilter, language, serverSearch, statusFilter]);
+  }, [ar, canRead, employeeFilter, language, serverSearch, statusFilter]);
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
@@ -181,16 +194,16 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   }, [employee]);
   useEffect(() => {
     const current = activeSession();
-    if (!current || !draft.employeeId) { setAdvances([]); setDeductions([]); setRecoveries({}); return; }
+    if (!current || !draft.employeeId || !canCreate) { setAdvances([]); setDeductions([]); setRecoveries({}); return; }
     void Promise.all([
-      listHrAdvances(current, { employeeId: draft.employeeId, pageSize: 100 }),
-      listHrAdministrativeDeductions(current, { employeeId: draft.employeeId, pageSize: 100 }),
+      canReadAdvances ? listHrAdvances(current, { employeeId: draft.employeeId, pageSize: 100 }) : Promise.resolve({ advances: [] as HrAdvance[] }),
+      canManageDeductions ? listHrAdministrativeDeductions(current, { employeeId: draft.employeeId, pageSize: 100 }) : Promise.resolve({ deductions: [] as HrAdministrativeDeduction[] }),
     ]).then(([advanceReceipt, deductionReceipt]) => {
       setAdvances(advanceReceipt.advances);
       setDeductions(deductionReceipt.deductions);
       setRecoveries({});
     }).catch((error) => showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل الأرصدة القابلة للاسترداد." : "Recoverable balances could not be loaded.")));
-  }, [ar, draft.employeeId, language]);
+  }, [ar, canCreate, canManageDeductions, canReadAdvances, draft.employeeId, language]);
 
   const searchEmployees = useCallback(async (query: string, signal: AbortSignal) => {
     const current = activeSession();
@@ -220,7 +233,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
   };
   const loadVaults = async () => {
     const current = activeSession();
-    if (!current || !selected) return;
+    if (!current || !selected || !canReadFinanceConfiguration) return;
     const configuration = await api<{ vaults: Vault[] }>(current, "/finance/configuration");
     setVaults(configuration.vaults);
     const first = configuration.vaults.find((item) => item.status === "ACTIVE" && item.isPaymentDestination);
@@ -279,13 +292,19 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     finally { setBusy(false); }
   };
 
+  useEffect(() => {
+    if (!availableTabs.some((item) => item.id === tab)) setTab(availableTabs[0]?.id ?? "calculator");
+  }, [availableTabs, tab]);
+
   const rows = settlements;
   const canOutput = selected?.status === "APPROVED" || selected?.status === "PARTIALLY_PAID" || selected?.status === "PAID";
   const reasonRequiresVerification = selected?.terminationReason === "ARTICLE_80" || selected?.terminationReason === "ARTICLE_81" || selected?.terminationReason === "FORCE_MAJEURE" || selected?.terminationReason === "MATERNITY" || selected?.terminationReason === "OTHER_LEGAL_REVIEW";
   const paymentColumns = [{ id: "number", header: ar ? "رقم الدفعة" : "Payment no.", cell: (payment: HrPayment) => payment.paymentNumber }, { id: "date", header: ar ? "التاريخ" : "Date", cell: (payment: HrPayment) => payment.businessDate }, { id: "amount", header: ar ? "المبلغ" : "Amount", cell: (payment: HrPayment) => money(payment.amount) }, { id: "status", header: ar ? "الحالة" : "Status", cell: (payment: HrPayment) => payment.status === "POSTED" ? (ar ? "مثبت" : "Posted") : (ar ? "ملغاة" : "Cancelled") }, { id: "action", header: ar ? "الإجراء" : "Action", cell: (payment: HrPayment) => hasActivePermission("hr.final_settlements.reverse") && payment.status === "POSTED" ? <BaseerButton type="button" variant="danger" onClick={() => { setBusinessDate(today()); setReverseReason(""); setPaymentToReverse(payment); }}>{ar ? "إلغاء الدفعة" : "Cancel payment"}</BaseerButton> : "—" }];
 
+  if (!availableTabs.length) return <BaseerCard>{ar ? "لا تملك صلاحية عرض أو إعداد تسويات نهاية الخدمة." : "You do not have permission to view or prepare final settlements."}</BaseerCard>;
+
   return <section className="administration-workspace">
-    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات مكافأة نهاية الخدمة" : "End-of-service award tabs"} idPrefix="hr-final-settlement" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={[{ id: "calculator", label: ar ? "مكافأة نهاية الخدمة" : "End-of-service award" }, { id: "register", label: ar ? "سجل المخالصات" : "Settlement register" }]} />
+    <BaseerWorkspaceTabs ariaLabel={ar ? "تبويبات مكافأة نهاية الخدمة" : "End-of-service award tabs"} idPrefix="hr-final-settlement" activeId={tab} onChange={(value) => setTab(value as Tab)} tabs={availableTabs} />
     <BaseerBatchPanel id={`hr-final-settlement-panel-${tab}`} labelledBy={`hr-final-settlement-${tab}`}>
       {message ? <BaseerCard>{message}</BaseerCard> : null}
       {tab === "calculator" ? <>
@@ -330,11 +349,11 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
     </BaseerBatchPanel>
 
     <BaseerDialog open={Boolean(selected)} title={selected?.settlementNumber ?? ""} language={language} busy={busy} onClose={() => setSelected(null)} footer={selected ? <>
-      {session && canOutput ? <BaseerOutputActions session={session} reportCode={selected.outputReportCode} language={language} filters={{ settlementId: selected.id }} printLabel={ar ? "معاينة وطباعة A4" : "Preview & print A4"} allowExport={false} /> : null}
-      {selected.status === "DRAFT" && reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => { setVerificationNote(""); setVerifyOpen(true); }}>{ar ? "تحقق من السبب" : "Verify reason"}</BaseerButton> : null}
-      {selected.status === "DRAFT" ? <BaseerButton type="button" disabled={busy || Boolean(reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED")} onClick={() => { setBusinessDate(today()); setApproveOpen(true); }}>{ar ? "اعتماد" : "Approve"}</BaseerButton> : null}
-      {selected.status === "APPROVED" || selected.status === "PARTIALLY_PAID" ? <BaseerButton type="button" disabled={busy} onClick={() => void openPayDialog()}>{ar ? "صرف" : "Pay"}</BaseerButton> : null}
-      {selected.status !== "DRAFT" && selected.status !== "REVERSED" && selected.status !== "CANCELLED" ? <BaseerButton type="button" variant="danger" disabled={busy} onClick={() => { setBusinessDate(today()); setReverseReason(""); setReverseOpen(true); }}>{ar ? "إلغاء" : "Cancel"}</BaseerButton> : null}
+      {session && canOutput && canRead ? <BaseerOutputActions session={session} reportCode={selected.outputReportCode} language={language} filters={{ settlementId: selected.id }} printLabel={ar ? "معاينة وطباعة A4" : "Preview & print A4"} allowExport={false} /> : null}
+      {canVerify && selected.status === "DRAFT" && reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => { setVerificationNote(""); setVerifyOpen(true); }}>{ar ? "تحقق من السبب" : "Verify reason"}</BaseerButton> : null}
+      {canApprove && selected.status === "DRAFT" ? <BaseerButton type="button" disabled={busy || Boolean(reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED")} onClick={() => { setBusinessDate(today()); setApproveOpen(true); }}>{ar ? "اعتماد" : "Approve"}</BaseerButton> : null}
+      {canPay && canReadFinanceConfiguration && (selected.status === "APPROVED" || selected.status === "PARTIALLY_PAID") ? <BaseerButton type="button" disabled={busy} onClick={() => void openPayDialog()}>{ar ? "صرف" : "Pay"}</BaseerButton> : null}
+      {canReverse && selected.status !== "DRAFT" && selected.status !== "REVERSED" && selected.status !== "CANCELLED" ? <BaseerButton type="button" variant="danger" disabled={busy} onClick={() => { setBusinessDate(today()); setReverseReason(""); setReverseOpen(true); }}>{ar ? "إلغاء" : "Cancel"}</BaseerButton> : null}
     </> : undefined}>{selected ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص المخالصة" : "Settlement summary"}><BaseerSummaryMetric label={ar ? "مكافأة نهاية الخدمة" : "EOS"} value={money(selected.eosAmount)} /><BaseerSummaryMetric label={ar ? "الاستردادات" : "Recoveries"} value={money(selected.recoveryAmount)} /><BaseerSummaryMetric label={ar ? "الصافي" : "Net"} value={money(selected.netPayableAmount)} /><BaseerSummaryMetric label={ar ? "المدفوع" : "Paid"} value={money(selected.paidAmount)} /></BaseerSummaryMetricGrid>{reasonRequiresVerification && selected.reasonVerificationStatus !== "VERIFIED" ? <BaseerCard>{ar ? "يتطلب هذا السبب تحققاً موثقاً قبل الاعتماد." : "This reason requires documented verification before approval."}</BaseerCard> : null}<dl className="administration-details"><div><dt>{ar ? "السبب" : "Reason"}</dt><dd>{labelReason(selected.terminationReason)}</dd></div><div><dt>{ar ? "مرجع الدليل" : "Evidence reference"}</dt><dd>{selected.reasonEvidenceReference}</dd></div><div><dt>{ar ? "تحقق السبب" : "Reason verification"}</dt><dd>{labelVerification(selected.reasonVerificationStatus)}</dd></div><div><dt>{ar ? "تاريخ الإنهاء" : "Termination date"}</dt><dd>{selected.terminationDate}</dd></div><div><dt>{ar ? "الحالة" : "Status"}</dt><dd>{labelStatus(selected.status)}</dd></div><div><dt>{ar ? "سياسة الحساب" : "Calculation policy"}</dt><dd>{selected.calculationPolicyVersion}</dd></div></dl>{payments.length ? <BaseerDataGrid ariaLabel={ar ? "دفعات المخالصة" : "Final-settlement payments"} caption={ar ? "دفعات المخالصة" : "Final-settlement payments"} rows={payments} rowKey={(payment) => payment.id} columns={paymentColumns} /> : null}{nextPaymentCursor ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void loadMorePayments()}>{ar ? "تحميل دفعات إضافية" : "Load more payments"}</BaseerButton> : null}</> : null}</BaseerDialog>
 
     <BaseerFormDialog open={approveOpen} title={ar ? "اعتماد المخالصة" : "Approve final settlement"} language={language} busy={busy} size="compact" formId="hr-settlement-approve" submitLabel={ar ? "اعتماد" : "Approve"} onClose={() => setApproveOpen(false)}>

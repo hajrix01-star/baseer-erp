@@ -20,7 +20,7 @@ import {
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
 import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { BaseerStepper } from "./baseer-stepper";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import {
   activeSession,
@@ -268,7 +268,7 @@ export function FinanceSetupWorkspace({
     void load().catch((error) =>
       setMessage({
         kind: "error",
-        text: presentBaseerApiError(error, language, text.loadingFinanceSetup),
+        text: presentBaseerLoadError(error, language, { ar: "إعدادات المالية", en: "finance settings" }),
       }),
     );
   }, [language, load]);
@@ -598,11 +598,7 @@ export function FinanceSetupWorkspace({
                   void load().catch((error) =>
                     setMessage({
                       kind: "error",
-                      text: presentBaseerApiError(
-                        error,
-                        language,
-                        text.loadingFinanceSetup,
-                      ),
+                      text: presentBaseerLoadError(error, language, { ar: "إعدادات المالية", en: "finance settings" }),
                     }),
                   )
                 }

@@ -6,6 +6,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import type {
+  AiProviderConnectionReceipt,
+  ActivateAiProviderConfigurationRequest,
   ConfigureAiProviderRequest,
   CreateAiIdentityRequest,
   CreateAiSystemIdentityRequest,
@@ -24,6 +26,7 @@ import {
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 import { AiCredentialVault } from "./ai-credential-vault.js";
+import { AiProviderAdapterRegistry } from "./ai-provider-adapter-registry.js";
 
 const PROVIDER_READ = "platform.ai.configuration.read";
 const IDENTITY_READ = "platform.ai.identity.read";
@@ -32,6 +35,7 @@ const PROVIDER_WRITE = "platform.ai.configuration.write";
 const IDENTITY_WRITE = "platform.ai.identity.write";
 const SYSTEM_IDENTITY_WRITE = "platform.ai.system_identity.write";
 const PROVIDER_OPERATION = "platform.ai.provider.configure";
+const PROVIDER_ACTIVATE_OPERATION = "platform.ai.provider.activate";
 const IDENTITY_OPERATION = "platform.ai.identity.create_version";
 const SYSTEM_IDENTITY_OPERATION = "platform.ai.system_identity.create_version";
 
@@ -43,6 +47,7 @@ export class AiPlatformService {
     private readonly idempotency: IdempotencyService,
     private readonly vault: AiCredentialVault,
     private readonly tenantAdministration: TenantAdministrationContextService,
+    private readonly adapters: AiProviderAdapterRegistry,
   ) {}
 
   async read(input: { accessToken: string; companyId: string }) {
@@ -135,6 +140,126 @@ export class AiPlatformService {
       },
     );
     return this.requireProviderConfiguration(context, configurationId);
+  }
+
+  /**
+   * Changes the single active AI profile for a tenant. Credentials never leave
+   * the server; only profiles backed by an implemented adapter are selectable.
+   */
+  async activateProvider(
+    context: TrustedCompanyActorContext,
+    configurationId: string,
+    input: ActivateAiProviderConfigurationRequest,
+  ) {
+    const activatedId = await this.database.inTenantTransaction(
+      context.tenantId,
+      async (transaction) => {
+        await this.lockTenantProviderConfiguration(transaction, context);
+        const configuration = await transaction.aiProviderConfiguration.findFirst({
+          where: { id: configurationId, tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE },
+          select: { id: true, provider: true, model: true },
+        });
+        if (!configuration) throw new NotFoundException("The AI provider configuration was not found.");
+        if (configuration.provider !== "OPENAI_COMPATIBLE") {
+          throw new ConflictException("This AI provider is not implemented yet and cannot be activated.");
+        }
+        const begun = await this.idempotency.beginInTransaction(transaction, context, {
+          operation: PROVIDER_ACTIVATE_OPERATION,
+          key: input.idempotencyKey,
+          request: { providerConfigurationId: configuration.id },
+          expiresAt: new Date(Date.now() + 86_400_000),
+        });
+        if (begun.kind === "replay") return (begun.response.body as { providerConfigurationId: string }).providerConfigurationId;
+        if (begun.kind === "in-progress") throw new ConflictException("The AI provider activation is still in progress.");
+
+        await transaction.aiProviderConfiguration.updateMany({
+          where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE, isDefault: true },
+          data: { isDefault: false },
+        });
+        await transaction.aiProviderConfiguration.update({ where: { id: configuration.id }, data: { isDefault: true } });
+        await this.audit(transaction, context, "platform.ai.provider_activated", configuration.id, {
+          provider: configuration.provider,
+          model: configuration.model,
+        });
+        await this.idempotency.completeInTransaction(transaction, context, {
+          receiptId: begun.receiptId,
+          response: { status: 200, headers: null, body: { providerConfigurationId: configuration.id } },
+        });
+        return configuration.id;
+      },
+    );
+    return this.requireProviderConfiguration(context, activatedId);
+  }
+
+  /**
+   * A genuine provider probe for the owner-only configuration screen. It does
+   * not send a prompt or any Baseer data; it only verifies the configured key
+   * can reach and retrieve the selected model now.
+   */
+  async checkProviderConnection(
+    context: TrustedCompanyActorContext,
+  ): Promise<AiProviderConnectionReceipt> {
+    const checkedAt = new Date();
+    const provider = await this.database.inTenantTransaction(
+      context.tenantId,
+      (transaction) =>
+        transaction.aiProviderConfiguration.findFirst({
+          where: {
+            tenantId: context.tenantId,
+            status: AiProviderConfigurationStatus.ACTIVE,
+            isDefault: true,
+          },
+          orderBy: { createdAt: "desc" },
+          select: {
+            provider: true,
+            model: true,
+            encryptedCredential: true,
+            credentialIv: true,
+            credentialTag: true,
+            credentialKeyVersion: true,
+          },
+        }),
+    );
+    if (!provider || provider.provider !== "OPENAI_COMPATIBLE") {
+      return {
+        state: "UNCONFIGURED",
+        reason: "PROVIDER_NOT_CONFIGURED",
+        provider: null,
+        model: null,
+        checkedAt,
+      };
+    }
+
+    let apiKey: string;
+    try {
+      apiKey = this.vault.decryptApiKey(provider);
+    } catch {
+      return {
+        state: "ERROR",
+        reason: "CREDENTIAL_DECRYPTION_FAILED",
+        provider: provider.provider,
+        model: provider.model,
+        checkedAt,
+      };
+    }
+    try {
+      await this.adapters.probeOpenAiProvider({ apiKey, model: provider.model });
+      return {
+        state: "READY",
+        reason: null,
+        provider: provider.provider,
+        model: provider.model,
+        checkedAt,
+      };
+    } catch (error) {
+      return {
+        state: "ERROR",
+        reason: providerProbeFailureReason(error),
+        provider: provider.provider,
+        model: provider.model,
+        checkedAt,
+      };
+    }
   }
 
   async createSystemIdentity(
@@ -335,7 +460,7 @@ export class AiPlatformService {
 
   private async readForContext(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
-      const [activeProvider, activeSystemIdentity, activeIdentity] = await Promise.all([
+      const [activeProvider, providerConfigurations, activeSystemIdentity, activeIdentity] = await Promise.all([
         transaction.aiProviderConfiguration.findFirst({
           where: {
             tenantId: context.tenantId,
@@ -343,6 +468,11 @@ export class AiPlatformService {
             isDefault: true,
           },
           orderBy: { createdAt: "desc" },
+          select: this.providerSelect(),
+        }),
+        transaction.aiProviderConfiguration.findMany({
+          where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE },
+          orderBy: [{ isDefault: "desc" }, { updatedAt: "desc" }],
           select: this.providerSelect(),
         }),
         transaction.aiSystemIdentity.findFirst({
@@ -366,6 +496,7 @@ export class AiPlatformService {
       return {
         companyId: context.companyId,
         activeProvider: activeProvider ? this.providerReceipt(activeProvider) : null,
+        providerConfigurations: providerConfigurations.map((provider) => this.providerReceipt(provider)),
         activeSystemIdentity,
         activeIdentity,
       };
@@ -422,6 +553,7 @@ export class AiPlatformService {
     provider: string;
     model: string;
     status: string;
+    isDefault: boolean;
     dailyRequestLimit: number;
     dailyCostLimit: { toString(): string } | null;
     configurationVersion: number;
@@ -440,6 +572,7 @@ export class AiPlatformService {
       provider: true,
       model: true,
       status: true,
+      isDefault: true,
       dailyRequestLimit: true,
       dailyCostLimit: true,
       configurationVersion: true,
@@ -521,4 +654,15 @@ export class AiPlatformService {
       },
     });
   }
+}
+
+function providerProbeFailureReason(error: unknown): AiProviderConnectionReceipt["reason"] {
+  const value = error as { status?: unknown; name?: unknown };
+  if (value?.status === 401) return "CREDENTIAL_REJECTED";
+  if (value?.status === 404) return "MODEL_UNAVAILABLE";
+  if (value?.status === 429) return "PROVIDER_RATE_LIMITED";
+  if (value?.name === "APIConnectionError" || value?.name === "APIConnectionTimeoutError") {
+    return "PROVIDER_UNREACHABLE";
+  }
+  return "PROVIDER_UNAVAILABLE";
 }

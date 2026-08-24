@@ -50,7 +50,7 @@ export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, classNa
         const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' ');
         return <th key={header.id} scope="col" aria-sort={header.id === serverSortColumnId ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={className}>{header.isPlaceholder ? null : sortable ? <button className="baseer-sort" type="button" onClick={onSortDirectionChange}><table.FlexRender header={header} /><span aria-hidden="true">{sortDirection === 'asc' ? '▲' : '▼'}</span></button> : <table.FlexRender header={header} />}</th>;
       })}</tr>)}</thead>
-      <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => { const column = columns.find((entry) => entry.id === cell.column.id); const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' '); return <td key={cell.id} className={className}>{<table.FlexRender cell={cell} />}</td>; })}</tr>)}</tbody>
+      <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => { const column = columns.find((entry) => entry.id === cell.column.id); const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' '); return <td key={cell.id} className={className}>{column?.cell(row.original)}</td>; })}</tr>)}</tbody>
     </table>
   </div>;
 }

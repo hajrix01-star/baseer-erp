@@ -35,7 +35,7 @@
 | Assets & Warranty | **Closed locally inside Operations Core — Gate A** | Operations section: Purchase & Expense follow-up marker, company-scoped queue and operational asset/warranty register; archive, permissions, audit, idempotency and no-finance-posting behavior are verified. | Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes rather than unfinished Gate A work. |
 | Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
 | Marketing & Reputation | **Active — A1 + P2 + P3a control centre** | سجل الحملات وسياسة ردود السمعة، وروابط مرجعية مدققة للمستند المالي القائم والسياق المنشور، وقراءات الحملة/التقويم الخادمية، وحالة/طلب تهيئة Google معزول. لا provider facts ولا أسرار أو اتصال خارجي. | اختبار/قبول القسم الداخلي وP3a أولاً. الموصلات الحية هي آخر بناء النطاق: PDR منفصل ثم تفعيل ذاتي من الواجهة لكل شركة لـAds (read-only) وGoogle Business (read ثم ردود حية محكومة). |
-| Inbound, AI provider, remaining modules | Not started or deferred | AI platform guardrails only; no provider execution. | Separate authorized scopes after their gates. |
+| Inbound, AI provider, remaining modules | **Basira pilot active; other work deferred** | One local/personal OpenAI explanation-only path for checksum-valid Decision alerts, behind `platform.ai.use`, server-only frozen brief, encrypted credential and explicit server enablement. | Provider configuration, manual quality review and pilot evidence are required before any outbound request. Generic chat, actions/tools, other modules/providers and production remain deferred. |
 
 ## Financial read-scale baseline
 

@@ -408,6 +408,7 @@ export const ModelName = {
   AppSession: 'AppSession',
   AuditEvent: 'AuditEvent',
   IdempotencyReceipt: 'IdempotencyReceipt',
+  OwnerDailyBriefSnapshot: 'OwnerDailyBriefSnapshot',
   DocumentSerialCounter: 'DocumentSerialCounter',
   FileMetadata: 'FileMetadata',
   CompanyFinanceProfile: 'CompanyFinanceProfile',
@@ -433,10 +434,22 @@ export const ModelName = {
   DecisionAlert: 'DecisionAlert',
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
+  InboundEvidenceLabel: 'InboundEvidenceLabel',
+  InboundEvidenceRule: 'InboundEvidenceRule',
+  InboundEvidenceCommandReceipt: 'InboundEvidenceCommandReceipt',
+  InboundEvidenceGmailConnection: 'InboundEvidenceGmailConnection',
+  InboundEvidenceGmailOAuthState: 'InboundEvidenceGmailOAuthState',
+  InboundEvidenceMessage: 'InboundEvidenceMessage',
+  InboundEvidenceAttachment: 'InboundEvidenceAttachment',
+  InboundEvidenceDocumentAnalysis: 'InboundEvidenceDocumentAnalysis',
+  InboundEvidenceMessageLabel: 'InboundEvidenceMessageLabel',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingCampaignAnalysisFeedback: 'MarketingCampaignAnalysisFeedback',
   MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
   MarketingCampaignContextLink: 'MarketingCampaignContextLink',
+  MarketingSalesTarget: 'MarketingSalesTarget',
   MarketingProviderConnection: 'MarketingProviderConnection',
+  MarketingProviderOAuthState: 'MarketingProviderOAuthState',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -537,7 +550,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "marketingCampaign" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingProviderConnection" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1352,6 +1365,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.IdempotencyReceiptCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.IdempotencyReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
+    OwnerDailyBriefSnapshot: {
+      payload: Prisma.$OwnerDailyBriefSnapshotPayload<ExtArgs>
+      fields: Prisma.OwnerDailyBriefSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OwnerDailyBriefSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OwnerDailyBriefSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.OwnerDailyBriefSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OwnerDailyBriefSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.OwnerDailyBriefSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.OwnerDailyBriefSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.OwnerDailyBriefSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OwnerDailyBriefSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.OwnerDailyBriefSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        update: {
+          args: Prisma.OwnerDailyBriefSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.OwnerDailyBriefSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OwnerDailyBriefSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OwnerDailyBriefSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.OwnerDailyBriefSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerDailyBriefSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.OwnerDailyBriefSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOwnerDailyBriefSnapshot>
+        }
+        groupBy: {
+          args: Prisma.OwnerDailyBriefSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OwnerDailyBriefSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OwnerDailyBriefSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OwnerDailyBriefSnapshotCountAggregateOutputType> | number
         }
       }
     }
@@ -3205,6 +3292,672 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InboundEvidenceLabel: {
+      payload: Prisma.$InboundEvidenceLabelPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceLabelFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceLabelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceLabelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceLabelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceLabelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceLabelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceLabelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceLabelCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceLabelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceLabelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceLabelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceLabelDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceLabelUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceLabelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceLabelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceLabelPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceLabelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceLabel>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceLabelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceLabelGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceLabelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceLabelCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceRule: {
+      payload: Prisma.$InboundEvidenceRulePayload<ExtArgs>
+      fields: Prisma.InboundEvidenceRuleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceRuleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceRuleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceRuleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceRuleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceRuleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceRuleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceRuleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceRuleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceRuleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceRuleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceRuleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceRuleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceRuleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceRuleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceRulePayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceRuleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceRule>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceRuleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceRuleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceRuleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceRuleCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceCommandReceipt: {
+      payload: Prisma.$InboundEvidenceCommandReceiptPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceCommandReceiptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceCommandReceiptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceCommandReceiptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceCommandReceiptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceCommandReceiptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceCommandReceiptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceCommandReceiptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceCommandReceiptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceCommandReceiptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceCommandReceiptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceCommandReceiptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceCommandReceiptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceCommandReceiptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceCommandReceiptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceCommandReceiptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceCommandReceiptPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceCommandReceiptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceCommandReceipt>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceCommandReceiptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceCommandReceiptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceCommandReceiptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceCommandReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceGmailConnection: {
+      payload: Prisma.$InboundEvidenceGmailConnectionPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceGmailConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceGmailConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceGmailConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceGmailConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceGmailConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceGmailConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceGmailConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceGmailConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceGmailConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceGmailConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceGmailConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceGmailConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceGmailConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceGmailConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceGmailConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceGmailConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceGmailConnection>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceGmailConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceGmailConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceGmailConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceGmailConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceGmailOAuthState: {
+      payload: Prisma.$InboundEvidenceGmailOAuthStatePayload<ExtArgs>
+      fields: Prisma.InboundEvidenceGmailOAuthStateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceGmailOAuthStateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceGmailOAuthStateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceGmailOAuthStateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceGmailOAuthStateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceGmailOAuthStateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceGmailOAuthStateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceGmailOAuthStateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceGmailOAuthStateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceGmailOAuthStateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceGmailOAuthStateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceGmailOAuthStateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceGmailOAuthStateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceGmailOAuthStateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceGmailOAuthStateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceGmailOAuthStatePayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceGmailOAuthStateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceGmailOAuthState>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceGmailOAuthStateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceGmailOAuthStateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceGmailOAuthStateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceGmailOAuthStateCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceMessage: {
+      payload: Prisma.$InboundEvidenceMessagePayload<ExtArgs>
+      fields: Prisma.InboundEvidenceMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceMessage>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceAttachment: {
+      payload: Prisma.$InboundEvidenceAttachmentPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceAttachmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceAttachmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceAttachmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceAttachmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceAttachmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceAttachmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceAttachmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceAttachmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceAttachmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceAttachmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceAttachmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceAttachmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceAttachmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceAttachmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceAttachmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceAttachmentPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceAttachmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceAttachment>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceAttachmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceAttachmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceAttachmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceAttachmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceDocumentAnalysis: {
+      payload: Prisma.$InboundEvidenceDocumentAnalysisPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceDocumentAnalysisFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceDocumentAnalysisFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceDocumentAnalysisFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceDocumentAnalysisFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceDocumentAnalysisFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceDocumentAnalysisFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceDocumentAnalysisCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceDocumentAnalysisCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceDocumentAnalysisCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceDocumentAnalysisDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceDocumentAnalysisUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceDocumentAnalysisDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceDocumentAnalysisUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceDocumentAnalysisUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceDocumentAnalysisUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceDocumentAnalysisPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceDocumentAnalysisAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceDocumentAnalysis>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceDocumentAnalysisGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceDocumentAnalysisGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceDocumentAnalysisCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceDocumentAnalysisCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboundEvidenceMessageLabel: {
+      payload: Prisma.$InboundEvidenceMessageLabelPayload<ExtArgs>
+      fields: Prisma.InboundEvidenceMessageLabelFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboundEvidenceMessageLabelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboundEvidenceMessageLabelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        findFirst: {
+          args: Prisma.InboundEvidenceMessageLabelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboundEvidenceMessageLabelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        findMany: {
+          args: Prisma.InboundEvidenceMessageLabelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>[]
+        }
+        create: {
+          args: Prisma.InboundEvidenceMessageLabelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        createMany: {
+          args: Prisma.InboundEvidenceMessageLabelCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboundEvidenceMessageLabelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>[]
+        }
+        delete: {
+          args: Prisma.InboundEvidenceMessageLabelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        update: {
+          args: Prisma.InboundEvidenceMessageLabelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboundEvidenceMessageLabelDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboundEvidenceMessageLabelUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboundEvidenceMessageLabelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboundEvidenceMessageLabelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboundEvidenceMessageLabelPayload>
+        }
+        aggregate: {
+          args: Prisma.InboundEvidenceMessageLabelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboundEvidenceMessageLabel>
+        }
+        groupBy: {
+          args: Prisma.InboundEvidenceMessageLabelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceMessageLabelGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboundEvidenceMessageLabelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceMessageLabelCountAggregateOutputType> | number
+        }
+      }
+    }
     MarketingCampaign: {
       payload: Prisma.$MarketingCampaignPayload<ExtArgs>
       fields: Prisma.MarketingCampaignFieldRefs
@@ -3276,6 +4029,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MarketingCampaignCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingCampaignAnalysisFeedback: {
+      payload: Prisma.$MarketingCampaignAnalysisFeedbackPayload<ExtArgs>
+      fields: Prisma.MarketingCampaignAnalysisFeedbackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        update: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingCampaignAnalysisFeedbackPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingCampaignAnalysisFeedback>
+        }
+        groupBy: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignAnalysisFeedbackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingCampaignAnalysisFeedbackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingCampaignAnalysisFeedbackCountAggregateOutputType> | number
         }
       }
     }
@@ -3427,6 +4254,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MarketingSalesTarget: {
+      payload: Prisma.$MarketingSalesTargetPayload<ExtArgs>
+      fields: Prisma.MarketingSalesTargetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingSalesTargetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingSalesTargetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingSalesTargetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingSalesTargetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingSalesTargetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingSalesTargetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingSalesTargetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingSalesTargetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingSalesTargetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        update: {
+          args: Prisma.MarketingSalesTargetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingSalesTargetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingSalesTargetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingSalesTargetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingSalesTargetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingSalesTargetPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingSalesTargetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingSalesTarget>
+        }
+        groupBy: {
+          args: Prisma.MarketingSalesTargetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingSalesTargetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingSalesTargetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingSalesTargetCountAggregateOutputType> | number
+        }
+      }
+    }
     MarketingProviderConnection: {
       payload: Prisma.$MarketingProviderConnectionPayload<ExtArgs>
       fields: Prisma.MarketingProviderConnectionFieldRefs
@@ -3498,6 +4399,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MarketingProviderConnectionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MarketingProviderConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingProviderOAuthState: {
+      payload: Prisma.$MarketingProviderOAuthStatePayload<ExtArgs>
+      fields: Prisma.MarketingProviderOAuthStateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingProviderOAuthStateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingProviderOAuthStateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingProviderOAuthStateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingProviderOAuthStateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        findMany: {
+          args: Prisma.MarketingProviderOAuthStateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>[]
+        }
+        create: {
+          args: Prisma.MarketingProviderOAuthStateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        createMany: {
+          args: Prisma.MarketingProviderOAuthStateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingProviderOAuthStateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingProviderOAuthStateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        update: {
+          args: Prisma.MarketingProviderOAuthStateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingProviderOAuthStateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingProviderOAuthStateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingProviderOAuthStateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingProviderOAuthStateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingProviderOAuthStatePayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingProviderOAuthStateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingProviderOAuthState>
+        }
+        groupBy: {
+          args: Prisma.MarketingProviderOAuthStateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingProviderOAuthStateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingProviderOAuthStateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingProviderOAuthStateCountAggregateOutputType> | number
         }
       }
     }
@@ -9988,6 +10963,18 @@ export const IdempotencyReceiptScalarFieldEnum = {
 export type IdempotencyReceiptScalarFieldEnum = (typeof IdempotencyReceiptScalarFieldEnum)[keyof typeof IdempotencyReceiptScalarFieldEnum]
 
 
+export const OwnerDailyBriefSnapshotScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reportDate: 'reportDate',
+  receiptJson: 'receiptJson',
+  receiptSha256: 'receiptSha256',
+  createdAt: 'createdAt'
+} as const
+
+export type OwnerDailyBriefSnapshotScalarFieldEnum = (typeof OwnerDailyBriefSnapshotScalarFieldEnum)[keyof typeof OwnerDailyBriefSnapshotScalarFieldEnum]
+
+
 export const DocumentSerialCounterScalarFieldEnum = {
   tenantId: 'tenantId',
   companyId: 'companyId',
@@ -10427,6 +11414,174 @@ export const DecisionFeedbackScalarFieldEnum = {
 export type DecisionFeedbackScalarFieldEnum = (typeof DecisionFeedbackScalarFieldEnum)[keyof typeof DecisionFeedbackScalarFieldEnum]
 
 
+export const InboundEvidenceLabelScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  nameKey: 'nameKey',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  systemKey: 'systemKey',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceLabelScalarFieldEnum = (typeof InboundEvidenceLabelScalarFieldEnum)[keyof typeof InboundEvidenceLabelScalarFieldEnum]
+
+
+export const InboundEvidenceRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  labelId: 'labelId',
+  name: 'name',
+  enabled: 'enabled',
+  priority: 'priority',
+  senderContains: 'senderContains',
+  subjectContains: 'subjectContains',
+  attachmentCondition: 'attachmentCondition',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceRuleScalarFieldEnum = (typeof InboundEvidenceRuleScalarFieldEnum)[keyof typeof InboundEvidenceRuleScalarFieldEnum]
+
+
+export const InboundEvidenceCommandReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  actorUserId: 'actorUserId',
+  operation: 'operation',
+  idempotencyKey: 'idempotencyKey',
+  requestHash: 'requestHash',
+  responseJson: 'responseJson',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type InboundEvidenceCommandReceiptScalarFieldEnum = (typeof InboundEvidenceCommandReceiptScalarFieldEnum)[keyof typeof InboundEvidenceCommandReceiptScalarFieldEnum]
+
+
+export const InboundEvidenceGmailConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  status: 'status',
+  mailboxEmail: 'mailboxEmail',
+  credentialCiphertext: 'credentialCiphertext',
+  credentialIv: 'credentialIv',
+  credentialTag: 'credentialTag',
+  credentialKeyVersion: 'credentialKeyVersion',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  gmailHistoryId: 'gmailHistoryId',
+  lastSyncedAt: 'lastSyncedAt',
+  lastErrorCode: 'lastErrorCode',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceGmailConnectionScalarFieldEnum = (typeof InboundEvidenceGmailConnectionScalarFieldEnum)[keyof typeof InboundEvidenceGmailConnectionScalarFieldEnum]
+
+
+export const InboundEvidenceGmailOAuthStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  initiatedByUserId: 'initiatedByUserId',
+  stateHash: 'stateHash',
+  nonceHash: 'nonceHash',
+  verifierEncrypted: 'verifierEncrypted',
+  verifierIv: 'verifierIv',
+  verifierTag: 'verifierTag',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type InboundEvidenceGmailOAuthStateScalarFieldEnum = (typeof InboundEvidenceGmailOAuthStateScalarFieldEnum)[keyof typeof InboundEvidenceGmailOAuthStateScalarFieldEnum]
+
+
+export const InboundEvidenceMessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  gmailMessageId: 'gmailMessageId',
+  gmailThreadId: 'gmailThreadId',
+  sender: 'sender',
+  subject: 'subject',
+  snippet: 'snippet',
+  receivedAt: 'receivedAt',
+  hasAttachments: 'hasAttachments',
+  rawChecksum: 'rawChecksum',
+  importedAt: 'importedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceMessageScalarFieldEnum = (typeof InboundEvidenceMessageScalarFieldEnum)[keyof typeof InboundEvidenceMessageScalarFieldEnum]
+
+
+export const InboundEvidenceAttachmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  messageId: 'messageId',
+  gmailAttachmentId: 'gmailAttachmentId',
+  gmailPartId: 'gmailPartId',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  status: 'status',
+  sha256: 'sha256',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  scannerName: 'scannerName',
+  scannerResult: 'scannerResult',
+  retentionUntil: 'retentionUntil',
+  downloadedAt: 'downloadedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceAttachmentScalarFieldEnum = (typeof InboundEvidenceAttachmentScalarFieldEnum)[keyof typeof InboundEvidenceAttachmentScalarFieldEnum]
+
+
+export const InboundEvidenceDocumentAnalysisScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  attachmentId: 'attachmentId',
+  supersedesId: 'supersedesId',
+  status: 'status',
+  sourceSha256: 'sourceSha256',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  provider: 'provider',
+  model: 'model',
+  configurationVersion: 'configurationVersion',
+  promptVersion: 'promptVersion',
+  schemaVersion: 'schemaVersion',
+  resultJson: 'resultJson',
+  validationJson: 'validationJson',
+  resultChecksum: 'resultChecksum',
+  requestId: 'requestId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type InboundEvidenceDocumentAnalysisScalarFieldEnum = (typeof InboundEvidenceDocumentAnalysisScalarFieldEnum)[keyof typeof InboundEvidenceDocumentAnalysisScalarFieldEnum]
+
+
+export const InboundEvidenceMessageLabelScalarFieldEnum = {
+  tenantId: 'tenantId',
+  messageId: 'messageId',
+  labelId: 'labelId',
+  appliedBy: 'appliedBy',
+  appliedAt: 'appliedAt'
+} as const
+
+export type InboundEvidenceMessageLabelScalarFieldEnum = (typeof InboundEvidenceMessageLabelScalarFieldEnum)[keyof typeof InboundEvidenceMessageLabelScalarFieldEnum]
+
+
 export const MarketingCampaignScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -10448,6 +11603,21 @@ export const MarketingCampaignScalarFieldEnum = {
 } as const
 
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
+
+
+export const MarketingCampaignAnalysisFeedbackScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
+  kind: 'kind',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignAnalysisFeedbackScalarFieldEnum = (typeof MarketingCampaignAnalysisFeedbackScalarFieldEnum)[keyof typeof MarketingCampaignAnalysisFeedbackScalarFieldEnum]
 
 
 export const MarketingCampaignFinancialLinkScalarFieldEnum = {
@@ -10477,6 +11647,21 @@ export const MarketingCampaignContextLinkScalarFieldEnum = {
 export type MarketingCampaignContextLinkScalarFieldEnum = (typeof MarketingCampaignContextLinkScalarFieldEnum)[keyof typeof MarketingCampaignContextLinkScalarFieldEnum]
 
 
+export const MarketingSalesTargetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  periodMonth: 'periodMonth',
+  amount: 'amount',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingSalesTargetScalarFieldEnum = (typeof MarketingSalesTargetScalarFieldEnum)[keyof typeof MarketingSalesTargetScalarFieldEnum]
+
+
 export const MarketingProviderConnectionScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -10490,6 +11675,24 @@ export const MarketingProviderConnectionScalarFieldEnum = {
 } as const
 
 export type MarketingProviderConnectionScalarFieldEnum = (typeof MarketingProviderConnectionScalarFieldEnum)[keyof typeof MarketingProviderConnectionScalarFieldEnum]
+
+
+export const MarketingProviderOAuthStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  provider: 'provider',
+  initiatedByUserId: 'initiatedByUserId',
+  stateHash: 'stateHash',
+  verifierEncrypted: 'verifierEncrypted',
+  verifierIv: 'verifierIv',
+  verifierTag: 'verifierTag',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingProviderOAuthStateScalarFieldEnum = (typeof MarketingProviderOAuthStateScalarFieldEnum)[keyof typeof MarketingProviderOAuthStateScalarFieldEnum]
 
 
 export const MarketingReputationReplyPolicyScalarFieldEnum = {
@@ -12560,6 +13763,62 @@ export type ListEnumDecisionAlertActionKindFieldRefInput<$PrismaModel> = FieldRe
 
 
 /**
+ * Reference to a field of type 'InboundEvidenceGmailConnectionStatus'
+ */
+export type EnumInboundEvidenceGmailConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceGmailConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InboundEvidenceGmailConnectionStatus[]'
+ */
+export type ListEnumInboundEvidenceGmailConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceGmailConnectionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InboundEvidenceAttachmentStatus'
+ */
+export type EnumInboundEvidenceAttachmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceAttachmentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InboundEvidenceAttachmentStatus[]'
+ */
+export type ListEnumInboundEvidenceAttachmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceAttachmentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InboundEvidenceAnalysisStatus'
+ */
+export type EnumInboundEvidenceAnalysisStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceAnalysisStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InboundEvidenceAnalysisStatus[]'
+ */
+export type ListEnumInboundEvidenceAnalysisStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InboundEvidenceAnalysisStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiProviderKind'
+ */
+export type EnumAiProviderKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProviderKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiProviderKind[]'
+ */
+export type ListEnumAiProviderKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProviderKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'MarketingCampaignPlatform'
  */
 export type EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingCampaignPlatform'>
@@ -13414,20 +14673,6 @@ export type ListEnumFinanceInclusiveLoanPaymentStatusFieldRefInput<$PrismaModel>
 
 
 /**
- * Reference to a field of type 'AiProviderKind'
- */
-export type EnumAiProviderKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProviderKind'>
-    
-
-
-/**
- * Reference to a field of type 'AiProviderKind[]'
- */
-export type ListEnumAiProviderKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProviderKind[]'>
-    
-
-
-/**
  * Reference to a field of type 'AiProviderConfigurationStatus'
  */
 export type EnumAiProviderConfigurationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProviderConfigurationStatus'>
@@ -13798,6 +15043,7 @@ export type GlobalOmitConfig = {
   appSession?: Prisma.AppSessionOmit
   auditEvent?: Prisma.AuditEventOmit
   idempotencyReceipt?: Prisma.IdempotencyReceiptOmit
+  ownerDailyBriefSnapshot?: Prisma.OwnerDailyBriefSnapshotOmit
   documentSerialCounter?: Prisma.DocumentSerialCounterOmit
   fileMetadata?: Prisma.FileMetadataOmit
   companyFinanceProfile?: Prisma.CompanyFinanceProfileOmit
@@ -13823,10 +15069,22 @@ export type GlobalOmitConfig = {
   decisionAlert?: Prisma.DecisionAlertOmit
   decisionAlertAction?: Prisma.DecisionAlertActionOmit
   decisionFeedback?: Prisma.DecisionFeedbackOmit
+  inboundEvidenceLabel?: Prisma.InboundEvidenceLabelOmit
+  inboundEvidenceRule?: Prisma.InboundEvidenceRuleOmit
+  inboundEvidenceCommandReceipt?: Prisma.InboundEvidenceCommandReceiptOmit
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionOmit
+  inboundEvidenceGmailOAuthState?: Prisma.InboundEvidenceGmailOAuthStateOmit
+  inboundEvidenceMessage?: Prisma.InboundEvidenceMessageOmit
+  inboundEvidenceAttachment?: Prisma.InboundEvidenceAttachmentOmit
+  inboundEvidenceDocumentAnalysis?: Prisma.InboundEvidenceDocumentAnalysisOmit
+  inboundEvidenceMessageLabel?: Prisma.InboundEvidenceMessageLabelOmit
   marketingCampaign?: Prisma.MarketingCampaignOmit
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackOmit
   marketingCampaignFinancialLink?: Prisma.MarketingCampaignFinancialLinkOmit
   marketingCampaignContextLink?: Prisma.MarketingCampaignContextLinkOmit
+  marketingSalesTarget?: Prisma.MarketingSalesTargetOmit
   marketingProviderConnection?: Prisma.MarketingProviderConnectionOmit
+  marketingProviderOAuthState?: Prisma.MarketingProviderOAuthStateOmit
   marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyOmit
   reportDocument?: Prisma.ReportDocumentOmit
   financeCashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOmit

@@ -147,6 +147,31 @@ financial policy change, an external AI provider, or release/public production
 acceptance. The Prisma P1 and its private-deployment risk acceptance remain
 unchanged.
 
+## Owner-approved Basira Decision Alert Interpreter pilot — 2026-08-23
+
+The owner has authorized one narrow, cross-cutting external-provider pilot:
+`decision.command_center_analyst`. It may explain **one already-authorized
+Decision Intelligence alert** only from the server-created, frozen
+`BasiraDecisionAlertBrief`. The pilot is explanation-only: it cannot query raw
+ERP rows freely, accept a browser prompt, use tools, call the web, modify any
+record, approve, post, pay, close, publish, or change a permission.
+
+OpenAI runs only in the API through the official SDK. The browser receives a
+structured explanation and never an API key; the credential remains encrypted
+at rest and is decrypted only for the outbound call. The request requires
+`platform.ai.use` and the alert's server-side Decision read capability,
+checksum-valid frozen evidence, idempotency, a per-user rate limit, a provider
+daily limit, and an audit receipt. Evidence text is treated as untrusted data,
+not model instructions. The request uses `store: false` and does not create a
+conversation or retain a prompt in Baseer.
+
+The pilot is **deny-by-default**. An active encrypted OpenAI provider
+configuration alone is insufficient: the server deployment must explicitly set
+`BASEER_BASIRA_DECISION_PILOT_ENABLED=true`. It remains local/personal-pilot
+only until its HTTP, browser, budget, audit and manual-quality review evidence
+is recorded. It does not authorize another module, another provider/model,
+generic assistant chat, AI actions, external tools, production or public use.
+
 The durable remedy remains an official Prisma
 patch, followed by a matched Prisma-stack upgrade and re-verification.
 Automatic `npm audit fix --force` is explicitly forbidden here because its

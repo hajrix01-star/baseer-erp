@@ -1,12 +1,13 @@
-import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
-import { archiveMarketingCampaignRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema } from "@baseer-erp/contracts";
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
+import { archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingService } from "./marketing.service.js";
+import { MarketingGoogleOAuthService } from "./marketing-google-oauth.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly googleOAuth: MarketingGoogleOAuthService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -53,10 +54,25 @@ export class MarketingController {
     return marketingCampaignAnalysisSchema.parse(await this.marketing.campaignAnalysis(await this.context(authorization, companyId, "marketing.insights.read"), campaignId));
   }
 
+  @Post("campaigns/:campaignId/analysis-feedback") @HttpCode(201)
+  async campaignAnalysisFeedback(@Param("campaignId") campaignId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = createMarketingCampaignAnalysisFeedbackRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Invalid Marketing campaign analysis feedback request.");
+    return marketingEntityReceiptSchema.parse(await this.marketing.createCampaignAnalysisFeedback(await this.context(authorization, companyId, "marketing.insights.read"), campaignId, parsed.data));
+  }
+
   @Get("calendar")
   async calendar(@Query() query: Record<string, unknown>, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = marketingCalendarQuerySchema.safeParse(query); if (!parsed.success) throw new BadRequestException("Invalid marketing calendar query.");
     return marketingCalendarReadSchema.parse(await this.marketing.calendar(await this.context(authorization, companyId, "marketing.insights.read"), { from: new Date(`${parsed.data.from}T00:00:00.000Z`), to: new Date(`${parsed.data.to}T00:00:00.000Z`) }));
+  }
+
+  @Put("sales-targets/:periodMonth")
+  async upsertSalesTarget(@Param("periodMonth") periodMonth: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsedMonth = marketingTargetMonthSchema.safeParse(periodMonth);
+    const parsedBody = upsertMarketingSalesTargetRequestSchema.safeParse(body);
+    if (!parsedMonth.success || !parsedBody.success) throw new BadRequestException("Invalid marketing sales target request.");
+    return marketingEntityReceiptSchema.parse(await this.marketing.upsertSalesTarget(await this.context(authorization, companyId, "marketing.campaign.write"), parsedMonth.data, parsedBody.data));
   }
 
   @Get("provider-connections")
@@ -70,6 +86,20 @@ export class MarketingController {
     const parsedBody = requestMarketingProviderConnectionSetupSchema.safeParse(body);
     if (!parsedProvider.success || !parsedBody.success) throw new BadRequestException("Invalid provider connection setup request.");
     return marketingEntityReceiptSchema.parse(await this.marketing.requestProviderConnectionSetup(await this.context(authorization, companyId, "marketing.google-connection.manage"), parsedProvider.data, parsedBody.data));
+  }
+
+  @Post("provider-connections/:provider/authorization")
+  async beginGoogleAuthorization(@Param("provider") provider: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    // This incomplete pre-connector route must never make a Google consent URL
+    // reachable just because platform variables happen to be present. A later
+    // Provider Decision Record enables the separate, named release gate after
+    // callback, vault, selection, revocation and pilot controls exist.
+    if (process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED !== "true") {
+      throw new ForbiddenException("Google authorization is not enabled for this Baseer release.");
+    }
+    const parsedProvider = marketingProviderSchema.safeParse(provider);
+    if (!parsedProvider.success) throw new BadRequestException("Invalid provider connection request.");
+    return this.googleOAuth.begin(await this.context(authorization, companyId, "marketing.google-connection.manage"), parsedProvider.data);
   }
 
   @Put("reputation/reply-policy")

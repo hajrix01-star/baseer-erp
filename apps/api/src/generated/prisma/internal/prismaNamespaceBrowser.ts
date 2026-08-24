@@ -62,6 +62,7 @@ export const ModelName = {
   AppSession: 'AppSession',
   AuditEvent: 'AuditEvent',
   IdempotencyReceipt: 'IdempotencyReceipt',
+  OwnerDailyBriefSnapshot: 'OwnerDailyBriefSnapshot',
   DocumentSerialCounter: 'DocumentSerialCounter',
   FileMetadata: 'FileMetadata',
   CompanyFinanceProfile: 'CompanyFinanceProfile',
@@ -87,10 +88,22 @@ export const ModelName = {
   DecisionAlert: 'DecisionAlert',
   DecisionAlertAction: 'DecisionAlertAction',
   DecisionFeedback: 'DecisionFeedback',
+  InboundEvidenceLabel: 'InboundEvidenceLabel',
+  InboundEvidenceRule: 'InboundEvidenceRule',
+  InboundEvidenceCommandReceipt: 'InboundEvidenceCommandReceipt',
+  InboundEvidenceGmailConnection: 'InboundEvidenceGmailConnection',
+  InboundEvidenceGmailOAuthState: 'InboundEvidenceGmailOAuthState',
+  InboundEvidenceMessage: 'InboundEvidenceMessage',
+  InboundEvidenceAttachment: 'InboundEvidenceAttachment',
+  InboundEvidenceDocumentAnalysis: 'InboundEvidenceDocumentAnalysis',
+  InboundEvidenceMessageLabel: 'InboundEvidenceMessageLabel',
   MarketingCampaign: 'MarketingCampaign',
+  MarketingCampaignAnalysisFeedback: 'MarketingCampaignAnalysisFeedback',
   MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
   MarketingCampaignContextLink: 'MarketingCampaignContextLink',
+  MarketingSalesTarget: 'MarketingSalesTarget',
   MarketingProviderConnection: 'MarketingProviderConnection',
+  MarketingProviderOAuthState: 'MarketingProviderOAuthState',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
@@ -350,6 +363,18 @@ export const IdempotencyReceiptScalarFieldEnum = {
 } as const
 
 export type IdempotencyReceiptScalarFieldEnum = (typeof IdempotencyReceiptScalarFieldEnum)[keyof typeof IdempotencyReceiptScalarFieldEnum]
+
+
+export const OwnerDailyBriefSnapshotScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reportDate: 'reportDate',
+  receiptJson: 'receiptJson',
+  receiptSha256: 'receiptSha256',
+  createdAt: 'createdAt'
+} as const
+
+export type OwnerDailyBriefSnapshotScalarFieldEnum = (typeof OwnerDailyBriefSnapshotScalarFieldEnum)[keyof typeof OwnerDailyBriefSnapshotScalarFieldEnum]
 
 
 export const DocumentSerialCounterScalarFieldEnum = {
@@ -791,6 +816,174 @@ export const DecisionFeedbackScalarFieldEnum = {
 export type DecisionFeedbackScalarFieldEnum = (typeof DecisionFeedbackScalarFieldEnum)[keyof typeof DecisionFeedbackScalarFieldEnum]
 
 
+export const InboundEvidenceLabelScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  nameKey: 'nameKey',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  systemKey: 'systemKey',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceLabelScalarFieldEnum = (typeof InboundEvidenceLabelScalarFieldEnum)[keyof typeof InboundEvidenceLabelScalarFieldEnum]
+
+
+export const InboundEvidenceRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  labelId: 'labelId',
+  name: 'name',
+  enabled: 'enabled',
+  priority: 'priority',
+  senderContains: 'senderContains',
+  subjectContains: 'subjectContains',
+  attachmentCondition: 'attachmentCondition',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceRuleScalarFieldEnum = (typeof InboundEvidenceRuleScalarFieldEnum)[keyof typeof InboundEvidenceRuleScalarFieldEnum]
+
+
+export const InboundEvidenceCommandReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  actorUserId: 'actorUserId',
+  operation: 'operation',
+  idempotencyKey: 'idempotencyKey',
+  requestHash: 'requestHash',
+  responseJson: 'responseJson',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type InboundEvidenceCommandReceiptScalarFieldEnum = (typeof InboundEvidenceCommandReceiptScalarFieldEnum)[keyof typeof InboundEvidenceCommandReceiptScalarFieldEnum]
+
+
+export const InboundEvidenceGmailConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  status: 'status',
+  mailboxEmail: 'mailboxEmail',
+  credentialCiphertext: 'credentialCiphertext',
+  credentialIv: 'credentialIv',
+  credentialTag: 'credentialTag',
+  credentialKeyVersion: 'credentialKeyVersion',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  gmailHistoryId: 'gmailHistoryId',
+  lastSyncedAt: 'lastSyncedAt',
+  lastErrorCode: 'lastErrorCode',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceGmailConnectionScalarFieldEnum = (typeof InboundEvidenceGmailConnectionScalarFieldEnum)[keyof typeof InboundEvidenceGmailConnectionScalarFieldEnum]
+
+
+export const InboundEvidenceGmailOAuthStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  initiatedByUserId: 'initiatedByUserId',
+  stateHash: 'stateHash',
+  nonceHash: 'nonceHash',
+  verifierEncrypted: 'verifierEncrypted',
+  verifierIv: 'verifierIv',
+  verifierTag: 'verifierTag',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type InboundEvidenceGmailOAuthStateScalarFieldEnum = (typeof InboundEvidenceGmailOAuthStateScalarFieldEnum)[keyof typeof InboundEvidenceGmailOAuthStateScalarFieldEnum]
+
+
+export const InboundEvidenceMessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  gmailMessageId: 'gmailMessageId',
+  gmailThreadId: 'gmailThreadId',
+  sender: 'sender',
+  subject: 'subject',
+  snippet: 'snippet',
+  receivedAt: 'receivedAt',
+  hasAttachments: 'hasAttachments',
+  rawChecksum: 'rawChecksum',
+  importedAt: 'importedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceMessageScalarFieldEnum = (typeof InboundEvidenceMessageScalarFieldEnum)[keyof typeof InboundEvidenceMessageScalarFieldEnum]
+
+
+export const InboundEvidenceAttachmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  messageId: 'messageId',
+  gmailAttachmentId: 'gmailAttachmentId',
+  gmailPartId: 'gmailPartId',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  status: 'status',
+  sha256: 'sha256',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  scannerName: 'scannerName',
+  scannerResult: 'scannerResult',
+  retentionUntil: 'retentionUntil',
+  downloadedAt: 'downloadedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboundEvidenceAttachmentScalarFieldEnum = (typeof InboundEvidenceAttachmentScalarFieldEnum)[keyof typeof InboundEvidenceAttachmentScalarFieldEnum]
+
+
+export const InboundEvidenceDocumentAnalysisScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  attachmentId: 'attachmentId',
+  supersedesId: 'supersedesId',
+  status: 'status',
+  sourceSha256: 'sourceSha256',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  provider: 'provider',
+  model: 'model',
+  configurationVersion: 'configurationVersion',
+  promptVersion: 'promptVersion',
+  schemaVersion: 'schemaVersion',
+  resultJson: 'resultJson',
+  validationJson: 'validationJson',
+  resultChecksum: 'resultChecksum',
+  requestId: 'requestId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type InboundEvidenceDocumentAnalysisScalarFieldEnum = (typeof InboundEvidenceDocumentAnalysisScalarFieldEnum)[keyof typeof InboundEvidenceDocumentAnalysisScalarFieldEnum]
+
+
+export const InboundEvidenceMessageLabelScalarFieldEnum = {
+  tenantId: 'tenantId',
+  messageId: 'messageId',
+  labelId: 'labelId',
+  appliedBy: 'appliedBy',
+  appliedAt: 'appliedAt'
+} as const
+
+export type InboundEvidenceMessageLabelScalarFieldEnum = (typeof InboundEvidenceMessageLabelScalarFieldEnum)[keyof typeof InboundEvidenceMessageLabelScalarFieldEnum]
+
+
 export const MarketingCampaignScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -812,6 +1005,21 @@ export const MarketingCampaignScalarFieldEnum = {
 } as const
 
 export type MarketingCampaignScalarFieldEnum = (typeof MarketingCampaignScalarFieldEnum)[keyof typeof MarketingCampaignScalarFieldEnum]
+
+
+export const MarketingCampaignAnalysisFeedbackScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
+  kind: 'kind',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingCampaignAnalysisFeedbackScalarFieldEnum = (typeof MarketingCampaignAnalysisFeedbackScalarFieldEnum)[keyof typeof MarketingCampaignAnalysisFeedbackScalarFieldEnum]
 
 
 export const MarketingCampaignFinancialLinkScalarFieldEnum = {
@@ -841,6 +1049,21 @@ export const MarketingCampaignContextLinkScalarFieldEnum = {
 export type MarketingCampaignContextLinkScalarFieldEnum = (typeof MarketingCampaignContextLinkScalarFieldEnum)[keyof typeof MarketingCampaignContextLinkScalarFieldEnum]
 
 
+export const MarketingSalesTargetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  periodMonth: 'periodMonth',
+  amount: 'amount',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingSalesTargetScalarFieldEnum = (typeof MarketingSalesTargetScalarFieldEnum)[keyof typeof MarketingSalesTargetScalarFieldEnum]
+
+
 export const MarketingProviderConnectionScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -854,6 +1077,24 @@ export const MarketingProviderConnectionScalarFieldEnum = {
 } as const
 
 export type MarketingProviderConnectionScalarFieldEnum = (typeof MarketingProviderConnectionScalarFieldEnum)[keyof typeof MarketingProviderConnectionScalarFieldEnum]
+
+
+export const MarketingProviderOAuthStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  provider: 'provider',
+  initiatedByUserId: 'initiatedByUserId',
+  stateHash: 'stateHash',
+  verifierEncrypted: 'verifierEncrypted',
+  verifierIv: 'verifierIv',
+  verifierTag: 'verifierTag',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingProviderOAuthStateScalarFieldEnum = (typeof MarketingProviderOAuthStateScalarFieldEnum)[keyof typeof MarketingProviderOAuthStateScalarFieldEnum]
 
 
 export const MarketingReputationReplyPolicyScalarFieldEnum = {

@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module.js';
+import { DatabaseService } from './database/database.service.js';
 import { ApiExceptionFilter } from './common/api-exception.filter.js';
 import { ObservabilityService } from './observability/observability.service.js';
 import { RequestObservabilityInterceptor } from './observability/request-observability.interceptor.js';
@@ -49,6 +50,12 @@ async function bootstrap(): Promise<void> {
   app.useGlobalFilters(new ApiExceptionFilter());
   app.useGlobalInterceptors(app.get(RequestObservabilityInterceptor));
   app.enableShutdownHooks();
+  // Do not accept browser traffic while the API has not proved it can reach
+  // its source of truth. This avoids a cold-start window where the first
+  // workspace read fails even though the process is already listening.
+  const database = app.get(DatabaseService);
+  await database.client.$connect();
+  await database.client.$queryRaw`SELECT 1`;
   const port = Number.parseInt(process.env.BASEER_API_PORT ?? '5200', 10);
   const host = process.env.BASEER_BIND_HOST ?? '127.0.0.1';
   await app.listen({ host, port });

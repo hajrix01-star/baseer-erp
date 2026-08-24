@@ -326,3 +326,12 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 
 .marketing-campaign-register { display: grid; gap: .8rem; }
 .marketing-campaign-register__filters { justify-content: flex-start; }
+
+/* Basira explains the business meaning first; audit metadata remains opt-in. */
+.decision-basira-explanation { display: grid; gap: 1rem; line-height: 1.7; }
+.decision-basira-explanation h4 { margin: 0; font-size: var(--font-label); }
+.decision-basira-explanation p { margin: .35rem 0 0; }
+.decision-basira-explanation__summary { padding: .9rem 1rem; border: 1px solid #cfe7d8; border-radius: .8rem; background: #f2faf5; }
+.decision-basira-explanation__details { padding-top: .8rem; border-top: 1px solid var(--line); color: var(--muted); }
+.decision-basira-explanation__details summary { cursor: pointer; color: var(--ink); font-weight: 750; }
+.decision-basira-explanation__details small { display: block; margin-top: .6rem; }

@@ -145,6 +145,7 @@ const entrySelect = {
   hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
   hrFinalSettlementAccrual: { select: { settlementNumber: true } },
   hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  vatSettlement: { select: { referenceNumber: true } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 
 const detailEntrySelect = {
@@ -174,6 +175,7 @@ const detailEntrySelect = {
   hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
   hrFinalSettlementAccrual: { select: { settlementNumber: true } },
   hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  vatSettlement: { select: { referenceNumber: true } },
   reversalOfEntry: { select: {
     sourceType: true, sourceReference: true, description: true,
     hrPayrollAccrual: { select: { runNumber: true } },
@@ -182,6 +184,7 @@ const detailEntrySelect = {
     hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
     hrFinalSettlementAccrual: { select: { settlementNumber: true } },
     hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+    vatSettlement: { select: { referenceNumber: true } },
   } },
 } satisfies Prisma.FinanceJournalEntrySelect;
 

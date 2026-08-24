@@ -274,6 +274,11 @@ export class HrController {
     return hrEmployeeAdvancesReceiptSchema.parse({ companyId: context.companyId, ...(await this.advances.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.employeeId ? { employeeId: parsed.data.employeeId } : {}), ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
+  @Get('advances/entry-references')
+  async advanceEntryReferences(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    return this.advances.entryReferences(await this.authorize(authorization, companyId, 'hr.advances.issue'));
+  }
+
   @Get('advances/:advanceId')
   async advanceDetail(@Param('advanceId', ParseUUIDPipe) advanceId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeeAdvanceDetailQuerySchema.safeParse(query);

@@ -7,7 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DocumentSerialService } from '../core-controls/document-serial.service.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
-import { FinanceAccountStatus, FinanceAccountType, FinanceVaultPaymentMethod, HrEmployeeAdvanceSettlementSource, HrEmployeeAdvanceStatus, HrEmployeeFinancialMovementType, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { FinanceAccountStatus, FinanceAccountType, FinanceVaultPaymentMethod, FinanceVaultStatus, HrEmployeeAdvanceSettlementSource, HrEmployeeAdvanceStatus, HrEmployeeFinancialMovementType, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import { FinanceVaultService } from '../finance/finance-vault.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { hrEmployeeAdvanceLockKey } from './hr-financial-lock.util.js';
@@ -38,6 +38,37 @@ export class HrAdvanceService {
     private readonly vaults: FinanceVaultService,
     private readonly journals: JournalPostingService,
   ) {}
+
+  /**
+   * Deliberately narrow reference data for a user who can issue an advance
+   * but is not allowed to browse the employee register or finance settings.
+   */
+  async entryReferences(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const [employees, vaults] = await Promise.all([
+        tx.hrEmployee.findMany({
+          where: {
+            tenantId: context.tenantId,
+            companyId: context.companyId,
+            status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] },
+          },
+          orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }],
+          select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, status: true },
+        }),
+        tx.financeVault.findMany({
+          where: {
+            tenantId: context.tenantId,
+            companyId: context.companyId,
+            status: FinanceVaultStatus.ACTIVE,
+            isPaymentDestination: true,
+          },
+          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+          select: { id: true, nameAr: true, nameEn: true, paymentMethod: true, paymentMethods: true },
+        }),
+      ]);
+      return { companyId: context.companyId, employees, vaults };
+    });
+  }
 
   async list(context: TrustedCompanyActorContext, query: AdvanceListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {

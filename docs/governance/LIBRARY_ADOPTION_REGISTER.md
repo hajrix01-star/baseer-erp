@@ -16,6 +16,7 @@
 | `echarts` | `6.1.0` | Apache-2.0 | Active pilot | لوحة HR تشغيلية من `/hr/overview` | `BaseerChart` lazy، HTML summary/table بديل، ولا حساب أو تفويض في المتصفح؛ سقف التفاعل 500 KB. |
 | `@tanstack/react-table` | `9.1.2` | MIT | Active foundation | `BaseerDataGrid` لسجلات HR والمالية ذات cursor/pagination خادمي | الفرز/الفلترة/pagination من الخادم؛ الجداول الصغيرة المحدودة تبقى `DataTable` خفيفة مقصودة. |
 | `@tanstack/react-virtual` | غير مثبت | MIT | Deferred | مع جدول مثبت البطء | لا يثبت استباقياً. |
+| `openai` | `7.5.0` | Apache-2.0 | Active, narrow personal pilot | `decision.command_center_analyst` فقط | API فقط؛ `store:false`؛ لا مفتاح في المتصفح ولا أدوات أو محادثة عامة. المدخل حصراً `BasiraDecisionAlertBrief` مجمّد ومصرح به؛ يتطلب `BASEER_BASIRA_DECISION_PILOT_ENABLED=true` ومراجعة جودة يدوية قبل أي توسع. |
 
 ## بوابة تفعيل مكتبة dormant
 

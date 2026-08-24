@@ -8,7 +8,8 @@ const permissions = [
   "hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.advances.reverse", "hr.deductions.manage",
   "hr.employee_letters.read", "hr.employee_letters.issue", "hr.final_settlements.read", "hr.final_settlements.create",
   "hr.final_settlements.verify", "hr.final_settlements.approve", "hr.final_settlements.pay", "hr.final_settlements.reverse",
-  "finance.purchase_expense.create", "finance.purchase_expense.cancel",
+  "hr.employee_documents.read", "hr.employee_documents.write", "hr.employee_documents.revoke", "hr.employee_letters.revoke",
+  "finance.configuration.read", "finance.purchase_expense.create", "finance.purchase_expense.cancel",
 ];
 
 const employee = {
@@ -79,8 +80,9 @@ const settlementPayment = { id: "payment-settlement-1", paymentNumber: "SP-001",
 
 async function fulfill(route: Route, json: unknown, status = 200) { await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) }); }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; terminatedEmployee?: boolean } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; terminatedEmployee?: boolean; permissionCodes?: string[] } = {}) {
   const language = options.language ?? "ar";
+  const grantedPermissions = options.permissionCodes ?? permissions;
   const profileEmployee = options.terminatedEmployee ? { ...employee, status: "TERMINATED", terminatedAt: "2026-08-01" } : employee;
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "e2e-token");
@@ -92,7 +94,7 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
     requested.push(`${route.request().method()} ${url.pathname}${url.search}`);
-    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: permissions }] });
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: grantedPermissions }] });
     if (url.pathname === "/v1/hr/employees/onboard" && route.request().method() === "POST") {
       if (options.onboarding === "failure") return fulfill(route, { error: { code: "VALIDATION_FAILED", message: { ar: "تعذر حفظ موظف الاختبار.", en: "The test employee could not be saved." }, correlationId: "e2e", retry: { kind: "do-not-retry" } } }, 422);
       return fulfill(route, { id: employee.id, compensationId, replayed: false });
@@ -127,6 +129,7 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     if (url.pathname === `/v1/hr/leaves/${leave.id}`) return fulfill(route, { leave });
     if (url.pathname === "/v1/hr/leaves") return fulfill(route, { companyId, leaves: [leave], hasMore: false, nextCursor: null, summary: { count: 9, onLeaveNow: 1, upcoming: 2, returned: 6 } });
     if (url.pathname === `/v1/hr/advances/${advance.id}`) return fulfill(route, { advance, settlements: [], hasMoreSettlements: false, nextSettlementCursor: null, deferrals: [], hasMoreDeferrals: false, nextDeferralCursor: null });
+    if (url.pathname === "/v1/hr/advances/entry-references") return fulfill(route, { companyId, employees: [{ id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE" }], vaults: [{ id: "vault-1", nameAr: "الخزينة", nameEn: "Vault", paymentMethod: "CASH", paymentMethods: ["CASH"] }] });
     if (url.pathname === "/v1/hr/advances") return fulfill(route, { companyId, advances: [advance], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/deductions/${deduction.id}`) return fulfill(route, { deduction, actions: [{ id: "action-1", actionType: "CREATED", businessDate: deduction.businessDate, amount: deduction.originalAmount, plannedPayrollDate: deduction.plannedPayrollDate, reason: null }], hasMoreActions: false, nextActionCursor: null });
     if (url.pathname === "/v1/hr/deductions") return fulfill(route, { companyId, deductions: [deduction], hasMore: false, nextCursor: null });
@@ -186,10 +189,11 @@ async function expectTopmostDialog(page: Page, name: string | RegExp) {
 async function fillOnboarding(page: Page) {
   const dialog = page.getByRole("dialog", { name: "إضافة موظف" });
   await dialog.getByLabel("الاسم الكامل*").fill("موظف جديد");
-  const hireDate = dialog.locator(".baseer-aria-date-picker").first();
-  await expect(hireDate.getByRole("spinbutton")).toHaveCount(3);
-  await hireDate.getByRole("button", { name: "فتح التقويم" }).click();
-  await page.keyboard.press("Enter");
+  await dialog.getByRole("button", { name: "تاريخ التعيين" }).click();
+  await page.getByRole("dialog", { name: "تاريخ التعيين" })
+    .locator(".baseer-period-filter__days button:not(.is-outside):not([disabled])")
+    .first()
+    .click();
   await dialog.getByLabel("إجمالي الراتب الشهري*").fill("3000");
   return dialog;
 }
@@ -210,6 +214,20 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await expect(page.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
   await expectViewportContained(page);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+});
+
+test("advance issuer shortcut loads only its narrow entry references", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { permissionCodes: ["hr.advances.issue"] });
+
+  await page.goto("/");
+  await page.locator(".quick-actions > summary").click();
+  await page.getByRole("menuitem", { name: "إدخال سلفة" }).click();
+  await expectTopmostDialog(page, "إدخال سلفة");
+  await expect.poll(() => requested.some((request) => request === "GET /v1/hr/advances/entry-references")).toBeTruthy();
+  expect(requested.some((request) => request.startsWith("GET /v1/hr/employees"))).toBeFalsy();
+  expect(requested.some((request) => request.startsWith("GET /v1/finance/configuration"))).toBeFalsy();
+  expect(requested.some((request) => request.startsWith("GET /v1/hr/advances?") || request.endsWith("GET /v1/hr/advances"))).toBeFalsy();
 });
 
 test("payroll uses server search and cursor paging without page-level overflow", async ({ page }) => {
@@ -556,14 +574,10 @@ test("leave date picker is keyboard-operable and remains Gregorian in Arabic", a
   await page.goto("/#module=hr&section=2");
   await page.getByRole("button", { name: "تسجيل إجازة" }).click();
   const dialog = await expectTopmostDialog(page, "تسجيل إجازة");
-  await dialog.getByRole("button", { name: "فتح التقويم" }).first().click();
-  const calendar = page.getByRole("grid");
-  await expect(calendar).toBeVisible();
-  await page.keyboard.press("PageDown");
-  await page.keyboard.press("Home");
-  await page.keyboard.press("Enter");
-  await expect(calendar).toHaveCount(0);
-  await expect(dialog.locator(".baseer-aria-date-picker").first().getByRole("spinbutton")).toHaveCount(3);
+  await dialog.getByRole("button", { name: "من" }).press("Enter");
+  await expect(page.getByRole("dialog", { name: "من" }).locator(".baseer-date-picker__popover")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "من" })).toHaveCount(0);
 });
 
 test("leave date picker remains labeled and usable in English LTR", async ({ page }) => {
@@ -575,10 +589,10 @@ test("leave date picker remains labeled and usable in English LTR", async ({ pag
   const dialog = page.getByRole("dialog", { name: "Record leave" });
   await expect(dialog).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await dialog.getByRole("button", { name: "Open calendar" }).first().click();
-  await expect(page.getByRole("grid")).toBeVisible();
+  await dialog.getByRole("button", { name: "From" }).press("Enter");
+  await expect(page.getByRole("dialog", { name: "From" }).locator(".baseer-date-picker__popover")).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("grid")).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "From" })).toHaveCount(0);
 });
 
 test("service cancellation validates its required reason before sending a request", async ({ page }) => {

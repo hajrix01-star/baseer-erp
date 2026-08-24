@@ -1,18 +1,19 @@
 import { z } from "zod";
 
-import { decisionDataQualityStatusSchema, decisionSalesMetricReadSchema, verificationStatusSchema } from "./decision-intelligence.js";
+import { decisionDataQualityStatusSchema, decisionSalesComparisonReadSchema, decisionSalesMetricReadSchema, verificationStatusSchema } from "./decision-intelligence.js";
 import { companyIdSchema } from "./identity.js";
 import { idempotencyKeySchema } from "./finance.js";
 
 const marketingIdSchema = z.string().uuid();
 const marketingAmountSchema = z.string().regex(/^\d+(\.\d{1,4})?$/);
 const marketingDateSchema = z.string().date();
+export const marketingTargetMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
 
 /** A campaign is business context, never a financial posting or a provider action. */
 export const marketingCampaignPlatformSchema = z.enum(["MANUAL", "GOOGLE_ADS", "META", "TIKTOK", "SNAPCHAT", "OTHER"]);
 export const marketingCampaignStatusSchema = z.enum(["DRAFT", "PLANNED", "ACTIVE", "COMPLETED", "CANCELLED", "ARCHIVED"]);
 export const marketingProviderSchema = z.enum(["GOOGLE_ADS", "GOOGLE_BUSINESS"]);
-export const marketingProviderConnectionStatusSchema = z.enum(["NOT_CONNECTED", "SETUP_REQUESTED", "BLOCKED"]);
+export const marketingProviderConnectionStatusSchema = z.enum(["NOT_CONNECTED", "SETUP_REQUESTED", "AUTHORIZING", "BLOCKED"]);
 export const marketingReputationReplyAutomationStatusSchema = z.enum(["DISABLED", "ENABLED", "PAUSED"]);
 export const marketingReputationReplyAuthoringMethodSchema = z.enum(["TEMPLATE", "BASIRA_DRAFT"]);
 export const marketingReputationReplyToneSchema = z.enum(["WARM", "PROFESSIONAL", "FORMAL"]);
@@ -61,11 +62,12 @@ export const marketingWorkspaceSchema = z.object({
 
 /** No credentials, Google account identifiers, location identifiers or OAuth
  * state are represented here. This is only the company-visible control plane. */
+export const marketingProviderPlatformReadinessSchema = z.enum(["PLATFORM_SETUP_REQUIRED", "PLATFORM_READY_AWAITING_OAUTH_IMPLEMENTATION"]);
 export const marketingProviderConnectionSchema = z.object({
   provider: marketingProviderSchema,
   status: marketingProviderConnectionStatusSchema,
   setupRequestedAt: z.string().datetime().nullable(),
-  platformReadiness: z.literal("PLATFORM_SETUP_REQUIRED"),
+  platformReadiness: marketingProviderPlatformReadinessSchema,
   allowedOperation: z.enum(["ADS_READ_ONLY", "BUSINESS_READ_AND_GOVERNED_PUBLISH"]),
   messageAr: z.string().min(1).max(600),
   messageEn: z.string().min(1).max(600),
@@ -127,8 +129,11 @@ export const marketingLinkableFinancialDocumentsSchema = z.object({
 /** A descriptive measurement read. It intentionally cannot be named ROI or
  * attribution: Ads facts are a separate source and may be unavailable. */
 export const marketingSpendResultSchema = z.object({
-  plannedCampaignCost: marketingAmountSchema,
+  plannedCampaignCost: marketingAmountSchema.nullable(),
   linkedActualSpend: marketingAmountSchema,
+  linkedPostedSpendOnly: z.literal(true),
+  spendDataQuality: decisionDataQualityStatusSchema,
+  excludedLinkedDocumentCount: z.number().int().nonnegative(),
   officialNetSales: marketingAmountSchema.nullable(),
   spendToSalesPercent: z.string().regex(/^\d+(\.\d{1,2})?$/).nullable(),
   campaignCount: z.number().int().nonnegative(),
@@ -140,9 +145,14 @@ export const marketingSpendResultSchema = z.object({
 }).strict();
 
 export const marketingCampaignAnalysisSchema = z.object({
+  schemaVersion: z.literal("marketing.campaign_analysis_read.v2"),
+  metricDefinitionVersion: z.literal("marketing.campaign.performance.v1"),
+  comparisonPolicyCode: z.literal("PREVIOUS_EQUAL_PERIOD"),
+  comparisonPolicyVersion: z.literal("previous_equal_period.v1"),
   campaign: marketingCampaignSchema,
   period: z.object({ fromBusinessDate: marketingDateSchema, toBusinessDate: marketingDateSchema, timezone: z.literal("Asia/Riyadh") }).nullable(),
   sales: decisionSalesMetricReadSchema.nullable(),
+  salesComparison: decisionSalesComparisonReadSchema.nullable(),
   linkedFinancialDocuments: z.array(z.object({
     linkId: marketingIdSchema,
     documentId: marketingIdSchema,
@@ -153,6 +163,7 @@ export const marketingCampaignAnalysisSchema = z.object({
     netAmount: marketingAmountSchema,
     vatAmount: marketingAmountSchema,
     status: z.literal("POSTED"),
+    includedInCampaignPeriod: z.boolean(),
   }).strict()).max(500),
   linkedActualGrossAmount: marketingAmountSchema,
   spendResult: marketingSpendResultSchema,
@@ -166,6 +177,8 @@ export const marketingCampaignAnalysisSchema = z.object({
     verificationStatus: verificationStatusSchema,
     explicitlyLinked: z.boolean(),
   }).strict()).max(100),
+  managerSummaryAr: z.string().min(1).max(1_000),
+  limitations: z.array(z.string().min(1).max(500)).min(1).max(12),
   analysisBoundary: z.literal("TEMPORAL_CONTEXT_ONLY_NOT_CAUSATION"),
 }).strict();
 
@@ -182,9 +195,32 @@ export const marketingCalendarDaySchema = z.object({
   businessDate: marketingDateSchema,
   officialNetSales: marketingAmountSchema.nullable(),
   salesDayQuality: z.enum(["READY", "PENDING", "PARTIAL", "MISSING"]),
+  dailySalesTarget: marketingAmountSchema.nullable(),
+  targetStatus: z.enum(["NO_TARGET", "NO_SALES", "BELOW", "NEAR", "MET", "EXCEEDED"]),
   linkedActualSpend: marketingAmountSchema,
   linkedFinancialDocumentCount: z.number().int().nonnegative(),
   activeCampaignIds: z.array(marketingIdSchema).max(1_000),
+}).strict();
+
+/** Server-owned weekday averages. Only calendar days with an eligible,
+ * complete sales amount participate; pending or missing days never become a
+ * misleading zero in the weekday header. Sunday is 0 through Saturday 6. */
+export const marketingCalendarWeekdayAverageSchema = z.object({
+  weekday: z.number().int().min(0).max(6),
+  averageOfficialNetSales: marketingAmountSchema.nullable(),
+  eligibleDayCount: z.number().int().nonnegative(),
+}).strict();
+
+/** A company-owned monthly sales target. Calendar days receive an explicit
+ * server-calculated daily share; the client never derives targets itself. */
+export const marketingSalesTargetSchema = z.object({
+  periodMonth: marketingTargetMonthSchema,
+  amount: marketingAmountSchema,
+}).strict();
+
+export const upsertMarketingSalesTargetRequestSchema = z.object({
+  amount: marketingAmountSchema.refine((value) => Number(value) > 0, { message: "Target must be greater than zero." }),
+  idempotencyKey: idempotencyKeySchema,
 }).strict();
 
 export const marketingCalendarContextSchema = z.object({
@@ -202,6 +238,8 @@ export const marketingCalendarReadSchema = z.object({
   sales: decisionSalesMetricReadSchema,
   campaigns: z.array(marketingCampaignSchema).max(1_000),
   days: z.array(marketingCalendarDaySchema).max(366),
+  weekdayAverages: z.array(marketingCalendarWeekdayAverageSchema).length(7),
+  salesTargets: z.array(marketingSalesTargetSchema).max(13),
   context: z.array(marketingCalendarContextSchema).max(500),
   linkedActualGrossAmount: marketingAmountSchema,
   spendResult: marketingSpendResultSchema,
@@ -219,6 +257,22 @@ export const updateMarketingReputationReplyPolicyRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Feedback is deliberately categorical first so it can improve evaluation
+ * without treating an open-ended note as a training instruction. */
+export const marketingCampaignAnalysisFeedbackKindSchema = z.enum([
+  "USEFUL",
+  "NOT_RELEVANT",
+  "DATA_INCOMPLETE",
+  "COMPARISON_UNFAIR",
+  "DIFFERENT_CONTEXT",
+]);
+export const createMarketingCampaignAnalysisFeedbackRequestSchema = z.object({
+  evidenceSnapshotId: marketingIdSchema,
+  kind: marketingCampaignAnalysisFeedbackKindSchema,
+  note: z.string().trim().min(1).max(1_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 export type MarketingWorkspace = z.infer<typeof marketingWorkspaceSchema>;
 export type MarketingProviderConnectionsRead = z.infer<typeof marketingProviderConnectionsReadSchema>;
 export type RequestMarketingProviderConnectionSetup = z.infer<typeof requestMarketingProviderConnectionSetupSchema>;
@@ -230,4 +284,6 @@ export type LinkMarketingCampaignContextRequest = z.infer<typeof linkMarketingCa
 export type MarketingLinkableFinancialDocuments = z.infer<typeof marketingLinkableFinancialDocumentsSchema>;
 export type MarketingCampaignAnalysis = z.infer<typeof marketingCampaignAnalysisSchema>;
 export type MarketingCalendarRead = z.infer<typeof marketingCalendarReadSchema>;
+export type UpsertMarketingSalesTargetRequest = z.infer<typeof upsertMarketingSalesTargetRequestSchema>;
 export type UpdateMarketingReputationReplyPolicyRequest = z.infer<typeof updateMarketingReputationReplyPolicyRequestSchema>;
+export type CreateMarketingCampaignAnalysisFeedbackRequest = z.infer<typeof createMarketingCampaignAnalysisFeedbackRequestSchema>;

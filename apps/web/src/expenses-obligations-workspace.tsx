@@ -25,6 +25,7 @@ import { formatNumber } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
+import { hasActivePermission } from "./module-access";
 
 type Configuration = {
   profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null;
@@ -108,11 +109,12 @@ type RepaymentForm = {
 type Workspace = {
   companyId: string;
   businessDate: string;
-  configuration: Configuration;
+  configuration: Configuration | null;
   loans: Loan[];
   recurringProfiles: Profile[];
   documents: Document[];
 };
+type ItemsWorkspace = Workspace & { configuration: Configuration };
 
 const money = (value: string) => formatNumber(value);
 const RecurringExpenseWorkspace = lazy(async () => ({
@@ -150,17 +152,30 @@ export function ExpensesObligationsWorkspace({
   const [tab, setTab] = useState<ExpensesWorkspaceTab>(activeTab);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loadError, setLoadError] = useState("");
+  const canReadConfiguration = hasActivePermission("finance.configuration.read");
+  const canReadLoans = hasActivePermission("finance.loans.read");
+  const canReadPurchases = hasActivePermission("finance.purchase_expense.read");
+  const availableTabs = useMemo(() => [
+    ...(canReadConfiguration && canReadLoans && canReadPurchases ? [{ id: "items" as const, label: text.itemsAndObligations }] : []),
+    ...(canReadConfiguration && canReadPurchases ? [{ id: "batch" as const, label: text.batchPayment }] : []),
+    ...(canReadLoans && canReadPurchases ? [{ id: "history" as const, label: text.settlementHistory }] : []),
+  ], [canReadConfiguration, canReadLoans, canReadPurchases, text.batchPayment, text.itemsAndObligations, text.settlementHistory]);
   const loadWorkspace = useCallback(async () => {
     const current = activeSession();
     setSession(current);
     if (!current) return;
-    const receipt = await api<Workspace>(
-      current,
-      "/finance/expenses-obligations-workspace",
-    );
-    setWorkspace(receipt);
+    const endpoint = tab === "items" ? "items" : tab === "batch" ? "batch" : "history";
+    const receipt = await api<Partial<Workspace> & Pick<Workspace, "companyId">>(current, `/finance/expenses-obligations-workspace/${endpoint}`);
+    setWorkspace({
+      companyId: receipt.companyId,
+      businessDate: receipt.businessDate ?? "",
+      configuration: receipt.configuration ?? null,
+      loans: receipt.loans ?? [],
+      recurringProfiles: receipt.recurringProfiles ?? [],
+      documents: receipt.documents ?? [],
+    });
     setLoadError("");
-  }, []);
+  }, [tab]);
   useEffect(() => {
     void loadWorkspace().catch((error) =>
       setLoadError(
@@ -171,7 +186,11 @@ export function ExpensesObligationsWorkspace({
   useEffect(() => {
     setTab(activeTab);
   }, [activeTab]);
+  useEffect(() => {
+    if (!availableTabs.some((item) => item.id === tab)) setTab(availableTabs[0]?.id ?? "items");
+  }, [availableTabs, tab]);
   if (!session) return <DailySalesSignIn language={language} />;
+  if (!availableTabs.length) return <BaseerCard>{language === "ar" ? "لا تملك صلاحية عرض هذا الجزء من المصروفات والالتزامات." : "You do not have permission to view this expenses and obligations area."}</BaseerCard>;
   if (!workspace)
     return (
       <BaseerCard>
@@ -189,11 +208,7 @@ export function ExpensesObligationsWorkspace({
         ariaLabel={text.expensesObligations}
         idPrefix="expenses-tab"
         activeId={tab}
-        tabs={[
-          { id: "items", label: text.itemsAndObligations },
-          { id: "batch", label: text.batchPayment },
-          { id: "history", label: text.settlementHistory },
-        ]}
+        tabs={availableTabs}
         onChange={(id) => {
           const next = id as ExpensesWorkspaceTab;
           setTab(next);
@@ -204,14 +219,14 @@ export function ExpensesObligationsWorkspace({
         id={`expenses-tab-panel-${tab}`}
         labelledBy={`expenses-tab-${tab}`}
       >
-        {tab === "items" ? (
+        {tab === "items" && workspace.configuration ? (
           <ItemsAndObligations
             language={language}
-            workspace={workspace}
+            workspace={workspace as ItemsWorkspace}
             reload={loadWorkspace}
           />
         ) : null}
-        {tab === "batch" ? (
+        {tab === "batch" && workspace.configuration ? (
           <ExpenseSettlementBatch
             language={language}
             configuration={workspace.configuration}
@@ -238,7 +253,7 @@ function ItemsAndObligations({
   reload,
 }: {
   language: "ar" | "en";
-  workspace: Workspace;
+  workspace: ItemsWorkspace;
   reload: () => Promise<void>;
 }) {
   const text = financeText(language);

@@ -59,6 +59,11 @@ export type HrEmployeeLetterType = "SALARY_CERTIFICATE" | "SERVICE_CERTIFICATE";
 export type HrEmployeeLetterStatus = "ISSUED" | "REVOKED";
 export type HrEmployeeLetter = { id: string; employeeId: string; letterType: HrEmployeeLetterType; status: HrEmployeeLetterStatus; letterNumber: string; locale: "ar" | "en"; recipient: string | null; issuedAt: string; revokedAt: string | null; revokedReason: string | null; outputReportCode: "hr.employee-letter" };
 export type HrEmployeeLettersReceipt = { companyId: string; letters: HrEmployeeLetter[]; hasMore: boolean; nextCursor: string | null };
+export type HrAdvanceEntryReferences = {
+  companyId: string;
+  employees: Array<Pick<HrEmployee, "id" | "employeeNumber" | "nameAr" | "nameEn" | "status">>;
+  vaults: Array<{ id: string; nameAr: string; nameEn: string; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; paymentMethods: Array<"CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"> }>;
+};
 export type HrFinalSettlementReason = "EMPLOYER_TERMINATION" | "RESIGNATION" | "ARTICLE_80" | "ARTICLE_81" | "FORCE_MAJEURE" | "MATERNITY" | "OTHER_LEGAL_REVIEW";
 export type HrFinalSettlementStatus = "DRAFT" | "APPROVED" | "PARTIALLY_PAID" | "PAID" | "REVERSED" | "CANCELLED";
 export type HrFinalSettlementReasonVerificationStatus = "PENDING" | "VERIFIED" | "REJECTED";
@@ -87,6 +92,7 @@ export function listHrEmployeePromotions(session: ActiveSession, employeeId: str
 export function listHrEmployeeCompensationHistory(session: ActiveSession, employeeId: string, query: { cursor?: string; pageSize?: number } = {}) { return api<HrEmployeeCompensationHistoryReceipt>(session, withQuery(`/hr/employees/${encodeURIComponent(employeeId)}/compensation-history`, query)); }
 export function createHrEmployeePromotion(session: ActiveSession, employeeId: string, payload: { effectiveDate: string; newJobTitle: string; decisionReference: string; reason?: string; idempotencyKey: string }) { return api<{ id: string; replayed: boolean }>(session, `/hr/employees/${encodeURIComponent(employeeId)}/promotions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function listHrAdvances(session: ActiveSession, query: { employeeId?: string; status?: HrAdvance["status"]; search?: string; cursor?: string; pageSize?: number } = {}) { return api<HrAdvancesReceipt>(session, withQuery("/hr/advances", query)); }
+export function getHrAdvanceEntryReferences(session: ActiveSession, options?: Pick<RequestInit, "signal">) { return api<HrAdvanceEntryReferences>(session, "/hr/advances/entry-references", options); }
 export function getHrAdvance(session: ActiveSession, advanceId: string, query: { settlementCursor?: string; settlementPageSize?: number; deferralCursor?: string; deferralPageSize?: number } = {}) { return api<HrAdvanceDetail>(session, withQuery(`/hr/advances/${encodeURIComponent(advanceId)}`, query)); }
 export function listHrAdministrativeDeductions(session: ActiveSession, query: { employeeId?: string; status?: HrAdministrativeDeduction["status"]; search?: string; cursor?: string; pageSize?: number } = {}) { return api<HrAdministrativeDeductionsReceipt>(session, withQuery("/hr/deductions", query)); }
 export function getHrAdministrativeDeduction(session: ActiveSession, deductionId: string, query: { actionCursor?: string; actionPageSize?: number } = {}) { return api<HrAdministrativeDeductionDetail>(session, withQuery(`/hr/deductions/${encodeURIComponent(deductionId)}`, query)); }

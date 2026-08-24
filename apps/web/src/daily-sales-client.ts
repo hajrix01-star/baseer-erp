@@ -255,18 +255,50 @@ export async function api<T>(
   options?: RequestInit,
 ): Promise<T> {
   try {
-    return await requestWithSession<T>(session, path, options);
+    return await requestWithTransientReadRetry<T>(session, path, options);
   } catch (error) {
     if (!(error instanceof BaseerApiError) || error.status !== 401) throw error;
     const refreshed = await refreshSessionOnce(session.accessToken);
     if (!refreshed) throw error;
     try {
-      return await requestWithSession<T>(refreshed, path, options);
+      return await requestWithTransientReadRetry<T>(refreshed, path, options);
     } catch (retryError) {
       // A new access token was rejected as well: the session is no longer valid.
       if (retryError instanceof BaseerApiError && retryError.status === 401) clearExpiredSession();
       throw retryError;
     }
+  }
+}
+
+function canRetryTransientRead(error: unknown, options?: RequestInit) {
+  if ((options?.method ?? "GET").toUpperCase() !== "GET" || options?.signal?.aborted) return false;
+  // A read may safely retry once if the browser never received a response, or
+  // when an intermediary/service is temporarily unavailable. Commands never
+  // use this path, so no financial write can be replayed by the client.
+  return !(error instanceof BaseerApiError) || [502, 503, 504].includes(error.status);
+}
+
+function waitForTransientReadRetry(signal?: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    const timer = window.setTimeout(resolve, 250);
+    signal?.addEventListener("abort", () => {
+      window.clearTimeout(timer);
+      reject(signal.reason ?? new DOMException("Request aborted", "AbortError"));
+    }, { once: true });
+  });
+}
+
+async function requestWithTransientReadRetry<T>(
+  session: ActiveSession,
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
+  try {
+    return await requestWithSession<T>(session, path, options);
+  } catch (error) {
+    if (!canRetryTransientRead(error, options)) throw error;
+    await waitForTransientReadRetry(options?.signal ?? undefined);
+    return requestWithSession<T>(session, path, options);
   }
 }
 

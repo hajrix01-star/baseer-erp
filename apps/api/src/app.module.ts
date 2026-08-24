@@ -112,12 +112,23 @@ import { OperationsInternalRegistrationController } from './operations/operation
 import { OperationsInternalRegistrationService } from './operations/operations-internal-registration.service.js';
 import { OperationsAssetsWarrantyController } from './operations/operations-assets-warranty.controller.js';
 import { OperationsAssetsWarrantyService } from './operations/operations-assets-warranty.service.js';
+import { OperationsOverviewController } from './operations/operations-overview.controller.js';
+import { OperationsOverviewService } from './operations/operations-overview.service.js';
 import { DecisionIntelligenceController } from './decision-intelligence/decision-intelligence.controller.js';
 import { DecisionIntelligenceService } from './decision-intelligence/decision-intelligence.service.js';
 import { DecisionContextImportService } from './decision-intelligence/decision-context-import.service.js';
 import { DecisionContextResearchService } from './decision-intelligence/decision-context-research.service.js';
 import { MarketingController } from './marketing/marketing.controller.js';
+import { MarketingGooglePlatformService } from './marketing/marketing-google-platform.service.js';
+import { MarketingGoogleOAuthService } from './marketing/marketing-google-oauth.service.js';
 import { MarketingService } from './marketing/marketing.service.js';
+import { InboundEvidenceController } from './inbound-evidence/inbound-evidence.controller.js';
+import { InboundEvidenceService } from './inbound-evidence/inbound-evidence.service.js';
+import { InboundEvidenceGmailService } from './inbound-evidence/inbound-evidence-gmail.service.js';
+import { InboundEvidenceDocumentIntelligenceService } from './inbound-evidence/inbound-evidence-document-intelligence.service.js';
+import { OwnerDailyBriefController } from './owner-daily-brief/owner-daily-brief.controller.js';
+import { OwnerDailyBriefService } from './owner-daily-brief/owner-daily-brief.service.js';
+import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily-brief-scheduler.service.js';
 
 @Module({
   imports: [
@@ -130,7 +141,7 @@ import { MarketingService } from './marketing/marketing.service.js';
       ],
     }),
   ],
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, DecisionIntelligenceController, MarketingController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -201,10 +212,18 @@ import { MarketingService } from './marketing/marketing.service.js';
     OperationsExecutionService,
     OperationsInternalRegistrationService,
     OperationsAssetsWarrantyService,
+    OperationsOverviewService,
     DecisionIntelligenceService,
     DecisionContextImportService,
     DecisionContextResearchService,
+    MarketingGooglePlatformService,
+    MarketingGoogleOAuthService,
     MarketingService,
+    InboundEvidenceService,
+    InboundEvidenceGmailService,
+    InboundEvidenceDocumentIntelligenceService,
+    OwnerDailyBriefService,
+    OwnerDailyBriefSchedulerService,
   ],
 })
 export class AppModule {}
