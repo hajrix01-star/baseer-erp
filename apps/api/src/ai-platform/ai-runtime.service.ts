@@ -33,6 +33,7 @@ import {
   AiProviderConfigurationStatus,
   AiSkillActivationStatus,
   Prisma,
+  type AiProviderKind,
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 import { AiProviderAdapterRegistry } from "./ai-provider-adapter-registry.js";
@@ -47,7 +48,7 @@ import { decisionAlertProviderPrompt, marketingCampaignProviderPrompt, promptTex
 import { AiRuntimeRateLimitService } from "./ai-runtime-rate-limit.service.js";
 import { AnalysisReadinessService } from "./analysis-readiness.service.js";
 import { evaluationSuiteForAiSkill, runOfflineAiSkillEvaluation } from "./ai-skill-evaluation-suites.js";
-import { BASIRA_S2_TOKENIZER_MODEL, BASIRA_S2_TOKENIZER_VERSION } from "./ai-token-counter.js";
+import { liveAiModelProfileForSkill } from "./ai-provider-capability-registry.js";
 import { DecisionIntelligenceService } from "../decision-intelligence/decision-intelligence.service.js";
 import { MarketingService } from "../marketing/marketing.service.js";
 import { AI_SKILL_CATALOG, listAiSkills, selectAiSkill } from "./ai-skills.js";
@@ -56,17 +57,6 @@ const AI_USE_CAPABILITY = "platform.ai.use";
 const PREFLIGHT_OPERATION = "platform.ai.runtime.preflight";
 const INTERPRETATION_RETENTION_MS = 30 * 24 * 60 * 60 * 1_000;
 const INTERPRETATION_PROMPT_VERSION = 1;
-const INTERPRETATION_MODEL_PROFILE = Object.freeze({
-  key: "s2.interpretation.low_cost.v1",
-  tokenizerModel: BASIRA_S2_TOKENIZER_MODEL,
-  tokenizerVersion: BASIRA_S2_TOKENIZER_VERSION,
-  tokenSafetyMargin: 256,
-  maxInputTokens: 12_000,
-  maxOutputTokens: 600,
-  reasoning: "low",
-  structuredOutput: true,
-  tools: "none",
-});
 
 /**
  * Gate B runtime boundary. It authorizes and records a selected skill, but it
@@ -315,7 +305,16 @@ export class AiRuntimeService {
     }
 
     const companyContextDigest = this.companyContextDigest(setup.companyContexts);
-    const modelProfileDigest = this.modelProfileDigest(setup.provider.provider, setup.provider.model);
+    const modelProfile = this.requireLiveModelProfile(
+      setup.provider.provider,
+      setup.provider.model,
+      skill.key,
+    );
+    const modelProfileDigest = this.modelProfileDigest(
+      setup.provider.provider,
+      setup.provider.model,
+      modelProfile,
+    );
     const reuseKey = this.interpretationReuseKey({
       subjectKind: "DECISION_ALERT",
       subjectId: input.request.alertId,
@@ -402,7 +401,7 @@ export class AiRuntimeService {
         provider: setup.provider,
         activation,
         interpretationRunId: claim.runId,
-        profile: INTERPRETATION_MODEL_PROFILE,
+        profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
       });
       const generated = await this.adapters.explainDecisionAlert({
@@ -414,7 +413,7 @@ export class AiRuntimeService {
         toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
         safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
         companyContext,
-        maxOutputTokens: INTERPRETATION_MODEL_PROFILE.maxOutputTokens,
+        maxOutputTokens: modelProfile.maxOutputTokens,
       });
       providerUsage = generated.usage;
       explanation = decisionAlertExplanationSchema.parse(generated.output);
@@ -619,7 +618,16 @@ export class AiRuntimeService {
     });
 
     const companyContextDigest = this.companyContextDigest(setup.companyContexts);
-    const modelProfileDigest = this.modelProfileDigest(setup.provider.provider, setup.provider.model);
+    const modelProfile = this.requireLiveModelProfile(
+      setup.provider.provider,
+      setup.provider.model,
+      skill.key,
+    );
+    const modelProfileDigest = this.modelProfileDigest(
+      setup.provider.provider,
+      setup.provider.model,
+      modelProfile,
+    );
     const reuseKey = this.interpretationReuseKey({
       subjectKind: "MARKETING_CAMPAIGN",
       subjectId: input.request.campaignId,
@@ -704,7 +712,7 @@ export class AiRuntimeService {
         provider: setup.provider,
         activation,
         interpretationRunId: claim.runId,
-        profile: INTERPRETATION_MODEL_PROFILE,
+        profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
       });
       const generated = await this.adapters.explainMarketingCampaign({
@@ -714,7 +722,7 @@ export class AiRuntimeService {
         toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
         safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
         companyContext,
-        maxOutputTokens: INTERPRETATION_MODEL_PROFILE.maxOutputTokens,
+        maxOutputTokens: modelProfile.maxOutputTokens,
       });
       providerUsage = generated.usage;
       explanation = marketingCampaignExplanationSchema.parse(generated.output);
@@ -939,8 +947,26 @@ export class AiRuntimeService {
     })).sort((left, right) => left.id.localeCompare(right.id)) as import("../core-controls/idempotency.service.js").CanonicalJsonValue);
   }
 
-  private modelProfileDigest(provider: string, model: string): string {
-    return hashCanonicalJson({ provider, model, ...INTERPRETATION_MODEL_PROFILE });
+  private requireLiveModelProfile(
+    provider: AiProviderKind,
+    model: string,
+    skillKey: string,
+  ) {
+    const profile = liveAiModelProfileForSkill({ provider, model, skillKey });
+    if (!profile) {
+      throw new ConflictException(
+        "The active AI provider/model is not an approved live Basira capability for this skill.",
+      );
+    }
+    return profile;
+  }
+
+  private modelProfileDigest(
+    provider: string,
+    model: string,
+    profile: NonNullable<ReturnType<typeof liveAiModelProfileForSkill>>,
+  ): string {
+    return hashCanonicalJson({ provider, model, ...profile });
   }
 
   private interpretationReuseKey(input: Readonly<{

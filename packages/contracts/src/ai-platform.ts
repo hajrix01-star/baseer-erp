@@ -10,6 +10,29 @@ export const aiProviderKindSchema = z.enum([
   "GOOGLE_GENERATIVE_AI",
 ]);
 
+/**
+ * A safe, product-facing description of a provider/model capability. The
+ * server owns the actual adapter, tokenizer and pricing checks; clients use
+ * this receipt only to present choices that may be configured.
+ */
+export const aiProviderModelCapabilityReceiptSchema = z
+  .object({
+    provider: aiProviderKindSchema,
+    model: z.string().min(1).max(160),
+    displayNameAr: z.string().min(1).max(160),
+    displayNameEn: z.string().min(1).max(160),
+    summaryAr: z.string().min(1).max(500),
+    summaryEn: z.string().min(1).max(500),
+    status: z.enum(["AVAILABLE", "PLANNED"]),
+    activationReadiness: z.enum([
+      "READY_FOR_CONFIGURATION",
+      "REQUIRES_ADAPTER_AND_EVALUATION",
+    ]),
+    costTier: z.enum(["LOW", "MEDIUM", "HIGH"]),
+    supportedSkillKeys: z.array(z.string().min(1).max(160)),
+  })
+  .strict();
+
 const moneyLimitSchema = z
   .string()
   .trim()
@@ -136,6 +159,7 @@ export const aiCompanyIdentityReceiptSchema = z
 export const aiPlatformConfigurationReceiptSchema = z
   .object({
     companyId: companyIdSchema,
+    providerCapabilities: z.array(aiProviderModelCapabilityReceiptSchema),
     activeProvider: aiProviderConfigurationReceiptSchema.nullable(),
     providerConfigurations: z.array(aiProviderConfigurationReceiptSchema),
     latestProviderConnectionCheck: aiProviderConnectionReceiptSchema.nullable(),
@@ -152,6 +176,9 @@ export type ActivateAiProviderConfigurationRequest = z.infer<
 >;
 export type AiProviderConnectionReceipt = z.infer<
   typeof aiProviderConnectionReceiptSchema
+>;
+export type AiProviderModelCapabilityReceipt = z.infer<
+  typeof aiProviderModelCapabilityReceiptSchema
 >;
 export type CreateAiIdentityRequest = z.infer<typeof createAiIdentityRequestSchema>;
 export type CreateAiSystemIdentityRequest = z.infer<typeof createAiSystemIdentityRequestSchema>;

@@ -22,7 +22,19 @@ type ProviderReceipt = {
   createdAt: string;
   updatedAt: string;
 };
-type Configuration = { companyId: string; activeProvider: ProviderReceipt | null; providerConfigurations: ProviderReceipt[]; latestProviderConnectionCheck: ProviderConnection | null; activeSystemIdentity: unknown | null; activeIdentity: unknown | null };
+type ProviderCapability = {
+  provider: "OPENAI_COMPATIBLE" | "ANTHROPIC" | "GOOGLE_GENERATIVE_AI";
+  model: string;
+  displayNameAr: string;
+  displayNameEn: string;
+  summaryAr: string;
+  summaryEn: string;
+  status: "AVAILABLE" | "PLANNED";
+  activationReadiness: "READY_FOR_CONFIGURATION" | "REQUIRES_ADAPTER_AND_EVALUATION";
+  costTier: "LOW" | "MEDIUM" | "HIGH";
+  supportedSkillKeys: string[];
+};
+type Configuration = { companyId: string; providerCapabilities: ProviderCapability[]; activeProvider: ProviderReceipt | null; providerConfigurations: ProviderReceipt[]; latestProviderConnectionCheck: ProviderConnection | null; activeSystemIdentity: unknown | null; activeIdentity: unknown | null };
 type ProviderConnection = {
   configurationId: string | null;
   state: "READY" | "ERROR" | "UNCONFIGURED";
@@ -77,12 +89,14 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
   const ar = language === "ar";
   const provider = configuration?.activeProvider ?? null;
   const candidateProvider = configuration?.providerConfigurations.find((item) => item.status === "DRAFT" || item.status === "VALIDATED") ?? provider;
+  const configurableCapabilities = (configuration?.providerCapabilities ?? []).filter((capability) => capability.status === "AVAILABLE" && capability.activationReadiness === "READY_FOR_CONFIGURATION");
+  const selectedCapability = configurableCapabilities.find((capability) => capability.model === values.model) ?? configurableCapabilities[0] ?? null;
   const schemaFactory = useCallback<BaseerValidatedFormSchemaFactory>(({ z }) => z.object({
     apiKey: z.string().trim().min(1, ar ? "أدخل مفتاح OpenAI." : "Enter the OpenAI key."),
-    model: z.string().trim().min(1, ar ? "أدخل اسم الموديل." : "Enter the model name.").max(160),
+    model: z.string().trim().min(1, ar ? "اختر ملف تشغيل معتمداً." : "Choose an approved runtime profile.").refine((value) => configurableCapabilities.some((capability) => capability.model === value), ar ? "هذا الملف غير معتمد للتشغيل." : "This profile is not approved for operation."),
     dailyRequestLimit: z.string().regex(/^\d+$/, ar ? "أدخل عدداً صحيحاً." : "Enter a whole number.").refine((value) => Number(value) >= 1 && Number(value) <= 100_000, ar ? "الحد بين 1 و100000." : "The limit must be between 1 and 100000."),
     dailyCostLimit: z.string().regex(/^\d+(?:\.\d{1,4})?$/, ar ? "أدخل مبلغاً بالدولار." : "Enter a USD amount.").refine((value) => Number(value) > 0 && Number(value) <= 100_000, ar ? "أدخل مبلغاً أكبر من صفر." : "Enter an amount above zero."),
-  }), [ar]);
+  }), [ar, configurableCapabilities]);
   const checkConnection = useCallback(async (signal?: AbortSignal) => {
     if (!candidateProvider) { setConnection(null); setConnectionBusy(false); return; }
     setConnectionBusy(true); setConnectionError(null);
@@ -100,13 +114,18 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
   }, [ar, candidateProvider?.id, candidateProvider?.model, candidateProvider?.provider, language, refetch, session]);
   const submit = async (next: FormValues) => {
     if (!owner) return;
+    const capability = configurableCapabilities.find((item) => item.model === next.model);
+    if (!capability) {
+      setError(ar ? "لا يوجد ملف ذكاء معتمد قابل للتشغيل حالياً." : "No approved AI profile is currently available for configuration.");
+      return;
+    }
     setBusy(true); setError(null); setMessage(null);
     try {
       const idempotencyKey = requestId();
       await api<ProviderReceipt>(session, "/administration/ai/provider-configurations", {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Idempotency-Key": idempotencyKey },
-        body: JSON.stringify({ provider: "OPENAI_COMPATIBLE", model: next.model.trim(), apiKey: next.apiKey, dailyRequestLimit: Number(next.dailyRequestLimit), dailyCostLimit: next.dailyCostLimit, idempotencyKey }),
+        body: JSON.stringify({ provider: capability.provider, model: capability.model, apiKey: next.apiKey, dailyRequestLimit: Number(next.dailyRequestLimit), dailyCostLimit: next.dailyCostLimit, idempotencyKey }),
       });
       setValues((current) => ({ ...current, apiKey: "" }));
       await refetch();
@@ -153,14 +172,15 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
     {loadError ? <p className="daily-sales-message error" role="status">{ar ? "تعذر قراءة الإعداد الحالي، لكن يمكنك حفظ إعداد جديد إذا كنت مالك النظام." : "The current configuration could not be read. As the system owner, you can still save a new configuration."}</p> : null}
     <BaseerCard tone="muted"><dl className="administration-ai-settings__status"><div><dt>{ar ? "الحالة الحالية" : "Current status"}</dt><dd>{provider ? (ar ? "مزود نشط" : "Provider active") : candidateProvider ? (ar ? "مزود بانتظار التحقق" : "Provider pending verification") : (ar ? "لا يوجد مزود محفوظ" : "No provider configured")}</dd></div><div className={`administration-ai-connection is-${connectionBusy ? "checking" : displayedConnection?.state?.toLowerCase() ?? "unchecked"}`}><dt>{ar ? "اتصال بصيرة" : "Basira connection"}</dt><dd><span className="administration-ai-connection__dot" aria-hidden="true" />{connectionText}</dd>{connectionReason ? <small>{connectionReason}</small> : null}{displayedConnection?.upstreamStatus ? <small dir="ltr">HTTP {displayedConnection.upstreamStatus}</small> : null}{displayedConnection?.checkedAt ? <small>{ar ? "آخر فحص يدوي: " : "Last manual check: "}{formatDateTime(displayedConnection.checkedAt, language, "Asia/Riyadh")}</small> : null}{connectionError ? <small role="alert">{connectionError}</small> : null}{owner && candidateProvider ? <button type="button" className="baseer-button baseer-button--quiet" disabled={connectionBusy} onClick={() => void checkConnection()}>{connectionBusy ? (ar ? "جارٍ الفحص…" : "Checking…") : (ar ? "فحص الاتصال الآن" : "Check connection now")}</button> : null}</div>{(provider ?? candidateProvider) ? <><div><dt>{ar ? "الموديل" : "Model"}</dt><dd dir="ltr">{(provider ?? candidateProvider)!.model}</dd></div><div><dt>{ar ? "حد الطلبات اليومي" : "Daily request limit"}</dt><dd><bdi dir="ltr">{formatCount((provider ?? candidateProvider)!.dailyRequestLimit, language)}</bdi></dd></div><div><dt>{ar ? "سقف التكلفة اليومي" : "Daily cost cap"}</dt><dd><bdi dir="ltr">{formatUsd((provider ?? candidateProvider)!.dailyCostLimit, language)}</bdi></dd></div><div><dt>{ar ? "الإصدار" : "Version"}</dt><dd><bdi dir="ltr">{formatCount((provider ?? candidateProvider)!.configurationVersion, language)}</bdi></dd></div></> : null}</dl></BaseerCard>
     {configuration?.providerConfigurations.length ? <BaseerCard tone="muted"><section className="administration-ai-profile-switcher" aria-label={ar ? "ملفات الذكاء" : "AI profiles"}><header><h4>{ar ? "ملفات الذكاء" : "AI profiles"}</h4><p>{ar ? "التسلسل آمن: مسودة → فحص اتصال → تفعيل صريح. حفظ المفتاح وحده لا يشغّل بصيرة." : "The safe sequence is: draft → verify connection → explicit activation. Saving a key never enables Basira by itself."}</p></header><div className="administration-ai-profile-switcher__list">{configuration.providerConfigurations.map((item) => <article key={item.id} className={item.isDefault ? "is-active" : undefined}><div><strong>{providerLabel(item.provider)}</strong><span dir="ltr">{item.model}</span><small>{ar ? `الحالة: ${providerStatusLabel(item.status, language)} · الحد اليومي: ${item.dailyRequestLimit}` : `Status: ${providerStatusLabel(item.status, language)} · Daily limit: ${item.dailyRequestLimit}`}</small></div>{item.isDefault ? <span className="administration-ai-profile-switcher__active">{ar ? "النشط الآن" : "Active now"}</span> : item.status === "VALIDATED" ? <button type="button" className="baseer-button baseer-button--quiet" disabled={!owner || activatingId !== null} onClick={() => void activateProfile(item.id)}>{activatingId === item.id ? (ar ? "جارٍ التفعيل…" : "Activating…") : (ar ? "تفعيل هذا الملف" : "Activate this profile")}</button> : item.status === "DRAFT" ? <span className="administration-ai-profile-switcher__active">{ar ? "افحص الاتصال أولاً" : "Verify connection first"}</span> : <span className="administration-ai-profile-switcher__active">{providerStatusLabel(item.status, language)}</span>}</article>)}</div><small>{ar ? "سيظهر Anthropic وGoogle هنا فقط بعد إضافة محولات خادمية آمنة ومفاتيحهما؛ لا يمكن تفعيلهما بشكل وهمي." : "Anthropic and Google will appear here only after secure server adapters and credentials are added; they cannot be activated deceptively."}</small></section></BaseerCard> : null}
+    {configuration?.providerCapabilities.length ? <BaseerCard tone="muted"><section className="administration-ai-profile-switcher" aria-label={ar ? "ملفات التشغيل المعتمدة" : "Approved runtime profiles"}><header><h4>{ar ? "ملفات التشغيل المعتمدة" : "Approved runtime profiles"}</h4><p>{ar ? "هذه قائمة خادمية موحّدة. لا يمكن كتابة اسم نموذج حر أو تفعيله بلا عدّاد توكن وسعر واختبار مناسب." : "This is a unified server-owned list. A free-form model name cannot be saved or activated without a tokenizer, price and matching evaluation."}</p></header><div className="administration-ai-profile-switcher__list">{configuration.providerCapabilities.map((capability) => <article key={`${capability.provider}:${capability.model}`} className={capability.status === "AVAILABLE" ? "is-active" : undefined}><div><strong>{ar ? capability.displayNameAr : capability.displayNameEn}</strong><span dir="ltr">{capability.model}</span><small>{ar ? `${capability.costTier === "LOW" ? "تكلفة منخفضة" : capability.costTier === "MEDIUM" ? "تكلفة متوسطة" : "تكلفة مرتفعة"} · ${capability.summaryAr}` : `${capability.costTier.toLowerCase()} cost · ${capability.summaryEn}`}</small></div><span className="administration-ai-profile-switcher__active">{capability.activationReadiness === "READY_FOR_CONFIGURATION" ? (ar ? "متاح للإعداد" : "Available") : (ar ? "يتطلب ربطاً واختباراً" : "Requires adapter and evaluation")}</span></article>)}</div><small>{ar ? "إضافة أي مزود أو نموذج جديد تتم بإصدار سجل القدرات وتقييمه، لا بتغيير المفتاح أو كتابة الاسم." : "Adding a provider or model requires a capability-registry release and evaluation, not merely a key or typed name."}</small></section></BaseerCard> : null}
     {owner ? <BaseerValidatedFormField<FormValues> id="administration-ai-provider" className="administration-ai-settings__form" values={values} schemaFactory={schemaFactory} onValid={(next) => void submit(next)} errorSummaryLabel={ar ? "تحقق من الحقول المطلوبة." : "Check the required fields."}>{({ errors }) => <>
-      <label>{ar ? "المزود" : "Provider"}<input value="OpenAI" disabled readOnly /></label>
-      <label>{ar ? "مفتاح OpenAI" : "OpenAI API key"}<input type="password" autoComplete="new-password" value={values.apiKey} aria-invalid={Boolean(errors.apiKey)} aria-describedby={errors.apiKey ? "administration-ai-key-error" : undefined} onChange={(event) => setValues((current) => ({ ...current, apiKey: event.target.value }))} />{errors.apiKey ? <small id="administration-ai-key-error" role="alert">{errors.apiKey.message}</small> : <small>{ar ? "لن يظهر هذا المفتاح بعد الحفظ." : "This key is never displayed after saving."}</small>}</label>
-      <label>{ar ? "الموديل" : "Model"}<input value={values.model} aria-invalid={Boolean(errors.model)} onChange={(event) => setValues((current) => ({ ...current, model: event.target.value }))} />{errors.model ? <small role="alert">{errors.model.message}</small> : null}</label>
+      <label>{ar ? "المزود" : "Provider"}<input value={selectedCapability ? providerLabel(selectedCapability.provider) : (ar ? "لا يوجد مزود معتمد" : "No approved provider")} disabled readOnly /></label>
+      <label>{ar ? "مفتاح مزوّد الذكاء" : "AI provider API key"}<input type="password" autoComplete="new-password" value={values.apiKey} aria-invalid={Boolean(errors.apiKey)} aria-describedby={errors.apiKey ? "administration-ai-key-error" : undefined} onChange={(event) => setValues((current) => ({ ...current, apiKey: event.target.value }))} />{errors.apiKey ? <small id="administration-ai-key-error" role="alert">{errors.apiKey.message}</small> : <small>{ar ? "لن يظهر هذا المفتاح بعد الحفظ." : "This key is never displayed after saving."}</small>}</label>
+      <label>{ar ? "ملف تشغيل بصيرة" : "Basira runtime profile"}<select value={selectedCapability?.model ?? ""} disabled={!selectedCapability} aria-invalid={Boolean(errors.model)} onChange={(event) => setValues((current) => ({ ...current, model: event.target.value }))}>{configurableCapabilities.map((capability) => <option key={`${capability.provider}:${capability.model}`} value={capability.model}>{ar ? capability.displayNameAr : capability.displayNameEn}</option>)}</select>{errors.model ? <small role="alert">{errors.model.message}</small> : selectedCapability ? <small>{ar ? selectedCapability.summaryAr : selectedCapability.summaryEn}</small> : <small>{ar ? "لا يوجد ملف مؤهل؛ لا يمكن الحفظ حتى يكتمل سجل القدرات." : "No eligible profile exists; saving is unavailable until the capability registry is complete."}</small>}</label>
       <label>{ar ? "حد التفسيرات اليومي" : "Daily explanation limit"}<input inputMode="numeric" dir="ltr" lang="en" value={values.dailyRequestLimit} aria-invalid={Boolean(errors.dailyRequestLimit)} onChange={(event) => setValues((current) => ({ ...current, dailyRequestLimit: normalizeBaseerNumericInput(event.target.value).replace(".", "") }))} />{errors.dailyRequestLimit ? <small role="alert">{errors.dailyRequestLimit.message}</small> : <small>{ar ? "ابدأ بـ10 للتجربة." : "Start with 10 for the pilot."}</small>}</label>
       <label>{ar ? "سقف التكلفة اليومي بالدولار" : "Daily USD cost cap"}<input inputMode="decimal" dir="ltr" lang="en" value={values.dailyCostLimit} aria-invalid={Boolean(errors.dailyCostLimit)} onChange={(event) => setValues((current) => ({ ...current, dailyCostLimit: normalizeBaseerNumericInput(event.target.value) }))} />{errors.dailyCostLimit ? <small role="alert">{errors.dailyCostLimit.message}</small> : <small>{ar ? "سقف حازم: يتوقف الطلب قبل إرساله عند تجاوزه." : "Hard stop: a request is blocked before sending if it would exceed this."}</small>}</label>
       {error ? <p className="daily-sales-message error" role="alert">{error}</p> : null}{message ? <p className="daily-sales-message success" role="status">{message}</p> : null}
-      <footer><button className="daily-sales-primary" disabled={busy}>{busy ? (ar ? "جارٍ الحفظ…" : "Saving…") : (provider ? (ar ? "تحديث إعداد OpenAI" : "Update OpenAI configuration") : (ar ? "حفظ إعداد OpenAI" : "Save OpenAI configuration"))}</button></footer>
+      <footer><button className="daily-sales-primary" disabled={busy || !selectedCapability}>{busy ? (ar ? "جارٍ الحفظ…" : "Saving…") : (provider ? (ar ? "تحديث إعداد بصيرة" : "Update Basira configuration") : (ar ? "حفظ إعداد بصيرة" : "Save Basira configuration"))}</button></footer>
     </>}</BaseerValidatedFormField> : <p className="daily-sales-message error">{ar ? "هذه الصفحة للمالك فقط." : "Only the system owner can configure Basira."}</p>}
   </section>;
 }

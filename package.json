@@ -27,6 +27,7 @@
     "verify:basira-skill-evaluations": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node apps/api/dist/ai-platform/ai-skill-evaluation-suites.policy-verification.js",
     "verify:basira-analysis-readiness": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node apps/api/dist/ai-platform/analysis-readiness.policy-verification.js",
     "verify:basira-provider-diagnostics": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node apps/api/dist/ai-platform/ai-provider-probe-diagnostics.policy-verification.js",
+    "verify:basira-provider-capabilities": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node apps/api/dist/ai-platform/ai-provider-capability-registry.policy-verification.js",
                     "verify:finance-gate-b-db":  "node scripts/run-finance-gate-b-db-verification.mjs",
                     "verify:finance-period-race":  "node scripts/run-finance-period-race-verification.mjs",
                     "verify:reporting-r0-a-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/finance/finance-pnl-mapping.policy-verification.js",

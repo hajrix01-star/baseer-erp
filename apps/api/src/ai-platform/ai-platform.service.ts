@@ -40,11 +40,16 @@ import {
   AiSkillActivationStatus,
   CompanyStatus,
   Prisma,
+  type AiProviderKind,
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 import { AiCredentialVault } from "./ai-credential-vault.js";
 import { startOfRiyadhDay } from "./ai-consumption-time.js";
 import { AiProviderAdapterRegistry } from "./ai-provider-adapter-registry.js";
+import {
+  canConfigureAiProviderModel,
+  listAiProviderModelCapabilities,
+} from "./ai-provider-capability-registry.js";
 import type { InterpretationSubjectAccess } from "./ai-interpretation-center.service.js";
 import { AI_SKILL_CATALOG, runtimeAvailabilityForAiSkill, selectAiSkill } from "./ai-skills.js";
 import { evaluationSuiteForAiSkill, runOfflineAiSkillEvaluation } from "./ai-skill-evaluation-suites.js";
@@ -111,11 +116,18 @@ export class AiPlatformService {
     context: TrustedCompanyActorContext,
     input: ConfigureAiProviderRequest,
   ) {
+    const model = input.model.trim();
+    this.assertConfigurableProviderModel(input.provider, model);
     const envelope = this.vault.encryptApiKey(input.apiKey);
     const configurationId = await this.database.inTenantTransaction(
       context.tenantId,
       async (transaction) => {
         await this.lockTenantProviderConfiguration(transaction, context);
+        await this.requireCurrentProviderPriceRevision(
+          transaction,
+          input.provider,
+          model,
+        );
         const begun = await this.idempotency.beginInTransaction(
           transaction,
           context,
@@ -124,7 +136,7 @@ export class AiPlatformService {
             key: input.idempotencyKey,
             request: {
               provider: input.provider,
-              model: input.model,
+              model,
               dailyRequestLimit: input.dailyRequestLimit,
               dailyCostLimit: input.dailyCostLimit ?? null,
             },
@@ -145,7 +157,7 @@ export class AiPlatformService {
             id,
             tenantId: context.tenantId,
             provider: input.provider,
-            model: input.model.trim(),
+            model,
             status: AiProviderConfigurationStatus.DRAFT,
             isDefault: false,
             dailyRequestLimit: input.dailyRequestLimit,
@@ -155,7 +167,7 @@ export class AiPlatformService {
         });
         await this.audit(transaction, context, "platform.ai.provider_configured", id, {
           provider: input.provider,
-          model: input.model.trim(),
+          model,
           dailyRequestLimit: input.dailyRequestLimit,
           dailyCostLimit: input.dailyCostLimit ?? null,
           configurationVersion: 1,
@@ -192,9 +204,15 @@ export class AiPlatformService {
           select: { id: true, provider: true, model: true },
         });
         if (!configuration) throw new NotFoundException("The AI provider configuration was not found.");
-        if (configuration.provider !== "OPENAI_COMPATIBLE") {
-          throw new ConflictException("This AI provider is not implemented yet and cannot be activated.");
-        }
+        this.assertConfigurableProviderModel(
+          configuration.provider,
+          configuration.model,
+        );
+        await this.requireCurrentProviderPriceRevision(
+          transaction,
+          configuration.provider,
+          configuration.model,
+        );
         const begun = await this.idempotency.beginInTransaction(transaction, context, {
           operation: PROVIDER_ACTIVATE_OPERATION,
           key: input.idempotencyKey,
@@ -263,6 +281,17 @@ export class AiPlatformService {
         upstreamStatus: null,
         checkedAt,
       };
+    }
+    if (!canConfigureAiProviderModel(provider.provider, provider.model)) {
+      return this.persistProviderConnectionCheck(context, {
+        configurationId: provider.id,
+        state: "ERROR",
+        reason: "MODEL_UNAVAILABLE",
+        provider: provider.provider,
+        model: provider.model,
+        upstreamStatus: null,
+        checkedAt,
+      });
     }
 
     let apiKey: string;
@@ -979,6 +1008,7 @@ export class AiPlatformService {
       ]);
       return {
         companyId: context.companyId,
+        providerCapabilities: listAiProviderModelCapabilities(),
         activeProvider: activeProvider ? this.providerReceipt(activeProvider) : null,
         providerConfigurations: providerConfigurations.map((provider) => this.providerReceipt(provider)),
         latestProviderConnectionCheck: this.providerConnectionReceiptFromAudit(latestProviderConnectionCheck?.afterJson),
@@ -1004,6 +1034,41 @@ export class AiPlatformService {
       }
       return this.providerReceipt(configuration);
     });
+  }
+
+  /**
+   * A provider key proves only that an account exists. The provider/model
+   * pairing must also have a reviewed adapter, local token counter and skill
+   * policy in the code-owned registry before it can be persisted or activated.
+   */
+  private assertConfigurableProviderModel(provider: AiProviderKind, model: string) {
+    if (!canConfigureAiProviderModel(provider, model)) {
+      throw new ConflictException(
+        "The selected AI provider/model is not an approved Basira capability.",
+      );
+    }
+  }
+
+  /** Price revisions are immutable and inserted by a reviewed migration. */
+  private async requireCurrentProviderPriceRevision(
+    transaction: Prisma.TransactionClient,
+    provider: AiProviderKind,
+    model: string,
+  ) {
+    const price = await transaction.aiModelPriceRevision.findFirst({
+      where: {
+        provider,
+        model,
+        effectiveFrom: { lte: new Date() },
+      },
+      orderBy: [{ effectiveFrom: "desc" }, { version: "desc" }],
+      select: { id: true },
+    });
+    if (!price) {
+      throw new ConflictException(
+        "No approved price revision exists for the selected Basira model.",
+      );
+    }
   }
 
   private async requireSystemIdentity(
