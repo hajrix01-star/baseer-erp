@@ -43,9 +43,11 @@ import {
 } from "./ai-consumption-guard.service.js";
 import { AiInterpretationService, interpretationAad } from "./ai-interpretation.service.js";
 import type { AiProviderUsage } from "./ai-provider-usage.js";
+import { decisionAlertProviderPrompt, marketingCampaignProviderPrompt, promptTextForLocalTokenCount } from "./ai-provider-prompts.js";
 import { AiRuntimeRateLimitService } from "./ai-runtime-rate-limit.service.js";
 import { AnalysisReadinessService } from "./analysis-readiness.service.js";
 import { evaluationSuiteForAiSkill, runOfflineAiSkillEvaluation } from "./ai-skill-evaluation-suites.js";
+import { BASIRA_S2_TOKENIZER_MODEL, BASIRA_S2_TOKENIZER_VERSION } from "./ai-token-counter.js";
 import { DecisionIntelligenceService } from "../decision-intelligence/decision-intelligence.service.js";
 import { MarketingService } from "../marketing/marketing.service.js";
 import { AI_SKILL_CATALOG, listAiSkills, selectAiSkill } from "./ai-skills.js";
@@ -56,6 +58,9 @@ const INTERPRETATION_RETENTION_MS = 30 * 24 * 60 * 60 * 1_000;
 const INTERPRETATION_PROMPT_VERSION = 1;
 const INTERPRETATION_MODEL_PROFILE = Object.freeze({
   key: "s2.interpretation.low_cost.v1",
+  tokenizerModel: BASIRA_S2_TOKENIZER_MODEL,
+  tokenizerVersion: BASIRA_S2_TOKENIZER_VERSION,
+  tokenSafetyMargin: 256,
   maxInputTokens: 12_000,
   maxOutputTokens: 600,
   reasoning: "low",
@@ -380,6 +385,14 @@ export class AiRuntimeService {
     let reservationSettled = false;
     try {
       const apiKey = this.vault.decryptApiKey(setup.provider);
+      const companyContext = this.companyContextData(setup.companyContexts);
+      const providerPrompt = decisionAlertProviderPrompt({
+        brief,
+        language: input.request.language,
+        toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
+        safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
+        companyContext,
+      });
       // This lightweight local limiter is only an extra anti-burst control.
       // The database reservation below is the authoritative cross-instance
       // request and cost limit.
@@ -390,11 +403,7 @@ export class AiRuntimeService {
         activation,
         interpretationRunId: claim.runId,
         profile: INTERPRETATION_MODEL_PROFILE,
-        inputCharacters: JSON.stringify({
-          frozenAlertBrief: brief,
-          approvedCompanyContext: this.companyContextData(setup.companyContexts),
-          requestedLanguage: input.request.language,
-        }).length,
+        inputText: promptTextForLocalTokenCount(providerPrompt),
       });
       const generated = await this.adapters.explainDecisionAlert({
         apiKey,
@@ -404,7 +413,7 @@ export class AiRuntimeService {
         actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
         toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
         safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
-        companyContext: this.companyContextData(setup.companyContexts),
+        companyContext,
         maxOutputTokens: INTERPRETATION_MODEL_PROFILE.maxOutputTokens,
       });
       providerUsage = generated.usage;
@@ -681,6 +690,14 @@ export class AiRuntimeService {
     let reservationSettled = false;
     try {
       const apiKey = this.vault.decryptApiKey(setup.provider);
+      const companyContext = this.companyContextData(setup.companyContexts);
+      const providerPrompt = marketingCampaignProviderPrompt({
+        brief: snapshot.payload as Record<string, unknown>,
+        language: input.request.language,
+        toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
+        safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
+        companyContext,
+      });
       this.rateLimit.recordNewExecution(context);
       reservation = await this.consumption.reserve({
         context,
@@ -688,11 +705,7 @@ export class AiRuntimeService {
         activation,
         interpretationRunId: claim.runId,
         profile: INTERPRETATION_MODEL_PROFILE,
-        inputCharacters: JSON.stringify({
-          frozenCampaignBrief: snapshot.payload,
-          approvedCompanyContext: this.companyContextData(setup.companyContexts),
-          requestedLanguage: input.request.language,
-        }).length,
+        inputText: promptTextForLocalTokenCount(providerPrompt),
       });
       const generated = await this.adapters.explainMarketingCampaign({
         apiKey, model: setup.provider.model,
@@ -700,7 +713,7 @@ export class AiRuntimeService {
         actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
         toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
         safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
-        companyContext: this.companyContextData(setup.companyContexts),
+        companyContext,
         maxOutputTokens: INTERPRETATION_MODEL_PROFILE.maxOutputTokens,
       });
       providerUsage = generated.usage;

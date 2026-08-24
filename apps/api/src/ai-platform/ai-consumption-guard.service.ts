@@ -12,6 +12,7 @@ import {
 } from "../generated/prisma/client.js";
 import type { AiProviderUsage } from "./ai-provider-usage.js";
 import { startOfRiyadhDay } from "./ai-consumption-time.js";
+import { countBasiraS2InputTokens } from "./ai-token-counter.js";
 
 const RESERVATION_LEASE_MS = 10 * 60 * 1_000;
 const USD_PER_MILLION = new Prisma.Decimal(1_000_000);
@@ -32,6 +33,8 @@ export type AiConsumptionActivation = Readonly<{
 
 export type AiConsumptionProfile = Readonly<{
   key: string;
+  tokenizerModel: string;
+  tokenSafetyMargin: number;
   maxInputTokens: number;
   maxOutputTokens: number;
 }>;
@@ -59,16 +62,30 @@ export class AiConsumptionGuardService {
     activation: AiConsumptionActivation;
     interpretationRunId: string;
     profile: AiConsumptionProfile;
-    inputCharacters: number;
+    inputText: string;
   }>): Promise<AiCostReservation> {
     const now = new Date();
-    const inputTokenEstimate = estimateTokens(input.inputCharacters);
-    if (inputTokenEstimate > input.profile.maxInputTokens) {
+    let tokenCount;
+    try {
+      if (input.provider.model !== input.profile.tokenizerModel) {
+        throw new Error("Configured model does not match the approved tokenizer profile.");
+      }
+      tokenCount = countBasiraS2InputTokens({
+        model: input.profile.tokenizerModel,
+        text: input.inputText,
+        maxInputTokens: input.profile.maxInputTokens,
+        safetyMarginTokens: input.profile.tokenSafetyMargin,
+      });
+    } catch {
+      throw new ConflictException("No approved local token counter exists for the configured Basira model.");
+    }
+    if (tokenCount.exceedsLimit) {
       throw new HttpException(
         "The prepared evidence is too large for this low-cost Basira skill. Narrow the period or review the source data first.",
         HttpStatus.PAYLOAD_TOO_LARGE,
       );
     }
+    const inputTokenEstimate = tokenCount.estimatedTokens;
 
     return this.database.inTenantTransaction(input.context.tenantId, async (transaction) => {
       await this.lockBudgetInTransaction(transaction, input.context, now);
@@ -315,10 +332,6 @@ export class AiConsumptionGuardService {
       },
     });
   }
-}
-
-function estimateTokens(characters: number): number {
-  return Math.max(1, Math.ceil(Math.max(0, characters) / 2));
 }
 
 function estimateWorstCaseCost(input: Readonly<{

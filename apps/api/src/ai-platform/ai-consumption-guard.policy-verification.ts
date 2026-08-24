@@ -8,6 +8,7 @@ import type { TrustedCompanyActorContext } from "../core-controls/trusted-contex
 import { DatabaseService } from "../database/database.service.js";
 import { AiBudgetReservationStatus, Prisma } from "../generated/prisma/client.js";
 import { AiConsumptionGuardService } from "./ai-consumption-guard.service.js";
+import { BASIRA_S2_TOKENIZER_MODEL, countBasiraS2InputTokens } from "./ai-token-counter.js";
 
 dotenv.config({ path: "apps/api/.env.baseer-test" });
 
@@ -47,9 +48,18 @@ async function verify(): Promise<void> {
 
     const provider = { id: providerId, provider: "OPENAI_COMPATIBLE" as const, model: "gpt-5-mini", dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000") };
     const activation = { id: activationId, dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000") };
-    const profile = { key: "verification.low_cost", maxInputTokens: 500, maxOutputTokens: 100 };
+    const profile = { key: "verification.low_cost", tokenizerModel: BASIRA_S2_TOKENIZER_MODEL, tokenSafetyMargin: 32, maxInputTokens: 500, maxOutputTokens: 100 };
+    const arabicCount = countBasiraS2InputTokens({
+      model: "gpt-5-mini",
+      text: "ملخص مبيعات اليوم مع دليل موثق ولا توجد أسباب مؤكدة.",
+      maxInputTokens: 500,
+      safetyMarginTokens: 32,
+    });
+    assert.ok(!arabicCount.exceedsLimit && arabicCount.contentTokens !== null && arabicCount.estimatedTokens === arabicCount.contentTokens + 32, "Arabic evidence must use the local GPT-5 BPE counter plus the fixed safety margin.");
+    const oversizedCount = countBasiraS2InputTokens({ model: "gpt-5-mini", text: "حد".repeat(10_000), maxInputTokens: 64, safetyMarginTokens: 16 });
+    assert.equal(oversizedCount.exceedsLimit, true, "The local counter must reject oversized evidence before provider egress.");
     const results = await Promise.allSettled(runIds.map((interpretationRunId) => guard.reserve({
-      context, provider, activation, interpretationRunId, profile, inputCharacters: 120,
+      context, provider, activation, interpretationRunId, profile, inputText: "حزمة أدلة تحقق محلية",
     })));
     const fulfilled = results.filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof guard.reserve>>> => result.status === "fulfilled");
     const rejected = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
