@@ -37,10 +37,9 @@ function AdministrationContent({ language, section, session, overview, loading, 
   const shared = { session, owner: overview.owner, onDone: reload, onError: reportError };
   const panel = section === 1 ? <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} /> : section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : section === 4 ? <AdministrationAiSettingsPanel language={language} session={session} owner={overview.owner} /> : <AdministrationOverviewPanel overview={overview} session={session} language={language} />;
   return <section className="administration-shell">
-    <header className="administration-heading">
+    {section !== 4 ? <header className="administration-heading">
       <div><p className="eyebrow">Baseer ERP / Administration</p><h2>{text.companiesAndAccess}</h2></div>
-
-    </header>
+    </header> : null}
     {message && <p className="daily-sales-message error">{message}</p>}
     {/* Basira governance is capability-based. A company manager with the
         dedicated Basira capabilities uses the same screen as the owner. */}

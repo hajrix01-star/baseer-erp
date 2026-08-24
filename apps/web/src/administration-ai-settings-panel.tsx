@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { api, requestId, type ActiveSession } from "./daily-sales-client";
 import { BaseerCard } from "./baseer-card";
@@ -36,7 +36,8 @@ type ProviderCapability = {
   costTier: "LOW" | "MEDIUM" | "HIGH";
   supportedSkillKeys: string[];
 };
-type Configuration = { companyId: string; providerCapabilities: ProviderCapability[]; activeProvider: ProviderReceipt | null; providerConfigurations: ProviderReceipt[]; latestProviderConnectionCheck: ProviderConnection | null; activeSystemIdentity: unknown | null; activeIdentity: unknown | null };
+type SystemIdentity = { id: string; version: number; status: "ACTIVE" | "ARCHIVED"; assistantNameAr: string; assistantNameEn: string; defaultLanguage: Language; toneInstructions: string; safetyInstructions: string; createdAt: string; updatedAt: string };
+type Configuration = { companyId: string; providerCapabilities: ProviderCapability[]; activeProvider: ProviderReceipt | null; providerConfigurations: ProviderReceipt[]; latestProviderConnectionCheck: ProviderConnection | null; activeSystemIdentity: SystemIdentity | null; activeIdentity: unknown | null };
 type ProviderConnection = {
   configurationId: string | null;
   state: "READY" | "ERROR" | "UNCONFIGURED";
@@ -49,6 +50,8 @@ type ProviderConnection = {
 type FormValues = { apiKey: string; model: string; dailyRequestLimit: string; dailyCostLimit: string };
 type ActivationBudget = { dailyRequestLimit: string; dailyCostLimit: string };
 type VisibleProviderConfigurations = { items: ProviderReceipt[]; hiddenRevisionCount: number };
+type BasiraTab = "overview" | "identity" | "operations" | "skills" | "context" | "records";
+type IdentityValues = { assistantNameAr: string; assistantNameEn: string; defaultLanguage: Language; toneInstructions: string; safetyInstructions: string };
 
 type OfflineEvaluation = { id: string; skillKey: string; skillVersion: number; policyVersion: number; suiteKey: string; suiteVersion: number; suiteChecksum: string; mode: "OFFLINE"; status: "PASSED" | "FAILED" | "BLOCKED"; totalCaseCount: number; passedCaseCount: number; failedCaseCount: number; createdAt: string };
 type Governance = {
@@ -66,21 +69,37 @@ const initialContextDraft: ContextDraft = { kind: "TERMINOLOGY", moduleScope: "g
 
 const initialValues: FormValues = { apiKey: "", model: "gpt-5-mini", dailyRequestLimit: "10", dailyCostLimit: "0.25" };
 const initialActivationBudget: ActivationBudget = { dailyRequestLimit: "10", dailyCostLimit: "0.10" };
+const initialIdentityValues: IdentityValues = { assistantNameAr: "", assistantNameEn: "", defaultLanguage: "ar", toneInstructions: "", safetyInstructions: "" };
 
 /**
  * Deliberately narrow UI: it stores an OpenAI key once through the existing
  * encrypted server endpoint. The key is never read back into this view.
  */
 export function AdministrationAiSettingsPanel({ language, session, owner }: { language: Language; session: ActiveSession; owner: boolean }) {
-  return <div className="administration-basira-governance">
+  const [activeTab, setActiveTab] = useState<BasiraTab>("overview");
+  const ar = language === "ar";
+  const tabs: Array<{ id: BasiraTab; ar: string; en: string }> = [
+    { id: "overview", ar: "النظرة العامة", en: "Overview" },
+    { id: "identity", ar: "الهوية والسلوك", en: "Identity & behavior" },
+    { id: "operations", ar: "التشغيل والاتصال", en: "Operation & connection" },
+    { id: "skills", ar: "المهارات والتجارب", en: "Skills & pilots" },
+    { id: "context", ar: "السياق المعتمد", en: "Approved context" },
+    { id: "records", ar: "الإيصالات والتقييمات", en: "Receipts & evaluations" },
+  ];
+  return <div className="basira-workspace">
+    <header className="basira-workspace__hero">
+      <div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "مركز تشغيل بصيرة" : "Basira control center"}</h3><p>{ar ? "تشغيل بصيرة وهويتها ومهاراتها وسياقها في مكان واحد. لا يُفعّل أي استخدام حي إلا بعد اجتياز الضوابط والحدود المعتمدة." : "One place for Basira’s operation, identity, skills and context. No live use is enabled until approved safeguards and limits pass."}</p></div>
+      <span className="basira-workspace__hero-mark" aria-hidden="true">ب</span>
+    </header>
+    <nav className="basira-workspace__tabs" aria-label={ar ? "أقسام بصيرة" : "Basira sections"}>{tabs.map((tab) => <button key={tab.id} type="button" aria-current={activeTab === tab.id ? "page" : undefined} className={activeTab === tab.id ? "is-active" : undefined} onClick={() => setActiveTab(tab.id)}>{ar ? tab.ar : tab.en}</button>)}</nav>
     <BaseerCompanyReadQuery session={session} resource="administration.ai.configuration" load={(current, signal) => api<Configuration>(current, "/administration/ai/configuration", { signal })}>
-      {({ data, loading, error, refetch }) => <AiSettingsContent language={language} session={session} owner={owner} configuration={data} loading={loading} loadError={error} refetch={refetch} />}
+      {({ data, loading, error, refetch }) => <AiSettingsContent language={language} session={session} owner={owner} configuration={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} />}
     </BaseerCompanyReadQuery>
-    <BasiraGovernancePanel language={language} session={session} />
+    <BasiraGovernancePanel language={language} session={session} activeTab={activeTab} />
   </div>;
 }
 
-function AiSettingsContent({ language, session, owner, configuration, loading, loadError, refetch }: { language: Language; session: ActiveSession; owner: boolean; configuration: Configuration | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
+function AiSettingsContent({ language, session, owner, configuration, loading, loadError, refetch, activeTab }: { language: Language; session: ActiveSession; owner: boolean; configuration: Configuration | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void>; activeTab: BasiraTab }) {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -89,8 +108,10 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [connectionBusy, setConnectionBusy] = useState(false);
   const [activatingId, setActivatingId] = useState<string | null>(null);
+  const [identityValues, setIdentityValues] = useState<IdentityValues>(initialIdentityValues);
   const ar = language === "ar";
   const provider = configuration?.activeProvider ?? null;
+  const systemIdentity = configuration?.activeSystemIdentity ?? null;
   const candidateProvider = configuration?.providerConfigurations.find((item) => item.status === "DRAFT" || item.status === "VALIDATED") ?? provider;
   const visibleProviderConfigurations = summarizeProviderConfigurations(configuration?.providerConfigurations ?? [], provider?.id ?? null);
   const configurableCapabilities = (configuration?.providerCapabilities ?? []).filter((capability) => capability.status === "AVAILABLE" && capability.activationReadiness === "READY_FOR_CONFIGURATION");
@@ -101,6 +122,17 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
     dailyRequestLimit: z.string().regex(/^\d+$/, ar ? "أدخل عدداً صحيحاً." : "Enter a whole number.").refine((value) => Number(value) >= 1 && Number(value) <= 100_000, ar ? "الحد بين 1 و100000." : "The limit must be between 1 and 100000."),
     dailyCostLimit: z.string().regex(/^\d+(?:\.\d{1,4})?$/, ar ? "أدخل مبلغاً بالدولار." : "Enter a USD amount.").refine((value) => Number(value) > 0 && Number(value) <= 100_000, ar ? "أدخل مبلغاً أكبر من صفر." : "Enter an amount above zero."),
   }), [ar, configurableCapabilities]);
+  const identitySchemaFactory = useCallback<BaseerValidatedFormSchemaFactory>(({ z }) => z.object({
+    assistantNameAr: z.string().trim().min(1, ar ? "أدخل الاسم العربي." : "Enter the Arabic name.").max(80),
+    assistantNameEn: z.string().trim().min(1, ar ? "أدخل الاسم الإنجليزي." : "Enter the English name.").max(80),
+    defaultLanguage: z.enum(["ar", "en"]),
+    toneInstructions: z.string().trim().min(1, ar ? "اكتب أسلوب العرض." : "Describe the presentation style.").max(2_000),
+    safetyInstructions: z.string().trim().min(1, ar ? "اكتب ضوابط السلامة." : "Describe the safety rules.").max(4_000),
+  }), [ar]);
+  useEffect(() => {
+    if (!systemIdentity) return;
+    setIdentityValues({ assistantNameAr: systemIdentity.assistantNameAr, assistantNameEn: systemIdentity.assistantNameEn, defaultLanguage: systemIdentity.defaultLanguage, toneInstructions: systemIdentity.toneInstructions, safetyInstructions: systemIdentity.safetyInstructions });
+  }, [systemIdentity?.id, systemIdentity?.assistantNameAr, systemIdentity?.assistantNameEn, systemIdentity?.defaultLanguage, systemIdentity?.toneInstructions, systemIdentity?.safetyInstructions]);
   const checkConnection = useCallback(async (signal?: AbortSignal) => {
     if (!candidateProvider) { setConnection(null); setConnectionBusy(false); return; }
     setConnectionBusy(true); setConnectionError(null);
@@ -138,6 +170,22 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
       setError(presentBaseerApiError(reason, language, ar ? "تعذر حفظ إعداد بصيرة." : "The Basira configuration could not be saved."));
     } finally { setBusy(false); }
   };
+  const submitSystemIdentity = async (next: IdentityValues) => {
+    if (!owner) return;
+    setBusy(true); setError(null); setMessage(null);
+    try {
+      const idempotencyKey = requestId();
+      await api<SystemIdentity>(session, "/administration/ai/system-identity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Idempotency-Key": idempotencyKey },
+        body: JSON.stringify({ ...next, idempotencyKey }),
+      });
+      await refetch();
+      setMessage(ar ? "تم حفظ إصدار جديد لهوية بصيرة المركزية." : "A new central Basira identity version was saved.");
+    } catch (reason) {
+      setError(presentBaseerApiError(reason, language, ar ? "تعذر حفظ هوية بصيرة." : "Basira identity could not be saved."));
+    } finally { setBusy(false); }
+  };
   const activateProfile = async (configurationId: string) => {
     if (!owner || configurationId === provider?.id) return;
     setActivatingId(configurationId); setError(null); setMessage(null);
@@ -154,6 +202,7 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
       setError(presentBaseerApiError(reason, language, ar ? "تعذر تبديل ملف الذكاء." : "The AI profile could not be switched."));
     } finally { setActivatingId(null); }
   };
+  if (activeTab !== "overview" && activeTab !== "identity" && activeTab !== "operations") return null;
   if (loading) return <section className="administration-section"><p className="administration-loading">{ar ? "جارٍ تحميل إعداد بصيرة…" : "Loading Basira settings…"}</p></section>;
   // Provider configuration is owner-only. A missing read-only capability must
   // not prevent the owner from supplying a new key through the write route.
@@ -171,8 +220,36 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
             ? (ar ? "لم يُفحص هذا الملف يدوياً بعد" : "This profile has not been checked manually yet")
             : (ar ? "لم يُحفظ مزود بعد" : "No provider is configured");
   const connectionReason = displayedConnection?.reason ? connectionReasonText(displayedConnection.reason, language) : null;
+  const providerState = provider ? (ar ? "مزود نشط" : "Provider active") : candidateProvider ? (ar ? "مزود بانتظار التحقق" : "Provider pending verification") : (ar ? "لم يُحفظ مزود" : "No provider saved");
+  const nextStep = !provider
+    ? (ar ? "أضف ملف التشغيل ثم افحص الاتصال قبل أي تجربة." : "Add an operating profile, then verify its connection before any pilot.")
+    : displayedConnection?.state !== "READY"
+      ? (ar ? "افحص الاتصال من تبويب التشغيل والاتصال قبل فتح أي تجربة." : "Check the connection from Operation & connection before opening any pilot.")
+      : (ar ? "الاتصال جاهز. تبقى المهارة المختارة وبوابة الخادم وتجربة بشرية محدودة." : "The connection is ready. The chosen skill, server gate, and limited human pilot remain.");
+  if (activeTab === "overview") return <section className="basira-tab-panel" aria-label={ar ? "نظرة بصيرة العامة" : "Basira overview"}>
+    <BaseerCard className="basira-overview__next"><p className="eyebrow">{ar ? "الخطوة التالية" : "Next step"}</p><strong>{nextStep}</strong><span>{ar ? "بصيرة لا تعمل تلقائياً ولا تنفذ أي إجراء خارجي." : "Basira never runs automatically or performs an external action."}</span></BaseerCard>
+    <div className="basira-overview__grid">
+      <BaseerCard className="basira-overview__metric"><small>{ar ? "حالة بصيرة" : "Basira status"}</small><strong>{providerState}</strong><span className={`basira-overview__signal is-${displayedConnection?.state?.toLowerCase() ?? "unchecked"}`}>{connectionText}</span></BaseerCard>
+      <BaseerCard className="basira-overview__metric"><small>{ar ? "ملف التشغيل" : "Runtime profile"}</small><strong dir="ltr">{provider?.model ?? "—"}</strong><span>{provider ? `${formatCount(provider.dailyRequestLimit, language)} ${ar ? "طلب يومياً" : "requests/day"}` : (ar ? "لا يوجد ملف نشط" : "No active profile")}</span></BaseerCard>
+      <BaseerCard className="basira-overview__metric"><small>{ar ? "سقف تكلفة بصيرة" : "Basira cost cap"}</small><strong dir="ltr">{provider ? formatUsd(provider.dailyCostLimit, language) : "—"}</strong><span>{ar ? "سقف حازم قبل إرسال الطلب" : "Hard pre-send cap"}</span></BaseerCard>
+      <BaseerCard className="basira-overview__metric"><small>{ar ? "هوية بصيرة" : "Basira identity"}</small><strong>{systemIdentity ? (ar ? systemIdentity.assistantNameAr : systemIdentity.assistantNameEn) : (ar ? "غير محفوظة" : "Not saved")}</strong><span>{systemIdentity ? `${ar ? "الإصدار" : "Version"} ${systemIdentity.version}` : (ar ? "أضف الهوية المركزية" : "Add the central identity")}</span></BaseerCard>
+    </div>
+  </section>;
+  if (activeTab === "identity") return <section className="basira-tab-panel basira-identity-panel" aria-label={ar ? "هوية بصيرة وسلوكها" : "Basira identity and behavior"}>
+    <header className="basira-tab-panel__heading"><div><p className="eyebrow">{ar ? "هوية بصيرة" : "Basira identity"}</p><h4>{ar ? "كيف تقدم بصيرة نفسها" : "How Basira presents itself"}</h4><p>{ar ? "هذه هوية مركزية مَرْجِعية لكل الشركات، وتُنشئ نسخة جديدة عند الحفظ. لا تضع فيها بيانات أعمال أو رسائل أو أوامر تنفيذ." : "This is a central reference identity for all companies. Saving creates a new version; never include business data, messages, or execution instructions."}</p></div></header>
+    <BaseerCard className="basira-identity-panel__current"><small>{ar ? "الهوية المعتمدة الآن" : "Current approved identity"}</small><strong>{systemIdentity ? (ar ? systemIdentity.assistantNameAr : systemIdentity.assistantNameEn) : (ar ? "لا توجد هوية مركزية محفوظة" : "No central identity is saved")}</strong>{systemIdentity ? <span>{ar ? `الإصدار ${systemIdentity.version} · اللغة الافتراضية ${systemIdentity.defaultLanguage === "ar" ? "العربية" : "English"}` : `Version ${systemIdentity.version} · Default language ${systemIdentity.defaultLanguage}`}</span> : <span>{ar ? "يمكن للمالك إنشاء النسخة الأولى من الأسفل." : "The owner can create the first version below."}</span>}</BaseerCard>
+    {owner ? <BaseerValidatedFormField<IdentityValues> id="basira-system-identity" className="basira-identity-panel__form" values={identityValues} schemaFactory={identitySchemaFactory} onValid={(next) => void submitSystemIdentity(next)} errorSummaryLabel={ar ? "تحقق من حقول هوية بصيرة." : "Check the Basira identity fields."}>{({ errors }) => <>
+      <label>{ar ? "اسم بصيرة بالعربية" : "Basira name in Arabic"}<input value={identityValues.assistantNameAr} aria-invalid={Boolean(errors.assistantNameAr)} onChange={(event) => setIdentityValues((current) => ({ ...current, assistantNameAr: event.target.value }))} />{errors.assistantNameAr ? <small role="alert">{errors.assistantNameAr.message}</small> : null}</label>
+      <label>{ar ? "اسم بصيرة بالإنجليزية" : "Basira name in English"}<input value={identityValues.assistantNameEn} dir="ltr" aria-invalid={Boolean(errors.assistantNameEn)} onChange={(event) => setIdentityValues((current) => ({ ...current, assistantNameEn: event.target.value }))} />{errors.assistantNameEn ? <small role="alert">{errors.assistantNameEn.message}</small> : null}</label>
+      <label>{ar ? "لغة العرض الافتراضية" : "Default presentation language"}<select value={identityValues.defaultLanguage} onChange={(event) => setIdentityValues((current) => ({ ...current, defaultLanguage: event.target.value as Language }))}><option value="ar">العربية</option><option value="en">English</option></select></label>
+      <label className="basira-identity-panel__form-full">{ar ? "أسلوب العرض" : "Presentation style"}<textarea value={identityValues.toneInstructions} aria-invalid={Boolean(errors.toneInstructions)} onChange={(event) => setIdentityValues((current) => ({ ...current, toneInstructions: event.target.value }))} placeholder={ar ? "مثال: اشرح بلغة بسيطة، واذكر الدليل والقيود قبل الاقتراح." : "Example: explain simply and state evidence and limitations before a suggestion."} />{errors.toneInstructions ? <small role="alert">{errors.toneInstructions.message}</small> : <small>{ar ? "أسلوب العرض فقط، وليس تعليمات حرة للتصرف أو مصادر معلومات." : "Presentation style only; never free action instructions or data sources."}</small>}</label>
+      <label className="basira-identity-panel__form-full">{ar ? "ضوابط السلامة" : "Safety rules"}<textarea value={identityValues.safetyInstructions} aria-invalid={Boolean(errors.safetyInstructions)} onChange={(event) => setIdentityValues((current) => ({ ...current, safetyInstructions: event.target.value }))} placeholder={ar ? "مثال: لا تخمّن، ولا تدّعِ السببية، ولا تنفذ أي إجراء." : "Example: do not guess, claim causation, or execute an action."} />{errors.safetyInstructions ? <small role="alert">{errors.safetyInstructions.message}</small> : <small>{ar ? "تطبّق الحماية الخادمية هذه القواعد ولا تعتمد على النص وحده." : "Server-side safeguards enforce these rules; they do not rely on text alone."}</small>}</label>
+      {error ? <p className="daily-sales-message error" role="alert">{error}</p> : null}{message ? <p className="daily-sales-message success" role="status">{message}</p> : null}
+      <footer><button className="daily-sales-primary" disabled={busy}>{busy ? (ar ? "جارٍ الحفظ…" : "Saving…") : (ar ? "حفظ إصدار هوية بصيرة" : "Save Basira identity version")}</button></footer>
+    </>}</BaseerValidatedFormField> : <p className="daily-sales-message error">{ar ? "إنشاء هوية بصيرة المركزية للمالك فقط." : "Only the owner can create a central Basira identity."}</p>}
+  </section>;
   return <section className="administration-section administration-ai-settings" aria-label={ar ? "إعداد بصيرة" : "Basira settings"}>
-    <header className="administration-section-heading"><div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "إعداد تفسير التنبيهات" : "Alert-explanation setup"}</h3><p>{ar ? "يُخزّن المفتاح مشفراً في الخادم ولا يظهر مرة أخرى. لا يفعّل التفسير وحده؛ يحتاج الخادم إلى مفتاح تشغيل Pilot." : "The key is encrypted on the server and never displayed again. Saving it alone does not enable explanations; the API deployment still needs the pilot switch."}</p></div></header>
+    <header className="administration-section-heading"><div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "التشغيل والاتصال" : "Operation & connection"}</h3><p>{ar ? "يُخزّن المفتاح مشفراً في الخادم ولا يظهر مرة أخرى. لا يفعّل التفسير وحده؛ يحتاج الخادم إلى مفتاح تشغيل Pilot." : "The key is encrypted on the server and never displayed again. Saving it alone does not enable explanations; the API deployment still needs the pilot switch."}</p></div></header>
     {loadError ? <p className="daily-sales-message error" role="status">{ar ? "تعذر قراءة الإعداد الحالي، لكن يمكنك حفظ إعداد جديد إذا كنت مالك النظام." : "The current configuration could not be read. As the system owner, you can still save a new configuration."}</p> : null}
     <BaseerCard tone="muted"><dl className="administration-ai-settings__status"><div><dt>{ar ? "الحالة الحالية" : "Current status"}</dt><dd>{provider ? (ar ? "مزود نشط" : "Provider active") : candidateProvider ? (ar ? "مزود بانتظار التحقق" : "Provider pending verification") : (ar ? "لا يوجد مزود محفوظ" : "No provider configured")}</dd></div><div className={`administration-ai-connection is-${connectionBusy ? "checking" : displayedConnection?.state?.toLowerCase() ?? "unchecked"}`}><dt>{ar ? "اتصال بصيرة" : "Basira connection"}</dt><dd><span className="administration-ai-connection__dot" aria-hidden="true" />{connectionText}</dd>{connectionReason ? <small>{connectionReason}</small> : null}{displayedConnection?.upstreamStatus ? <small dir="ltr">HTTP {displayedConnection.upstreamStatus}</small> : null}{displayedConnection?.checkedAt ? <small>{ar ? "آخر فحص يدوي: " : "Last manual check: "}{formatDateTime(displayedConnection.checkedAt, language, "Asia/Riyadh")}</small> : null}{connectionError ? <small role="alert">{connectionError}</small> : null}{owner && candidateProvider ? <button type="button" className="baseer-button baseer-button--quiet" disabled={connectionBusy} onClick={() => void checkConnection()}>{connectionBusy ? (ar ? "جارٍ الفحص…" : "Checking…") : (ar ? "فحص الاتصال الآن" : "Check connection now")}</button> : null}</div>{(provider ?? candidateProvider) ? <><div><dt>{ar ? "الموديل" : "Model"}</dt><dd dir="ltr">{(provider ?? candidateProvider)!.model}</dd></div><div><dt>{ar ? "حد الطلبات اليومي" : "Daily request limit"}</dt><dd><bdi dir="ltr">{formatCount((provider ?? candidateProvider)!.dailyRequestLimit, language)}</bdi></dd></div><div><dt>{ar ? "سقف التكلفة اليومي" : "Daily cost cap"}</dt><dd><bdi dir="ltr">{formatUsd((provider ?? candidateProvider)!.dailyCostLimit, language)}</bdi></dd></div><div><dt>{ar ? "الإصدار" : "Version"}</dt><dd><bdi dir="ltr">{formatCount((provider ?? candidateProvider)!.configurationVersion, language)}</bdi></dd></div></> : null}</dl></BaseerCard>
     {visibleProviderConfigurations.items.length ? <BaseerCard tone="muted"><section className="administration-ai-profile-switcher" aria-label={ar ? "ملفات الذكاء" : "AI profiles"}><header><h4>{ar ? "ملفات الذكاء" : "AI profiles"}</h4><p>{ar ? "تُعرض حالة تشغيل واحدة لكل مزود ونموذج. تُحفظ الإصدارات السابقة للتدقيق ولا تتكرر كبطاقات." : "One operational state is shown for each provider and model. Earlier revisions remain auditable without repeating cards."}</p></header><div className="administration-ai-profile-switcher__list">{visibleProviderConfigurations.items.map((item) => <article key={item.id} className={item.isDefault ? "is-active" : undefined}><div><strong>{providerLabel(item.provider)}</strong><span dir="ltr">{item.model}</span><small>{ar ? `الحالة: ${providerStatusLabel(item.status, language)} · الحد اليومي: ${item.dailyRequestLimit}` : `Status: ${providerStatusLabel(item.status, language)} · Daily limit: ${item.dailyRequestLimit}`}</small></div>{item.isDefault ? <span className="administration-ai-profile-switcher__active">{ar ? "النشط الآن" : "Active now"}</span> : item.status === "VALIDATED" ? <button type="button" className="baseer-button baseer-button--quiet" disabled={!owner || activatingId !== null} onClick={() => void activateProfile(item.id)}>{activatingId === item.id ? (ar ? "جارٍ التفعيل…" : "Activating…") : (ar ? "تفعيل هذا الملف" : "Activate this profile")}</button> : item.status === "DRAFT" ? <span className="administration-ai-profile-switcher__active">{ar ? "افحص الاتصال أولاً" : "Verify connection first"}</span> : <span className="administration-ai-profile-switcher__active">{providerStatusLabel(item.status, language)}</span>}</article>)}</div>{visibleProviderConfigurations.hiddenRevisionCount ? <small>{ar ? `${visibleProviderConfigurations.hiddenRevisionCount} إصدار سابق محفوظ في سجل التدقيق ولا يظهر كبطاقة مكررة.` : `${visibleProviderConfigurations.hiddenRevisionCount} earlier revision${visibleProviderConfigurations.hiddenRevisionCount === 1 ? " is" : "s are"} retained in the audit log without a duplicate card.`}</small> : null}<small>{ar ? "لا تظهر ملفات مزوّد مستقبلي هنا إلا بعد اجتياز بوابات السجل؛ لا يمكن تفعيلها بشكل وهمي." : "A future-provider profile appears here only after its registry gates pass; it cannot be activated deceptively."}</small></section></BaseerCard> : null}
@@ -192,13 +269,13 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
 /** One capability-based surface for the tenant owner and company manager.
  * It deliberately manages structured reference data and governed switches,
  * never prompts, secrets, raw model output, or unrestricted chat memory. */
-function BasiraGovernancePanel({ language, session }: { language: Language; session: ActiveSession }) {
+function BasiraGovernancePanel({ language, session, activeTab }: { language: Language; session: ActiveSession; activeTab: BasiraTab }) {
   return <BaseerCompanyReadQuery session={session} resource="administration.ai.governance" load={(current, signal) => api<Governance>(current, "/administration/ai/governance", { signal })}>
-    {({ data, loading, error, refetch }) => <BasiraGovernanceContent language={language} session={session} governance={data} loading={loading} loadError={error} refetch={refetch} />}
+    {({ data, loading, error, refetch }) => <BasiraGovernanceContent language={language} session={session} governance={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} />}
   </BaseerCompanyReadQuery>;
 }
 
-function BasiraGovernanceContent({ language, session, governance, loading, loadError, refetch }: { language: Language; session: ActiveSession; governance: Governance | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
+function BasiraGovernanceContent({ language, session, governance, loading, loadError, refetch, activeTab }: { language: Language; session: ActiveSession; governance: Governance | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void>; activeTab: BasiraTab }) {
   const ar = language === "ar";
   const [draftOpen, setDraftOpen] = useState(false);
   const [feedbackReceipt, setFeedbackReceipt] = useState<Governance["receipts"][number] | null>(null);
@@ -294,13 +371,13 @@ function BasiraGovernanceContent({ language, session, governance, loading, loadE
     },
   );
 
+  if (activeTab !== "overview" && activeTab !== "skills" && activeTab !== "context" && activeTab !== "records") return null;
   if (loading) return <section className="administration-section"><p className="administration-loading">{ar ? "جارٍ تحميل حوكمة بصيرة…" : "Loading Basira governance…"}</p></section>;
   if (!governance) return <section className="administration-section"><BaseerCard tone="muted"><strong>{ar ? "حوكمة بصيرة غير متاحة لهذا الدور" : "Basira governance is unavailable for this role"}</strong><p>{loadError ? presentBaseerApiError(loadError, language, ar ? "تحتاج صلاحيات حوكمة بصيرة للشركة الحالية." : "You need Basira governance permissions for the active company.") : ""}</p></BaseerCard></section>;
   const activeActivations = new Map(governance.activations.filter((item) => item.status !== "SUSPENDED").map((item) => [`${item.skillKey}:${item.skillVersion}:${item.policyVersion}`, item]));
-  return <section className="administration-section basira-governance" aria-label={ar ? "حوكمة بصيرة" : "Basira governance"}>
-    <header className="administration-section-heading"><div><p className="eyebrow">Baseer / Basira</p><h3>{ar ? "حوكمة بصيرة للشركة الحالية" : "Basira governance for the active company"}</h3><p>{ar ? "تستخدم بصيرة سياقاً منظماً ومهارات معتمدة وإيصالات قابلة للتدقيق. لا توجد شخصيات متعددة أو تعليمات حرة هنا." : "Basira uses structured context, approved skills, and auditable receipts. There are no multiple personas or free-form prompts here."}</p></div></header>
+  return <section className="basira-tab-panel basira-governance" data-active-tab={activeTab} aria-label={ar ? "حوكمة بصيرة" : "Basira governance"}>
     {commandError ? <p className="daily-sales-message error" role="alert">{commandError}</p> : null}{message ? <p className="daily-sales-message success" role="status">{message}</p> : null}
-    <div className="baseer-metric-grid"><BaseerCard className="baseer-metric"><small>{ar ? "سياقات معتمدة" : "Approved context"}</small><strong>{governance.companyContexts.filter((item) => item.status === "APPROVED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "مهارات مفعلة" : "Active skills"}</small><strong>{governance.activations.filter((item) => item.status !== "SUSPENDED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "استهلاك اليوم" : "Today's usage"}</small><strong dir="ltr">{formatUsd(governance.consumption.chargedCostUsd, language)}</strong><small>{ar ? `${formatCount(governance.consumption.providerCalls, language)} طلب مزود منذ بداية يوم الرياض` : `${formatCount(governance.consumption.providerCalls, language)} provider calls since Riyadh day start`}</small></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "تقييمات منظمة" : "Structured evaluations"}</small><strong>{governance.evaluations.length}</strong></BaseerCard></div>
+    {activeTab === "overview" ? <><div className="baseer-metric-grid"><BaseerCard className="baseer-metric"><small>{ar ? "سياقات معتمدة" : "Approved context"}</small><strong>{governance.companyContexts.filter((item) => item.status === "APPROVED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "مهارات مفعلة" : "Active skills"}</small><strong>{governance.activations.filter((item) => item.status !== "SUSPENDED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "استهلاك اليوم" : "Today's usage"}</small><strong dir="ltr">{formatUsd(governance.consumption.chargedCostUsd, language)}</strong><small>{ar ? `${formatCount(governance.consumption.providerCalls, language)} طلب مزود منذ بداية يوم الرياض` : `${formatCount(governance.consumption.providerCalls, language)} provider calls since Riyadh day start`}</small></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "تقييمات منظمة" : "Structured evaluations"}</small><strong>{governance.evaluations.length}</strong></BaseerCard></div><BaseerCard className="basira-governance__overview-note"><strong>{ar ? "حوكمة بصيرة" : "Basira governance"}</strong><p>{ar ? "المهارات لا تستخدم البيانات مباشرة؛ تستقبل حزمة أدلة خادمية، ولا يفتح التفعيل صلاحية جديدة أو ينفذ إجراءً خارجياً." : "Skills never read raw data directly. They receive server-built evidence, and activation grants neither new permissions nor external actions."}</p></BaseerCard></> : null}
     <BaseerCard><section className="basira-governance__section"><header><div><h4>{ar ? "سياق الشركة المعتمد" : "Approved company context"}</h4><p>{ar ? "مصطلحات ومراجع عمل فقط؛ لا أرقام مالية متغيرة ولا محتوى بريد أو Google ولا تعليمات للنموذج." : "Business terms and references only; no changing financial facts, email/Google content, or model instructions."}</p></div><BaseerButton type="button" onClick={() => { setCommandError(null); setDraftOpen(true); }}>{ar ? "إضافة سياق" : "Add context"}</BaseerButton></header><div className="basira-governance__list">{governance.companyContexts.length ? governance.companyContexts.map((item) => <article key={item.id}><div><strong>{contextKindLabel(item.kind, language)} · {item.moduleScope}</strong><small>{contextStatusLabel(item.status, language)} · {ar ? `إصدار ${item.version}` : `Version ${item.version}`} · {date(item.createdAt)}</small><p>{contextSummary(item, language)}</p></div><footer>{item.status === "DRAFT" ? <><BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void approveContext(item.id)}>{ar ? "اعتماد" : "Approve"}</BaseerButton><BaseerButton type="button" variant="quiet" disabled={busy} onClick={() => void revokeContext(item.id)}>{ar ? "إلغاء المسودة" : "Revoke draft"}</BaseerButton></> : item.status === "APPROVED" ? <BaseerButton type="button" variant="quiet" disabled={busy} onClick={() => void revokeContext(item.id)}>{ar ? "إلغاء" : "Revoke"}</BaseerButton> : null}</footer></article>) : <p className="decision-muted">{ar ? "لا يوجد سياق معتمد أو مسودة بعد." : "No approved context or draft yet."}</p>}</div></section></BaseerCard>
     <BaseerCard><section className="basira-governance__section"><header><div><h4>{ar ? "كتالوج المهارات والتجربة" : "Skill catalogue and pilot"}</h4><p>{ar ? "المسار واضح: فحص ضوابط بلا تكلفة → فتح بوابة الخادم → تجربة بشرية محدودة. لا يوسّع التفعيل صلاحيات المهارة أو يمنحها أفعالاً خارجية." : "The path is explicit: no-cost safeguard check → server gate → limited human-click pilot. Activation never broadens permissions or grants external actions."}</p></div></header><div className="basira-governance__list">{governance.catalogue.map((skill) => {
       const activation = activeActivations.get(`${skill.key}:${skill.version}:${skill.policyVersion}`);
