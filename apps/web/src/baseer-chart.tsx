@@ -2,7 +2,7 @@ import { BarChart, LineChart, PieChart } from "echarts/charts";
 import { AriaComponent, GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
 import { init, use } from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { formatCompactNumber, formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatPercent } from "./number-format";
 
 use([BarChart, LineChart, PieChart, GridComponent, TooltipComponent, LegendComponent, AriaComponent, SVGRenderer]);
@@ -22,7 +22,7 @@ export type BaseerMarketingTimelineContext = { id: string; titleAr: string; star
 export type BaseerOperationsMonthDay = { businessDate: string; salesGrossAmount: string | null; purchaseGrossAmount: string; purchaseDocumentCount: number };
 
 /** A local, accessible visualisation of server-provided operational totals. */
-export function BaseerChart({ language, title, points, asOf, showSummary = true, presentation = "chart", onPointClick }: {
+export function BaseerChart({ language, title, points, asOf, showSummary = true, presentation = "chart", inlineShareLabel, headerActions, onPointClick }: {
   language: Language;
   title: string;
   points: readonly BaseerOperationalChartPoint[];
@@ -31,6 +31,10 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
   showSummary?: boolean;
   /** A compact, non-duplicating chart rendered inside the data table. */
   presentation?: "chart" | "inlineRows";
+  /** The denominator label used by an inline share column. */
+  inlineShareLabel?: string;
+  /** Optional compact controls that change only the chart presentation. */
+  headerActions?: ReactNode;
   onPointClick?: (point: BaseerOperationalChartPoint) => void;
 }) {
   const element = useRef<HTMLDivElement | null>(null);
@@ -87,9 +91,9 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
     return () => { observer.disconnect(); chart.dispose(); };
   }, [language, points, presentation, title]);
   return <section className="baseer-chart" aria-label={title}>
-    <header><h3>{title}</h3>{showSummary ? <small>{language === "ar" ? `حسب ملخص الخادم في ${formatDate(asOf, language)}` : `Server summary as of ${formatDate(asOf, language)}`}</small> : null}</header>
+    <header><div className="baseer-chart__heading"><h3>{title}</h3>{showSummary ? <small>{language === "ar" ? `حسب ملخص الخادم في ${formatDate(asOf, language)}` : `Server summary as of ${formatDate(asOf, language)}`}</small> : null}</div>{headerActions}</header>
     {showSummary ? <p>{points.map((point) => `${point.label}: ${pointDisplay(point)}`).join(" · ")}</p> : null}
-    {presentation === "inlineRows" ? <table className="baseer-chart__inline-table" dir={language === "ar" ? "rtl" : "ltr"}><caption className="visually-hidden">{title}</caption><thead><tr><th>#</th><th>{language === "ar" ? "الفئة" : "Category"}</th><th>{language === "ar" ? "الحركة" : "Movement"}</th><th>{language === "ar" ? "من إجمالي الإنفاق" : "Share of spend"}</th><th>{language === "ar" ? "القيمة" : "Value"}</th></tr></thead><tbody>{points.map((point, index) => {
+    {presentation === "inlineRows" ? <table className="baseer-chart__inline-table" dir={language === "ar" ? "rtl" : "ltr"}><caption className="visually-hidden">{title}</caption><thead><tr><th>#</th><th>{language === "ar" ? "الفئة" : "Category"}</th><th>{language === "ar" ? "الحركة" : "Movement"}</th><th>{inlineShareLabel ?? (language === "ar" ? "من إجمالي الإنفاق" : "Share of spend")}</th><th>{language === "ar" ? "القيمة" : "Value"}</th></tr></thead><tbody>{points.map((point, index) => {
       const scale = maximum > 0 ? Math.max(0, Math.min(1, point.value / maximum)) : 0;
       const barStyle = { "--baseer-bar-scale": String(scale), "--baseer-bar-delay": `${index * 70}ms` } as CSSProperties;
       return <tr key={point.id ?? point.label}><td className="baseer-chart__rank" dir="ltr">{formatCount(point.rank ?? index + 1, language)}</td><th scope="row">{onPointClick ? <button type="button" className="baseer-chart__point-link" onClick={() => onPointClick(point)}>{point.label}</button> : point.label}</th><td><span className="baseer-chart__inline-bar" aria-hidden="true"><span className="baseer-chart__inline-bar-fill" style={barStyle} /></span></td><td className="baseer-chart__share" dir="ltr">{point.shareOfTotalPercent === undefined ? "—" : formatPercent(point.shareOfTotalPercent, 2, language)}</td><td dir="ltr">{pointDisplay(point)}</td></tr>;
