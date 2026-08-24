@@ -1346,11 +1346,11 @@ body[data-launcher-background="desert-night"] .baseer-login__field input { color
 @keyframes baseer-save-toast { 80% { opacity: 1; } to { opacity: 0; visibility: hidden; } }
 
 /* Launcher visual overrides must remain after responsive workspace rules. */
-.module-card { grid-template-columns: minmax(132px, 44%) minmax(0, 1fr); gap: 0; min-height: 158px; padding: 0; overflow: hidden; border-radius: 18px; }
-.module-icon-panel { display: grid; min-height: 100%; place-items: center; padding: 18px; color: var(--module); background: color-mix(in srgb, var(--module) 13%, #fff); transition: background .18s ease; }
+.module-card { grid-template-columns: minmax(90px, 35%) minmax(0, 1fr); gap: 0; min-height: 158px; padding: 0; overflow: hidden; border-radius: 18px; }
+.module-icon-panel { display: grid; min-height: 100%; place-items: center; padding: 14px; color: var(--module); background: color-mix(in srgb, var(--module) 13%, #fff); transition: background .18s ease; }
 .module-card:hover .module-icon-panel { background: color-mix(in srgb, var(--module) 19%, #fff); }
 .module-icon { display: grid; width: min(104px, 100%); aspect-ratio: 1; place-items: center; background: transparent; }
 .module-icon svg { display: block; width: min(82px, 78%); height: min(82px, 78%); transform: translateY(-1px); }
-.module-copy { display: grid; min-width: 0; place-items: center; padding: 22px; text-align: center; }
-.module-copy strong { font-size: clamp(1.05rem, 1.4vw, 1.3rem); line-height: 1.45; }
-@media (max-width: 800px) { .module-card { grid-template-columns: minmax(106px, 42%) minmax(0, 1fr); min-height: 138px; }.module-icon-panel { padding: 12px; }.module-copy { padding: 16px; }.module-icon { width: min(82px, 100%); }.module-icon svg { width: min(64px, 78%); height: min(64px, 78%); } }
+.module-copy { display: grid; min-width: 0; place-items: center; padding: 18px 16px; text-align: center; }
+.module-copy strong { max-inline-size: 100%; overflow-wrap: normal; word-break: normal; text-wrap: balance; font-size: clamp(1.1rem, 1.55vw, 1.38rem); font-weight: 850; line-height: 1.35; }
+@media (max-width: 800px) { .module-card { grid-template-columns: minmax(88px, 34%) minmax(0, 1fr); min-height: 138px; }.module-icon-panel { padding: 12px; }.module-copy { padding: 14px; }.module-icon { width: min(82px, 100%); }.module-icon svg { width: min(64px, 78%); height: min(64px, 78%); } }
