@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { activeSession, api, monthRange, type Closing } from "./daily-sales-client";
 import { presentBaseerApiError } from "./baseer-api-error";
+import { formatNumber, formatPercent } from "./number-format";
 
 type Language = "ar" | "en";
 type ClosingsReceipt = { closings: Closing[]; hasMore: boolean };
@@ -25,7 +26,7 @@ function labelForMonth(month: MonthValue, language: Language) {
 }
 
 function money(value: number, _language: Language) {
-  return new Intl.NumberFormat("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(value);
+  return formatNumber(value);
 }
 
 function percent(current: number | null, comparison: number | null) {
@@ -103,11 +104,11 @@ export function SalesAnalyticsWorkspace({ language }: { language: Language }) {
       <article className="sales-analytics__card">
         <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? "متوسط المبيعات اليومية حسب أسبوع الشهر" : "Daily sales average by month week"}</h2></div></header>
         <div className="sales-analytics__filters"><label>{ar ? "الفترة الأولى" : "Primary period"}<select value={primaryMonth} onChange={(event) => setPrimaryMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</select></label><label>{ar ? "فترة المقارنة" : "Comparison period"}<select value={comparisonMonth} onChange={(event) => setComparisonMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</select></label></div>
-        <AnalyticsTable headers={[ar ? "الفترة" : "Period", labelForMonth(primaryMonth, language), labelForMonth(comparisonMonth, language), ar ? "التغير" : "Change"]}>{weeks.map((week) => { const change = percent(week.average, week.comparison); return <tr key={week.first}><th scope="row">{ar ? `أسبوع ${Math.ceil(week.first / 7)} (${week.first}–${week.last})` : `Week ${Math.ceil(week.first / 7)} (${week.first}–${week.last})`}</th><td>{week.average === null ? "—" : money(week.average, language)}</td><td>{week.comparison === null ? "—" : money(week.comparison, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`}</td></tr>; })}</AnalyticsTable>
+        <AnalyticsTable headers={[ar ? "الفترة" : "Period", labelForMonth(primaryMonth, language), labelForMonth(comparisonMonth, language), ar ? "التغير" : "Change"]}>{weeks.map((week) => { const change = percent(week.average, week.comparison); return <tr key={week.first}><th scope="row">{ar ? `أسبوع ${Math.ceil(week.first / 7)} (${week.first}–${week.last})` : `Week ${Math.ceil(week.first / 7)} (${week.first}–${week.last})`}</th><td>{week.average === null ? "—" : money(week.average, language)}</td><td>{week.comparison === null ? "—" : money(week.comparison, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : "-"}${formatPercent(Math.abs(change))}`}</td></tr>; })}</AnalyticsTable>
       </article>
       <article className="sales-analytics__card">
         <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? `المعدل اليومي الشهري — ${year}` : `Monthly daily average — ${year}`}</h2></div><label>{ar ? "السنة" : "Year"}<select value={year} onChange={(event) => setYear(Number(event.target.value))}>{[year, year - 1, year - 2].map((value) => <option key={value} value={value}>{value}</option>)}</select></label></header>
-        <AnalyticsTable headers={[ar ? "الشهر" : "Month", ar ? "المبيعات" : "Sales", ar ? "المعدل اليومي" : "Daily average", ar ? "التغير" : "Change"]}>{monthly.map((item, index) => { const prior = monthly[index - 1]?.average ?? null; const change = percent(item.average, prior); return <tr key={item.month}><th scope="row">{labelForMonth(item.month, language)}</th><td>{money(item.total, language)}</td><td>{item.average === null ? "—" : money(item.average, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`}</td></tr>; })}</AnalyticsTable>
+        <AnalyticsTable headers={[ar ? "الشهر" : "Month", ar ? "المبيعات" : "Sales", ar ? "المعدل اليومي" : "Daily average", ar ? "التغير" : "Change"]}>{monthly.map((item, index) => { const prior = monthly[index - 1]?.average ?? null; const change = percent(item.average, prior); return <tr key={item.month}><th scope="row">{labelForMonth(item.month, language)}</th><td>{money(item.total, language)}</td><td>{item.average === null ? "—" : money(item.average, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : "-"}${formatPercent(Math.abs(change))}`}</td></tr>; })}</AnalyticsTable>
       </article>
     </div>
     {loading ? <p className="sales-analytics__status">{ar ? "جارٍ تحميل البيانات…" : "Loading data…"}</p> : null}{error ? <p className="sales-analytics__status is-error">{error}</p> : null}

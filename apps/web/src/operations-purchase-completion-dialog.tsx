@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFormDialog } from "./baseer-form-dialog";
+import { formatMoney } from "./number-format";
 import type { OperationsPurchasePosLine } from "./operations-purchase-pos-composer";
 
 const LazyOperationsPurchasePosComposer = lazy(async () => ({ default: (await import("./operations-purchase-pos-composer")).OperationsPurchasePosComposer }));
@@ -18,7 +19,7 @@ type PurchaseRequest = { id: string; requestNumber: string; plannedPaymentChanne
 type ReceiptInput = { requestLineId: string | null; rawMaterialItemId: string; unitId: string; quantity: string; price: string; selected: boolean };
 
 const today = () => new Date().toISOString().slice(0, 10);
-const money = (value: number) => new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: false }).format(value);
+const money = (value: number, language: Language) => formatMoney(value, "SAR", language);
 
 function formSchema(language: Language) {
   const ar = language === "ar";
@@ -75,6 +76,6 @@ export function OperationsPurchaseCompletionDialog({ open, language, busy, reque
     await onSubmit({ requestId: value.requestId, businessDate: value.businessDate, notes: value.notes.trim() || undefined, paymentReference: value.paymentReference.trim() || undefined, lines: confirmedLines.map((line) => ({ requestLineId: line.requestLineId ?? undefined, rawMaterialItemId: line.rawMaterialItemId, receivedUnitId: line.unitId, receivedQuantity: line.quantity, actualUnitPrice: line.price })) });
   });
 
-  return <BaseerFormDialog open={open} title={text.title} language={language} formId="purchase-completion" submitLabel={`${text.submit} · ${money(total)}`} busy={busy} onClose={onClose}><form id="purchase-completion" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={(event) => void submit(event)}>
+  return <BaseerFormDialog open={open} title={text.title} language={language} formId="purchase-completion" submitLabel={`${text.submit} · ${money(total, language)}`} busy={busy} onClose={onClose}><form id="purchase-completion" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={(event) => void submit(event)}>
     <div className="operations-purchase-request-meta"><label>{text.date}<BaseerDatePicker language={language} label={text.date} value={businessDate} onChange={(value) => form.setValue("businessDate", value, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.businessDate ? <small role="alert">{form.formState.errors.businessDate.message}</small> : null}</label><fieldset className="operations-payment-channel"><legend>{text.channel}</legend><div><BaseerButton type="button" variant="primary" disabled>{selectedRequest?.plannedPaymentChannel === "CUSTODY" ? text.custody : selectedRequest?.plannedPaymentChannel === "BANK_TRANSFER" ? text.transfer : text.cash}</BaseerButton></div></fieldset><label>{text.request}<select aria-invalid={Boolean(form.formState.errors.requestId)} value={requestId} onChange={(event) => chooseRequest(event.target.value)}><option value="">{text.select}</option>{requests.map((request) => <option key={request.id} value={request.id}>{request.requestNumber}</option>)}</select>{form.formState.errors.requestId ? <small role="alert">{form.formState.errors.requestId.message}</small> : null}</label>{selectedRequest?.plannedPaymentChannel === "BANK_TRANSFER" ? <label>{text.reference}<input aria-invalid={Boolean(form.formState.errors.paymentReference)} {...form.register("paymentReference")} />{form.formState.errors.paymentReference ? <small role="alert">{form.formState.errors.paymentReference.message}</small> : null}</label> : null}</div><label>{text.notes}<input {...form.register("notes")} /></label><Suspense fallback={<p>{text.loading}</p>}><OperationsPurchasePosComposer language={language} materials={materials} units={units} lines={composerLines} onChange={updateComposer} /></Suspense>{form.formState.errors.root ? <small role="alert">{form.formState.errors.root.message}</small> : null}<p>{text.confirmation}</p></form></BaseerFormDialog>;
 }

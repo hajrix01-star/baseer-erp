@@ -514,7 +514,18 @@ export const ModelName = {
   FinanceInclusiveLoanInstallmentPlan: 'FinanceInclusiveLoanInstallmentPlan',
   AiProviderConfiguration: 'AiProviderConfiguration',
   AiCompanyIdentity: 'AiCompanyIdentity',
+  AiCompanyContext: 'AiCompanyContext',
+  AiSkillActivation: 'AiSkillActivation',
   AiExecutionReceipt: 'AiExecutionReceipt',
+  AiInterpretation: 'AiInterpretation',
+  AiInterpretationRun: 'AiInterpretationRun',
+  AiModelPriceRevision: 'AiModelPriceRevision',
+  AiBudgetReservation: 'AiBudgetReservation',
+  AiUsageLedger: 'AiUsageLedger',
+  AiInterpretationPlacement: 'AiInterpretationPlacement',
+  AiHumanInsight: 'AiHumanInsight',
+  AiEvaluationFeedback: 'AiEvaluationFeedback',
+  AiSkillEvaluationRun: 'AiSkillEvaluationRun',
   AiSystemIdentity: 'AiSystemIdentity',
   OperationsSection: 'OperationsSection',
   OperationsUnit: 'OperationsUnit',
@@ -550,7 +561,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiExecutionReceipt" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -9212,6 +9223,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AiCompanyContext: {
+      payload: Prisma.$AiCompanyContextPayload<ExtArgs>
+      fields: Prisma.AiCompanyContextFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanyContextFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanyContextFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanyContextFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanyContextFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanyContextFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanyContextCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanyContextCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanyContextCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanyContextDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        update: {
+          args: Prisma.AiCompanyContextUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanyContextDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanyContextUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanyContextUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanyContextUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyContextPayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanyContextAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanyContext>
+        }
+        groupBy: {
+          args: Prisma.AiCompanyContextGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyContextGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanyContextCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyContextCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiSkillActivation: {
+      payload: Prisma.$AiSkillActivationPayload<ExtArgs>
+      fields: Prisma.AiSkillActivationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiSkillActivationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiSkillActivationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        findFirst: {
+          args: Prisma.AiSkillActivationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiSkillActivationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        findMany: {
+          args: Prisma.AiSkillActivationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>[]
+        }
+        create: {
+          args: Prisma.AiSkillActivationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        createMany: {
+          args: Prisma.AiSkillActivationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiSkillActivationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>[]
+        }
+        delete: {
+          args: Prisma.AiSkillActivationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        update: {
+          args: Prisma.AiSkillActivationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiSkillActivationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiSkillActivationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiSkillActivationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiSkillActivationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillActivationPayload>
+        }
+        aggregate: {
+          args: Prisma.AiSkillActivationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiSkillActivation>
+        }
+        groupBy: {
+          args: Prisma.AiSkillActivationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiSkillActivationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiSkillActivationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiSkillActivationCountAggregateOutputType> | number
+        }
+      }
+    }
     AiExecutionReceipt: {
       payload: Prisma.$AiExecutionReceiptPayload<ExtArgs>
       fields: Prisma.AiExecutionReceiptFieldRefs
@@ -9283,6 +9442,672 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AiExecutionReceiptCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AiExecutionReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiInterpretation: {
+      payload: Prisma.$AiInterpretationPayload<ExtArgs>
+      fields: Prisma.AiInterpretationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiInterpretationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiInterpretationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        findFirst: {
+          args: Prisma.AiInterpretationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiInterpretationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        findMany: {
+          args: Prisma.AiInterpretationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>[]
+        }
+        create: {
+          args: Prisma.AiInterpretationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        createMany: {
+          args: Prisma.AiInterpretationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiInterpretationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>[]
+        }
+        delete: {
+          args: Prisma.AiInterpretationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        update: {
+          args: Prisma.AiInterpretationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiInterpretationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiInterpretationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiInterpretationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiInterpretationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPayload>
+        }
+        aggregate: {
+          args: Prisma.AiInterpretationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiInterpretation>
+        }
+        groupBy: {
+          args: Prisma.AiInterpretationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiInterpretationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiInterpretationRun: {
+      payload: Prisma.$AiInterpretationRunPayload<ExtArgs>
+      fields: Prisma.AiInterpretationRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiInterpretationRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiInterpretationRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        findFirst: {
+          args: Prisma.AiInterpretationRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiInterpretationRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        findMany: {
+          args: Prisma.AiInterpretationRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>[]
+        }
+        create: {
+          args: Prisma.AiInterpretationRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        createMany: {
+          args: Prisma.AiInterpretationRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiInterpretationRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>[]
+        }
+        delete: {
+          args: Prisma.AiInterpretationRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        update: {
+          args: Prisma.AiInterpretationRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiInterpretationRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiInterpretationRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiInterpretationRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiInterpretationRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationRunPayload>
+        }
+        aggregate: {
+          args: Prisma.AiInterpretationRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiInterpretationRun>
+        }
+        groupBy: {
+          args: Prisma.AiInterpretationRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiInterpretationRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationRunCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiModelPriceRevision: {
+      payload: Prisma.$AiModelPriceRevisionPayload<ExtArgs>
+      fields: Prisma.AiModelPriceRevisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiModelPriceRevisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiModelPriceRevisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        findFirst: {
+          args: Prisma.AiModelPriceRevisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiModelPriceRevisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        findMany: {
+          args: Prisma.AiModelPriceRevisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>[]
+        }
+        create: {
+          args: Prisma.AiModelPriceRevisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        createMany: {
+          args: Prisma.AiModelPriceRevisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiModelPriceRevisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>[]
+        }
+        delete: {
+          args: Prisma.AiModelPriceRevisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        update: {
+          args: Prisma.AiModelPriceRevisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiModelPriceRevisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiModelPriceRevisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiModelPriceRevisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiModelPriceRevisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiModelPriceRevisionPayload>
+        }
+        aggregate: {
+          args: Prisma.AiModelPriceRevisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiModelPriceRevision>
+        }
+        groupBy: {
+          args: Prisma.AiModelPriceRevisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiModelPriceRevisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiModelPriceRevisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiModelPriceRevisionCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiBudgetReservation: {
+      payload: Prisma.$AiBudgetReservationPayload<ExtArgs>
+      fields: Prisma.AiBudgetReservationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiBudgetReservationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiBudgetReservationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        findFirst: {
+          args: Prisma.AiBudgetReservationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiBudgetReservationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        findMany: {
+          args: Prisma.AiBudgetReservationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>[]
+        }
+        create: {
+          args: Prisma.AiBudgetReservationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        createMany: {
+          args: Prisma.AiBudgetReservationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiBudgetReservationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>[]
+        }
+        delete: {
+          args: Prisma.AiBudgetReservationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        update: {
+          args: Prisma.AiBudgetReservationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiBudgetReservationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiBudgetReservationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiBudgetReservationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiBudgetReservationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiBudgetReservationPayload>
+        }
+        aggregate: {
+          args: Prisma.AiBudgetReservationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiBudgetReservation>
+        }
+        groupBy: {
+          args: Prisma.AiBudgetReservationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiBudgetReservationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiBudgetReservationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiBudgetReservationCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiUsageLedger: {
+      payload: Prisma.$AiUsageLedgerPayload<ExtArgs>
+      fields: Prisma.AiUsageLedgerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiUsageLedgerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiUsageLedgerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        findFirst: {
+          args: Prisma.AiUsageLedgerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiUsageLedgerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        findMany: {
+          args: Prisma.AiUsageLedgerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>[]
+        }
+        create: {
+          args: Prisma.AiUsageLedgerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        createMany: {
+          args: Prisma.AiUsageLedgerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiUsageLedgerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>[]
+        }
+        delete: {
+          args: Prisma.AiUsageLedgerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        update: {
+          args: Prisma.AiUsageLedgerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiUsageLedgerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiUsageLedgerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiUsageLedgerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiUsageLedgerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiUsageLedgerPayload>
+        }
+        aggregate: {
+          args: Prisma.AiUsageLedgerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiUsageLedger>
+        }
+        groupBy: {
+          args: Prisma.AiUsageLedgerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiUsageLedgerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiUsageLedgerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiUsageLedgerCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiInterpretationPlacement: {
+      payload: Prisma.$AiInterpretationPlacementPayload<ExtArgs>
+      fields: Prisma.AiInterpretationPlacementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiInterpretationPlacementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiInterpretationPlacementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        findFirst: {
+          args: Prisma.AiInterpretationPlacementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiInterpretationPlacementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        findMany: {
+          args: Prisma.AiInterpretationPlacementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>[]
+        }
+        create: {
+          args: Prisma.AiInterpretationPlacementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        createMany: {
+          args: Prisma.AiInterpretationPlacementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiInterpretationPlacementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>[]
+        }
+        delete: {
+          args: Prisma.AiInterpretationPlacementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        update: {
+          args: Prisma.AiInterpretationPlacementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiInterpretationPlacementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiInterpretationPlacementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiInterpretationPlacementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiInterpretationPlacementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiInterpretationPlacementPayload>
+        }
+        aggregate: {
+          args: Prisma.AiInterpretationPlacementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiInterpretationPlacement>
+        }
+        groupBy: {
+          args: Prisma.AiInterpretationPlacementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationPlacementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiInterpretationPlacementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiInterpretationPlacementCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiHumanInsight: {
+      payload: Prisma.$AiHumanInsightPayload<ExtArgs>
+      fields: Prisma.AiHumanInsightFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiHumanInsightFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiHumanInsightFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        findFirst: {
+          args: Prisma.AiHumanInsightFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiHumanInsightFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        findMany: {
+          args: Prisma.AiHumanInsightFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>[]
+        }
+        create: {
+          args: Prisma.AiHumanInsightCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        createMany: {
+          args: Prisma.AiHumanInsightCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiHumanInsightCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>[]
+        }
+        delete: {
+          args: Prisma.AiHumanInsightDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        update: {
+          args: Prisma.AiHumanInsightUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiHumanInsightDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiHumanInsightUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiHumanInsightUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiHumanInsightUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiHumanInsightPayload>
+        }
+        aggregate: {
+          args: Prisma.AiHumanInsightAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiHumanInsight>
+        }
+        groupBy: {
+          args: Prisma.AiHumanInsightGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiHumanInsightGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiHumanInsightCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiHumanInsightCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiEvaluationFeedback: {
+      payload: Prisma.$AiEvaluationFeedbackPayload<ExtArgs>
+      fields: Prisma.AiEvaluationFeedbackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiEvaluationFeedbackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiEvaluationFeedbackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        findFirst: {
+          args: Prisma.AiEvaluationFeedbackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiEvaluationFeedbackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        findMany: {
+          args: Prisma.AiEvaluationFeedbackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>[]
+        }
+        create: {
+          args: Prisma.AiEvaluationFeedbackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        createMany: {
+          args: Prisma.AiEvaluationFeedbackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiEvaluationFeedbackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>[]
+        }
+        delete: {
+          args: Prisma.AiEvaluationFeedbackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        update: {
+          args: Prisma.AiEvaluationFeedbackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiEvaluationFeedbackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiEvaluationFeedbackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiEvaluationFeedbackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiEvaluationFeedbackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiEvaluationFeedbackPayload>
+        }
+        aggregate: {
+          args: Prisma.AiEvaluationFeedbackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiEvaluationFeedback>
+        }
+        groupBy: {
+          args: Prisma.AiEvaluationFeedbackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiEvaluationFeedbackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiEvaluationFeedbackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiEvaluationFeedbackCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiSkillEvaluationRun: {
+      payload: Prisma.$AiSkillEvaluationRunPayload<ExtArgs>
+      fields: Prisma.AiSkillEvaluationRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiSkillEvaluationRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiSkillEvaluationRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        findFirst: {
+          args: Prisma.AiSkillEvaluationRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiSkillEvaluationRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        findMany: {
+          args: Prisma.AiSkillEvaluationRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>[]
+        }
+        create: {
+          args: Prisma.AiSkillEvaluationRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        createMany: {
+          args: Prisma.AiSkillEvaluationRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiSkillEvaluationRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>[]
+        }
+        delete: {
+          args: Prisma.AiSkillEvaluationRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        update: {
+          args: Prisma.AiSkillEvaluationRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiSkillEvaluationRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiSkillEvaluationRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiSkillEvaluationRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiSkillEvaluationRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiSkillEvaluationRunPayload>
+        }
+        aggregate: {
+          args: Prisma.AiSkillEvaluationRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiSkillEvaluationRun>
+        }
+        groupBy: {
+          args: Prisma.AiSkillEvaluationRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiSkillEvaluationRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiSkillEvaluationRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiSkillEvaluationRunCountAggregateOutputType> | number
         }
       }
     }
@@ -11593,6 +12418,8 @@ export const MarketingCampaignScalarFieldEnum = {
   startsOn: 'startsOn',
   endsOn: 'endsOn',
   status: 'status',
+  stoppedOn: 'stoppedOn',
+  stoppedReason: 'stoppedReason',
   objective: 'objective',
   notes: 'notes',
   plannedCost: 'plannedCost',
@@ -12946,6 +13773,53 @@ export const AiCompanyIdentityScalarFieldEnum = {
 export type AiCompanyIdentityScalarFieldEnum = (typeof AiCompanyIdentityScalarFieldEnum)[keyof typeof AiCompanyIdentityScalarFieldEnum]
 
 
+export const AiCompanyContextScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  version: 'version',
+  status: 'status',
+  kind: 'kind',
+  moduleScope: 'moduleScope',
+  presentationStyle: 'presentationStyle',
+  approvedTermsJson: 'approvedTermsJson',
+  policyReferencesJson: 'policyReferencesJson',
+  sourceReference: 'sourceReference',
+  expiresAt: 'expiresAt',
+  revocationReason: 'revocationReason',
+  supersedesContextId: 'supersedesContextId',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyContextScalarFieldEnum = (typeof AiCompanyContextScalarFieldEnum)[keyof typeof AiCompanyContextScalarFieldEnum]
+
+
+export const AiSkillActivationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  status: 'status',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  dailyRequestLimit: 'dailyRequestLimit',
+  dailyCostLimit: 'dailyCostLimit',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  suspendedByUserId: 'suspendedByUserId',
+  suspendedAt: 'suspendedAt',
+  suspensionReason: 'suspensionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiSkillActivationScalarFieldEnum = (typeof AiSkillActivationScalarFieldEnum)[keyof typeof AiSkillActivationScalarFieldEnum]
+
+
 export const AiExecutionReceiptScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -12953,6 +13827,8 @@ export const AiExecutionReceiptScalarFieldEnum = {
   providerConfigurationId: 'providerConfigurationId',
   identityId: 'identityId',
   systemIdentityId: 'systemIdentityId',
+  skillActivationId: 'skillActivationId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
   moduleKey: 'moduleKey',
   capability: 'capability',
   skillKey: 'skillKey',
@@ -12964,14 +13840,216 @@ export const AiExecutionReceiptScalarFieldEnum = {
   configurationVersion: 'configurationVersion',
   identityVersion: 'identityVersion',
   systemIdentityVersion: 'systemIdentityVersion',
+  promptVersion: 'promptVersion',
+  inputChecksum: 'inputChecksum',
+  outputChecksum: 'outputChecksum',
   inputCharacters: 'inputCharacters',
   outputCharacters: 'outputCharacters',
+  inputTokens: 'inputTokens',
+  cachedInputTokens: 'cachedInputTokens',
+  outputTokens: 'outputTokens',
+  reasoningTokens: 'reasoningTokens',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  estimatedCostUsd: 'estimatedCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  providerRequestId: 'providerRequestId',
   safeErrorCode: 'safeErrorCode',
   requestId: 'requestId',
   createdAt: 'createdAt'
 } as const
 
 export type AiExecutionReceiptScalarFieldEnum = (typeof AiExecutionReceiptScalarFieldEnum)[keyof typeof AiExecutionReceiptScalarFieldEnum]
+
+
+export const AiInterpretationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  subjectKind: 'subjectKind',
+  subjectId: 'subjectId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
+  evidenceChecksum: 'evidenceChecksum',
+  reuseKey: 'reuseKey',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  promptVersion: 'promptVersion',
+  language: 'language',
+  systemIdentityVersion: 'systemIdentityVersion',
+  companyContextDigest: 'companyContextDigest',
+  modelProfileDigest: 'modelProfileDigest',
+  providerSnapshot: 'providerSnapshot',
+  modelSnapshot: 'modelSnapshot',
+  sourceExecutionReceiptId: 'sourceExecutionReceiptId',
+  encryptedOutput: 'encryptedOutput',
+  outputIv: 'outputIv',
+  outputTag: 'outputTag',
+  outputKeyVersion: 'outputKeyVersion',
+  outputChecksum: 'outputChecksum',
+  expiresAt: 'expiresAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiInterpretationScalarFieldEnum = (typeof AiInterpretationScalarFieldEnum)[keyof typeof AiInterpretationScalarFieldEnum]
+
+
+export const AiInterpretationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  reuseKey: 'reuseKey',
+  status: 'status',
+  leaseExpiresAt: 'leaseExpiresAt',
+  claimedByUserId: 'claimedByUserId',
+  interpretationId: 'interpretationId',
+  safeFailureCode: 'safeFailureCode',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+} as const
+
+export type AiInterpretationRunScalarFieldEnum = (typeof AiInterpretationRunScalarFieldEnum)[keyof typeof AiInterpretationRunScalarFieldEnum]
+
+
+export const AiModelPriceRevisionScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  model: 'model',
+  version: 'version',
+  effectiveFrom: 'effectiveFrom',
+  inputUsdPerMillion: 'inputUsdPerMillion',
+  cachedInputUsdPerMillion: 'cachedInputUsdPerMillion',
+  outputUsdPerMillion: 'outputUsdPerMillion',
+  sourceReference: 'sourceReference',
+  createdAt: 'createdAt'
+} as const
+
+export type AiModelPriceRevisionScalarFieldEnum = (typeof AiModelPriceRevisionScalarFieldEnum)[keyof typeof AiModelPriceRevisionScalarFieldEnum]
+
+
+export const AiBudgetReservationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  providerConfigurationId: 'providerConfigurationId',
+  skillActivationId: 'skillActivationId',
+  interpretationRunId: 'interpretationRunId',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  dayStartAt: 'dayStartAt',
+  status: 'status',
+  inputTokenEstimate: 'inputTokenEstimate',
+  maxOutputTokens: 'maxOutputTokens',
+  estimatedCostUsd: 'estimatedCostUsd',
+  chargeCostUsd: 'chargeCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  expiresAt: 'expiresAt',
+  settledAt: 'settledAt',
+  releasedAt: 'releasedAt',
+  releaseReason: 'releaseReason',
+  createdAt: 'createdAt'
+} as const
+
+export type AiBudgetReservationScalarFieldEnum = (typeof AiBudgetReservationScalarFieldEnum)[keyof typeof AiBudgetReservationScalarFieldEnum]
+
+
+export const AiUsageLedgerScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  reservationId: 'reservationId',
+  executionReceiptId: 'executionReceiptId',
+  providerConfigurationId: 'providerConfigurationId',
+  skillActivationId: 'skillActivationId',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  kind: 'kind',
+  inputTokens: 'inputTokens',
+  cachedInputTokens: 'cachedInputTokens',
+  outputTokens: 'outputTokens',
+  reasoningTokens: 'reasoningTokens',
+  estimatedCostUsd: 'estimatedCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  safeReasonCode: 'safeReasonCode',
+  createdAt: 'createdAt'
+} as const
+
+export type AiUsageLedgerScalarFieldEnum = (typeof AiUsageLedgerScalarFieldEnum)[keyof typeof AiUsageLedgerScalarFieldEnum]
+
+
+export const AiInterpretationPlacementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  interpretationId: 'interpretationId',
+  kind: 'kind',
+  subjectId: 'subjectId',
+  moduleKey: 'moduleKey',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiInterpretationPlacementScalarFieldEnum = (typeof AiInterpretationPlacementScalarFieldEnum)[keyof typeof AiInterpretationPlacementScalarFieldEnum]
+
+
+export const AiHumanInsightScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  interpretationId: 'interpretationId',
+  kind: 'kind',
+  status: 'status',
+  encryptedStatement: 'encryptedStatement',
+  statementIv: 'statementIv',
+  statementTag: 'statementTag',
+  statementKeyVersion: 'statementKeyVersion',
+  statementChecksum: 'statementChecksum',
+  supersedesInsightId: 'supersedesInsightId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  revokedByUserId: 'revokedByUserId',
+  revokedAt: 'revokedAt',
+  revocationReason: 'revocationReason'
+} as const
+
+export type AiHumanInsightScalarFieldEnum = (typeof AiHumanInsightScalarFieldEnum)[keyof typeof AiHumanInsightScalarFieldEnum]
+
+
+export const AiEvaluationFeedbackScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionReceiptId: 'executionReceiptId',
+  kind: 'kind',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiEvaluationFeedbackScalarFieldEnum = (typeof AiEvaluationFeedbackScalarFieldEnum)[keyof typeof AiEvaluationFeedbackScalarFieldEnum]
+
+
+export const AiSkillEvaluationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  suiteKey: 'suiteKey',
+  suiteVersion: 'suiteVersion',
+  suiteChecksum: 'suiteChecksum',
+  mode: 'mode',
+  status: 'status',
+  totalCaseCount: 'totalCaseCount',
+  passedCaseCount: 'passedCaseCount',
+  failedCaseCount: 'failedCaseCount',
+  resultSummaryJson: 'resultSummaryJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiSkillEvaluationRunScalarFieldEnum = (typeof AiSkillEvaluationRunScalarFieldEnum)[keyof typeof AiSkillEvaluationRunScalarFieldEnum]
 
 
 export const AiSystemIdentityScalarFieldEnum = {
@@ -14701,6 +15779,62 @@ export type ListEnumAiCompanyIdentityStatusFieldRefInput<$PrismaModel> = FieldRe
 
 
 /**
+ * Reference to a field of type 'AiCompanyContextStatus'
+ */
+export type EnumAiCompanyContextStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyContextStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyContextStatus[]'
+ */
+export type ListEnumAiCompanyContextStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyContextStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyContextKind'
+ */
+export type EnumAiCompanyContextKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyContextKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyContextKind[]'
+ */
+export type ListEnumAiCompanyContextKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyContextKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyPresentationStyle'
+ */
+export type EnumAiCompanyPresentationStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyPresentationStyle'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyPresentationStyle[]'
+ */
+export type ListEnumAiCompanyPresentationStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyPresentationStyle[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillActivationStatus'
+ */
+export type EnumAiSkillActivationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillActivationStatus[]'
+ */
+export type ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'AiExecutionOutcome'
  */
 export type EnumAiExecutionOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiExecutionOutcome'>
@@ -14711,6 +15845,146 @@ export type EnumAiExecutionOutcomeFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'AiExecutionOutcome[]'
  */
 export type ListEnumAiExecutionOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiExecutionOutcome[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationSubjectKind'
+ */
+export type EnumAiInterpretationSubjectKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationSubjectKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationSubjectKind[]'
+ */
+export type ListEnumAiInterpretationSubjectKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationSubjectKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationRunStatus'
+ */
+export type EnumAiInterpretationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationRunStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationRunStatus[]'
+ */
+export type ListEnumAiInterpretationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationRunStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiBudgetReservationStatus'
+ */
+export type EnumAiBudgetReservationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiBudgetReservationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiBudgetReservationStatus[]'
+ */
+export type ListEnumAiBudgetReservationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiBudgetReservationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiUsageLedgerKind'
+ */
+export type EnumAiUsageLedgerKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiUsageLedgerKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiUsageLedgerKind[]'
+ */
+export type ListEnumAiUsageLedgerKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiUsageLedgerKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationPlacementKind'
+ */
+export type EnumAiInterpretationPlacementKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationPlacementKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiInterpretationPlacementKind[]'
+ */
+export type ListEnumAiInterpretationPlacementKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiInterpretationPlacementKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiHumanInsightKind'
+ */
+export type EnumAiHumanInsightKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiHumanInsightKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiHumanInsightKind[]'
+ */
+export type ListEnumAiHumanInsightKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiHumanInsightKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiHumanInsightStatus'
+ */
+export type EnumAiHumanInsightStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiHumanInsightStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiHumanInsightStatus[]'
+ */
+export type ListEnumAiHumanInsightStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiHumanInsightStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiEvaluationFeedbackKind'
+ */
+export type EnumAiEvaluationFeedbackKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiEvaluationFeedbackKind'>
+    
+
+
+/**
+ * Reference to a field of type 'AiEvaluationFeedbackKind[]'
+ */
+export type ListEnumAiEvaluationFeedbackKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiEvaluationFeedbackKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillEvaluationRunMode'
+ */
+export type EnumAiSkillEvaluationRunModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillEvaluationRunMode'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillEvaluationRunMode[]'
+ */
+export type ListEnumAiSkillEvaluationRunModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillEvaluationRunMode[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillEvaluationRunStatus'
+ */
+export type EnumAiSkillEvaluationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillEvaluationRunStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillEvaluationRunStatus[]'
+ */
+export type ListEnumAiSkillEvaluationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillEvaluationRunStatus[]'>
     
 
 
@@ -15149,7 +16423,18 @@ export type GlobalOmitConfig = {
   financeInclusiveLoanInstallmentPlan?: Prisma.FinanceInclusiveLoanInstallmentPlanOmit
   aiProviderConfiguration?: Prisma.AiProviderConfigurationOmit
   aiCompanyIdentity?: Prisma.AiCompanyIdentityOmit
+  aiCompanyContext?: Prisma.AiCompanyContextOmit
+  aiSkillActivation?: Prisma.AiSkillActivationOmit
   aiExecutionReceipt?: Prisma.AiExecutionReceiptOmit
+  aiInterpretation?: Prisma.AiInterpretationOmit
+  aiInterpretationRun?: Prisma.AiInterpretationRunOmit
+  aiModelPriceRevision?: Prisma.AiModelPriceRevisionOmit
+  aiBudgetReservation?: Prisma.AiBudgetReservationOmit
+  aiUsageLedger?: Prisma.AiUsageLedgerOmit
+  aiInterpretationPlacement?: Prisma.AiInterpretationPlacementOmit
+  aiHumanInsight?: Prisma.AiHumanInsightOmit
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackOmit
+  aiSkillEvaluationRun?: Prisma.AiSkillEvaluationRunOmit
   aiSystemIdentity?: Prisma.AiSystemIdentityOmit
   operationsSection?: Prisma.OperationsSectionOmit
   operationsUnit?: Prisma.OperationsUnitOmit

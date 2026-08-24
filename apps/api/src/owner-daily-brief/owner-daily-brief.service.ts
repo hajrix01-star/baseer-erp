@@ -31,24 +31,12 @@ export class OwnerDailyBriefService {
   ) {}
 
   async answerWithBasira(context: TrustedTenantAdministratorContext, request: OwnerDailyBriefBasiraAnswerRequest): Promise<OwnerDailyBriefBasiraAnswerReceipt> {
-    const skill = selectAiSkill("command-center", "owner.daily_brief_analyst");
-    if (!skill || (skill.status !== "PILOT" && skill.status !== "ACTIVE")) throw new ForbiddenException("The owner Daily Brief AI skill is not active.");
-    if (process.env.BASEER_BASIRA_OWNER_BRIEF_PILOT_ENABLED !== "true") throw new ForbiddenException("The owner Daily Brief Basira pilot is not enabled.");
-    const brief = await this.read(context, { reportDate: request.reportDate });
-    const setup = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [provider, identity] = await Promise.all([
-        tx.aiProviderConfiguration.findFirst({ where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE, isDefault: true }, select: { id: true, provider: true, model: true, encryptedCredential: true, credentialIv: true, credentialTag: true, credentialKeyVersion: true } }),
-        tx.aiSystemIdentity.findFirst({ where: { tenantId: context.tenantId, status: AiCompanyIdentityStatus.ACTIVE }, select: { toneInstructions: true, safetyInstructions: true } }),
-      ]);
-      if (!provider || provider.provider !== "OPENAI_COMPATIBLE") throw new ConflictException("An active OpenAI-compatible provider is required for Basira.");
-      return { provider, identity };
-    });
-    const answer = ownerDailyBriefBasiraAnswerSchema.parse(await this.adapters.answerOwnerDailyBrief({
-      apiKey: this.vault.decryptApiKey(setup.provider), model: setup.provider.model, brief, question: request.question, language: request.language,
-      actorFingerprint: `${context.tenantId}:${context.actorUserId}:owner-daily-brief`,
-      toneInstructions: setup.identity?.toneInstructions ?? "", safetyInstructions: setup.identity?.safetyInstructions ?? "",
-    }));
-    return { skillKey: "owner.daily_brief_analyst", model: setup.provider.model, answer, createdAt: new Date() };
+    void context;
+    void request;
+    // This former direct-provider path deliberately stays unavailable until it
+    // is rebuilt on the shared evidence/activation/receipt gateway. Keeping a
+    // familiar endpoint must never become a way around company skill gates.
+    throw new ForbiddenException("Owner Daily Brief AI is temporarily unavailable while it is migrated to Basira governance.");
   }
 
   /** Called exclusively by the code-owned scheduler. The unique database key
@@ -85,11 +73,14 @@ export class OwnerDailyBriefService {
       throw new BadRequestException("The owner daily brief cannot be generated for a future or unfinished business date.");
     }
     const snapshot = await this.loadSnapshot(context.tenantId, reportDate);
-    if (snapshot) return snapshot;
+    if (snapshot?.companies.every((company) => company.sales.trend !== undefined)) return snapshot;
     const monthStart = `${reportDate.slice(0, 7)}-01`;
     const from = dateAtUtcStart(monthStart);
     const to = dateAtUtcStart(reportDate);
     const reportDayCount = inclusiveDayCount(from, to);
+    const trendFrom = addUtcDays(to, -11);
+    const priorPeriodFrom = previousMonthStart(from);
+    const priorPeriodTo = sameDayPreviousMonth(to);
 
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const companies = await tx.company.findMany({
@@ -104,9 +95,17 @@ export class OwnerDailyBriefService {
       });
       const companyIds = companies.map((company) => company.id);
       const empty = companyIds.length === 0;
-      const [salesSummaries, yesterdayPurchases, monthPurchases, activeCampaigns, linkedSpend, providerConnections, labelCount, enabledRuleCount] = await Promise.all([
+      const [salesSummaries, trendSummaries, priorPeriodSummaries, yesterdayPurchases, monthPurchases, activeCampaigns, linkedSpend, providerConnections, labelCount, enabledRuleCount] = await Promise.all([
         empty ? [] : tx.financeDailyFinancialSummary.findMany({
           where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: from, lte: to } },
+          select: { companyId: true, businessDate: true, salesGrossAmount: true, salesClosingCount: true, dataStatus: true, operationalDayStatus: true },
+        }),
+        empty ? [] : tx.financeDailyFinancialSummary.findMany({
+          where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: trendFrom, lte: to } },
+          select: { companyId: true, businessDate: true, salesGrossAmount: true, salesClosingCount: true, dataStatus: true, operationalDayStatus: true },
+        }),
+        empty ? [] : tx.financeDailyFinancialSummary.findMany({
+          where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: priorPeriodFrom, lte: priorPeriodTo } },
           select: { companyId: true, businessDate: true, salesGrossAmount: true, salesClosingCount: true, dataStatus: true, operationalDayStatus: true },
         }),
         empty ? [] : tx.financeOutflowDocument.groupBy({
@@ -147,6 +146,18 @@ export class OwnerDailyBriefService {
         current.push(summary);
         summariesByCompany.set(summary.companyId, current);
       }
+      const trendByCompany = new Map<string, typeof trendSummaries>();
+      for (const summary of trendSummaries) {
+        const current = trendByCompany.get(summary.companyId) ?? [];
+        current.push(summary);
+        trendByCompany.set(summary.companyId, current);
+      }
+      const priorPeriodByCompany = new Map<string, typeof priorPeriodSummaries>();
+      for (const summary of priorPeriodSummaries) {
+        const current = priorPeriodByCompany.get(summary.companyId) ?? [];
+        current.push(summary);
+        priorPeriodByCompany.set(summary.companyId, current);
+      }
       const yesterdayPurchasesByCompany = new Map(yesterdayPurchases.map((row) => [row.companyId, row]));
       const monthPurchasesByCompany = new Map(monthPurchases.map((row) => [row.companyId, row]));
       const currencyCodes = [...new Set(companies.map((company) => company.financeProfile?.functionalCurrencyCode ?? null))];
@@ -155,10 +166,14 @@ export class OwnerDailyBriefService {
 
       const companyReceipts = companies.map((company) => {
         const summaries = summariesByCompany.get(company.id) ?? [];
+        const trend = trendByCompany.get(company.id) ?? [];
+        const priorPeriod = priorPeriodByCompany.get(company.id) ?? [];
         const yesterday = summaries.find((summary) => ymd(summary.businessDate) === reportDate);
         const eligible = summaries.filter(isEligibleSalesSummary);
         const eligibleGross = eligible.reduce((total, summary) => total.plus(summary.salesGrossAmount), new Prisma.Decimal(0));
         const eligibleClosingCount = eligible.reduce((total, summary) => total + summary.salesClosingCount, 0);
+        const priorEligible = priorPeriod.filter(isEligibleSalesSummary);
+        const priorEligibleGross = priorEligible.reduce((total, summary) => total.plus(summary.salesGrossAmount), new Prisma.Decimal(0));
         const incompleteDayCount = reportDayCount - eligible.length;
         const yesterdayStatus = salesStatus(yesterday);
         const monthToDateStatus: SalesStatus = summaries.length === 0 ? "NO_DATA" : incompleteDayCount > 0 ? "INCOMPLETE" : "READY";
@@ -166,6 +181,14 @@ export class OwnerDailyBriefService {
         const monthPurchase = monthPurchasesByCompany.get(company.id);
         const yesterdaySalesAmount = yesterday && isEligibleSalesSummary(yesterday) ? yesterday.salesGrossAmount : null;
         const monthToDateSalesAmount = eligible.length > 0 ? eligibleGross : null;
+        const priorDay = trend.find((summary) => ymd(summary.businessDate) === ymd(addUtcDays(to, -1)));
+        const priorDaySalesAmount = priorDay && isEligibleSalesSummary(priorDay) ? priorDay.salesGrossAmount : null;
+        const dailyChangeGrossAmount = yesterdaySalesAmount && priorDaySalesAmount ? yesterdaySalesAmount.minus(priorDaySalesAmount) : null;
+        const dailyAverageGrossAmount = eligible.length > 0 ? eligibleGross.div(eligible.length) : null;
+        const monthEndForecastGrossAmount = dailyAverageGrossAmount ? dailyAverageGrossAmount.mul(daysInMonth(to)) : null;
+        const priorPeriodTrendPercent = eligible.length === reportDayCount && priorEligible.length === reportDayCount
+          ? percentageChange(eligibleGross, priorEligibleGross)
+          : null;
         const yesterdayPurchaseAmount = yesterdayPurchase?._sum.grossAmount ?? new Prisma.Decimal(0);
         const monthPurchaseAmount = monthPurchase?._sum.grossAmount ?? new Prisma.Decimal(0);
         return {
@@ -182,6 +205,14 @@ export class OwnerDailyBriefService {
             monthToDateStatus,
             eligibleMonthToDateDayCount: eligible.length,
             incompleteMonthToDateDayCount: incompleteDayCount,
+            dailyChangeGrossAmount: signedAmountOrNull(dailyChangeGrossAmount),
+            dailyAverageGrossAmount: amountOrNull(dailyAverageGrossAmount),
+            monthEndForecastGrossAmount: amountOrNull(monthEndForecastGrossAmount),
+            priorPeriodTrendPercent: signedAmountOrNull(priorPeriodTrendPercent),
+            trend: businessDays(trendFrom, to).map((businessDate) => {
+              const summary = trend.find((candidate) => ymd(candidate.businessDate) === businessDate);
+              return { businessDate, grossAmount: summary && isEligibleSalesSummary(summary) ? amountOrNull(summary.salesGrossAmount) : null };
+            }),
           },
           purchases: {
             yesterdayGrossAmount: yesterdayPurchaseAmount.toFixed(4),
@@ -259,7 +290,27 @@ const SYSTEM_ACTOR_ID = "00000000-0000-0000-0000-000000000000";
 function dateAtUtcStart(value: string) { return new Date(`${value}T00:00:00.000Z`); }
 function ymd(value: Date) { return value.toISOString().slice(0, 10); }
 function inclusiveDayCount(from: Date, to: Date) { return Math.floor((to.getTime() - from.getTime()) / 86_400_000) + 1; }
+function addUtcDays(value: Date, days: number) {
+  const result = new Date(value);
+  result.setUTCDate(result.getUTCDate() + days);
+  return result;
+}
+function daysInMonth(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth() + 1, 0)).getUTCDate(); }
+function previousMonthStart(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth() - 1, 1)); }
+function sameDayPreviousMonth(value: Date) {
+  const previousMonthLastDay = new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 0)).getUTCDate();
+  return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth() - 1, Math.min(value.getUTCDate(), previousMonthLastDay)));
+}
+function businessDays(from: Date, to: Date) {
+  const days: string[] = [];
+  for (let current = new Date(from); current <= to; current = addUtcDays(current, 1)) days.push(ymd(current));
+  return days;
+}
 function amountOrNull(value: Prisma.Decimal | null) { return value?.toFixed(4) ?? null; }
+function signedAmountOrNull(value: Prisma.Decimal | null) { return value?.toFixed(4) ?? null; }
+function percentageChange(current: Prisma.Decimal, prior: Prisma.Decimal) {
+  return prior.isZero() ? null : current.minus(prior).mul(100).div(prior).toDecimalPlaces(4);
+}
 function percent(numerator: Prisma.Decimal, denominator: Prisma.Decimal | null) {
   return !denominator || denominator.isZero() ? null : numerator.mul(100).div(denominator).toDecimalPlaces(4).toFixed(4);
 }

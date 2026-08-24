@@ -1,38 +1,28 @@
 import type { ComponentProps } from "react";
+import { normalizeBaseerNumericInput } from "./number-format";
 
 type MoneyInputProps = Omit<ComponentProps<"input">, "type" | "value" | "onChange"> & {
   value: string;
   onValueChange: (value: string) => void;
 };
 
-const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+/** @deprecated Use normalizeBaseerNumericInput for numeric fields generally. */
+export function normalizeBaseerAmount(value: string) {
+  return normalizeBaseerNumericInput(value);
+}
 
 /**
- * Normalises keyboard input to the ASCII decimal notation used by the API.
- * The display deliberately stays LTR even inside an Arabic form so amounts
- * remain easy to scan and copy without changing the stored value.
+ * Prepares an API amount for editing without formatting, parsing or rounding
+ * a decimal string. This keeps a stored value such as `12.75` intact.
  */
-export function normalizeBaseerAmount(value: string) {
-  return value
-    .replace(/[٠-٩]/g, (digit) => String(arabicDigits.indexOf(digit)))
-    .replace(/[۰-۹]/g, (digit) => String(persianDigits.indexOf(digit)))
-    .replace(/[٬,\s]/g, "")
-    .replace(/٫/g, ".")
-    .replace(/[^0-9.]/g, "")
-    .replace(/(\..*)\./g, "$1");
-}
-
-/** Formats API money for an editable field without interfering with partial input such as `1.`. */
 export function formatBaseerEditableAmount(value: string | number) {
-  const amount = Number(value);
-  if (!Number.isFinite(amount)) return "";
-  return Number.isInteger(amount) ? String(amount) : amount.toFixed(1);
+  if (typeof value === "string") return normalizeBaseerNumericInput(value);
+  return Number.isFinite(value) ? String(value) : "";
 }
 
-/** Shared monetary input: plain, compact and consistently English-numeric. */
+/** Shared monetary input: accepts Arabic digits but emits ASCII/LTR text. */
 export function BaseerMoneyInput({ value, onValueChange, className, ...props }: MoneyInputProps) {
-  return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={value} inputMode="decimal" dir="ltr" onChange={(event) => onValueChange(normalizeBaseerAmount(event.target.value))} />;
+  return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={normalizeBaseerNumericInput(value)} inputMode="decimal" dir="ltr" lang="en" onChange={(event) => onValueChange(normalizeBaseerNumericInput(event.target.value))} />;
 }
 
 type TextAreaProps = Omit<ComponentProps<"textarea">, "onChange"> & {

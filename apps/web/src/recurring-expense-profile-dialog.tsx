@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerMoneyInput } from "./baseer-form-fields";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import type { ProfileForm, RecurringExpenseConfiguration } from "./recurring-expense-workspace";
@@ -37,7 +38,7 @@ export function RecurringExpenseProfileDialog({ open, language, busy, configurat
       <label>{text.financialCategory}<select aria-invalid={Boolean(form.formState.errors.categoryId)} {...form.register("categoryId")} onChange={(event) => { form.setValue("categoryId", event.target.value, { shouldDirty: true }); const category = categories.find((item) => item.id === event.target.value); form.setValue("supplierId", category?.suggestedSupplierId ?? "", { shouldDirty: true }); }}><option value="">{text.selectCategory}</option>{categories.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select>{form.formState.errors.categoryId ? <small role="alert">{form.formState.errors.categoryId.message}</small> : null}</label>
       <label>{text.supplier}<select {...form.register("supplierId")}><option value="">{text.optional}</option>{suppliers.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
       <label>{text.serviceNumber}<input placeholder={text.optional} {...form.register("serviceNumber")} /></label>
-      <label>{text.expectedAmount} (SAR)<input inputMode="decimal" placeholder={text.enterAmount} aria-invalid={Boolean(form.formState.errors.expectedAmount)} {...form.register("expectedAmount")} />{form.formState.errors.expectedAmount ? <small role="alert">{form.formState.errors.expectedAmount.message}</small> : null}</label>
+      <label>{text.expectedAmount} (SAR)<BaseerMoneyInput placeholder={text.enterAmount} aria-invalid={Boolean(form.formState.errors.expectedAmount)} value={form.watch("expectedAmount")} onValueChange={(expectedAmount) => form.setValue("expectedAmount", expectedAmount, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.expectedAmount ? <small role="alert">{form.formState.errors.expectedAmount.message}</small> : null}</label>
       <label>{text.paymentCycle}<select {...form.register("intervalMonths")}>{[1, 2, 3, 4, 6, 12].map((month) => <option key={month} value={month}>{month === 1 ? text.monthly : text.everyMonths(month)}</option>)}</select></label>
       <label>{text.nextDueDate}<BaseerDatePicker language={language} label={text.nextDueDate} value={nextReminderDate} onChange={(value) => form.setValue("nextReminderDate", value, { shouldDirty: true, shouldValidate: true })} /></label>
       <label>{text.defaultPaymentChannel}<select {...form.register("defaultVaultId")}><option value="">{text.setAtPayment}</option>{vaults.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>

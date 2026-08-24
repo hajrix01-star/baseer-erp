@@ -80,7 +80,7 @@ type EmployeeOnboardingInput = Omit<OnboardHrEmployeeRequest, 'idempotencyKey'>;
 type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
 type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
-type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; search?: string; cursor?: string; pageSize: number }>;
+type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; periodFrom?: Date; periodTo?: Date; search?: string; cursor?: string; pageSize: number }>;
 type PayrollRunDetailQuery = Readonly<{ lineCursor?: string; linePageSize: number; paymentCursor?: string; paymentPageSize: number }>;
 type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type PayrollCalculationPeriod = Readonly<{ calculationPeriodStart: Date; calculationPeriodEnd: Date; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: Prisma.Decimal; eligibilityCode: HrPayrollLineEligibilityCode; formulaCode: HrPayrollCalculationFormulaCode }>;
@@ -291,6 +291,7 @@ export class HrPayrollService {
         tenantId: context.tenantId,
         companyId: context.companyId,
         ...(query.status ? { status: query.status } : {}),
+        ...(query.periodFrom || query.periodTo ? { businessDate: { ...(query.periodFrom ? { gte: query.periodFrom } : {}), ...(query.periodTo ? { lte: query.periodTo } : {}) } } : {}),
         ...(query.search ? { OR: [
           { runNumber: { contains: query.search, mode: 'insensitive' } },
           ...(matchingStatuses.length > 0 ? [{ status: { in: matchingStatuses } }] : []),

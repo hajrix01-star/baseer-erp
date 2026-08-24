@@ -46,6 +46,8 @@ export type MarketingCampaignMinAggregateOutputType = {
   startsOn: Date | null
   endsOn: Date | null
   status: $Enums.MarketingCampaignStatus | null
+  stoppedOn: Date | null
+  stoppedReason: string | null
   objective: string | null
   notes: string | null
   plannedCost: runtime.Decimal | null
@@ -66,6 +68,8 @@ export type MarketingCampaignMaxAggregateOutputType = {
   startsOn: Date | null
   endsOn: Date | null
   status: $Enums.MarketingCampaignStatus | null
+  stoppedOn: Date | null
+  stoppedReason: string | null
   objective: string | null
   notes: string | null
   plannedCost: runtime.Decimal | null
@@ -86,6 +90,8 @@ export type MarketingCampaignCountAggregateOutputType = {
   startsOn: number
   endsOn: number
   status: number
+  stoppedOn: number
+  stoppedReason: number
   objective: number
   notes: number
   plannedCost: number
@@ -116,6 +122,8 @@ export type MarketingCampaignMinAggregateInputType = {
   startsOn?: true
   endsOn?: true
   status?: true
+  stoppedOn?: true
+  stoppedReason?: true
   objective?: true
   notes?: true
   plannedCost?: true
@@ -136,6 +144,8 @@ export type MarketingCampaignMaxAggregateInputType = {
   startsOn?: true
   endsOn?: true
   status?: true
+  stoppedOn?: true
+  stoppedReason?: true
   objective?: true
   notes?: true
   plannedCost?: true
@@ -156,6 +166,8 @@ export type MarketingCampaignCountAggregateInputType = {
   startsOn?: true
   endsOn?: true
   status?: true
+  stoppedOn?: true
+  stoppedReason?: true
   objective?: true
   notes?: true
   plannedCost?: true
@@ -263,6 +275,8 @@ export type MarketingCampaignGroupByOutputType = {
   startsOn: Date | null
   endsOn: Date | null
   status: $Enums.MarketingCampaignStatus
+  stoppedOn: Date | null
+  stoppedReason: string | null
   objective: string | null
   notes: string | null
   plannedCost: runtime.Decimal | null
@@ -306,6 +320,8 @@ export type MarketingCampaignWhereInput = {
   startsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   endsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFilter<"MarketingCampaign"> | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
+  stoppedReason?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   objective?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   notes?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   plannedCost?: Prisma.DecimalNullableFilter<"MarketingCampaign"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -330,6 +346,8 @@ export type MarketingCampaignOrderByWithRelationInput = {
   startsOn?: Prisma.SortOrderInput | Prisma.SortOrder
   endsOn?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  stoppedOn?: Prisma.SortOrderInput | Prisma.SortOrder
+  stoppedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   objective?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   plannedCost?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -358,6 +376,8 @@ export type MarketingCampaignWhereUniqueInput = Prisma.AtLeast<{
   startsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   endsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFilter<"MarketingCampaign"> | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
+  stoppedReason?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   objective?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   notes?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   plannedCost?: Prisma.DecimalNullableFilter<"MarketingCampaign"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -382,6 +402,8 @@ export type MarketingCampaignOrderByWithAggregationInput = {
   startsOn?: Prisma.SortOrderInput | Prisma.SortOrder
   endsOn?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  stoppedOn?: Prisma.SortOrderInput | Prisma.SortOrder
+  stoppedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   objective?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   plannedCost?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -410,6 +432,8 @@ export type MarketingCampaignScalarWhereWithAggregatesInput = {
   startsOn?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
   endsOn?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusWithAggregatesFilter<"MarketingCampaign"> | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
+  stoppedReason?: Prisma.StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
   objective?: Prisma.StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
   plannedCost?: Prisma.DecimalNullableWithAggregatesFilter<"MarketingCampaign"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -428,6 +452,8 @@ export type MarketingCampaignCreateInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -452,6 +478,8 @@ export type MarketingCampaignUncheckedCreateInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -473,6 +501,8 @@ export type MarketingCampaignUpdateInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -497,6 +527,8 @@ export type MarketingCampaignUncheckedUpdateInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -520,6 +552,8 @@ export type MarketingCampaignCreateManyInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -538,6 +572,8 @@ export type MarketingCampaignUpdateManyMutationInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -558,6 +594,8 @@ export type MarketingCampaignUncheckedUpdateManyInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -594,6 +632,8 @@ export type MarketingCampaignCountOrderByAggregateInput = {
   startsOn?: Prisma.SortOrder
   endsOn?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  stoppedOn?: Prisma.SortOrder
+  stoppedReason?: Prisma.SortOrder
   objective?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   plannedCost?: Prisma.SortOrder
@@ -618,6 +658,8 @@ export type MarketingCampaignMaxOrderByAggregateInput = {
   startsOn?: Prisma.SortOrder
   endsOn?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  stoppedOn?: Prisma.SortOrder
+  stoppedReason?: Prisma.SortOrder
   objective?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   plannedCost?: Prisma.SortOrder
@@ -638,6 +680,8 @@ export type MarketingCampaignMinOrderByAggregateInput = {
   startsOn?: Prisma.SortOrder
   endsOn?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  stoppedOn?: Prisma.SortOrder
+  stoppedReason?: Prisma.SortOrder
   objective?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   plannedCost?: Prisma.SortOrder
@@ -757,6 +801,8 @@ export type MarketingCampaignCreateWithoutCompanyInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -778,6 +824,8 @@ export type MarketingCampaignUncheckedCreateWithoutCompanyInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -830,6 +878,8 @@ export type MarketingCampaignScalarWhereInput = {
   startsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   endsOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFilter<"MarketingCampaign"> | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
+  stoppedReason?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   objective?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   notes?: Prisma.StringNullableFilter<"MarketingCampaign"> | string | null
   plannedCost?: Prisma.DecimalNullableFilter<"MarketingCampaign"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -848,6 +898,8 @@ export type MarketingCampaignCreateWithoutAnalysisFeedbackInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -871,6 +923,8 @@ export type MarketingCampaignUncheckedCreateWithoutAnalysisFeedbackInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -907,6 +961,8 @@ export type MarketingCampaignUpdateWithoutAnalysisFeedbackInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -930,6 +986,8 @@ export type MarketingCampaignUncheckedUpdateWithoutAnalysisFeedbackInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -950,6 +1008,8 @@ export type MarketingCampaignCreateWithoutFinancialLinksInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -973,6 +1033,8 @@ export type MarketingCampaignUncheckedCreateWithoutFinancialLinksInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1009,6 +1071,8 @@ export type MarketingCampaignUpdateWithoutFinancialLinksInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1032,6 +1096,8 @@ export type MarketingCampaignUncheckedUpdateWithoutFinancialLinksInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1052,6 +1118,8 @@ export type MarketingCampaignCreateWithoutContextLinksInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1075,6 +1143,8 @@ export type MarketingCampaignUncheckedCreateWithoutContextLinksInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1111,6 +1181,8 @@ export type MarketingCampaignUpdateWithoutContextLinksInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1134,6 +1206,8 @@ export type MarketingCampaignUncheckedUpdateWithoutContextLinksInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1154,6 +1228,8 @@ export type MarketingCampaignCreateManyCompanyInput = {
   startsOn?: Date | string | null
   endsOn?: Date | string | null
   status?: $Enums.MarketingCampaignStatus
+  stoppedOn?: Date | string | null
+  stoppedReason?: string | null
   objective?: string | null
   notes?: string | null
   plannedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1172,6 +1248,8 @@ export type MarketingCampaignUpdateWithoutCompanyInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1193,6 +1271,8 @@ export type MarketingCampaignUncheckedUpdateWithoutCompanyInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1214,6 +1294,8 @@ export type MarketingCampaignUncheckedUpdateManyWithoutCompanyInput = {
   startsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endsOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMarketingCampaignStatusFieldUpdateOperationsInput | $Enums.MarketingCampaignStatus
+  stoppedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stoppedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plannedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1283,6 +1365,8 @@ export type MarketingCampaignSelect<ExtArgs extends runtime.Types.Extensions.Int
   startsOn?: boolean
   endsOn?: boolean
   status?: boolean
+  stoppedOn?: boolean
+  stoppedReason?: boolean
   objective?: boolean
   notes?: boolean
   plannedCost?: boolean
@@ -1308,6 +1392,8 @@ export type MarketingCampaignSelectCreateManyAndReturn<ExtArgs extends runtime.T
   startsOn?: boolean
   endsOn?: boolean
   status?: boolean
+  stoppedOn?: boolean
+  stoppedReason?: boolean
   objective?: boolean
   notes?: boolean
   plannedCost?: boolean
@@ -1329,6 +1415,8 @@ export type MarketingCampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   startsOn?: boolean
   endsOn?: boolean
   status?: boolean
+  stoppedOn?: boolean
+  stoppedReason?: boolean
   objective?: boolean
   notes?: boolean
   plannedCost?: boolean
@@ -1350,6 +1438,8 @@ export type MarketingCampaignSelectScalar = {
   startsOn?: boolean
   endsOn?: boolean
   status?: boolean
+  stoppedOn?: boolean
+  stoppedReason?: boolean
   objective?: boolean
   notes?: boolean
   plannedCost?: boolean
@@ -1359,7 +1449,7 @@ export type MarketingCampaignSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MarketingCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "titleAr" | "titleEn" | "platform" | "externalReference" | "startsOn" | "endsOn" | "status" | "objective" | "notes" | "plannedCost" | "plannedCurrencyCode" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["marketingCampaign"]>
+export type MarketingCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "titleAr" | "titleEn" | "platform" | "externalReference" | "startsOn" | "endsOn" | "status" | "stoppedOn" | "stoppedReason" | "objective" | "notes" | "plannedCost" | "plannedCurrencyCode" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["marketingCampaign"]>
 export type MarketingCampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   financialLinks?: boolean | Prisma.MarketingCampaign$financialLinksArgs<ExtArgs>
@@ -1393,6 +1483,8 @@ export type $MarketingCampaignPayload<ExtArgs extends runtime.Types.Extensions.I
     startsOn: Date | null
     endsOn: Date | null
     status: $Enums.MarketingCampaignStatus
+    stoppedOn: Date | null
+    stoppedReason: string | null
     objective: string | null
     notes: string | null
     plannedCost: runtime.Decimal | null
@@ -1837,6 +1929,8 @@ export interface MarketingCampaignFieldRefs {
   readonly startsOn: Prisma.FieldRef<"MarketingCampaign", 'DateTime'>
   readonly endsOn: Prisma.FieldRef<"MarketingCampaign", 'DateTime'>
   readonly status: Prisma.FieldRef<"MarketingCampaign", 'MarketingCampaignStatus'>
+  readonly stoppedOn: Prisma.FieldRef<"MarketingCampaign", 'DateTime'>
+  readonly stoppedReason: Prisma.FieldRef<"MarketingCampaign", 'String'>
   readonly objective: Prisma.FieldRef<"MarketingCampaign", 'String'>
   readonly notes: Prisma.FieldRef<"MarketingCampaign", 'String'>
   readonly plannedCost: Prisma.FieldRef<"MarketingCampaign", 'Decimal'>

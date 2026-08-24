@@ -6,6 +6,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerMoneyInput, normalizeBaseerAmount } from "./baseer-form-fields";
 import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
 import { activeSession, api, requestId } from "./daily-sales-client";
 import {
@@ -775,12 +776,13 @@ export function RecurringExpensePaymentBatch({
                 cell: (row) => (
                   <input
                     aria-label={text.coverageYear}
-                    type="number"
+                    inputMode="numeric"
+                    dir="ltr"
                     min="2000"
                     max="2100"
                     value={row.coverageYear}
                     onChange={(event) =>
-                      change(row.id, "coverageYear", event.target.value)
+                      change(row.id, "coverageYear", normalizeBaseerAmount(event.target.value).replace(".", ""))
                     }
                   />
                 ),
@@ -815,18 +817,15 @@ export function RecurringExpensePaymentBatch({
                     (item) => item.id === row.profileId,
                   );
                   return (
-                    <input
+                    <BaseerMoneyInput
                       aria-label={text.totalAmount}
                       required
                       disabled={Boolean(
                         profile && !profile.allowAmountOverride,
                       )}
-                      inputMode="decimal"
                       placeholder={text.enterAmount}
                       value={row.grossAmount}
-                      onChange={(event) =>
-                        change(row.id, "grossAmount", event.target.value)
-                      }
+                      onValueChange={(grossAmount) => change(row.id, "grossAmount", grossAmount)}
                     />
                   );
                 },
@@ -1003,12 +1002,13 @@ export function RecurringExpensePaymentBatch({
                 <label>
                   {text.coverageYear}
                   <input
-                    type="number"
+                    inputMode="numeric"
+                    dir="ltr"
                     min="2000"
                     max="2100"
                     value={individual.coverageYear}
                     onChange={(event) =>
-                      updateIndividual("coverageYear", event.target.value)
+                      updateIndividual("coverageYear", normalizeBaseerAmount(event.target.value).replace(".", ""))
                     }
                   />
                 </label>
@@ -1031,17 +1031,14 @@ export function RecurringExpensePaymentBatch({
                 </label>
                 <label>
                   {text.totalAmount} (SAR)
-                  <input
+                  <BaseerMoneyInput
                     disabled={
                       !activeProfiles.find(
                         (profile) => profile.id === individual.profileId,
                       )?.allowAmountOverride
                     }
-                    inputMode="decimal"
                     value={individual.grossAmount}
-                    onChange={(event) =>
-                      updateIndividual("grossAmount", event.target.value)
-                    }
+                    onValueChange={(grossAmount) => updateIndividual("grossAmount", grossAmount)}
                   />
                 </label>
                 {configuration.profile?.vatAccountingEnabled ? (
@@ -1158,12 +1155,11 @@ export function RecurringExpensePaymentBatch({
                     header: `${text.amount} (SAR)`,
                     numeric: true,
                     cell: (allocation) => (
-                      <input
-                        inputMode="decimal"
+                      <BaseerMoneyInput
                         value={allocation.grossAmount}
-                        onChange={(event) =>
+                        onValueChange={(grossAmount) =>
                           updateAllocation(allocation.id, {
-                            grossAmount: event.target.value,
+                            grossAmount,
                           })
                         }
                       />

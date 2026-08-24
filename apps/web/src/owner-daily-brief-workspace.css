@@ -27,3 +27,292 @@
 .owner-daily-brief__history { display: grid; gap: .7rem; padding-top: 1.1rem; border-top: 1px solid #e6e2da; }.owner-daily-brief__history > div:last-child { display: grid; gap: .42rem; }.owner-daily-brief__history-entry { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: .7rem; width: 100%; border: 1px solid #ebe8df; border-radius: .55rem; padding: .65rem .75rem; color: #34443b; background: #fff; font: inherit; text-align: start; cursor: pointer; }.owner-daily-brief__history-entry:hover, .owner-daily-brief__history-entry.is-selected { border-color: #9ac9ad; background: #f6fbf7; }.owner-daily-brief__history-entry span { font-size: .82rem; font-weight: 750; }.owner-daily-brief__history-entry small { color: #728078; font-size: .7rem; }.owner-daily-brief__history-entry bdi { color: #285840; font-size: .78rem; font-variant-numeric: tabular-nums; font-weight: 800; }
 @media (max-width: 840px) { .owner-daily-brief__totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }.owner-daily-brief__companies { grid-template-columns: repeat(2, minmax(0, 1fr)); }.owner-daily-brief__marketing-body { grid-template-columns: 1fr; } }
 @media (max-width: 570px) { .owner-daily-brief__paper { padding: 1rem; border-radius: .9rem; }.owner-daily-brief__report-head, .owner-daily-brief__failure { align-items: stretch; flex-direction: column; }.owner-daily-brief__tax { width: fit-content; }.owner-daily-brief__companies { grid-template-columns: 1fr; }.owner-daily-brief__mail-body { grid-template-columns: 1fr; }.owner-daily-brief__mail-body ul { grid-column: auto; }.owner-daily-brief__history-entry { grid-template-columns: 1fr auto; }.owner-daily-brief__history-entry small { grid-column: 1; }.owner-daily-brief__chat form { align-items: stretch; flex-direction: column; }.owner-daily-brief__chat .baseer-button { width: 100%; } }
+
+.owner-daily-brief__company-summary { padding-top: .15rem; }
+.owner-daily-brief__company { display: grid; position: relative; align-content: start; min-height: 0; padding: 1rem; text-align: center; }
+.owner-daily-brief__company header { align-items: center; justify-content: center; padding: 0; border: 0; }
+.owner-daily-brief__company header > div { gap: .08rem; }
+.owner-daily-brief__company header span { font-family: Georgia, "Times New Roman", serif; font-size: 1.04rem; text-align: center; }
+.owner-daily-brief__company header small { text-align: center; }
+.owner-daily-brief__company header em { position: absolute; inset-inline-start: .7rem; inset-block-start: .7rem; }
+.owner-daily-brief__company-sales { display: grid; gap: .24rem; margin-top: .92rem; }
+.owner-daily-brief__company-sales > bdi { color: #173b2d; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.65rem, 2.6vw, 2.25rem); font-variant-numeric: tabular-nums; font-weight: 800; }
+.owner-daily-brief__company-sales > span { color: #6e7c74; font-size: .73rem; font-weight: 700; }
+.owner-daily-brief__company-sales > span.is-up { color: #16754e; }
+.owner-daily-brief__company-sales > span.is-down { color: #b4493e; }
+.owner-daily-brief__company-sales > span.is-unknown { color: #718078; }
+.owner-daily-brief__trend { display: flex; align-items: end; gap: .28rem; min-height: 4.5rem; margin: 1rem 0; padding: .2rem 0; border-bottom: 1px solid #e3e7e1; }
+.owner-daily-brief__trend > span:not(.is-empty) { width: 100%; min-width: .28rem; border-radius: .32rem .32rem .08rem .08rem; background: linear-gradient(180deg, #16754e, #92bcaa); }
+.owner-daily-brief__trend > span.is-missing { background: #dce4de; }
+.owner-daily-brief__trend > .is-empty { width: 100%; align-self: center; color: #718078; font-size: .72rem; }
+.owner-daily-brief__company dl { grid-template-columns: repeat(2, minmax(0, 1fr)); text-align: start; }
+.owner-daily-brief__company dl div { gap: .28rem; padding: .68rem .72rem; border: 1px solid #e6e3da; border-radius: .72rem; background: #fcfaf5; }
+.owner-daily-brief__company dl div:nth-child(odd), .owner-daily-brief__company dl div:nth-child(-n + 2) { border: 1px solid #e6e3da; }
+.owner-daily-brief__company dl div:nth-child(odd) { margin-inline-end: .2rem; }
+.owner-daily-brief__company dl div:nth-child(even) { margin-inline-start: .2rem; }
+.owner-daily-brief__company dl div:nth-child(-n + 2) { margin-block-end: .35rem; }
+.owner-daily-brief__company dt { font-size: .68rem; }
+.owner-daily-brief__company dd { color: #173b2d; font-size: .84rem; }
+
+/* The owner brief is intentionally a single ruled notebook sheet. The
+   summaries are written on that sheet, rather than being a stack of cards. */
+.owner-daily-brief__paper {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  gap: 0;
+  padding: clamp(1.45rem, 3.2vw, 2.8rem) clamp(1.2rem, 3.4vw, 3.25rem);
+  border-color: #e7dfd1;
+  border-radius: .35rem 1rem 1rem .35rem;
+  background:
+    linear-gradient(90deg, transparent 0 4.35rem, rgb(188 93 87 / .24) 4.35rem 4.42rem, transparent 4.42rem),
+    #fffefa;
+  box-shadow: .35rem .7rem 2.4rem rgb(47 52 38 / .11);
+}
+.owner-daily-brief__paper::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(110deg, rgb(255 255 255 / .34), transparent 28%, rgb(237 246 238 / .18));
+}
+.owner-daily-brief__paper > * { position: relative; }
+.owner-daily-brief__notebook-intro {
+  padding: .35rem 1.1rem 1.55rem 5.35rem;
+  border-bottom: 1px solid rgb(47 103 75 / .35);
+}
+.owner-daily-brief__notebook-intro span { color: #0d7550; font-size: .84rem; font-weight: 800; letter-spacing: .07em; }
+.owner-daily-brief__notebook-intro p { margin: .3rem 0 0; color: #65746c; font-size: .94rem; line-height: 1.65; }
+.owner-daily-brief__company-summary,
+.owner-daily-brief__section,
+.owner-daily-brief__chat,
+.owner-daily-brief__history {
+  padding: 1.45rem 1.1rem 1.55rem 5.35rem;
+}
+.owner-daily-brief__company-summary { padding-top: 1.5rem; }
+.owner-daily-brief__section,
+.owner-daily-brief__chat,
+.owner-daily-brief__history { border-top: 1px solid rgb(47 103 75 / .3); }
+.owner-daily-brief__section-title { gap: .16rem; }
+.owner-daily-brief__section-title > span { color: #0d7550; font-size: .84rem; letter-spacing: .07em; }
+.owner-daily-brief__section-title h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1.42rem; }
+
+.owner-daily-brief__companies {
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 17.5rem));
+  justify-content: start;
+  gap: 0;
+  border-block: 1px solid rgb(47 103 75 / .28);
+}
+.owner-daily-brief .owner-daily-brief__company {
+  min-height: 0;
+  padding: 1.2rem .95rem 1.05rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.owner-daily-brief .owner-daily-brief__company + .owner-daily-brief__company { border-inline-start: 1px solid rgb(47 103 75 / .22); }
+.owner-daily-brief__company header em,
+.owner-daily-brief__mail-status {
+  padding: .1rem .2rem;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+}
+.owner-daily-brief__company header em.is-ready,
+.owner-daily-brief__mail-status.is-connected { background: transparent; }
+.owner-daily-brief__company-sales { margin-top: .78rem; }
+.owner-daily-brief__company-sales > bdi { font-size: clamp(1.55rem, 2.4vw, 2.15rem); }
+.owner-daily-brief__trend { margin: .78rem 0 .62rem; border-bottom: 0; }
+.owner-daily-brief__company dl {
+  gap: .25rem 1rem;
+  margin-top: .3rem;
+  border-top: 1px solid rgb(47 103 75 / .22);
+}
+.owner-daily-brief__company dl div,
+.owner-daily-brief__company dl div:nth-child(odd),
+.owner-daily-brief__company dl div:nth-child(-n + 2) {
+  gap: .12rem;
+  margin: 0;
+  padding: .48rem 0;
+  border: 0;
+  border-bottom: 1px dotted rgb(47 103 75 / .32);
+  border-radius: 0;
+  background: transparent;
+}
+.owner-daily-brief__company dd { font-size: .8rem; }
+
+.owner-daily-brief__marketing-body,
+.owner-daily-brief__mail-body,
+.owner-daily-brief__chat {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.owner-daily-brief__marketing-body { gap: 1.5rem; padding: .55rem 0 0; }
+.owner-daily-brief__marketing dl {
+  gap: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 1px solid rgb(47 103 75 / .26);
+}
+.owner-daily-brief__marketing dl div {
+  gap: .15rem;
+  padding: .65rem 0;
+  border-bottom: 1px dotted rgb(47 103 75 / .32);
+  border-radius: 0;
+  background: transparent;
+}
+.owner-daily-brief__mail-body { gap: .8rem; padding: .5rem 0 0; }
+.owner-daily-brief__mail-body p { color: #43574b; }
+.owner-daily-brief__chat { gap: .8rem; padding-top: 1.25rem; }
+.owner-daily-brief__basira-mark {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid #187551;
+  border-radius: 50%;
+  color: #187551;
+  background: transparent;
+}
+.owner-daily-brief__messages { gap: .2rem; padding: .1rem 0; }
+.owner-daily-brief__messages p {
+  max-width: 100%;
+  padding: .38rem .72rem;
+  border-radius: 0;
+  border-inline-start: 2px solid #95bdab;
+  background: transparent;
+  box-shadow: none;
+}
+.owner-daily-brief__messages .is-assistant { background: transparent; box-shadow: none; }
+.owner-daily-brief__messages .is-user { color: #184e3a; border-inline-start-color: #15764f; background: rgb(221 239 226 / .52); }
+.owner-daily-brief__suggestions { gap: .65rem; }
+.owner-daily-brief__suggestions button {
+  padding: .18rem 0;
+  border: 0;
+  border-bottom: 1px solid #91b8a3;
+  border-radius: 0;
+  color: #316b53;
+  background: transparent;
+}
+.owner-daily-brief__chat input {
+  border-width: 0 0 1px;
+  border-radius: 0;
+  background: transparent;
+}
+
+.owner-daily-brief__history { gap: .7rem; }
+.owner-daily-brief__history-entry {
+  padding: .62rem 0;
+  border: 0;
+  border-bottom: 1px dotted rgb(47 103 75 / .34);
+  border-radius: 0;
+  background: transparent;
+}
+.owner-daily-brief__history-entry:hover,
+.owner-daily-brief__history-entry.is-selected { border-color: #70aa8e; background: rgb(218 237 223 / .44); }
+
+@media (max-width: 840px) {
+  .owner-daily-brief__companies { grid-template-columns: repeat(auto-fill, minmax(16rem, 20rem)); }
+  .owner-daily-brief__marketing-body { grid-template-columns: 1fr; }
+  .owner-daily-brief__marketing dl { padding-inline-start: 0; border-inline-start: 0; }
+}
+@media (max-width: 570px) {
+  .owner-daily-brief__paper {
+    padding: 1.2rem 1rem;
+    background:
+      #fffefa;
+  }
+  .owner-daily-brief__notebook-intro,
+  .owner-daily-brief__company-summary,
+  .owner-daily-brief__section,
+  .owner-daily-brief__chat,
+  .owner-daily-brief__history { padding-inline: .15rem; }
+  .owner-daily-brief__companies { grid-template-columns: 1fr; }
+  .owner-daily-brief .owner-daily-brief__company + .owner-daily-brief__company { border-inline-start: 0; border-top: 1px solid rgb(47 103 75 / .22); }
+}
+
+/* A quiet, selectable notebook sheet: one margin line only, without the
+   excessive rulers and dividers that made the report feel crowded. */
+.owner-daily-brief__paper {
+  --owner-paper: #fff4c9;
+  --owner-paper-glow: rgb(255 255 255 / .38);
+  --owner-paper-edge: #e4d5a1;
+  --owner-paper-accent: rgb(164 109 62 / .3);
+  border-color: var(--owner-paper-edge);
+  background:
+    linear-gradient(90deg, transparent 0 4.35rem, var(--owner-paper-accent) 4.35rem 4.42rem, transparent 4.42rem),
+    var(--owner-paper);
+  box-shadow: .35rem .7rem 2.4rem rgb(47 52 38 / .1);
+}
+.owner-daily-brief__paper[data-paper-tone="pure-white"] {
+  --owner-paper: #fff;
+  --owner-paper-glow: rgb(255 255 255 / .5);
+  --owner-paper-edge: #e6e8e5;
+  --owner-paper-accent: rgb(190 108 99 / .2);
+}
+.owner-daily-brief__paper[data-paper-tone="soft-yellow"] {
+  --owner-paper: #fffbe9;
+  --owner-paper-glow: rgb(255 255 255 / .46);
+  --owner-paper-edge: #ebe1bb;
+  --owner-paper-accent: rgb(194 142 72 / .22);
+}
+.owner-daily-brief__paper::before { background: linear-gradient(110deg, var(--owner-paper-glow), transparent 32%, rgb(227 242 233 / .12)); }
+.owner-daily-brief__notebook-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; border-bottom-color: color-mix(in srgb, var(--brand) 30%, transparent); }
+.owner-daily-brief__paper-tone { position: relative; flex: 0 0 auto; }
+.owner-daily-brief__paper-tone summary { display: inline-flex; align-items: center; gap: .38rem; min-height: 2rem; padding: .28rem .52rem; border: 1px solid color-mix(in srgb, var(--brand) 25%, var(--owner-paper-edge)); border-radius: .55rem; color: #25543f; background: rgb(255 255 255 / .32); font-size: .7rem; font-weight: 800; list-style: none; cursor: pointer; }
+.owner-daily-brief__paper-tone summary::-webkit-details-marker { display: none; }
+.owner-daily-brief__paper-tone summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.owner-daily-brief__paper-tone[open] summary { color: #fff; border-color: var(--brand); background: var(--brand); }
+.owner-daily-brief__paper-tone > div { position: absolute; z-index: 3; top: calc(100% + .4rem); inset-inline-end: 0; display: grid; min-width: 10.75rem; gap: .18rem; padding: .3rem; border: 1px solid var(--owner-paper-edge); border-radius: .65rem; background: #fffefb; box-shadow: 0 .75rem 1.75rem rgb(44 54 42 / .14); }
+.owner-daily-brief__paper-tone button { display: grid; grid-template-columns: 1.1rem 1fr; align-items: center; gap: .45rem; width: 100%; min-height: 2rem; padding: .3rem .38rem; border: 0; border-radius: .42rem; color: #2e4438; background: transparent; font: inherit; font-size: .7rem; font-weight: 750; text-align: start; cursor: pointer; }
+.owner-daily-brief__paper-tone button:hover,.owner-daily-brief__paper-tone button[aria-checked="true"] { color: #0d6545; background: #edf6ef; }
+.owner-daily-brief__paper-tone-swatch { inline-size: .95rem; block-size: .95rem; border: 1px solid rgb(62 72 63 / .14); border-radius: 999px; background: #fff4c9; }.owner-daily-brief__paper-tone-swatch.is-pure-white { background: #fff; }.owner-daily-brief__paper-tone-swatch.is-soft-yellow { background: #fffbe9; }
+
+.owner-daily-brief__company-summary,
+.owner-daily-brief__section,
+.owner-daily-brief__chat,
+.owner-daily-brief__history { border-top: 0; }
+.owner-daily-brief__companies { gap: 1rem; border-block: 0; }
+.owner-daily-brief .owner-daily-brief__company,
+.owner-daily-brief .owner-daily-brief__company + .owner-daily-brief__company { border: 0; }
+.owner-daily-brief__company header em,
+.owner-daily-brief__mail-status { border-bottom: 0; }
+.owner-daily-brief__company dl { gap: .35rem .9rem; border-top: 0; }
+.owner-daily-brief__company dl div,
+.owner-daily-brief__company dl div:nth-child(odd),
+.owner-daily-brief__company dl div:nth-child(-n + 2),
+.owner-daily-brief__marketing dl div,
+.owner-daily-brief__history-entry { border-bottom: 0; }
+.owner-daily-brief__marketing dl { border-inline-start: 0; }
+.owner-daily-brief__history-entry { border-radius: .55rem; padding-inline: .65rem; background: rgb(255 255 255 / .3); }
+.owner-daily-brief__history-entry:hover,
+.owner-daily-brief__history-entry.is-selected { background: rgb(218 237 223 / .52); }
+
+@media (max-width: 570px) {
+  .owner-daily-brief__paper { background: var(--owner-paper); }
+  .owner-daily-brief__notebook-intro { align-items: stretch; flex-direction: column; }
+  .owner-daily-brief__paper-tone > div { inset-inline-start: 0; inset-inline-end: auto; }
+  .owner-daily-brief .owner-daily-brief__company + .owner-daily-brief__company { border-top: 0; }
+}
+
+/* Readability pass: narrower company cards and a slightly larger notebook type scale. */
+.owner-daily-brief__notebook-intro span { font-size: .84rem; }
+.owner-daily-brief__notebook-intro p { font-size: .94rem; }
+.owner-daily-brief__section-title > span { font-size: .84rem; }
+.owner-daily-brief__section-title h3 { font-size: 1.42rem; }
+.owner-daily-brief__companies { grid-template-columns: repeat(auto-fill, minmax(15.5rem, 17.5rem)); }
+.owner-daily-brief .owner-daily-brief__company { padding-inline: .95rem; }
+.owner-daily-brief__company header span { font-size: 1.14rem; }
+.owner-daily-brief__company header small { font-size: .76rem; }
+.owner-daily-brief__company-sales > bdi { font-size: clamp(1.72rem, 2.55vw, 2.32rem); }
+.owner-daily-brief__company-sales > span { font-size: .82rem; }
+.owner-daily-brief__company dt { font-size: .77rem; }
+.owner-daily-brief__company dd { font-size: .92rem; }
+.owner-daily-brief__marketing-body { font-size: .95rem; }
+.owner-daily-brief__mail-body p { font-size: .95rem; }
+
+@media (max-width: 840px) {
+  .owner-daily-brief__companies { grid-template-columns: repeat(auto-fill, minmax(15rem, 17.5rem)); }
+}

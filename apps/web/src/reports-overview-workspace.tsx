@@ -5,6 +5,7 @@ import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
+import { pageRouteHash } from "./page-registry";
 
 type Language = "ar" | "en";
 type ReportCode = "ledger_trial_balance" | "personal_cash_performance" | "internal_vat_report";
@@ -57,9 +58,9 @@ const copy = {
 } as const;
 
 const reportCards: ReadonlyArray<{ code: ReportCode; target: string; icon: string; question: keyof typeof copy.ar; description: keyof typeof copy.ar; basis: keyof typeof copy.ar; action: keyof typeof copy.ar }> = [
-  { code: "ledger_trial_balance", target: "module=reports&section=1&stage=trial-balance", icon: "⚖", question: "trialQuestion", description: "trialDescription", basis: "trialBasis", action: "openTrial" },
-  { code: "personal_cash_performance", target: "module=reports&section=1&stage=cash-performance", icon: "↕", question: "financialQuestion", description: "financialDescription", basis: "financialBasis", action: "openFinancial" },
-  { code: "internal_vat_report", target: "module=reports&section=2", icon: "٪", question: "vatQuestion", description: "vatDescription", basis: "vatBasis", action: "openVat" },
+  { code: "ledger_trial_balance", target: pageRouteHash("reports-financial", "trial-balance"), icon: "⚖", question: "trialQuestion", description: "trialDescription", basis: "trialBasis", action: "openTrial" },
+  { code: "personal_cash_performance", target: pageRouteHash("reports-financial", "cash-performance"), icon: "↕", question: "financialQuestion", description: "financialDescription", basis: "financialBasis", action: "openFinancial" },
+  { code: "internal_vat_report", target: pageRouteHash("reports-vat"), icon: "٪", question: "vatQuestion", description: "vatDescription", basis: "vatBasis", action: "openVat" },
 ];
 
 export function ReportsOverviewWorkspace({ language }: { language: Language }) {

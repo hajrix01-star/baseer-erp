@@ -335,3 +335,91 @@ input[type="checkbox"] { box-sizing: border-box; inline-size: 18px; block-size: 
 .decision-basira-explanation__details { padding-top: .8rem; border-top: 1px solid var(--line); color: var(--muted); }
 .decision-basira-explanation__details summary { cursor: pointer; color: var(--ink); font-weight: 750; }
 .decision-basira-explanation__details small { display: block; margin-top: .6rem; }
+
+/* One company-facing Basira governance surface; provider secrets remain a tenant control. */
+.administration-basira-governance,
+.basira-governance { display: grid; gap: var(--section-gap); }
+.basira-governance__section { display: grid; gap: .9rem; }
+.basira-governance__section > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.basira-governance__section h4 { margin: 0; color: var(--ink); font-size: var(--font-heading-sm); }
+.basira-governance__section header p,
+.basira-governance__list p { margin: .3rem 0 0; color: var(--muted); line-height: 1.65; }
+.basira-governance__list { display: grid; gap: .65rem; }
+.basira-governance__list article { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--line); }
+.basira-governance__list article:first-child { padding-top: 0; border-top: 0; }
+.basira-governance__list article > div { min-inline-size: 0; }
+.basira-governance__list strong,
+.basira-governance__list small { display: block; }
+.basira-governance__list small { margin-top: .2rem; color: var(--muted); font-size: var(--font-caption); }
+.basira-governance__list footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .45rem; }
+.basira-governance__state { color: var(--muted); font-size: var(--font-caption); font-weight: 700; white-space: nowrap; }
+.basira-governance__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.basira-governance__form > p,
+.basira-governance__form-full { grid-column: 1 / -1; }
+.basira-governance__form p { margin: 0; color: var(--muted); line-height: 1.65; }
+.basira-governance__form label { display: grid; gap: .35rem; color: var(--ink); font-size: var(--font-label); font-weight: 700; }
+.basira-governance__form :is(input, select, textarea) { inline-size: 100%; min-inline-size: 0; }
+.basira-governance__form textarea { min-block-size: 6rem; resize: vertical; }
+
+/* Central read-only hub for one reusable Basira explanation. It deliberately
+ * shares content by id rather than creating an AI call or a visual copy. */
+.basira-interpretation-center { display: grid; gap: var(--section-gap); max-inline-size: 76rem; }
+.basira-interpretation-center__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: .2rem .1rem; }
+.basira-interpretation-center__header h3 { margin: .12rem 0 0; color: var(--ink); font-size: var(--font-heading-md); }
+.basira-interpretation-center__header p { max-inline-size: 48rem; margin: .35rem 0 0; color: var(--muted); line-height: 1.65; }
+.basira-interpretation-center__filter { display: grid; flex: 0 0 auto; gap: .35rem; min-inline-size: 10rem; color: var(--ink); font-size: var(--font-label); font-weight: 750; }
+.basira-interpretation-center__filter select { inline-size: 100%; }
+.basira-interpretation-center__metrics { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; }
+.basira-interpretation-center__metrics .baseer-button { margin-inline-start: auto; }
+.basira-interpretation-center__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: .85rem; }
+.basira-interpretation-center__item { display: grid; gap: .85rem; min-block-size: 13rem; }
+.basira-interpretation-center__item > header { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+.basira-interpretation-center__item header > div { display: grid; gap: .35rem; }
+.basira-interpretation-center__item h4 { margin: 0; color: var(--ink); font-size: var(--font-heading-sm); }
+.basira-interpretation-center__item small { color: var(--muted); font-size: var(--font-caption); }
+.basira-interpretation-center__item > p { margin: 0; color: var(--ink); line-height: 1.7; }
+.basira-interpretation-center__item > footer { display: flex; align-self: end; flex-wrap: wrap; gap: .5rem; padding-top: .7rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--font-caption); }
+.basira-interpretation-center__empty { display: grid; gap: .35rem; text-align: center; }
+.basira-interpretation-center__empty h3,
+.basira-interpretation-center__empty h4 { margin: 0; color: var(--ink); }
+.basira-interpretation-center__empty p { max-inline-size: 43rem; margin: 0 auto; color: var(--muted); line-height: 1.65; }
+.basira-interpretation-center__detail { display: grid; gap: 1rem; }
+.basira-interpretation-center__detail > section { display: grid; gap: .45rem; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, var(--surface, #fff) 92%, var(--brand-soft, #eff7f2)); }
+.basira-interpretation-center__detail h4 { margin: 0; color: var(--ink); font-size: var(--font-heading-sm); }
+.basira-interpretation-center__detail p { margin: 0; line-height: 1.7; }
+.basira-interpretation-center__detail ul,
+.basira-interpretation-center__detail ol { display: grid; gap: .35rem; margin: 0; padding-inline-start: 1.2rem; line-height: 1.65; }
+.basira-interpretation-center__detail details { padding: .8rem 0; border-block: 1px solid var(--line); }
+.basira-interpretation-center__detail summary { cursor: pointer; color: var(--ink); font-weight: 750; }
+.basira-interpretation-center__detail dl { display: grid; gap: .55rem; margin: .8rem 0 0; }
+.basira-interpretation-center__detail dl div { display: grid; gap: .15rem; }
+.basira-interpretation-center__detail dt { color: var(--muted); font-size: var(--font-caption); }
+.basira-interpretation-center__detail dd { margin: 0; overflow-wrap: anywhere; color: var(--ink); }
+.basira-interpretation-center__notice { padding: .8rem 1rem; border-inline-start: .25rem solid var(--brand); border-radius: .45rem; background: var(--brand-soft, #eff7f2); color: var(--ink); }
+.basira-interpretation-center__human { background: var(--surface, #fff) !important; }
+.basira-interpretation-center__human > header { display: flex; align-items: flex-start; justify-content: space-between; gap: .8rem; }
+.basira-interpretation-center__human header p { color: var(--muted); font-size: var(--font-caption); }
+.basira-interpretation-center__human > ol { list-style: none; padding: 0; }
+.basira-interpretation-center__human > ol > li { display: flex; align-items: flex-start; gap: .5rem; padding: .7rem 0; border-top: 1px solid var(--line); }
+.basira-interpretation-center__human > ol > li > div { display: grid; flex: 1; gap: .35rem; min-inline-size: 0; }
+.basira-interpretation-center__human > ol > li strong { color: var(--ink); }
+.basira-interpretation-center__human > ol > li small { color: var(--muted); }
+.basira-interpretation-center__source { display: flex; justify-content: flex-end; }
+.basira-interpretation-center__form { display: grid; gap: .8rem; }
+.basira-interpretation-center__form > p { margin: 0; color: var(--muted); line-height: 1.65; }
+.basira-interpretation-center__form label { display: grid; gap: .35rem; color: var(--ink); font-weight: 750; }
+.basira-interpretation-center__form textarea { min-block-size: 8rem; resize: vertical; }
+@media (max-width: 760px) {
+  .basira-governance__section > header,
+  .basira-governance__list article { align-items: stretch; flex-direction: column; }
+  .basira-governance__list footer { justify-content: flex-start; }
+  .basira-governance__form { grid-template-columns: 1fr; }
+  .basira-governance__form > p,
+  .basira-governance__form-full { grid-column: auto; }
+  .basira-interpretation-center__header,
+  .basira-interpretation-center__human > header,
+  .basira-interpretation-center__human > ol > li { align-items: stretch; flex-direction: column; }
+  .basira-interpretation-center__filter { inline-size: 100%; }
+  .basira-interpretation-center__metrics .baseer-button { margin-inline-start: 0; }
+  .basira-interpretation-center__source { justify-content: stretch; }
+}

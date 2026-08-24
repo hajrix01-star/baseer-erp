@@ -27,7 +27,7 @@ import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field"
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
 import { financeText } from "./finance-copy";
-import { formatMoney } from "./number-format";
+import { formatCount, formatDate, formatMoney } from "./number-format";
 import { presentBaseerApiError } from "./baseer-api-error";
 import {
   absoluteMoneyDecimal,
@@ -400,7 +400,7 @@ export function FinanceAccountsWorkspace({ language }: { language: Language }) {
     {
       id: "date",
       header: text.documentDate,
-      cell: (item) => item.businessDate,
+      cell: (item) => <bdi dir="ltr">{formatDate(item.businessDate, language)}</bdi>,
     },
     {
       id: "reference",
@@ -464,7 +464,7 @@ export function FinanceAccountsWorkspace({ language }: { language: Language }) {
       header: "#",
       numeric: true,
       align: "center",
-      cell: (item) => item.lineNumber,
+      cell: (item) => <bdi dir="ltr">{formatCount(item.lineNumber, language)}</bdi>,
     },
     {
       id: "account",
@@ -738,7 +738,7 @@ export function FinanceAccountsWorkspace({ language }: { language: Language }) {
             </label>
             <label>
               {text.documentDate}
-              <output>{journal.businessDate}</output>
+              <output dir="ltr">{formatDate(journal.businessDate, language)}</output>
             </label>
             <label>
               {text.notes}

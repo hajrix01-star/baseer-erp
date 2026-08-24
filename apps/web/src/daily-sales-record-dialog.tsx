@@ -1,7 +1,7 @@
 import { BaseerButton } from "./baseer-button";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing, Vault } from "./daily-sales-client";
-import { formatMoney, formatNumber } from "./number-format";
+import { formatDate, formatMoney, formatNumber } from "./number-format";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 
 export function DailySalesRecordDialog({
@@ -57,7 +57,7 @@ export function DailySalesRecordDialog({
           <div>
             <h3 id="daily-sales-record-title">{recordTitle}</h3>
             <strong dir="ltr">{closing.documentNumber}</strong>
-            <small>{closing.businessDate.slice(0, 10)} · {scope}</small>
+            <small><bdi dir="ltr">{formatDate(closing.businessDate, language)}</bdi> · {scope}</small>
           </div>
           <div className="daily-sales-record-dialog__header-actions">
             <span className={`daily-sales-badge ${closing.status.toLowerCase()}`}>

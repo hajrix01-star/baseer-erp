@@ -10,6 +10,7 @@ import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } 
 import { DataTable, type DataTableColumn } from "./data-table";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
+import { formatCount, formatMoney, formatQuantity } from "./number-format";
 
 type Language = "ar" | "en";
 type MaterialRow = {
@@ -209,18 +210,18 @@ export function OperationsReportsWorkspace({ language }: { language: Language })
   const materialColumns: readonly BaseerDataGridColumn<MaterialRow>[] = [
     { id: "material", header: t.material, cell: (row) => ar ? row.materialNameAr : row.materialNameEn ?? row.materialNameAr },
     { id: "unit", header: t.unit, cell: (row) => ar ? row.unitNameAr : row.unitNameEn ?? row.unitNameAr },
-    { id: "quantity", header: t.quantity, numeric: true, cell: (row) => row.quantity },
-    { id: "average", header: t.average, numeric: true, cell: (row) => row.weightedActualUnitPrice },
-    { id: "amount", header: t.amount, numeric: true, cell: (row) => row.amount },
+    { id: "quantity", header: t.quantity, numeric: true, cell: (row) => <bdi dir="ltr">{formatQuantity(row.quantity, 3, language)}</bdi> },
+    { id: "average", header: t.average, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.weightedActualUnitPrice, "SAR", language, 4)}</bdi> },
+    { id: "amount", header: t.amount, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.amount, "SAR", language)}</bdi> },
   ];
   const custodyColumns: readonly DataTableColumn<CustodyMonth>[] = [
     { id: "month", header: t.month, cell: (row) => row.month },
-    { id: "opening", header: t.opening, numeric: true, cell: (row) => row.openingBalance },
-    { id: "funding", header: t.funding, numeric: true, cell: (row) => row.funding },
-    { id: "purchases", header: t.purchases, numeric: true, cell: (row) => row.purchases },
-    { id: "returns", header: t.returns, numeric: true, cell: (row) => row.returns },
-    { id: "reversals", header: t.reversals, numeric: true, cell: (row) => row.reversals },
-    { id: "closing", header: t.closing, numeric: true, cell: (row) => row.closingBalance },
+    { id: "opening", header: t.opening, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.openingBalance, "SAR", language)}</bdi> },
+    { id: "funding", header: t.funding, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.funding, "SAR", language)}</bdi> },
+    { id: "purchases", header: t.purchases, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.purchases, "SAR", language)}</bdi> },
+    { id: "returns", header: t.returns, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.returns, "SAR", language)}</bdi> },
+    { id: "reversals", header: t.reversals, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.reversals, "SAR", language)}</bdi> },
+    { id: "closing", header: t.closing, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.closingBalance, "SAR", language)}</bdi> },
   ];
   const load = async (current: ActiveSession, signal: AbortSignal): Promise<ReportsData> => {
     const query = new URLSearchParams({ from: period.from, to: period.to, pageSize: "50" });
@@ -237,15 +238,15 @@ export function OperationsReportsWorkspace({ language }: { language: Language })
         <div><p className="eyebrow">Operations</p><h3>{t.title}</h3><p>{t.description}</p></div>
         <BaseerButton type="button" variant="secondary" disabled={loading} onClick={refetch}>{t.refresh}</BaseerButton>
       </header>
-      <BaseerFilterBar language={language} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} />} />
+      <BaseerFilterBar language={language} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} />} />
       {error ? <p className="daily-sales-message error">{presentBaseerApiError(error, language, t.failed)}</p> : null}
       <BaseerCard>
         <h3>{t.materials}</h3>
         {data ? <>
           <div className="baseer-card-grid">
-            <BaseerCard><strong>{t.materialCount}</strong><p>{data.materials.totals.materialCount}</p></BaseerCard>
-            <BaseerCard><strong>{t.totalQuantity}</strong><p>{data.materials.totals.quantity}</p></BaseerCard>
-            <BaseerCard><strong>{t.totalAmount}</strong><p>{data.materials.totals.amount}</p></BaseerCard>
+            <BaseerCard><strong>{t.materialCount}</strong><p><bdi dir="ltr">{formatCount(data.materials.totals.materialCount, language)}</bdi></p></BaseerCard>
+            <BaseerCard><strong>{t.totalQuantity}</strong><p><bdi dir="ltr">{formatQuantity(data.materials.totals.quantity, 3, language)}</bdi></p></BaseerCard>
+            <BaseerCard><strong>{t.totalAmount}</strong><p><bdi dir="ltr">{formatMoney(data.materials.totals.amount, "SAR", language)}</bdi></p></BaseerCard>
           </div>
           <MaterialsReportGrid session={session} language={language} period={period} report={data.materials} columns={materialColumns} />
         </> : loading ? <p>{t.loading}</p> : null}

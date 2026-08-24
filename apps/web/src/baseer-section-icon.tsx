@@ -1,21 +1,6 @@
-import type { ModuleId } from "./modules";
+export type SectionGlyph = "dashboard" | "target" | "bell" | "activity" | "trend" | "cart" | "truck" | "boxes" | "clipboard" | "receipt" | "bank" | "wallet" | "ledger" | "users" | "calendar" | "hand" | "badge" | "chart" | "tax" | "print" | "building" | "shield" | "palette" | "backup" | "mail";
 
-type Glyph = "dashboard" | "target" | "bell" | "activity" | "trend" | "cart" | "truck" | "boxes" | "clipboard" | "receipt" | "bank" | "wallet" | "ledger" | "users" | "calendar" | "hand" | "badge" | "chart" | "tax" | "print" | "building" | "shield" | "palette" | "backup" | "mail";
-
-const sections: Record<ModuleId, readonly Glyph[]> = {
-  command: ["dashboard", "target", "chart", "ledger"],
-  decision: ["dashboard", "calendar", "bell", "chart", "shield"],
-  marketing: ["dashboard", "target", "activity", "shield"],
-  "inbound-evidence": ["dashboard", "mail", "shield"],
-  operations: ["dashboard", "trend", "cart", "truck", "boxes", "clipboard", "receipt", "clipboard", "chart", "badge"],
-  finance: ["dashboard", "receipt", "bank", "wallet", "ledger", "ledger"],
-  hr: ["dashboard", "users", "calendar", "wallet", "hand", "badge"],
-  reports: ["dashboard", "chart", "tax", "tax", "print"],
-  administration: ["dashboard", "building", "users", "shield", "palette", "backup"],
-};
-
-export function BaseerSectionIcon({ moduleId, index }: { moduleId: ModuleId; index: number }) {
-  const glyph = sections[moduleId][index] ?? "dashboard";
+export function BaseerSectionIcon({ glyph }: { glyph: SectionGlyph }) {
   const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   if (glyph === "dashboard") return <svg viewBox="0 0 24 24" {...common}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>;
   if (glyph === "mail") return <svg viewBox="0 0 24 24" {...common}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6M5 17l4.5-4M19 17l-4.5-4" /></svg>;

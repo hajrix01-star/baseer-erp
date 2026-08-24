@@ -41,6 +41,8 @@ export const marketingCampaignSchema = z.object({
   startsOn: z.string().date().nullable(),
   endsOn: z.string().date().nullable(),
   status: marketingCampaignStatusSchema,
+  stoppedOn: z.string().date().nullable(),
+  stoppedReason: z.string().max(500).nullable(),
   objective: z.string().max(500).nullable(),
   notes: z.string().max(2_000).nullable(),
   plannedCost: marketingAmountSchema.nullable(),
@@ -89,7 +91,9 @@ const campaignPayloadSchema = z.object({
   externalReference: z.string().trim().max(160).optional(),
   startsOn: z.string().date().optional(),
   endsOn: z.string().date().optional(),
-  status: marketingCampaignStatusSchema.exclude(["ARCHIVED"]),
+  // Cancellation must use the dedicated stop command so a date and a reason
+  // are always retained for the analysis timeline.
+  status: marketingCampaignStatusSchema.exclude(["ARCHIVED", "CANCELLED"]),
   objective: z.string().trim().max(500).optional(),
   notes: z.string().trim().max(2_000).optional(),
   plannedCost: marketingAmountSchema.optional(),
@@ -99,6 +103,13 @@ export const createMarketingCampaignRequestSchema = campaignPayloadSchema.extend
 export const updateMarketingCampaignRequestSchema = campaignPayloadSchema.extend({ idempotencyKey: idempotencyKeySchema }).strict();
 export const archiveMarketingCampaignRequestSchema = z.object({
   campaignId: marketingIdSchema,
+  reason: z.string().trim().min(1).max(500),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+/** Stops a live/planned campaign without deleting its history. The stop date
+ * becomes the effective campaign end used by the official read model. */
+export const stopMarketingCampaignRequestSchema = z.object({
+  stoppedOn: marketingDateSchema,
   reason: z.string().trim().min(1).max(500),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
@@ -279,6 +290,7 @@ export type RequestMarketingProviderConnectionSetup = z.infer<typeof requestMark
 export type CreateMarketingCampaignRequest = z.infer<typeof createMarketingCampaignRequestSchema>;
 export type UpdateMarketingCampaignRequest = z.infer<typeof updateMarketingCampaignRequestSchema>;
 export type ArchiveMarketingCampaignRequest = z.infer<typeof archiveMarketingCampaignRequestSchema>;
+export type StopMarketingCampaignRequest = z.infer<typeof stopMarketingCampaignRequestSchema>;
 export type LinkMarketingCampaignFinancialDocumentRequest = z.infer<typeof linkMarketingCampaignFinancialDocumentRequestSchema>;
 export type LinkMarketingCampaignContextRequest = z.infer<typeof linkMarketingCampaignContextRequestSchema>;
 export type MarketingLinkableFinancialDocuments = z.infer<typeof marketingLinkableFinancialDocumentsSchema>;

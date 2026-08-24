@@ -3,7 +3,7 @@ import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field"
 import { BaseerButton } from "./baseer-button";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing } from "./daily-sales-client";
-import { formatMoney, formatNumber } from "./number-format";
+import { formatDate, formatMoney, formatNumber } from "./number-format";
 
 export function DailySalesHistory({
   language,
@@ -34,7 +34,7 @@ export function DailySalesHistory({
           onClick={() => onView(closing)}
         >
           <strong dir="ltr">{closing.documentNumber}</strong>
-          <small>{closing.businessDate.slice(0, 10)}</small>
+          <small dir="ltr">{formatDate(closing.businessDate, language)}</small>
         </button>
       ),
     },

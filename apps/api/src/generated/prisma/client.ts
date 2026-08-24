@@ -709,10 +709,83 @@ export type AiProviderConfiguration = Prisma.AiProviderConfigurationModel
  */
 export type AiCompanyIdentity = Prisma.AiCompanyIdentityModel
 /**
+ * Model AiCompanyContext
+ * Versioned, approved company terms and presentation preferences. The JSON
+ * values are constrained by the API contract and cannot contain model or
+ * safety instructions. A correction creates a new version.
+ */
+export type AiCompanyContext = Prisma.AiCompanyContextModel
+/**
+ * Model AiSkillActivation
+ * Company-scoped approval for a fixed code-owned skill revision. Catalogue
+ * status alone never authorises runtime use.
+ */
+export type AiSkillActivation = Prisma.AiSkillActivationModel
+/**
  * Model AiExecutionReceipt
  * 
  */
 export type AiExecutionReceipt = Prisma.AiExecutionReceiptModel
+/**
+ * Model AiInterpretation
+ * A durable, encrypted explanation. Its exact reuse key is intentionally not
+ * unique: an expired interpretation is replaced by a new immutable row. A
+ * partial unique PENDING run index performs the single-flight coordination.
+ */
+export type AiInterpretation = Prisma.AiInterpretationModel
+/**
+ * Model AiInterpretationRun
+ * A short lease that prevents two manual requests for the same exact input
+ * from calling the provider concurrently. It may transition operationally;
+ * it never contains the model output.
+ */
+export type AiInterpretationRun = Prisma.AiInterpretationRunModel
+/**
+ * Model AiModelPriceRevision
+ * A code-owned price revision. It contains no tenant data and is never
+ * editable through the product UI. The runtime fails closed when a selected
+ * provider/model has no current price revision.
+ */
+export type AiModelPriceRevision = Prisma.AiModelPriceRevisionModel
+/**
+ * Model AiBudgetReservation
+ * One provider-call budget reservation per operational interpretation run.
+ * Reused, blocked, and deterministic responses never create this row.
+ */
+export type AiBudgetReservation = Prisma.AiBudgetReservationModel
+/**
+ * Model AiUsageLedger
+ * Immutable metering entries. Monetary values are USD because model prices
+ * are published in USD; presentation may convert separately with a dated FX
+ * source, never during limit enforcement.
+ */
+export type AiUsageLedger = Prisma.AiUsageLedgerModel
+/**
+ * Model AiInterpretationPlacement
+ * A placement only points to a shared explanation. Removing a placement can
+ * never delete or mutate the explanation itself.
+ */
+export type AiInterpretationPlacement = Prisma.AiInterpretationPlacementModel
+/**
+ * Model AiHumanInsight
+ * Human notes and decisions remain separate from the explanation. The
+ * encrypted statement is immutable; a correction creates a new row that can
+ * reference the prior insight through supersedesInsightId.
+ */
+export type AiHumanInsight = Prisma.AiHumanInsightModel
+/**
+ * Model AiEvaluationFeedback
+ * Structured human evaluation of one execution. It supports reviewed future
+ * releases only; it is never an automatic training signal.
+ */
+export type AiEvaluationFeedback = Prisma.AiEvaluationFeedbackModel
+/**
+ * Model AiSkillEvaluationRun
+ * A compact, de-identified record of an offline acceptance suite. It holds
+ * no provider prompt or answer and is immutable once recorded. A successful
+ * matching run is required before a company can start a human-click pilot.
+ */
+export type AiSkillEvaluationRun = Prisma.AiSkillEvaluationRunModel
 /**
  * Model AiSystemIdentity
  * 

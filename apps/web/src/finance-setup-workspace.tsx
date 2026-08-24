@@ -30,6 +30,8 @@ import {
 } from "./daily-sales-client";
 import { displayName, localizedEnum } from "./baseer-localization";
 import { financeText } from "./finance-copy";
+import { financeRouteHash } from "./finance-page-registry";
+import { pageRouteHash } from "./page-registry";
 import { uiCopy } from "./baseer-ui-copy";
 import {
   BaseerValidatedFormField as BaseerValidatedForm,
@@ -954,7 +956,7 @@ function FinanceSettingsHub({
         ? `${readiness.openPeriod.startDate} — ${readiness.openPeriod.endDate}`
         : issueText("NO_OPEN_PERIOD"),
       action: language === "ar" ? "إدارة الفترات" : "Manage periods",
-      target: "#module=finance&section=0",
+      target: `#${financeRouteHash("finance-settings")}`,
     },
     {
       icon: "▦",
@@ -968,7 +970,7 @@ function FinanceSettingsHub({
         language === "ar"
           ? "فتح الحسابات والفئات"
           : "Open accounts & categories",
-      target: "#module=finance&section=3",
+      target: `#${financeRouteHash("finance-accounts")}`,
     },
     {
       icon: "◉",
@@ -976,7 +978,7 @@ function FinanceSettingsHub({
       value: String(readiness.counts.activeVaults),
       detail: text.vaultsAndPaymentChannels,
       action: text.vaults,
-      target: "#module=finance&section=2",
+      target: `#${financeRouteHash("finance-treasury")}`,
     },
     {
       icon: "⌁",
@@ -984,7 +986,7 @@ function FinanceSettingsHub({
       value: String(readiness.counts.activeSuppliers),
       detail: text.standardSuppliersDescription,
       action: language === "ar" ? "إدارة الموردين" : "Manage suppliers",
-      target: "#module=operations&section=4",
+      target: `#${pageRouteHash("operations-suppliers")}`,
     },
   ];
   return (
@@ -1198,7 +1200,7 @@ function FinanceSetupReviewDialog({
         </p>
         {action(
           language === "ar" ? "إدارة الفترات" : "Manage periods",
-          "#module=finance&section=0",
+          `#${financeRouteHash("finance-settings")}`,
         )}
       </BaseerCard>
     ) : step === 2 ? (
@@ -1216,7 +1218,7 @@ function FinanceSetupReviewDialog({
             language === "ar"
               ? "فتح الحسابات والفئات"
               : "Open accounts & categories",
-            "#module=finance&section=3",
+            `#${financeRouteHash("finance-accounts")}`,
           )}
         </BaseerCard>
         <BaseerCard>
@@ -1232,7 +1234,7 @@ function FinanceSetupReviewDialog({
           </p>
           {action(
             language === "ar" ? "إدارة السيولة" : "Manage cash",
-            "#module=finance&section=2",
+            `#${financeRouteHash("finance-treasury")}`,
           )}
         </BaseerCard>
       </div>
@@ -1284,7 +1286,7 @@ function FinanceSetupReviewDialog({
           </BaseerButton>
           {action(
             language === "ar" ? "إدارة الموردين" : "Manage suppliers",
-            "#module=operations&section=4",
+            `#${pageRouteHash("operations-suppliers")}`,
           )}
         </div>
       </BaseerCard>

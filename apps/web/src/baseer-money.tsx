@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { formatMoney } from "./number-format";
 
 export function formatBaseerMoney(value: string | number, _language: "ar" | "en", currency = "SAR") {
-  return formatMoney(value, currency);
+  return formatMoney(value, currency, _language);
 }
 
 export function BaseerMoney({ value, language, currency = "SAR", className }: { value: string | number; language: "ar" | "en"; currency?: string; className?: string }) {

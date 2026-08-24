@@ -12,6 +12,7 @@ import { administrationText } from "./administration-copy";
 import type { AdministrationOverview } from "./administration-types";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterToggle } from "./baseer-filter-controls";
+import { normalizeBaseerAmount } from "./baseer-form-fields";
 import { displayName } from "./baseer-localization";
 import { api, requestId, type ActiveSession } from "./daily-sales-client";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
@@ -198,7 +199,7 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
         </fieldset>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-tax">
           <legend>{language === "ar" ? "الإعدادات الضريبية" : "Tax settings"}</legend>
-          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-describedby="company-vat-rate-note" aria-invalid={Boolean(vatError)} disabled={!owner || vatBusy} inputMode="decimal" min="0" max="100" step="0.01" type="number" value={vatRate} onChange={(event) => { setVatRate(event.target.value); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
+          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-describedby="company-vat-rate-note" aria-invalid={Boolean(vatError)} disabled={!owner || vatBusy} inputMode="decimal" dir="ltr" min="0" max="100" step="0.01" value={vatRate} onChange={(event) => { setVatRate(normalizeBaseerAmount(event.target.value)); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
           <small id="company-vat-rate-note">{language === "ar" ? "تطبّق على الفواتير الجديدة فقط؛ الفواتير السابقة لا تتغير." : "Applies to future invoices only; posted invoices never change."}</small>
           {owner && <footer><button className="daily-sales-secondary" disabled={vatBusy} type="button" onClick={() => void saveVatRate()}>{vatBusy ? text.saving : language === "ar" ? "حفظ النسبة" : "Save rate"}</button></footer>}
         </fieldset>}

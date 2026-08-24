@@ -3,12 +3,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
-import { BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
+import { BaseerWorkspace } from "./baseer-workspace";
 import { activeSession, api, requestId } from "./daily-sales-client";
-import { formatMoney, formatPercent } from "./number-format";
+import { formatCount as formatNumber, formatLongDate, formatMoney, formatPercent, formatTime } from "./number-format";
 import "./owner-daily-brief-workspace.css";
 
 type Language = "ar" | "en";
+type NotebookPaperTone = "notebook-yellow" | "pure-white" | "soft-yellow";
 type Numeric = string | number | null | undefined;
 type DataStatus = "READY" | "PENDING" | "PARTIAL" | "MISSING" | string | null | undefined;
 
@@ -22,6 +23,11 @@ export type OwnerDailyBriefCompany = Readonly<{
   monthToDateSales: Numeric;
   monthToDatePurchases: Numeric;
   purchaseToSalesPercent: Numeric;
+  dailyChangeGrossAmount?: Numeric;
+  dailyAverageGrossAmount?: Numeric;
+  monthEndForecastGrossAmount?: Numeric;
+  priorPeriodTrendPercent?: Numeric;
+  salesTrend?: readonly Readonly<{ businessDate: string; grossAmount: Numeric }>[];
   salesStatus?: DataStatus;
   purchaseStatus?: DataStatus;
   marketing?: Readonly<{ activeCampaignCount?: number; linkedSpend?: Numeric; plannedSpend?: Numeric }> | null;
@@ -49,6 +55,14 @@ export type OwnerDailyBriefReport = Readonly<{
 }>;
 
 type DailyBriefReceipt = OwnerDailyBriefReport & { reports?: readonly OwnerDailyBriefReport[]; history?: readonly OwnerDailyBriefReport[] };
+const notebookPaperToneStorageKey = "baseer-erp.owner-daily-brief.paper-tone.v1";
+
+function readNotebookPaperTone(): NotebookPaperTone {
+  const stored = localStorage.getItem(notebookPaperToneStorageKey);
+  return stored === "pure-white" || stored === "soft-yellow" || stored === "notebook-yellow"
+    ? stored
+    : "notebook-yellow";
+}
 type OwnerDailyBriefApi = Readonly<{
   reportDate: string; generatedAt: string; currency?: { code: string | null }; totals: {
     activeCompanyCount: number; readyCompanyCount: number; incompleteCompanyCount: number; noDataCompanyCount: number;
@@ -57,7 +71,11 @@ type OwnerDailyBriefApi = Readonly<{
   };
   companies: readonly Readonly<{
     companyId: string; nameAr: string; nameEn: string; currencyCode: string | null; purchaseToSalesPercent: Numeric;
-    sales: { yesterdayGrossAmount: Numeric; monthToDateGrossAmount: Numeric; yesterdayStatus: DataStatus };
+    sales: {
+      yesterdayGrossAmount: Numeric; monthToDateGrossAmount: Numeric; yesterdayStatus: DataStatus;
+      dailyChangeGrossAmount?: Numeric; dailyAverageGrossAmount?: Numeric; monthEndForecastGrossAmount?: Numeric;
+      priorPeriodTrendPercent?: Numeric; trend?: readonly Readonly<{ businessDate: string; grossAmount: Numeric }>[];
+    };
     purchases: { yesterdayGrossAmount: Numeric; monthToDateGrossAmount: Numeric };
   }>[];
   marketing: { activeCampaignCount: number; plannedCostAmount: Numeric; linkedPostedSpendMonthToDate: Numeric };
@@ -95,6 +113,11 @@ function normalizeBrief(source: OwnerDailyBriefApi): OwnerDailyBriefReport {
       yesterdaySales: company.sales.yesterdayGrossAmount, yesterdayPurchases: company.purchases.yesterdayGrossAmount,
       monthToDateSales: company.sales.monthToDateGrossAmount, monthToDatePurchases: company.purchases.monthToDateGrossAmount,
       purchaseToSalesPercent: company.purchaseToSalesPercent, salesStatus: company.sales.yesterdayStatus,
+      dailyChangeGrossAmount: company.sales.dailyChangeGrossAmount,
+      dailyAverageGrossAmount: company.sales.dailyAverageGrossAmount,
+      monthEndForecastGrossAmount: company.sales.monthEndForecastGrossAmount,
+      priorPeriodTrendPercent: company.sales.priorPeriodTrendPercent,
+      salesTrend: company.sales.trend,
     })),
     marketingSummary: { activeCampaignCount: source.marketing.activeCampaignCount, plannedSpend: source.marketing.plannedCostAmount, linkedSpend: source.marketing.linkedPostedSpendMonthToDate },
     mailSummary: { status: source.inboundEmail.readiness === "NOT_CONFIGURED" ? "NOT_CONNECTED" : "NO_DATA", totalMessages: source.inboundEmail.importedMessageCount },
@@ -110,15 +133,13 @@ function statusLabel(status: DataStatus, language: Language) {
 }
 
 function reportDate(value: string, language: Language) {
-  const date = new Date(`${value}T00:00:00.000Z`);
-  return new Intl.DateTimeFormat(language === "ar" ? "ar-SA" : "en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: "UTC" }).format(date);
+  return formatLongDate(value, language);
 }
 
 function timestamp(value: string | null | undefined, language: Language) {
   if (!value) return language === "ar" ? "لقطة يومية محفوظة" : "Saved daily snapshot";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return language === "ar" ? "لقطة يومية محفوظة" : "Saved daily snapshot";
-  return new Intl.DateTimeFormat(language === "ar" ? "ar-SA" : "en-US", { hour: "numeric", minute: "2-digit", timeZone: "Asia/Riyadh" }).format(date);
+  if (Number.isNaN(new Date(value).getTime())) return language === "ar" ? "لقطة يومية محفوظة" : "Saved daily snapshot";
+  return formatTime(value, language, "Asia/Riyadh");
 }
 
 function insightFor(report: OwnerDailyBriefReport, language: Language) {
@@ -156,8 +177,6 @@ function mailNarrative(report: OwnerDailyBriefReport, language: Language) {
   return language === "ar" ? "البريد غير متصل حاليًا؛ لن يُعرض ملخص أو توصية حتى يتم ربط مصدر البريد واستيراد الرسائل." : "Mail is not connected yet; no summary or recommendation is shown until a mail source is connected and messages are imported.";
 }
 
-function formatNumber(value: number | null | undefined) { return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value ?? 0); }
-
 export function OwnerDailyBriefWorkspace({ language }: { language: Language }) {
   const ar = language === "ar";
   const [receipt, setReceipt] = useState<DailyBriefReceipt | null>(null);
@@ -166,7 +185,10 @@ export function OwnerDailyBriefWorkspace({ language }: { language: Language }) {
   const [error, setError] = useState("");
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [paperTone, setPaperTone] = useState<NotebookPaperTone>(readNotebookPaperTone);
   const nextMessage = useRef(1);
+
+  useEffect(() => { localStorage.setItem(notebookPaperToneStorageKey, paperTone); }, [paperTone]);
 
   const load = async () => {
     const session = activeSession();
@@ -221,21 +243,13 @@ export function OwnerDailyBriefWorkspace({ language }: { language: Language }) {
   if (loading) return <BaseerWorkspace className="owner-daily-brief"><div dir={ar ? "rtl" : "ltr"}><p className="owner-daily-brief__state">{ar ? "جارٍ فتح دفتر المالك…" : "Opening the owner’s notebook…"}</p></div></BaseerWorkspace>;
   if (error || !report) return <BaseerWorkspace className="owner-daily-brief"><div dir={ar ? "rtl" : "ltr"}><BaseerCard className="owner-daily-brief__failure"><strong>{error || (ar ? "لا توجد لقطة يومية متاحة." : "No daily snapshot is available.")}</strong><BaseerButton type="button" onClick={() => void load()}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></BaseerCard></div></BaseerWorkspace>;
 
-  const totals = report.totals ?? {};
-  const currency = totals.currencyCode ?? report.companies[0]?.currencyCode ?? "SAR";
-  const readyCount = report.companies.filter((company) => company.salesStatus === "READY").length;
+  const currency = report.totals?.currencyCode ?? report.companies[0]?.currencyCode ?? "SAR";
   return <BaseerWorkspace className="owner-daily-brief">
-    <div className="owner-daily-brief__paper" dir={ar ? "rtl" : "ltr"}>
-      <BaseerSectionHeader eyebrow={ar ? "مركز القيادة · للمالك فقط" : "Command center · owner only"} title={ar ? "دفتر المالك اليومي" : "Owner’s daily notebook"} description={ar ? "لقطة محفوظة تجمع قراءة الشركات والتسويق والبريد، وكل القيم المالية شاملة الضريبة." : "A saved snapshot of companies, marketing, and mail. All financial values include VAT."} />
-      <header className="owner-daily-brief__report-head"><div><span>{ar ? "تقرير الأعمال" : "Business report"}</span><h3>{reportDate(report.businessDate, language)}</h3><p>{ar ? `تم التوليد ${timestamp(report.generatedAt, language)} · ${readyCount} من ${report.companies.length} شركات مكتملة` : `Generated ${timestamp(report.generatedAt, language)} · ${readyCount} of ${report.companies.length} companies ready`}</p></div><bdi className="owner-daily-brief__tax" dir="rtl">{ar ? "شامل الضريبة" : "VAT inclusive"}</bdi></header>
-      <section className="owner-daily-brief__totals" aria-label={ar ? "إجمالي المجموعة" : "Group totals"}>
-        <Metric label={ar ? "مبيعات أمس" : "Yesterday sales"} value={englishNumbers(totals.yesterdaySales, currency)} />
-        <Metric label={ar ? "مشتريات أمس" : "Yesterday purchases"} value={englishNumbers(totals.yesterdayPurchases, currency)} />
-        <Metric label={ar ? "مبيعات الشهر حتى أمس" : "Month-to-date sales"} value={englishNumbers(totals.monthToDateSales, currency)} />
-        <Metric label={ar ? "نسبة المشتريات" : "Purchase ratio"} value={formatPercent(totals.purchaseToSalesPercent)} />
+    <div className="owner-daily-brief__paper" data-paper-tone={paperTone} dir={ar ? "rtl" : "ltr"}>
+      <header className="owner-daily-brief__notebook-intro"><div><span>{ar ? "مركز القيادة · للمالك فقط" : "Command center · owner only"}</span><p>{ar ? "لقطة محفوظة تجمع قراءة الشركات والتسويق والبريد، وكل القيم المالية شاملة الضريبة." : "A saved snapshot of companies, marketing, and mail. All financial values include VAT."}</p></div><details className="owner-daily-brief__paper-tone"><summary aria-label={ar ? "تغيير لون الدفتر" : "Change notebook color"}><span aria-hidden="true">◐</span><span>{ar ? "لون الدفتر" : "Notebook color"}</span></summary><div role="menu" aria-label={ar ? "ألوان الدفتر" : "Notebook colors"}>{([{ id: "notebook-yellow", ar: "أصفر الدفتر", en: "Notebook yellow" }, { id: "pure-white", ar: "أبيض ناصع", en: "Pure white" }, { id: "soft-yellow", ar: "أصفر فاتح", en: "Soft yellow" }] as const).map((tone) => <button key={tone.id} type="button" role="menuitemradio" aria-checked={paperTone === tone.id} onClick={(event) => { setPaperTone(tone.id); event.currentTarget.closest("details")?.removeAttribute("open"); }}><span className={`owner-daily-brief__paper-tone-swatch is-${tone.id}`} /><span>{ar ? tone.ar : tone.en}</span></button>)}</div></details></header>
+      <section className="owner-daily-brief__company-summary" aria-label={ar ? "ملخص الشركات اليومي" : "Daily company summaries"}>
+        <div className="owner-daily-brief__companies">{report.companies.map((company) => <CompanyCard key={company.companyId} company={company} language={language} />)}</div>
       </section>
-
-      <section className="owner-daily-brief__section"><div className="owner-daily-brief__section-title"><span>{ar ? "الشركات" : "Companies"}</span><h3>{ar ? "قراءة الأمس والشهر حتى تاريخه" : "Yesterday and month-to-date read"}</h3></div><div className="owner-daily-brief__companies">{report.companies.map((company) => <CompanyCard key={company.companyId} company={company} language={language} />)}</div></section>
       <section className="owner-daily-brief__section owner-daily-brief__marketing"><div className="owner-daily-brief__section-title"><span>{ar ? "التسويق" : "Marketing"}</span><h3>{ar ? "قراءة ذكية منضبطة" : "A grounded smart read"}</h3></div><div className="owner-daily-brief__marketing-body"><div><p className="owner-daily-brief__insight">{insightFor(report, language)}</p><ul>{recommendationsFor(report, language).map((item) => <li key={item}>{item}</li>)}</ul></div><dl><div><dt>{ar ? "الحملات النشطة" : "Active campaigns"}</dt><dd dir="ltr">{formatNumber(report.marketingSummary?.activeCampaignCount ?? report.companies.reduce((sum, company) => sum + (company.marketing?.activeCampaignCount ?? 0), 0))}</dd></div><div><dt>{ar ? "الصرف المرتبط" : "Linked spend"}</dt><dd dir="ltr">{englishNumbers(report.marketingSummary?.linkedSpend, currency)}</dd></div></dl></div></section>
       <section className="owner-daily-brief__section owner-daily-brief__mail"><div className="owner-daily-brief__section-title"><span>{ar ? "البريد" : "Mail"}</span><h3>{ar ? "ملخص الرسائل" : "Message summary"}</h3></div><div className="owner-daily-brief__mail-body"><span className={`owner-daily-brief__mail-status is-${(report.mailSummary?.status ?? "NOT_CONNECTED").toLowerCase()}`}>{report.mailSummary?.status === "CONNECTED" ? (ar ? "متصل" : "Connected") : (ar ? "غير متصل" : "Not connected")}</span><p>{mailNarrative(report, language)}</p>{(ar ? report.mailSummary?.highlightsAr : report.mailSummary?.highlightsEn)?.length ? <ul>{(ar ? report.mailSummary?.highlightsAr : report.mailSummary?.highlightsEn)?.map((item) => <li key={item}>{item}</li>)}</ul> : null}</div></section>
 
@@ -245,11 +259,29 @@ export function OwnerDailyBriefWorkspace({ language }: { language: Language }) {
   </BaseerWorkspace>;
 }
 
-function Metric({ label, value }: { label: string; value: string }) { return <BaseerCard className="owner-daily-brief__metric" padding="compact"><span>{label}</span><bdi dir="ltr">{value}</bdi></BaseerCard>; }
-
 function CompanyCard({ company, language }: { company: OwnerDailyBriefCompany; language: Language }) {
-  const ar = language === "ar"; const currency = company.currencyCode ?? "SAR"; const name = ar ? company.nameAr : company.nameEn || company.nameAr;
-  return <BaseerCard className="owner-daily-brief__company" padding="compact"><header><div><span>{name}</span><small>{ar ? "شامل الضريبة" : "VAT inclusive"}</small></div><em className={`is-${(company.salesStatus ?? "MISSING").toLowerCase()}`}>{statusLabel(company.salesStatus, language)}</em></header><dl><div><dt>{ar ? "مبيعات أمس" : "Yesterday sales"}</dt><dd dir="ltr">{englishNumbers(company.yesterdaySales, currency)}</dd></div><div><dt>{ar ? "مشتريات أمس" : "Yesterday purchases"}</dt><dd dir="ltr">{englishNumbers(company.yesterdayPurchases, currency)}</dd></div><div><dt>{ar ? "مبيعات الشهر" : "Month-to-date sales"}</dt><dd dir="ltr">{englishNumbers(company.monthToDateSales, currency)}</dd></div><div><dt>{ar ? "نسبة المشتريات" : "Purchase ratio"}</dt><dd dir="ltr">{formatPercent(company.purchaseToSalesPercent)}</dd></div></dl></BaseerCard>;
+  const ar = language === "ar";
+  const currency = company.currencyCode ?? "SAR";
+  const name = ar ? company.nameAr : company.nameEn || company.nameAr;
+  const change = numeric(company.dailyChangeGrossAmount);
+  const trend = company.salesTrend ?? [];
+  const trendPeak = Math.max(1, ...trend.map((point) => numeric(point.grossAmount) ?? 0));
+  const unknown = ar ? "غير معروف" : "Unknown";
+  const moneyValue = (value: Numeric) => numeric(value) === null ? unknown : englishNumbers(value, currency);
+  const percentValue = (value: Numeric) => numeric(value) === null ? unknown : formatPercent(value);
+  const changeValue = change === null ? unknown : `${change >= 0 ? "↑" : "↓"} ${englishNumbers(Math.abs(change), currency)}`;
+
+  return <BaseerCard className="owner-daily-brief__company" padding="compact">
+    <header><div><span>{name}</span><small>{ar ? "شامل الضريبة" : "VAT inclusive"}</small></div><em className={`is-${(company.salesStatus ?? "MISSING").toLowerCase()}`}>{statusLabel(company.salesStatus, language)}</em></header>
+    <div className="owner-daily-brief__company-sales"><bdi dir="ltr">{moneyValue(company.yesterdaySales)}</bdi><span className={change === null ? "is-unknown" : change >= 0 ? "is-up" : "is-down"}>{ar ? "التغير اليومي: " : "Daily change: "}<strong dir="ltr">{changeValue}</strong></span></div>
+    <div className="owner-daily-brief__trend" aria-label={ar ? `اتجاه مبيعات ${name}` : `${name} sales trend`}>
+      {trend.length ? trend.map((point) => {
+        const value = numeric(point.grossAmount);
+        return <span key={point.businessDate} className={value === null ? "is-missing" : ""} style={{ height: `${value === null ? 8 : Math.max(8, (value / trendPeak) * 100)}%` }} aria-label={`${point.businessDate}: ${moneyValue(point.grossAmount)}`} />;
+      }) : <span className="is-empty">{ar ? "لا تتوفر بيانات اتجاه كافية" : "Trend data is unavailable"}</span>}
+    </div>
+    <dl><div><dt>{ar ? "الشهر حتى تاريخه" : "Month to date"}</dt><dd dir="ltr">{moneyValue(company.monthToDateSales)}</dd></div><div><dt>{ar ? "المتوسط اليومي" : "Daily average"}</dt><dd dir="ltr">{moneyValue(company.dailyAverageGrossAmount)}</dd></div><div><dt>{ar ? "توقع نهاية الشهر" : "Month-end forecast"}</dt><dd dir="ltr">{moneyValue(company.monthEndForecastGrossAmount)}</dd></div><div><dt>{ar ? "مقابل الفترة السابقة" : "Prior period"}</dt><dd dir="ltr">{percentValue(company.priorPeriodTrendPercent)}</dd></div></dl>
+  </BaseerCard>;
 }
 
 function BasiraChat({ language, messages, question, onQuestionChange, onSubmit }: { language: Language; messages: readonly ChatMessage[]; question: string; onQuestionChange: (value: string) => void; onSubmit: (event: React.FormEvent<HTMLFormElement>) => void }) {

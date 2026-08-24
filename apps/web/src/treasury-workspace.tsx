@@ -17,6 +17,7 @@ import {
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterToggle } from "./baseer-filter-controls";
+import { BaseerMoneyInput } from "./baseer-form-fields";
 import {
   BaseerPeriodFilter,
   baseerPeriodLabel,
@@ -33,7 +34,7 @@ import {
   requestId,
   type ActiveSession,
 } from "./daily-sales-client";
-import { formatMoney } from "./number-format";
+import { formatCount, formatDate, formatMoney } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { hasActivePermission } from "./module-access";
@@ -1174,14 +1175,13 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
           </label>
           <label>
             {text.amount}
-            <input
-              inputMode="decimal"
+            <BaseerMoneyInput
               value={transfer.amount}
               aria-invalid={Boolean(errors.amount)}
-              onChange={(event) =>
+              onValueChange={(amount) =>
                 setTransfer((value) => ({
                   ...value,
-                  amount: event.target.value,
+                  amount,
                 }))
               }
             />
@@ -1312,16 +1312,15 @@ export function TreasuryWorkspace({ language }: { language: Language }) {
           />
           <label>
             {text.observedBalance}
-            <input
-              inputMode="decimal"
+            <BaseerMoneyInput
               value={control.observedBalance}
               aria-invalid={Boolean(
                 errors.observedBalance,
               )}
-              onChange={(event) =>
+              onValueChange={(observedBalance) =>
                 setControl((value) => ({
                   ...value,
-                  observedBalance: event.target.value,
+                  observedBalance,
                 }))
               }
             />
@@ -1730,7 +1729,7 @@ function ActivityPanel({
     {
       id: "date",
       header: language === "ar" ? "التاريخ" : "Date",
-      cell: (item) => item.businessDate,
+      cell: (item) => <bdi dir="ltr">{formatDate(item.businessDate, language)}</bdi>,
     },
     {
       id: "reference",
@@ -1843,7 +1842,7 @@ function TreasuryJournalView({
       header: "#",
       numeric: true,
       align: "center",
-      cell: (item) => item.lineNumber,
+      cell: (item) => <bdi dir="ltr">{formatCount(item.lineNumber, language)}</bdi>,
     },
     {
       id: "account",
@@ -1888,7 +1887,7 @@ function TreasuryJournalView({
         </label>
         <label>
           {text.documentDate}
-          <output>{journal.businessDate}</output>
+          <output dir="ltr">{formatDate(journal.businessDate, language)}</output>
         </label>
         <label>
           {text.status}

@@ -168,7 +168,18 @@ export const ModelName = {
   FinanceInclusiveLoanInstallmentPlan: 'FinanceInclusiveLoanInstallmentPlan',
   AiProviderConfiguration: 'AiProviderConfiguration',
   AiCompanyIdentity: 'AiCompanyIdentity',
+  AiCompanyContext: 'AiCompanyContext',
+  AiSkillActivation: 'AiSkillActivation',
   AiExecutionReceipt: 'AiExecutionReceipt',
+  AiInterpretation: 'AiInterpretation',
+  AiInterpretationRun: 'AiInterpretationRun',
+  AiModelPriceRevision: 'AiModelPriceRevision',
+  AiBudgetReservation: 'AiBudgetReservation',
+  AiUsageLedger: 'AiUsageLedger',
+  AiInterpretationPlacement: 'AiInterpretationPlacement',
+  AiHumanInsight: 'AiHumanInsight',
+  AiEvaluationFeedback: 'AiEvaluationFeedback',
+  AiSkillEvaluationRun: 'AiSkillEvaluationRun',
   AiSystemIdentity: 'AiSystemIdentity',
   OperationsSection: 'OperationsSection',
   OperationsUnit: 'OperationsUnit',
@@ -995,6 +1006,8 @@ export const MarketingCampaignScalarFieldEnum = {
   startsOn: 'startsOn',
   endsOn: 'endsOn',
   status: 'status',
+  stoppedOn: 'stoppedOn',
+  stoppedReason: 'stoppedReason',
   objective: 'objective',
   notes: 'notes',
   plannedCost: 'plannedCost',
@@ -2348,6 +2361,53 @@ export const AiCompanyIdentityScalarFieldEnum = {
 export type AiCompanyIdentityScalarFieldEnum = (typeof AiCompanyIdentityScalarFieldEnum)[keyof typeof AiCompanyIdentityScalarFieldEnum]
 
 
+export const AiCompanyContextScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  version: 'version',
+  status: 'status',
+  kind: 'kind',
+  moduleScope: 'moduleScope',
+  presentationStyle: 'presentationStyle',
+  approvedTermsJson: 'approvedTermsJson',
+  policyReferencesJson: 'policyReferencesJson',
+  sourceReference: 'sourceReference',
+  expiresAt: 'expiresAt',
+  revocationReason: 'revocationReason',
+  supersedesContextId: 'supersedesContextId',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyContextScalarFieldEnum = (typeof AiCompanyContextScalarFieldEnum)[keyof typeof AiCompanyContextScalarFieldEnum]
+
+
+export const AiSkillActivationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  status: 'status',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  dailyRequestLimit: 'dailyRequestLimit',
+  dailyCostLimit: 'dailyCostLimit',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  suspendedByUserId: 'suspendedByUserId',
+  suspendedAt: 'suspendedAt',
+  suspensionReason: 'suspensionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiSkillActivationScalarFieldEnum = (typeof AiSkillActivationScalarFieldEnum)[keyof typeof AiSkillActivationScalarFieldEnum]
+
+
 export const AiExecutionReceiptScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -2355,6 +2415,8 @@ export const AiExecutionReceiptScalarFieldEnum = {
   providerConfigurationId: 'providerConfigurationId',
   identityId: 'identityId',
   systemIdentityId: 'systemIdentityId',
+  skillActivationId: 'skillActivationId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
   moduleKey: 'moduleKey',
   capability: 'capability',
   skillKey: 'skillKey',
@@ -2366,14 +2428,216 @@ export const AiExecutionReceiptScalarFieldEnum = {
   configurationVersion: 'configurationVersion',
   identityVersion: 'identityVersion',
   systemIdentityVersion: 'systemIdentityVersion',
+  promptVersion: 'promptVersion',
+  inputChecksum: 'inputChecksum',
+  outputChecksum: 'outputChecksum',
   inputCharacters: 'inputCharacters',
   outputCharacters: 'outputCharacters',
+  inputTokens: 'inputTokens',
+  cachedInputTokens: 'cachedInputTokens',
+  outputTokens: 'outputTokens',
+  reasoningTokens: 'reasoningTokens',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  estimatedCostUsd: 'estimatedCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  providerRequestId: 'providerRequestId',
   safeErrorCode: 'safeErrorCode',
   requestId: 'requestId',
   createdAt: 'createdAt'
 } as const
 
 export type AiExecutionReceiptScalarFieldEnum = (typeof AiExecutionReceiptScalarFieldEnum)[keyof typeof AiExecutionReceiptScalarFieldEnum]
+
+
+export const AiInterpretationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  subjectKind: 'subjectKind',
+  subjectId: 'subjectId',
+  evidenceSnapshotId: 'evidenceSnapshotId',
+  evidenceChecksum: 'evidenceChecksum',
+  reuseKey: 'reuseKey',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  promptVersion: 'promptVersion',
+  language: 'language',
+  systemIdentityVersion: 'systemIdentityVersion',
+  companyContextDigest: 'companyContextDigest',
+  modelProfileDigest: 'modelProfileDigest',
+  providerSnapshot: 'providerSnapshot',
+  modelSnapshot: 'modelSnapshot',
+  sourceExecutionReceiptId: 'sourceExecutionReceiptId',
+  encryptedOutput: 'encryptedOutput',
+  outputIv: 'outputIv',
+  outputTag: 'outputTag',
+  outputKeyVersion: 'outputKeyVersion',
+  outputChecksum: 'outputChecksum',
+  expiresAt: 'expiresAt',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiInterpretationScalarFieldEnum = (typeof AiInterpretationScalarFieldEnum)[keyof typeof AiInterpretationScalarFieldEnum]
+
+
+export const AiInterpretationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  reuseKey: 'reuseKey',
+  status: 'status',
+  leaseExpiresAt: 'leaseExpiresAt',
+  claimedByUserId: 'claimedByUserId',
+  interpretationId: 'interpretationId',
+  safeFailureCode: 'safeFailureCode',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+} as const
+
+export type AiInterpretationRunScalarFieldEnum = (typeof AiInterpretationRunScalarFieldEnum)[keyof typeof AiInterpretationRunScalarFieldEnum]
+
+
+export const AiModelPriceRevisionScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  model: 'model',
+  version: 'version',
+  effectiveFrom: 'effectiveFrom',
+  inputUsdPerMillion: 'inputUsdPerMillion',
+  cachedInputUsdPerMillion: 'cachedInputUsdPerMillion',
+  outputUsdPerMillion: 'outputUsdPerMillion',
+  sourceReference: 'sourceReference',
+  createdAt: 'createdAt'
+} as const
+
+export type AiModelPriceRevisionScalarFieldEnum = (typeof AiModelPriceRevisionScalarFieldEnum)[keyof typeof AiModelPriceRevisionScalarFieldEnum]
+
+
+export const AiBudgetReservationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  providerConfigurationId: 'providerConfigurationId',
+  skillActivationId: 'skillActivationId',
+  interpretationRunId: 'interpretationRunId',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  dayStartAt: 'dayStartAt',
+  status: 'status',
+  inputTokenEstimate: 'inputTokenEstimate',
+  maxOutputTokens: 'maxOutputTokens',
+  estimatedCostUsd: 'estimatedCostUsd',
+  chargeCostUsd: 'chargeCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  expiresAt: 'expiresAt',
+  settledAt: 'settledAt',
+  releasedAt: 'releasedAt',
+  releaseReason: 'releaseReason',
+  createdAt: 'createdAt'
+} as const
+
+export type AiBudgetReservationScalarFieldEnum = (typeof AiBudgetReservationScalarFieldEnum)[keyof typeof AiBudgetReservationScalarFieldEnum]
+
+
+export const AiUsageLedgerScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  reservationId: 'reservationId',
+  executionReceiptId: 'executionReceiptId',
+  providerConfigurationId: 'providerConfigurationId',
+  skillActivationId: 'skillActivationId',
+  modelPriceRevisionId: 'modelPriceRevisionId',
+  kind: 'kind',
+  inputTokens: 'inputTokens',
+  cachedInputTokens: 'cachedInputTokens',
+  outputTokens: 'outputTokens',
+  reasoningTokens: 'reasoningTokens',
+  estimatedCostUsd: 'estimatedCostUsd',
+  actualCostUsd: 'actualCostUsd',
+  safeReasonCode: 'safeReasonCode',
+  createdAt: 'createdAt'
+} as const
+
+export type AiUsageLedgerScalarFieldEnum = (typeof AiUsageLedgerScalarFieldEnum)[keyof typeof AiUsageLedgerScalarFieldEnum]
+
+
+export const AiInterpretationPlacementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  interpretationId: 'interpretationId',
+  kind: 'kind',
+  subjectId: 'subjectId',
+  moduleKey: 'moduleKey',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiInterpretationPlacementScalarFieldEnum = (typeof AiInterpretationPlacementScalarFieldEnum)[keyof typeof AiInterpretationPlacementScalarFieldEnum]
+
+
+export const AiHumanInsightScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  interpretationId: 'interpretationId',
+  kind: 'kind',
+  status: 'status',
+  encryptedStatement: 'encryptedStatement',
+  statementIv: 'statementIv',
+  statementTag: 'statementTag',
+  statementKeyVersion: 'statementKeyVersion',
+  statementChecksum: 'statementChecksum',
+  supersedesInsightId: 'supersedesInsightId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  revokedByUserId: 'revokedByUserId',
+  revokedAt: 'revokedAt',
+  revocationReason: 'revocationReason'
+} as const
+
+export type AiHumanInsightScalarFieldEnum = (typeof AiHumanInsightScalarFieldEnum)[keyof typeof AiHumanInsightScalarFieldEnum]
+
+
+export const AiEvaluationFeedbackScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionReceiptId: 'executionReceiptId',
+  kind: 'kind',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiEvaluationFeedbackScalarFieldEnum = (typeof AiEvaluationFeedbackScalarFieldEnum)[keyof typeof AiEvaluationFeedbackScalarFieldEnum]
+
+
+export const AiSkillEvaluationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  suiteKey: 'suiteKey',
+  suiteVersion: 'suiteVersion',
+  suiteChecksum: 'suiteChecksum',
+  mode: 'mode',
+  status: 'status',
+  totalCaseCount: 'totalCaseCount',
+  passedCaseCount: 'passedCaseCount',
+  failedCaseCount: 'failedCaseCount',
+  resultSummaryJson: 'resultSummaryJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AiSkillEvaluationRunScalarFieldEnum = (typeof AiSkillEvaluationRunScalarFieldEnum)[keyof typeof AiSkillEvaluationRunScalarFieldEnum]
 
 
 export const AiSystemIdentityScalarFieldEnum = {

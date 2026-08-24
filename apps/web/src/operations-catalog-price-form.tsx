@@ -1,6 +1,8 @@
 import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
+import { normalizeBaseerNumericInput } from "./number-format";
+
 type Language = "ar" | "en";
 type Values = { price: string };
 
@@ -18,9 +20,10 @@ export function OperationsCatalogPriceForm({ formId, language, value, onSubmit }
   const text = ar ? { price: "سعر بيع المنيو", required: "أدخل السعر." } : { price: "Menu sale price", required: "Enter a price." };
   const schema = useMemo(() => z.object({ price: z.string().trim().min(1, text.required) }), [text.required]);
   const form = useBaseerForm<Values>({ schema, defaultValues: { price: value }, shouldFocusError: true });
+  const price = form.watch("price");
   useEffect(() => { form.reset({ price: value }); }, [form, value]);
   return <form id={formId} className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
     <p>{ar ? "سعر البيع محفوظ داخل كرت صنف المنيو، ولا يظهر للموظف في شاشة التسجيل الداخلي." : "The sale price is stored on this menu-product card and is never shown to internal-registration staff."}</p>
-    <label>{text.price}<input inputMode="decimal" aria-invalid={Boolean(form.formState.errors.price)} {...form.register("price")} />{form.formState.errors.price ? <small role="alert">{form.formState.errors.price.message}</small> : null}</label>
+    <label>{text.price}<input inputMode="decimal" dir="ltr" lang="en" value={price} aria-invalid={Boolean(form.formState.errors.price)} onChange={(event) => form.setValue("price", normalizeBaseerNumericInput(event.target.value), { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.price ? <small role="alert">{form.formState.errors.price.message}</small> : null}</label>
   </form>;
 }

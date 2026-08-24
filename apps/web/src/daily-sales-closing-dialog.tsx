@@ -21,6 +21,7 @@ import type {
   Vault,
 } from "./daily-sales-client";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
+import { normalizeBaseerAmount } from "./baseer-form-fields";
 
 type Props = {
   language: DailySalesLanguage;
@@ -107,12 +108,13 @@ function ShiftCard({
         <label className="daily-sales-dialog__customer-field">
           <span>{copy.customers}</span>
           <input
-            type="number"
+            inputMode="numeric"
+            dir="ltr"
             min="0"
             step="1"
             value={form.customerCount}
             onChange={(event) =>
-              onChange({ ...form, customerCount: event.target.value })
+              onChange({ ...form, customerCount: normalizeBaseerAmount(event.target.value).replace(".", "") })
             }
             placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
             required
@@ -122,9 +124,10 @@ function ShiftCard({
           <span>{copy.cashHandover}</span>
           <input
             inputMode="decimal"
+            dir="ltr"
             value={form.cashHandoverAmount}
             onChange={(event) =>
-              onChange({ ...form, cashHandoverAmount: event.target.value })
+              onChange({ ...form, cashHandoverAmount: normalizeBaseerAmount(event.target.value) })
             }
             placeholder={language === "ar" ? "اختياري" : "Optional"}
           />
@@ -144,9 +147,10 @@ function ShiftCard({
                 <input
                   aria-label={`${name} ${copy.amount}`}
                   inputMode="decimal"
+                  dir="ltr"
                   value={allocation?.grossAmount ?? ""}
                   onChange={(event) =>
-                    updateAmount(vault.id, event.target.value)
+                    updateAmount(vault.id, normalizeBaseerAmount(event.target.value))
                   }
                   placeholder={
                     language === "ar" ? "أدخل المبلغ" : "Enter amount"

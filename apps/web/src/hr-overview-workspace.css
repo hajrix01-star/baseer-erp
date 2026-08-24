@@ -1,0 +1,74 @@
+.hr-workforce-chart {
+  display: grid;
+  gap: 1rem;
+  overflow: hidden;
+  padding: clamp(1rem, 2vw, 1.45rem);
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--line));
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(circle at 12% 22%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 31%),
+    linear-gradient(135deg, color-mix(in srgb, var(--surface) 92%, #e7f7ef), var(--surface));
+  box-shadow: 0 1rem 2.6rem rgb(10 54 41 / 8%);
+  animation: hr-workforce-chart-enter 680ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.hr-workforce-chart__header,
+.hr-workforce-chart__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hr-workforce-chart__header > div { min-inline-size: 0; }
+.hr-workforce-chart__header p,
+.hr-workforce-chart__header h3,
+.hr-workforce-chart__footer { margin: 0; }
+.hr-workforce-chart__header p { color: var(--brand); font-size: var(--font-caption); font-weight: 850; letter-spacing: .02em; }
+.hr-workforce-chart__header h3 { margin-top: .22rem; color: var(--ink); font-size: var(--font-title-md); letter-spacing: -.02em; }
+.hr-workforce-chart__header > small { flex: 0 0 auto; padding: .35rem .6rem; border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)); border-radius: 999px; color: var(--muted); background: color-mix(in srgb, var(--surface) 84%, var(--brand-soft)); font-size: var(--font-caption); font-weight: 700; }
+
+.hr-workforce-chart__body { display: grid; grid-template-columns: minmax(15rem, .88fr) minmax(19rem, 1.12fr); align-items: center; gap: clamp(1rem, 3vw, 2.5rem); }
+.hr-workforce-chart__visual { position: relative; display: grid; min-block-size: 15.5rem; place-items: center; isolation: isolate; }
+.hr-workforce-chart__visual::before { position: absolute; z-index: -1; inline-size: min(85%, 14rem); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(21 154 121 / 14%), transparent 68%); content: ""; animation: hr-workforce-chart-glow 2.9s ease-in-out infinite; }
+.hr-workforce-chart__plot { inline-size: min(100%, 17rem); block-size: 15.5rem; }
+.hr-workforce-chart__center { position: absolute; display: grid; max-inline-size: 8.7rem; gap: .16rem; place-items: center; pointer-events: none; text-align: center; }
+.hr-workforce-chart__center strong { color: var(--ink); font-size: clamp(2rem, 4vw, 3rem); font-variant-numeric: tabular-nums; letter-spacing: -.06em; line-height: 1; }
+.hr-workforce-chart__center span { color: var(--muted); font-size: var(--font-caption); font-weight: 750; line-height: 1.35; }
+
+.hr-workforce-chart__insights { display: grid; gap: .55rem; }
+.hr-workforce-chart__insight { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .72rem; min-block-size: 4.35rem; padding: .7rem .8rem; border: 1px solid color-mix(in srgb, var(--brand) 10%, var(--line)); border-radius: .9rem; color: var(--ink); background: color-mix(in srgb, var(--surface) 90%, transparent); font: inherit; text-align: start; cursor: pointer; transition: transform 200ms cubic-bezier(.22, 1, .36, 1), border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease; }
+.hr-workforce-chart__insight:hover,
+.hr-workforce-chart__insight[aria-pressed="true"] { border-color: color-mix(in srgb, var(--brand) 48%, var(--line)); background: var(--surface); box-shadow: 0 .7rem 1.3rem rgb(10 58 44 / 9%); transform: translateY(-2px); }
+.hr-workforce-chart__insight:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.hr-workforce-chart__insight > span:nth-child(2) { display: grid; min-inline-size: 0; gap: .16rem; }
+.hr-workforce-chart__insight strong { overflow: hidden; color: var(--ink); font-size: var(--font-label); text-overflow: ellipsis; white-space: nowrap; }
+.hr-workforce-chart__insight small { color: var(--muted); font-size: var(--font-caption); }
+.hr-workforce-chart__insight b { color: var(--ink); font-size: clamp(1.18rem, 2vw, 1.45rem); font-variant-numeric: tabular-nums; }
+.hr-workforce-chart__dot { inline-size: .68rem; block-size: .68rem; border-radius: 50%; box-shadow: 0 0 0 .3rem color-mix(in srgb, currentColor 0%, transparent); }
+.hr-workforce-chart__insight[aria-pressed="true"] .hr-workforce-chart__dot { animation: hr-workforce-chart-dot 1.8s ease-in-out infinite; }
+
+.hr-workforce-chart__footer { padding-top: .8rem; border-top: 1px solid color-mix(in srgb, var(--brand) 12%, var(--line)); color: var(--muted); font-size: var(--font-caption); line-height: 1.45; }
+.hr-workforce-chart__footer span:last-child { text-align: end; }
+
+@keyframes hr-workforce-chart-enter { from { opacity: 0; transform: translateY(.8rem) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes hr-workforce-chart-glow { 0%, 100% { opacity: .55; transform: scale(.94); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes hr-workforce-chart-dot { 0%, 100% { box-shadow: 0 0 0 .14rem color-mix(in srgb, var(--brand) 9%, transparent); } 50% { box-shadow: 0 0 0 .42rem color-mix(in srgb, var(--brand) 14%, transparent); } }
+
+@media (max-width: 760px) {
+  .hr-workforce-chart__header,
+  .hr-workforce-chart__footer { align-items: flex-start; flex-direction: column; }
+  .hr-workforce-chart__body { grid-template-columns: 1fr; gap: .8rem; }
+  .hr-workforce-chart__visual { min-block-size: 14rem; }
+  .hr-workforce-chart__plot { block-size: 14rem; }
+  .hr-workforce-chart__footer span:last-child { text-align: start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-workforce-chart,
+  .hr-workforce-chart__visual::before,
+  .hr-workforce-chart__insight[aria-pressed="true"] .hr-workforce-chart__dot { animation: none; }
+  .hr-workforce-chart__insight { transition: none; }
+  .hr-workforce-chart__insight:hover,
+  .hr-workforce-chart__insight[aria-pressed="true"] { transform: none; }
+}

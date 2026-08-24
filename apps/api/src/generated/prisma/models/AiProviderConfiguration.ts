@@ -309,6 +309,8 @@ export type AiProviderConfigurationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"AiProviderConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiProviderConfiguration"> | Date | string
   executionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
+  budgetReservations?: Prisma.AiBudgetReservationListRelationFilter
+  usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
 }
 
 export type AiProviderConfigurationOrderByWithRelationInput = {
@@ -328,6 +330,8 @@ export type AiProviderConfigurationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   executionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
+  budgetReservations?: Prisma.AiBudgetReservationOrderByRelationAggregateInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerOrderByRelationAggregateInput
 }
 
 export type AiProviderConfigurationWhereUniqueInput = Prisma.AtLeast<{
@@ -351,6 +355,8 @@ export type AiProviderConfigurationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"AiProviderConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiProviderConfiguration"> | Date | string
   executionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
+  budgetReservations?: Prisma.AiBudgetReservationListRelationFilter
+  usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
 }, "id" | "id_tenantId">
 
 export type AiProviderConfigurationOrderByWithAggregationInput = {
@@ -414,6 +420,8 @@ export type AiProviderConfigurationCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   executionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutProviderConfigurationInput
+  budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutProviderConfigurationInput
 }
 
 export type AiProviderConfigurationUncheckedCreateInput = {
@@ -433,6 +441,8 @@ export type AiProviderConfigurationUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   executionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutProviderConfigurationInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutProviderConfigurationInput
 }
 
 export type AiProviderConfigurationUpdateInput = {
@@ -452,6 +462,8 @@ export type AiProviderConfigurationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   executionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutProviderConfigurationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutProviderConfigurationNestedInput
 }
 
 export type AiProviderConfigurationUncheckedUpdateInput = {
@@ -471,6 +483,8 @@ export type AiProviderConfigurationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   executionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutProviderConfigurationNestedInput
 }
 
 export type AiProviderConfigurationCreateManyInput = {
@@ -605,6 +619,11 @@ export type AiProviderConfigurationNullableScalarRelationFilter = {
   isNot?: Prisma.AiProviderConfigurationWhereInput | null
 }
 
+export type AiProviderConfigurationScalarRelationFilter = {
+  is?: Prisma.AiProviderConfigurationWhereInput
+  isNot?: Prisma.AiProviderConfigurationWhereInput
+}
+
 export type EnumAiProviderConfigurationStatusFieldUpdateOperationsInput = {
   set?: $Enums.AiProviderConfigurationStatus
 }
@@ -625,6 +644,34 @@ export type AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.AiProviderConfigurationUpdateToOneWithWhereWithoutExecutionReceiptsInput, Prisma.AiProviderConfigurationUpdateWithoutExecutionReceiptsInput>, Prisma.AiProviderConfigurationUncheckedUpdateWithoutExecutionReceiptsInput>
 }
 
+export type AiProviderConfigurationCreateNestedOneWithoutBudgetReservationsInput = {
+  create?: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutBudgetReservationsInput>
+  connectOrCreate?: Prisma.AiProviderConfigurationCreateOrConnectWithoutBudgetReservationsInput
+  connect?: Prisma.AiProviderConfigurationWhereUniqueInput
+}
+
+export type AiProviderConfigurationUpdateOneRequiredWithoutBudgetReservationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutBudgetReservationsInput>
+  connectOrCreate?: Prisma.AiProviderConfigurationCreateOrConnectWithoutBudgetReservationsInput
+  upsert?: Prisma.AiProviderConfigurationUpsertWithoutBudgetReservationsInput
+  connect?: Prisma.AiProviderConfigurationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AiProviderConfigurationUpdateToOneWithWhereWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUpdateWithoutBudgetReservationsInput>, Prisma.AiProviderConfigurationUncheckedUpdateWithoutBudgetReservationsInput>
+}
+
+export type AiProviderConfigurationCreateNestedOneWithoutUsageLedgerEntriesInput = {
+  create?: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutUsageLedgerEntriesInput>
+  connectOrCreate?: Prisma.AiProviderConfigurationCreateOrConnectWithoutUsageLedgerEntriesInput
+  connect?: Prisma.AiProviderConfigurationWhereUniqueInput
+}
+
+export type AiProviderConfigurationUpdateOneRequiredWithoutUsageLedgerEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutUsageLedgerEntriesInput>
+  connectOrCreate?: Prisma.AiProviderConfigurationCreateOrConnectWithoutUsageLedgerEntriesInput
+  upsert?: Prisma.AiProviderConfigurationUpsertWithoutUsageLedgerEntriesInput
+  connect?: Prisma.AiProviderConfigurationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AiProviderConfigurationUpdateToOneWithWhereWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUpdateWithoutUsageLedgerEntriesInput>, Prisma.AiProviderConfigurationUncheckedUpdateWithoutUsageLedgerEntriesInput>
+}
+
 export type AiProviderConfigurationCreateWithoutExecutionReceiptsInput = {
   id?: string
   tenantId: string
@@ -641,6 +688,8 @@ export type AiProviderConfigurationCreateWithoutExecutionReceiptsInput = {
   configurationVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutProviderConfigurationInput
 }
 
 export type AiProviderConfigurationUncheckedCreateWithoutExecutionReceiptsInput = {
@@ -659,6 +708,8 @@ export type AiProviderConfigurationUncheckedCreateWithoutExecutionReceiptsInput 
   configurationVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutProviderConfigurationInput
 }
 
 export type AiProviderConfigurationCreateOrConnectWithoutExecutionReceiptsInput = {
@@ -693,6 +744,8 @@ export type AiProviderConfigurationUpdateWithoutExecutionReceiptsInput = {
   configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutProviderConfigurationNestedInput
 }
 
 export type AiProviderConfigurationUncheckedUpdateWithoutExecutionReceiptsInput = {
@@ -711,6 +764,200 @@ export type AiProviderConfigurationUncheckedUpdateWithoutExecutionReceiptsInput 
   configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+}
+
+export type AiProviderConfigurationCreateWithoutBudgetReservationsInput = {
+  id?: string
+  tenantId: string
+  provider: $Enums.AiProviderKind
+  model: string
+  status?: $Enums.AiProviderConfigurationStatus
+  isDefault?: boolean
+  dailyRequestLimit?: number
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential: string
+  credentialIv: string
+  credentialTag: string
+  credentialKeyVersion?: number
+  configurationVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutProviderConfigurationInput
+}
+
+export type AiProviderConfigurationUncheckedCreateWithoutBudgetReservationsInput = {
+  id?: string
+  tenantId: string
+  provider: $Enums.AiProviderKind
+  model: string
+  status?: $Enums.AiProviderConfigurationStatus
+  isDefault?: boolean
+  dailyRequestLimit?: number
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential: string
+  credentialIv: string
+  credentialTag: string
+  credentialKeyVersion?: number
+  configurationVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutProviderConfigurationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutProviderConfigurationInput
+}
+
+export type AiProviderConfigurationCreateOrConnectWithoutBudgetReservationsInput = {
+  where: Prisma.AiProviderConfigurationWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutBudgetReservationsInput>
+}
+
+export type AiProviderConfigurationUpsertWithoutBudgetReservationsInput = {
+  update: Prisma.XOR<Prisma.AiProviderConfigurationUpdateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedUpdateWithoutBudgetReservationsInput>
+  create: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutBudgetReservationsInput>
+  where?: Prisma.AiProviderConfigurationWhereInput
+}
+
+export type AiProviderConfigurationUpdateToOneWithWhereWithoutBudgetReservationsInput = {
+  where?: Prisma.AiProviderConfigurationWhereInput
+  data: Prisma.XOR<Prisma.AiProviderConfigurationUpdateWithoutBudgetReservationsInput, Prisma.AiProviderConfigurationUncheckedUpdateWithoutBudgetReservationsInput>
+}
+
+export type AiProviderConfigurationUpdateWithoutBudgetReservationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAiProviderConfigurationStatusFieldUpdateOperationsInput | $Enums.AiProviderConfigurationStatus
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dailyRequestLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialIv?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialTag?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialKeyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutProviderConfigurationNestedInput
+}
+
+export type AiProviderConfigurationUncheckedUpdateWithoutBudgetReservationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAiProviderConfigurationStatusFieldUpdateOperationsInput | $Enums.AiProviderConfigurationStatus
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dailyRequestLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialIv?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialTag?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialKeyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+}
+
+export type AiProviderConfigurationCreateWithoutUsageLedgerEntriesInput = {
+  id?: string
+  tenantId: string
+  provider: $Enums.AiProviderKind
+  model: string
+  status?: $Enums.AiProviderConfigurationStatus
+  isDefault?: boolean
+  dailyRequestLimit?: number
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential: string
+  credentialIv: string
+  credentialTag: string
+  credentialKeyVersion?: number
+  configurationVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutProviderConfigurationInput
+  budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutProviderConfigurationInput
+}
+
+export type AiProviderConfigurationUncheckedCreateWithoutUsageLedgerEntriesInput = {
+  id?: string
+  tenantId: string
+  provider: $Enums.AiProviderKind
+  model: string
+  status?: $Enums.AiProviderConfigurationStatus
+  isDefault?: boolean
+  dailyRequestLimit?: number
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential: string
+  credentialIv: string
+  credentialTag: string
+  credentialKeyVersion?: number
+  configurationVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutProviderConfigurationInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutProviderConfigurationInput
+}
+
+export type AiProviderConfigurationCreateOrConnectWithoutUsageLedgerEntriesInput = {
+  where: Prisma.AiProviderConfigurationWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutUsageLedgerEntriesInput>
+}
+
+export type AiProviderConfigurationUpsertWithoutUsageLedgerEntriesInput = {
+  update: Prisma.XOR<Prisma.AiProviderConfigurationUpdateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedUpdateWithoutUsageLedgerEntriesInput>
+  create: Prisma.XOR<Prisma.AiProviderConfigurationCreateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedCreateWithoutUsageLedgerEntriesInput>
+  where?: Prisma.AiProviderConfigurationWhereInput
+}
+
+export type AiProviderConfigurationUpdateToOneWithWhereWithoutUsageLedgerEntriesInput = {
+  where?: Prisma.AiProviderConfigurationWhereInput
+  data: Prisma.XOR<Prisma.AiProviderConfigurationUpdateWithoutUsageLedgerEntriesInput, Prisma.AiProviderConfigurationUncheckedUpdateWithoutUsageLedgerEntriesInput>
+}
+
+export type AiProviderConfigurationUpdateWithoutUsageLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAiProviderConfigurationStatusFieldUpdateOperationsInput | $Enums.AiProviderConfigurationStatus
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dailyRequestLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialIv?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialTag?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialKeyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutProviderConfigurationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutProviderConfigurationNestedInput
+}
+
+export type AiProviderConfigurationUncheckedUpdateWithoutUsageLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAiProviderConfigurationStatusFieldUpdateOperationsInput | $Enums.AiProviderConfigurationStatus
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dailyRequestLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  encryptedCredential?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialIv?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialTag?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialKeyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  configurationVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationNestedInput
 }
 
 
@@ -720,10 +967,14 @@ export type AiProviderConfigurationUncheckedUpdateWithoutExecutionReceiptsInput 
 
 export type AiProviderConfigurationCountOutputType = {
   executionReceipts: number
+  budgetReservations: number
+  usageLedgerEntries: number
 }
 
 export type AiProviderConfigurationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   executionReceipts?: boolean | AiProviderConfigurationCountOutputTypeCountExecutionReceiptsArgs
+  budgetReservations?: boolean | AiProviderConfigurationCountOutputTypeCountBudgetReservationsArgs
+  usageLedgerEntries?: boolean | AiProviderConfigurationCountOutputTypeCountUsageLedgerEntriesArgs
 }
 
 /**
@@ -741,6 +992,20 @@ export type AiProviderConfigurationCountOutputTypeDefaultArgs<ExtArgs extends ru
  */
 export type AiProviderConfigurationCountOutputTypeCountExecutionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AiExecutionReceiptWhereInput
+}
+
+/**
+ * AiProviderConfigurationCountOutputType without action
+ */
+export type AiProviderConfigurationCountOutputTypeCountBudgetReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiBudgetReservationWhereInput
+}
+
+/**
+ * AiProviderConfigurationCountOutputType without action
+ */
+export type AiProviderConfigurationCountOutputTypeCountUsageLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiUsageLedgerWhereInput
 }
 
 
@@ -761,6 +1026,8 @@ export type AiProviderConfigurationSelect<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   executionReceipts?: boolean | Prisma.AiProviderConfiguration$executionReceiptsArgs<ExtArgs>
+  budgetReservations?: boolean | Prisma.AiProviderConfiguration$budgetReservationsArgs<ExtArgs>
+  usageLedgerEntries?: boolean | Prisma.AiProviderConfiguration$usageLedgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AiProviderConfigurationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aiProviderConfiguration"]>
 
@@ -821,6 +1088,8 @@ export type AiProviderConfigurationSelectScalar = {
 export type AiProviderConfigurationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "provider" | "model" | "status" | "isDefault" | "dailyRequestLimit" | "dailyCostLimit" | "encryptedCredential" | "credentialIv" | "credentialTag" | "credentialKeyVersion" | "configurationVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["aiProviderConfiguration"]>
 export type AiProviderConfigurationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   executionReceipts?: boolean | Prisma.AiProviderConfiguration$executionReceiptsArgs<ExtArgs>
+  budgetReservations?: boolean | Prisma.AiProviderConfiguration$budgetReservationsArgs<ExtArgs>
+  usageLedgerEntries?: boolean | Prisma.AiProviderConfiguration$usageLedgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AiProviderConfigurationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AiProviderConfigurationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -830,6 +1099,8 @@ export type $AiProviderConfigurationPayload<ExtArgs extends runtime.Types.Extens
   name: "AiProviderConfiguration"
   objects: {
     executionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
+    budgetReservations: Prisma.$AiBudgetReservationPayload<ExtArgs>[]
+    usageLedgerEntries: Prisma.$AiUsageLedgerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1242,6 +1513,8 @@ readonly fields: AiProviderConfigurationFieldRefs;
 export interface Prisma__AiProviderConfigurationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   executionReceipts<T extends Prisma.AiProviderConfiguration$executionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiProviderConfiguration$executionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgetReservations<T extends Prisma.AiProviderConfiguration$budgetReservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiProviderConfiguration$budgetReservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiBudgetReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  usageLedgerEntries<T extends Prisma.AiProviderConfiguration$usageLedgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiProviderConfiguration$usageLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiUsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1700,6 +1973,54 @@ export type AiProviderConfiguration$executionReceiptsArgs<ExtArgs extends runtim
   take?: number
   skip?: number
   distinct?: Prisma.AiExecutionReceiptScalarFieldEnum | Prisma.AiExecutionReceiptScalarFieldEnum[]
+}
+
+/**
+ * AiProviderConfiguration.budgetReservations
+ */
+export type AiProviderConfiguration$budgetReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiBudgetReservation
+   */
+  select?: Prisma.AiBudgetReservationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiBudgetReservation
+   */
+  omit?: Prisma.AiBudgetReservationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiBudgetReservationInclude<ExtArgs> | null
+  where?: Prisma.AiBudgetReservationWhereInput
+  orderBy?: Prisma.AiBudgetReservationOrderByWithRelationInput | Prisma.AiBudgetReservationOrderByWithRelationInput[]
+  cursor?: Prisma.AiBudgetReservationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiBudgetReservationScalarFieldEnum | Prisma.AiBudgetReservationScalarFieldEnum[]
+}
+
+/**
+ * AiProviderConfiguration.usageLedgerEntries
+ */
+export type AiProviderConfiguration$usageLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiUsageLedger
+   */
+  select?: Prisma.AiUsageLedgerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiUsageLedger
+   */
+  omit?: Prisma.AiUsageLedgerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiUsageLedgerInclude<ExtArgs> | null
+  where?: Prisma.AiUsageLedgerWhereInput
+  orderBy?: Prisma.AiUsageLedgerOrderByWithRelationInput | Prisma.AiUsageLedgerOrderByWithRelationInput[]
+  cursor?: Prisma.AiUsageLedgerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiUsageLedgerScalarFieldEnum | Prisma.AiUsageLedgerScalarFieldEnum[]
 }
 
 /**

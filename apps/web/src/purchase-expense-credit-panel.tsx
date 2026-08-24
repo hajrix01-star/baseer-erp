@@ -5,6 +5,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerMoneyInput } from "./baseer-form-fields";
 import {
   BaseerSummaryMetric,
   BaseerSummaryMetricGrid,
@@ -399,10 +400,10 @@ function CreditPaymentDialog({
           </label>
           <label>
             {text.repaymentAmount} (SAR)
-            <input
-              inputMode="decimal"
+            <BaseerMoneyInput
               aria-invalid={Boolean(form.formState.errors.amount)}
-              {...form.register("amount")}
+              value={form.watch("amount")}
+              onValueChange={(amount) => form.setValue("amount", amount, { shouldDirty: true, shouldValidate: true })}
             />
             {form.formState.errors.amount ? (
               <small role="alert">{form.formState.errors.amount.message}</small>

@@ -129,9 +129,18 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "platform.ai.identity.read", module: "ai", nameAr: "عرض هوية الذكاء للشركة", nameEn: "View company AI identity", risk: "standard" },
   { code: "platform.ai.identity.write", module: "ai", nameAr: "تعديل هوية الذكاء للشركة", nameEn: "Change company AI identity", risk: "sensitive" },
   { code: "platform.ai.identity.create_version", module: "ai", nameAr: "إنشاء إصدار هوية الذكاء للشركة", nameEn: "Create company AI identity version", risk: "sensitive" },
+  { code: "platform.ai.context.read", module: "ai", nameAr: "عرض سياق بصيرة المعتمد للشركة", nameEn: "View approved company Basira context", risk: "standard" },
+  { code: "platform.ai.context.write", module: "ai", nameAr: "إدارة سياق بصيرة المنظم للشركة", nameEn: "Manage structured company Basira context", risk: "sensitive" },
+  { code: "platform.ai.skills.read", module: "ai", nameAr: "عرض كتالوج مهارات بصيرة وحالتها", nameEn: "View Basira skill catalogue and status", risk: "standard" },
+  { code: "platform.ai.skills.activate", module: "ai", nameAr: "اعتماد أو إيقاف مهارات بصيرة للشركة", nameEn: "Approve or suspend company Basira skills", risk: "sensitive" },
+  { code: "platform.ai.receipts.read", module: "ai", nameAr: "عرض إيصالات تنفيذ بصيرة", nameEn: "View Basira execution receipts", risk: "sensitive" },
+  { code: "platform.ai.evaluations.write", module: "ai", nameAr: "تقييم مخرجات بصيرة", nameEn: "Evaluate Basira outputs", risk: "standard" },
+  { code: "platform.ai.evaluations.read", module: "ai", nameAr: "عرض تقييمات بصيرة", nameEn: "View Basira evaluations", risk: "sensitive" },
   { code: "platform.ai.system_identity.read", module: "ai", nameAr: "عرض هوية بصيرة المركزية", nameEn: "View central Baseerah identity", risk: "standard" },
   { code: "platform.ai.system_identity.write", module: "ai", nameAr: "تعديل هوية بصيرة المركزية", nameEn: "Change central Baseerah identity", risk: "sensitive" },
   { code: "platform.ai.system_identity.create_version", module: "ai", nameAr: "إنشاء إصدار هوية بصيرة المركزية", nameEn: "Create central Baseerah identity version", risk: "sensitive" },
+  { code: "decision.human_insights.read", module: "decision", nameAr: "عرض التفسيرات المحفوظة والقرارات البشرية", nameEn: "View saved interpretations and human decisions", risk: "standard" },
+  { code: "decision.human_insights.write", module: "decision", nameAr: "تسجيل واعتماد قرارات بشرية على التفسير", nameEn: "Record and approve human interpretation decisions", risk: "sensitive" },
 ] as const;
 
 const DAILY_SALES_MANAGE = [
@@ -143,6 +152,15 @@ const DAILY_SALES_MANAGE = [
 
 const COMPANY_MANAGER_PERMISSIONS = [
   "platform.ai.use",
+  "platform.ai.context.read",
+  "platform.ai.context.write",
+  "platform.ai.skills.read",
+  "platform.ai.skills.activate",
+  "platform.ai.receipts.read",
+  "platform.ai.evaluations.read",
+  "platform.ai.evaluations.write",
+  "decision.human_insights.read",
+  "decision.human_insights.write",
   "finance.setup.write",
   "finance.configuration.read",
   "reports.read",

@@ -1,5 +1,5 @@
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
-import { formatMoney } from "./number-format";
+import { formatDate, formatMoney } from "./number-format";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import type { Closing } from "./daily-sales-client";
 
@@ -83,7 +83,7 @@ export function DailySalesReversalDialog({
           <span>{cancellation.record}</span>
           <strong>{closing.documentNumber}</strong>
           <span>
-            {closing.businessDate.slice(0, 10)} Â·{" "}
+            <bdi dir="ltr">{formatDate(closing.businessDate, language)}</bdi> ·{" "}
             {formatMoney(closing.grossAmount)}
           </span>
         </div>

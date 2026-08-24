@@ -95,8 +95,14 @@ export const operationsCatalogReceiptSchema = z.object({
   asOf: z.string().datetime(),
 }).strict();
 
-/** Current-month, server-owned execution read. Sales remain absent where a
- * day is missing or incomplete; the dashboard must never convert that to 0. */
+export const operationsOverviewQuerySchema = z.object({
+  fromBusinessDate: operationsOverviewDateSchema.optional(),
+  toBusinessDate: operationsOverviewDateSchema.optional(),
+}).strict();
+
+/** Server-owned execution read for a selected business period. Sales remain
+ * absent where a day is missing or incomplete; the dashboard must never
+ * convert that to 0. */
 export const operationsOverviewReadSchema = z.object({
   companyId: companyIdSchema,
   businessDate: operationsOverviewDateSchema,
@@ -111,12 +117,12 @@ export const operationsOverviewReadSchema = z.object({
     eligibleDayCount: z.number().int().nonnegative(),
     incompleteDayCount: z.number().int().nonnegative(),
     dataQuality: z.enum(["READY", "INCOMPLETE", "NO_DATA"]),
-    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema.nullable() }).strict()).max(31),
+    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema.nullable() }).strict()).max(366),
   }).strict(),
   purchases: z.object({
     grossAmount: operationsOverviewAmountSchema,
     documentCount: z.number().int().nonnegative(),
-    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(31),
+    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(366),
   }).strict(),
 }).strict();
 

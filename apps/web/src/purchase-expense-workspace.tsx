@@ -19,6 +19,7 @@ import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
+import { BaseerMoneyInput } from "./baseer-form-fields";
 import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerLoadFailure } from "./baseer-load-failure";
 import { formatMoney } from "./number-format";
@@ -1477,13 +1478,10 @@ export function PurchaseExpenseWorkspace({
             </label>
             <label>
               {language === "ar" ? "المبلغ الإجمالي" : "Gross amount"}
-              <input
+              <BaseerMoneyInput
                 required
-                inputMode="decimal"
                 value={amendmentRow.grossAmount}
-                onChange={(event) =>
-                  updateAmendment("grossAmount", event.target.value)
-                }
+                onValueChange={(grossAmount) => updateAmendment("grossAmount", grossAmount)}
               />
             </label>
             {amendmentRow.settlementKind === "PAID" ? (

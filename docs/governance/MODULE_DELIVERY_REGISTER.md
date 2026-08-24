@@ -1,6 +1,6 @@
 # BASEER ERP Module Delivery Register
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-08-24
 **Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
@@ -34,7 +34,7 @@
 | Operations (catalogue, purchasing, inventory and custody) | **Closed — local owner acceptance and library migration** | Items, units, recipes/conversions, purchase request/receipt, inventory movement, custody, internal registration and operation reports. Browser E2E, 12-scope DB verifier, migration inventory and release budgets pass from `c53ba7d`; server paging/filtering covers the large catalogue and report surfaces. | No financial policy, formal financial report, Noorix or external integration is activated. Intentional bounded `DataTable` surfaces are final lightweight decisions, not legacy. |
 | Assets & Warranty | **Closed locally inside Operations Core — Gate A** | Operations section: Purchase & Expense follow-up marker, company-scoped queue and operational asset/warranty register; archive, permissions, audit, idempotency and no-finance-posting behavior are verified. | Capitalization, depreciation, disposal, claims, attachments and split-source assets remain separate scopes rather than unfinished Gate A work. |
 | Migration and cutover | Discovery only | Noorix mapping/discovery and cutover gates. | Importer, staging dry run, reconciliation and cutover approval. |
-| Marketing & Reputation | **Active — A1 + P2 + P3a control centre** | سجل الحملات وسياسة ردود السمعة، وروابط مرجعية مدققة للمستند المالي القائم والسياق المنشور، وقراءات الحملة/التقويم الخادمية، وحالة/طلب تهيئة Google معزول. لا provider facts ولا أسرار أو اتصال خارجي. | اختبار/قبول القسم الداخلي وP3a أولاً. الموصلات الحية هي آخر بناء النطاق: PDR منفصل ثم تفعيل ذاتي من الواجهة لكل شركة لـAds (read-only) وGoogle Business (read ثم ردود حية محكومة). |
+| Marketing & Reputation | **Active — A1 + P2 + P3a control centre** | سجل الحملات وسياسة ردود السمعة، وروابط مرجعية مدققة للمستند المالي القائم والسياق المنشور، وقراءات الحملة/التقويم الخادمية، وإيقاف حملة مدقق (تاريخ + سبب + نهاية فعلية للفترة)، وحالة/طلب تهيئة Google معزول. لا provider facts ولا أسرار أو اتصال خارجي. | اختبار/قبول القسم الداخلي وP3a أولاً. الموصلات الحية هي آخر بناء النطاق: PDR منفصل ثم تفعيل ذاتي من الواجهة لكل شركة لـAds (read-only) وGoogle Business (read ثم ردود حية محكومة). |
 | Inbound, AI provider, remaining modules | **Basira pilot active; other work deferred** | One local/personal OpenAI explanation-only path for checksum-valid Decision alerts, behind `platform.ai.use`, server-only frozen brief, encrypted credential and explicit server enablement. | Provider configuration, manual quality review and pilot evidence are required before any outbound request. Generic chat, actions/tools, other modules/providers and production remain deferred. |
 
 ## Financial read-scale baseline

@@ -4,6 +4,7 @@ import { BaseerButton } from "./baseer-button";
 import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerMoneyInput } from "./baseer-form-fields";
 import { activeSession } from "./daily-sales-client";
 import { displayName } from "./baseer-localization";
 import { financeText, outflowBatchEntryText } from "./finance-copy";
@@ -280,15 +281,14 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({
                 </label>
                 <label>
                   <span>{text.totalAmount}</span>
-                  <input
-                    inputMode="decimal"
+                  <BaseerMoneyInput
                     placeholder={text.enterAmount}
                     value={row.grossAmount}
-                    onChange={(event) =>
+                    onValueChange={(grossAmount) =>
                       change(
                         row,
                         "grossAmount" as keyof Row,
-                        event.target.value as Row[keyof Row],
+                        grossAmount as Row[keyof Row],
                       )
                     }
                   />
@@ -484,16 +484,15 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({
             width: "6.25rem",
             numeric: true,
             cell: (row) => (
-              <input
+              <BaseerMoneyInput
                 aria-label={text.totalAmount}
-                inputMode="decimal"
                 placeholder={text.enterAmount}
                 value={row.grossAmount}
-                onChange={(event) =>
+                onValueChange={(grossAmount) =>
                   onChange(
                     row.id,
                     "grossAmount" as keyof Row,
-                    event.target.value as Row[keyof Row],
+                    grossAmount as Row[keyof Row],
                   )
                 }
               />

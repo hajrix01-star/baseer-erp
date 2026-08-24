@@ -43,6 +43,19 @@ export class InboundEvidenceDocumentIntelligenceService {
 
   async analyze(context: TrustedTenantAdministratorContext, attachmentId: string, request: AnalyzeInboundEvidenceAttachmentRequest): Promise<InboundEvidenceDocumentAnalysis> {
     this.ownerOnly(context);
+    // This legacy S3 path called the provider directly. It is intentionally
+    // unavailable until it is moved behind the shared Basira runtime, where
+    // company skill activation, immutable execution receipts, evidence
+    // lineage and per-company limits are all enforced together. An env var
+    // must never be able to re-enable that bypass.
+    throw new ForbiddenException("Document intelligence is temporarily unavailable while it is migrated to the governed Basira runtime.");
+  }
+
+  /**
+   * Preserved only as a migration reference. It is deliberately unreachable
+   * from the controller until it is rebuilt on the shared governed runtime.
+   */
+  private async analyzeLegacyDirect(context: TrustedTenantAdministratorContext, attachmentId: string, request: AnalyzeInboundEvidenceAttachmentRequest): Promise<InboundEvidenceDocumentAnalysis> {
     const skill = selectAiSkill("inbound-evidence", "inbound.document_intelligence");
     if (!skill || (skill.status !== "PILOT" && skill.status !== "ACTIVE")) throw new ForbiddenException("The document-intelligence skill is not active.");
     if (process.env.BASEER_INBOUND_DOCUMENT_INTELLIGENCE_ENABLED !== "true") throw new ForbiddenException("Document intelligence is not enabled in this deployment.");

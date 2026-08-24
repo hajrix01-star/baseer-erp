@@ -256,6 +256,8 @@ export type DecisionEvidenceSnapshotWhereInput = {
   supersedes?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotNullableScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput> | null
   replacements?: Prisma.DecisionEvidenceSnapshotListRelationFilter
   alerts?: Prisma.DecisionAlertListRelationFilter
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
+  aiInterpretations?: Prisma.AiInterpretationListRelationFilter
 }
 
 export type DecisionEvidenceSnapshotOrderByWithRelationInput = {
@@ -278,6 +280,8 @@ export type DecisionEvidenceSnapshotOrderByWithRelationInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotOrderByWithRelationInput
   replacements?: Prisma.DecisionEvidenceSnapshotOrderByRelationAggregateInput
   alerts?: Prisma.DecisionAlertOrderByRelationAggregateInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
+  aiInterpretations?: Prisma.AiInterpretationOrderByRelationAggregateInput
 }
 
 export type DecisionEvidenceSnapshotWhereUniqueInput = Prisma.AtLeast<{
@@ -304,6 +308,8 @@ export type DecisionEvidenceSnapshotWhereUniqueInput = Prisma.AtLeast<{
   supersedes?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotNullableScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput> | null
   replacements?: Prisma.DecisionEvidenceSnapshotListRelationFilter
   alerts?: Prisma.DecisionAlertListRelationFilter
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
+  aiInterpretations?: Prisma.AiInterpretationListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type DecisionEvidenceSnapshotOrderByWithAggregationInput = {
@@ -362,6 +368,8 @@ export type DecisionEvidenceSnapshotCreateInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
   replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateInput = {
@@ -381,6 +389,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateInput = {
   createdAt?: Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUpdateInput = {
@@ -399,6 +409,8 @@ export type DecisionEvidenceSnapshotUpdateInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
   replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateInput = {
@@ -418,6 +430,8 @@ export type DecisionEvidenceSnapshotUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotCreateManyInput = {
@@ -702,6 +716,36 @@ export type DecisionEvidenceSnapshotUpdateOneRequiredWithoutAlertsNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateToOneWithWhereWithoutAlertsInput, Prisma.DecisionEvidenceSnapshotUpdateWithoutAlertsInput>, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAlertsInput>
 }
 
+export type DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput = {
+  create?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiExecutionReceiptsInput>
+  connectOrCreate?: Prisma.DecisionEvidenceSnapshotCreateOrConnectWithoutAiExecutionReceiptsInput
+  connect?: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+}
+
+export type DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiExecutionReceiptsInput>
+  connectOrCreate?: Prisma.DecisionEvidenceSnapshotCreateOrConnectWithoutAiExecutionReceiptsInput
+  upsert?: Prisma.DecisionEvidenceSnapshotUpsertWithoutAiExecutionReceiptsInput
+  disconnect?: Prisma.DecisionEvidenceSnapshotWhereInput | boolean
+  delete?: Prisma.DecisionEvidenceSnapshotWhereInput | boolean
+  connect?: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateToOneWithWhereWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUpdateWithoutAiExecutionReceiptsInput>, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiExecutionReceiptsInput>
+}
+
+export type DecisionEvidenceSnapshotCreateNestedOneWithoutAiInterpretationsInput = {
+  create?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiInterpretationsInput>
+  connectOrCreate?: Prisma.DecisionEvidenceSnapshotCreateOrConnectWithoutAiInterpretationsInput
+  connect?: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+}
+
+export type DecisionEvidenceSnapshotUpdateOneRequiredWithoutAiInterpretationsNestedInput = {
+  create?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiInterpretationsInput>
+  connectOrCreate?: Prisma.DecisionEvidenceSnapshotCreateOrConnectWithoutAiInterpretationsInput
+  upsert?: Prisma.DecisionEvidenceSnapshotUpsertWithoutAiInterpretationsInput
+  connect?: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateToOneWithWhereWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUpdateWithoutAiInterpretationsInput>, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiInterpretationsInput>
+}
+
 export type DecisionEvidenceSnapshotCreateWithoutCompanyInput = {
   id?: string
   evidenceKind: $Enums.DecisionEvidenceKind
@@ -717,6 +761,8 @@ export type DecisionEvidenceSnapshotCreateWithoutCompanyInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
   replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateWithoutCompanyInput = {
@@ -734,6 +780,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotCreateOrConnectWithoutCompanyInput = {
@@ -797,6 +845,8 @@ export type DecisionEvidenceSnapshotCreateWithoutSourceReportRunInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
   replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateWithoutSourceReportRunInput = {
@@ -813,6 +863,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateWithoutSourceReportRunInput =
   createdAt?: Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotCreateOrConnectWithoutSourceReportRunInput = {
@@ -856,6 +908,8 @@ export type DecisionEvidenceSnapshotCreateWithoutReplacementsInput = {
   sourceReportRun?: Prisma.ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
   supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
   alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateWithoutReplacementsInput = {
@@ -874,6 +928,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateWithoutReplacementsInput = {
   createdByUserId?: string | null
   createdAt?: Date | string
   alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotCreateOrConnectWithoutReplacementsInput = {
@@ -896,6 +952,8 @@ export type DecisionEvidenceSnapshotCreateWithoutSupersedesInput = {
   sourceReportRun?: Prisma.ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
   replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateWithoutSupersedesInput = {
@@ -912,6 +970,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateWithoutSupersedesInput = {
   createdAt?: Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
   alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotCreateOrConnectWithoutSupersedesInput = {
@@ -950,6 +1010,8 @@ export type DecisionEvidenceSnapshotUpdateWithoutReplacementsInput = {
   sourceReportRun?: Prisma.ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput
   supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
   alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateWithoutReplacementsInput = {
@@ -968,6 +1030,8 @@ export type DecisionEvidenceSnapshotUncheckedUpdateWithoutReplacementsInput = {
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUpsertWithWhereUniqueWithoutSupersedesInput = {
@@ -1001,6 +1065,8 @@ export type DecisionEvidenceSnapshotCreateWithoutAlertsInput = {
   sourceReportRun?: Prisma.ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
   supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
   replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedCreateWithoutAlertsInput = {
@@ -1019,6 +1085,8 @@ export type DecisionEvidenceSnapshotUncheckedCreateWithoutAlertsInput = {
   createdByUserId?: string | null
   createdAt?: Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
 }
 
 export type DecisionEvidenceSnapshotCreateOrConnectWithoutAlertsInput = {
@@ -1052,6 +1120,8 @@ export type DecisionEvidenceSnapshotUpdateWithoutAlertsInput = {
   sourceReportRun?: Prisma.ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput
   supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
   replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateWithoutAlertsInput = {
@@ -1070,6 +1140,196 @@ export type DecisionEvidenceSnapshotUncheckedUpdateWithoutAlertsInput = {
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+}
+
+export type DecisionEvidenceSnapshotCreateWithoutAiExecutionReceiptsInput = {
+  id?: string
+  evidenceKind: $Enums.DecisionEvidenceKind
+  verificationStatus: $Enums.DecisionVerificationStatus
+  periodFrom: Date | string
+  periodTo: Date | string
+  timezone?: string
+  payloadJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum: string
+  createdByUserId?: string | null
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
+  sourceReportRun?: Prisma.ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
+  supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
+  replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
+  alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutEvidenceSnapshotInput
+}
+
+export type DecisionEvidenceSnapshotUncheckedCreateWithoutAiExecutionReceiptsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  sourceReportRunId?: string | null
+  supersedesSnapshotId?: string | null
+  evidenceKind: $Enums.DecisionEvidenceKind
+  verificationStatus: $Enums.DecisionVerificationStatus
+  periodFrom: Date | string
+  periodTo: Date | string
+  timezone?: string
+  payloadJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum: string
+  createdByUserId?: string | null
+  createdAt?: Date | string
+  replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
+  alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+}
+
+export type DecisionEvidenceSnapshotCreateOrConnectWithoutAiExecutionReceiptsInput = {
+  where: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiExecutionReceiptsInput>
+}
+
+export type DecisionEvidenceSnapshotUpsertWithoutAiExecutionReceiptsInput = {
+  update: Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiExecutionReceiptsInput>
+  create: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiExecutionReceiptsInput>
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+}
+
+export type DecisionEvidenceSnapshotUpdateToOneWithWhereWithoutAiExecutionReceiptsInput = {
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+  data: Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateWithoutAiExecutionReceiptsInput, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiExecutionReceiptsInput>
+}
+
+export type DecisionEvidenceSnapshotUpdateWithoutAiExecutionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  evidenceKind?: Prisma.EnumDecisionEvidenceKindFieldUpdateOperationsInput | $Enums.DecisionEvidenceKind
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  periodFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodTo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  payloadJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionEvidenceSnapshotsNestedInput
+  sourceReportRun?: Prisma.ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput
+  supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
+  replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
+  alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
+}
+
+export type DecisionEvidenceSnapshotUncheckedUpdateWithoutAiExecutionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReportRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supersedesSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceKind?: Prisma.EnumDecisionEvidenceKindFieldUpdateOperationsInput | $Enums.DecisionEvidenceKind
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  periodFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodTo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  payloadJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
+  alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+}
+
+export type DecisionEvidenceSnapshotCreateWithoutAiInterpretationsInput = {
+  id?: string
+  evidenceKind: $Enums.DecisionEvidenceKind
+  verificationStatus: $Enums.DecisionVerificationStatus
+  periodFrom: Date | string
+  periodTo: Date | string
+  timezone?: string
+  payloadJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum: string
+  createdByUserId?: string | null
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
+  sourceReportRun?: Prisma.ReportRunCreateNestedOneWithoutDecisionEvidenceSnapshotsInput
+  supersedes?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutReplacementsInput
+  replacements?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutSupersedesInput
+  alerts?: Prisma.DecisionAlertCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput
+}
+
+export type DecisionEvidenceSnapshotUncheckedCreateWithoutAiInterpretationsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  sourceReportRunId?: string | null
+  supersedesSnapshotId?: string | null
+  evidenceKind: $Enums.DecisionEvidenceKind
+  verificationStatus: $Enums.DecisionVerificationStatus
+  periodFrom: Date | string
+  periodTo: Date | string
+  timezone?: string
+  payloadJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum: string
+  createdByUserId?: string | null
+  createdAt?: Date | string
+  replacements?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutSupersedesInput
+  alerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput
+}
+
+export type DecisionEvidenceSnapshotCreateOrConnectWithoutAiInterpretationsInput = {
+  where: Prisma.DecisionEvidenceSnapshotWhereUniqueInput
+  create: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiInterpretationsInput>
+}
+
+export type DecisionEvidenceSnapshotUpsertWithoutAiInterpretationsInput = {
+  update: Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiInterpretationsInput>
+  create: Prisma.XOR<Prisma.DecisionEvidenceSnapshotCreateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedCreateWithoutAiInterpretationsInput>
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+}
+
+export type DecisionEvidenceSnapshotUpdateToOneWithWhereWithoutAiInterpretationsInput = {
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+  data: Prisma.XOR<Prisma.DecisionEvidenceSnapshotUpdateWithoutAiInterpretationsInput, Prisma.DecisionEvidenceSnapshotUncheckedUpdateWithoutAiInterpretationsInput>
+}
+
+export type DecisionEvidenceSnapshotUpdateWithoutAiInterpretationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  evidenceKind?: Prisma.EnumDecisionEvidenceKindFieldUpdateOperationsInput | $Enums.DecisionEvidenceKind
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  periodFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodTo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  payloadJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDecisionEvidenceSnapshotsNestedInput
+  sourceReportRun?: Prisma.ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput
+  supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
+  replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
+  alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+}
+
+export type DecisionEvidenceSnapshotUncheckedUpdateWithoutAiInterpretationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceReportRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supersedesSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceKind?: Prisma.EnumDecisionEvidenceKindFieldUpdateOperationsInput | $Enums.DecisionEvidenceKind
+  verificationStatus?: Prisma.EnumDecisionVerificationStatusFieldUpdateOperationsInput | $Enums.DecisionVerificationStatus
+  periodFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodTo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  payloadJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
+  alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotCreateManyCompanyInput = {
@@ -1102,6 +1362,8 @@ export type DecisionEvidenceSnapshotUpdateWithoutCompanyInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
   replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateWithoutCompanyInput = {
@@ -1119,6 +1381,8 @@ export type DecisionEvidenceSnapshotUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyInput = {
@@ -1165,6 +1429,8 @@ export type DecisionEvidenceSnapshotUpdateWithoutSourceReportRunInput = {
   supersedes?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutReplacementsNestedInput
   replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateWithoutSourceReportRunInput = {
@@ -1181,6 +1447,8 @@ export type DecisionEvidenceSnapshotUncheckedUpdateWithoutSourceReportRunInput =
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSourceReportRunInput = {
@@ -1226,6 +1494,8 @@ export type DecisionEvidenceSnapshotUpdateWithoutSupersedesInput = {
   sourceReportRun?: Prisma.ReportRunUpdateOneWithoutDecisionEvidenceSnapshotsNestedInput
   replacements?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateWithoutSupersedesInput = {
@@ -1242,6 +1512,8 @@ export type DecisionEvidenceSnapshotUncheckedUpdateWithoutSupersedesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   replacements?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesNestedInput
   alerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput
 }
 
 export type DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesInput = {
@@ -1266,11 +1538,15 @@ export type DecisionEvidenceSnapshotUncheckedUpdateManyWithoutSupersedesInput = 
 export type DecisionEvidenceSnapshotCountOutputType = {
   replacements: number
   alerts: number
+  aiExecutionReceipts: number
+  aiInterpretations: number
 }
 
 export type DecisionEvidenceSnapshotCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   replacements?: boolean | DecisionEvidenceSnapshotCountOutputTypeCountReplacementsArgs
   alerts?: boolean | DecisionEvidenceSnapshotCountOutputTypeCountAlertsArgs
+  aiExecutionReceipts?: boolean | DecisionEvidenceSnapshotCountOutputTypeCountAiExecutionReceiptsArgs
+  aiInterpretations?: boolean | DecisionEvidenceSnapshotCountOutputTypeCountAiInterpretationsArgs
 }
 
 /**
@@ -1297,6 +1573,20 @@ export type DecisionEvidenceSnapshotCountOutputTypeCountAlertsArgs<ExtArgs exten
   where?: Prisma.DecisionAlertWhereInput
 }
 
+/**
+ * DecisionEvidenceSnapshotCountOutputType without action
+ */
+export type DecisionEvidenceSnapshotCountOutputTypeCountAiExecutionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiExecutionReceiptWhereInput
+}
+
+/**
+ * DecisionEvidenceSnapshotCountOutputType without action
+ */
+export type DecisionEvidenceSnapshotCountOutputTypeCountAiInterpretationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiInterpretationWhereInput
+}
+
 
 export type DecisionEvidenceSnapshotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1318,6 +1608,8 @@ export type DecisionEvidenceSnapshotSelect<ExtArgs extends runtime.Types.Extensi
   supersedes?: boolean | Prisma.DecisionEvidenceSnapshot$supersedesArgs<ExtArgs>
   replacements?: boolean | Prisma.DecisionEvidenceSnapshot$replacementsArgs<ExtArgs>
   alerts?: boolean | Prisma.DecisionEvidenceSnapshot$alertsArgs<ExtArgs>
+  aiExecutionReceipts?: boolean | Prisma.DecisionEvidenceSnapshot$aiExecutionReceiptsArgs<ExtArgs>
+  aiInterpretations?: boolean | Prisma.DecisionEvidenceSnapshot$aiInterpretationsArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionEvidenceSnapshotCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["decisionEvidenceSnapshot"]>
 
@@ -1385,6 +1677,8 @@ export type DecisionEvidenceSnapshotInclude<ExtArgs extends runtime.Types.Extens
   supersedes?: boolean | Prisma.DecisionEvidenceSnapshot$supersedesArgs<ExtArgs>
   replacements?: boolean | Prisma.DecisionEvidenceSnapshot$replacementsArgs<ExtArgs>
   alerts?: boolean | Prisma.DecisionEvidenceSnapshot$alertsArgs<ExtArgs>
+  aiExecutionReceipts?: boolean | Prisma.DecisionEvidenceSnapshot$aiExecutionReceiptsArgs<ExtArgs>
+  aiInterpretations?: boolean | Prisma.DecisionEvidenceSnapshot$aiInterpretationsArgs<ExtArgs>
   _count?: boolean | Prisma.DecisionEvidenceSnapshotCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DecisionEvidenceSnapshotIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1406,6 +1700,8 @@ export type $DecisionEvidenceSnapshotPayload<ExtArgs extends runtime.Types.Exten
     supersedes: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs> | null
     replacements: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>[]
     alerts: Prisma.$DecisionAlertPayload<ExtArgs>[]
+    aiExecutionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
+    aiInterpretations: Prisma.$AiInterpretationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1821,6 +2117,8 @@ export interface Prisma__DecisionEvidenceSnapshotClient<T, Null = never, ExtArgs
   supersedes<T extends Prisma.DecisionEvidenceSnapshot$supersedesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshot$supersedesArgs<ExtArgs>>): Prisma.Prisma__DecisionEvidenceSnapshotClient<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   replacements<T extends Prisma.DecisionEvidenceSnapshot$replacementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshot$replacementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   alerts<T extends Prisma.DecisionEvidenceSnapshot$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshot$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DecisionAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiExecutionReceipts<T extends Prisma.DecisionEvidenceSnapshot$aiExecutionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshot$aiExecutionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiInterpretations<T extends Prisma.DecisionEvidenceSnapshot$aiInterpretationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DecisionEvidenceSnapshot$aiInterpretationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiInterpretationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2348,6 +2646,54 @@ export type DecisionEvidenceSnapshot$alertsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.DecisionAlertScalarFieldEnum | Prisma.DecisionAlertScalarFieldEnum[]
+}
+
+/**
+ * DecisionEvidenceSnapshot.aiExecutionReceipts
+ */
+export type DecisionEvidenceSnapshot$aiExecutionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiExecutionReceipt
+   */
+  select?: Prisma.AiExecutionReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiExecutionReceipt
+   */
+  omit?: Prisma.AiExecutionReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiExecutionReceiptInclude<ExtArgs> | null
+  where?: Prisma.AiExecutionReceiptWhereInput
+  orderBy?: Prisma.AiExecutionReceiptOrderByWithRelationInput | Prisma.AiExecutionReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.AiExecutionReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiExecutionReceiptScalarFieldEnum | Prisma.AiExecutionReceiptScalarFieldEnum[]
+}
+
+/**
+ * DecisionEvidenceSnapshot.aiInterpretations
+ */
+export type DecisionEvidenceSnapshot$aiInterpretationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiInterpretation
+   */
+  select?: Prisma.AiInterpretationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiInterpretation
+   */
+  omit?: Prisma.AiInterpretationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiInterpretationInclude<ExtArgs> | null
+  where?: Prisma.AiInterpretationWhereInput
+  orderBy?: Prisma.AiInterpretationOrderByWithRelationInput | Prisma.AiInterpretationOrderByWithRelationInput[]
+  cursor?: Prisma.AiInterpretationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiInterpretationScalarFieldEnum | Prisma.AiInterpretationScalarFieldEnum[]
 }
 
 /**

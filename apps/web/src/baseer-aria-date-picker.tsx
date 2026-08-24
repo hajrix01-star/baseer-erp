@@ -51,7 +51,7 @@ export function BaseerAriaDatePicker({ language, value, onChange, label, min, ma
   >
     <Label className="visually-hidden">{label}</Label>
     <Group className="baseer-aria-date-picker__group">
-      <DateInput className="baseer-aria-date-picker__input">{(segment) => <DateSegment segment={segment} />}</DateInput>
+      <DateInput className="baseer-aria-date-picker__input" dir="ltr" lang="en">{(segment) => <DateSegment segment={segment} />}</DateInput>
       <Button className="baseer-aria-date-picker__trigger" aria-label={language === "ar" ? "فتح التقويم" : "Open calendar"}>⌄</Button>
       {clearable ? <Button className="baseer-aria-date-picker__clear" isDisabled={disabled || !value} aria-label={language === "ar" ? "مسح التاريخ" : "Clear date"} onPress={() => onChange("")}>×</Button> : null}
     </Group>

@@ -9,6 +9,8 @@ import {
   type AvailableCompany,
 } from "./daily-sales-client";
 
+import { pageRouteHash } from "./page-registry";
+
 type Language = "ar" | "en";
 
 export function CompanySessionControl({ language }: { language: Language }) {
@@ -41,7 +43,7 @@ export function CompanySessionControl({ language }: { language: Language }) {
         className="company-selector"
         type="button"
         onClick={() => {
-          window.location.hash = "module=operations&section=1";
+          window.location.hash = pageRouteHash("operations-sales");
         }}
       >
         <span className="status-dot" />

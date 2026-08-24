@@ -1,5 +1,5 @@
-import { companyIdSchema, operationsOverviewReadSchema } from "@baseer-erp/contracts";
-import { Controller, ForbiddenException, Get, Headers, UnauthorizedException } from "@nestjs/common";
+import { companyIdSchema, operationsOverviewQuerySchema, operationsOverviewReadSchema } from "@baseer-erp/contracts";
+import { BadRequestException, Controller, ForbiddenException, Get, Headers, Query, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { OperationsOverviewService } from "./operations-overview.service.js";
@@ -9,9 +9,14 @@ export class OperationsOverviewController {
   constructor(private readonly companyContext: CompanyContextService, private readonly overview: OperationsOverviewService) {}
 
   @Get()
-  async currentMonth(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+  async currentMonth(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = operationsOverviewQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException("Invalid operations overview period.");
     const context = await this.authorize(authorization, companyId);
-    return operationsOverviewReadSchema.parse(await this.overview.currentMonth(context));
+    return operationsOverviewReadSchema.parse(await this.overview.period(context, {
+      ...(parsed.data.fromBusinessDate ? { fromBusinessDate: parsed.data.fromBusinessDate } : {}),
+      ...(parsed.data.toBusinessDate ? { toBusinessDate: parsed.data.toBusinessDate } : {}),
+    }));
   }
 
   private async authorize(authorization: string | undefined, companyId: string | undefined) {

@@ -1,3 +1,6 @@
+import { getPageByLegacySection, pageRouteHash } from "./page-registry";
+
 export function consumeHrRouteStage(section: number) {
-  window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#module=hr&section=${section}`);
+  const page = getPageByLegacySection("hr", section);
+  if (page) window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${pageRouteHash(page.id)}`);
 }

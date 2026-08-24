@@ -2,6 +2,7 @@ import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
+import { normalizeBaseerNumericInput } from "./number-format";
 import type { ItemForm } from "./operations-catalog-workspace";
 
 type Unit = { id: string; nameAr: string; nameEn: string | null; isActive: boolean };
@@ -12,7 +13,7 @@ function schema(ar: boolean) { return z.object({ code: z.string().trim().min(1, 
 export function OperationsCatalogItemCreateDialog({ open, language, busy, value, units, sections, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; value: ItemForm; units: readonly Unit[]; sections: readonly Section[]; onClose: () => void; onSubmit: (value: ItemForm) => Promise<void> | void }) {
   const ar = language === "ar"; const t = ar ? { title: "إضافة مادة أولية", save: "حفظ", code: "الرمز", nameAr: "الاسم بالعربية", nameEn: "الاسم بالإنجليزية", kind: "نوع الصنف", raw: "مادة أولية", menu: "منتج منيو", section: "قسم التسجيل", base: "الوحدة الأساسية", sale: "سعر بيع المنيو", units: "وحدات الصنف" } : { title: "Add raw material", save: "Save", code: "Code", nameAr: "Arabic name", nameEn: "English name", kind: "Item type", raw: "Raw material", menu: "Menu product", section: "Registration section", base: "Base unit", sale: "Menu sale price", units: "Item units" };
   const validation = useMemo(() => schema(ar), [ar]); const form = useBaseerForm<ItemForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
-  const kind = form.watch("kind"); const baseUnitId = form.watch("baseUnitId"); const unitIds = form.watch("unitIds");
+  const kind = form.watch("kind"); const baseUnitId = form.watch("baseUnitId"); const unitIds = form.watch("unitIds"); const salePrice = form.watch("salePrice");
   useEffect(() => { if (open) form.reset(value.code || value.nameAr || value.baseUnitId ? value : empty()); }, [form, open, value]);
   const name = (item: { nameAr: string; nameEn: string | null }) => ar ? item.nameAr : item.nameEn ?? item.nameAr;
   const toggleUnit = (id: string) => { const next = unitIds.includes(id) ? unitIds.filter((item) => item !== id) : [...unitIds, id]; form.setValue("unitIds", next, { shouldDirty: true, shouldValidate: true }); if (baseUnitId === id && !next.includes(id)) form.setValue("baseUnitId", "", { shouldDirty: true, shouldValidate: true }); };
@@ -22,7 +23,7 @@ export function OperationsCatalogItemCreateDialog({ open, language, busy, value,
     <label>{t.kind}<select {...form.register("kind")} onChange={(event) => { form.setValue("kind", event.target.value as ItemForm["kind"], { shouldDirty: true }); form.setValue("sectionId", "", { shouldDirty: true }); }}><option value="RAW_MATERIAL">{t.raw}</option><option value="MENU_PRODUCT">{t.menu}</option></select></label>
     {kind === "MENU_PRODUCT" ? <label>{t.section}<select aria-invalid={Boolean(form.formState.errors.sectionId)} {...form.register("sectionId")}><option value="">—</option>{sections.filter((section) => section.isActive).map((section) => <option key={section.id} value={section.id}>{name(section)}</option>)}</select>{form.formState.errors.sectionId ? <small role="alert">{form.formState.errors.sectionId.message}</small> : null}</label> : null}
     <label>{t.base}<select aria-invalid={Boolean(form.formState.errors.baseUnitId)} {...form.register("baseUnitId")} onChange={(event) => { const next = event.target.value; form.setValue("baseUnitId", next, { shouldDirty: true, shouldValidate: true }); if (next && !unitIds.includes(next)) form.setValue("unitIds", [...unitIds, next], { shouldDirty: true, shouldValidate: true }); }}><option value="">—</option>{units.filter((unit) => unit.isActive).map((unit) => <option key={unit.id} value={unit.id}>{name(unit)}</option>)}</select>{form.formState.errors.baseUnitId ? <small role="alert">{form.formState.errors.baseUnitId.message}</small> : null}</label>
-    {kind === "MENU_PRODUCT" ? <label>{t.sale}<input inputMode="decimal" aria-invalid={Boolean(form.formState.errors.salePrice)} {...form.register("salePrice")} />{form.formState.errors.salePrice ? <small role="alert">{form.formState.errors.salePrice.message}</small> : null}</label> : null}
+    {kind === "MENU_PRODUCT" ? <label>{t.sale}<input inputMode="decimal" dir="ltr" lang="en" value={salePrice} aria-invalid={Boolean(form.formState.errors.salePrice)} onChange={(event) => form.setValue("salePrice", normalizeBaseerNumericInput(event.target.value), { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.salePrice ? <small role="alert">{form.formState.errors.salePrice.message}</small> : null}</label> : null}
     <fieldset><legend>{t.units}</legend>{units.filter((unit) => unit.isActive).map((unit) => <label key={unit.id}><input type="checkbox" checked={unitIds.includes(unit.id)} onChange={() => toggleUnit(unit.id)} /> {name(unit)}</label>)}{form.formState.errors.unitIds ? <small role="alert">{form.formState.errors.unitIds.message}</small> : null}</fieldset>
   </form></BaseerFormDialog>;
 }

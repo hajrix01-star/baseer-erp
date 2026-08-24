@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { BusinessDateService } from "../business-date/business-date.service.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
@@ -16,11 +16,14 @@ export class OperationsOverviewService {
     private readonly businessDates: BusinessDateService,
   ) {}
 
-  async currentMonth(context: TrustedCompanyActorContext) {
+  async period(context: TrustedCompanyActorContext, requested: { fromBusinessDate?: string; toBusinessDate?: string }) {
     const current = await this.businessDates.currentForTrustedContext(context);
-    const fromBusinessDate = `${current.businessDate.slice(0, 7)}-01`;
+    const fromBusinessDate = requested.fromBusinessDate ?? `${current.businessDate.slice(0, 7)}-01`;
+    const toBusinessDate = requested.toBusinessDate ?? current.businessDate;
+    if (fromBusinessDate > toBusinessDate || toBusinessDate > current.businessDate) throw new BadRequestException("The requested operations overview period is invalid.");
     const from = new Date(`${fromBusinessDate}T00:00:00.000Z`);
-    const to = new Date(`${current.businessDate}T00:00:00.000Z`);
+    const to = new Date(`${toBusinessDate}T00:00:00.000Z`);
+    if ((to.getTime() - from.getTime()) / 86_400_000 > 365) throw new BadRequestException("The operations overview period must not exceed one year.");
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const [salesSummaries, purchaseDays] = await Promise.all([
         tx.financeDailyFinancialSummary.findMany({
@@ -64,7 +67,7 @@ export class OperationsOverviewService {
       return {
         companyId: context.companyId,
         businessDate: current.businessDate,
-        period: { fromBusinessDate, toBusinessDate: current.businessDate, timezone: "Asia/Riyadh" as const },
+        period: { fromBusinessDate, toBusinessDate, timezone: "Asia/Riyadh" as const },
         sales: {
           grossAmount: eligibleSales.length ? salesTotal.toFixed(4) : null,
           closingCount: salesClosingCount,

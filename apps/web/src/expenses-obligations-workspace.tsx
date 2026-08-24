@@ -12,6 +12,7 @@ import { BaseerButton } from "./baseer-button";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerMoneyInput, normalizeBaseerAmount } from "./baseer-form-fields";
 import {
   activeSession,
   api,
@@ -21,7 +22,7 @@ import {
 import { isPositiveMoneyDecimal } from "./decimal-string";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import type { Profile } from "./recurring-expense-workspace";
-import { formatNumber } from "./number-format";
+import { formatDate, formatMoney, formatNumber } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
@@ -412,51 +413,43 @@ function ItemsAndObligations({
               </label>
               <label>
                 {text.originalLoanAmount} (SAR)
-                <input
+                <BaseerMoneyInput
                   required
-                  inputMode="decimal"
                   value={loanForm.originalAmount}
                   placeholder={text.originalLoanAmount}
-                  onChange={(event) =>
-                    updateLoan("originalAmount", event.target.value)
-                  }
+                  onValueChange={(value) => updateLoan("originalAmount", value)}
                 />
               </label>
               <label>
                 {text.openingOutstandingAmount} (SAR)
-                <input
+                <BaseerMoneyInput
                   required
-                  inputMode="decimal"
                   value={loanForm.openingOutstandingAmount}
                   placeholder={text.openingOutstandingAmount}
-                  onChange={(event) =>
-                    updateLoan("openingOutstandingAmount", event.target.value)
-                  }
+                  onValueChange={(value) => updateLoan("openingOutstandingAmount", value)}
                 />
               </label>
               <label>
                 {text.monthlyInstallment} (SAR)
-                <input
+                <BaseerMoneyInput
                   required
-                  inputMode="decimal"
                   value={loanForm.installmentAmount}
                   placeholder={text.monthlyInstallment}
-                  onChange={(event) =>
-                    updateLoan("installmentAmount", event.target.value)
-                  }
+                  onValueChange={(value) => updateLoan("installmentAmount", value)}
                 />
               </label>
               <label>
                 {text.totalTermMonths}
                 <input
                   required
-                  type="number"
+                  inputMode="numeric"
+                  dir="ltr"
                   min="1"
                   max="600"
                   value={loanForm.termMonths}
                   placeholder="24"
                   onChange={(event) =>
-                    updateLoan("termMonths", event.target.value)
+                    updateLoan("termMonths", normalizeBaseerAmount(event.target.value).replace(".", ""))
                   }
                 />
               </label>
@@ -517,7 +510,7 @@ function ItemsAndObligations({
                 <h4>{loan.sourceDocumentNumber}</h4>
                 <p>
                   {text.term}: {loan.termMonths} · {text.firstDue}:{" "}
-                  {loan.firstInstallmentDueDate.slice(0, 10)}
+                  <bdi dir="ltr">{formatDate(loan.firstInstallmentDueDate, language)}</bdi>
                 </p>
               </div>
               <div className="recurring-profile__amount">
@@ -593,13 +586,10 @@ function ItemsAndObligations({
               </label>
               <label>
                 {text.repaymentAmount} (SAR)
-                <input
+                <BaseerMoneyInput
                   required
-                  inputMode="decimal"
                   value={repayment.amount}
-                  onChange={(event) =>
-                    updateRepayment("amount", event.target.value)
-                  }
+                  onValueChange={(value) => updateRepayment("amount", value)}
                 />
               </label>
               <label>
@@ -691,7 +681,7 @@ function SettlementHistory({
         {documents.map((document) => (
           <article key={document.id}>
             <strong>{document.documentNumber}</strong>
-            <span>{document.businessDate.slice(0, 10)}</span>
+            <span><bdi dir="ltr">{formatDate(document.businessDate, language)}</bdi></span>
             <span>
               {displayName(language, {
                 nameAr: document.categoryNameAr,
@@ -701,7 +691,7 @@ function SettlementHistory({
                 ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}`
                 : ""}
             </span>
-            <strong>SAR {money(document.grossAmount)}</strong>
+            <strong dir="ltr">{formatMoney(document.grossAmount, "SAR", language)}</strong>
           </article>
         ))}
         {loans.map((loan) => (

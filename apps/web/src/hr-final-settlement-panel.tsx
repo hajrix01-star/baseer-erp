@@ -321,7 +321,7 @@ export function HrFinalSettlementWorkspace({ language, employee }: { language: L
           { id: "type", header: ar ? "النوع" : "Type", cell: (row: RecoveryRow) => row.recoveryType === "ADVANCE" ? (ar ? "سلفة" : "Advance") : (ar ? "خصم إداري" : "Administrative deduction") },
           { id: "reference", header: ar ? "المرجع" : "Reference", cell: (row: RecoveryRow) => row.reference },
           { id: "remaining", header: ar ? "المتاح" : "Available", cell: (row: RecoveryRow) => money(row.remainingAmount) },
-          { id: "recovery", header: ar ? "استرداد" : "Recovery", cell: (row: RecoveryRow) => <input inputMode="decimal" value={recoveries[row.id] ?? ""} onChange={(event) => { setRecoveries((values) => ({ ...values, [row.id]: event.target.value })); setPreview(null); }} /> },
+          { id: "recovery", header: ar ? "استرداد" : "Recovery", cell: (row: RecoveryRow) => <BaseerMoneyInput value={recoveries[row.id] ?? ""} onValueChange={(amount) => { setRecoveries((values) => ({ ...values, [row.id]: amount })); setPreview(null); }} /> },
         ]} /> : null}
         {preview ? <><BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص معاينة المخالصة" : "Final-settlement preview summary"}>
           <BaseerSummaryMetric label={ar ? "أيام الخدمة" : "Service days"} value={preview.serviceDays} />

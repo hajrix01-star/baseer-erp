@@ -42,7 +42,9 @@ function AdministrationContent({ language, section, session, overview, loading, 
 
     </header>
     {message && <p className="daily-sales-message error">{message}</p>}
-    {!overview.owner && <p className="daily-sales-message error">{text.ownerOnly}</p>}
+    {/* Basira governance is capability-based. A company manager with the
+        dedicated Basira capabilities uses the same screen as the owner. */}
+    {!overview.owner && section !== 4 && <p className="daily-sales-message error">{text.ownerOnly}</p>}
     <Suspense fallback={<p className="administration-loading">{text.loadingAdministration}</p>}>{panel}</Suspense>
   </section>;
 }

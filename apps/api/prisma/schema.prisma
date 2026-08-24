@@ -581,6 +581,8 @@ enum AiProviderKind {
 }
 
 enum AiProviderConfigurationStatus {
+  DRAFT
+  VALIDATED
   ACTIVE
   DISABLED
 }
@@ -594,6 +596,108 @@ enum AiExecutionOutcome {
   SUCCEEDED
   FAILED
   BLOCKED
+}
+
+/// Company context is approved structured business vocabulary, not a second
+/// assistant persona and never a free-form prompt.
+enum AiCompanyContextStatus {
+  DRAFT
+  APPROVED
+  SUPERSEDED
+  REVOKED
+}
+
+enum AiCompanyPresentationStyle {
+  CONCISE
+  DETAILED
+}
+
+enum AiCompanyContextKind {
+  TERMINOLOGY
+  BUSINESS_SCOPE
+  POLICY_REFERENCE
+}
+
+enum AiSkillActivationStatus {
+  PILOT
+  ACTIVE
+  SUSPENDED
+}
+
+enum AiEvaluationFeedbackKind {
+  USEFUL
+  NOT_USEFUL
+  DATA_INCOMPLETE
+  COMPARISON_UNFAIR
+  CONTEXT_DIFFERENT
+  OTHER
+}
+
+/// An offline, code-owned evaluation checks that a fixed skill revision still
+/// has its Arabic safety and evidence gates before a human-click pilot.
+enum AiSkillEvaluationRunMode {
+  OFFLINE
+}
+
+enum AiSkillEvaluationRunStatus {
+  PASSED
+  FAILED
+  BLOCKED
+}
+
+/// Operational claim state only. A run never becomes an AI answer; a
+/// successful run creates a separate immutable AiInterpretation row.
+enum AiInterpretationRunStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+/// The selected business object is a reference for exact reuse and future
+/// display placement. It is never model-selected.
+enum AiInterpretationSubjectKind {
+  DECISION_ALERT
+  MARKETING_CAMPAIGN
+}
+
+enum AiInterpretationPlacementKind {
+  DECISION_ALERT
+  MARKETING_CAMPAIGN
+  COMMAND_CENTER
+  REPORT
+}
+
+/// A recorded human contribution next to a saved Basira interpretation. It is
+/// never sent back to a model automatically and can never become a financial
+/// fact or causal conclusion by itself.
+enum AiHumanInsightKind {
+  NOTE
+  HYPOTHESIS
+  DECISION
+}
+
+enum AiHumanInsightStatus {
+  DRAFT
+  APPROVED
+  REVOKED
+}
+
+/// A reservation is created before a provider request. It makes the cost
+/// ceiling deterministic across API instances rather than relying on a soft
+/// dashboard limit at the provider.
+enum AiBudgetReservationStatus {
+  RESERVED
+  SETTLED
+  RELEASED
+  EXPIRED
+}
+
+/// The ledger is append-only. A reservation, its actual settlement, and a
+/// pre-call release are distinct auditable events.
+enum AiUsageLedgerKind {
+  RESERVATION
+  SETTLEMENT
+  RELEASE
 }
 
 enum OperationsUnitDimension {
@@ -672,25 +776,25 @@ model Tenant {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
-  users                     User[]
-  companies                 Company[]
-  roles                     Role[]
-  sessions                  AppSession[]
-  audits                    AuditEvent[]
-  idempotencyReceipts       IdempotencyReceipt[]
-  documentSerialCounters    DocumentSerialCounter[]
-  fileMetadata              FileMetadata[]
-  reportDocuments           ReportDocument[]
-  administrationAssignments TenantAdministrationAssignment[]
-  inboundEvidenceLabels     InboundEvidenceLabel[]
-  inboundEvidenceRules      InboundEvidenceRule[]
-  inboundEvidenceCommands   InboundEvidenceCommandReceipt[]
-  inboundEvidenceGmailConnection InboundEvidenceGmailConnection?
-  inboundEvidenceOAuthStates     InboundEvidenceGmailOAuthState[]
-  inboundEvidenceMessages        InboundEvidenceMessage[]
-  inboundEvidenceAttachments     InboundEvidenceAttachment[]
+  users                           User[]
+  companies                       Company[]
+  roles                           Role[]
+  sessions                        AppSession[]
+  audits                          AuditEvent[]
+  idempotencyReceipts             IdempotencyReceipt[]
+  documentSerialCounters          DocumentSerialCounter[]
+  fileMetadata                    FileMetadata[]
+  reportDocuments                 ReportDocument[]
+  administrationAssignments       TenantAdministrationAssignment[]
+  inboundEvidenceLabels           InboundEvidenceLabel[]
+  inboundEvidenceRules            InboundEvidenceRule[]
+  inboundEvidenceCommands         InboundEvidenceCommandReceipt[]
+  inboundEvidenceGmailConnection  InboundEvidenceGmailConnection?
+  inboundEvidenceOAuthStates      InboundEvidenceGmailOAuthState[]
+  inboundEvidenceMessages         InboundEvidenceMessage[]
+  inboundEvidenceAttachments      InboundEvidenceAttachment[]
   inboundEvidenceDocumentAnalyses InboundEvidenceDocumentAnalysis[]
-  ownerDailyBriefSnapshots       OwnerDailyBriefSnapshot[]
+  ownerDailyBriefSnapshots        OwnerDailyBriefSnapshot[]
 }
 
 model User {
@@ -720,6 +824,11 @@ model User {
   cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[]         @relation("FinanceCashPerformanceCoverageActivator")
   cashPerformanceHistoricalImports   FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
   tenantAdministrationAssignments    TenantAdministrationAssignment[]
+  approvedAiCompanyContexts          AiCompanyContext[]                       @relation("AiCompanyContextApprover")
+  approvedAiSkillActivations         AiSkillActivation[]                      @relation("AiSkillActivationApprover")
+  suspendedAiSkillActivations        AiSkillActivation[]                      @relation("AiSkillActivationSuspender")
+  aiEvaluationFeedback               AiEvaluationFeedback[]
+  aiSkillEvaluationRuns              AiSkillEvaluationRun[]
 
   @@unique([tenantId, loginNormalized])
   @@unique([id, tenantId])
@@ -806,7 +915,17 @@ model Company {
   hrEmployeeLetters                          HrEmployeeLetter[]
   hrFinalSettlements                         HrFinalSettlement[]
   aiCompanyIdentities                        AiCompanyIdentity[]
+  aiCompanyContexts                          AiCompanyContext[]
+  aiSkillActivations                         AiSkillActivation[]
   aiExecutionReceipts                        AiExecutionReceipt[]
+  aiEvaluationFeedback                       AiEvaluationFeedback[]
+  aiSkillEvaluationRuns                      AiSkillEvaluationRun[]
+  aiInterpretations                          AiInterpretation[]
+  aiInterpretationRuns                       AiInterpretationRun[]
+  aiInterpretationPlacements                 AiInterpretationPlacement[]
+  aiHumanInsights                            AiHumanInsight[]
+  aiBudgetReservations                       AiBudgetReservation[]
+  aiUsageLedgerEntries                       AiUsageLedger[]
   decisionMetricDefinitions                  DecisionMetricDefinition[]
   decisionSalesChangePolicy                  DecisionSalesChangePolicy?
   decisionRuleDefinitions                    DecisionRuleDefinition[]
@@ -1436,7 +1555,7 @@ model DecisionGlobalContextEventRevision {
   status             DecisionContextEventStatus @default(PUBLISHED)
   createdAt          DateTime                   @default(now()) @db.Timestamptz(6)
 
-  event DecisionGlobalContextEvent @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  event                         DecisionGlobalContextEvent     @relation(fields: [eventId, tenantId], references: [id, tenantId], onDelete: Restrict)
   marketingCampaignContextLinks MarketingCampaignContextLink[]
 
   @@unique([id, tenantId])
@@ -1480,7 +1599,7 @@ model DecisionCompanyContextEvent {
   createdAt          DateTime                   @default(now()) @db.Timestamptz(6)
   updatedAt          DateTime                   @updatedAt @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company                       Company                        @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   marketingCampaignContextLinks MarketingCampaignContextLink[]
 
   @@unique([id, tenantId, companyId])
@@ -1525,11 +1644,13 @@ model DecisionEvidenceSnapshot {
   createdByUserId      String?                    @db.Uuid
   createdAt            DateTime                   @default(now()) @db.Timestamptz(6)
 
-  company         Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  sourceReportRun ReportRun?                 @relation(fields: [sourceReportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  supersedes      DecisionEvidenceSnapshot?  @relation("DecisionEvidenceSupersedes", fields: [supersedesSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  replacements    DecisionEvidenceSnapshot[] @relation("DecisionEvidenceSupersedes")
-  alerts          DecisionAlert[]
+  company             Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  sourceReportRun     ReportRun?                 @relation(fields: [sourceReportRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supersedes          DecisionEvidenceSnapshot?  @relation("DecisionEvidenceSupersedes", fields: [supersedesSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  replacements        DecisionEvidenceSnapshot[] @relation("DecisionEvidenceSupersedes")
+  alerts              DecisionAlert[]
+  aiExecutionReceipts AiExecutionReceipt[]
+  aiInterpretations   AiInterpretation[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
@@ -1612,8 +1733,8 @@ model InboundEvidenceLabel {
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime @updatedAt @db.Timestamptz(6)
 
-  tenant Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  rules  InboundEvidenceRule[]
+  tenant        Tenant                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  rules         InboundEvidenceRule[]
   messageLabels InboundEvidenceMessageLabel[]
 
   @@unique([id, tenantId])
@@ -1639,8 +1760,8 @@ model InboundEvidenceRule {
   createdAt           DateTime @default(now()) @db.Timestamptz(6)
   updatedAt           DateTime @updatedAt @db.Timestamptz(6)
 
-  tenant Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  label  InboundEvidenceLabel  @relation(fields: [labelId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant Tenant               @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  label  InboundEvidenceLabel @relation(fields: [labelId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId])
   @@index([tenantId, enabled, priority])
@@ -1669,22 +1790,22 @@ model InboundEvidenceCommandReceipt {
 /// One encrypted Gmail mailbox connection for the tenant-owner evidence hub.
 /// Credentials never leave the server and are kept outside ordinary audit data.
 model InboundEvidenceGmailConnection {
-  id                    String                              @id @default(uuid()) @db.Uuid
-  tenantId              String                              @unique @db.Uuid
-  status                InboundEvidenceGmailConnectionStatus @default(NOT_CONNECTED)
-  mailboxEmail          String?                             @db.VarChar(320)
-  credentialCiphertext  String?                             @db.Text
-  credentialIv          String?                             @db.VarChar(64)
-  credentialTag         String?                             @db.VarChar(64)
-  credentialKeyVersion  Int?
-  accessTokenExpiresAt  DateTime?                           @db.Timestamptz(6)
-  gmailHistoryId        String?                             @db.VarChar(80)
-  lastSyncedAt          DateTime?                           @db.Timestamptz(6)
-  lastErrorCode         String?                             @db.VarChar(80)
-  createdByUserId       String?                             @db.Uuid
-  updatedByUserId       String?                             @db.Uuid
-  createdAt             DateTime                            @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime                            @updatedAt @db.Timestamptz(6)
+  id                   String                               @id @default(uuid()) @db.Uuid
+  tenantId             String                               @unique @db.Uuid
+  status               InboundEvidenceGmailConnectionStatus @default(NOT_CONNECTED)
+  mailboxEmail         String?                              @db.VarChar(320)
+  credentialCiphertext String?                              @db.Text
+  credentialIv         String?                              @db.VarChar(64)
+  credentialTag        String?                              @db.VarChar(64)
+  credentialKeyVersion Int?
+  accessTokenExpiresAt DateTime?                            @db.Timestamptz(6)
+  gmailHistoryId       String?                              @db.VarChar(80)
+  lastSyncedAt         DateTime?                            @db.Timestamptz(6)
+  lastErrorCode        String?                              @db.VarChar(80)
+  createdByUserId      String?                              @db.Uuid
+  updatedByUserId      String?                              @db.Uuid
+  createdAt            DateTime                             @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime                             @updatedAt @db.Timestamptz(6)
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
 
@@ -1694,17 +1815,17 @@ model InboundEvidenceGmailConnection {
 
 /// Single-use PKCE/nonce material for an owner-initiated Gmail consent flow.
 model InboundEvidenceGmailOAuthState {
-  id                String   @id @default(uuid()) @db.Uuid
-  tenantId          String   @db.Uuid
-  initiatedByUserId String   @db.Uuid
-  stateHash         String   @unique @db.Char(64)
-  nonceHash         String   @db.Char(64)
-  verifierEncrypted String   @db.Text
-  verifierIv        String   @db.VarChar(64)
-  verifierTag       String   @db.VarChar(64)
-  expiresAt         DateTime @db.Timestamptz(6)
+  id                String    @id @default(uuid()) @db.Uuid
+  tenantId          String    @db.Uuid
+  initiatedByUserId String    @db.Uuid
+  stateHash         String    @unique @db.Char(64)
+  nonceHash         String    @db.Char(64)
+  verifierEncrypted String    @db.Text
+  verifierIv        String    @db.VarChar(64)
+  verifierTag       String    @db.VarChar(64)
+  expiresAt         DateTime  @db.Timestamptz(6)
   consumedAt        DateTime? @db.Timestamptz(6)
-  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
 
@@ -1714,18 +1835,18 @@ model InboundEvidenceGmailOAuthState {
 /// Imported mail metadata. Message bodies and provider attachments are not
 /// trusted instructions or financial truth; they remain evidence only.
 model InboundEvidenceMessage {
-  id             String   @id @default(uuid()) @db.Uuid
-  tenantId       String   @db.Uuid
-  gmailMessageId String   @db.VarChar(120)
-  gmailThreadId  String?  @db.VarChar(120)
-  sender         String?  @db.VarChar(600)
-  subject        String?  @db.VarChar(998)
-  snippet        String?  @db.Text
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @db.Uuid
+  gmailMessageId String    @db.VarChar(120)
+  gmailThreadId  String?   @db.VarChar(120)
+  sender         String?   @db.VarChar(600)
+  subject        String?   @db.VarChar(998)
+  snippet        String?   @db.Text
   receivedAt     DateTime? @db.Timestamptz(6)
-  hasAttachments Boolean  @default(false)
-  rawChecksum    String   @db.Char(64)
-  importedAt     DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @db.Timestamptz(6)
+  hasAttachments Boolean   @default(false)
+  rawChecksum    String    @db.Char(64)
+  importedAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(6)
 
   tenant      Tenant                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   attachments InboundEvidenceAttachment[]
@@ -1739,27 +1860,27 @@ model InboundEvidenceMessage {
 /// Encrypted local copy of an attachment downloaded from Gmail. The original
 /// source reference and checksum make re-download and review auditable.
 model InboundEvidenceAttachment {
-  id                  String                         @id @default(uuid()) @db.Uuid
-  tenantId            String                         @db.Uuid
-  messageId           String                         @db.Uuid
-  gmailAttachmentId   String                         @db.VarChar(180)
-  gmailPartId         String                         @db.VarChar(80)
-  fileName            String                         @db.VarChar(500)
-  mimeType            String                         @db.VarChar(160)
-  byteSize            BigInt                         @db.BigInt
-  status              InboundEvidenceAttachmentStatus
-  sha256              String?                        @db.Char(64)
-  storageReference    String?                        @db.VarChar(500)
-  encryptionIv        String?                        @db.VarChar(64)
-  scannerName         String?                        @db.VarChar(120)
-  scannerResult       String?                        @db.VarChar(240)
-  retentionUntil      DateTime?                      @db.Timestamptz(6)
-  downloadedAt        DateTime?                      @db.Timestamptz(6)
-  createdAt           DateTime                       @default(now()) @db.Timestamptz(6)
-  updatedAt           DateTime                       @updatedAt @db.Timestamptz(6)
+  id                String                          @id @default(uuid()) @db.Uuid
+  tenantId          String                          @db.Uuid
+  messageId         String                          @db.Uuid
+  gmailAttachmentId String                          @db.VarChar(180)
+  gmailPartId       String                          @db.VarChar(80)
+  fileName          String                          @db.VarChar(500)
+  mimeType          String                          @db.VarChar(160)
+  byteSize          BigInt                          @db.BigInt
+  status            InboundEvidenceAttachmentStatus
+  sha256            String?                         @db.Char(64)
+  storageReference  String?                         @db.VarChar(500)
+  encryptionIv      String?                         @db.VarChar(64)
+  scannerName       String?                         @db.VarChar(120)
+  scannerResult     String?                         @db.VarChar(240)
+  retentionUntil    DateTime?                       @db.Timestamptz(6)
+  downloadedAt      DateTime?                       @db.Timestamptz(6)
+  createdAt         DateTime                        @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                        @updatedAt @db.Timestamptz(6)
 
-  tenant  Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  message InboundEvidenceMessage @relation(fields: [messageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant   Tenant                            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  message  InboundEvidenceMessage            @relation(fields: [messageId, tenantId], references: [id, tenantId], onDelete: Restrict)
   analyses InboundEvidenceDocumentAnalysis[]
 
   @@unique([tenantId, messageId, gmailAttachmentId])
@@ -1772,30 +1893,30 @@ model InboundEvidenceAttachment {
 /// It stores only validated structured findings and provenance — never a raw
 /// provider transcript, prompt, or provider credential.
 model InboundEvidenceDocumentAnalysis {
-  id                  String                        @id @default(uuid()) @db.Uuid
-  tenantId            String                        @db.Uuid
-  attachmentId        String                        @db.Uuid
-  supersedesId        String?                       @db.Uuid
-  status              InboundEvidenceAnalysisStatus
-  sourceSha256        String                        @db.Char(64)
-  skillKey            String                        @db.VarChar(120)
-  skillVersion        Int
-  policyVersion       Int
-  provider            AiProviderKind
-  model               String                        @db.VarChar(160)
+  id                   String                        @id @default(uuid()) @db.Uuid
+  tenantId             String                        @db.Uuid
+  attachmentId         String                        @db.Uuid
+  supersedesId         String?                       @db.Uuid
+  status               InboundEvidenceAnalysisStatus
+  sourceSha256         String                        @db.Char(64)
+  skillKey             String                        @db.VarChar(120)
+  skillVersion         Int
+  policyVersion        Int
+  provider             AiProviderKind
+  model                String                        @db.VarChar(160)
   configurationVersion Int
-  promptVersion       Int
-  schemaVersion       Int
-  resultJson          Json
-  validationJson      Json
-  resultChecksum      String                        @db.Char(64)
-  requestId           String                        @db.VarChar(120)
-  createdByUserId     String                        @db.Uuid
-  createdAt           DateTime                      @default(now()) @db.Timestamptz(6)
+  promptVersion        Int
+  schemaVersion        Int
+  resultJson           Json
+  validationJson       Json
+  resultChecksum       String                        @db.Char(64)
+  requestId            String                        @db.VarChar(120)
+  createdByUserId      String                        @db.Uuid
+  createdAt            DateTime                      @default(now()) @db.Timestamptz(6)
 
-  tenant     Tenant                           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  attachment InboundEvidenceAttachment        @relation(fields: [attachmentId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  supersedes InboundEvidenceDocumentAnalysis? @relation("InboundEvidenceAnalysisSupersession", fields: [supersedesId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant     Tenant                            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  attachment InboundEvidenceAttachment         @relation(fields: [attachmentId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  supersedes InboundEvidenceDocumentAnalysis?  @relation("InboundEvidenceAnalysisSupersession", fields: [supersedesId, tenantId], references: [id, tenantId], onDelete: Restrict)
   successors InboundEvidenceDocumentAnalysis[] @relation("InboundEvidenceAnalysisSupersession")
 
   @@unique([id, tenantId])
@@ -1822,27 +1943,29 @@ model InboundEvidenceMessageLabel {
 /// P1 owns only an internal campaign register. Provider facts, OAuth tokens,
 /// Google locations and external publishing belong to later, separate gates.
 model MarketingCampaign {
-  id                String                    @id @default(uuid()) @db.Uuid
-  tenantId          String                    @db.Uuid
-  companyId         String                    @db.Uuid
-  titleAr           String                    @db.VarChar(160)
-  titleEn           String?                   @db.VarChar(160)
-  platform          MarketingCampaignPlatform @default(MANUAL)
-  externalReference String?                   @db.VarChar(160)
-  startsOn          DateTime?                 @db.Date
-  endsOn            DateTime?                 @db.Date
-  status            MarketingCampaignStatus   @default(DRAFT)
-  objective         String?                   @db.VarChar(500)
-  notes             String?                   @db.VarChar(2000)
-  plannedCost       Decimal?                  @db.Decimal(18, 4)
-  plannedCurrencyCode String?                 @db.Char(3)
-  createdByUserId   String                    @db.Uuid
-  createdAt         DateTime                  @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime                  @updatedAt @db.Timestamptz(6)
+  id                  String                    @id @default(uuid()) @db.Uuid
+  tenantId            String                    @db.Uuid
+  companyId           String                    @db.Uuid
+  titleAr             String                    @db.VarChar(160)
+  titleEn             String?                   @db.VarChar(160)
+  platform            MarketingCampaignPlatform @default(MANUAL)
+  externalReference   String?                   @db.VarChar(160)
+  startsOn            DateTime?                 @db.Date
+  endsOn              DateTime?                 @db.Date
+  status              MarketingCampaignStatus   @default(DRAFT)
+  stoppedOn           DateTime?                 @db.Date
+  stoppedReason       String?                   @db.VarChar(500)
+  objective           String?                   @db.VarChar(500)
+  notes               String?                   @db.VarChar(2000)
+  plannedCost         Decimal?                  @db.Decimal(18, 4)
+  plannedCurrencyCode String?                   @db.Char(3)
+  createdByUserId     String                    @db.Uuid
+  createdAt           DateTime                  @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                  @updatedAt @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  financialLinks MarketingCampaignFinancialLink[]
-  contextLinks MarketingCampaignContextLink[]
+  company          Company                             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  financialLinks   MarketingCampaignFinancialLink[]
+  contextLinks     MarketingCampaignContextLink[]
   analysisFeedback MarketingCampaignAnalysisFeedback[]
 
   @@unique([id, tenantId, companyId])
@@ -1883,8 +2006,8 @@ model MarketingCampaignFinancialLink {
   createdByUserId     String   @db.Uuid
   createdAt           DateTime @default(now()) @db.Timestamptz(6)
 
-  company           Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  campaign          MarketingCampaign     @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company           Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  campaign          MarketingCampaign      @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   financialDocument FinanceOutflowDocument @relation(fields: [financialDocumentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
@@ -1895,14 +2018,14 @@ model MarketingCampaignFinancialLink {
 /// A campaign may explicitly cite a published global-event revision or a
 /// published company event. The link is context only, never causal evidence.
 model MarketingCampaignContextLink {
-  id                       String                              @id @default(uuid()) @db.Uuid
-  tenantId                 String                              @db.Uuid
-  companyId                String                              @db.Uuid
-  campaignId               String                              @db.Uuid
-  globalContextRevisionId  String?                             @db.Uuid
-  companyContextEventId    String?                             @db.Uuid
-  createdByUserId          String                              @db.Uuid
-  createdAt                DateTime                            @default(now()) @db.Timestamptz(6)
+  id                      String   @id @default(uuid()) @db.Uuid
+  tenantId                String   @db.Uuid
+  companyId               String   @db.Uuid
+  campaignId              String   @db.Uuid
+  globalContextRevisionId String?  @db.Uuid
+  companyContextEventId   String?  @db.Uuid
+  createdByUserId         String   @db.Uuid
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
 
   company               Company                             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   campaign              MarketingCampaign                   @relation(fields: [campaignId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -1939,15 +2062,15 @@ model MarketingSalesTarget {
 /// The later OAuth gate adds a separate encrypted credential vault and account
 /// mapping; those sensitive concepts deliberately do not exist in this model.
 model MarketingProviderConnection {
-  id                    String                            @id @default(uuid()) @db.Uuid
-  tenantId              String                            @db.Uuid
-  companyId             String                            @db.Uuid
-  provider              MarketingProvider
-  status                MarketingProviderConnectionStatus @default(NOT_CONNECTED)
-  setupRequestedAt      DateTime?                         @db.Timestamptz(6)
-  setupRequestedByUserId String?                          @db.Uuid
-  createdAt             DateTime                          @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime                          @updatedAt @db.Timestamptz(6)
+  id                     String                            @id @default(uuid()) @db.Uuid
+  tenantId               String                            @db.Uuid
+  companyId              String                            @db.Uuid
+  provider               MarketingProvider
+  status                 MarketingProviderConnectionStatus @default(NOT_CONNECTED)
+  setupRequestedAt       DateTime?                         @db.Timestamptz(6)
+  setupRequestedByUserId String?                           @db.Uuid
+  createdAt              DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime                          @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -1960,18 +2083,18 @@ model MarketingProviderConnection {
 /// only an encrypted PKCE verifier; no Google access or refresh token belongs
 /// in this table.
 model MarketingProviderOAuthState {
-  id                  String            @id @default(uuid()) @db.Uuid
-  tenantId            String            @db.Uuid
-  companyId           String            @db.Uuid
-  provider            MarketingProvider
-  initiatedByUserId   String            @db.Uuid
-  stateHash           String            @unique @db.VarChar(64)
-  verifierEncrypted   String            @db.Text
-  verifierIv          String            @db.VarChar(64)
-  verifierTag         String            @db.VarChar(64)
-  expiresAt           DateTime          @db.Timestamptz(6)
-  consumedAt          DateTime?         @db.Timestamptz(6)
-  createdAt           DateTime          @default(now()) @db.Timestamptz(6)
+  id                String            @id @default(uuid()) @db.Uuid
+  tenantId          String            @db.Uuid
+  companyId         String            @db.Uuid
+  provider          MarketingProvider
+  initiatedByUserId String            @db.Uuid
+  stateHash         String            @unique @db.VarChar(64)
+  verifierEncrypted String            @db.Text
+  verifierIv        String            @db.VarChar(64)
+  verifierTag       String            @db.VarChar(64)
+  expiresAt         DateTime          @db.Timestamptz(6)
+  consumedAt        DateTime?         @db.Timestamptz(6)
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
 
   @@index([tenantId, companyId, provider, expiresAt])
 }
@@ -1981,20 +2104,20 @@ model MarketingProviderOAuthState {
 /// authority; a provider connection must independently prove consent before a
 /// configured automatic action can ever run.
 model MarketingReputationReplyPolicy {
-  id                    String                                          @id @default(uuid()) @db.Uuid
-  tenantId              String                                          @db.Uuid
-  companyId             String                                          @db.Uuid
-  automationStatus      MarketingReputationReplyAutomationStatus        @default(DISABLED)
-  authoringMethod       MarketingReputationReplyAuthoringMethod          @default(TEMPLATE)
-  tone                  MarketingReputationReplyTone                     @default(WARM)
-  languageMode          MarketingReputationReplyLanguageMode             @default(MATCH_REVIEW)
-  autoFourFiveEnabled   Boolean                                         @default(true)
-  autoThreeIfSafe       Boolean                                         @default(true)
-  signature             String?                                         @db.VarChar(160)
-  revision              Int                                             @default(1)
-  updatedByUserId       String                                          @db.Uuid
-  createdAt             DateTime                                        @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime                                        @updatedAt @db.Timestamptz(6)
+  id                  String                                   @id @default(uuid()) @db.Uuid
+  tenantId            String                                   @db.Uuid
+  companyId           String                                   @db.Uuid
+  automationStatus    MarketingReputationReplyAutomationStatus @default(DISABLED)
+  authoringMethod     MarketingReputationReplyAuthoringMethod  @default(TEMPLATE)
+  tone                MarketingReputationReplyTone             @default(WARM)
+  languageMode        MarketingReputationReplyLanguageMode     @default(MATCH_REVIEW)
+  autoFourFiveEnabled Boolean                                  @default(true)
+  autoThreeIfSafe     Boolean                                  @default(true)
+  signature           String?                                  @db.VarChar(160)
+  revision            Int                                      @default(1)
+  updatedByUserId     String                                   @db.Uuid
+  createdAt           DateTime                                 @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                                 @updatedAt @db.Timestamptz(6)
 
   company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
@@ -2471,17 +2594,17 @@ model FinanceOutflowDocument {
   createdAt                       DateTime                     @default(now()) @db.Timestamptz(6)
   updatedAt                       DateTime                     @updatedAt @db.Timestamptz(6)
 
-  company                 Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  batch                   FinanceOutflowBatch?              @relation(fields: [batchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  recurringExpenseProfile FinanceRecurringExpenseProfile?   @relation(fields: [recurringExpenseProfileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  supplier                FinanceSupplier?                  @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  category                FinanceCategory                   @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  journalEntry            FinanceJournalEntry               @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  allocations             FinanceOutflowAllocation[]
-  revisions               FinanceOutflowDocumentRevision[]
-  recurringCoverage       FinanceRecurringExpenseCoverage[]
-  hrEmployeeService       HrEmployeeService?                @relation("HrEmployeeServiceOutflowDocument")
-  assetWarrantyAssets     OperationsAssetWarrantyAsset[]
+  company                         Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  batch                           FinanceOutflowBatch?              @relation(fields: [batchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  recurringExpenseProfile         FinanceRecurringExpenseProfile?   @relation(fields: [recurringExpenseProfileId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supplier                        FinanceSupplier?                  @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category                        FinanceCategory                   @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  journalEntry                    FinanceJournalEntry               @relation("FinanceOutflowDocumentJournal", fields: [journalEntryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  allocations                     FinanceOutflowAllocation[]
+  revisions                       FinanceOutflowDocumentRevision[]
+  recurringCoverage               FinanceRecurringExpenseCoverage[]
+  hrEmployeeService               HrEmployeeService?                @relation("HrEmployeeServiceOutflowDocument")
+  assetWarrantyAssets             OperationsAssetWarrantyAsset[]
   marketingCampaignFinancialLinks MarketingCampaignFinancialLink[]
 
   @@unique([id, tenantId, companyId])
@@ -3703,7 +3826,9 @@ model AiProviderConfiguration {
   createdAt            DateTime                      @default(now()) @db.Timestamptz(6)
   updatedAt            DateTime                      @updatedAt @db.Timestamptz(6)
 
-  executionReceipts AiExecutionReceipt[]
+  executionReceipts  AiExecutionReceipt[]
+  budgetReservations AiBudgetReservation[]
+  usageLedgerEntries AiUsageLedger[]
 
   @@unique([id, tenantId])
   @@index([tenantId, status])
@@ -3732,6 +3857,72 @@ model AiCompanyIdentity {
   @@index([tenantId, companyId, status])
 }
 
+/// Versioned, approved company terms and presentation preferences. The JSON
+/// values are constrained by the API contract and cannot contain model or
+/// safety instructions. A correction creates a new version.
+model AiCompanyContext {
+  id                   String                     @id @default(uuid()) @db.Uuid
+  tenantId             String                     @db.Uuid
+  companyId            String                     @db.Uuid
+  version              Int
+  status               AiCompanyContextStatus     @default(DRAFT)
+  kind                 AiCompanyContextKind
+  moduleScope          String                     @db.VarChar(80)
+  presentationStyle    AiCompanyPresentationStyle @default(CONCISE)
+  approvedTermsJson    Json                       @default("{}")
+  policyReferencesJson Json                       @default("[]")
+  sourceReference      String?                    @db.VarChar(500)
+  expiresAt            DateTime?                  @db.Timestamptz(6)
+  revocationReason     String?                    @db.VarChar(500)
+  supersedesContextId  String?                    @db.Uuid
+  approvedByUserId     String?                    @db.Uuid
+  approvedAt           DateTime?                  @db.Timestamptz(6)
+  createdAt            DateTime                   @default(now()) @db.Timestamptz(6)
+
+  company      Company            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  approvedBy   User?              @relation("AiCompanyContextApprover", fields: [approvedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  supersedes   AiCompanyContext?  @relation("AiCompanyContextSupersedes", fields: [supersedesContextId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  replacements AiCompanyContext[] @relation("AiCompanyContextSupersedes")
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, kind, moduleScope, version])
+  @@index([tenantId, companyId, kind, moduleScope, status])
+}
+
+/// Company-scoped approval for a fixed code-owned skill revision. Catalogue
+/// status alone never authorises runtime use.
+model AiSkillActivation {
+  id                String                  @id @default(uuid()) @db.Uuid
+  tenantId          String                  @db.Uuid
+  companyId         String                  @db.Uuid
+  skillKey          String                  @db.VarChar(120)
+  skillVersion      Int
+  policyVersion     Int
+  status            AiSkillActivationStatus @default(PILOT)
+  validFrom         DateTime                @default(now()) @db.Timestamptz(6)
+  validUntil        DateTime?               @db.Timestamptz(6)
+  dailyRequestLimit Int?
+  dailyCostLimit    Decimal?                @db.Decimal(18, 4)
+  approvedByUserId  String                  @db.Uuid
+  approvedAt        DateTime                @default(now()) @db.Timestamptz(6)
+  suspendedByUserId String?                 @db.Uuid
+  suspendedAt       DateTime?               @db.Timestamptz(6)
+  suspensionReason  String?                 @db.VarChar(500)
+  createdAt         DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                @updatedAt @db.Timestamptz(6)
+
+  company            Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  approvedBy         User                  @relation("AiSkillActivationApprover", fields: [approvedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  suspendedBy        User?                 @relation("AiSkillActivationSuspender", fields: [suspendedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  receipts           AiExecutionReceipt[]
+  budgetReservations AiBudgetReservation[]
+  usageLedgerEntries AiUsageLedger[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, skillKey, skillVersion, policyVersion])
+  @@index([tenantId, companyId, skillKey, status])
+}
+
 model AiExecutionReceipt {
   id                      String             @id @default(uuid()) @db.Uuid
   tenantId                String             @db.Uuid
@@ -3739,6 +3930,8 @@ model AiExecutionReceipt {
   providerConfigurationId String?            @db.Uuid
   identityId              String?            @db.Uuid
   systemIdentityId        String?            @db.Uuid
+  skillActivationId       String?            @db.Uuid
+  evidenceSnapshotId      String?            @db.Uuid
   moduleKey               String             @db.VarChar(80)
   capability              String             @db.VarChar(120)
   skillKey                String?            @db.VarChar(120)
@@ -3750,22 +3943,310 @@ model AiExecutionReceipt {
   configurationVersion    Int?
   identityVersion         Int?
   systemIdentityVersion   Int?
+  promptVersion           Int?
+  inputChecksum           String?            @db.Char(64)
+  outputChecksum          String?            @db.Char(64)
   inputCharacters         Int                @default(0)
   outputCharacters        Int                @default(0)
+  inputTokens             Int?
+  cachedInputTokens       Int?
+  outputTokens            Int?
+  reasoningTokens         Int?
+  modelPriceRevisionId    String?            @db.Uuid
+  estimatedCostUsd        Decimal?           @db.Decimal(18, 8)
+  actualCostUsd           Decimal?           @db.Decimal(18, 8)
+  providerRequestId       String?            @db.VarChar(160)
   safeErrorCode           String?            @db.VarChar(120)
   requestId               String             @db.VarChar(120)
   createdAt               DateTime           @default(now()) @db.Timestamptz(6)
 
-  company               Company                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  providerConfiguration AiProviderConfiguration? @relation(fields: [providerConfigurationId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  identity              AiCompanyIdentity?       @relation(fields: [identityId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  systemIdentity        AiSystemIdentity?        @relation(fields: [systemIdentityId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company                  Company                   @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  providerConfiguration    AiProviderConfiguration?  @relation(fields: [providerConfigurationId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  identity                 AiCompanyIdentity?        @relation(fields: [identityId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  systemIdentity           AiSystemIdentity?         @relation(fields: [systemIdentityId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  skillActivation          AiSkillActivation?        @relation(fields: [skillActivationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  evidenceSnapshot         DecisionEvidenceSnapshot? @relation(fields: [evidenceSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  evaluationFeedback       AiEvaluationFeedback[]
+  generatedInterpretations AiInterpretation[]        @relation("AiInterpretationSourceReceipt")
+  usageLedgerEntries       AiUsageLedger[]
+  modelPriceRevision       AiModelPriceRevision?     @relation(fields: [modelPriceRevisionId], references: [id], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
   @@index([tenantId, companyId, moduleKey, capability, createdAt])
   @@index([tenantId, companyId, skillKey, createdAt])
   @@index([tenantId, systemIdentityId, createdAt])
+  @@index([tenantId, companyId, evidenceSnapshotId, createdAt])
+  @@index([tenantId, companyId, skillActivationId, createdAt])
+  @@index([modelPriceRevisionId])
+}
+
+/// A durable, encrypted explanation. Its exact reuse key is intentionally not
+/// unique: an expired interpretation is replaced by a new immutable row. A
+/// partial unique PENDING run index performs the single-flight coordination.
+model AiInterpretation {
+  id                       String                      @id @default(uuid()) @db.Uuid
+  tenantId                 String                      @db.Uuid
+  companyId                String                      @db.Uuid
+  subjectKind              AiInterpretationSubjectKind
+  subjectId                String                      @db.Uuid
+  evidenceSnapshotId       String                      @db.Uuid
+  evidenceChecksum         String                      @db.Char(64)
+  reuseKey                 String                      @db.Char(64)
+  skillKey                 String                      @db.VarChar(120)
+  skillVersion             Int
+  policyVersion            Int
+  promptVersion            Int
+  language                 String                      @db.VarChar(2)
+  systemIdentityVersion    Int?
+  companyContextDigest     String                      @db.Char(64)
+  modelProfileDigest       String                      @db.Char(64)
+  providerSnapshot         AiProviderKind
+  modelSnapshot            String                      @db.VarChar(160)
+  sourceExecutionReceiptId String                      @db.Uuid
+  encryptedOutput          String
+  outputIv                 String                      @db.VarChar(64)
+  outputTag                String                      @db.VarChar(64)
+  outputKeyVersion         Int
+  outputChecksum           String                      @db.Char(64)
+  expiresAt                DateTime?                   @db.Timestamptz(6)
+  createdByUserId          String                      @db.Uuid
+  createdAt                DateTime                    @default(now()) @db.Timestamptz(6)
+
+  company                Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  evidenceSnapshot       DecisionEvidenceSnapshot    @relation(fields: [evidenceSnapshotId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  sourceExecutionReceipt AiExecutionReceipt          @relation("AiInterpretationSourceReceipt", fields: [sourceExecutionReceiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  placements             AiInterpretationPlacement[]
+  runs                   AiInterpretationRun[]
+  humanInsights          AiHumanInsight[]
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, reuseKey, createdAt])
+  @@index([tenantId, companyId, subjectKind, subjectId, createdAt])
+  @@index([tenantId, companyId, evidenceSnapshotId, createdAt])
+}
+
+/// A short lease that prevents two manual requests for the same exact input
+/// from calling the provider concurrently. It may transition operationally;
+/// it never contains the model output.
+model AiInterpretationRun {
+  id               String                    @id @default(uuid()) @db.Uuid
+  tenantId         String                    @db.Uuid
+  companyId        String                    @db.Uuid
+  reuseKey         String                    @db.Char(64)
+  status           AiInterpretationRunStatus @default(PENDING)
+  leaseExpiresAt   DateTime                  @db.Timestamptz(6)
+  claimedByUserId  String                    @db.Uuid
+  interpretationId String?                   @db.Uuid
+  safeFailureCode  String?                   @db.VarChar(120)
+  createdAt        DateTime                  @default(now()) @db.Timestamptz(6)
+  completedAt      DateTime?                 @db.Timestamptz(6)
+
+  company           Company              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  interpretation    AiInterpretation?    @relation(fields: [interpretationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  budgetReservation AiBudgetReservation?
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, reuseKey, status, leaseExpiresAt])
+}
+
+/// A code-owned price revision. It contains no tenant data and is never
+/// editable through the product UI. The runtime fails closed when a selected
+/// provider/model has no current price revision.
+model AiModelPriceRevision {
+  id                       String         @id @default(uuid()) @db.Uuid
+  provider                 AiProviderKind
+  model                    String         @db.VarChar(160)
+  version                  Int
+  effectiveFrom            DateTime       @db.Timestamptz(6)
+  inputUsdPerMillion       Decimal        @db.Decimal(18, 8)
+  cachedInputUsdPerMillion Decimal        @db.Decimal(18, 8)
+  outputUsdPerMillion      Decimal        @db.Decimal(18, 8)
+  sourceReference          String         @db.VarChar(500)
+  createdAt                DateTime       @default(now()) @db.Timestamptz(6)
+
+  budgetReservations  AiBudgetReservation[]
+  usageLedgerEntries  AiUsageLedger[]
+  aiExecutionReceipts AiExecutionReceipt[]
+
+  @@unique([provider, model, version])
+  @@index([provider, model, effectiveFrom])
+}
+
+/// One provider-call budget reservation per operational interpretation run.
+/// Reused, blocked, and deterministic responses never create this row.
+model AiBudgetReservation {
+  id                      String                    @id @default(uuid()) @db.Uuid
+  tenantId                String                    @db.Uuid
+  companyId               String                    @db.Uuid
+  providerConfigurationId String                    @db.Uuid
+  skillActivationId       String                    @db.Uuid
+  interpretationRunId     String                    @db.Uuid
+  modelPriceRevisionId    String                    @db.Uuid
+  dayStartAt              DateTime                  @db.Timestamptz(6)
+  status                  AiBudgetReservationStatus @default(RESERVED)
+  inputTokenEstimate      Int
+  maxOutputTokens         Int
+  estimatedCostUsd        Decimal                   @db.Decimal(18, 8)
+  chargeCostUsd           Decimal                   @db.Decimal(18, 8)
+  actualCostUsd           Decimal?                  @db.Decimal(18, 8)
+  expiresAt               DateTime                  @db.Timestamptz(6)
+  settledAt               DateTime?                 @db.Timestamptz(6)
+  releasedAt              DateTime?                 @db.Timestamptz(6)
+  releaseReason           String?                   @db.VarChar(120)
+  createdAt               DateTime                  @default(now()) @db.Timestamptz(6)
+
+  company               Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  providerConfiguration AiProviderConfiguration @relation(fields: [providerConfigurationId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  skillActivation       AiSkillActivation       @relation(fields: [skillActivationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  interpretationRun     AiInterpretationRun     @relation(fields: [interpretationRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  modelPriceRevision    AiModelPriceRevision    @relation(fields: [modelPriceRevisionId], references: [id], onDelete: Restrict)
+  ledgerEntries         AiUsageLedger[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([interpretationRunId, tenantId, companyId])
+  @@index([tenantId, providerConfigurationId, dayStartAt, status])
+  @@index([tenantId, companyId, skillActivationId, dayStartAt, status])
+}
+
+/// Immutable metering entries. Monetary values are USD because model prices
+/// are published in USD; presentation may convert separately with a dated FX
+/// source, never during limit enforcement.
+model AiUsageLedger {
+  id                      String            @id @default(uuid()) @db.Uuid
+  tenantId                String            @db.Uuid
+  companyId               String            @db.Uuid
+  reservationId           String            @db.Uuid
+  executionReceiptId      String?           @db.Uuid
+  providerConfigurationId String            @db.Uuid
+  skillActivationId       String            @db.Uuid
+  modelPriceRevisionId    String            @db.Uuid
+  kind                    AiUsageLedgerKind
+  inputTokens             Int?
+  cachedInputTokens       Int?
+  outputTokens            Int?
+  reasoningTokens         Int?
+  estimatedCostUsd        Decimal           @db.Decimal(18, 8)
+  actualCostUsd           Decimal?          @db.Decimal(18, 8)
+  safeReasonCode          String?           @db.VarChar(120)
+  createdAt               DateTime          @default(now()) @db.Timestamptz(6)
+
+  company               Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  reservation           AiBudgetReservation     @relation(fields: [reservationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  executionReceipt      AiExecutionReceipt?     @relation(fields: [executionReceiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  providerConfiguration AiProviderConfiguration @relation(fields: [providerConfigurationId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  skillActivation       AiSkillActivation       @relation(fields: [skillActivationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  modelPriceRevision    AiModelPriceRevision    @relation(fields: [modelPriceRevisionId], references: [id], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, createdAt])
+  @@index([tenantId, providerConfigurationId, createdAt])
+  @@index([tenantId, companyId, skillActivationId, createdAt])
+}
+
+/// A placement only points to a shared explanation. Removing a placement can
+/// never delete or mutate the explanation itself.
+model AiInterpretationPlacement {
+  id               String                        @id @default(uuid()) @db.Uuid
+  tenantId         String                        @db.Uuid
+  companyId        String                        @db.Uuid
+  interpretationId String                        @db.Uuid
+  kind             AiInterpretationPlacementKind
+  subjectId        String                        @db.Uuid
+  moduleKey        String                        @db.VarChar(80)
+  createdByUserId  String                        @db.Uuid
+  createdAt        DateTime                      @default(now()) @db.Timestamptz(6)
+
+  company        Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  interpretation AiInterpretation @relation(fields: [interpretationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([interpretationId, kind, subjectId, moduleKey])
+  @@index([tenantId, companyId, kind, subjectId, createdAt])
+}
+
+/// Human notes and decisions remain separate from the explanation. The
+/// encrypted statement is immutable; a correction creates a new row that can
+/// reference the prior insight through supersedesInsightId.
+model AiHumanInsight {
+  id                  String               @id @default(uuid()) @db.Uuid
+  tenantId            String               @db.Uuid
+  companyId           String               @db.Uuid
+  interpretationId    String               @db.Uuid
+  kind                AiHumanInsightKind
+  status              AiHumanInsightStatus @default(DRAFT)
+  encryptedStatement  String
+  statementIv         String               @db.VarChar(64)
+  statementTag        String               @db.VarChar(64)
+  statementKeyVersion Int
+  statementChecksum   String               @db.Char(64)
+  supersedesInsightId String?              @db.Uuid
+  createdByUserId     String               @db.Uuid
+  createdAt           DateTime             @default(now()) @db.Timestamptz(6)
+  approvedByUserId    String?              @db.Uuid
+  approvedAt          DateTime?            @db.Timestamptz(6)
+  revokedByUserId     String?              @db.Uuid
+  revokedAt           DateTime?            @db.Timestamptz(6)
+  revocationReason    String?              @db.VarChar(500)
+
+  company        Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  interpretation AiInterpretation @relation(fields: [interpretationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, interpretationId, createdAt])
+  @@index([tenantId, companyId, kind, status, createdAt])
+  @@index([tenantId, companyId, supersedesInsightId])
+}
+
+/// Structured human evaluation of one execution. It supports reviewed future
+/// releases only; it is never an automatic training signal.
+model AiEvaluationFeedback {
+  id                 String                   @id @default(uuid()) @db.Uuid
+  tenantId           String                   @db.Uuid
+  companyId          String                   @db.Uuid
+  executionReceiptId String                   @db.Uuid
+  kind               AiEvaluationFeedbackKind
+  note               String?                  @db.VarChar(1000)
+  createdByUserId    String                   @db.Uuid
+  createdAt          DateTime                 @default(now()) @db.Timestamptz(6)
+
+  company          Company            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  executionReceipt AiExecutionReceipt @relation(fields: [executionReceiptId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  createdBy        User               @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, executionReceiptId, createdAt])
+  @@index([tenantId, companyId, kind, createdAt])
+}
+
+/// A compact, de-identified record of an offline acceptance suite. It holds
+/// no provider prompt or answer and is immutable once recorded. A successful
+/// matching run is required before a company can start a human-click pilot.
+model AiSkillEvaluationRun {
+  id                String                     @id @default(uuid()) @db.Uuid
+  tenantId          String                     @db.Uuid
+  companyId         String                     @db.Uuid
+  skillKey          String                     @db.VarChar(120)
+  skillVersion      Int
+  policyVersion     Int
+  suiteKey          String                     @db.VarChar(160)
+  suiteVersion      Int
+  suiteChecksum     String                     @db.Char(64)
+  mode              AiSkillEvaluationRunMode
+  status            AiSkillEvaluationRunStatus
+  totalCaseCount    Int
+  passedCaseCount   Int
+  failedCaseCount   Int
+  resultSummaryJson Json
+  createdByUserId   String                     @db.Uuid
+  createdAt         DateTime                   @default(now()) @db.Timestamptz(6)
+
+  company   Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  createdBy User    @relation(fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, skillKey, skillVersion, policyVersion, status, createdAt])
+  @@index([tenantId, companyId, suiteKey, suiteVersion, suiteChecksum, createdAt])
 }
 
 model AiSystemIdentity {

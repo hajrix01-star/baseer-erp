@@ -3,6 +3,7 @@ import { z } from "zod";
 import { companyIdSchema } from "./identity.js";
 
 const ownerDailyBriefAmountSchema = z.string().regex(/^\d{1,14}(?:\.\d{1,4})?$/);
+const ownerDailyBriefSignedAmountSchema = z.string().regex(/^-?\d{1,14}(?:\.\d{1,4})?$/);
 const ownerDailyBriefDateSchema = z.string().date();
 const ownerDailyBriefCurrencySchema = z.string().regex(/^[A-Z]{3}$/);
 
@@ -31,6 +32,14 @@ export const ownerDailyBriefCompanySchema = z.object({
     monthToDateStatus: z.enum(["READY", "INCOMPLETE", "NO_DATA"]),
     eligibleMonthToDateDayCount: z.number().int().nonnegative(),
     incompleteMonthToDateDayCount: z.number().int().nonnegative(),
+    dailyChangeGrossAmount: ownerDailyBriefSignedAmountSchema.nullable().optional(),
+    dailyAverageGrossAmount: ownerDailyBriefAmountSchema.nullable().optional(),
+    monthEndForecastGrossAmount: ownerDailyBriefAmountSchema.nullable().optional(),
+    priorPeriodTrendPercent: ownerDailyBriefSignedAmountSchema.nullable().optional(),
+    trend: z.array(z.object({
+      businessDate: ownerDailyBriefDateSchema,
+      grossAmount: ownerDailyBriefAmountSchema.nullable(),
+    }).strict()).max(12).optional(),
   }).strict(),
   purchases: z.object({
     yesterdayGrossAmount: ownerDailyBriefAmountSchema,

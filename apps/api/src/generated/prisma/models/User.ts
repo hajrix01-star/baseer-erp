@@ -285,6 +285,11 @@ export type UserWhereInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageListRelationFilter
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportListRelationFilter
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextListRelationFilter
+  approvedAiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -313,6 +318,11 @@ export type UserOrderByWithRelationInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageOrderByRelationAggregateInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportOrderByRelationAggregateInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentOrderByRelationAggregateInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextOrderByRelationAggregateInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationOrderByRelationAggregateInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationOrderByRelationAggregateInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackOrderByRelationAggregateInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -346,6 +356,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageListRelationFilter
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportListRelationFilter
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentListRelationFilter
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextListRelationFilter
+  approvedAiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunListRelationFilter
 }, "id" | "tenantId_loginNormalized" | "id_tenantId">
 
 export type UserOrderByWithAggregationInput = {
@@ -411,6 +426,11 @@ export type UserCreateInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -438,6 +458,11 @@ export type UserUncheckedCreateInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -465,6 +490,11 @@ export type UserUpdateInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -492,6 +522,11 @@ export type UserUncheckedUpdateInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -845,6 +880,80 @@ export type UserUpdateOneRequiredWithoutOutflowDocumentRevisionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOutflowDocumentRevisionsInput, Prisma.UserUpdateWithoutOutflowDocumentRevisionsInput>, Prisma.UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput>
 }
 
+export type UserCreateNestedOneWithoutApprovedAiCompanyContextsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedCreateWithoutApprovedAiCompanyContextsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedAiCompanyContextsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutApprovedAiCompanyContextsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedCreateWithoutApprovedAiCompanyContextsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedAiCompanyContextsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedAiCompanyContextsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedAiCompanyContextsInput, Prisma.UserUpdateWithoutApprovedAiCompanyContextsInput>, Prisma.UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput>
+}
+
+export type UserCreateNestedOneWithoutApprovedAiSkillActivationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutApprovedAiSkillActivationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedAiSkillActivationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutSuspendedAiSkillActivationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSuspendedAiSkillActivationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutApprovedAiSkillActivationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutApprovedAiSkillActivationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedAiSkillActivationsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedAiSkillActivationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedAiSkillActivationsInput, Prisma.UserUpdateWithoutApprovedAiSkillActivationsInput>, Prisma.UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput>
+}
+
+export type UserUpdateOneWithoutSuspendedAiSkillActivationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSuspendedAiSkillActivationsInput
+  upsert?: Prisma.UserUpsertWithoutSuspendedAiSkillActivationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSuspendedAiSkillActivationsInput, Prisma.UserUpdateWithoutSuspendedAiSkillActivationsInput>, Prisma.UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput>
+}
+
+export type UserCreateNestedOneWithoutAiEvaluationFeedbackInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedCreateWithoutAiEvaluationFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiEvaluationFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAiEvaluationFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedCreateWithoutAiEvaluationFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiEvaluationFeedbackInput
+  upsert?: Prisma.UserUpsertWithoutAiEvaluationFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiEvaluationFeedbackInput, Prisma.UserUpdateWithoutAiEvaluationFeedbackInput>, Prisma.UserUncheckedUpdateWithoutAiEvaluationFeedbackInput>
+}
+
+export type UserCreateNestedOneWithoutAiSkillEvaluationRunsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedCreateWithoutAiSkillEvaluationRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiSkillEvaluationRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAiSkillEvaluationRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedCreateWithoutAiSkillEvaluationRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiSkillEvaluationRunsInput
+  upsert?: Prisma.UserUpsertWithoutAiSkillEvaluationRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiSkillEvaluationRunsInput, Prisma.UserUpdateWithoutAiSkillEvaluationRunsInput>, Prisma.UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput>
+}
+
 export type UserCreateWithoutTenantInput = {
   id?: string
   loginNormalized: string
@@ -869,6 +978,11 @@ export type UserCreateWithoutTenantInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTenantInput = {
@@ -895,6 +1009,11 @@ export type UserUncheckedCreateWithoutTenantInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTenantInput = {
@@ -965,6 +1084,11 @@ export type UserCreateWithoutTenantAdministrationAssignmentsInput = {
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
@@ -991,6 +1115,11 @@ export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTenantAdministrationAssignmentsInput = {
@@ -1033,6 +1162,11 @@ export type UserUpdateWithoutTenantAdministrationAssignmentsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
@@ -1059,6 +1193,11 @@ export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -1085,6 +1224,11 @@ export type UserCreateWithoutMembershipsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -1111,6 +1255,11 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -1153,6 +1302,11 @@ export type UserUpdateWithoutMembershipsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -1179,6 +1333,11 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1205,6 +1364,11 @@ export type UserCreateWithoutSessionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1231,6 +1395,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1273,6 +1442,11 @@ export type UserUpdateWithoutSessionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1299,6 +1473,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -1325,6 +1504,11 @@ export type UserCreateWithoutAuditEventsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -1351,6 +1535,11 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -1393,6 +1582,11 @@ export type UserUpdateWithoutAuditEventsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -1419,6 +1613,11 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutIdempotencyReceiptsInput = {
@@ -1445,6 +1644,11 @@ export type UserCreateWithoutIdempotencyReceiptsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
@@ -1471,6 +1675,11 @@ export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutIdempotencyReceiptsInput = {
@@ -1513,6 +1722,11 @@ export type UserUpdateWithoutIdempotencyReceiptsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
@@ -1539,6 +1753,11 @@ export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCreatedFileMetadataInput = {
@@ -1565,6 +1784,11 @@ export type UserCreateWithoutCreatedFileMetadataInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
@@ -1591,6 +1815,11 @@ export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFileMetadataInput = {
@@ -1633,6 +1862,11 @@ export type UserUpdateWithoutCreatedFileMetadataInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
@@ -1659,6 +1893,11 @@ export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCreatedReportRunsInput = {
@@ -1685,6 +1924,11 @@ export type UserCreateWithoutCreatedReportRunsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedReportRunsInput = {
@@ -1711,6 +1955,11 @@ export type UserUncheckedCreateWithoutCreatedReportRunsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedReportRunsInput = {
@@ -1753,6 +2002,11 @@ export type UserUpdateWithoutCreatedReportRunsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedReportRunsInput = {
@@ -1779,6 +2033,11 @@ export type UserUncheckedUpdateWithoutCreatedReportRunsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCreatedReportDocumentsInput = {
@@ -1805,6 +2064,11 @@ export type UserCreateWithoutCreatedReportDocumentsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedReportDocumentsInput = {
@@ -1831,6 +2095,11 @@ export type UserUncheckedCreateWithoutCreatedReportDocumentsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedReportDocumentsInput = {
@@ -1873,6 +2142,11 @@ export type UserUpdateWithoutCreatedReportDocumentsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedReportDocumentsInput = {
@@ -1899,6 +2173,11 @@ export type UserUncheckedUpdateWithoutCreatedReportDocumentsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCashPerformanceCoverageActivationsInput = {
@@ -1925,6 +2204,11 @@ export type UserCreateWithoutCashPerformanceCoverageActivationsInput = {
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCashPerformanceCoverageActivationsInput = {
@@ -1951,6 +2235,11 @@ export type UserUncheckedCreateWithoutCashPerformanceCoverageActivationsInput = 
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCashPerformanceCoverageActivationsInput = {
@@ -1993,6 +2282,11 @@ export type UserUpdateWithoutCashPerformanceCoverageActivationsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCashPerformanceCoverageActivationsInput = {
@@ -2019,6 +2313,11 @@ export type UserUncheckedUpdateWithoutCashPerformanceCoverageActivationsInput = 
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCashPerformanceHistoricalImportsInput = {
@@ -2045,6 +2344,11 @@ export type UserCreateWithoutCashPerformanceHistoricalImportsInput = {
   createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCashPerformanceHistoricalImportsInput = {
@@ -2071,6 +2375,11 @@ export type UserUncheckedCreateWithoutCashPerformanceHistoricalImportsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCashPerformanceHistoricalImportsInput = {
@@ -2113,6 +2422,11 @@ export type UserUpdateWithoutCashPerformanceHistoricalImportsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput = {
@@ -2139,6 +2453,11 @@ export type UserUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput = {
   createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCreatedJournalEntriesInput = {
@@ -2165,6 +2484,11 @@ export type UserCreateWithoutCreatedJournalEntriesInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
@@ -2191,6 +2515,11 @@ export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedJournalEntriesInput = {
@@ -2233,6 +2562,11 @@ export type UserUpdateWithoutCreatedJournalEntriesInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
@@ -2259,6 +2593,11 @@ export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutOutflowDocumentRevisionsInput = {
@@ -2285,6 +2624,11 @@ export type UserCreateWithoutOutflowDocumentRevisionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
@@ -2311,6 +2655,11 @@ export type UserUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutOutflowDocumentRevisionsInput = {
@@ -2353,6 +2702,11 @@ export type UserUpdateWithoutOutflowDocumentRevisionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
@@ -2379,6 +2733,711 @@ export type UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutApprovedAiCompanyContextsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutApprovedAiCompanyContextsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutApprovedAiCompanyContextsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedCreateWithoutApprovedAiCompanyContextsInput>
+}
+
+export type UserUpsertWithoutApprovedAiCompanyContextsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedCreateWithoutApprovedAiCompanyContextsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedAiCompanyContextsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedAiCompanyContextsInput, Prisma.UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput>
+}
+
+export type UserUpdateWithoutApprovedAiCompanyContextsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutApprovedAiSkillActivationsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutApprovedAiSkillActivationsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutApprovedAiSkillActivationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutApprovedAiSkillActivationsInput>
+}
+
+export type UserCreateWithoutSuspendedAiSkillActivationsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutSuspendedAiSkillActivationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput>
+}
+
+export type UserUpsertWithoutApprovedAiSkillActivationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutApprovedAiSkillActivationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedAiSkillActivationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedAiSkillActivationsInput, Prisma.UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput>
+}
+
+export type UserUpdateWithoutApprovedAiSkillActivationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutSuspendedAiSkillActivationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSuspendedAiSkillActivationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSuspendedAiSkillActivationsInput, Prisma.UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput>
+}
+
+export type UserUpdateWithoutSuspendedAiSkillActivationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAiEvaluationFeedbackInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutAiEvaluationFeedbackInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAiEvaluationFeedbackInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedCreateWithoutAiEvaluationFeedbackInput>
+}
+
+export type UserUpsertWithoutAiEvaluationFeedbackInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedUpdateWithoutAiEvaluationFeedbackInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedCreateWithoutAiEvaluationFeedbackInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAiEvaluationFeedbackInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAiEvaluationFeedbackInput, Prisma.UserUncheckedUpdateWithoutAiEvaluationFeedbackInput>
+}
+
+export type UserUpdateWithoutAiEvaluationFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAiSkillEvaluationRunsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAiSkillEvaluationRunsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedCreateWithoutAiSkillEvaluationRunsInput>
+}
+
+export type UserUpsertWithoutAiSkillEvaluationRunsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedCreateWithoutAiSkillEvaluationRunsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAiSkillEvaluationRunsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAiSkillEvaluationRunsInput, Prisma.UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput>
+}
+
+export type UserUpdateWithoutAiSkillEvaluationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyTenantInput = {
@@ -2419,6 +3478,11 @@ export type UserUpdateWithoutTenantInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantInput = {
@@ -2445,6 +3509,11 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
   tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -2479,6 +3548,11 @@ export type UserCountOutputType = {
   cashPerformanceCoverageActivations: number
   cashPerformanceHistoricalImports: number
   tenantAdministrationAssignments: number
+  approvedAiCompanyContexts: number
+  approvedAiSkillActivations: number
+  suspendedAiSkillActivations: number
+  aiEvaluationFeedback: number
+  aiSkillEvaluationRuns: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2494,6 +3568,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   cashPerformanceCoverageActivations?: boolean | UserCountOutputTypeCountCashPerformanceCoverageActivationsArgs
   cashPerformanceHistoricalImports?: boolean | UserCountOutputTypeCountCashPerformanceHistoricalImportsArgs
   tenantAdministrationAssignments?: boolean | UserCountOutputTypeCountTenantAdministrationAssignmentsArgs
+  approvedAiCompanyContexts?: boolean | UserCountOutputTypeCountApprovedAiCompanyContextsArgs
+  approvedAiSkillActivations?: boolean | UserCountOutputTypeCountApprovedAiSkillActivationsArgs
+  suspendedAiSkillActivations?: boolean | UserCountOutputTypeCountSuspendedAiSkillActivationsArgs
+  aiEvaluationFeedback?: boolean | UserCountOutputTypeCountAiEvaluationFeedbackArgs
+  aiSkillEvaluationRuns?: boolean | UserCountOutputTypeCountAiSkillEvaluationRunsArgs
 }
 
 /**
@@ -2590,6 +3669,41 @@ export type UserCountOutputTypeCountTenantAdministrationAssignmentsArgs<ExtArgs 
   where?: Prisma.TenantAdministrationAssignmentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedAiCompanyContextsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiCompanyContextWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedAiSkillActivationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiSkillActivationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSuspendedAiSkillActivationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiSkillActivationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAiEvaluationFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiEvaluationFeedbackWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAiSkillEvaluationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiSkillEvaluationRunWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2617,6 +3731,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   cashPerformanceCoverageActivations?: boolean | Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>
   cashPerformanceHistoricalImports?: boolean | Prisma.User$cashPerformanceHistoricalImportsArgs<ExtArgs>
   tenantAdministrationAssignments?: boolean | Prisma.User$tenantAdministrationAssignmentsArgs<ExtArgs>
+  approvedAiCompanyContexts?: boolean | Prisma.User$approvedAiCompanyContextsArgs<ExtArgs>
+  approvedAiSkillActivations?: boolean | Prisma.User$approvedAiSkillActivationsArgs<ExtArgs>
+  suspendedAiSkillActivations?: boolean | Prisma.User$suspendedAiSkillActivationsArgs<ExtArgs>
+  aiEvaluationFeedback?: boolean | Prisma.User$aiEvaluationFeedbackArgs<ExtArgs>
+  aiSkillEvaluationRuns?: boolean | Prisma.User$aiSkillEvaluationRunsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2682,6 +3801,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   cashPerformanceCoverageActivations?: boolean | Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>
   cashPerformanceHistoricalImports?: boolean | Prisma.User$cashPerformanceHistoricalImportsArgs<ExtArgs>
   tenantAdministrationAssignments?: boolean | Prisma.User$tenantAdministrationAssignmentsArgs<ExtArgs>
+  approvedAiCompanyContexts?: boolean | Prisma.User$approvedAiCompanyContextsArgs<ExtArgs>
+  approvedAiSkillActivations?: boolean | Prisma.User$approvedAiSkillActivationsArgs<ExtArgs>
+  suspendedAiSkillActivations?: boolean | Prisma.User$suspendedAiSkillActivationsArgs<ExtArgs>
+  aiEvaluationFeedback?: boolean | Prisma.User$aiEvaluationFeedbackArgs<ExtArgs>
+  aiSkillEvaluationRuns?: boolean | Prisma.User$aiSkillEvaluationRunsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2707,6 +3831,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     cashPerformanceCoverageActivations: Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs>[]
     cashPerformanceHistoricalImports: Prisma.$FinanceCashPerformanceHistoricalImportPayload<ExtArgs>[]
     tenantAdministrationAssignments: Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>[]
+    approvedAiCompanyContexts: Prisma.$AiCompanyContextPayload<ExtArgs>[]
+    approvedAiSkillActivations: Prisma.$AiSkillActivationPayload<ExtArgs>[]
+    suspendedAiSkillActivations: Prisma.$AiSkillActivationPayload<ExtArgs>[]
+    aiEvaluationFeedback: Prisma.$AiEvaluationFeedbackPayload<ExtArgs>[]
+    aiSkillEvaluationRuns: Prisma.$AiSkillEvaluationRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3128,6 +4257,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   cashPerformanceCoverageActivations<T extends Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cashPerformanceCoverageActivationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cashPerformanceHistoricalImports<T extends Prisma.User$cashPerformanceHistoricalImportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cashPerformanceHistoricalImportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceHistoricalImportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenantAdministrationAssignments<T extends Prisma.User$tenantAdministrationAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantAdministrationAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAdministrationAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedAiCompanyContexts<T extends Prisma.User$approvedAiCompanyContextsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedAiCompanyContextsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyContextPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedAiSkillActivations<T extends Prisma.User$approvedAiSkillActivationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedAiSkillActivationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiSkillActivationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  suspendedAiSkillActivations<T extends Prisma.User$suspendedAiSkillActivationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$suspendedAiSkillActivationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiSkillActivationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiEvaluationFeedback<T extends Prisma.User$aiEvaluationFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiEvaluationFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiEvaluationFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiSkillEvaluationRuns<T extends Prisma.User$aiSkillEvaluationRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiSkillEvaluationRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiSkillEvaluationRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3855,6 +4989,126 @@ export type User$tenantAdministrationAssignmentsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.TenantAdministrationAssignmentScalarFieldEnum | Prisma.TenantAdministrationAssignmentScalarFieldEnum[]
+}
+
+/**
+ * User.approvedAiCompanyContexts
+ */
+export type User$approvedAiCompanyContextsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyContext
+   */
+  select?: Prisma.AiCompanyContextSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyContext
+   */
+  omit?: Prisma.AiCompanyContextOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyContextInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyContextWhereInput
+  orderBy?: Prisma.AiCompanyContextOrderByWithRelationInput | Prisma.AiCompanyContextOrderByWithRelationInput[]
+  cursor?: Prisma.AiCompanyContextWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiCompanyContextScalarFieldEnum | Prisma.AiCompanyContextScalarFieldEnum[]
+}
+
+/**
+ * User.approvedAiSkillActivations
+ */
+export type User$approvedAiSkillActivationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiSkillActivation
+   */
+  select?: Prisma.AiSkillActivationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiSkillActivation
+   */
+  omit?: Prisma.AiSkillActivationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiSkillActivationInclude<ExtArgs> | null
+  where?: Prisma.AiSkillActivationWhereInput
+  orderBy?: Prisma.AiSkillActivationOrderByWithRelationInput | Prisma.AiSkillActivationOrderByWithRelationInput[]
+  cursor?: Prisma.AiSkillActivationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiSkillActivationScalarFieldEnum | Prisma.AiSkillActivationScalarFieldEnum[]
+}
+
+/**
+ * User.suspendedAiSkillActivations
+ */
+export type User$suspendedAiSkillActivationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiSkillActivation
+   */
+  select?: Prisma.AiSkillActivationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiSkillActivation
+   */
+  omit?: Prisma.AiSkillActivationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiSkillActivationInclude<ExtArgs> | null
+  where?: Prisma.AiSkillActivationWhereInput
+  orderBy?: Prisma.AiSkillActivationOrderByWithRelationInput | Prisma.AiSkillActivationOrderByWithRelationInput[]
+  cursor?: Prisma.AiSkillActivationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiSkillActivationScalarFieldEnum | Prisma.AiSkillActivationScalarFieldEnum[]
+}
+
+/**
+ * User.aiEvaluationFeedback
+ */
+export type User$aiEvaluationFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiEvaluationFeedback
+   */
+  select?: Prisma.AiEvaluationFeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiEvaluationFeedback
+   */
+  omit?: Prisma.AiEvaluationFeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiEvaluationFeedbackInclude<ExtArgs> | null
+  where?: Prisma.AiEvaluationFeedbackWhereInput
+  orderBy?: Prisma.AiEvaluationFeedbackOrderByWithRelationInput | Prisma.AiEvaluationFeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.AiEvaluationFeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiEvaluationFeedbackScalarFieldEnum | Prisma.AiEvaluationFeedbackScalarFieldEnum[]
+}
+
+/**
+ * User.aiSkillEvaluationRuns
+ */
+export type User$aiSkillEvaluationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiSkillEvaluationRun
+   */
+  select?: Prisma.AiSkillEvaluationRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiSkillEvaluationRun
+   */
+  omit?: Prisma.AiSkillEvaluationRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiSkillEvaluationRunInclude<ExtArgs> | null
+  where?: Prisma.AiSkillEvaluationRunWhereInput
+  orderBy?: Prisma.AiSkillEvaluationRunOrderByWithRelationInput | Prisma.AiSkillEvaluationRunOrderByWithRelationInput[]
+  cursor?: Prisma.AiSkillEvaluationRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiSkillEvaluationRunScalarFieldEnum | Prisma.AiSkillEvaluationRunScalarFieldEnum[]
 }
 
 /**

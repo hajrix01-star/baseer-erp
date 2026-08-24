@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AiCredentialVault } from './ai-platform/ai-credential-vault.js';
+import { AiConsumptionGuardService } from './ai-platform/ai-consumption-guard.service.js';
+import { AiInterpretationService } from './ai-platform/ai-interpretation.service.js';
+import { AiInterpretationCenterService } from './ai-platform/ai-interpretation-center.service.js';
 import { AdministrationController } from './administration/administration.controller.js';
 import { AdministrationService } from './administration/administration.service.js';
 import { TenantAdministrationContextService } from './administration/tenant-administration-context.service.js';
@@ -9,6 +12,7 @@ import { AiPlatformController } from './ai-platform/ai-platform.controller.js';
 import { AiRuntimeController } from './ai-platform/ai-runtime.controller.js';
 import { AiProviderAdapterRegistry } from './ai-platform/ai-provider-adapter-registry.js';
 import { AiRuntimeService } from './ai-platform/ai-runtime.service.js';
+import { AnalysisReadinessService } from './ai-platform/analysis-readiness.service.js';
 import { AiRuntimeRateLimitService } from './ai-platform/ai-runtime-rate-limit.service.js';
 import { AiPlatformService } from './ai-platform/ai-platform.service.js';
 
@@ -147,9 +151,13 @@ import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily
     TenantAdministrationContextService,
     AdministrationService,
     AiCredentialVault,
+    AiConsumptionGuardService,
+    AiInterpretationService,
+    AiInterpretationCenterService,
     AiPlatformService,
     AiProviderAdapterRegistry,
     AiRuntimeService,
+    AnalysisReadinessService,
     AiRuntimeRateLimitService,
     { provide: BUSINESS_DATE_CLOCK, useValue: { now: () => new Date() } },
     BusinessDateService,

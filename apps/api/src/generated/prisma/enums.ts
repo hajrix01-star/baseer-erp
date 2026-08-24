@@ -794,6 +794,8 @@ export type AiProviderKind = (typeof AiProviderKind)[keyof typeof AiProviderKind
 
 
 export const AiProviderConfigurationStatus = {
+  DRAFT: 'DRAFT',
+  VALIDATED: 'VALIDATED',
   ACTIVE: 'ACTIVE',
   DISABLED: 'DISABLED'
 } as const
@@ -816,6 +818,134 @@ export const AiExecutionOutcome = {
 } as const
 
 export type AiExecutionOutcome = (typeof AiExecutionOutcome)[keyof typeof AiExecutionOutcome]
+
+
+export const AiCompanyContextStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  SUPERSEDED: 'SUPERSEDED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type AiCompanyContextStatus = (typeof AiCompanyContextStatus)[keyof typeof AiCompanyContextStatus]
+
+
+export const AiCompanyPresentationStyle = {
+  CONCISE: 'CONCISE',
+  DETAILED: 'DETAILED'
+} as const
+
+export type AiCompanyPresentationStyle = (typeof AiCompanyPresentationStyle)[keyof typeof AiCompanyPresentationStyle]
+
+
+export const AiCompanyContextKind = {
+  TERMINOLOGY: 'TERMINOLOGY',
+  BUSINESS_SCOPE: 'BUSINESS_SCOPE',
+  POLICY_REFERENCE: 'POLICY_REFERENCE'
+} as const
+
+export type AiCompanyContextKind = (typeof AiCompanyContextKind)[keyof typeof AiCompanyContextKind]
+
+
+export const AiSkillActivationStatus = {
+  PILOT: 'PILOT',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type AiSkillActivationStatus = (typeof AiSkillActivationStatus)[keyof typeof AiSkillActivationStatus]
+
+
+export const AiEvaluationFeedbackKind = {
+  USEFUL: 'USEFUL',
+  NOT_USEFUL: 'NOT_USEFUL',
+  DATA_INCOMPLETE: 'DATA_INCOMPLETE',
+  COMPARISON_UNFAIR: 'COMPARISON_UNFAIR',
+  CONTEXT_DIFFERENT: 'CONTEXT_DIFFERENT',
+  OTHER: 'OTHER'
+} as const
+
+export type AiEvaluationFeedbackKind = (typeof AiEvaluationFeedbackKind)[keyof typeof AiEvaluationFeedbackKind]
+
+
+export const AiSkillEvaluationRunMode = {
+  OFFLINE: 'OFFLINE'
+} as const
+
+export type AiSkillEvaluationRunMode = (typeof AiSkillEvaluationRunMode)[keyof typeof AiSkillEvaluationRunMode]
+
+
+export const AiSkillEvaluationRunStatus = {
+  PASSED: 'PASSED',
+  FAILED: 'FAILED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type AiSkillEvaluationRunStatus = (typeof AiSkillEvaluationRunStatus)[keyof typeof AiSkillEvaluationRunStatus]
+
+
+export const AiInterpretationRunStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type AiInterpretationRunStatus = (typeof AiInterpretationRunStatus)[keyof typeof AiInterpretationRunStatus]
+
+
+export const AiInterpretationSubjectKind = {
+  DECISION_ALERT: 'DECISION_ALERT',
+  MARKETING_CAMPAIGN: 'MARKETING_CAMPAIGN'
+} as const
+
+export type AiInterpretationSubjectKind = (typeof AiInterpretationSubjectKind)[keyof typeof AiInterpretationSubjectKind]
+
+
+export const AiInterpretationPlacementKind = {
+  DECISION_ALERT: 'DECISION_ALERT',
+  MARKETING_CAMPAIGN: 'MARKETING_CAMPAIGN',
+  COMMAND_CENTER: 'COMMAND_CENTER',
+  REPORT: 'REPORT'
+} as const
+
+export type AiInterpretationPlacementKind = (typeof AiInterpretationPlacementKind)[keyof typeof AiInterpretationPlacementKind]
+
+
+export const AiHumanInsightKind = {
+  NOTE: 'NOTE',
+  HYPOTHESIS: 'HYPOTHESIS',
+  DECISION: 'DECISION'
+} as const
+
+export type AiHumanInsightKind = (typeof AiHumanInsightKind)[keyof typeof AiHumanInsightKind]
+
+
+export const AiHumanInsightStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type AiHumanInsightStatus = (typeof AiHumanInsightStatus)[keyof typeof AiHumanInsightStatus]
+
+
+export const AiBudgetReservationStatus = {
+  RESERVED: 'RESERVED',
+  SETTLED: 'SETTLED',
+  RELEASED: 'RELEASED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type AiBudgetReservationStatus = (typeof AiBudgetReservationStatus)[keyof typeof AiBudgetReservationStatus]
+
+
+export const AiUsageLedgerKind = {
+  RESERVATION: 'RESERVATION',
+  SETTLEMENT: 'SETTLEMENT',
+  RELEASE: 'RELEASE'
+} as const
+
+export type AiUsageLedgerKind = (typeof AiUsageLedgerKind)[keyof typeof AiUsageLedgerKind]
 
 
 export const OperationsUnitDimension = {

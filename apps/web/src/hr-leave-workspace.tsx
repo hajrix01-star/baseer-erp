@@ -5,6 +5,7 @@ import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
+import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { uiCopy } from "./baseer-ui-copy";
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
@@ -35,6 +36,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
   const [employeeFilter, setEmployeeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<"" | HrEmployeeLeave["status"]>("");
   const [typeFilter, setTypeFilter] = useState<"" | HrEmployeeLeave["leaveType"]>("");
+  const [period, setPeriod] = useState<BaseerPeriodRange>(defaultBaseerPeriodRange);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,14 +65,14 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
     const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
-      const [leaveReceipt, employeeReceipt] = await Promise.all([listHrEmployeeLeaves(current, { employeeId: employeeFilter || undefined, status: statusFilter || undefined, leaveType: typeFilter || undefined, search: serverSearch || undefined, cursor, pageSize: 50, sortDirection }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 })]);
+      const [leaveReceipt, employeeReceipt] = await Promise.all([listHrEmployeeLeaves(current, { employeeId: employeeFilter || undefined, status: statusFilter || undefined, leaveType: typeFilter || undefined, periodFrom: period.from, periodTo: period.to, search: serverSearch || undefined, cursor, pageSize: 50, sortDirection }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 })]);
       if (requestNumber !== loadRequestRef.current) return;
       setLeaves((rows) => append ? [...rows, ...leaveReceipt.leaves] : leaveReceipt.leaves); setNextCursor(leaveReceipt.nextCursor);
       setSummary(leaveReceipt.summary);
       if (employeeReceipt) setEmployees((currentEmployees) => [...employeeReceipt.employees, ...currentEmployees.filter((employee) => !employeeReceipt.employees.some((candidate) => candidate.id === employee.id))]);
     } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "الإجازات", en: "leaves" })); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
-  }, [ar, employeeFilter, language, serverSearch, sessionCompanyId, sortDirection, statusFilter, typeFilter]);
+  }, [ar, employeeFilter, language, period.from, period.to, serverSearch, sessionCompanyId, sortDirection, statusFilter, typeFilter]);
   useEffect(() => { void load(); }, [load]);
 
   const showDetail = async (leave: HrEmployeeLeave) => {
@@ -108,6 +110,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
   const typeLabel = (type: HrEmployeeLeave["leaveType"]) => ({ ANNUAL: ar ? "سنوية" : "Annual", SICK: ar ? "مرضية" : "Sick", UNPAID: ar ? "بدون راتب" : "Unpaid", OTHER: ar ? "أخرى" : "Other" })[type];
   const statusLabel = (status: HrEmployeeLeave["status"]) => status === "APPROVED" ? ui.leaveApproved : ui.leaveReturned;
   const appliedFilters = [
+    period.preset !== "MONTH" || period.from !== defaultBaseerPeriodRange().from || period.to !== defaultBaseerPeriodRange().to ? { id: "period", label: baseerPeriodLabel(period, language), onRemove: () => setPeriod(defaultBaseerPeriodRange()) } : null,
     employeeFilter ? { id: "employee", label: label(language, employees.find((employee) => employee.id === employeeFilter) ?? { nameAr: "", nameEn: null }), onRemove: () => setEmployeeFilter("") } : null,
     statusFilter ? { id: "status", label: statusLabel(statusFilter), onRemove: () => setStatusFilter("") } : null,
     typeFilter ? { id: "type", label: typeLabel(typeFilter), onRemove: () => setTypeFilter("") } : null,
@@ -123,7 +126,7 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
   return <section className="administration-panel">
     <div className="administration-section-heading"><div><h2>{ar ? "الإجازات والعودة" : "Leave & return"}</h2></div><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "تسجيل إجازة" : "Record leave"}</BaseerButton></div>
     <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص الإجازات" : "Leave summary"}><BaseerSummaryMetric label={ar ? "في إجازة الآن" : "On leave now"} value={summary.onLeaveNow} /><BaseerSummaryMetric label={ar ? "إجازات قادمة" : "Upcoming leaves"} value={summary.upcoming} /><BaseerSummaryMetric label={ar ? "تمت العودة" : "Returned"} value={summary.returned} /></BaseerSummaryMetricGrid>
-    <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في الإجازات" : "Search leaves"} searchPlaceholder={ar ? "ابحث بالموظف أو الفترة" : "Search employee or period"} onSearchChange={setSearch} controlsPresentation="menu" controls={<><Suspense fallback={<span>{ar ? "جارٍ تحميل الفلتر…" : "Loading filter…"}</span>}><BaseerCombobox label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={employees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} remoteSearch={searchEmployeeOptions} scopeKey={session.companyId} loadingLabel={ar ? "جارٍ تحميل الموظفين…" : "Loading employees…"} emptyLabel={ar ? "لا يوجد موظفون مطابقون." : "No matching employees."} errorLabel={ar ? "تعذر تحميل الموظفين. حاول مجدداً." : "Employees could not be loaded. Try again."} onChange={setEmployeeFilter} /></Suspense><label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option><option value="APPROVED">{statusLabel("APPROVED")}</option><option value="RETURNED">{statusLabel("RETURNED")}</option></select></label><label>{ar ? "النوع" : "Type"}<select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}><option value="">{ar ? "كل الأنواع" : "All types"}</option>{(["ANNUAL", "SICK", "UNPAID", "OTHER"] as const).map((type) => <option key={type} value={type}>{typeLabel(type)}</option>)}</select></label></>} appliedFilters={appliedFilters} onClear={() => { setEmployeeFilter(""); setStatusFilter(""); setTypeFilter(""); }} />
+    <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في الإجازات" : "Search leaves"} searchPlaceholder={ar ? "ابحث بالموظف أو الفترة" : "Search employee or period"} onSearchChange={setSearch} controlsPresentation="menu" controls={<><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} allowNonContiguousMonths={false} /><Suspense fallback={<span>{ar ? "جارٍ تحميل الفلتر…" : "Loading filter…"}</span>}><BaseerCombobox label={ar ? "الموظف" : "Employee"} value={employeeFilter} placeholder={ar ? "كل الموظفين" : "All employees"} options={employees.map((employee) => ({ id: employee.id, label: `${employee.employeeNumber} · ${label(language, employee)}` }))} remoteSearch={searchEmployeeOptions} scopeKey={session.companyId} loadingLabel={ar ? "جارٍ تحميل الموظفين…" : "Loading employees…"} emptyLabel={ar ? "لا يوجد موظفون مطابقون." : "No matching employees."} errorLabel={ar ? "تعذر تحميل الموظفين. حاول مجدداً." : "Employees could not be loaded. Try again."} onChange={setEmployeeFilter} /></Suspense><label>{ar ? "الحالة" : "Status"}<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}><option value="">{ar ? "كل الحالات" : "All statuses"}</option><option value="APPROVED">{statusLabel("APPROVED")}</option><option value="RETURNED">{statusLabel("RETURNED")}</option></select></label><label>{ar ? "النوع" : "Type"}<select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}><option value="">{ar ? "كل الأنواع" : "All types"}</option>{(["ANNUAL", "SICK", "UNPAID", "OTHER"] as const).map((type) => <option key={type} value={type}>{typeLabel(type)}</option>)}</select></label></>} appliedFilters={appliedFilters} onClear={() => { setPeriod(defaultBaseerPeriodRange()); setEmployeeFilter(""); setStatusFilter(""); setTypeFilter(""); }} />
     {loading ? <BaseerCard>{ar ? "جارٍ تحميل الإجازات…" : "Loading leaves…"}</BaseerCard> : leaves.length ? <BaseerDataGrid<HrEmployeeLeave> ariaLabel={ar ? "سجل الإجازات والعودة" : "Leave and return register"} caption={ar ? "سجل الإجازات والعودة" : "Leave and return register"} rows={leaves} columns={columns} rowKey={(row) => row.id} serverSortColumnId="period" sortDirection={sortDirection} onSortDirectionChange={() => setSortDirection((value) => value === 'asc' ? 'desc' : 'asc')} /> : <BaseerCard>{ar ? "لا توجد إجازات مطابقة لهذه الشركة." : "No matching leaves for this company."}</BaseerCard>}
     {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
     {message ? <p className="daily-sales-message error">{message}</p> : null}

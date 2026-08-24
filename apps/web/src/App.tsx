@@ -34,21 +34,24 @@ const OwnerDailyBriefWorkspace = lazy(async () => ({ default: (await import('./o
 const QuickAdvanceDialog = lazy(async () => ({ default: (await import('./quick-advance-dialog')).QuickAdvanceDialog }));
 import { getModule, modules, type ModuleId } from './modules';
 import { activeSession, clearActiveSession, listAvailableCompanies, signOutActiveSession } from './daily-sales-client';
-import { canOpenRoute, firstAllowedRoute, setActivePermissionCodes, visibleModules, visibleSections } from './module-access';
+import { canOpenRoute, setActivePermissionCodes, visibleModules } from './module-access';
 import { appText } from './app-copy';
+import { getPage, getPageByLegacySection, pageRouteHash, pagesForModule, type PageId } from './page-registry';
 
 type Language = 'ar' | 'en';
 type Theme = 'green' | 'blue' | 'plum' | 'classic';
 type LauncherBackground = 'emerald-light' | 'emerald-dark' | 'architectural-light' | 'desert-night' | 'saudi-heritage' | 'saudi-heritage-burned' | 'emerald-glass';
-type ResolvedRoute = { moduleId: ModuleId; section: number; stage?: string };
+type ResolvedRoute = { moduleId: ModuleId; section: number; pageId: PageId; stage?: string };
 
 type Route = ResolvedRoute | null;
 
-const recentStorageKey = 'baseer-erp.shell.recent.v1';
+const recentStorageKey = 'baseer-erp.shell.recent.v2';
+const legacyRecentStorageKey = 'baseer-erp.shell.recent.v1';
 const themeStorageKey = 'baseer-erp.shell.theme.v1';
 const launcherBackgroundStorageKey = 'baseer-erp.shell.launcher-background.v1';
 const languageStorageKey = 'baseer.ui.locale.v1';
-const routeSessionKey = 'baseer.erp.shell.route.v1';
+const routeSessionKey = 'baseer.erp.shell.route.v2';
+const legacyRouteSessionKey = 'baseer.erp.shell.route.v1';
 
 
 
@@ -72,7 +75,7 @@ function readLanguagePreference(): Language {
   }
 }
 function routeHash(route: ResolvedRoute): string {
-  return `module=${route.moduleId}&section=${route.section}${route.stage ? `&stage=${encodeURIComponent(route.stage)}` : ''}`;
+  return pageRouteHash(route.pageId, route.stage);
 }
 function persistRoute(route: ResolvedRoute): void {
   try { sessionStorage.setItem(routeSessionKey, routeHash(route)); } catch { /* session storage can be unavailable */ }
@@ -80,43 +83,82 @@ function persistRoute(route: ResolvedRoute): void {
 function parseRouteValue(value: string): Route {
   const params = new URLSearchParams(value.replace(/^#/, ''));
   const moduleId = params.get('module');
-  const section = Number(params.get('section'));
+  const pageId = params.get('page');
+  const sectionValue = params.get('section');
   const stage = params.get('stage');
   const module = modules.find((item) => item.id === moduleId);
-  if (!module || !Number.isInteger(section) || section < 0 || section >= module.sections.ar.length || (stage !== null && !/^[a-z][a-z0-9-]{0,31}$/.test(stage))) return null;
-  return { moduleId: module.id, section, ...(stage ? { stage } : {}) };
+  if (!module || (stage !== null && !/^[a-z][a-z0-9-]{0,31}$/.test(stage))) return null;
+
+  const legacySection = sectionValue === null ? undefined : Number(sectionValue);
+  const page = pageId === null
+    ? (legacySection === undefined ? undefined : getPageByLegacySection(module.id, legacySection))
+    : getPage(pageId);
+  if (!page || page.moduleId !== module.id || (legacySection !== undefined && (!Number.isInteger(legacySection) || page.legacySection !== legacySection))) return null;
+  return { moduleId: page.moduleId, section: page.legacySection, pageId: page.id, ...(stage ? { stage } : {}) };
 }
 function parseRoute(): Route {
   const fromHash = parseRouteValue(window.location.hash);
   if (fromHash) { persistRoute(fromHash); return fromHash; }
   if (window.location.hash) return null;
-  try { return parseRouteValue(sessionStorage.getItem(routeSessionKey) ?? ''); } catch { return null; }
+  try { return parseRouteValue(sessionStorage.getItem(routeSessionKey) ?? sessionStorage.getItem(legacyRouteSessionKey) ?? ''); } catch { return null; }
+}
+
+function routeIdentity(route: ResolvedRoute): string {
+  return `${route.moduleId}:${route.pageId}`;
+}
+
+function parseRecentValue(value: string): ResolvedRoute | null {
+  const canonical = parseRouteValue(value);
+  if (canonical) return canonical;
+  const [moduleId, sectionValue] = value.split(':');
+  return parseRouteValue(`module=${moduleId}&section=${sectionValue}`);
 }
 
 function readRecent(): ResolvedRoute[] {
   try {
-    const raw = localStorage.getItem(recentStorageKey);
-    if (!raw) return [];
-    const parsed: unknown = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.flatMap((value): ResolvedRoute[] => {
-      if (typeof value !== 'string') return [];
-      const [moduleId, sectionValue] = value.split(':');
-      const module = modules.find((item) => item.id === moduleId);
-      const section = Number(sectionValue);
-      return module && Number.isInteger(section) && section >= 0 && section < module.sections.ar.length
-        ? [{ moduleId: module.id, section }]
-        : [];
+    const values = [recentStorageKey, legacyRecentStorageKey].flatMap((key) => {
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      const parsed: unknown = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string') : [];
     });
+    return values.flatMap((value): ResolvedRoute[] => {
+      const route = parseRecentValue(value);
+      return route ? [route] : [];
+    }).filter((route, index, routes) => routes.findIndex((candidate) => routeIdentity(candidate) === routeIdentity(route)) === index).slice(0, 4);
   } catch {
     return [];
   }
 }
 
 function persistRecent(route: ResolvedRoute): void {
-  const key = `${route.moduleId}:${route.section}`;
-  const values = readRecent().map((item) => `${item.moduleId}:${item.section}`).filter((item) => item !== key);
-  localStorage.setItem(recentStorageKey, JSON.stringify([key, ...values].slice(0, 4)));
+  const key = routeIdentity(route);
+  const values = readRecent().map(routeHash).filter((value) => parseRecentValue(value) && routeIdentity(parseRecentValue(value)!) !== key);
+  localStorage.setItem(recentStorageKey, JSON.stringify([routeHash(route), ...values].slice(0, 4)));
+}
+
+function firstAllowedRouteForModule(moduleId: ModuleId, permissionCodes: readonly string[] | null): ResolvedRoute | null {
+  const page = [...pagesForModule(moduleId)]
+    .sort((left, right) => left.navigation.order - right.navigation.order)
+    .find((candidate) => candidate.navigation.visible && canOpenRoute({ moduleId: candidate.moduleId, section: candidate.legacySection }, permissionCodes));
+  return page ? { moduleId: page.moduleId, section: page.legacySection, pageId: page.id } : null;
+}
+
+function preferredAllowedRoute(moduleId: ModuleId, permissionCodes: readonly string[] | null): ResolvedRoute | null {
+  return readRecent().find((route) => route.moduleId === moduleId && canOpenRoute(route, permissionCodes))
+    ?? firstAllowedRouteForModule(moduleId, permissionCodes);
+}
+
+function routeTitle(route: ResolvedRoute, language: Language): string {
+  return getPage(route.pageId)?.title[language] ?? '';
+}
+
+function navigationRoutes(moduleId: ModuleId, permissionCodes: readonly string[] | null): ResolvedRoute[] {
+  return [...pagesForModule(moduleId)]
+    .sort((left, right) => left.navigation.order - right.navigation.order)
+    .flatMap((page): ResolvedRoute[] => page.navigation.visible && canOpenRoute({ moduleId: page.moduleId, section: page.legacySection }, permissionCodes)
+      ? [{ moduleId: page.moduleId, section: page.legacySection, pageId: page.id }]
+      : []);
 }
 
 function SignOutIcon() {
@@ -135,7 +177,7 @@ function AppHeader({ language, theme, background, activeModuleId, permissionCode
   return <header className="topbar">
     <button className="icon-button app-modules-button" onClick={onModules} onPointerDown={(event) => playModulesRipple(event.currentTarget)} onAnimationEnd={(event) => { if (event.animationName === 'app-modules-ripple') event.currentTarget.classList.remove('is-rippling'); }} type="button" aria-label={text.allModules}>{"\u283f"}</button>
     <nav className="header-module-switcher" aria-label={text.allModules}>
-      {visibleModules(permissionCodes).map((module) => <button key={module.id} type="button" className={module.id === activeModuleId ? 'is-active' : ''} onClick={() => onOpenModule(module.id)} aria-current={module.id === activeModuleId ? 'page' : undefined} title={module.title[language]}>{module.title[language]}</button>)}
+      {visibleModules(permissionCodes).map((module) => <button key={module.id} type="button" className={module.id === activeModuleId ? 'is-active' : ''} onClick={() => onOpenModule(module.id)} aria-current={module.id === activeModuleId ? 'page' : undefined} aria-label={module.title[language]} title={module.title[language]} disabled={module.id === activeModuleId}>{module.title[language]}</button>)}
     </nav>
     <div className="topbar-spacer" />
     <QuickActionsMenu language={language} permissionCodes={permissionCodes} onQuickAdvance={onQuickAdvance} />
@@ -155,24 +197,24 @@ function ModuleLauncher({ language, theme, background, onLanguage, onTheme, onBa
     <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} type="button"><BaseerBrand /></button><div className="topbar-spacer" /><QuickActionsMenu language={language} permissionCodes={permissionCodes} onQuickAdvance={onQuickAdvance} /><CompanySessionControl language={language} /><button className="text-button" onClick={onLanguage} type="button">{language === 'ar' ? text.switchToEnglish : text.switchToArabic}</button><ThemePicker language={language} theme={theme} onTheme={onTheme} background={background} onBackground={onBackground} /><button className="header-signout" onClick={onSignOut} type="button" aria-label={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'} title={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}><SignOutIcon /></button></header>
     <main className="launcher-page__content">
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1></div>
-      {recent.filter((route) => canOpenRoute(route, permissionCodes)).length > 0 && <section className="recent"><h2>{text.recent}</h2><div className="recent__list">{recent.filter((route) => canOpenRoute(route, permissionCodes)).map((route) => { const module = getModule(route.moduleId); return <button key={`${route.moduleId}:${route.section}`} onClick={() => open(route)} type="button">{module.title[language]} · {module.sections[language][route.section]}</button>; })}</div></section>}
-      <section className="modules-grid launcher-page__grid">{visible.map((module) => <button key={module.id} type="button" className="module-card" style={{ '--module': module.accent, '--module-alt': module.accentAlt } as React.CSSProperties} onClick={() => { const route = firstAllowedRoute(module.id, permissionCodes); if (route) open(route); }}><span className="module-icon-panel" aria-hidden="true"><span className="module-icon"><BaseerModuleIcon moduleId={module.id} /></span></span><span className="module-copy"><strong>{module.title[language]}</strong></span></button>)}</section>
+      {recent.filter((route) => canOpenRoute(route, permissionCodes)).length > 0 && <section className="recent"><h2>{text.recent}</h2><div className="recent__list">{recent.filter((route) => canOpenRoute(route, permissionCodes)).map((route) => { const module = getModule(route.moduleId); return <button key={routeIdentity(route)} onClick={() => open(route)} type="button">{module.title[language]} · {routeTitle(route, language)}</button>; })}</div></section>}
+      <section className="modules-grid launcher-page__grid">{visible.map((module) => <button key={module.id} type="button" className="module-card" style={{ '--module': module.accent, '--module-alt': module.accentAlt } as React.CSSProperties} onClick={() => { const route = preferredAllowedRoute(module.id, permissionCodes); if (route) open(route); }}><span className="module-icon-panel" aria-hidden="true"><span className="module-icon"><BaseerModuleIcon moduleId={module.id} /></span></span><span className="module-copy"><strong>{module.title[language]}</strong></span></button>)}</section>
       {visible.length === 0 && <p className="empty-results">{text.noResults}</p>}
 
     </main>
   </div>;
 }
 
-function Navigation({ moduleId, active, language, onSelect, permissionCodes }: { moduleId: ModuleId; active: number; language: Language; onSelect: (section: number) => void; permissionCodes: readonly string[] | null }) {
-  const module = getModule(moduleId);
-  const sections = visibleSections(moduleId, permissionCodes);
-  return <nav className="module-navigation">{sections.map((index) => {
-    const label = module.sections[language][index];
+function Navigation({ moduleId, active, language, onSelect, permissionCodes }: { moduleId: ModuleId; active: ResolvedRoute; language: Language; onSelect: (route: ResolvedRoute) => void; permissionCodes: readonly string[] | null }) {
+  const routes = navigationRoutes(moduleId, permissionCodes);
+  return <nav className="module-navigation">{routes.map((route, position) => {
+    const label = routeTitle(route, language);
+    const page = getPage(route.pageId);
     const colors = ['#36b37e', '#42a5f5', '#ff9f43', '#c77dff', '#f5bd1f', '#fb7185'];
-    return <button key={label} type="button" onClick={() => onSelect(index)} className={"nav-item" + (index === active ? " active" : "")}><span className="nav-icon" style={{ '--section-accent': colors[index % colors.length] } as React.CSSProperties}><BaseerSectionIcon moduleId={moduleId} index={index} /></span><span>{label}</span></button>;
+    return <button key={routeIdentity(route)} type="button" onClick={() => onSelect(route)} className={"nav-item" + (routeIdentity(route) === routeIdentity(active) ? " active" : "")}><span className="nav-icon" style={{ '--section-accent': colors[position % colors.length] } as React.CSSProperties}><BaseerSectionIcon glyph={page?.icon ?? "dashboard"} /></span><span>{label}</span></button>;
   })}</nav>;
 }
-function ModuleWorkspaceContents({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onOpenModule, onSection, onStage, onQuickAdvance, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onSection: (section: number) => void; onStage: (stage: string) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
+function ModuleWorkspaceContents({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onOpenModule, onRoute, onStage, onQuickAdvance, onSignOut, permissionCodes }: { route: ResolvedRoute; language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onRoute: (route: ResolvedRoute) => void; onStage: (stage: string) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   useEffect(() => {
     if (!drawerOpen) return;
@@ -184,12 +226,12 @@ function ModuleWorkspaceContents({ route, language, theme, background, onLanguag
   }, [drawerOpen]);
   const module = getModule(route.moduleId);
   const text = appText(language);
-  const sectionTitle = module.sections[language][route.section];
-  const select = (section: number) => { onSection(section); setDrawerOpen(false); };
+  const sectionTitle = routeTitle(route, language);
+  const select = (next: ResolvedRoute) => { onRoute(next); setDrawerOpen(false); };
   if (route.moduleId === "command" && route.section === 3) return <>
     <AppHeader language={language} theme={theme} background={background} activeModuleId={route.moduleId} permissionCodes={permissionCodes} onLanguage={onLanguage} onTheme={onTheme} onBackground={onBackground} onModules={onModules} onOpenModule={onOpenModule} onQuickAdvance={onQuickAdvance} onSignOut={onSignOut} />
-    <main className="workspace"><aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside><section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div><Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OwnerDailyBriefWorkspace language={language} /></Suspense></section></main>
-    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
+    <main className="workspace"><aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside><section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div><Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OwnerDailyBriefWorkspace language={language} /></Suspense></section></main>
+    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
   </>;
   // This is deliberately a focused workstation. A bar/kitchen employee who
   // only has the registration capability is never shown the wider operations
@@ -198,18 +240,18 @@ function ModuleWorkspaceContents({ route, language, theme, background, onLanguag
   if (route.moduleId === "inbound-evidence") return <>
     <AppHeader language={language} theme={theme} background={background} activeModuleId={route.moduleId} permissionCodes={permissionCodes} onLanguage={onLanguage} onTheme={onTheme} onBackground={onBackground} onModules={onModules} onOpenModule={onOpenModule} onQuickAdvance={onQuickAdvance} onSignOut={onSignOut} />
     <main className="workspace">
-      <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside>
+      <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside>
       <section className="module-page"><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div><Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><InboundEvidenceWorkspace language={language} section={route.section} /></Suspense></section>
     </main>
-    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
+    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
   </>;
   return <>
     <AppHeader language={language} theme={theme} background={background} activeModuleId={route.moduleId} permissionCodes={permissionCodes} onLanguage={onLanguage} onTheme={onTheme} onBackground={onBackground} onModules={onModules} onOpenModule={onOpenModule} onQuickAdvance={onQuickAdvance} onSignOut={onSignOut} />
     <main className="workspace">
-      <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside>
-      <section className={`module-page${route.moduleId === "hr" ? " module-page--hr" : ""}`}><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div>{route.moduleId === 'operations' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'command' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><SalesAnalyticsWorkspace language={language} /></Suspense> : route.moduleId === 'decision' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} /></Suspense> : route.moduleId === 'marketing' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><MarketingWorkspace language={language} section={route.section} permissionCodes={permissionCodes} /></Suspense> : route.moduleId === 'operations' && route.section === 9 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsAssetsWarrantyWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportsOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportsWorkspace language={language} initialReport={route.stage === 'cash-performance' ? 'cash-performance' : 'trial-balance'} /></Suspense> : route.moduleId === 'reports' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><InternalVatReportWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportDocumentsWorkspace language={language} /></Suspense> : route.moduleId === 'hr' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><HrOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'hr' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><HrWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'operations' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DailySalesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingPurchases}</section>}><PurchaseExpenseWorkspace language={language} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} /></Suspense> : route.moduleId === 'operations' && route.section === 5 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsCatalogWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 6 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsExecutionWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 7 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsInternalRegistrationWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 8 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsReportsWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><InvoiceRegisterWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingVaults}</section>}><TreasuryWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 3 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceAccountsWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><CategoriesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 3 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingExpensesObligations}</section>}><ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} /></Suspense> : route.moduleId === 'operations' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} view="suppliers" /></Suspense> : route.moduleId === 'administration' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingAdministration}</section>}><AdministrationWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'command' && (route.section === 0 || route.section === 1) ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><CommandCenterSalesCalendar language={language} permissionCodes={permissionCodes} section={route.section} /></Suspense> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2></div></section><section className="module-page__placeholder" /></>}</section>
+      <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{text.currentModule}</p><h2>{module.title[language]}</h2></div><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside>
+      <section className={`module-page${route.moduleId === "hr" ? " module-page--hr" : ""}`}><div className="page-breadcrumb">Baseer ERP / {module.title[language]}</div><div className="page-heading"><div><h1>{sectionTitle}</h1></div><div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)}>☰ {text.sections}</button></div></div>{route.moduleId === 'operations' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'command' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><SalesAnalyticsWorkspace language={language} /></Suspense> : route.moduleId === 'decision' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} /></Suspense> : route.moduleId === 'marketing' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><MarketingWorkspace language={language} section={route.section} permissionCodes={permissionCodes} /></Suspense> : route.moduleId === 'operations' && route.section === 9 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsAssetsWarrantyWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportsOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportsWorkspace language={language} initialReport={route.stage === 'cash-performance' ? 'cash-performance' : 'trial-balance'} /></Suspense> : route.moduleId === 'reports' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><InternalVatReportWorkspace language={language} /></Suspense> : route.moduleId === 'reports' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><ReportDocumentsWorkspace language={language} /></Suspense> : route.moduleId === 'hr' && route.section === 0 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><HrOverviewWorkspace language={language} /></Suspense> : route.moduleId === 'hr' ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><HrWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'operations' && route.section === 1 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><DailySalesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 2 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingPurchases}</section>}><PurchaseExpenseWorkspace language={language} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} /></Suspense> : route.moduleId === 'operations' && route.section === 5 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsCatalogWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 6 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsExecutionWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 7 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsInternalRegistrationWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 8 ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OperationsReportsWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.pageId === 'finance-settings' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.pageId === 'finance-ledger' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><InvoiceRegisterWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.pageId === 'finance-treasury' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingVaults}</section>}><TreasuryWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.pageId === 'finance-accounts' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceAccountsWorkspace language={language} /></Suspense> : route.moduleId === 'finance' && route.pageId === 'finance-categories' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><CategoriesWorkspace language={language} /></Suspense> : route.moduleId === 'operations' && route.section === 3 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingExpensesObligations}</section>}><ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} /></Suspense> : route.moduleId === 'operations' && route.section === 4 ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingFinanceSetup}</section>}><FinanceSetupWorkspace language={language} view="suppliers" /></Suspense> : route.moduleId === 'administration' ? <Suspense fallback={<section className="module-page__placeholder">{text.loadingAdministration}</section>}><AdministrationWorkspace language={language} section={route.section} /></Suspense> : route.moduleId === 'command' && (route.section === 0 || route.section === 1) ? <Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><CommandCenterSalesCalendar language={language} permissionCodes={permissionCodes} section={route.section} /></Suspense> : <><section className="hero-panel"><div><span className="eyebrow">{module.title[language]}</span><h2>{language === 'ar' ? `مرحبًا بك في ${sectionTitle}` : `Welcome to ${sectionTitle}`}</h2></div></section><section className="module-page__placeholder" /></>}</section>
     </main>
-    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route.section} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
+    {drawerOpen && <div className="mobile-drawer is-open"><div className="mobile-drawer__backdrop" onClick={() => setDrawerOpen(false)} /><aside className="mobile-drawer__panel" aria-label={text.sections}><header><div><p className="overline">{text.sections}</p><h2>{module.title[language]}</h2></div><button className="close-button" type="button" onClick={() => setDrawerOpen(false)} aria-label={text.close}>×</button></header><Navigation moduleId={module.id} active={route} language={language} onSelect={select} permissionCodes={permissionCodes} /></aside></div>}
   </>;
 }
 
@@ -255,6 +297,12 @@ export function App() {
     return () => window.removeEventListener("hashchange", listener);
   }, []);
   useEffect(() => {
+    if (!route || !window.location.hash || window.location.hash.slice(1) === routeHash(route)) return;
+    // Old numeric finance links stay readable, then become the immutable page
+    // link without adding a browser-history entry.
+    history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${routeHash(route)}`);
+  }, [route]);
+  useEffect(() => {
     const session = activeSession();
     if (!session) { setPermissionCodes(null); setActivePermissionCodes([]); return; }
     setActivePermissionCodes([]);
@@ -286,14 +334,14 @@ export function App() {
     setRoute(next);
   };
   const clear = () => {
-    try { sessionStorage.removeItem(routeSessionKey); } catch { /* session storage can be unavailable */ }
+    try { sessionStorage.removeItem(routeSessionKey); sessionStorage.removeItem(legacyRouteSessionKey); } catch { /* session storage can be unavailable */ }
     history.replaceState(null, "", window.location.pathname);
     setRoute(null);
   };
   const toggleLanguage = () => setLanguage((current) => current === "ar" ? "en" : "ar");
   const signOut = () => {
     const session = activeSession();
-    try { sessionStorage.removeItem(routeSessionKey); } catch { /* session storage can be unavailable */ }
+    try { sessionStorage.removeItem(routeSessionKey); sessionStorage.removeItem(legacyRouteSessionKey); } catch { /* session storage can be unavailable */ }
     clearActiveSession();
     const reload = () => window.location.reload();
     if (!session) { reload(); return; }
@@ -302,9 +350,9 @@ export function App() {
 
   useEffect(() => {
     if (!route || permissionCodes === null || canOpenRoute(route, permissionCodes)) return;
-    const replacement = firstAllowedRoute(route.moduleId, permissionCodes)
+    const replacement = firstAllowedRouteForModule(route.moduleId, permissionCodes)
       ?? visibleModules(permissionCodes).flatMap((module) => {
-        const next = firstAllowedRoute(module.id, permissionCodes);
+        const next = firstAllowedRouteForModule(module.id, permissionCodes);
         return next ? [next] : [];
       })[0];
     if (replacement) open(replacement); else clear();
@@ -318,7 +366,7 @@ export function App() {
   return <>
     {quickAdvanceOpen ? <Suspense fallback={null}><QuickAdvanceDialog open language={language} onClose={() => setQuickAdvanceOpen(false)} /></Suspense> : null}
     {route
-      ? <ModuleWorkspace route={route} language={language} theme={theme} background={background} onLanguage={toggleLanguage} onTheme={setTheme} onBackground={setBackground} onModules={clear} onOpenModule={(moduleId) => { const destination = firstAllowedRoute(moduleId, permissionCodes); if (destination) open(destination); }} onSection={(section) => open({ moduleId: route.moduleId, section })} onStage={(stage) => open({ ...route, stage })} onQuickAdvance={openQuickAdvance} onSignOut={signOut} permissionCodes={permissionCodes} />
+      ? <ModuleWorkspace route={route} language={language} theme={theme} background={background} onLanguage={toggleLanguage} onTheme={setTheme} onBackground={setBackground} onModules={clear} onOpenModule={(moduleId) => { const destination = preferredAllowedRoute(moduleId, permissionCodes); if (destination) open(destination); }} onRoute={open} onStage={(stage) => open({ ...route, stage })} onQuickAdvance={openQuickAdvance} onSignOut={signOut} permissionCodes={permissionCodes} />
       : <ModuleLauncher language={language} theme={theme} background={background} onLanguage={toggleLanguage} onTheme={setTheme} onBackground={setBackground} onOpen={open} onQuickAdvance={openQuickAdvance} onSignOut={signOut} permissionCodes={permissionCodes} />}
   </>;
 }

@@ -4,6 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 const companyId = "11111111-1111-4111-8111-111111111111";
 const permissions = ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"];
 const treasuryPermissions = ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"];
+const allFinancePermissions = [...permissions, "finance.purchase_expense.read", ...treasuryPermissions];
 
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
@@ -26,7 +27,7 @@ function availableCompanies(permissionCodes: string[]) {
   };
 }
 
-async function mockFinanceSetup(page: Page, language: "ar" | "en") {
+async function mockFinanceSetup(page: Page, language: "ar" | "en", permissionCodes = permissions) {
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "finance-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "finance-e2e-refresh-token");
@@ -36,7 +37,7 @@ async function mockFinanceSetup(page: Page, language: "ar" | "en") {
   }, { locale: language, company: companyId });
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
-    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes }] });
     if (url.pathname === "/v1/finance/configuration/readiness") return fulfill(route, {
       companyId, requiredBaseSeedVersion: 8, profile: null, openPeriod: null,
       counts: { activeVaults: 0, activeAccounts: 0, activeCategories: 0, activeSuppliers: 0 },
@@ -136,6 +137,28 @@ test("finance setup keeps the Gregorian adapter available in LTR", async ({ page
 
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.locator("[data-baseer-rhf-form]").getByRole("button", { name: "Period start" })).toBeVisible();
+});
+
+test("finance settings displays last while old numeric links retain their page identity", async ({ page }) => {
+  await mockFinanceSetup(page, "ar", allFinancePermissions);
+  await page.goto("/#module=finance&section=0");
+
+  await expect(page).toHaveURL(/#module=finance&page=finance-settings$/);
+  let navigation = page.locator(".module-sidebar .module-navigation");
+  if (test.info().project.name === "mobile-chromium") {
+    await page.getByRole("button", { name: /الأقسام/ }).click();
+    navigation = page.locator(".mobile-drawer .module-navigation");
+  }
+  await expect(navigation.getByRole("button")).toHaveText([
+    "السجل المالي الموحد",
+    "الخزائن والبنوك",
+    "الحسابات",
+    "الفئات والتصنيفات",
+    "إعدادات المالية",
+  ]);
+
+  await navigation.getByRole("button", { name: "السجل المالي الموحد" }).click();
+  await expect(page).toHaveURL(/#module=finance&page=finance-ledger$/);
 });
 
 test("treasury control uses the central form and reports inline validation errors", async ({ page }) => {

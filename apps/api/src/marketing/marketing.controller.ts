@@ -1,17 +1,28 @@
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
-import { archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingService } from "./marketing.service.js";
 import { MarketingGoogleOAuthService } from "./marketing-google-oauth.service.js";
+import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly googleOAuth: MarketingGoogleOAuthService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly googleOAuth: MarketingGoogleOAuthService, private readonly analysisReadiness: AnalysisReadinessService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     return marketingWorkspaceSchema.parse(await this.marketing.workspace(await this.context(authorization, companyId, "marketing.insights.read")));
+  }
+
+  @Get("basira/analysis-readiness")
+  async basiraAnalysisReadiness(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return analysisReadinessReceiptSchema.parse(await this.analysisReadiness.marketingWorkspace(await this.context(authorization, companyId, ["marketing.insights.read", "platform.ai.use"])));
+  }
+
+  @Get("campaigns/:campaignId/basira/analysis-readiness")
+  async campaignBasiraAnalysisReadiness(@Param("campaignId") campaignId: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return analysisReadinessReceiptSchema.parse(await this.analysisReadiness.marketingCampaign(await this.context(authorization, companyId, ["marketing.insights.read", "platform.ai.use"]), campaignId));
   }
 
   @Post("campaigns") @HttpCode(201)
@@ -30,6 +41,12 @@ export class MarketingController {
   async archive(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = archiveMarketingCampaignRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException("Invalid marketing campaign archive request.");
     return marketingEntityReceiptSchema.parse(await this.marketing.archiveCampaign(await this.context(authorization, companyId, "marketing.campaign.write"), parsed.data));
+  }
+
+  @Post("campaigns/:campaignId/stop")
+  async stop(@Param("campaignId") campaignId: string, @Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = stopMarketingCampaignRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException("Invalid marketing campaign stop request.");
+    return marketingEntityReceiptSchema.parse(await this.marketing.stopCampaign(await this.context(authorization, companyId, "marketing.campaign.write"), campaignId, parsed.data));
   }
 
   @Post("campaigns/:campaignId/financial-documents") @HttpCode(201)

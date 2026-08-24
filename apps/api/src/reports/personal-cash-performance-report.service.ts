@@ -560,16 +560,16 @@ function movementSourcePresentation(sourceType: string, sourceReference: string,
  * additionally returns the operational screen that owns the transaction. */
 function sourceOrigin(sourceType: string) {
   const origins: Record<string, { labelAr: string; labelEn: string; route: string }> = {
-    daily_sales_closing: { labelAr: 'العمليات ← المبيعات', labelEn: 'Operations → Sales', route: '#module=operations&section=1' },
-    finance_outflow_document: { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&section=2' },
-    supplier_due_payment: { labelAr: 'العمليات ← المصروفات والالتزامات', labelEn: 'Operations → Expenses & obligations', route: '#module=operations&section=3&stage=history' },
-    finance_vat_settlement: { labelAr: 'التقارير ← التقرير الضريبي', labelEn: 'Reports → VAT report', route: '#module=reports&section=2' },
-    hr_payroll_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&section=3' },
-    hr_employee_advance: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&section=4' },
-    hr_employee_advance_receipt: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&section=4' },
-    hr_final_settlement_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&section=3' },
+    daily_sales_closing: { labelAr: 'العمليات ← المبيعات', labelEn: 'Operations → Sales', route: '#module=operations&page=operations-sales' },
+    finance_outflow_document: { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&page=operations-purchases' },
+    supplier_due_payment: { labelAr: 'العمليات ← المصروفات والالتزامات', labelEn: 'Operations → Expenses & obligations', route: '#module=operations&page=operations-expenses-obligations&stage=history' },
+    finance_vat_settlement: { labelAr: 'التقارير ← التقرير الضريبي', labelEn: 'Reports → VAT report', route: '#module=reports&page=reports-vat' },
+    hr_payroll_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&page=hr-payroll' },
+    hr_employee_advance: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&page=hr-advances-deductions' },
+    hr_employee_advance_receipt: { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&page=hr-advances-deductions' },
+    hr_final_settlement_payment: { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&page=hr-payroll' },
   };
-  return origins[sourceType] ?? { labelAr: 'المالية والمحاسبة ← السجل المالي الموحد', labelEn: 'Finance & accounting → Unified financial register', route: '#module=finance&section=1' };
+  return origins[sourceType] ?? { labelAr: 'المالية والمحاسبة ← السجل المالي الموحد', labelEn: 'Finance & accounting → Unified financial register', route: '#module=finance&page=finance-ledger' };
 }
 
 export function aggregateCashPerformanceEvents(events: readonly EventForAggregation[], vatInclusive: boolean, vaultLabels: VaultLabels = new Map()) {

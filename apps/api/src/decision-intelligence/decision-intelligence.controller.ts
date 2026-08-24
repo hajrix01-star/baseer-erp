@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
 import {
   archiveDecisionCompanyContextEventRequestSchema,
+  analysisReadinessReceiptSchema,
   archiveDecisionGlobalContextEventRequestSchema,
   basiraDecisionAlertBriefSchema,
   createDecisionCompanyContextEventRequestSchema,
@@ -23,6 +24,7 @@ import { CompanyContextService } from "../company-context/company-context.servic
 import { DecisionIntelligenceService } from "./decision-intelligence.service.js";
 import { DecisionContextImportService } from "./decision-context-import.service.js";
 import { DecisionContextResearchService } from "./decision-context-research.service.js";
+import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 const METRICS_READ = "decision.metrics.read";
 const ALERTS_READ = "decision.alerts.read";
@@ -34,7 +36,7 @@ const AI_USE = "platform.ai.use";
 
 @Controller("decision-intelligence")
 export class DecisionIntelligenceController {
-  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService, private readonly contextImports: DecisionContextImportService, private readonly contextResearch: DecisionContextResearchService) {}
+  constructor(private readonly contexts: CompanyContextService, private readonly decisions: DecisionIntelligenceService, private readonly contextImports: DecisionContextImportService, private readonly contextResearch: DecisionContextResearchService, private readonly analysisReadiness: AnalysisReadinessService) {}
 
   @Post("context/sources/bootstrap")
   async bootstrapContextSources(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -186,6 +188,13 @@ export class DecisionIntelligenceController {
   async basiraAlertBrief(@Param("alertId") alertId: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const context = await this.context(authorization, companyId, [AI_USE, ALERTS_READ, METRICS_READ, CONTEXT_READ]);
     return basiraDecisionAlertBriefSchema.parse(await this.decisions.readBasiraDecisionAlertBrief(context, alertId));
+  }
+
+  /** A small readiness receipt for the screen; it never invokes a provider. */
+  @Get("basira/analysis-readiness")
+  async basiraAnalysisReadiness(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const context = await this.context(authorization, companyId, [AI_USE, ALERTS_READ, METRICS_READ, CONTEXT_READ]);
+    return analysisReadinessReceiptSchema.parse(await this.analysisReadiness.decisionWorkspace(context));
   }
 
   @Post("alerts/:alertId/status")

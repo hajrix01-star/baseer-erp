@@ -32,8 +32,15 @@ export type AiExecutionReceiptAvgAggregateOutputType = {
   configurationVersion: number | null
   identityVersion: number | null
   systemIdentityVersion: number | null
+  promptVersion: number | null
   inputCharacters: number | null
   outputCharacters: number | null
+  inputTokens: number | null
+  cachedInputTokens: number | null
+  outputTokens: number | null
+  reasoningTokens: number | null
+  estimatedCostUsd: runtime.Decimal | null
+  actualCostUsd: runtime.Decimal | null
 }
 
 export type AiExecutionReceiptSumAggregateOutputType = {
@@ -42,8 +49,15 @@ export type AiExecutionReceiptSumAggregateOutputType = {
   configurationVersion: number | null
   identityVersion: number | null
   systemIdentityVersion: number | null
+  promptVersion: number | null
   inputCharacters: number | null
   outputCharacters: number | null
+  inputTokens: number | null
+  cachedInputTokens: number | null
+  outputTokens: number | null
+  reasoningTokens: number | null
+  estimatedCostUsd: runtime.Decimal | null
+  actualCostUsd: runtime.Decimal | null
 }
 
 export type AiExecutionReceiptMinAggregateOutputType = {
@@ -53,6 +67,8 @@ export type AiExecutionReceiptMinAggregateOutputType = {
   providerConfigurationId: string | null
   identityId: string | null
   systemIdentityId: string | null
+  skillActivationId: string | null
+  evidenceSnapshotId: string | null
   moduleKey: string | null
   capability: string | null
   skillKey: string | null
@@ -64,8 +80,19 @@ export type AiExecutionReceiptMinAggregateOutputType = {
   configurationVersion: number | null
   identityVersion: number | null
   systemIdentityVersion: number | null
+  promptVersion: number | null
+  inputChecksum: string | null
+  outputChecksum: string | null
   inputCharacters: number | null
   outputCharacters: number | null
+  inputTokens: number | null
+  cachedInputTokens: number | null
+  outputTokens: number | null
+  reasoningTokens: number | null
+  modelPriceRevisionId: string | null
+  estimatedCostUsd: runtime.Decimal | null
+  actualCostUsd: runtime.Decimal | null
+  providerRequestId: string | null
   safeErrorCode: string | null
   requestId: string | null
   createdAt: Date | null
@@ -78,6 +105,8 @@ export type AiExecutionReceiptMaxAggregateOutputType = {
   providerConfigurationId: string | null
   identityId: string | null
   systemIdentityId: string | null
+  skillActivationId: string | null
+  evidenceSnapshotId: string | null
   moduleKey: string | null
   capability: string | null
   skillKey: string | null
@@ -89,8 +118,19 @@ export type AiExecutionReceiptMaxAggregateOutputType = {
   configurationVersion: number | null
   identityVersion: number | null
   systemIdentityVersion: number | null
+  promptVersion: number | null
+  inputChecksum: string | null
+  outputChecksum: string | null
   inputCharacters: number | null
   outputCharacters: number | null
+  inputTokens: number | null
+  cachedInputTokens: number | null
+  outputTokens: number | null
+  reasoningTokens: number | null
+  modelPriceRevisionId: string | null
+  estimatedCostUsd: runtime.Decimal | null
+  actualCostUsd: runtime.Decimal | null
+  providerRequestId: string | null
   safeErrorCode: string | null
   requestId: string | null
   createdAt: Date | null
@@ -103,6 +143,8 @@ export type AiExecutionReceiptCountAggregateOutputType = {
   providerConfigurationId: number
   identityId: number
   systemIdentityId: number
+  skillActivationId: number
+  evidenceSnapshotId: number
   moduleKey: number
   capability: number
   skillKey: number
@@ -114,8 +156,19 @@ export type AiExecutionReceiptCountAggregateOutputType = {
   configurationVersion: number
   identityVersion: number
   systemIdentityVersion: number
+  promptVersion: number
+  inputChecksum: number
+  outputChecksum: number
   inputCharacters: number
   outputCharacters: number
+  inputTokens: number
+  cachedInputTokens: number
+  outputTokens: number
+  reasoningTokens: number
+  modelPriceRevisionId: number
+  estimatedCostUsd: number
+  actualCostUsd: number
+  providerRequestId: number
   safeErrorCode: number
   requestId: number
   createdAt: number
@@ -129,8 +182,15 @@ export type AiExecutionReceiptAvgAggregateInputType = {
   configurationVersion?: true
   identityVersion?: true
   systemIdentityVersion?: true
+  promptVersion?: true
   inputCharacters?: true
   outputCharacters?: true
+  inputTokens?: true
+  cachedInputTokens?: true
+  outputTokens?: true
+  reasoningTokens?: true
+  estimatedCostUsd?: true
+  actualCostUsd?: true
 }
 
 export type AiExecutionReceiptSumAggregateInputType = {
@@ -139,8 +199,15 @@ export type AiExecutionReceiptSumAggregateInputType = {
   configurationVersion?: true
   identityVersion?: true
   systemIdentityVersion?: true
+  promptVersion?: true
   inputCharacters?: true
   outputCharacters?: true
+  inputTokens?: true
+  cachedInputTokens?: true
+  outputTokens?: true
+  reasoningTokens?: true
+  estimatedCostUsd?: true
+  actualCostUsd?: true
 }
 
 export type AiExecutionReceiptMinAggregateInputType = {
@@ -150,6 +217,8 @@ export type AiExecutionReceiptMinAggregateInputType = {
   providerConfigurationId?: true
   identityId?: true
   systemIdentityId?: true
+  skillActivationId?: true
+  evidenceSnapshotId?: true
   moduleKey?: true
   capability?: true
   skillKey?: true
@@ -161,8 +230,19 @@ export type AiExecutionReceiptMinAggregateInputType = {
   configurationVersion?: true
   identityVersion?: true
   systemIdentityVersion?: true
+  promptVersion?: true
+  inputChecksum?: true
+  outputChecksum?: true
   inputCharacters?: true
   outputCharacters?: true
+  inputTokens?: true
+  cachedInputTokens?: true
+  outputTokens?: true
+  reasoningTokens?: true
+  modelPriceRevisionId?: true
+  estimatedCostUsd?: true
+  actualCostUsd?: true
+  providerRequestId?: true
   safeErrorCode?: true
   requestId?: true
   createdAt?: true
@@ -175,6 +255,8 @@ export type AiExecutionReceiptMaxAggregateInputType = {
   providerConfigurationId?: true
   identityId?: true
   systemIdentityId?: true
+  skillActivationId?: true
+  evidenceSnapshotId?: true
   moduleKey?: true
   capability?: true
   skillKey?: true
@@ -186,8 +268,19 @@ export type AiExecutionReceiptMaxAggregateInputType = {
   configurationVersion?: true
   identityVersion?: true
   systemIdentityVersion?: true
+  promptVersion?: true
+  inputChecksum?: true
+  outputChecksum?: true
   inputCharacters?: true
   outputCharacters?: true
+  inputTokens?: true
+  cachedInputTokens?: true
+  outputTokens?: true
+  reasoningTokens?: true
+  modelPriceRevisionId?: true
+  estimatedCostUsd?: true
+  actualCostUsd?: true
+  providerRequestId?: true
   safeErrorCode?: true
   requestId?: true
   createdAt?: true
@@ -200,6 +293,8 @@ export type AiExecutionReceiptCountAggregateInputType = {
   providerConfigurationId?: true
   identityId?: true
   systemIdentityId?: true
+  skillActivationId?: true
+  evidenceSnapshotId?: true
   moduleKey?: true
   capability?: true
   skillKey?: true
@@ -211,8 +306,19 @@ export type AiExecutionReceiptCountAggregateInputType = {
   configurationVersion?: true
   identityVersion?: true
   systemIdentityVersion?: true
+  promptVersion?: true
+  inputChecksum?: true
+  outputChecksum?: true
   inputCharacters?: true
   outputCharacters?: true
+  inputTokens?: true
+  cachedInputTokens?: true
+  outputTokens?: true
+  reasoningTokens?: true
+  modelPriceRevisionId?: true
+  estimatedCostUsd?: true
+  actualCostUsd?: true
+  providerRequestId?: true
   safeErrorCode?: true
   requestId?: true
   createdAt?: true
@@ -312,6 +418,8 @@ export type AiExecutionReceiptGroupByOutputType = {
   providerConfigurationId: string | null
   identityId: string | null
   systemIdentityId: string | null
+  skillActivationId: string | null
+  evidenceSnapshotId: string | null
   moduleKey: string
   capability: string
   skillKey: string | null
@@ -323,8 +431,19 @@ export type AiExecutionReceiptGroupByOutputType = {
   configurationVersion: number | null
   identityVersion: number | null
   systemIdentityVersion: number | null
+  promptVersion: number | null
+  inputChecksum: string | null
+  outputChecksum: string | null
   inputCharacters: number
   outputCharacters: number
+  inputTokens: number | null
+  cachedInputTokens: number | null
+  outputTokens: number | null
+  reasoningTokens: number | null
+  modelPriceRevisionId: string | null
+  estimatedCostUsd: runtime.Decimal | null
+  actualCostUsd: runtime.Decimal | null
+  providerRequestId: string | null
   safeErrorCode: string | null
   requestId: string
   createdAt: Date
@@ -360,6 +479,8 @@ export type AiExecutionReceiptWhereInput = {
   providerConfigurationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   identityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   systemIdentityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  skillActivationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  evidenceSnapshotId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   moduleKey?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   capability?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -371,8 +492,19 @@ export type AiExecutionReceiptWhereInput = {
   configurationVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   identityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   systemIdentityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  promptVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  inputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
+  outputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   inputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
   outputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
+  inputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  cachedInputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  outputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  reasoningTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  modelPriceRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  estimatedCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   safeErrorCode?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   requestId?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   createdAt?: Prisma.DateTimeFilter<"AiExecutionReceipt"> | Date | string
@@ -380,6 +512,12 @@ export type AiExecutionReceiptWhereInput = {
   providerConfiguration?: Prisma.XOR<Prisma.AiProviderConfigurationNullableScalarRelationFilter, Prisma.AiProviderConfigurationWhereInput> | null
   identity?: Prisma.XOR<Prisma.AiCompanyIdentityNullableScalarRelationFilter, Prisma.AiCompanyIdentityWhereInput> | null
   systemIdentity?: Prisma.XOR<Prisma.AiSystemIdentityNullableScalarRelationFilter, Prisma.AiSystemIdentityWhereInput> | null
+  skillActivation?: Prisma.XOR<Prisma.AiSkillActivationNullableScalarRelationFilter, Prisma.AiSkillActivationWhereInput> | null
+  evidenceSnapshot?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotNullableScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput> | null
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
+  generatedInterpretations?: Prisma.AiInterpretationListRelationFilter
+  usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
+  modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionNullableScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput> | null
 }
 
 export type AiExecutionReceiptOrderByWithRelationInput = {
@@ -389,6 +527,8 @@ export type AiExecutionReceiptOrderByWithRelationInput = {
   providerConfigurationId?: Prisma.SortOrderInput | Prisma.SortOrder
   identityId?: Prisma.SortOrderInput | Prisma.SortOrder
   systemIdentityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  skillActivationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  evidenceSnapshotId?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleKey?: Prisma.SortOrder
   capability?: Prisma.SortOrder
   skillKey?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -400,8 +540,19 @@ export type AiExecutionReceiptOrderByWithRelationInput = {
   configurationVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   identityVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  inputChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
+  outputChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  outputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  modelPriceRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
   requestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -409,6 +560,12 @@ export type AiExecutionReceiptOrderByWithRelationInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationOrderByWithRelationInput
   identity?: Prisma.AiCompanyIdentityOrderByWithRelationInput
   systemIdentity?: Prisma.AiSystemIdentityOrderByWithRelationInput
+  skillActivation?: Prisma.AiSkillActivationOrderByWithRelationInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotOrderByWithRelationInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackOrderByRelationAggregateInput
+  generatedInterpretations?: Prisma.AiInterpretationOrderByRelationAggregateInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerOrderByRelationAggregateInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionOrderByWithRelationInput
 }
 
 export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
@@ -422,6 +579,8 @@ export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
   providerConfigurationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   identityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   systemIdentityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  skillActivationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  evidenceSnapshotId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   moduleKey?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   capability?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -433,8 +592,19 @@ export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
   configurationVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   identityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   systemIdentityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  promptVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  inputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
+  outputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   inputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
   outputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
+  inputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  cachedInputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  outputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  reasoningTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  modelPriceRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  estimatedCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   safeErrorCode?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   requestId?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   createdAt?: Prisma.DateTimeFilter<"AiExecutionReceipt"> | Date | string
@@ -442,6 +612,12 @@ export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
   providerConfiguration?: Prisma.XOR<Prisma.AiProviderConfigurationNullableScalarRelationFilter, Prisma.AiProviderConfigurationWhereInput> | null
   identity?: Prisma.XOR<Prisma.AiCompanyIdentityNullableScalarRelationFilter, Prisma.AiCompanyIdentityWhereInput> | null
   systemIdentity?: Prisma.XOR<Prisma.AiSystemIdentityNullableScalarRelationFilter, Prisma.AiSystemIdentityWhereInput> | null
+  skillActivation?: Prisma.XOR<Prisma.AiSkillActivationNullableScalarRelationFilter, Prisma.AiSkillActivationWhereInput> | null
+  evidenceSnapshot?: Prisma.XOR<Prisma.DecisionEvidenceSnapshotNullableScalarRelationFilter, Prisma.DecisionEvidenceSnapshotWhereInput> | null
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
+  generatedInterpretations?: Prisma.AiInterpretationListRelationFilter
+  usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
+  modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionNullableScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput> | null
 }, "id" | "id_tenantId_companyId">
 
 export type AiExecutionReceiptOrderByWithAggregationInput = {
@@ -451,6 +627,8 @@ export type AiExecutionReceiptOrderByWithAggregationInput = {
   providerConfigurationId?: Prisma.SortOrderInput | Prisma.SortOrder
   identityId?: Prisma.SortOrderInput | Prisma.SortOrder
   systemIdentityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  skillActivationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  evidenceSnapshotId?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleKey?: Prisma.SortOrder
   capability?: Prisma.SortOrder
   skillKey?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -462,8 +640,19 @@ export type AiExecutionReceiptOrderByWithAggregationInput = {
   configurationVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   identityVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  inputChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
+  outputChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  outputTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  modelPriceRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
   requestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,6 +673,8 @@ export type AiExecutionReceiptScalarWhereWithAggregatesInput = {
   providerConfigurationId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   identityId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   systemIdentityId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
+  skillActivationId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
+  evidenceSnapshotId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   moduleKey?: Prisma.StringWithAggregatesFilter<"AiExecutionReceipt"> | string
   capability?: Prisma.StringWithAggregatesFilter<"AiExecutionReceipt"> | string
   skillKey?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
@@ -495,8 +686,19 @@ export type AiExecutionReceiptScalarWhereWithAggregatesInput = {
   configurationVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
   identityVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
   systemIdentityVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  promptVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  inputChecksum?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
+  outputChecksum?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   inputCharacters?: Prisma.IntWithAggregatesFilter<"AiExecutionReceipt"> | number
   outputCharacters?: Prisma.IntWithAggregatesFilter<"AiExecutionReceipt"> | number
+  inputTokens?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  cachedInputTokens?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  outputTokens?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  reasoningTokens?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  modelPriceRevisionId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
+  estimatedCostUsd?: Prisma.DecimalNullableWithAggregatesFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.DecimalNullableWithAggregatesFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   safeErrorCode?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   requestId?: Prisma.StringWithAggregatesFilter<"AiExecutionReceipt"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AiExecutionReceipt"> | Date | string
@@ -515,8 +717,18 @@ export type AiExecutionReceiptCreateInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -524,6 +736,12 @@ export type AiExecutionReceiptCreateInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
   identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
   systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateInput = {
@@ -533,6 +751,8 @@ export type AiExecutionReceiptUncheckedCreateInput = {
   providerConfigurationId?: string | null
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -544,11 +764,25 @@ export type AiExecutionReceiptUncheckedCreateInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
 }
 
 export type AiExecutionReceiptUpdateInput = {
@@ -564,8 +798,18 @@ export type AiExecutionReceiptUpdateInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -573,6 +817,12 @@ export type AiExecutionReceiptUpdateInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
   identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
   systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateInput = {
@@ -582,6 +832,8 @@ export type AiExecutionReceiptUncheckedUpdateInput = {
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -593,11 +845,25 @@ export type AiExecutionReceiptUncheckedUpdateInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
 }
 
 export type AiExecutionReceiptCreateManyInput = {
@@ -607,6 +873,8 @@ export type AiExecutionReceiptCreateManyInput = {
   providerConfigurationId?: string | null
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -618,8 +886,19 @@ export type AiExecutionReceiptCreateManyInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -638,8 +917,18 @@ export type AiExecutionReceiptUpdateManyMutationInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -652,6 +941,8 @@ export type AiExecutionReceiptUncheckedUpdateManyInput = {
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -663,8 +954,19 @@ export type AiExecutionReceiptUncheckedUpdateManyInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -693,6 +995,8 @@ export type AiExecutionReceiptCountOrderByAggregateInput = {
   providerConfigurationId?: Prisma.SortOrder
   identityId?: Prisma.SortOrder
   systemIdentityId?: Prisma.SortOrder
+  skillActivationId?: Prisma.SortOrder
+  evidenceSnapshotId?: Prisma.SortOrder
   moduleKey?: Prisma.SortOrder
   capability?: Prisma.SortOrder
   skillKey?: Prisma.SortOrder
@@ -704,8 +1008,19 @@ export type AiExecutionReceiptCountOrderByAggregateInput = {
   configurationVersion?: Prisma.SortOrder
   identityVersion?: Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  inputChecksum?: Prisma.SortOrder
+  outputChecksum?: Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrder
+  outputTokens?: Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrder
+  modelPriceRevisionId?: Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrder
+  providerRequestId?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -717,8 +1032,15 @@ export type AiExecutionReceiptAvgOrderByAggregateInput = {
   configurationVersion?: Prisma.SortOrder
   identityVersion?: Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrder
+  outputTokens?: Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrder
 }
 
 export type AiExecutionReceiptMaxOrderByAggregateInput = {
@@ -728,6 +1050,8 @@ export type AiExecutionReceiptMaxOrderByAggregateInput = {
   providerConfigurationId?: Prisma.SortOrder
   identityId?: Prisma.SortOrder
   systemIdentityId?: Prisma.SortOrder
+  skillActivationId?: Prisma.SortOrder
+  evidenceSnapshotId?: Prisma.SortOrder
   moduleKey?: Prisma.SortOrder
   capability?: Prisma.SortOrder
   skillKey?: Prisma.SortOrder
@@ -739,8 +1063,19 @@ export type AiExecutionReceiptMaxOrderByAggregateInput = {
   configurationVersion?: Prisma.SortOrder
   identityVersion?: Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  inputChecksum?: Prisma.SortOrder
+  outputChecksum?: Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrder
+  outputTokens?: Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrder
+  modelPriceRevisionId?: Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrder
+  providerRequestId?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -753,6 +1088,8 @@ export type AiExecutionReceiptMinOrderByAggregateInput = {
   providerConfigurationId?: Prisma.SortOrder
   identityId?: Prisma.SortOrder
   systemIdentityId?: Prisma.SortOrder
+  skillActivationId?: Prisma.SortOrder
+  evidenceSnapshotId?: Prisma.SortOrder
   moduleKey?: Prisma.SortOrder
   capability?: Prisma.SortOrder
   skillKey?: Prisma.SortOrder
@@ -764,8 +1101,19 @@ export type AiExecutionReceiptMinOrderByAggregateInput = {
   configurationVersion?: Prisma.SortOrder
   identityVersion?: Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  inputChecksum?: Prisma.SortOrder
+  outputChecksum?: Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrder
+  outputTokens?: Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrder
+  modelPriceRevisionId?: Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrder
+  providerRequestId?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -777,8 +1125,25 @@ export type AiExecutionReceiptSumOrderByAggregateInput = {
   configurationVersion?: Prisma.SortOrder
   identityVersion?: Prisma.SortOrder
   systemIdentityVersion?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
   inputCharacters?: Prisma.SortOrder
   outputCharacters?: Prisma.SortOrder
+  inputTokens?: Prisma.SortOrder
+  cachedInputTokens?: Prisma.SortOrder
+  outputTokens?: Prisma.SortOrder
+  reasoningTokens?: Prisma.SortOrder
+  estimatedCostUsd?: Prisma.SortOrder
+  actualCostUsd?: Prisma.SortOrder
+}
+
+export type AiExecutionReceiptScalarRelationFilter = {
+  is?: Prisma.AiExecutionReceiptWhereInput
+  isNot?: Prisma.AiExecutionReceiptWhereInput
+}
+
+export type AiExecutionReceiptNullableScalarRelationFilter = {
+  is?: Prisma.AiExecutionReceiptWhereInput | null
+  isNot?: Prisma.AiExecutionReceiptWhereInput | null
 }
 
 export type AiExecutionReceiptCreateNestedManyWithoutCompanyInput = {
@@ -820,6 +1185,48 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput = {
   connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
   update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyInput[]
   updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptCreateNestedManyWithoutEvidenceSnapshotInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput> | Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUncheckedCreateNestedManyWithoutEvidenceSnapshotInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput> | Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUpdateManyWithoutEvidenceSnapshotNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput> | Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutEvidenceSnapshotInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutEvidenceSnapshotInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutEvidenceSnapshotInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput> | Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutEvidenceSnapshotInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutEvidenceSnapshotInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutEvidenceSnapshotInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutEvidenceSnapshotInput[]
   deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
 }
 
@@ -907,12 +1314,140 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutIdentityNestedInput = {
   deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
 }
 
+export type AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput> | Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManySkillActivationInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput> | Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManySkillActivationInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput> | Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutSkillActivationInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManySkillActivationInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutSkillActivationInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutSkillActivationInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput> | Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutSkillActivationInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManySkillActivationInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutSkillActivationInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutSkillActivationInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutSkillActivationInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
 export type EnumAiExecutionOutcomeFieldUpdateOperationsInput = {
   set?: $Enums.AiExecutionOutcome
 }
 
 export type NullableEnumAiProviderKindFieldUpdateOperationsInput = {
   set?: $Enums.AiProviderKind | null
+}
+
+export type AiExecutionReceiptCreateNestedOneWithoutGeneratedInterpretationsInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutGeneratedInterpretationsInput
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+}
+
+export type AiExecutionReceiptUpdateOneRequiredWithoutGeneratedInterpretationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutGeneratedInterpretationsInput
+  upsert?: Prisma.AiExecutionReceiptUpsertWithoutGeneratedInterpretationsInput
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AiExecutionReceiptUpdateToOneWithWhereWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput>, Prisma.AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInput>
+}
+
+export type AiExecutionReceiptCreateNestedManyWithoutModelPriceRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUncheckedCreateNestedManyWithoutModelPriceRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUpdateManyWithoutModelPriceRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutModelPriceRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutModelPriceRevisionInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutModelPriceRevisionInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutModelPriceRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutModelPriceRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutModelPriceRevisionInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutModelPriceRevisionInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutModelPriceRevisionInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptCreateNestedOneWithoutUsageLedgerEntriesInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutUsageLedgerEntriesInput
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+}
+
+export type AiExecutionReceiptUpdateOneWithoutUsageLedgerEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutUsageLedgerEntriesInput
+  upsert?: Prisma.AiExecutionReceiptUpsertWithoutUsageLedgerEntriesInput
+  disconnect?: Prisma.AiExecutionReceiptWhereInput | boolean
+  delete?: Prisma.AiExecutionReceiptWhereInput | boolean
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AiExecutionReceiptUpdateToOneWithWhereWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput>, Prisma.AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput>
+}
+
+export type AiExecutionReceiptCreateNestedOneWithoutEvaluationFeedbackInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvaluationFeedbackInput
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+}
+
+export type AiExecutionReceiptUpdateOneRequiredWithoutEvaluationFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput>
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutEvaluationFeedbackInput
+  upsert?: Prisma.AiExecutionReceiptUpsertWithoutEvaluationFeedbackInput
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AiExecutionReceiptUpdateToOneWithWhereWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput>, Prisma.AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput>
 }
 
 export type AiExecutionReceiptCreateNestedManyWithoutSystemIdentityInput = {
@@ -970,14 +1505,30 @@ export type AiExecutionReceiptCreateWithoutCompanyInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
   providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
   identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
   systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutCompanyInput = {
@@ -985,6 +1536,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutCompanyInput = {
   providerConfigurationId?: string | null
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -996,11 +1549,25 @@ export type AiExecutionReceiptUncheckedCreateWithoutCompanyInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
 }
 
 export type AiExecutionReceiptCreateOrConnectWithoutCompanyInput = {
@@ -1039,6 +1606,8 @@ export type AiExecutionReceiptScalarWhereInput = {
   providerConfigurationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   identityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   systemIdentityId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  skillActivationId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  evidenceSnapshotId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
   moduleKey?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   capability?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -1050,11 +1619,125 @@ export type AiExecutionReceiptScalarWhereInput = {
   configurationVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   identityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   systemIdentityVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  promptVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  inputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
+  outputChecksum?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   inputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
   outputCharacters?: Prisma.IntFilter<"AiExecutionReceipt"> | number
+  inputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  cachedInputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  outputTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  reasoningTokens?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  modelPriceRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  estimatedCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.DecimalNullableFilter<"AiExecutionReceipt"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   safeErrorCode?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   requestId?: Prisma.StringFilter<"AiExecutionReceipt"> | string
   createdAt?: Prisma.DateTimeFilter<"AiExecutionReceipt"> | Date | string
+}
+
+export type AiExecutionReceiptCreateWithoutEvidenceSnapshotInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput = {
+  id?: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutEvidenceSnapshotInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput>
+}
+
+export type AiExecutionReceiptCreateManyEvidenceSnapshotInputEnvelope = {
+  data: Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInput | Prisma.AiExecutionReceiptCreateManyEvidenceSnapshotInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiExecutionReceiptUpsertWithWhereUniqueWithoutEvidenceSnapshotInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutEvidenceSnapshotInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput>
+}
+
+export type AiExecutionReceiptUpdateWithWhereUniqueWithoutEvidenceSnapshotInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutEvidenceSnapshotInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutEvidenceSnapshotInput>
+}
+
+export type AiExecutionReceiptUpdateManyWithWhereWithoutEvidenceSnapshotInput = {
+  where: Prisma.AiExecutionReceiptScalarWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotInput>
 }
 
 export type AiExecutionReceiptCreateWithoutProviderConfigurationInput = {
@@ -1070,14 +1753,30 @@ export type AiExecutionReceiptCreateWithoutProviderConfigurationInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
   identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
   systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutProviderConfigurationInput = {
@@ -1085,6 +1784,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutProviderConfigurationInput =
   companyId: string
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1096,11 +1797,25 @@ export type AiExecutionReceiptUncheckedCreateWithoutProviderConfigurationInput =
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
 }
 
 export type AiExecutionReceiptCreateOrConnectWithoutProviderConfigurationInput = {
@@ -1142,20 +1857,38 @@ export type AiExecutionReceiptCreateWithoutIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
   providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
   systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutIdentityInput = {
   id?: string
   providerConfigurationId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1167,11 +1900,25 @@ export type AiExecutionReceiptUncheckedCreateWithoutIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
 }
 
 export type AiExecutionReceiptCreateOrConnectWithoutIdentityInput = {
@@ -1200,6 +1947,736 @@ export type AiExecutionReceiptUpdateManyWithWhereWithoutIdentityInput = {
   data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutIdentityInput>
 }
 
+export type AiExecutionReceiptCreateWithoutSkillActivationInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput = {
+  id?: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput>
+}
+
+export type AiExecutionReceiptCreateManySkillActivationInputEnvelope = {
+  data: Prisma.AiExecutionReceiptCreateManySkillActivationInput | Prisma.AiExecutionReceiptCreateManySkillActivationInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiExecutionReceiptUpsertWithWhereUniqueWithoutSkillActivationInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutSkillActivationInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput>
+}
+
+export type AiExecutionReceiptUpdateWithWhereUniqueWithoutSkillActivationInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutSkillActivationInput>
+}
+
+export type AiExecutionReceiptUpdateManyWithWhereWithoutSkillActivationInput = {
+  where: Prisma.AiExecutionReceiptScalarWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationInput>
+}
+
+export type AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutGeneratedInterpretationsInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput>
+}
+
+export type AiExecutionReceiptUpsertWithoutGeneratedInterpretationsInput = {
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput>
+  where?: Prisma.AiExecutionReceiptWhereInput
+}
+
+export type AiExecutionReceiptUpdateToOneWithWhereWithoutGeneratedInterpretationsInput = {
+  where?: Prisma.AiExecutionReceiptWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInput>
+}
+
+export type AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptCreateWithoutModelPriceRevisionInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutModelPriceRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput>
+}
+
+export type AiExecutionReceiptCreateManyModelPriceRevisionInputEnvelope = {
+  data: Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInput | Prisma.AiExecutionReceiptCreateManyModelPriceRevisionInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiExecutionReceiptUpsertWithWhereUniqueWithoutModelPriceRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutModelPriceRevisionInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput>
+}
+
+export type AiExecutionReceiptUpdateWithWhereUniqueWithoutModelPriceRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutModelPriceRevisionInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutModelPriceRevisionInput>
+}
+
+export type AiExecutionReceiptUpdateManyWithWhereWithoutModelPriceRevisionInput = {
+  where: Prisma.AiExecutionReceiptScalarWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutModelPriceRevisionInput>
+}
+
+export type AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutUsageLedgerEntriesInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput>
+}
+
+export type AiExecutionReceiptUpsertWithoutUsageLedgerEntriesInput = {
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput>
+  where?: Prisma.AiExecutionReceiptWhereInput
+}
+
+export type AiExecutionReceiptUpdateToOneWithWhereWithoutUsageLedgerEntriesInput = {
+  where?: Prisma.AiExecutionReceiptWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput>
+}
+
+export type AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptCreateWithoutEvaluationFeedbackInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutEvaluationFeedbackInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput>
+}
+
+export type AiExecutionReceiptUpsertWithoutEvaluationFeedbackInput = {
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput>
+  where?: Prisma.AiExecutionReceiptWhereInput
+}
+
+export type AiExecutionReceiptUpdateToOneWithWhereWithoutEvaluationFeedbackInput = {
+  where?: Prisma.AiExecutionReceiptWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput>
+}
+
+export type AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
 export type AiExecutionReceiptCreateWithoutSystemIdentityInput = {
   id?: string
   moduleKey: string
@@ -1213,14 +2690,30 @@ export type AiExecutionReceiptCreateWithoutSystemIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
   providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
   identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutSystemIdentityInput = {
@@ -1228,6 +2721,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutSystemIdentityInput = {
   companyId: string
   providerConfigurationId?: string | null
   identityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1239,11 +2734,25 @@ export type AiExecutionReceiptUncheckedCreateWithoutSystemIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
 }
 
 export type AiExecutionReceiptCreateOrConnectWithoutSystemIdentityInput = {
@@ -1277,6 +2786,8 @@ export type AiExecutionReceiptCreateManyCompanyInput = {
   providerConfigurationId?: string | null
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1288,8 +2799,19 @@ export type AiExecutionReceiptCreateManyCompanyInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -1308,14 +2830,30 @@ export type AiExecutionReceiptUpdateWithoutCompanyInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
   identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
   systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutCompanyInput = {
@@ -1323,6 +2861,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutCompanyInput = {
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1334,11 +2874,25 @@ export type AiExecutionReceiptUncheckedUpdateWithoutCompanyInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyInput = {
@@ -1346,6 +2900,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyInput = {
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1357,18 +2913,30 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AiExecutionReceiptCreateManyProviderConfigurationInput = {
+export type AiExecutionReceiptCreateManyEvidenceSnapshotInput = {
   id?: string
-  companyId: string
+  providerConfigurationId?: string | null
   identityId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1380,8 +2948,167 @@ export type AiExecutionReceiptCreateManyProviderConfigurationInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+}
+
+export type AiExecutionReceiptUpdateWithoutEvidenceSnapshotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutEvidenceSnapshotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiExecutionReceiptCreateManyProviderConfigurationInput = {
+  id?: string
+  companyId: string
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -1400,14 +3127,30 @@ export type AiExecutionReceiptUpdateWithoutProviderConfigurationInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
   identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
   systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutProviderConfigurationInput = {
@@ -1415,6 +3158,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutProviderConfigurationInput =
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1426,11 +3171,25 @@ export type AiExecutionReceiptUncheckedUpdateWithoutProviderConfigurationInput =
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationInput = {
@@ -1438,6 +3197,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationInp
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1449,8 +3210,19 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationInp
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1460,6 +3232,8 @@ export type AiExecutionReceiptCreateManyIdentityInput = {
   id?: string
   providerConfigurationId?: string | null
   systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1471,8 +3245,19 @@ export type AiExecutionReceiptCreateManyIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -1491,20 +3276,38 @@ export type AiExecutionReceiptUpdateWithoutIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
   systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutIdentityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1516,17 +3319,33 @@ export type AiExecutionReceiptUncheckedUpdateWithoutIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateManyWithoutIdentityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1538,18 +3357,30 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AiExecutionReceiptCreateManySystemIdentityInput = {
+export type AiExecutionReceiptCreateManySkillActivationInput = {
   id?: string
-  companyId: string
   providerConfigurationId?: string | null
   identityId?: string | null
+  systemIdentityId?: string | null
+  evidenceSnapshotId?: string | null
   moduleKey: string
   capability: string
   skillKey?: string | null
@@ -1561,8 +3392,320 @@ export type AiExecutionReceiptCreateManySystemIdentityInput = {
   configurationVersion?: number | null
   identityVersion?: number | null
   systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
   inputCharacters?: number
   outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+}
+
+export type AiExecutionReceiptUpdateWithoutSkillActivationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutSkillActivationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiExecutionReceiptCreateManyModelPriceRevisionInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+}
+
+export type AiExecutionReceiptUpdateWithoutModelPriceRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutModelPriceRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutModelPriceRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiExecutionReceiptCreateManySystemIdentityInput = {
+  id?: string
+  companyId: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
   safeErrorCode?: string | null
   requestId: string
   createdAt?: Date | string
@@ -1581,14 +3724,30 @@ export type AiExecutionReceiptUpdateWithoutSystemIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
   identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutSystemIdentityInput = {
@@ -1596,6 +3755,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutSystemIdentityInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1607,11 +3768,25 @@ export type AiExecutionReceiptUncheckedUpdateWithoutSystemIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateManyWithoutSystemIdentityInput = {
@@ -1619,6 +3794,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutSystemIdentityInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
   capability?: Prisma.StringFieldUpdateOperationsInput | string
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1630,13 +3807,71 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutSystemIdentityInput = {
   configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
   outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type AiExecutionReceiptCountOutputType
+ */
+
+export type AiExecutionReceiptCountOutputType = {
+  evaluationFeedback: number
+  generatedInterpretations: number
+  usageLedgerEntries: number
+}
+
+export type AiExecutionReceiptCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  evaluationFeedback?: boolean | AiExecutionReceiptCountOutputTypeCountEvaluationFeedbackArgs
+  generatedInterpretations?: boolean | AiExecutionReceiptCountOutputTypeCountGeneratedInterpretationsArgs
+  usageLedgerEntries?: boolean | AiExecutionReceiptCountOutputTypeCountUsageLedgerEntriesArgs
+}
+
+/**
+ * AiExecutionReceiptCountOutputType without action
+ */
+export type AiExecutionReceiptCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiExecutionReceiptCountOutputType
+   */
+  select?: Prisma.AiExecutionReceiptCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AiExecutionReceiptCountOutputType without action
+ */
+export type AiExecutionReceiptCountOutputTypeCountEvaluationFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiEvaluationFeedbackWhereInput
+}
+
+/**
+ * AiExecutionReceiptCountOutputType without action
+ */
+export type AiExecutionReceiptCountOutputTypeCountGeneratedInterpretationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiInterpretationWhereInput
+}
+
+/**
+ * AiExecutionReceiptCountOutputType without action
+ */
+export type AiExecutionReceiptCountOutputTypeCountUsageLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiUsageLedgerWhereInput
+}
 
 
 export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1646,6 +3881,8 @@ export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.In
   providerConfigurationId?: boolean
   identityId?: boolean
   systemIdentityId?: boolean
+  skillActivationId?: boolean
+  evidenceSnapshotId?: boolean
   moduleKey?: boolean
   capability?: boolean
   skillKey?: boolean
@@ -1657,8 +3894,19 @@ export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.In
   configurationVersion?: boolean
   identityVersion?: boolean
   systemIdentityVersion?: boolean
+  promptVersion?: boolean
+  inputChecksum?: boolean
+  outputChecksum?: boolean
   inputCharacters?: boolean
   outputCharacters?: boolean
+  inputTokens?: boolean
+  cachedInputTokens?: boolean
+  outputTokens?: boolean
+  reasoningTokens?: boolean
+  modelPriceRevisionId?: boolean
+  estimatedCostUsd?: boolean
+  actualCostUsd?: boolean
+  providerRequestId?: boolean
   safeErrorCode?: boolean
   requestId?: boolean
   createdAt?: boolean
@@ -1666,6 +3914,13 @@ export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.In
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  evaluationFeedback?: boolean | Prisma.AiExecutionReceipt$evaluationFeedbackArgs<ExtArgs>
+  generatedInterpretations?: boolean | Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>
+  usageLedgerEntries?: boolean | Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  _count?: boolean | Prisma.AiExecutionReceiptCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
 export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1675,6 +3930,8 @@ export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.
   providerConfigurationId?: boolean
   identityId?: boolean
   systemIdentityId?: boolean
+  skillActivationId?: boolean
+  evidenceSnapshotId?: boolean
   moduleKey?: boolean
   capability?: boolean
   skillKey?: boolean
@@ -1686,8 +3943,19 @@ export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.
   configurationVersion?: boolean
   identityVersion?: boolean
   systemIdentityVersion?: boolean
+  promptVersion?: boolean
+  inputChecksum?: boolean
+  outputChecksum?: boolean
   inputCharacters?: boolean
   outputCharacters?: boolean
+  inputTokens?: boolean
+  cachedInputTokens?: boolean
+  outputTokens?: boolean
+  reasoningTokens?: boolean
+  modelPriceRevisionId?: boolean
+  estimatedCostUsd?: boolean
+  actualCostUsd?: boolean
+  providerRequestId?: boolean
   safeErrorCode?: boolean
   requestId?: boolean
   createdAt?: boolean
@@ -1695,6 +3963,9 @@ export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
 export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1704,6 +3975,8 @@ export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.
   providerConfigurationId?: boolean
   identityId?: boolean
   systemIdentityId?: boolean
+  skillActivationId?: boolean
+  evidenceSnapshotId?: boolean
   moduleKey?: boolean
   capability?: boolean
   skillKey?: boolean
@@ -1715,8 +3988,19 @@ export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.
   configurationVersion?: boolean
   identityVersion?: boolean
   systemIdentityVersion?: boolean
+  promptVersion?: boolean
+  inputChecksum?: boolean
+  outputChecksum?: boolean
   inputCharacters?: boolean
   outputCharacters?: boolean
+  inputTokens?: boolean
+  cachedInputTokens?: boolean
+  outputTokens?: boolean
+  reasoningTokens?: boolean
+  modelPriceRevisionId?: boolean
+  estimatedCostUsd?: boolean
+  actualCostUsd?: boolean
+  providerRequestId?: boolean
   safeErrorCode?: boolean
   requestId?: boolean
   createdAt?: boolean
@@ -1724,6 +4008,9 @@ export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
 export type AiExecutionReceiptSelectScalar = {
@@ -1733,6 +4020,8 @@ export type AiExecutionReceiptSelectScalar = {
   providerConfigurationId?: boolean
   identityId?: boolean
   systemIdentityId?: boolean
+  skillActivationId?: boolean
+  evidenceSnapshotId?: boolean
   moduleKey?: boolean
   capability?: boolean
   skillKey?: boolean
@@ -1744,31 +4033,55 @@ export type AiExecutionReceiptSelectScalar = {
   configurationVersion?: boolean
   identityVersion?: boolean
   systemIdentityVersion?: boolean
+  promptVersion?: boolean
+  inputChecksum?: boolean
+  outputChecksum?: boolean
   inputCharacters?: boolean
   outputCharacters?: boolean
+  inputTokens?: boolean
+  cachedInputTokens?: boolean
+  outputTokens?: boolean
+  reasoningTokens?: boolean
+  modelPriceRevisionId?: boolean
+  estimatedCostUsd?: boolean
+  actualCostUsd?: boolean
+  providerRequestId?: boolean
   safeErrorCode?: boolean
   requestId?: boolean
   createdAt?: boolean
 }
 
-export type AiExecutionReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "identityId" | "systemIdentityId" | "moduleKey" | "capability" | "skillKey" | "skillVersion" | "policyVersion" | "outcome" | "providerSnapshot" | "modelSnapshot" | "configurationVersion" | "identityVersion" | "systemIdentityVersion" | "inputCharacters" | "outputCharacters" | "safeErrorCode" | "requestId" | "createdAt", ExtArgs["result"]["aiExecutionReceipt"]>
+export type AiExecutionReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "identityId" | "systemIdentityId" | "skillActivationId" | "evidenceSnapshotId" | "moduleKey" | "capability" | "skillKey" | "skillVersion" | "policyVersion" | "outcome" | "providerSnapshot" | "modelSnapshot" | "configurationVersion" | "identityVersion" | "systemIdentityVersion" | "promptVersion" | "inputChecksum" | "outputChecksum" | "inputCharacters" | "outputCharacters" | "inputTokens" | "cachedInputTokens" | "outputTokens" | "reasoningTokens" | "modelPriceRevisionId" | "estimatedCostUsd" | "actualCostUsd" | "providerRequestId" | "safeErrorCode" | "requestId" | "createdAt", ExtArgs["result"]["aiExecutionReceipt"]>
 export type AiExecutionReceiptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  evaluationFeedback?: boolean | Prisma.AiExecutionReceipt$evaluationFeedbackArgs<ExtArgs>
+  generatedInterpretations?: boolean | Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>
+  usageLedgerEntries?: boolean | Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  _count?: boolean | Prisma.AiExecutionReceiptCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AiExecutionReceiptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
 }
 export type AiExecutionReceiptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
   identity?: boolean | Prisma.AiExecutionReceipt$identityArgs<ExtArgs>
   systemIdentity?: boolean | Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>
+  skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
+  evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
+  modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
 }
 
 export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1778,6 +4091,12 @@ export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.
     providerConfiguration: Prisma.$AiProviderConfigurationPayload<ExtArgs> | null
     identity: Prisma.$AiCompanyIdentityPayload<ExtArgs> | null
     systemIdentity: Prisma.$AiSystemIdentityPayload<ExtArgs> | null
+    skillActivation: Prisma.$AiSkillActivationPayload<ExtArgs> | null
+    evidenceSnapshot: Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs> | null
+    evaluationFeedback: Prisma.$AiEvaluationFeedbackPayload<ExtArgs>[]
+    generatedInterpretations: Prisma.$AiInterpretationPayload<ExtArgs>[]
+    usageLedgerEntries: Prisma.$AiUsageLedgerPayload<ExtArgs>[]
+    modelPriceRevision: Prisma.$AiModelPriceRevisionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1786,6 +4105,8 @@ export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.
     providerConfigurationId: string | null
     identityId: string | null
     systemIdentityId: string | null
+    skillActivationId: string | null
+    evidenceSnapshotId: string | null
     moduleKey: string
     capability: string
     skillKey: string | null
@@ -1797,8 +4118,19 @@ export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.
     configurationVersion: number | null
     identityVersion: number | null
     systemIdentityVersion: number | null
+    promptVersion: number | null
+    inputChecksum: string | null
+    outputChecksum: string | null
     inputCharacters: number
     outputCharacters: number
+    inputTokens: number | null
+    cachedInputTokens: number | null
+    outputTokens: number | null
+    reasoningTokens: number | null
+    modelPriceRevisionId: string | null
+    estimatedCostUsd: runtime.Decimal | null
+    actualCostUsd: runtime.Decimal | null
+    providerRequestId: string | null
     safeErrorCode: string | null
     requestId: string
     createdAt: Date
@@ -2200,6 +4532,12 @@ export interface Prisma__AiExecutionReceiptClient<T, Null = never, ExtArgs exten
   providerConfiguration<T extends Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>>): Prisma.Prisma__AiProviderConfigurationClient<runtime.Types.Result.GetResult<Prisma.$AiProviderConfigurationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   identity<T extends Prisma.AiExecutionReceipt$identityArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$identityArgs<ExtArgs>>): Prisma.Prisma__AiCompanyIdentityClient<runtime.Types.Result.GetResult<Prisma.$AiCompanyIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   systemIdentity<T extends Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$systemIdentityArgs<ExtArgs>>): Prisma.Prisma__AiSystemIdentityClient<runtime.Types.Result.GetResult<Prisma.$AiSystemIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  skillActivation<T extends Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>>): Prisma.Prisma__AiSkillActivationClient<runtime.Types.Result.GetResult<Prisma.$AiSkillActivationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  evidenceSnapshot<T extends Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>>): Prisma.Prisma__DecisionEvidenceSnapshotClient<runtime.Types.Result.GetResult<Prisma.$DecisionEvidenceSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  evaluationFeedback<T extends Prisma.AiExecutionReceipt$evaluationFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$evaluationFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiEvaluationFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  generatedInterpretations<T extends Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiInterpretationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  usageLedgerEntries<T extends Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiUsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  modelPriceRevision<T extends Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>>): Prisma.Prisma__AiModelPriceRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiModelPriceRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2235,6 +4573,8 @@ export interface AiExecutionReceiptFieldRefs {
   readonly providerConfigurationId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly identityId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly systemIdentityId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
+  readonly skillActivationId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
+  readonly evidenceSnapshotId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly moduleKey: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly capability: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly skillKey: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
@@ -2246,8 +4586,19 @@ export interface AiExecutionReceiptFieldRefs {
   readonly configurationVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
   readonly identityVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
   readonly systemIdentityVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly promptVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly inputChecksum: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
+  readonly outputChecksum: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly inputCharacters: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
   readonly outputCharacters: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly inputTokens: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly cachedInputTokens: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly outputTokens: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly reasoningTokens: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly modelPriceRevisionId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
+  readonly estimatedCostUsd: Prisma.FieldRef<"AiExecutionReceipt", 'Decimal'>
+  readonly actualCostUsd: Prisma.FieldRef<"AiExecutionReceipt", 'Decimal'>
+  readonly providerRequestId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly safeErrorCode: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly requestId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly createdAt: Prisma.FieldRef<"AiExecutionReceipt", 'DateTime'>
@@ -2706,6 +5057,135 @@ export type AiExecutionReceipt$systemIdentityArgs<ExtArgs extends runtime.Types.
    */
   include?: Prisma.AiSystemIdentityInclude<ExtArgs> | null
   where?: Prisma.AiSystemIdentityWhereInput
+}
+
+/**
+ * AiExecutionReceipt.skillActivation
+ */
+export type AiExecutionReceipt$skillActivationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiSkillActivation
+   */
+  select?: Prisma.AiSkillActivationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiSkillActivation
+   */
+  omit?: Prisma.AiSkillActivationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiSkillActivationInclude<ExtArgs> | null
+  where?: Prisma.AiSkillActivationWhereInput
+}
+
+/**
+ * AiExecutionReceipt.evidenceSnapshot
+ */
+export type AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DecisionEvidenceSnapshot
+   */
+  select?: Prisma.DecisionEvidenceSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DecisionEvidenceSnapshot
+   */
+  omit?: Prisma.DecisionEvidenceSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DecisionEvidenceSnapshotInclude<ExtArgs> | null
+  where?: Prisma.DecisionEvidenceSnapshotWhereInput
+}
+
+/**
+ * AiExecutionReceipt.evaluationFeedback
+ */
+export type AiExecutionReceipt$evaluationFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiEvaluationFeedback
+   */
+  select?: Prisma.AiEvaluationFeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiEvaluationFeedback
+   */
+  omit?: Prisma.AiEvaluationFeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiEvaluationFeedbackInclude<ExtArgs> | null
+  where?: Prisma.AiEvaluationFeedbackWhereInput
+  orderBy?: Prisma.AiEvaluationFeedbackOrderByWithRelationInput | Prisma.AiEvaluationFeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.AiEvaluationFeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiEvaluationFeedbackScalarFieldEnum | Prisma.AiEvaluationFeedbackScalarFieldEnum[]
+}
+
+/**
+ * AiExecutionReceipt.generatedInterpretations
+ */
+export type AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiInterpretation
+   */
+  select?: Prisma.AiInterpretationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiInterpretation
+   */
+  omit?: Prisma.AiInterpretationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiInterpretationInclude<ExtArgs> | null
+  where?: Prisma.AiInterpretationWhereInput
+  orderBy?: Prisma.AiInterpretationOrderByWithRelationInput | Prisma.AiInterpretationOrderByWithRelationInput[]
+  cursor?: Prisma.AiInterpretationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiInterpretationScalarFieldEnum | Prisma.AiInterpretationScalarFieldEnum[]
+}
+
+/**
+ * AiExecutionReceipt.usageLedgerEntries
+ */
+export type AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiUsageLedger
+   */
+  select?: Prisma.AiUsageLedgerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiUsageLedger
+   */
+  omit?: Prisma.AiUsageLedgerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiUsageLedgerInclude<ExtArgs> | null
+  where?: Prisma.AiUsageLedgerWhereInput
+  orderBy?: Prisma.AiUsageLedgerOrderByWithRelationInput | Prisma.AiUsageLedgerOrderByWithRelationInput[]
+  cursor?: Prisma.AiUsageLedgerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiUsageLedgerScalarFieldEnum | Prisma.AiUsageLedgerScalarFieldEnum[]
+}
+
+/**
+ * AiExecutionReceipt.modelPriceRevision
+ */
+export type AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiModelPriceRevision
+   */
+  select?: Prisma.AiModelPriceRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiModelPriceRevision
+   */
+  omit?: Prisma.AiModelPriceRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiModelPriceRevisionInclude<ExtArgs> | null
+  where?: Prisma.AiModelPriceRevisionWhereInput
 }
 
 /**
